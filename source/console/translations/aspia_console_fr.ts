@@ -6,33 +6,33 @@
     <message>
         <location filename="../address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés du carnet d'adresses</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiffrement :</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="58"/>
         <location filename="../address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="65"/>
@@ -42,37 +42,37 @@
     <message>
         <location filename="../address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Routeur</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser un routeur</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse :</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d'utilisateur</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s'il n'y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="242"/>
         <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration par défaut</translation>
     </message>
 </context>
 <context>
@@ -80,32 +80,32 @@
     <message>
         <location filename="../address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l'ordinateur</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse / ID</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="108"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaires</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="113"/>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Créé</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="118"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifié</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Statut</translation>
     </message>
 </context>
 <context>
@@ -113,7 +113,7 @@
     <message>
         <location filename="../computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés de l'ordinateur</translation>
     </message>
 </context>
 <context>
@@ -121,98 +121,98 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="55"/>
         <source>Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="250"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocage de la session à distance</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="66"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Profondeur de couleur</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Hérite de la configuration du parent</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="87"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapide</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="113"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Meilleur</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="131"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Caractéristiques</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="137"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l'audio</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="144"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer le presse-papiers</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="151"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la forme du curseur à distance</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="158"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la position du curseur à distance</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="194"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Apparence</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="200"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver les effets de bureau</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="207"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver le fond d'écran</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="214"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver le lissage des polices</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="182"/>
         <location filename="../computer_dialog_desktop.ui" line="230"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="236"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="243"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verrouiller l'ordinateur lors de la déconnexion</translation>
     </message>
 </context>
 <context>
@@ -220,17 +220,17 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="34"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupe parents :</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse / ID</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="81"/>
