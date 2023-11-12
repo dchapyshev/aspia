@@ -899,6 +899,25 @@
     </message>
 </context>
 <context>
+    <name>QtDesktopWindow</name>
+    <message>
+        <source>Save File</source>
+        <translation type="obsolete">儲存檔案</translation>
+    </message>
+    <message>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="obsolete">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <source>Could not save image</source>
+        <translation type="obsolete">無法儲存影像</translation>
+    </message>
+</context>
+<context>
     <name>RecordSettingsDialog</name>
     <message>
         <location filename="../ui/desktop/record_settings_dialog.ui" line="14"/>
@@ -2693,22 +2712,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="539"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="551"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3038,34 +3057,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="312"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="321"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="315"/>
         <source>There are no supported video encodings.</source>
         <translation>沒有支援的視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="322"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="324"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="972"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="974"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>

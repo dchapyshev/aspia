@@ -895,6 +895,25 @@
     </message>
 </context>
 <context>
+    <name>QtDesktopWindow</name>
+    <message>
+        <source>Save File</source>
+        <translation type="obsolete">Salva File</translation>
+    </message>
+    <message>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="obsolete">PNG Image (*.png);;BMP Image (*.bmp)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Attenzione</translation>
+    </message>
+    <message>
+        <source>Could not save image</source>
+        <translation type="obsolete">Non è stato possibile salvare l&apos;immagine</translation>
+    </message>
+</context>
+<context>
     <name>RecordSettingsDialog</name>
     <message>
         <location filename="../ui/desktop/record_settings_dialog.ui" line="14"/>
@@ -2657,22 +2676,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="539"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
         <source>The session was paused by a remote user</source>
         <translation>La sessione è stata messa in pausa dell&apos;utente remoto</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
         <source>The session is temporarily unavailable</source>
         <translation>La sessione è temporaneamente indisponibile</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
         <source>The session is permanently unavailable</source>
         <translation>La sessione è permanentemente indisponibile</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="551"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Errore durante la ricezione dello stream video: %1</translation>
     </message>
@@ -2979,34 +2998,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="312"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="321"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="313"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="315"/>
         <source>There are no supported video encodings.</source>
         <translation>Non ci sono codifiche video supportate.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="322"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="324"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>La modalità di codifica video attiva non è supportata dall&apos;host. Per cortesia selezionare un codifica video diversa.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="972"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="974"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Could not save image</source>
         <translation>Non è stato possibile salvare l&apos;immagine</translation>
     </message>
