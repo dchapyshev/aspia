@@ -44,6 +44,7 @@ ClientSystemInfo::~ClientSystemInfo()
 void ClientSystemInfo::setSystemInfoWindow(
     std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy)
 {
+    LOG(LS_INFO) << "System info window installed";
     system_info_window_proxy_ = std::move(system_info_window_proxy);
 }
 

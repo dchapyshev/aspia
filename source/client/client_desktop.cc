@@ -134,6 +134,7 @@ ClientDesktop::~ClientDesktop()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy)
 {
+    LOG(LS_INFO) << "Desktop window installed";
     desktop_window_proxy_ = std::move(desktop_window_proxy);
 }
 
@@ -349,6 +350,8 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
 
     if (enable)
     {
+        LOG(LS_INFO) << "Video recording enabled (file: " << file_path << ")";
+
         video_recording.set_action(proto::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ = std::make_unique<base::WebmFileWriter>(file_path, computerName());
@@ -369,6 +372,8 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
     }
     else
     {
+        LOG(LS_INFO) << "Video recording disabled";
+
         video_recording.set_action(proto::VideoRecording::ACTION_STOPPED);
 
         webm_video_encode_timer_.reset();
@@ -579,10 +584,11 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     if (video_encoding_ != packet.encoding())
     {
+        LOG(LS_INFO) << "Video encoding changed from: " << videoEncodingToString(video_encoding_)
+                     << " to: " << videoEncodingToString(packet.encoding());
+
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
-
-        LOG(LS_INFO) << "Video encoding changed to: " << videoEncodingToString(video_encoding_);
     }
 
     if (!video_decoder_)
@@ -662,7 +668,10 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
         webm_file_writer_->addAudioPacket(packet);
 
     if (!audio_player_)
+    {
+        LOG(LS_ERROR) << "Audio packet received but audio player not initialized";
         return;
+    }
 
     if (packet.encoding() != audio_encoding_)
     {
@@ -673,7 +682,10 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
     }
 
     if (!audio_decoder_)
+    {
+        LOG(LS_INFO) << "Audio decoder not initialized now";
         return;
+    }
 
     size_t packet_size = packet.ByteSizeLong();
 
