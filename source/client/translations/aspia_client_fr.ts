@@ -160,7 +160,7 @@
     <message>
         <location filename="../client_main.cc" line="696"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation>ID de l'hôte a été saisi, mais le routeur n'a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
+        <translation>ID de l&apos;hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
         <location filename="../ui/router_manager/router_manager_window.ui" line="244"/>
         <location filename="../ui/router_manager/router_manager_window.ui" line="411"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
 </context>
 <context>
@@ -1485,7 +1485,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="59"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="64"/>
@@ -1594,7 +1594,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="76"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="81"/>
@@ -1824,7 +1824,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="85"/>
@@ -2320,7 +2320,7 @@
     <message>
         <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID de l&apos;hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
@@ -2761,34 +2761,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="312"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="321"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="313"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="322"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="972"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="974"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1005"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
