@@ -37,6 +37,10 @@
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
 
+#if defined(OS_WIN)
+#include "base/win/windows_version.h"
+#endif // defined(OS_WIN)
+
 #include <QApplication>
 #include <QBrush>
 #include <QClipboard>
@@ -661,14 +665,26 @@ void QtDesktopWindow::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::showEvent(QShowEvent *event)
+void QtDesktopWindow::showEvent(QShowEvent* event)
 {
     if (is_minimized_from_full_screen_)
     {
         LOG(LS_INFO) << "Restore to full screen";
         is_minimized_from_full_screen_ = false;
-        showFullScreen();
+
+#if defined(OS_WIN)
+        if (base::win::windowsVersion() >= base::win::VERSION_WIN11)
+        {
+            // In Windows 11, when you maximize a minimized window from full screen, the window does
+            // not return to full screen. We force the window to full screen.
+            // However, in versions of Windows less than 11, this breaks the window's minimization,
+            // therefore we use this piece of code only for Windows 11.
+            showFullScreen();
+        }
+#endif // defined(OS_WIN)
     }
+
+    QWidget::showEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
