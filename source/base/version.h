@@ -32,8 +32,8 @@ namespace base {
 class Version
 {
 public:
-    static const Version& kVersion_CurrentFull;
-    static const Version& kVersion_CurrentShort;
+    static const Version& kVersion_CurrentFull; // Version of application (with build number).
+    static const Version& kVersion_CurrentShort; // Version of application (without build number).
     static const Version& kVersion_2_4_0;
     static const Version& kVersion_2_6_0;
 
@@ -81,12 +81,6 @@ public:
 
     proto::Version toProto() const;
     static Version fromProto(const proto::Version& proto_version);
-
-    // Returns current version of application (without build number).
-    static const Version& currentShort();
-
-    // Returns current version of application (with build number).
-    static const Version& currentFull();
 
 private:
     std::vector<uint32_t> components_;
