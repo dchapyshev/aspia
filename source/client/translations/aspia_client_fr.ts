@@ -6,17 +6,17 @@
     <message>
         <location filename="../ui/authorization_dialog.ui" line="14"/>
         <source>Authorization</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisation</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="46"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="96"/>
@@ -34,42 +34,42 @@
     <message>
         <location filename="../client_main.cc" line="415"/>
         <source>Remote computer address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse ordinateur distant</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="419"/>
         <source>Remote computer port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Port ordinateur distant</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="424"/>
         <source>Name of host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom hote</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="428"/>
         <source>Name of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="432"/>
         <source>Password of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe utilisateur</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="436"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de session</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="441"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
-        <translation type="unfinished"></translation>
+        <translation>Type codec</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="445"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
-        <translation type="unfinished"></translation>
+        <translation>Profondeur de couleur</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="449"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../client_main.cc" line="453"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio oui ou non</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="457"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../client_main.cc" line="696"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID de l'hôte a été saisi, mais le routeur n'a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
