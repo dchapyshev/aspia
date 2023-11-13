@@ -864,17 +864,19 @@
     <message numerus="yes">
         <location filename="../connect_confirm_dialog.cc" line="142"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation>La connexion sera automatiquement acceptée après %n secondes.
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
+            <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
+            <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../connect_confirm_dialog.cc" line="147"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation>La connexion sera automatiquement rejetée après %n secondes.
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
+            <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
+            <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
         </translation>
     </message>
     <message>
@@ -962,12 +964,12 @@
     <message>
         <location filename="../main_window.cc" line="475"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
-        <translation>L'utilisateur &quot;%1&quot ; (%2) a commencé l'enregistrement de l'écran.</translation>
+        <translation>L&apos;utilisateur &quot;%1&quot; (%2) a commencé l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="480"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
-        <translation>L'utilisateur &quot;%1&quot ; (%2) a arrêté l'enregistrement de l'écran.</translation>
+        <translation>L&apos;utilisateur &quot;%1&quot; (%2) a arrêté l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="701"/>
@@ -1053,9 +1055,10 @@
     <message numerus="yes">
         <location filename="../user_dialog.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
+            <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
+            <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
         </translation>
     </message>
     <message>
@@ -1066,9 +1069,10 @@
     <message numerus="yes">
         <location filename="../user_dialog.cc" line="205"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
+            <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
+            <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
         </translation>
     </message>
     <message>
