@@ -6,7 +6,7 @@
     <message>
         <location filename="../address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation>Propriétés du carnet d&apos;adresses</translation>
+        <translation>Propriétés du carnet d adresses</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="27"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation>Nom d&apos;utilisateur:</translation>
+        <translation>Nom d utilisateur:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n&apos;y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;site officiel&lt;/a&gt;.</translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;site officiel&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="242"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../main_window.ui" line="497"/>
         <source>Show tray icon</source>
-        <translation>Afficher les icônes dans la barre d&apos;état</translation>
+        <translation>Afficher les icônes dans la barre d état</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="505"/>
@@ -801,17 +801,17 @@
     <message>
         <location filename="../fast_connect_dialog.ui" line="104"/>
         <source>Default configuration from address book</source>
-        <translation>Configuration par défaut du carnet d&apos;adresses</translation>
+        <translation>Configuration par défaut du carnet d adresses</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="110"/>
         <source>Use credentials from address book</source>
-        <translation>Utiliser les informations d&apos;identification du carnet d&apos;adresses</translation>
+        <translation>Utiliser les informations d identification du carnet d adresses</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="117"/>
         <source>Use session parameters from address book</source>
-        <translation>Utiliser les paramètres de session du carnet d&apos;adresses</translation>
+        <translation>Utiliser les paramètres de session du carnet d adresses</translation>
     </message>
 </context>
 <context>
@@ -819,12 +819,12 @@
     <message>
         <location filename="../open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation>Ouvrir le carnet d&apos;adresses</translation>
+        <translation>Ouvrir le carnet d adresses</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Le carnet d&apos;adresses est crypté. Pour l&apos;ouvrir, vous devez entrer un mot de passe.</translation>
+        <translation>Le carnet d adresses est crypté. Pour l ouvrir, vous devez entrer un mot de passe.</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.ui" line="66"/>
@@ -1006,17 +1006,17 @@
     <message>
         <location filename="../address_book_tab.cc" line="210"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>Impossible de lire le fichier du carnet d&apos;adresses &quot;%1&quot;.</translation>
+        <translation>Impossible de lire le fichier du carnet d adresses &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="219"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation>Le fichier du carnet d&apos;adresses &quot;%1&quot; est corrompu ou a un format inconnu.</translation>
+        <translation>Le fichier du carnet d adresses &quot;%1&quot; est corrompu ou a un format inconnu.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="264"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Impossible de décrypter le carnet d&apos;adresses avec le mot de passe spécifié.</translation>
+        <translation>Impossible de décrypter le carnet d adresses avec le mot de passe spécifié.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="270"/>
@@ -1026,12 +1026,12 @@
     <message>
         <location filename="../address_book_tab.cc" line="257"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Le fichier du carnet d&apos;adresses est crypté avec un type de cryptage non pris en charge.</translation>
+        <translation>Le fichier du carnet d adresses est crypté avec un type de cryptage non pris en charge.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="594"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Êtes-vous sûr de vouloir supprimer le groupe d&apos;ordinateurs &quot;%1&quot; et tous les éléments enfants?</translation>
+        <translation>Êtes-vous sûr de vouloir supprimer le groupe d ordinateurs &quot;%1&quot; et tous les éléments enfants?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="598"/>
@@ -1054,7 +1054,7 @@
     <message>
         <location filename="../address_book_tab.cc" line="623"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Êtes-vous sûr de vouloir supprimer l&apos;ordinateur &quot;%1&quot;?</translation>
+        <translation>Êtes-vous sûr de vouloir supprimer l ordinateur &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="912"/>
@@ -1079,12 +1079,12 @@
     <message>
         <location filename="../address_book_tab.cc" line="1068"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Impossible de créer ou d&apos;ouvrir un fichier de carnet d&apos;adresses.</translation>
+        <translation>Impossible de créer ou d ouvrir un fichier de carnet d adresses.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="1081"/>
         <source>Unable to write address book file.</source>
-        <translation>Impossible d&apos;écrire le fichier du carnet d&apos;adresses.</translation>
+        <translation>Impossible d écrire le fichier du carnet d adresses.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="1111"/>
@@ -1100,12 +1100,12 @@
     <message>
         <location filename="../address_book_tab.cc" line="1125"/>
         <source>Could not open address book</source>
-        <translation>Impossible d&apos;ouvrir le carnet d adresses</translation>
+        <translation>Impossible d ouvrir le carnet d adresses</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="1140"/>
         <source>Failed to save address book</source>
-        <translation>Échec de l&apos;enregistrement du carnet d adresses</translation>
+        <translation>Échec de l enregistrement du carnet d adresses</translation>
     </message>
 </context>
 <context>
@@ -1315,7 +1315,7 @@
     <message>
         <location filename="../computer_group_dialog_general.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Le nom d&apos;utilisateur ne peut pas être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, .</translation>
+        <translation>Le nom de l utilisateur ne peut pas être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, .</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.cc" line="142"/>
@@ -1359,7 +1359,7 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="244"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>La connexion par ID est spécifiée mais le routeur n&apos;est pas configuré. Vérifiez les paramètres du routeur dans les propriétés du carnet d&apos;adresses.</translation>
+        <translation>La connexion par ID est spécifiée mais le routeur n est pas configuré. Vérifiez les paramètres du routeur dans les propriétés du carnet d&apos;adresses.</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="265"/>
