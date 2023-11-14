@@ -26,7 +26,7 @@
     <message>
         <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation>Chiffrement :</translation>
+        <translation>Chiffrement:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="58"/>
