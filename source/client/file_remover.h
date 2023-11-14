@@ -19,6 +19,7 @@
 #ifndef CLIENT_FILE_REMOVER_H
 #define CLIENT_FILE_REMOVER_H
 
+#include "base/location.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
 
@@ -95,7 +96,7 @@ protected:
 private:
     void doNextTask();
     void doCurrentTask();
-    void onFinished();
+    void onFinished(const base::Location& location);
 
     std::shared_ptr<FileRemoverProxy> remover_proxy_;
     std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy_;

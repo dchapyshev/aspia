@@ -145,7 +145,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
         LOG(LS_ERROR) << "Decoding failed: " << (error ? error : "(NULL)") << "\n"
-                        << "Details: " << (error_detail ? error_detail : "(NULL)");
+                      << "Details: " << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 

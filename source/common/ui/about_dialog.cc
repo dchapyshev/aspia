@@ -60,6 +60,7 @@ const char* kDevelopers[] = { "Dmitry Chapyshev (dmitry@aspia.ru)" };
 const char* kTranslators[] =
 {
     "Dmitry Chapyshev (Russian)",
+    "Felipe Borela (Portuguese Brazilian)",
     "Gregor Doroschenko (German)",
     "Lyhyrda Myhaylo (Ukrainian)",
     "Mark Jansen (Dutch)",

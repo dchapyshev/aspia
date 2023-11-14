@@ -33,6 +33,7 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(
     : task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_consumer_proxy_);
 
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
@@ -41,6 +42,7 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(
 //--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
+    LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
 }
 
@@ -48,6 +50,8 @@ FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 void FileRemoveQueueBuilder::start(
     const FileRemover::TaskList& items, const FinishCallback& callback)
 {
+    LOG(LS_INFO) << "Start remove queue builder";
+
     pending_tasks_ = items;
     callback_ = callback;
 
@@ -114,6 +118,8 @@ void FileRemoveQueueBuilder::doPendingTasks()
 //--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onAborted(proto::FileError error_code)
 {
+    LOG(LS_INFO) << "Aborted: " << error_code;
+
     pending_tasks_.clear();
     tasks_.clear();
 

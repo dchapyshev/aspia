@@ -140,7 +140,7 @@ void UpdateChecker::run()
 #error Unknown architecture
 #endif
 
-    const base::Version& version = base::Version::currentShort();
+    const base::Version& version = base::Version::kVersion_CurrentShort;
 
     std::string url(update_server_);
     url += "/update.php?";

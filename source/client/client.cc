@@ -315,7 +315,7 @@ void Client::startAuthentication()
                 channel_->setChannelIdSupport(true);
             }
 
-            const base::Version& client_version = base::Version::currentFull();
+            const base::Version& client_version = base::Version::kVersion_CurrentFull;
             if (host_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()

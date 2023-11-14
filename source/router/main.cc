@@ -237,7 +237,7 @@ int wmain()
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     if (command_line->hasSwitch(u"install"))
@@ -284,7 +284,7 @@ int main(int argc, const char* const* argv)
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =

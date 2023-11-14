@@ -53,7 +53,7 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     // |destination| provided to ProvideInput() directly.
     if (channels > 1)
     {
-        resampler_audio_bus_ = AudioBus::Create(channels - 1, request_size);
+        resampler_audio_bus_ = AudioBus::Create(channels - 1, static_cast<int>(request_size));
         for (int i = 0; i < resampler_audio_bus_->channels(); ++i)
         {
             wrapped_resampler_audio_bus_->SetChannelData(i + 1, resampler_audio_bus_->channel(i));
@@ -98,7 +98,7 @@ void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
             // since they all buffer in the same way and are processing the same
             // number of frames.
             resamplers_[i]->Resample(
-                frames_this_time, audio_bus->channel(i) + output_frames_ready_);
+                frames_this_time, audio_bus->channel(static_cast<int>(i)) + output_frames_ready_);
         }
 
         output_frames_ready_ += frames_this_time;

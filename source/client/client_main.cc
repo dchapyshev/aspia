@@ -18,6 +18,7 @@
 
 #include "client/client_main.h"
 
+#include "base/sys_info.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"
@@ -399,11 +400,14 @@ int clientMain(int argc, char* argv[])
 
     client::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
@@ -535,6 +539,8 @@ int clientMain(int argc, char* argv[])
 
     if (parser.isSet(address_option))
     {
+        LOG(LS_INFO) << "Command line start";
+
         std::optional<proto::DesktopConfig> desktop_config;
         client::Config config;
 
@@ -574,6 +580,7 @@ int clientMain(int argc, char* argv[])
         }
         else
         {
+            LOG(LS_ERROR) << "Unknown session type specified: " << session_type;
             onInvalidValue("session-type",
                            "desktop-manage, desktop-view, file-transfer, system-info, text-chat");
             return 1;
@@ -582,46 +589,85 @@ int clientMain(int argc, char* argv[])
         if (desktop_config.has_value())
         {
             if (!parseCodecValue(parser.value(codec_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse codec value";
                 return 1;
+            }
 
             if (desktop_config->video_encoding() == proto::VIDEO_ENCODING_ZSTD)
             {
                 if (!parseColorDepthValue(parser.value(color_depth_option), *desktop_config))
+                {
+                    LOG(LS_ERROR) << "Unable to parse color depth value";
                     return 1;
+                }
 
                 if (!parseCompressRatioValue(parser.value(compress_ratio_option), *desktop_config))
+                {
+                    LOG(LS_ERROR) << "Unable to parse compress ratio value";
                     return 1;
+                }
             }
 
             if (!parseAudioValue(parser.value(audio_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse audio value";
                 return 1;
+            }
 
             if (!parseCursorShapeValue(parser.value(cursor_shape_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse cursor shape value";
                 return 1;
+            }
 
             if (!parseCursorPositionValue(parser.value(cursor_position_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse cursor position value";
                 return 1;
+            }
 
             if (!parseClipboardValue(parser.value(clipboard_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse clipboard value";
                 return 1;
+            }
 
             if (!parseDesktopEffectsValue(parser.value(desktop_effects_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse desktop effects value";
                 return 1;
+            }
 
             if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse desktop wallpaper value";
                 return 1;
+            }
 
             if (!parseFontSmoothingValue(parser.value(font_smoothing_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse font smoothing value";
                 return 1;
+            }
 
             if (!parseClearClipboardValue(parser.value(clear_clipboard_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse clear clipboard value";
                 return 1;
+            }
 
             if (!parseLockAtDisconnectValue(parser.value(lock_at_disconnect_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse lock at disconnect value";
                 return 1;
+            }
 
             if (!parseBlockRemoteInputValue(parser.value(block_remote_input_option), *desktop_config))
+            {
+                LOG(LS_ERROR) << "Unable to parse block remote input value";
                 return 1;
+            }
         }
 
         if (base::isHostId(config.address_or_id))
@@ -632,10 +678,16 @@ int clientMain(int argc, char* argv[])
 
             if (parser.isSet(router_address_option))
             {
+                LOG(LS_INFO) << "Router address option specified";
+
                 router_config.address = parser.value(router_address_option).toStdU16String();
                 router_config.port = parser.value(router_port_option).toUShort();
                 router_config.username = parser.value(router_username_option).toStdU16String();
                 router_config.password = parser.value(router_password_option).toStdU16String();
+            }
+            else
+            {
+                LOG(LS_INFO) << "Router address option not specified";
             }
 
             if (!router_config.isValid())
@@ -685,14 +737,22 @@ int clientMain(int argc, char* argv[])
         }
 
         if (!session_window)
+        {
+            LOG(LS_ERROR) << "Session window not created";
             return 1;
+        }
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
         if (!session_window->connectToHost(config))
+        {
+            LOG(LS_ERROR) << "Unable to connect to host";
             return 0;
+        }
     }
     else
     {
+        LOG(LS_INFO) << "Normal start";
+
         client_window.reset(new client::ClientWindow());
         client_window->show();
         client_window->activateWindow();

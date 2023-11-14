@@ -38,7 +38,9 @@ Contacts
 --------
 E-Mail: dmitry@aspia.ru
 
-Group in Telegram: [@aspia_ru](https://t.me/aspia_ru)
+Group in Telegram: [@aspia_talks](https://t.me/aspia_talks)
+
+News in Telegram: [@aspia_news](https://t.me/aspia_news)
 
 Licensing
 ---------

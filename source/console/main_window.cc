@@ -1451,7 +1451,7 @@ void MainWindow::onUpdateCheckedFinished(const base::ByteArray& result)
         }
         else
         {
-            const base::Version& current_version = base::Version::currentShort();
+            const base::Version& current_version = base::Version::kVersion_CurrentShort;
             const base::Version& update_version = update_info.version();
 
             if (update_version > current_version)

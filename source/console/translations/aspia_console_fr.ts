@@ -67,7 +67,7 @@
     <message>
         <location filename="../address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;site officiel&lt;/a&gt;.</translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s il n y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;site officiel&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="242"/>
@@ -225,11 +225,13 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>Groupe parents:</translation>
+
+        <translation>Groupe parents:</translation>r
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
+
         <translation>Adresse / ID:</translation>
     </message>
     <message>
@@ -616,7 +618,7 @@
     <message>
         <location filename="../main_window.ui" line="416"/>
         <source>Address Book Properties</source>
-        <translation>Propriétés du carnet d&apos;adresses</translation>
+        <translation>Propriétés du carnet d adresses</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="425"/>
