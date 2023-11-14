@@ -225,8 +225,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-
-        <translation>Groupe parents:</translation>r
+        <translation>Groupe parents:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="65"/>
