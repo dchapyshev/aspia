@@ -125,6 +125,7 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
     {
         LOG(LS_ERROR) << "acceptor_->bind failed: "
                       << base::utf16FromLocal8Bit(error_code.message());
+        return;
     }
 
     acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
@@ -132,6 +133,7 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
     {
         LOG(LS_ERROR) << "acceptor_->listen failed: "
                       << base::utf16FromLocal8Bit(error_code.message());
+        return;
     }
 
     doAccept();
