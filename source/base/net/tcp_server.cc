@@ -112,6 +112,14 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
         return;
     }
 
+    acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_->set_option failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
