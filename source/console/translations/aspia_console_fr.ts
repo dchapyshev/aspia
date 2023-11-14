@@ -212,7 +212,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="243"/>
         <source>Lock computer at disconnect</source>
-        <translation>Verrouiller l&apos;ordinateur lors de la déconnexion</translation>
+        <translation>Verrouiller l ordinateur lors de la déconnexion</translation>
     </message>
 </context>
 <context>
@@ -225,7 +225,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>Groupe parents :</translation>
+        <translation>Groupe parents:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="65"/>
@@ -235,22 +235,22 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="81"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Hérite du parent</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="93"/>
         <source>User Name:</source>
-        <translation type="unfinished">Nom d&apos;utilisateur</translation>
+        <translation>Nom de l utilisateur:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="107"/>
         <source>Password:</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="153"/>
         <source>Comment:</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Commentaire:</translation>
     </message>
 </context>
 <context>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner l élément enfant</translation>
     </message>
 </context>
 <context>
@@ -266,32 +266,32 @@
     <message>
         <location filename="../computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés du groupe des ordinateurs</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">Général</translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
-        <translation type="unfinished">Groupe parents :</translation>
+        <translation>Groupe parents:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Commentaire:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="91"/>
         <source>Default Configuration</source>
-        <translation type="unfinished">Configuration par défaut</translation>
+        <translation>Configuration par défaut</translation>
     </message>
 </context>
 <context>
@@ -299,98 +299,98 @@
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="55"/>
         <source>Codec</source>
-        <translation type="unfinished">Codec</translation>
+        <translation>Codec</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="66"/>
         <source>Color depth:</source>
-        <translation type="unfinished">Profondeur de couleur</translation>
+        <translation>Profondeur de couleur:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="87"/>
         <source>Fast</source>
-        <translation type="unfinished">Rapide</translation>
+        <translatio>Rapide</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="113"/>
         <source>Best</source>
-        <translation type="unfinished">Meilleur</translation>
+        <translation>Meilleur</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="131"/>
         <source>Features</source>
-        <translation type="unfinished">Caractéristiques</translation>
+        <translation>Caractéristiques</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="137"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Activer l&apos;audio</translation>
+        <translation>Activer l audio</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="144"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Activer le presse-papiers</translation>
+        <translation>Activer le presse-papiers</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="151"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">Afficher la forme du curseur à distance</translation>
+        <translation>Afficher la forme du curseur à distance</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="158"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">Afficher la position du curseur à distance</translation>
+        <translation>Afficher la position du curseur à distance</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="194"/>
         <source>Appearance</source>
-        <translation type="unfinished">Apparence</translation>
+        <translation>Apparence</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="200"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Désactiver les effets de bureau</translation>
+        <translation>Désactiver les effets de bureau</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="207"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Désactiver le fond d&apos;écran</translation>
+        <translation>Désactiver le fond d écran</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="214"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished">Désactiver le lissage des polices</translation>
+        <translation>Désactiver le lissage des polices</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="182"/>
         <location filename="../computer_group_dialog_desktop.ui" line="230"/>
         <source>Other</source>
-        <translation type="unfinished">Autre</translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished">Général</translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished">Hérite de la configuration du parent</translation>
+        <translation>Hérite de la configuration du parent</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="236"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished">Effacer le presse-papiers lors de la déconnexion</translation>
+        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="243"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Verrouiller l&apos;ordinateur lors de la déconnexion</translation>
+        <translation>Verrouiller l ordinateur lors de la déconnexion</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="250"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Blocage de la session à distance</translation>
+        <translation>Blocage de la session à distance</translation>
     </message>
 </context>
 <context>
@@ -398,17 +398,17 @@
     <message>
         <location filename="../computer_group_dialog_general.ui" line="20"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Hérite du parent</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation type="unfinished">Nom d&apos;utilisateur</translation>
+        <translation>Nom de l utilisateur</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe:</translation>
     </message>
 </context>
 <context>
@@ -416,7 +416,7 @@
     <message>
         <location filename="../computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner l élément enfant</translation>
     </message>
 </context>
 <context>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../computer_group_item.cc" line="141"/>
         <source>Root Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupe Racine</translation>
     </message>
 </context>
 <context>
@@ -432,17 +432,17 @@
     <message>
         <location filename="../main.cc" line="70"/>
         <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console Aspia</translation>
     </message>
     <message>
         <location filename="../main.cc" line="73"/>
         <source>file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../main.cc" line="74"/>
         <source>The file to open.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier à ouvrir.</translation>
     </message>
 </context>
 <context>
@@ -450,47 +450,47 @@
     <message>
         <location filename="../main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="62"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="66"/>
         <source>Recent open</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvert récemment</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="85"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Edition</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="103"/>
         <source>&amp;Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Type de session</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="113"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="124"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vue</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="128"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Language</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="148"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Outils</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="163"/>
