@@ -97,6 +97,9 @@ void SessionsWorker::onBeforeThreadRunning()
         listen_address = asio::ip::address_v6::any();
     }
 
+    LOG(LS_INFO) << "Listen interface: "
+                 << (listen_interface_.empty() ? u"ANY" : listen_interface_) << ":" << peer_port_;
+
     session_manager_ = std::make_unique<SessionManager>(
         self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,
         statistics_interval_);
