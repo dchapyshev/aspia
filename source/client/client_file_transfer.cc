@@ -57,6 +57,7 @@ ClientFileTransfer::~ClientFileTransfer()
 void ClientFileTransfer::setFileManagerWindow(
     std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy)
 {
+    LOG(LS_INFO) << "File transfer window installed";
     file_manager_window_proxy_ = std::move(file_manager_window_proxy);
 }
 
@@ -88,6 +89,7 @@ void ClientFileTransfer::onSessionMessageReceived(
 
     if (reply->error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
     {
+        LOG(LS_INFO) << "No logged in user on host side";
         file_manager_window_proxy_->onErrorOccurred(reply->error_code());
     }
     else if (!remote_task_queue_.empty())
@@ -167,7 +169,10 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 void ClientFileTransfer::doNextRemoteTask()
 {
     if (remote_task_queue_.empty())
+    {
+        LOG(LS_INFO) << "No more tasks";
         return;
+    }
 
     // Send a request to the remote computer.
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front()->request());

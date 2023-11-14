@@ -6,161 +6,161 @@
     <message>
         <location filename="../ui/authorization_dialog.ui" line="14"/>
         <source>Authorization</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisation</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d'utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="46"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe à usage unique</translation>
     </message>
 </context>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="61"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="411"/>
-        <source>Remote computer address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur incorrecte pour &quot;%1&quot;. Valeurs possibles: %2.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="415"/>
-        <source>Remote computer port.</source>
-        <translation type="unfinished"></translation>
+        <source>Remote computer address.</source>
+        <translation>Adresse de l'ordinateur distant.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="420"/>
-        <source>Name of host.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client_main.cc" line="419"/>
+        <source>Remote computer port.</source>
+        <translation>Port de l'ordinateur distant.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="424"/>
-        <source>Name of user.</source>
-        <translation type="unfinished"></translation>
+        <source>Name of host.</source>
+        <translation>Nom d'hôte.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="428"/>
-        <source>Password of user.</source>
-        <translation type="unfinished"></translation>
+        <source>Name of user.</source>
+        <translation>Nom d'utilisateur.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="432"/>
-        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
+        <source>Password of user.</source>
+        <translation>Mot de passe de l'utilisateur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
-        <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client_main.cc" line="436"/>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
+        <translation>Type de session. Valeurs possibles: Gestion du bureau, Vue du bureau, Transfert de fichier, Informations système, fenêtre de dialogue.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="441"/>
-        <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
-        <translation type="unfinished"></translation>
+        <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
+        <translation>Type de codec. Valeurs possibles: vp8, vp9, zstd.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="445"/>
-        <source>Compression ratio. Possible values: 1-22.</source>
-        <translation type="unfinished"></translation>
+        <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
+        <translation>Profondeur de couleur. Valeurs possibles: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="449"/>
-        <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Compression ratio. Possible values: 1-22.</source>
+        <translation>Taux de compression. Valeurs possibles: 1-22.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="453"/>
-        <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable audio. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive le son. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="457"/>
-        <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive la forme du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="461"/>
-        <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive la position du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="465"/>
-        <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive le presse-papiers. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="469"/>
-        <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive les effets de bureau. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="473"/>
-        <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive le fond d'écran. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="477"/>
-        <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
+        <translation>Active ou désactive le lissage des polices. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="481"/>
-        <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
+        <translation>Efface le presse-papiers lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="485"/>
-        <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
+        <translation>Verrouiller l'ordinateur lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="489"/>
-        <source>Router address.</source>
-        <translation type="unfinished"></translation>
+        <source>Block remote input. Possible values: 0 or 1.</source>
+        <translation>Blocage de l'accès à distance. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="493"/>
-        <source>Router port.</source>
-        <translation type="unfinished"></translation>
+        <source>Router address.</source>
+        <translation>Adresse du routeur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="498"/>
-        <source>Router name of user.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client_main.cc" line="497"/>
+        <source>Router port.</source>
+        <translation>Port du routeur.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="502"/>
-        <source>Router password of user.</source>
-        <translation type="unfinished"></translation>
+        <source>Router name of user.</source>
+        <translation>Nom d'utilisateur du routeur.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="506"/>
+        <source>Router password of user.</source>
+        <translation>Mot de passe de l'utilisateur du routeur.</translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="510"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="59"/>
-        <location filename="../client_main.cc" line="643"/>
+        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="695"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="644"/>
+        <location filename="../client_main.cc" line="696"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished"></translation>
+        <translation>l'ID de l'hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
@@ -168,37 +168,37 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="24"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Routeur</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="30"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser un routeur</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="39"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d'utilisateur:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s'il n'y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre.</translation>
     </message>
 </context>
 <context>
@@ -206,77 +206,77 @@
     <message>
         <location filename="../ui/client_window.ui" line="14"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client Aspia</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="48"/>
         <source>ID / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>ID / Adresse</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="120"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de session</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="256"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecter</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="301"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vue</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="361"/>
         <source>Show icons in menus</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les icônes dans les menus</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="366"/>
         <source>Check for updates...</source>
-        <translation type="unfinished"></translation>
+        <translation>Recherche de mise à jour...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="371"/>
         <source>Update Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour des paramètres</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="376"/>
         <source>Clear history</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer l'historique</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="305"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Language</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="290"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="326"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide en ligne...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="335"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos de</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="344"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="353"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie</translation>
     </message>
 </context>
 <context>
@@ -284,92 +284,92 @@
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="20"/>
         <source>Session Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la session</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="145"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Apparence</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="201"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocage de l'accès à distance</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="43"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Profondeur de couleur</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="64"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapide</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="84"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Meilleur</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="102"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Caractéristiques</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="108"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l'audio</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="115"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer le presse-papiers</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="122"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la souris de l'ordinateur distant</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="129"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la position du curseur de l'ordianteur distant</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver les effets de bureau</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="158"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver le fond d'écran</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="165"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver le lissage des polices</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="181"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="187"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="194"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verrouiller l'ordinateur lors de la déconnexion</translation>
     </message>
 </context>
 <context>
@@ -377,37 +377,37 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="126"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Verrouiller la barre d'outils</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="138"/>
         <source>Session configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la session</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="150"/>
         <source>Automatic window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille automatique de la fenêtre</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="165"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer en mode plein écran ou revenir en arrière</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="176"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Défilement automatique</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="188"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="200"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu avancé</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="205"/>
@@ -917,7 +917,7 @@
         <location filename="../ui/router_manager/router_manager_window.ui" line="244"/>
         <location filename="../ui/router_manager/router_manager_window.ui" line="411"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
 </context>
 <context>
@@ -1485,7 +1485,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="59"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="64"/>
@@ -1594,7 +1594,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="76"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="81"/>
@@ -1824,7 +1824,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom utilisateur</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="85"/>
@@ -2320,7 +2320,7 @@
     <message>
         <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID de l&apos;hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
@@ -2439,22 +2439,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="539"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="551"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2761,34 +2761,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="315"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="324"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

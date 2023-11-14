@@ -17,7 +17,7 @@
 //
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/scoped_logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
@@ -25,11 +25,11 @@
 #include "build/version.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database.h"
+#include "router/service.h"
 #include "router/settings.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "router/service.h"
 #include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -232,12 +232,12 @@ void showHelp()
 int wmain()
 {
     base::installFailureHandler(L"aspia_router");
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     if (command_line->hasSwitch(u"install"))
@@ -273,19 +273,18 @@ int wmain()
         router::Service().exec();
     }
 
-    base::shutdownLogging();
     return 0;
 }
 #else
 //--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
@@ -305,20 +304,7 @@ int main(int argc, const char* const* argv)
     }
     else
     {
-        std::unique_ptr<base::MessageLoop> message_loop =
-            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
-
-        std::unique_ptr<router::Server> server =
-            std::make_unique<router::Server>(message_loop->taskRunner());
-
-        server->start();
-        message_loop->run();
-
-        server.reset();
-        message_loop.reset();
+        router::Service().exec();
     }
-
-    crypto_initializer.reset();
-    base::shutdownLogging();
 }
 #endif

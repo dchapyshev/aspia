@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/sys_info.h"
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
@@ -53,11 +54,15 @@ int main(int argc, char *argv[])
 
     console::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 

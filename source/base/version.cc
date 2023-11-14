@@ -144,6 +144,11 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
 
 //--------------------------------------------------------------------------------------------------
 // static
+const Version& Version::kVersion_CurrentFull =
+    Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+const Version& Version::kVersion_CurrentShort =
+    Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+const Version& Version::kVersion_2_4_0 = Version(2, 4, 0);
 const Version& Version::kVersion_2_6_0 = Version(2, 6, 0);
 
 //--------------------------------------------------------------------------------------------------
@@ -328,23 +333,6 @@ Version Version::fromProto(const proto::Version& proto_version)
 {
     return Version(proto_version.major(), proto_version.minor(),
                    proto_version.patch(), proto_version.revision());
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-const Version& Version::currentShort()
-{
-    static const Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-    return version;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-const Version& Version::currentFull()
-{
-    static const Version version(
-        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
-    return version;
 }
 
 //--------------------------------------------------------------------------------------------------

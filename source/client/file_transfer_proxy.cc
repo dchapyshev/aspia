@@ -29,6 +29,7 @@ FileTransferProxy::FileTransferProxy(
     : io_task_runner_(std::move(io_task_runner)),
       file_transfer_(file_transfer)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
     DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(file_transfer_);
@@ -37,12 +38,14 @@ FileTransferProxy::FileTransferProxy(
 //--------------------------------------------------------------------------------------------------
 FileTransferProxy::~FileTransferProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!file_transfer_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach file transfer";
     DCHECK(io_task_runner_->belongsToCurrentThread());
     file_transfer_ = nullptr;
 }

@@ -32,13 +32,15 @@ System requirements
 -------------------
 - Windows 7/2008 R2 or higher (x86 or x86_64 CPU)
 - Debian 11/Ubuntu 20.04 Linux (x86_64 CPU)
-- MacOSX (x86_64 or ARM CPU)
+- MacOSX (x86_64 or ARM64 CPU)
 
 Contacts
 --------
 E-Mail: dmitry@aspia.ru
 
-Group in Telegram: [@aspia_ru](https://t.me/aspia_ru)
+Group in Telegram: [@aspia_talks](https://t.me/aspia_talks)
+
+News in Telegram: [@aspia_news](https://t.me/aspia_news)
 
 Licensing
 ---------

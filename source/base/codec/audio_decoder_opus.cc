@@ -122,7 +122,8 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
     decoded_packet->set_bytes_per_sample(proto::AudioPacket::BYTES_PER_SAMPLE_2);
     decoded_packet->set_channels(packet.channels());
 
-    int max_frame_samples = kMaxFrameSizeMs * kSamplingRate / std::chrono::milliseconds(1000);
+    int max_frame_samples = static_cast<int>(
+        kMaxFrameSizeMs * kSamplingRate / std::chrono::milliseconds(1000));
     int max_frame_bytes = max_frame_samples * channels_ * decoded_packet->bytes_per_sample();
 
     std::string* decoded_data = decoded_packet->add_data();

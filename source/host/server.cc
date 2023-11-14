@@ -202,7 +202,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
 
-    const base::Version& host_version = base::Version::currentFull();
+    const base::Version& host_version = base::Version::kVersion_CurrentFull;
     if (host_version > session_info.version)
     {
         LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
@@ -285,7 +285,7 @@ void Server::onUpdateCheckedFinished(const base::ByteArray& result)
         }
         else
         {
-            const base::Version& current_version = base::Version::currentShort();
+            const base::Version& current_version = base::Version::kVersion_CurrentShort;
             const base::Version& update_version = update_info.version();
 
             if (update_version > current_version)

@@ -27,32 +27,32 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="61"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="411"/>
+        <location filename="../client_main.cc" line="415"/>
         <source>Remote computer address.</source>
         <translation>远程计算机地址。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="415"/>
+        <location filename="../client_main.cc" line="419"/>
         <source>Remote computer port.</source>
         <translation>远程计算机端口。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="420"/>
+        <location filename="../client_main.cc" line="424"/>
         <source>Name of host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="424"/>
+        <location filename="../client_main.cc" line="428"/>
         <source>Name of user.</source>
         <translation>用户名。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="428"/>
+        <location filename="../client_main.cc" line="432"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,103 +61,103 @@
         <translation type="vanished">会话类型。 可能的值：桌面管理，桌面视图，文件传输。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="432"/>
+        <location filename="../client_main.cc" line="436"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="441"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="465"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="469"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="469"/>
+        <location filename="../client_main.cc" line="473"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="473"/>
+        <location filename="../client_main.cc" line="477"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="477"/>
+        <location filename="../client_main.cc" line="481"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="481"/>
+        <location filename="../client_main.cc" line="485"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="485"/>
+        <location filename="../client_main.cc" line="489"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="489"/>
+        <location filename="../client_main.cc" line="493"/>
         <source>Router address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="493"/>
+        <location filename="../client_main.cc" line="497"/>
         <source>Router port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="498"/>
+        <location filename="../client_main.cc" line="502"/>
         <source>Router name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="502"/>
+        <location filename="../client_main.cc" line="506"/>
         <source>Router password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="506"/>
+        <location filename="../client_main.cc" line="510"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="59"/>
-        <location filename="../client_main.cc" line="643"/>
+        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="695"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -166,7 +166,7 @@
         <translation type="vanished">输入了错误的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="644"/>
+        <location filename="../client_main.cc" line="696"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -895,6 +895,25 @@
         <location filename="../ui/desktop/task_manager_window.cc" line="90"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtDesktopWindow</name>
+    <message>
+        <source>Save File</source>
+        <translation type="obsolete">保存文件</translation>
+    </message>
+    <message>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="obsolete">PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <source>Could not save image</source>
+        <translation type="obsolete">无法保存图像</translation>
     </message>
 </context>
 <context>
@@ -2795,22 +2814,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="539"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="551"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3140,34 +3159,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="315"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="324"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>

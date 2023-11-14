@@ -34,12 +34,13 @@ WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string
     : path_(path),
       name_(name)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor (path=" << path << " name=" << name.data() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 WebmFileWriter::~WebmFileWriter()
 {
+    LOG(LS_INFO) << "Dtor";
     close();
 }
 
@@ -72,7 +73,10 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
     if (packet.has_format())
     {
         if (!init())
+        {
+            LOG(LS_ERROR) << "init failed";
             return;
+        }
 
         const char* video_codec_id = mkvmuxer::Tracks::kVp8CodecId;
         if (packet.encoding() == proto::VIDEO_ENCODING_VP9)
@@ -236,11 +240,13 @@ void WebmFileWriter::close()
             LOG(LS_ERROR) << "WebmFileMuxer::finalize failed";
         }
 
+        LOG(LS_INFO) << "Muxer destroyed";
         muxer_.reset();
     }
 
     if (file_)
     {
+        LOG(LS_INFO) << "File closed";
         fclose(file_);
         file_ = nullptr;
     }

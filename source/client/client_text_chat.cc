@@ -44,6 +44,7 @@ ClientTextChat::~ClientTextChat()
 void ClientTextChat::setTextChatWindow(
     std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy)
 {
+    LOG(LS_INFO) << "Text chat window installed";
     text_chat_window_proxy_ = std::move(text_chat_window_proxy);
 }
 

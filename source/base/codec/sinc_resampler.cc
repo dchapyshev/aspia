@@ -200,7 +200,7 @@ void SincResampler::UpdateRegions(bool second_load)
     r0_ = input_buffer_.get() + (second_load ? kKernelSize : kKernelSize / 2);
     r3_ = r0_ + request_frames_ - kKernelSize;
     r4_ = r0_ + request_frames_ - kKernelSize / 2;
-    block_size_ = r4_ - r2_;
+    block_size_ = static_cast<int>(r4_ - r2_);
     chunk_size_ = CalculateChunkSize(block_size_, io_sample_rate_ratio_);
 
     // r1_ at the beginning of the buffer.

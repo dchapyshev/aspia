@@ -19,6 +19,7 @@
 #ifndef CLIENT_FILE_TRANSFER_H
 #define CLIENT_FILE_TRANSFER_H
 
+#include "base/location.h"
 #include "base/waitable_timer.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
@@ -186,7 +187,7 @@ private:
     void doUpdateSpeed();
     void onError(Error::Type type, proto::FileError code, const std::string& path = std::string());
     void setActionForErrorType(Error::Type error_type, Error::Action action);
-    void onFinished();
+    void onFinished(const base::Location& location);
 
     const Type type_;
 
