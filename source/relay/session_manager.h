@@ -49,7 +49,7 @@ public:
     };
 
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                   const asio::ip::address& listen_address,
+                   const asio::ip::address& address,
                    uint16_t port,
                    const std::chrono::minutes& idle_timeout,
                    bool statistics_enabled,
@@ -84,6 +84,9 @@ private:
     asio::ip::tcp::acceptor acceptor_;
     std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
     std::vector<std::unique_ptr<Session>> active_sessions_;
+
+    const asio::ip::address address_;
+    const uint16_t port_;
 
     const std::chrono::minutes idle_timeout_;
     asio::high_resolution_timer idle_timer_;

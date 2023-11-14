@@ -98,14 +98,15 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 
 //--------------------------------------------------------------------------------------------------
 SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                               const asio::ip::address& listen_address,
+                               const asio::ip::address& address,
                                uint16_t port,
                                const std::chrono::minutes& idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval)
     : task_runner_(std::move(task_runner)),
-      acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
-                asio::ip::tcp::endpoint(listen_address, port)),
+      acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      address_(address),
+      port_(port),
       idle_timeout_(idle_timeout),
       idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
@@ -113,8 +114,6 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
       statistics_interval_(statistics_interval)
 {
     DCHECK(task_runner_);
-
-    LOG(LS_INFO) << "Session manager port: " << port;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,6 +129,41 @@ SessionManager::~SessionManager()
 void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
 {
     LOG(LS_INFO) << "Starting session manager";
+
+    asio::ip::tcp::endpoint endpoint(address_, port_);
+
+    std::error_code error_code;
+    acceptor_.open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.open failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.set_option failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.bind failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.listen failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
 
     start_time_ = Clock::now();
 
