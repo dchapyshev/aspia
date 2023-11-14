@@ -529,10 +529,15 @@ void Server::reloadUserList()
     LOG(LS_INFO) << "Reloading user list";
 
     // Read the list of regular users.
-    std::unique_ptr<base::UserList> user_list(settings_.userList().release());
+    std::unique_ptr<base::UserList> user_list = settings_.userList();
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(*user_session_manager_->userList());
+
+    if (user_list->seedKey().empty())
+    {
+        LOG(LS_ERROR) << "Empty seed key for user list";
+    }
 
     // Updating the list of users.
     authenticator_manager_->setUserList(std::move(user_list));

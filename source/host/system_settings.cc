@@ -218,8 +218,12 @@ void SystemSettings::setUserList(const base::UserList& users)
         users_array.emplace_back(std::move(item));
     }
 
+    base::ByteArray seed_key = users.seedKey();
+    if (seed_key.empty())
+        seed_key = base::Random::byteArray(64);
+
     settings_.setArray("Users", users_array);
-    settings_.set("SeedKey", users.seedKey());
+    settings_.set("SeedKey", seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------
