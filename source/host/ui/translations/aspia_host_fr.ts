@@ -133,7 +133,7 @@
     <message>
         <location filename="../config_dialog.ui" line="599"/>
         <source>Preffered video capturer:</source>
-        <translation>Capteur vidéo préféré</translation>
+        <translation>Capteur vidéo préféré:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="591"/>
@@ -595,7 +595,7 @@
         <location filename="../config_dialog.cc" line="575"/>
         <location filename="../config_dialog.cc" line="641"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="unfinished"></translation>
+        <translation>La configuration du service a été modifiée. Pour que les modifications soient prises en compte, vous devez redémarrer le service. Redémarrer le service maintenant?</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="603"/>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../config_dialog.cc" line="141"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes les 30 minutes</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="142"/>
