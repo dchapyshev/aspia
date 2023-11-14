@@ -75,23 +75,41 @@ void Service::exec()
 {
     LOG(LS_INFO) << "Begin";
 
-    signal(SIGKILL, signalHandler);
-    signal(SIGTERM, signalHandler);
-    signal(SIGHUP, signalHandler);
-    signal(SIGQUIT, signalHandler);
-    signal(SIGINT, signalHandler);
-    signal(SIGSTOP, signalHandler);
-    signal(SIGABRT, signalHandler);
+    if (signal(SIGKILL, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGKILL";
+
+    if (signal(SIGTERM, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGTERM";
+
+    if (signal(SIGHUP, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGHUP";
+
+    if (signal(SIGQUIT, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGQUIT";
+
+    if (signal(SIGINT, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGQUIT";
+
+    if (signal(SIGSTOP, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGSTOP";
+
+    if (signal(SIGABRT, signalHandler) == SIG_ERR)
+        LOG(LS_ERROR) << "Unable to install signal handler for SIGABRT";
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
     CHECK(crypto_initializer->isSucceeded());
 
+    LOG(LS_INFO) << "Cryptography initialized successfully";
+
     message_loop_ = std::make_unique<MessageLoop>(type_);
     task_runner_ = message_loop_->taskRunner();
 
+    LOG(LS_INFO) << "Message loop created";
+
     task_runner_->postTask(std::bind(&Service::onStart, this));
 
+    LOG(LS_INFO) << "Run message loop";
     message_loop_->run();
     message_loop_.reset();
 

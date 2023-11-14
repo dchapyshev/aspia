@@ -304,6 +304,7 @@ int main(int argc, const char* const* argv)
     }
     else
     {
+        LOG(LS_INFO) << "Starting router services";
         router::Service().exec();
     }
 }
