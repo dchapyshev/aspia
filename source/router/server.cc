@@ -22,6 +22,7 @@
 #include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/net/tcp_channel.h"
@@ -168,7 +169,16 @@ bool Server::start()
             LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
     }
 
+    base::ByteArray seed_key = settings.seedKey();
+    if (seed_key.empty())
+    {
+        LOG(LS_INFO) << "Empty seed key. New key generated";
+        seed_key = base::Random::byteArray(64);
+        settings.setSeedKey(seed_key);
+    }
+
     std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
+    user_list->setSeedKey(seed_key);
 
     authenticator_manager_ =
         std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);

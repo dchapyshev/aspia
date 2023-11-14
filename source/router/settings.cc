@@ -152,6 +152,18 @@ Settings::WhiteList Settings::relayWhiteList() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Settings::setSeedKey(const base::ByteArray &seed_key)
+{
+    impl_.set<std::string>("SeedKey", base::toHex(seed_key));
+}
+
+//--------------------------------------------------------------------------------------------------
+base::ByteArray Settings::seedKey() const
+{
+    return base::fromHex(impl_.get<std::string>("SeedKey"));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Settings::setWhiteList(std::string_view key, const WhiteList& value)
 {
     std::u16string result;

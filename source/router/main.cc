@@ -19,6 +19,7 @@
 #include "base/command_line.h"
 #include "base/scoped_logging.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
@@ -196,10 +197,19 @@ void createConfig()
         return;
     }
 
+    std::cout << "Generate seed key...";
+    base::ByteArray seed_key = base::Random::byteArray(64);
+    if (seed_key.empty())
+    {
+        std::cout << "Unable to generate seed key";
+    }
+    std::cout << "Seed key successfully generated";
+
     // Save the configuration file.
     router::Settings settings;
     settings.reset();
     settings.setPrivateKey(private_key);
+    settings.setSeedKey(seed_key);
     settings.flush();
 
     std::cout << "Configuration successfully created. Don't forget to change your password!"
