@@ -268,7 +268,8 @@ std::filesystem::path execFilePath()
     exec_file_path = buffer;
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
-    readlink("/proc/self/exe", buffer, std::size(buffer));
+    if (readlink("/proc/self/exe", buffer, std::size(buffer)) == -1)
+        return std::filesystem::path();
     exec_file_path = buffer;
 #elif defined(OS_MAC)
     char buffer[PATH_MAX] = { 0 };
