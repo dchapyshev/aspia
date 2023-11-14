@@ -421,7 +421,10 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         }
 
         if (seed_key.empty())
+        {
+            LOG(LS_INFO) << "Empty seed key. Using random 64 bytes";
             seed_key = base::Random::byteArray(64);
+        }
 
         if (user.isValid())
         {
