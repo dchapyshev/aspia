@@ -230,7 +230,6 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-
         <translation>Adresse / ID:</translation>
     </message>
     <message>
