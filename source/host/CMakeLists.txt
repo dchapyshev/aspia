@@ -67,6 +67,8 @@ list(APPEND SOURCE_HOST_CORE
     service_constants.h
     service_main.cc
     service_main.h
+    stat_counter.cc
+    stat_counter.h
     system_settings.cc
     system_settings.h
     unconfirmed_client_session.cc

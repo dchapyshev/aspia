@@ -65,9 +65,10 @@ ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
                                            std::shared_ptr<base::TaskRunner> task_runner)
     : ClientSession(session_type, std::move(channel)),
-      overflow_detection_timer_(base::WaitableTimer::Type::REPEATED, std::move(task_runner)),
+      overflow_detection_timer_(base::WaitableTimer::Type::REPEATED, task_runner),
       incoming_message_(std::make_unique<proto::ClientToHost>()),
-      outgoing_message_(std::make_unique<proto::HostToClient>())
+      outgoing_message_(std::make_unique<proto::HostToClient>()),
+      stat_counter_(id(), task_runner)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -194,21 +195,31 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
         out_mouse_event.set_y(pos_y);
 
         desktop_session_proxy_->injectMouseEvent(out_mouse_event);
+        stat_counter_.addMouseEvent();
     }
     else if (incoming_message_->has_key_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
             desktop_session_proxy_->injectKeyEvent(incoming_message_->key_event());
+            stat_counter_.addKeyboardEvent();
+        }
     }
     else if (incoming_message_->has_text_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
             desktop_session_proxy_->injectTextEvent(incoming_message_->text_event());
+            stat_counter_.addTextEvent();
+        }
     }
     else if (incoming_message_->has_clipboard_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
             desktop_session_proxy_->injectClipboardEvent(incoming_message_->clipboard_event());
+            stat_counter_.addIncomingClipboardEvent();
+        }
     }
     else if (incoming_message_->has_extension())
     {
@@ -332,7 +343,10 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
     }
 
     if (outgoing_message_->has_video_packet() || outgoing_message_->has_cursor_shape())
+    {
         sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+        stat_counter_.addVideoPacket();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -350,6 +364,7 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
         return;
 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+    stat_counter_.addAudioPacket();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -366,6 +381,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
     outgoing_message_->Clear();
     outgoing_message_->mutable_video_packet()->set_error_code(error_code);
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+    stat_counter_.addVideoError();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,6 +402,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     position->set_y(pos_y);
 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+    stat_counter_.addCursorPosition();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -418,6 +435,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
         outgoing_message_->Clear();
         outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
         sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+        stat_counter_.addOutgoingClipboardEvent();
     }
     else
     {
