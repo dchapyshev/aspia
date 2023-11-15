@@ -67,12 +67,13 @@ AudioCapturerWin::AudioCapturerWin()
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWin::~AudioCapturerWin()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(thread_checker_.calledOnValidThread());
     deinitialize();
 }
@@ -80,10 +81,14 @@ AudioCapturerWin::~AudioCapturerWin()
 //--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
 {
+    LOG(LS_INFO) << "Starting audio capturer";
     callback_ = callback;
 
     if (!initialize())
+    {
+        LOG(LS_ERROR) << "initialize failed";
         return false;
+    }
 
     // Initialize the capture timer and start capturing. Note, this timer won't be reset or
     // restarted in resetAndInitialize() function. Which means we expect the audio_device_period_
@@ -100,6 +105,7 @@ bool AudioCapturerWin::resetAndInitialize()
     deinitialize();
     if (!initialize())
     {
+        LOG(LS_ERROR) << "initialize failed";
         deinitialize();
         return false;
     }

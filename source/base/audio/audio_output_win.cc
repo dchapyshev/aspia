@@ -50,6 +50,8 @@ const char* sessionStateToString(AudioSessionState state)
 AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     : AudioOutput(need_more_data_cb)
 {
+    LOG(LS_INFO) << "Ctor";
+
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
     // processed by the client.
     audio_samples_event_.reset(CreateEventW(nullptr, false, false, nullptr));
@@ -70,6 +72,7 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
 //--------------------------------------------------------------------------------------------------
 AudioOutputWin::~AudioOutputWin()
 {
+    LOG(LS_INFO) << "Dtor";
     stop();
 }
 
@@ -228,11 +231,17 @@ bool AudioOutputWin::init()
 {
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
     if (!device.Get())
+    {
+        LOG(LS_ERROR) << "createDevice failed";
         return false;
+    }
 
     Microsoft::WRL::ComPtr<IAudioClient> audio_client = createClient(device.Get());
     if (!audio_client.Get())
+    {
+        LOG(LS_ERROR) << "createClient failed";
         return false;
+    }
 
     // Define the output WAVEFORMATEXTENSIBLE format in |format_|.
     WAVEFORMATEXTENSIBLE format_extensible;
@@ -253,7 +262,10 @@ bool AudioOutputWin::init()
     format_extensible.SubFormat                   = KSDATAFORMAT_SUBTYPE_PCM;
 
     if (!isFormatSupported(audio_client.Get(), AUDCLNT_SHAREMODE_SHARED, &format_extensible))
+    {
+        LOG(LS_ERROR) << "Format not supported";
         return false;
+    }
 
     // Initialize the audio stream between the client and the device in shared mode using
     // event-driven buffer handling. Also, using 0 as requested buffer size results in a default
@@ -262,6 +274,7 @@ bool AudioOutputWin::init()
     if (!sharedModeInitialize(audio_client.Get(), &format_extensible, audio_samples_event_,
                               requested_buffer_size, true, &endpoint_buffer_size_frames_))
     {
+        LOG(LS_ERROR) << "sharedModeInitialize failed";
         return false;
     }
 
@@ -270,7 +283,10 @@ bool AudioOutputWin::init()
     Microsoft::WRL::ComPtr<IAudioRenderClient> audio_render_client =
         createRenderClient(audio_client.Get());
     if (!audio_render_client.Get())
+    {
+        LOG(LS_ERROR) << "createRenderClient failed";
         return false;
+    }
 
     // Create an AudioSessionControl interface given the initialized client. The IAudioControl
     // interface enables a client to configure the control parameters for an audio session and to
@@ -278,7 +294,10 @@ bool AudioOutputWin::init()
     Microsoft::WRL::ComPtr<IAudioSessionControl> audio_session_control =
         createAudioSessionControl(audio_client.Get());
     if (!audio_session_control.Get())
+    {
+        LOG(LS_ERROR) << "createAudioSessionControl failed";
         return false;
+    }
 
     // The Sndvol program displays volume and mute controls for sessions that are in the active and
     // inactive states.
@@ -372,13 +391,22 @@ bool AudioOutputWin::handleRestartEvent()
         return true;
 
     if (!stop())
+    {
+        LOG(LS_ERROR) << "stop failed";
         return false;
+    }
 
     if (!init())
+    {
+        LOG(LS_ERROR) << "init failed";
         return false;
+    }
 
     if (!start())
+    {
+        LOG(LS_ERROR) << "start failed";
         return false;
+    }
 
     return true;
 }
@@ -458,7 +486,7 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
 {
     if (is_restarting_)
     {
-        DLOG(LS_ERROR) << "Ignoring since restart is already active";
+        LOG(LS_ERROR) << "Ignoring since restart is already active";
         return S_OK;
     }
 
