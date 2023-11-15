@@ -68,12 +68,12 @@
     <message>
         <location filename="../config_dialog.ui" line="523"/>
         <source>Edit user</source>
-        <translation>Modifier l'utilisateur</translation>
+        <translation>Modifier l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="543"/>
         <source>Delete user</source>
-        <translation>Supprimer l'utilisateur</translation>
+        <translation>Supprimer l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="120"/>
@@ -118,7 +118,7 @@
     <message>
         <location filename="../config_dialog.ui" line="427"/>
         <source>Enable the use of a router</source>
-        <translation>Permettre l'utilisation d'un routeur</translation>
+        <translation>Permettre l&apos;utilisation d&apos;un routeur</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="439"/>
@@ -198,12 +198,12 @@
     <message>
         <location filename="../config_dialog.ui" line="376"/>
         <source>If there is no active user:</source>
-        <translation>S'il n'y a pas d'utilisateur actif:</translation>
+        <translation>S&apos;il n&apos;y a pas d&apos;utilisateur actif:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="472"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s'il n'y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre.</translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n&apos;y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre.</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="30"/>
@@ -218,7 +218,7 @@
     <message>
         <location filename="../config_dialog.ui" line="397"/>
         <source>Disable Aspia shutdown</source>
-        <translation>Désactiver l'arrêt d'Aspia</translation>
+        <translation>Désactiver l&apos;arrêt d&apos;Aspia</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="202"/>
@@ -266,12 +266,12 @@
     <message>
         <location filename="../host_main.cc" line="238"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation>Le contrôle de l'intégrité de l'application a échoué. Des composants sont manquants ou endommagés.</translation>
+        <translation>Le contrôle de l&apos;intégrité de l&apos;application a échoué. Des composants sont manquants ou endommagés.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="257"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation>Les paramètres d'exportation et d'importation ne peuvent pas être spécifiés ensemble.</translation>
+        <translation>Les paramètres d&apos;exportation et d&apos;importation ne peuvent pas être spécifiés ensemble.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="291"/>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../host_main.cc" line="292"/>
         <source>Application version: %1.%2.%3.%4.</source>
-        <translation>Version de l'application: %1.%2.%3.%4.</translation>
+        <translation>Version de l&apos;application: %1.%2.%3.%4.</translation>
     </message>
 </context>
 <context>
@@ -454,12 +454,12 @@
     <message>
         <location filename="../settings_util.cc" line="162"/>
         <source>Unable to write the target file.</source>
-        <translation>Impossible d'écrire le fichier cible.</translation>
+        <translation>Impossible d&apos;écrire le fichier cible.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="89"/>
         <source>Source settings file does not exist.</source>
-        <translation>Le fichier des paramètres source n'existe pas.</translation>
+        <translation>Le fichier des paramètres source n&apos;existe pas.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="134"/>
@@ -482,12 +482,12 @@
     <message>
         <location filename="../user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation>Propriétés de l'utilisateur</translation>
+        <translation>Propriétés de l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../user_dialog.ui" line="24"/>
         <source>User Name:</source>
-        <translation>Nom d'utilisateur:</translation>
+        <translation>Nom d&apos;utilisateur:</translation>
     </message>
     <message>
         <location filename="../user_dialog.ui" line="31"/>
@@ -584,7 +584,7 @@
     <message>
         <location filename="../config_dialog.cc" line="415"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Êtes-vous sûr de vouloir supprimer l'utilisateur &quot;%1&quot;?</translation>
+        <translation>Êtes-vous sûr de vouloir supprimer l&apos;utilisateur &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="563"/>
@@ -605,7 +605,7 @@
     <message>
         <location filename="../config_dialog.cc" line="628"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation>La configuration ne peut pas être écrite. Assurez-vous que vous disposez des droits d'écriture suffisants.</translation>
+        <translation>La configuration ne peut pas être écrite. Assurez-vous que vous disposez des droits d&apos;écriture suffisants.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="505"/>
@@ -669,33 +669,33 @@
     <message>
         <location filename="../config_dialog.cc" line="967"/>
         <source>The service could not be installed.</source>
-        <translation>Le service n'a pas pu être installé.</translation>
+        <translation>Le service n&apos;a pas pu être installé.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="992"/>
         <source>The service could not be removed.</source>
-        <translation>Le service n'a pas pu être supprimé.</translation>
+        <translation>Le service n&apos;a pas pu être supprimé.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="1013"/>
         <location filename="../config_dialog.cc" line="1046"/>
         <source>Could not access the service.</source>
-        <translation>Impossible d'accéder au service.</translation>
+        <translation>Impossible d&apos;accéder au service.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="1024"/>
         <source>The service could not be started.</source>
-        <translation>Le service n'a pas pu être démarré.</translation>
+        <translation>Le service n&apos;a pas pu être démarré.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="1057"/>
         <source>The service could not be stopped.</source>
-        <translation>Le service n'a pas pu être arrêté.</translation>
+        <translation>Le service n&apos;a pas pu être arrêté.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="668"/>
         <source>Incorrect router address entered.</source>
-        <translation>L'adresse du routeur est incorrecte.</translation>
+        <translation>L&apos;adresse du routeur est incorrecte.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="681"/>
@@ -717,7 +717,7 @@
         <location filename="../config_dialog.cc" line="506"/>
         <location filename="../config_dialog.cc" line="543"/>
         <source>An error occurred while processing the password.</source>
-        <translation>Une erreur s'est produite lors du traitement du mot de passe.</translation>
+        <translation>Une erreur s&apos;est produite lors du traitement du mot de passe.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="139"/>
@@ -854,7 +854,7 @@
     <message>
         <location filename="../connect_confirm_dialog.cc" line="71"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation>L'utilisateur %1 (%2) essaie de se connecter à votre ordinateur avec le type de session %3.</translation>
+        <translation>L&apos;utilisateur %1 (%2) essaie de se connecter à votre ordinateur avec le type de session %3.</translation>
     </message>
     <message>
         <location filename="../connect_confirm_dialog.cc" line="73"/>
@@ -867,14 +867,12 @@
         <translation>
             <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
             <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
-            <numerusform>La connexion sera automatiquement acceptée après %n secondes.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../connect_confirm_dialog.cc" line="147"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation>
-            <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
             <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
             <numerusform>La connexion sera automatiquement rejetée après %n secondes.</numerusform>
         </translation>
@@ -923,7 +921,7 @@
     <message>
         <location filename="../main_window.cc" line="696"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation>Si vous quittez Aspia, il ne sera plus possible de se connecter à cet ordinateur jusqu'à ce que vous rallumiez manuellement l'ordinateur ou Aspia. Voulez-vous vraiment quitter l'application ?</translation>
+        <translation>Si vous quittez Aspia, il ne sera plus possible de se connecter à cet ordinateur jusqu&apos;à ce que vous rallumiez manuellement l&apos;ordinateur ou Aspia. Voulez-vous vraiment quitter l&apos;application ?</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="423"/>
@@ -1045,7 +1043,7 @@
     <message>
         <location filename="../user_dialog.cc" line="163"/>
         <source>The username you entered already exists.</source>
-        <translation>Le nom d'utilisateur que vous avez saisi existe déjà.</translation>
+        <translation>Le nom d&apos;utilisateur que vous avez saisi existe déjà.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="179"/>
@@ -1056,7 +1054,6 @@
         <location filename="../user_dialog.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
-            <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
             <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
             <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
         </translation>
@@ -1072,7 +1069,6 @@
         <translation>
             <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
             <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
-            <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
         </translation>
     </message>
     <message>
@@ -1083,7 +1079,7 @@
     <message>
         <location filename="../user_dialog.cc" line="234"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation>Erreur interne inconnue lors de la création ou de la modification d'un utilisateur.</translation>
+        <translation>Erreur interne inconnue lors de la création ou de la modification d&apos;un utilisateur.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="291"/>
@@ -1093,7 +1089,7 @@
     <message>
         <location filename="../user_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation>Le nom d'utilisateur ne peut être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, ., @.</translation>
+        <translation>Le nom d&apos;utilisateur ne peut être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, ., @.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="41"/>
