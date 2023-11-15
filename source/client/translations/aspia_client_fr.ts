@@ -1839,7 +1839,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gestionnaire de tâches</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="75"/>
@@ -1901,7 +1901,7 @@
         <location filename="../ui/desktop/task_manager_window.ui" line="293"/>
         <location filename="../ui/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Déconnexion</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="313"/>
@@ -1986,7 +1986,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enregistrer (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="57"/>
@@ -1996,7 +1996,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Imprimer (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="68"/>
@@ -2021,7 +2021,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Actualiser (F5)</translation>
     </message>
 </context>
 <context>
@@ -2029,7 +2029,7 @@
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mise à jour des paramètres</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="26"/>
@@ -2082,7 +2082,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="322"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inactif</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="325"/>
@@ -2304,7 +2304,7 @@
     <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Client Aspia</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="293"/>
@@ -2376,7 +2376,7 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrer l&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
@@ -2433,7 +2433,7 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="762"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Échelle</translation>
     </message>
 </context>
 <context>
@@ -2881,7 +2881,7 @@
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="282"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Système d&apos;exploitation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="287"/>
@@ -3127,7 +3127,7 @@
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="964"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Modifier</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="967"/>
@@ -3468,7 +3468,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="232"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Transfert de fichiers</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="236"/>
@@ -3478,7 +3478,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="240"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenêtre de dialogue</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="284"/>
@@ -3667,12 +3667,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poursuivre l attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pause en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="142"/>
@@ -3687,17 +3687,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="148"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="151"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arrêt en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="154"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arrêté</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="157"/>
@@ -3713,7 +3713,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="172"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Demande démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="175"/>
@@ -3723,12 +3723,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="178"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage du Boot</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="181"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage du système</translation>
     </message>
 </context>
 <context>
@@ -4127,7 +4127,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passerelle</translation>
     </message>
 </context>
 <context>
@@ -4295,7 +4295,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">État</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
@@ -4384,12 +4384,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Processus de veille du système</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Processus inconnu</translation>
     </message>
 </context>
 <context>
@@ -4397,12 +4397,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poursuivre l attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="141"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pause en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="144"/>
@@ -4417,17 +4417,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="153"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arrêt en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="156"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arrêté</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="159"/>
@@ -4443,7 +4443,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Demande démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="177"/>
@@ -4453,12 +4453,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="180"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage du Boot</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="183"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Démarrage du système</translation>
     </message>
 </context>
 <context>
@@ -4508,12 +4508,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Date d installation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Système d&apos;exploitation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
@@ -4659,12 +4659,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Date du pilote</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Version du pilote</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
