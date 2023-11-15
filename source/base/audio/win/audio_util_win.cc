@@ -63,7 +63,10 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     // Create the IMMDeviceEnumerator interface.
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enum(createDeviceEnumerator(true));
     if (!device_enum.Get())
+    {
+        LOG(LS_ERROR) << "createDeviceEnumerator failed";
         return audio_endpoint_device;
+    }
 
     // Get the default audio endpoint for the specified data-flow direction and // role. Note that,
     // if only a single rendering or capture device is available, the system always assigns all
@@ -247,7 +250,7 @@ bool isFormatSupported(IAudioClient* client,
                                            &closest_match);
     if ((hr == S_OK) && (closest_match == nullptr))
     {
-        DLOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(LS_INFO) << "Audio device does not support specified format";
     }
     else if ((hr == S_FALSE) && (closest_match != nullptr))
     {
@@ -259,7 +262,7 @@ bool isFormatSupported(IAudioClient* client,
     {
         // The audio engine does not support the caller-specified format or any
         // similar format.
-        DLOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(LS_INFO) << "Audio device does not support specified format";
     }
     else
     {
