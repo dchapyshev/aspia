@@ -24,7 +24,7 @@ CREATE TABLE `releases` (
 
 CREATE TABLE `updates` (
   `id` int(11) NOT NULL,
-  `source_version` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `version` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `release_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
