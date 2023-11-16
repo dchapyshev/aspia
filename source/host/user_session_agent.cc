@@ -90,10 +90,14 @@ void UserSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 
     if (incoming_message_.has_connect_confirmation_request())
     {
-        LOG(LS_INFO) << "Connect confirmation request received";
+        const proto::internal::ConnectConfirmationRequest& request =
+            incoming_message_.connect_confirmation_request();
 
-        window_proxy_->onConnectConfirmationRequest(
-            incoming_message_.connect_confirmation_request());
+        LOG(LS_INFO) << "Connect confirmation request received (id=" << request.id()
+                     << " computer_name=" << request.computer_name() << " user_name="
+                     << request.user_name() << ")";
+
+        window_proxy_->onConnectConfirmationRequest(request);
     }
     else if (incoming_message_.has_connect_event())
     {
@@ -137,6 +141,11 @@ void UserSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
     {
         const proto::internal::VideoRecordingState& video_recording_state =
             incoming_message_.video_recording_state();
+
+        LOG(LS_INFO) << "Video recording state changed (computer_name="
+                     << video_recording_state.computer_name() << " user_name="
+                     << video_recording_state.user_name() << " started="
+                     << video_recording_state.started() << ")";
 
         window_proxy_->onVideoRecordingStateChanged(
             video_recording_state.computer_name(),

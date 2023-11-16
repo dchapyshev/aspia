@@ -181,11 +181,17 @@ bool UserSessionManager::start(Delegate* delegate)
     HostIpcStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
 
+    LOG(LS_INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
+
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_for_ui, this))
     {
         LOG(LS_ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
         return false;
+    }
+    else
+    {
+        LOG(LS_INFO) << "IPC channel for UI started";
     }
 
 #if defined(OS_WIN)
@@ -204,7 +210,8 @@ bool UserSessionManager::start(Delegate* delegate)
         std::u16string name = session.sessionName16();
         if (base::compareCaseInsensitive(name, u"console") != 0)
         {
-            // RDP session detected.
+            LOG(LS_INFO) << "RDP session detected";
+
             if (session.state() != WTSActive)
             {
                 LOG(LS_INFO) << "RDP session with ID " << session_id << " not in active state. "
@@ -212,6 +219,14 @@ bool UserSessionManager::start(Delegate* delegate)
                              << base::win::SessionEnumerator::stateToString(session.state()) << ")";
                 continue;
             }
+            else
+            {
+                LOG(LS_INFO) << "RDP session in active state";
+            }
+        }
+        else
+        {
+            LOG(LS_INFO) << "CONSOLE session detected";
         }
 
         LOG(LS_INFO) << "Starting process for session id: " << session_id << " (name='" << name
@@ -336,7 +351,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
     std::string username = client_session->userName();
     if (base::startsWith(username, "#"))
     {
-        LOG(LS_INFO) << "Connection with one time password";
+        LOG(LS_INFO) << "Connection with one-time password";
 
         username.erase(username.begin());
 

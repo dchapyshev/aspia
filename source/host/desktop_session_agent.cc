@@ -111,13 +111,13 @@ DesktopSessionAgent::~DesktopSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
-    LOG(LS_INFO) << "Starting with channel id: " << channel_id.data();
+    LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
     channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
     {
-        LOG(LS_ERROR) << "Connection failed";
+        LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id.data() << ")";
         return;
     }
 
@@ -131,6 +131,8 @@ void DesktopSessionAgent::onIpcDisconnected()
     LOG(LS_INFO) << "IPC channel disconnected";
 
     setEnabled(false);
+
+    LOG(LS_INFO) << "Post quit";
     io_task_runner_->postQuit();
 }
 
@@ -153,22 +155,46 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
     else if (incoming_message_->has_mouse_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectMouseEvent(incoming_message_->mouse_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_key_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectKeyEvent(incoming_message_->key_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_text_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectTextEvent(incoming_message_->text_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_clipboard_event())
     {
         if (clipboard_monitor_)
+        {
             clipboard_monitor_->injectClipboardEvent(incoming_message_->clipboard_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
+        }
     }
     else if (incoming_message_->has_select_source())
     {
@@ -504,6 +530,8 @@ void DesktopSessionAgent::onAfterThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
+    LOG(LS_INFO) << "Send clipboard event";
+
     outgoing_message_->Clear();
     outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
     channel_->send(base::serialize(*outgoing_message_));
@@ -586,6 +614,10 @@ void DesktopSessionAgent::setEnabled(bool enable)
             {
                 LOG(LS_ERROR) << "base::PowerController::lock failed";
             }
+            else
+            {
+                LOG(LS_INFO) << "User session locked";
+            }
 
             lock_at_disconnect_ = false;
         }
@@ -598,7 +630,10 @@ void DesktopSessionAgent::setEnabled(bool enable)
 void DesktopSessionAgent::captureBegin()
 {
     if (!capture_scheduler_ || !screen_capturer_)
+    {
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return;
+    }
 
     capture_scheduler_->beginCapture();
     screen_capturer_->captureFrame();

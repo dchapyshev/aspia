@@ -276,11 +276,13 @@ void DesktopSessionIpc::onIpcMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_->has_screen_list())
     {
+        LOG(LS_INFO) << "Screen list received";
         last_screen_list_.reset(incoming_message_->release_screen_list());
         delegate_->onScreenListChanged(*last_screen_list_);
     }
     else if (incoming_message_->has_screen_type())
     {
+        LOG(LS_INFO) << "Screen type received";
         delegate_->onScreenTypeChanged(incoming_message_->screen_type());
     }
     else if (incoming_message_->has_shared_buffer())

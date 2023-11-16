@@ -68,9 +68,17 @@ void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
     switch (action)
     {
         case proto::internal::DesktopControl::ENABLE:
+        {
             if (delegate_)
+            {
                 delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
-            break;
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Invalid delegate";
+            }
+        }
+        break;
 
         default:
             break;
@@ -93,7 +101,13 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 void DesktopSessionFake::captureScreen()
 {
     if (delegate_)
+    {
         delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Invalid delegate";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

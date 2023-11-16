@@ -256,14 +256,16 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 {
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session";
+        LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
+                      << session_id << " channel_id=" << channel_id.data() << ")";
         return nullptr;
     }
 
 #if defined(OS_WIN)
     if (session_id == base::kServiceSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session";
+        LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session ("
+                      << "session_id=" << session_id << " channel_id=" << channel_id.data() << ")";
         return nullptr;
     }
 
@@ -273,7 +275,8 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
-        LOG(LS_ERROR) << "createSessionToken failed";
+        LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << " channel_id="
+                      << channel_id.data() << ")";
         return nullptr;
     }
 
@@ -282,7 +285,8 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(LS_ERROR) << "startProcessWithToken failed";
+        LOG(LS_ERROR) << "startProcessWithToken failed (session_id=" << session_id << " channel_id="
+                      << channel_id.data() << ")";
         return nullptr;
     }
 

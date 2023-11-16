@@ -464,7 +464,13 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
             desktop_dettach_timer_.stop();
 
             if (desktop_session_)
+            {
                 desktop_session_->attachSession(FROM_HERE, session_id);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No desktop session manager";
+            }
         }
         break;
 
@@ -480,7 +486,13 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
             desktop_dettach_timer_.stop();
 
             if (desktop_session_)
+            {
                 desktop_session_->dettachSession(FROM_HERE);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No desktop session manager";
+            }
 
             onSessionDettached(FROM_HERE);
         }
@@ -541,6 +553,8 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 //--------------------------------------------------------------------------------------------------
 void UserSession::onHostIdChanged(base::HostId host_id)
 {
+    LOG(LS_INFO) << "Host id changed from " << host_id_ << " to " << host_id;
+
     host_id_ = host_id;
     sendCredentials(FROM_HERE);
 }
@@ -548,6 +562,8 @@ void UserSession::onHostIdChanged(base::HostId host_id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onSettingsChanged()
 {
+    LOG(LS_INFO) << "Settings changed";
+
     SystemSettings settings;
 
     bool password_enabled = settings.oneTimePassword();
@@ -579,6 +595,8 @@ void UserSession::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcDisconnected()
 {
+    LOG(LS_INFO) << "Ipc channel disconnected";
+
     desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
     {
         if (desktop_session_)
@@ -634,6 +652,9 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
         proto::internal::ConnectConfirmation connect_confirmation =
             incoming_message_.connect_confirmation();
 
+        LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
+                     << connect_confirmation.accept_connection() << ")";
+
         if (connect_confirmation.accept_connection())
             onUnconfirmedSessionAccept(connect_confirmation.id());
         else
@@ -653,6 +674,8 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
                     return;
                 }
 
+                LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
+                             << control.unsigned_integer() << ")";
                 killClientSession(static_cast<uint32_t>(control.unsigned_integer()));
             }
             break;
@@ -666,6 +689,9 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
                 }
 
                 bool is_paused = control.boolean();
+
+                LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
+                             << is_paused << ")";
 
                 desktop_session_proxy_->setPaused(is_paused);
                 desktop_session_proxy_->control(is_paused ?
@@ -698,6 +724,9 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
                     return;
                 }
 
+                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
+                             << " lock_mouse=" << control.boolean() << ")";
+
                 desktop_session_proxy_->setMouseLock(control.boolean());
             }
             break;
@@ -709,6 +738,9 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
                     LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid=" << session_id_ << ")";
                     return;
                 }
+
+                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
+                             << " lock_keyboard=" << control.boolean() << ")";
 
                 desktop_session_proxy_->setKeyboardLock(control.boolean());
             }
@@ -730,6 +762,8 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_text_chat())
     {
+        LOG(LS_INFO) << "Text chat message";
+
         for (const auto& client : text_chat_clients_)
         {
             ClientSessionTextChat* text_chat_session =
@@ -838,7 +872,7 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
 void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
 {
     LOG(LS_INFO) << "Screen type changed (type=" << type.type() << " name=" << type.name()
-                 << " sid: " << session_id_ << ")";
+                 << " sid=" << session_id_ << ")";
 
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->setScreenType(type);
@@ -1115,6 +1149,8 @@ void UserSession::updateCredentials(const base::Location& location)
 
     if (password_enabled_)
     {
+        LOG(LS_INFO) << "One-time password enabled";
+
         base::PasswordGenerator generator;
         generator.setCharacters(password_characters_);
         generator.setLength(static_cast<size_t>(password_length_));
@@ -1136,6 +1172,8 @@ void UserSession::updateCredentials(const base::Location& location)
     }
     else
     {
+        LOG(LS_INFO) << "One-time password disabled";
+
         password_expire_timer_.stop();
         one_time_sessions_ = 0;
         one_time_password_.clear();
