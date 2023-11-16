@@ -81,6 +81,8 @@ private:
     State state_ = State::STOPPED;
     DesktopSession::Delegate* delegate_;
 
+    base::SessionId session_id_ = base::kInvalidSessionId;
+
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionManager);
 };
 

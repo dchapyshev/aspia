@@ -39,7 +39,7 @@ FileTransferAgent::~FileTransferAgent()
 
 void FileTransferAgent::start(std::u16string_view channel_id)
 {
-    LOG(LS_INFO) << "Starting with channel id: " << channel_id.data();
+    LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
     channel_ = std::make_unique<base::IpcChannel>();
 

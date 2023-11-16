@@ -109,6 +109,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
+        LOG(LS_INFO) << "[ACTION] Show icons in menus changed: " << enable;
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
 
@@ -121,6 +122,7 @@ MainWindow::MainWindow(QWidget* parent)
         if (reason == QSystemTrayIcon::Context)
             return;
 
+        LOG(LS_INFO) << "[ACTION] Tray icon activated";
         onShowHide();
     });
 
@@ -135,8 +137,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
-        if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
+        LOG(LS_INFO) << "[ACTION] New password";
+        if (!agent_proxy_)
+        {
+            LOG(LS_INFO) << "No agent proxy";
+            return;
+        }
+
+        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
 
@@ -360,6 +368,8 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
+    LOG(LS_INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
+
     ui.button_new_password->setEnabled(true);
 
     bool has_id = credentials.host_id() != base::kInvalidHostId;
@@ -383,6 +393,7 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 {
+    LOG(LS_INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
 
     QString router;
@@ -457,17 +468,29 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 void MainWindow::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
+    LOG(LS_INFO) << "Connection confirmation request (id=" << request.id() << ")";
+
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
-    if (agent_proxy_)
-        agent_proxy_->connectConfirmation(request.id(), accept);
+    LOG(LS_INFO) << "[ACTION] User " << (accept ? "ACCEPT" : "REJECT") << " connection request";
+
+    if (!agent_proxy_)
+    {
+        LOG(LS_ERROR) << "No agent proxy";
+        return;
+    }
+
+    agent_proxy_->connectConfirmation(request.id(), accept);
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onVideoRecordingStateChanged(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
+    LOG(LS_INFO) << "Video recoring state changed (user_name=" << user_name
+                 << " started=" << started << ")";
+
     QString message;
 
     if (started)
@@ -522,7 +545,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-    LOG(LS_INFO) << "Language changed: " << new_locale;
+    LOG(LS_INFO) << "[ACTION] Language changed: " << new_locale;
 
     Application* application = Application::instance();
 
@@ -553,6 +576,8 @@ void MainWindow::onLanguageChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
+    LOG(LS_INFO) << "[ACTION] Settings";
+
 #if defined(OS_WIN)
     if (!base::win::isProcessElevated())
     {
@@ -630,8 +655,6 @@ void MainWindow::onSettings()
     }
 #endif // defined(OS_LINUX)
 
-    LOG(LS_INFO) << "Settings dialog open";
-
     SystemSettings settings;
     if (settings.passwordProtection())
     {
@@ -647,8 +670,6 @@ void MainWindow::onSettings()
         ConfigDialog(this).exec();
         onSettingsChanged();
     }
-
-    LOG(LS_INFO) << "Settings dialog close";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -669,15 +690,15 @@ void MainWindow::onShowHide()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onHelp()
 {
+    LOG(LS_INFO) << "[ACTION] Help";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
-    LOG(LS_INFO) << "About dialog open";
+    LOG(LS_INFO) << "[ACTION] About";
     common::AboutDialog(tr("Aspia Host"), this).exec();
-    LOG(LS_INFO) << "About dialog close";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -691,6 +712,8 @@ void MainWindow::onExit()
         return;
     }
 
+    LOG(LS_INFO) << "[ACTION] Exit";
+
     QMessageBox message_box(QMessageBox::Question,
         tr("Confirmation"),
         tr("If you exit from Aspia, it will not be possible to connect to this computer until "
@@ -703,6 +726,7 @@ void MainWindow::onExit()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)
         {
             LOG(LS_INFO) << "No notifier";
@@ -714,6 +738,10 @@ void MainWindow::onExit()
             connect(notifier_, &NotifierWindow::sig_finished, this, &MainWindow::realClose);
             notifier_->onStop();
         }
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] User rejected exit";
     }
 }
 
@@ -816,6 +844,8 @@ void MainWindow::updateStatusBar()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
+    LOG(LS_INFO) << "Updating tray tooltip";
+
     QString ip;
 
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
