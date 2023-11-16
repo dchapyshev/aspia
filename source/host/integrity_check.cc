@@ -32,6 +32,7 @@ bool integrityCheck()
     {
         u"aspia_host.exe",
         u"aspia_desktop_agent.exe",
+        u"aspia_file_transfer_agent.exe",
         u"aspia_host_service.exe"
     };
     static const size_t kMinFileSize = 5 * 1024; // 5 kB.
