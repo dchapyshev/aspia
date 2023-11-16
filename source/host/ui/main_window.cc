@@ -226,7 +226,13 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
         LOG(LS_INFO) << "The connection to the service was successfully established.";
 
         if (agent_proxy_)
+        {
             agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "No agent proxy";
+        }
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
@@ -748,6 +754,7 @@ void MainWindow::onExit()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSettingsChanged()
 {
+    LOG(LS_INFO) << "Settings changed";
     SystemSettings settings;
     ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
@@ -769,6 +776,8 @@ void MainWindow::onKillSession(uint32_t session_id)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onOneTimeSessionsChanged()
 {
+    LOG(LS_INFO) << "[ACTION] One-time sessions changed";
+
     uint32_t sessions = calcOneTimeSessions();
 
     UserSettings user_settings;
@@ -807,6 +816,8 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateStatusBar()
 {
+    LOG(LS_INFO) << "Update status bar";
+
     QString message;
     QString icon;
 

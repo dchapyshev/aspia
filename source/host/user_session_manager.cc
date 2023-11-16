@@ -184,7 +184,7 @@ bool UserSessionManager::start(Delegate* delegate)
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_for_ui, this))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server for UI";
+        LOG(LS_ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
         return false;
     }
 
@@ -208,14 +208,14 @@ bool UserSessionManager::start(Delegate* delegate)
             if (session.state() != WTSActive)
             {
                 LOG(LS_INFO) << "RDP session with ID " << session_id << " not in active state. "
-                             << "Session process will not be started (name: '" << name << "' state: "
+                             << "Session process will not be started (name='" << name << "' state="
                              << base::win::SessionEnumerator::stateToString(session.state()) << ")";
                 continue;
             }
         }
 
-        LOG(LS_INFO) << "Starting process for session id: " << session_id << " (name: '" << name
-                     << "' state: " << base::win::SessionEnumerator::stateToString(session.state())
+        LOG(LS_INFO) << "Starting process for session id: " << session_id << " (name='" << name
+                     << "' state=" << base::win::SessionEnumerator::stateToString(session.state())
                      << ")";
 
         // Start UI process in user session.
@@ -276,7 +276,7 @@ void UserSessionManager::onUserSessionEvent(
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "New router state";
+    LOG(LS_INFO) << "New router changed (state=" << router_state.state() << ")";
     router_state_ = router_state;
 
     // Send an event of each session.
@@ -317,8 +317,8 @@ void UserSessionManager::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
-    LOG(LS_INFO) << "Adding a new client connection (user: '" << client_session->userName()
-                 << "', host_id: '" << client_session->hostId() << "')";
+    LOG(LS_INFO) << "Adding a new client connection (user='" << client_session->userName()
+                 << "' host_id='" << client_session->hostId() << "')";
 
     base::SessionId session_id = base::kInvalidSessionId;
 
@@ -405,7 +405,9 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
                     return;
                 }
 
-                switch (session_info.connectState())
+                base::win::SessionInfo::ConnectState connect_state = session_info.connectState();
+
+                switch (connect_state)
                 {
                     case base::win::SessionInfo::ConnectState::CONNECTED:
                     {
@@ -415,7 +417,9 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
                     break;
 
                     default:
-                        LOG(LS_INFO) << "No connected UI. Connection rejected";
+                        LOG(LS_INFO) << "No connected UI. Connection rejected (connect_state="
+                                     << base::win::SessionInfo::connectStateToString(connect_state)
+                                     << ")";
                         return;
                 }
 #else
@@ -444,7 +448,14 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
     {
         base::User user = session->user();
         if (user.isValid())
+        {
+            LOG(LS_INFO) << "User '" << user.name << "' added to user list";
             user_list->add(user);
+        }
+        else
+        {
+            LOG(LS_INFO) << "User is invalid and not added to user list";
+        }
     }
 
     return user_list;
@@ -465,22 +476,27 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
 
     reference_path.append(kExecutableNameForUi);
 
+    std::filesystem::path channel_file_path = channel->peerFilePath();
+    base::SessionId session_id = channel->peerSessionId();
+
     if (reference_path != channel->peerFilePath())
     {
-        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application";
+        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application (ref_path="
+                      << reference_path << " channel_path=" << channel_file_path << " session_id="
+                      << session_id << ")";
         return;
     }
 
-    base::SessionId session_id = channel->peerSessionId();
+
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "Invalid session id";
         return;
     }
 
-    addUserSession(session_id, std::move(channel));
+    addUserSession(FROM_HERE, session_id, std::move(channel));
 #else
-    addUserSession(0, std::move(channel));
+    addUserSession(FROM_HERE, 0, std::move(channel));
 #endif
 }
 
@@ -541,8 +557,8 @@ void UserSessionManager::onUserSessionFinished()
 void UserSessionManager::startSessionProcess(
     const base::Location& location, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Starting UI process (sid: " << session_id
-                 << " from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Starting UI process (sid=" << session_id
+                 << " from=" << location.toString() << ")";
 
 #if defined(OS_WIN)
     if (session_id == base::kInvalidSessionId)
@@ -560,45 +576,45 @@ void UserSessionManager::startSessionProcess(
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_ERROR) << "Failed to get user token (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Failed to get user token (sid=" << session_id << ")";
         return;
     }
 
     if (!user_token.isValid())
     {
-        LOG(LS_INFO) << "User is not logged in (sid: " << session_id << ")";
+        LOG(LS_INFO) << "User is not logged in (sid=" << session_id << ")";
 
         // If there is no user logged in, but the session exists, then add the session without
         // connecting to UI (we cannot start UI if the user is not logged in).
-        addUserSession(session_id, nullptr);
+        addUserSession(FROM_HERE, session_id, nullptr);
         return;
     }
 
     base::win::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
         return;
     }
 
     if (session_info.isUserLocked())
     {
-        LOG(LS_INFO) << "Session has LOCKED user (sid: " << session_id << ")";
+        LOG(LS_INFO) << "Session has LOCKED user (sid=" << session_id << ")";
 
         // If the user session is locked, then we do not start the UI process. The process will be
         // started later when the user session is unlocked.
-        addUserSession(session_id, nullptr);
+        addUserSession(FROM_HERE, session_id, nullptr);
         return;
     }
     else
     {
-        LOG(LS_INFO) << "Session has UNLOCKED user (sid: " << session_id << ")";
+        LOG(LS_INFO) << "Session has UNLOCKED user (sid=" << session_id << ")";
     }
 
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-        LOG(LS_ERROR) << "Failed to get current exec directory (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
         return;
     }
 
@@ -609,8 +625,8 @@ void UserSessionManager::startSessionProcess(
 
     if (!createProcessWithToken(user_token, command_line))
     {
-        LOG(LS_ERROR) << "Failed to start process with user token (sid: " << session_id
-                        << " cmd: " << command_line.commandLineString() << ")";
+        LOG(LS_ERROR) << "Failed to start process with user token (sid=" << session_id
+                        << " cmd=" << command_line.commandLineString() << ")";
     }
 #elif defined(OS_LINUX)
     std::error_code ignored_error;
@@ -645,7 +661,7 @@ void UserSessionManager::startSessionProcess(
                 std::filesystem::path file_path;
                 if (!base::BasePaths::currentExecDir(&file_path))
                 {
-                    LOG(LS_ERROR) << "Failed to get current exec directory (sid: " << session_id << ")";
+                    LOG(LS_ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
                     return;
                 }
 
@@ -670,10 +686,10 @@ void UserSessionManager::startSessionProcess(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::addUserSession(
-    base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel)
+void UserSessionManager::addUserSession(const base::Location& location, base::SessionId session_id,
+                                        std::unique_ptr<base::IpcChannel> channel)
 {
-    LOG(LS_INFO) << "Add user session: " << session_id;
+    LOG(LS_INFO) << "Add user session: " << session_id << " (from=" << location.toString() << ")";
 
     for (const auto& session : sessions_)
     {

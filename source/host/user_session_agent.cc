@@ -49,21 +49,22 @@ UserSessionAgent::~UserSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::start()
 {
-    LOG(LS_INFO) << "Starting user session agent";
+    std::u16string channel_id = HostIpcStorage().channelIdForUI();
+    LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
     ipc_channel_ = std::make_unique<base::IpcChannel>();
     ipc_channel_->setListener(this);
 
-    if (ipc_channel_->connect(HostIpcStorage().channelIdForUI()))
+    if (ipc_channel_->connect(channel_id))
     {
-        LOG(LS_INFO) << "IPC channel connected";
+        LOG(LS_INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
 
         window_proxy_->onStatusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
     }
     else
     {
-        LOG(LS_INFO) << "IPC channel not connected";
+        LOG(LS_INFO) << "IPC channel not connected (channel_id=" << channel_id << ")";
 
         window_proxy_->onStatusChanged(Status::SERVICE_NOT_AVAILABLE);
     }
@@ -118,15 +119,15 @@ void UserSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_credentials())
     {
-        LOG(LS_INFO) << "Credentials received";
-
-        window_proxy_->onCredentialsChanged(incoming_message_.credentials());
+        const proto::internal::Credentials& credentials = incoming_message_.credentials();
+        LOG(LS_INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
+        window_proxy_->onCredentialsChanged(credentials);
     }
     else if (incoming_message_.has_router_state())
     {
-        LOG(LS_INFO) << "Router state received";
-
-        window_proxy_->onRouterStateChanged(incoming_message_.router_state());
+        const proto::internal::RouterState router_state = incoming_message_.router_state();
+        LOG(LS_INFO) << "Router state received (state=" << router_state.state() << ")";
+        window_proxy_->onRouterStateChanged(router_state);
     }
     else if (incoming_message_.has_text_chat())
     {
@@ -192,7 +193,7 @@ void UserSessionAgent::killClient(uint32_t id)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
 {
-    LOG(LS_INFO) << "Connect confirmation (id: " << id << " accept: " << accept << ")";
+    LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
 
     outgoing_message_.Clear();
     proto::internal::ConnectConfirmation* confirmation =
