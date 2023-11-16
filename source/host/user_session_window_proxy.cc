@@ -30,6 +30,7 @@ UserSessionWindowProxy::UserSessionWindowProxy(
     : ui_task_runner_(std::move(ui_task_runner)),
       window_(window)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_ && ui_task_runner_->belongsToCurrentThread());
     DCHECK(window_);
 }
@@ -37,6 +38,7 @@ UserSessionWindowProxy::UserSessionWindowProxy(
 //--------------------------------------------------------------------------------------------------
 UserSessionWindowProxy::~UserSessionWindowProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     DCHECK(!window_);
 }
@@ -44,6 +46,7 @@ UserSessionWindowProxy::~UserSessionWindowProxy()
 //--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach user session window";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     window_ = nullptr;
 }

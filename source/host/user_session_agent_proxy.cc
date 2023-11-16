@@ -55,12 +55,14 @@ UserSessionAgentProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runn
     : io_task_runner_(std::move(io_task_runner)),
       agent_(std::move(agent))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_ && agent_);
 }
 
 //--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::Impl::~Impl()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!agent_);
 }
 
@@ -215,12 +217,13 @@ UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> i
                                              std::unique_ptr<UserSessionAgent> agent)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::~UserSessionAgentProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 
