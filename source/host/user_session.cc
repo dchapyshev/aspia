@@ -1262,7 +1262,10 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
 
             if (enable_required)
+            {
+                LOG(LS_INFO) << "Has desktop clients. Enable desktop session";
                 desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
+            }
         }
         break;
 
@@ -1347,6 +1350,8 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionStarted(uint32_t id)
 {
+    LOG(LS_INFO) << "Text chat session started: " << id;
+
     outgoing_message_.Clear();
 
     for (const auto& client : text_chat_clients_)
@@ -1390,6 +1395,8 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionFinished(uint32_t id)
 {
+    LOG(LS_INFO) << "Text chat session finished: " << id;
+
     outgoing_message_.Clear();
 
     for (const auto& client : text_chat_clients_)

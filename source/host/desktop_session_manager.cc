@@ -155,10 +155,13 @@ base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy(
 void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
 #if defined(OS_WIN)
-    if (DesktopSessionProcess::filePath() != channel->peerFilePath())
+    std::filesystem::path ref_path = DesktopSessionProcess::filePath();
+    std::filesystem::path path = channel->peerFilePath();
+
+    if (ref_path != path)
     {
         LOG(LS_ERROR) << "An attempt was made to connect from an unknown application (sid="
-                      << session_id_ << ")";
+                      << session_id_ << " ref_path=" << ref_path << " path=" << path << ")";
         return;
     }
 #endif // defined(OS_WIN)
@@ -184,7 +187,10 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
 void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
+    {
+        LOG(LS_INFO) << "Error skipped (state=" << stateToString(state_) << ")";
         return;
+    }
 
     setState(FROM_HERE, State::STOPPING);
     dettachSession(FROM_HERE);
@@ -194,12 +200,14 @@ void DesktopSessionManager::onErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStarted()
 {
+    LOG(LS_INFO) << "Desktop session started";
     delegate_->onDesktopSessionStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStopped()
 {
+    LOG(LS_INFO) << "Desktop session stopped";
     dettachSession(FROM_HERE);
 }
 

@@ -263,6 +263,8 @@ void UserSessionAgent::setPause(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
 {
+    LOG(LS_INFO) << "Text chat message";
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
     ipc_channel_->send(base::serialize(outgoing_message_));

@@ -233,6 +233,9 @@ bool UserSessionManager::start(Delegate* delegate)
 void UserSessionManager::onUserSessionEvent(
     base::win::SessionStatus status, base::SessionId session_id)
 {
+    LOG(LS_INFO) << "User session event (status=" << base::win::sessionStatusToString(status)
+                 << " session_id=" << session_id << ")";
+
     // Send an event of each session.
     for (const auto& session : sessions_)
         session->onUserSessionEvent(status, session_id);
@@ -257,7 +260,13 @@ void UserSessionManager::onUserSessionEvent(
                     if (!session->isConnectedToUi())
                     {
                         // Start UI process in user session.
+                        LOG(LS_INFO) << "Starting session process for session: " << session_id;
                         startSessionProcess(FROM_HERE, session_id);
+                    }
+                    else
+                    {
+                        LOG(LS_INFO) << "Session proccess already connected for session: "
+                                     << session_id;
                     }
                     break;
                 }
@@ -309,6 +318,8 @@ void UserSessionManager::onHostIdChanged(const std::string& session_name, base::
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onSettingsChanged()
 {
+    LOG(LS_INFO) << "Settings changed";
+
     // Send an event of each session.
     for (const auto& session : sessions_)
         session->onSettingsChanged();
@@ -509,24 +520,29 @@ void UserSessionManager::onErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionHostIdRequest(const std::string& session_name)
 {
+    LOG(LS_INFO) << "User session host id request for session name: " << session_name;
     delegate_->onHostIdRequest(session_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionCredentialsChanged()
 {
+    LOG(LS_INFO) << "User session credentials changed";
     delegate_->onUserListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionDettached()
 {
+    LOG(LS_INFO) << "User session dettached";
     delegate_->onUserListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionFinished()
 {
+    LOG(LS_INFO) << "User session finished";
+
     scoped_task_runner_->postTask([this]()
     {
         for (auto it = sessions_.begin(); it != sessions_.end();)
