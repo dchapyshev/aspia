@@ -28,7 +28,14 @@ IpcChannelProxy::IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcCha
     : task_runner_(std::move(task_runner)),
       channel_(channel)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_ && channel_);
+}
+
+//--------------------------------------------------------------------------------------------------
+IpcChannelProxy::~IpcChannelProxy()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,6 +59,7 @@ void IpcChannelProxy::send(ByteArray&& buffer)
 //--------------------------------------------------------------------------------------------------
 void IpcChannelProxy::willDestroyCurrentChannel()
 {
+    LOG(LS_INFO) << "Ipc channel destroyed";
     channel_ = nullptr;
 }
 

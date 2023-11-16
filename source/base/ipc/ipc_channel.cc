@@ -115,7 +115,7 @@ IpcChannel::IpcChannel()
     : stream_(MessageLoop::current()->pumpAsio()->ioContext()),
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,7 +156,8 @@ std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::setListener(Listener* listener)
 {
-    LOG(LS_INFO) << "Listener changed (" << (listener != nullptr) << ")";
+    LOG(LS_INFO) << "Listener changed (listener=" << (listener != nullptr) << " channel_name="
+                 << channel_name_ << ")";
     listener_ = listener;
 }
 
@@ -195,14 +196,15 @@ bool IpcChannel::connect(std::u16string_view channel_id)
         if (error_code != ERROR_PIPE_BUSY)
         {
             LOG(LS_ERROR) << "Failed to connect to the named pipe: "
-                          << SystemError::toString(error_code);
+                          << SystemError::toString(error_code) << " (channel_name="
+                          << channel_name_ << ")";
             return false;
         }
 
         if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
                             kConnectTimeout))
         {
-            PLOG(LS_ERROR) << "WaitNamedPipeW failed";
+            PLOG(LS_ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
             return false;
         }
     }
@@ -210,7 +212,10 @@ bool IpcChannel::connect(std::u16string_view channel_id)
     std::error_code error_code;
     stream_.assign(handle.release(), error_code);
     if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to assign handle: " << base::utf16FromLocal8Bit(error_code.message());
         return false;
+    }
 
     peer_process_id_ = serverProcessIdImpl(stream_.native_handle());
     peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
@@ -238,9 +243,12 @@ void IpcChannel::disconnect()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     if (!is_connected_)
+    {
+        LOG(LS_INFO) << "Channel not in connected state";
         return;
+    }
 
-    LOG(LS_INFO) << "disconnect called";
+    LOG(LS_INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;
@@ -278,7 +286,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(LS_INFO) << "resume called";
+    LOG(LS_INFO) << "resume channel (channel_name=" << channel_name_ << ")";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -349,12 +357,14 @@ std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
+    {
+        LOG(LS_ERROR) << "Operation aborted (from=" << location.toString() << ")";
         return;
+    }
 
     LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': "
                   << utf16FromLocal8Bit(error_code.message())
-                  << " (code: " << error_code.value()
-                  << ", location: " << location.toString() << ")";
+                  << " (code=" << error_code.value() << " location=" << location.toString() << ")";
 
     disconnect();
 
@@ -365,7 +375,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     }
     else
     {
-        LOG(LS_ERROR) << "No listener";
+        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
     }
 }
 
@@ -481,7 +491,7 @@ void IpcChannel::onMessageReceived()
     }
     else
     {
-        LOG(LS_ERROR) << "No listener";
+        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
     }
 
     read_size_ = 0;

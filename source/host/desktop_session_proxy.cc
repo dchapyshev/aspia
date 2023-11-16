@@ -29,6 +29,8 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 DesktopSessionProxy::DesktopSessionProxy()
 {
+    LOG(LS_INFO) << "Ctor";
+
     std::string default_fps_string;
     if (base::Environment::get("ASPIA_DEFAULT_FPS", &default_fps_string))
     {
@@ -105,6 +107,7 @@ DesktopSessionProxy::DesktopSessionProxy()
 //--------------------------------------------------------------------------------------------------
 DesktopSessionProxy::~DesktopSessionProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_session_);
 }
 

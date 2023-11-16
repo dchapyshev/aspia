@@ -28,6 +28,8 @@ class TaskRunner;
 class IpcChannelProxy : public std::enable_shared_from_this<IpcChannelProxy>
 {
 public:
+    ~IpcChannelProxy();
+
     void send(ByteArray&& buffer);
 
 private:

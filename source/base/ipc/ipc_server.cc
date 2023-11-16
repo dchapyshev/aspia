@@ -249,10 +249,14 @@ void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, asio::local::stream_protocol::socket socket)
 {
     if (!server_)
+    {
+        LOG(LS_ERROR) << "Invalid pointer";
         return;
+    }
 
     if (error_code)
     {
+        LOG(LS_ERROR) << "Error code: " << base::utf16FromLocal8Bit(error_code.message());
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
