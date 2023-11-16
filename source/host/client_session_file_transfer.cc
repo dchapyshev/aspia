@@ -32,6 +32,7 @@
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
+#include "base/win/session_info.h"
 
 #include <UserEnv.h>
 #include <WtsApi32.h>
@@ -223,11 +224,26 @@ void ClientSessionFileTransfer::onStarted()
         return;
     }
 
+    base::win::SessionInfo session_info(sessionId());
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get session info";
+        onError(FROM_HERE);
+        return;
+    }
+
+    if (session_info.isUserLocked())
+    {
+        LOG(LS_ERROR) << "User session is locked";
+        return;
+    }
+
     base::win::ScopedHandle process_handle;
     base::win::ScopedHandle thread_handle;
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
         LOG(LS_ERROR) << "startProcessWithToken failed";
+        onError(FROM_HERE);
         return;
     }
 #elif defined(OS_LINUX)
@@ -243,6 +259,7 @@ void ClientSessionFileTransfer::onStarted()
     if (!pipe)
     {
         LOG(LS_ERROR) << "Unable to open pipe";
+        onError(FROM_HERE);
         return;
     }
 
@@ -275,6 +292,7 @@ void ClientSessionFileTransfer::onStarted()
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
             LOG(LS_ERROR) << "Unable to start process";
+            onError(FROM_HERE);
             return;
         }
     }
