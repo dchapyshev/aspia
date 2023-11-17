@@ -1055,27 +1055,27 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="149"/>
-        <location filename="../user_dialog.cc" line="162"/>
-        <location filename="../user_dialog.cc" line="178"/>
-        <location filename="../user_dialog.cc" line="190"/>
-        <location filename="../user_dialog.cc" line="212"/>
-        <location filename="../user_dialog.cc" line="233"/>
+        <location filename="../user_dialog.cc" line="153"/>
+        <location filename="../user_dialog.cc" line="166"/>
+        <location filename="../user_dialog.cc" line="182"/>
+        <location filename="../user_dialog.cc" line="194"/>
+        <location filename="../user_dialog.cc" line="216"/>
+        <location filename="../user_dialog.cc" line="237"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="163"/>
+        <location filename="../user_dialog.cc" line="167"/>
         <source>The username you entered already exists.</source>
         <translation>O nome de usuário já existe.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="179"/>
+        <location filename="../user_dialog.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
         <translation>As senhas digitadas não correspondem.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="191"/>
+        <location filename="../user_dialog.cc" line="195"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>A senha não pode ficar em branco e não pode exceder %n caracteres.</numerusform>
@@ -1083,12 +1083,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="202"/>
+        <location filename="../user_dialog.cc" line="206"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A senha que você digitou não atende aos requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="205"/>
+        <location filename="../user_dialog.cc" line="209"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de %n caracteres.</numerusform>
@@ -1096,22 +1096,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="209"/>
+        <location filename="../user_dialog.cc" line="213"/>
         <source>Do you want to enter a different password?</source>
         <translation>Deseja inserir uma senha diferente?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="234"/>
+        <location filename="../user_dialog.cc" line="238"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erro interno desconhecido ao criar ou modificar um usuário.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="291"/>
+        <location filename="../user_dialog.cc" line="295"/>
         <source>Double-click to change</source>
         <translation>Clique duas vezes para alterar</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="150"/>
+        <location filename="../user_dialog.cc" line="154"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>O nome do usuário não pode estar vazio e deve conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
     </message>
@@ -1121,12 +1121,12 @@
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="216"/>
+        <location filename="../user_dialog.cc" line="220"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="217"/>
+        <location filename="../user_dialog.cc" line="221"/>
         <source>No</source>
         <translation>Não</translation>
     </message>

@@ -1062,32 +1062,32 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="149"/>
-        <location filename="../user_dialog.cc" line="162"/>
-        <location filename="../user_dialog.cc" line="178"/>
-        <location filename="../user_dialog.cc" line="190"/>
-        <location filename="../user_dialog.cc" line="212"/>
-        <location filename="../user_dialog.cc" line="233"/>
+        <location filename="../user_dialog.cc" line="153"/>
+        <location filename="../user_dialog.cc" line="166"/>
+        <location filename="../user_dialog.cc" line="182"/>
+        <location filename="../user_dialog.cc" line="194"/>
+        <location filename="../user_dialog.cc" line="216"/>
+        <location filename="../user_dialog.cc" line="237"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="150"/>
+        <location filename="../user_dialog.cc" line="154"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="163"/>
+        <location filename="../user_dialog.cc" line="167"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="179"/>
+        <location filename="../user_dialog.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="191"/>
+        <location filename="../user_dialog.cc" line="195"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -1096,12 +1096,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="202"/>
+        <location filename="../user_dialog.cc" line="206"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="205"/>
+        <location filename="../user_dialog.cc" line="209"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -1110,27 +1110,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="209"/>
+        <location filename="../user_dialog.cc" line="213"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="216"/>
+        <location filename="../user_dialog.cc" line="220"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="217"/>
+        <location filename="../user_dialog.cc" line="221"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="234"/>
+        <location filename="../user_dialog.cc" line="238"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="291"/>
+        <location filename="../user_dialog.cc" line="295"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
