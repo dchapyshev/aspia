@@ -248,8 +248,14 @@ bool UserSessionManager::start(Delegate* delegate)
 void UserSessionManager::onUserSessionEvent(
     base::win::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "User session event (status=" << base::win::sessionStatusToString(status)
-                 << " session_id=" << session_id << ")";
+    std::string status_str;
+#if defined(OS_WIN)
+    status_str = base::win::sessionStatusToString(status);
+#else
+    status_str = base::numberToString(static_cast<int>(status));
+#endif
+
+    LOG(LS_INFO) << "User session event (status=" << status_str << " session_id=" << session_id << ")";
 
     // Send an event of each session.
     for (const auto& session : sessions_)
