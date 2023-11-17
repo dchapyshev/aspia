@@ -63,6 +63,7 @@ private:
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);
 
+    base::SessionId session_id_ = base::kInvalidSessionId;
     std::unique_ptr<base::IpcChannel> channel_;
     SharedBuffers shared_buffers_;
     std::unique_ptr<base::Frame> last_frame_;

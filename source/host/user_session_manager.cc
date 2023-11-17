@@ -510,17 +510,16 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
 
     reference_path.append(kExecutableNameForUi);
 
-    std::filesystem::path channel_file_path = channel->peerFilePath();
+    std::filesystem::path channel_path = channel->peerFilePath();
     base::SessionId session_id = channel->peerSessionId();
 
-    if (reference_path != channel->peerFilePath())
+    if (reference_path != channel_path)
     {
         LOG(LS_ERROR) << "An attempt was made to connect from an unknown application (ref_path="
-                      << reference_path << " channel_path=" << channel_file_path << " session_id="
+                      << reference_path << " channel_path=" << channel_path << " session_id="
                       << session_id << ")";
         return;
     }
-
 
     if (session_id == base::kInvalidSessionId)
     {
