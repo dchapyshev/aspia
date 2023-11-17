@@ -84,6 +84,10 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     {
         LOG(LS_ERROR) << "Invalid console session ID (sid=" << session_id_ << ")";
     }
+    else
+    {
+        LOG(LS_INFO) << "Console session ID: " << console_session_id;
+    }
 
     if (session_id_ != console_session_id)
         type_ = UserSession::Type::RDP;
@@ -455,6 +459,11 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
                 return;
             }
 
+            if (type_ == Type::RDP)
+            {
+                LOG(LS_ERROR) << "CONSOLE_CONNECT for RDP session detected (sid=" << session_id_ << ")";
+            }
+
             LOG(LS_INFO) << "User session ID changed from " << session_id_ << " to " << session_id;
             session_id_ = session_id;
 
@@ -481,6 +490,11 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
                 LOG(LS_ERROR) << "Not equals session IDs (event ID: '" << session_id
                               << "' current ID: '" << session_id_ << "')";
                 return;
+            }
+
+            if (type_ == Type::RDP)
+            {
+                LOG(LS_ERROR) << "CONSOLE_DISCONNECT for RDP session detected (sid=" << session_id_ << ")";
             }
 
             desktop_dettach_timer_.stop();
@@ -595,7 +609,7 @@ void UserSession::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "Ipc channel disconnected";
+    LOG(LS_INFO) << "Ipc channel disconnected (sid=" << session_id_ << ")";
 
     desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
     {
@@ -641,7 +655,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
         if (one_time_sessions != one_time_sessions_)
         {
             LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
-                         << " to " << one_time_sessions;
+                         << " to " << one_time_sessions << " (sid=" << session_id_ << ")";
             one_time_sessions_ = one_time_sessions;
 
             delegate_->onUserSessionCredentialsChanged();
@@ -653,7 +667,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
             incoming_message_.connect_confirmation();
 
         LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
-                     << connect_confirmation.accept_connection() << ")";
+                     << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
 
         if (connect_confirmation.accept_connection())
             onUnconfirmedSessionAccept(connect_confirmation.id());
@@ -762,7 +776,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_text_chat())
     {
-        LOG(LS_INFO) << "Text chat message";
+        LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
 
         for (const auto& client : text_chat_clients_)
         {
@@ -1043,6 +1057,7 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     if (channel_)
     {
+        LOG(LS_INFO) << "Post task to delete IPC channel (sid=" << session_id_ << ")";
         channel_->setListener(nullptr);
         task_runner_->deleteSoon(std::move(channel_));
     }
@@ -1053,18 +1068,26 @@ void UserSession::onSessionDettached(const base::Location& location)
     // Stop one-time desktop clients.
     for (const auto& client : desktop_clients_)
     {
-        if (base::startsWith(client->userName(), "#"))
+        const std::string& user_name = client->userName();
+        if (base::startsWith(user_name, "#"))
+        {
+            LOG(LS_INFO) << "Stop one-time desktop client (id=" << client->id()
+                         << " user_name=" << user_name << " sid=" << session_id_ << ")";
             client->stop();
+        }
     }
 
     // Stop all file transfer clients.
     for (const auto& client : file_transfer_clients_)
+    {
+        LOG(LS_INFO) << "Stop file transfer client (id=" << client->id()
+                     << " user_name=" << client->userName() << " sid=" << session_id_ << ")";
         client->stop();
+    }
 
     onTextChatHasUser(FROM_HERE, false);
 
     setState(FROM_HERE, State::DETTACHED);
-
     delegate_->onUserSessionDettached();
 
     if (type_ == Type::RDP)
@@ -1149,7 +1172,7 @@ void UserSession::updateCredentials(const base::Location& location)
 
     if (password_enabled_)
     {
-        LOG(LS_INFO) << "One-time password enabled";
+        LOG(LS_INFO) << "One-time password enabled (sid=" << session_id_ << ")";
 
         base::PasswordGenerator generator;
         generator.setCharacters(password_characters_);
@@ -1172,7 +1195,7 @@ void UserSession::updateCredentials(const base::Location& location)
     }
     else
     {
-        LOG(LS_INFO) << "One-time password disabled";
+        LOG(LS_INFO) << "One-time password disabled (sid=" << session_id_ << ")";
 
         password_expire_timer_.stop();
         one_time_sessions_ = 0;
@@ -1218,6 +1241,7 @@ void UserSession::killClientSession(uint32_t id)
         {
             if (client_session->id() == id)
             {
+                LOG(LS_INFO) << "Client session with id " << id << " found in list. Stop it";
                 client_session->stop();
                 break;
             }
@@ -1244,8 +1268,9 @@ void UserSession::sendRouterState(const base::Location& location)
         return;
     }
 
-    LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();
-    LOG(LS_INFO) << "New state: " << routerStateToString(router_state_.state());
+    LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port()
+                 << " (state=" << routerStateToString(router_state_.state())
+                 << " sid=" << session_id_ << ")";
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
@@ -1267,12 +1292,12 @@ void UserSession::sendHostIdRequest(const base::Location& location)
     std::optional<std::string> session_name = sessionName();
     if (session_name.has_value())
     {
-        LOG(LS_INFO) << "Session name: " << *session_name;
+        LOG(LS_INFO) << "Session name: " << *session_name << " (sid=" << session_id_ << ")";
         delegate_->onUserSessionHostIdRequest(*session_name);
     }
     else
     {
-        LOG(LS_INFO) << "No session name";
+        LOG(LS_INFO) << "No session name (sid=" << session_id_ << ")";
     }
 }
 
@@ -1301,7 +1326,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
             if (enable_required)
             {
-                LOG(LS_INFO) << "Has desktop clients. Enable desktop session";
+                LOG(LS_INFO) << "Has desktop clients. Enable desktop session (sid=" << session_id_ << ")";
                 desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
             }
         }
@@ -1388,7 +1413,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionStarted(uint32_t id)
 {
-    LOG(LS_INFO) << "Text chat session started: " << id;
+    LOG(LS_INFO) << "Text chat session started: " << id << " (sid=" << session_id_ << ")";
 
     outgoing_message_.Clear();
 
@@ -1433,7 +1458,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionFinished(uint32_t id)
 {
-    LOG(LS_INFO) << "Text chat session finished: " << id;
+    LOG(LS_INFO) << "Text chat session finished: " << id << " (sid=" << session_id_ << ")";
 
     outgoing_message_.Clear();
 

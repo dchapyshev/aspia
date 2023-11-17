@@ -306,7 +306,7 @@ void UserSessionManager::onUserSessionEvent(
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "New router changed (state=" << router_state.state() << ")";
+    LOG(LS_INFO) << "Router state changed (state=" << router_state.state() << ")";
     router_state_ = router_state;
 
     // Send an event of each session.
