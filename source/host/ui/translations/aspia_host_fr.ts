@@ -513,38 +513,38 @@
 <context>
     <name>host::ChangePasswordDialog</name>
     <message>
-        <location filename="../change_password_dialog.cc" line="96"/>
-        <location filename="../change_password_dialog.cc" line="107"/>
-        <location filename="../change_password_dialog.cc" line="126"/>
-        <location filename="../change_password_dialog.cc" line="136"/>
-        <location filename="../change_password_dialog.cc" line="147"/>
-        <location filename="../change_password_dialog.cc" line="157"/>
+        <location filename="../change_password_dialog.cc" line="97"/>
+        <location filename="../change_password_dialog.cc" line="109"/>
+        <location filename="../change_password_dialog.cc" line="129"/>
+        <location filename="../change_password_dialog.cc" line="140"/>
+        <location filename="../change_password_dialog.cc" line="152"/>
+        <location filename="../change_password_dialog.cc" line="163"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="97"/>
+        <location filename="../change_password_dialog.cc" line="98"/>
         <source>Password cannot be empty.</source>
         <translation>Le mot de passe ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="127"/>
+        <location filename="../change_password_dialog.cc" line="130"/>
         <source>You must enter your old password.</source>
         <translation>Vous devez saisir votre ancien mot de passe.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="137"/>
+        <location filename="../change_password_dialog.cc" line="141"/>
         <source>You entered an incorrect old password.</source>
         <translation>Votre ancien mot de passe est incorrect.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="148"/>
+        <location filename="../change_password_dialog.cc" line="153"/>
         <source>New password cannot be empty.</source>
         <translation>Le nouveau mot de passe ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="108"/>
-        <location filename="../change_password_dialog.cc" line="158"/>
+        <location filename="../change_password_dialog.cc" line="110"/>
+        <location filename="../change_password_dialog.cc" line="164"/>
         <source>The passwords entered do not match.</source>
         <translation>Les mots de passe saisis ne correspondent pas.</translation>
     </message>
@@ -613,82 +613,82 @@
         <location filename="../config_dialog.cc" line="631"/>
         <location filename="../config_dialog.cc" line="667"/>
         <location filename="../config_dialog.cc" line="680"/>
-        <location filename="../config_dialog.cc" line="966"/>
-        <location filename="../config_dialog.cc" line="991"/>
-        <location filename="../config_dialog.cc" line="1012"/>
-        <location filename="../config_dialog.cc" line="1023"/>
-        <location filename="../config_dialog.cc" line="1045"/>
-        <location filename="../config_dialog.cc" line="1056"/>
+        <location filename="../config_dialog.cc" line="968"/>
+        <location filename="../config_dialog.cc" line="993"/>
+        <location filename="../config_dialog.cc" line="1014"/>
+        <location filename="../config_dialog.cc" line="1025"/>
+        <location filename="../config_dialog.cc" line="1047"/>
+        <location filename="../config_dialog.cc" line="1058"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="856"/>
-        <location filename="../config_dialog.cc" line="891"/>
+        <location filename="../config_dialog.cc" line="858"/>
+        <location filename="../config_dialog.cc" line="893"/>
         <source>Remove</source>
         <translation>Enlever</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="900"/>
+        <location filename="../config_dialog.cc" line="902"/>
         <source>Started</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="901"/>
+        <location filename="../config_dialog.cc" line="903"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="906"/>
+        <location filename="../config_dialog.cc" line="908"/>
         <source>Not started</source>
         <translation>Pas encore démarré</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="907"/>
-        <location filename="../config_dialog.cc" line="914"/>
-        <location filename="../config_dialog.cc" line="927"/>
+        <location filename="../config_dialog.cc" line="909"/>
+        <location filename="../config_dialog.cc" line="916"/>
+        <location filename="../config_dialog.cc" line="929"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="913"/>
+        <location filename="../config_dialog.cc" line="915"/>
         <source>Installed</source>
         <translation>Installé</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="924"/>
+        <location filename="../config_dialog.cc" line="926"/>
         <source>Not installed</source>
         <translation>Pas encore installé</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="851"/>
-        <location filename="../config_dialog.cc" line="926"/>
+        <location filename="../config_dialog.cc" line="853"/>
+        <location filename="../config_dialog.cc" line="928"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="967"/>
+        <location filename="../config_dialog.cc" line="969"/>
         <source>The service could not be installed.</source>
         <translation>Le service n&apos;a pas pu être installé.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="992"/>
+        <location filename="../config_dialog.cc" line="994"/>
         <source>The service could not be removed.</source>
         <translation>Le service n&apos;a pas pu être supprimé.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1013"/>
-        <location filename="../config_dialog.cc" line="1046"/>
+        <location filename="../config_dialog.cc" line="1015"/>
+        <location filename="../config_dialog.cc" line="1048"/>
         <source>Could not access the service.</source>
         <translation>Impossible d&apos;accéder au service.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1024"/>
+        <location filename="../config_dialog.cc" line="1026"/>
         <source>The service could not be started.</source>
         <translation>Le service n&apos;a pas pu être démarré.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1057"/>
+        <location filename="../config_dialog.cc" line="1059"/>
         <source>The service could not be stopped.</source>
         <translation>Le service n&apos;a pas pu être arrêté.</translation>
     </message>
@@ -805,7 +805,7 @@
         <translation>Rejeter la connexion</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="931"/>
+        <location filename="../config_dialog.cc" line="933"/>
         <source>Current service state: %1</source>
         <translation>État actuel du service: %1</translation>
     </message>
