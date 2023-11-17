@@ -49,7 +49,7 @@ private slots:
     void onChangePassClicked();
     void onImport();
     void onExport();
-    void onConfigChanged() { setConfigChanged(true); }
+    void onConfigChanged() { setConfigChanged(FROM_HERE, true); }
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
