@@ -89,12 +89,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.combobox_update_check_freq, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this](int /* index */)
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     connect(ui.checkbox_auto_update, &QCheckBox::toggled, this, [this](bool checked)
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
 
         ui.label_update_check_freq->setEnabled(checked);
         ui.combobox_update_check_freq->setEnabled(checked);
@@ -102,7 +102,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, this, [this](bool checked)
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
 
         ui.label_update_server->setEnabled(checked);
         ui.edit_update_server->setEnabled(checked);
@@ -147,7 +147,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.combobox_onetime_pass_change, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     ui.combobox_onetime_pass_chars->addItem(tr("Letters and digits"),
@@ -161,7 +161,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.combobox_onetime_pass_chars, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     connect(ui.spinbox_onetime_pass_char_count, QOverload<int>::of(&QSpinBox::valueChanged),
@@ -181,7 +181,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.combobox_conn_confirm_auto, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     ui.combobox_no_user_action->addItem(tr("Accept connection"),
@@ -192,14 +192,14 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.combobox_no_user_action, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     //---------------------------------------------------------------------------------------------
     // Other
     connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, [=]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     //---------------------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
         ui.label_router_address->setEnabled(checked);
         ui.edit_router_address->setEnabled(checked);
         ui.label_router_public_key->setEnabled(checked);
@@ -271,7 +271,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
     {
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     });
 
     ui.tab_bar->setTabVisible(4, QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier));
@@ -304,7 +304,7 @@ void ConfigDialog::onOneTimeStateChanged(int state)
     ui.label_onetime_pass_char_count->setEnabled(enable);
     ui.spinbox_onetime_pass_char_count->setEnabled(enable);
 
-    setConfigChanged(true);
+    setConfigChanged(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ void ConfigDialog::onConnConfirmStateChanged(int state)
     ui.label_no_user_action->setEnabled(enable);
     ui.combobox_no_user_action->setEnabled(enable);
 
-    setConfigChanged(true);
+    setConfigChanged(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -364,7 +364,7 @@ void ConfigDialog::onAddUser()
     if (dialog.exec() == QDialog::Accepted)
     {
         ui.tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     }
 }
 
@@ -394,7 +394,7 @@ void ConfigDialog::onModifyUser()
     if (dialog.exec() == QDialog::Accepted)
     {
         current_item->setUser(dialog.user());
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     }
 }
 
@@ -423,7 +423,7 @@ void ConfigDialog::onDeleteUser()
     {
         LOG(LS_INFO) << "[ACTION] Accepted by user";
         delete user_item;
-        setConfigChanged(true);
+        setConfigChanged(FROM_HERE, true);
     }
     else
     {
@@ -724,7 +724,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         settings.flush();
 
-        setConfigChanged(false);
+        setConfigChanged(FROM_HERE, false);
 
         if (service_restart_required)
             restartService();
@@ -748,8 +748,10 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConfigDialog::setConfigChanged(bool changed)
+void ConfigDialog::setConfigChanged(const base::Location& location, bool changed)
 {
+    LOG(LS_INFO) << "Config changed (from=" << location.toString() << "changed=" << changed << ")";
+
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)
     {
@@ -859,7 +861,7 @@ void ConfigDialog::reloadAll()
 
     ui.checkbox_disable_shutdown->setChecked(settings.isApplicationShutdownDisabled());
 
-    setConfigChanged(false);
+    setConfigChanged(FROM_HERE, false);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -92,6 +92,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password.isEmpty())
             {
+                LOG(LS_ERROR) << "Password cannot be empty";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password cannot be empty."),
@@ -103,6 +104,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password != new_password_repeat)
             {
+                LOG(LS_ERROR) << "Password entered do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),
@@ -122,6 +124,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (old_password.isEmpty())
             {
+                LOG(LS_ERROR) << "Old password not entered";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("You must enter your old password."),
@@ -132,6 +135,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!SystemSettings::isValidPassword(old_password.toStdString()))
             {
+                LOG(LS_ERROR) << "Incorrect password entered";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("You entered an incorrect old password."),
@@ -143,6 +147,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password.isEmpty())
             {
+                LOG(LS_ERROR) << "New password cannot be empty";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("New password cannot be empty."),
@@ -153,6 +158,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password != new_password_repeat)
             {
+                LOG(LS_ERROR) << "Password entered do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),

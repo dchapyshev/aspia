@@ -20,6 +20,7 @@
 #define HOST_UI_CONFIG_DIALOG_H
 
 #include "build/build_config.h"
+#include "base/location.h"
 #include "base/peer/user_list.h"
 #include "qt_base/locale_loader.h"
 #include "ui_config_dialog.h"
@@ -52,7 +53,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void setConfigChanged(bool changed);
+    void setConfigChanged(const base::Location& location, bool changed);
     bool isConfigChanged() const;
     void reloadAll();
     void reloadUserList(const base::UserList& user_list);
