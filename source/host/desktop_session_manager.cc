@@ -28,6 +28,12 @@
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
 
+#if defined(OS_WIN)
+#include "base/win/desktop.h"
+#include "base/win/session_info.h"
+#include "base/win/window_station.h"
+#endif // defined(OS_WIN)
+
 namespace host {
 
 namespace {
@@ -83,7 +89,49 @@ void DesktopSessionManager::attachSession(
 
     setState(FROM_HERE, State::STARTING);
 
+    LOG(LS_INFO) << "Starting desktop session";
+    LOG(LS_INFO) << "#####################################################";
+
+#if defined(OS_WIN)
+    LOG(LS_INFO) << "# Active console session id: " << WTSGetActiveConsoleSessionId();
+    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    {
+        std::wstring desktops;
+
+        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        if (window_station.isValid())
+        {
+            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                desktops += list[i];
+                if ((i + 1) != list.size())
+                    desktops += L", ";
+            }
+        }
+
+        LOG(LS_INFO) << "# " << window_station_name << " (desktops: " << desktops << ")";
+    }
+
+    base::win::SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        return;
+    }
+
+    LOG(LS_INFO) << "# Session info (sid=" << session_id
+                 << " username='" << session_info.userName() << "'"
+                 << " connect_state=" << base::win::SessionInfo::connectStateToString(session_info.connectState())
+                 << " win_station='" << session_info.winStationName() << "'"
+                 << " domain='" << session_info.domain() << "'"
+                 << " locked=" << session_info.isUserLocked() << ")";
+#endif // defined(OS_WIN)
+
     std::u16string channel_id = base::IpcServer::createUniqueId();
+
+    LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
     server_ = std::make_unique<base::IpcServer>();
     if (!server_->start(channel_id, this))
@@ -93,6 +141,8 @@ void DesktopSessionManager::attachSession(
         onErrorOccurred();
         return;
     }
+
+    LOG(LS_INFO) << "Starting desktop session process";
 
     std::unique_ptr<DesktopSessionProcess> process =
         DesktopSessionProcess::create(session_id, channel_id);

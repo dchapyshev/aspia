@@ -35,9 +35,11 @@
 #include "host/user_session.h"
 
 #if defined(OS_WIN)
+#include "base/win/desktop.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
+#include "base/win/window_station.h"
 
 #include <UserEnv.h>
 #endif // defined(OS_WIN)
@@ -610,6 +612,45 @@ void UserSessionManager::startSessionProcess(
         return;
     }
 
+    LOG(LS_INFO) << "Starting user session";
+    LOG(LS_INFO) << "#####################################################";
+
+    LOG(LS_INFO) << "# Active console session id: " << WTSGetActiveConsoleSessionId();
+
+    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    {
+        std::wstring desktops;
+
+        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        if (window_station.isValid())
+        {
+            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                desktops += list[i];
+                if ((i + 1) != list.size())
+                        desktops += L", ";
+            }
+        }
+
+        LOG(LS_INFO) << "# " << window_station_name << " (desktops: " << desktops << ")";
+    }
+
+    base::win::SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        return;
+    }
+
+    LOG(LS_INFO) << "# Session info (sid=" << session_id
+                 << " username='" << session_info.userName() << "'"
+                 << " connect_state=" << base::win::SessionInfo::connectStateToString(session_info.connectState())
+                 << " win_station='" << session_info.winStationName() << "'"
+                 << " domain='" << session_info.domain() << "'"
+                 << " locked=" << session_info.isUserLocked() << ")";
+
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
@@ -624,13 +665,6 @@ void UserSessionManager::startSessionProcess(
         // If there is no user logged in, but the session exists, then add the session without
         // connecting to UI (we cannot start UI if the user is not logged in).
         addUserSession(FROM_HERE, session_id, nullptr);
-        return;
-    }
-
-    base::win::SessionInfo session_info(session_id);
-    if (!session_info.isValid())
-    {
-        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
         return;
     }
 

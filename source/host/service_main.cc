@@ -365,9 +365,9 @@ int hostServiceMain(int argc, wchar_t* argv[])
     LOG(LS_INFO) << "#####################################################";
     for (base::win::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
-        LOG(LS_INFO) << enumerator.sessionName() << " (id: " << enumerator.sessionId()
-                     << ", host: '" << enumerator.hostName() << "', user: '" << enumerator.userName()
-                     << "', domain: '" << enumerator.domainName() << "', locked: "
+        LOG(LS_INFO) << enumerator.sessionName() << " (id=" << enumerator.sessionId()
+                     << " host='" << enumerator.hostName() << "', user='" << enumerator.userName()
+                     << "', domain='" << enumerator.domainName() << "', locked="
                      << enumerator.isUserLocked() << ")";
     }
     LOG(LS_INFO) << "#####################################################";
