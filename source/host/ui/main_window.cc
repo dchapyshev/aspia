@@ -278,19 +278,37 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         connect(notifier_, &NotifierWindow::sig_lockMouse, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setMouseLock(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
         connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setKeyboardLock(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
         connect(notifier_, &NotifierWindow::sig_pause, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setPause(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -334,6 +352,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                     text_chat.mutable_chat_message()->CopyFrom(message);
                     agent_proxy_->onTextChat(text_chat);
                 }
+                else
+                {
+                    LOG(LS_ERROR) << "No agent proxy";
+                }
             });
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
@@ -344,6 +366,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                     proto::TextChat text_chat;
                     text_chat.mutable_chat_status()->CopyFrom(status);
                     agent_proxy_->onTextChat(text_chat);
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "No agent proxy";
                 }
             });
 
