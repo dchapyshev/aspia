@@ -40,13 +40,13 @@ ClientSession::ClientSession(
     static uint32_t id_counter = 0;
     id_ = ++id_counter;
 
-    LOG(LS_INFO) << "Ctor: " << id_;
+    LOG(LS_INFO) << "Ctor (id=" << id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientSession::~ClientSession()
 {
-    LOG(LS_INFO) << "Dtor: " << id_;
+    LOG(LS_INFO) << "Dtor (id=" << id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------

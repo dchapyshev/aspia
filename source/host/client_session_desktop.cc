@@ -177,10 +177,16 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
     if (incoming_message_->has_mouse_event())
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            LOG(LS_ERROR) << "Mouse event for non-desktop-manage session";
             return;
+        }
 
         if (!scale_reducer_)
+        {
+            LOG(LS_ERROR) << "Scale reducer NOT initialized";
             return;
+        }
 
         const proto::MouseEvent& mouse_event = incoming_message_->mouse_event();
 
@@ -204,6 +210,10 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
             desktop_session_proxy_->injectKeyEvent(incoming_message_->key_event());
             stat_counter_.addKeyboardEvent();
         }
+        else
+        {
+            LOG(LS_ERROR) << "Key event for non-desktop-manage session";
+        }
     }
     else if (incoming_message_->has_text_event())
     {
@@ -212,6 +222,10 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
             desktop_session_proxy_->injectTextEvent(incoming_message_->text_event());
             stat_counter_.addTextEvent();
         }
+        else
+        {
+            LOG(LS_ERROR) << "Text event for non-desktop-manage session";
+        }
     }
     else if (incoming_message_->has_clipboard_event())
     {
@@ -219,6 +233,10 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
         {
             desktop_session_proxy_->injectClipboardEvent(incoming_message_->clipboard_event());
             stat_counter_.addIncomingClipboardEvent();
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Clipboard event for non-desktop-manage session";
         }
     }
     else if (incoming_message_->has_extension())
@@ -408,6 +426,8 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
+    LOG(LS_INFO) << "Send screen list to client";
+
     outgoing_message_->Clear();
     proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
@@ -419,6 +439,8 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
 {
+    LOG(LS_INFO) << "Send screen type to client";
+
     outgoing_message_->Clear();
     proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
     extension->set_name(common::kScreenTypeExtension);
@@ -536,7 +558,10 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
     cursor_encoder_.reset();
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
+    {
+        LOG(LS_INFO) << "Cursor shape enabled. Init cursor encoder";
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
+    }
 
     scale_reducer_ = std::make_unique<base::ScaleReducer>();
 

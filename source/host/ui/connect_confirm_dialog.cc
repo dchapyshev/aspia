@@ -119,9 +119,15 @@ void ConnectConfirmDialog::onTimeout()
     if (time_seconds_ <= 0)
     {
         if (auto_accept_)
+        {
+            LOG(LS_INFO) << "Accept connection by timeout";
             accept();
+        }
         else
+        {
+            LOG(LS_INFO) << "Reject connection by timeout";
             reject();
+        }
 
         close();
     }

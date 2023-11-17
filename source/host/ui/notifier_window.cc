@@ -141,6 +141,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, [this]()
     {
+        LOG(LS_INFO) << "Screen geometry changed";
         // The taskbar does not move instantly.
         QTimer::singleShot(
             std::chrono::milliseconds(500), this, &NotifierWindow::updateWindowPosition);
@@ -186,6 +187,8 @@ std::vector<uint32_t> NotifierWindow::sessions(proto::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
+    LOG(LS_INFO) << "Client list changed: " << clients.size();
+
     if (!clients.empty())
     {
         ui.tree->clear();
