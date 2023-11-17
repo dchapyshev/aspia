@@ -295,6 +295,8 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
 //--------------------------------------------------------------------------------------------------
 ProcessMonitor::ProcessMonitor()
 {
+    LOG(LS_INFO) << "Ctor";
+
     memset(&prev_cpu_idle_time_, 0, sizeof(prev_cpu_idle_time_));
     memset(&prev_cpu_total_time_, 0, sizeof(prev_cpu_total_time_));
 
@@ -355,6 +357,8 @@ ProcessMonitor::ProcessMonitor()
 //--------------------------------------------------------------------------------------------------
 ProcessMonitor::~ProcessMonitor()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (ntdll_library_)
         FreeLibrary(reinterpret_cast<HMODULE>(ntdll_library_));
 }

@@ -29,6 +29,8 @@ namespace client {
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
+    LOG(LS_INFO) << "Ctor";
+
     setOrganizationName("Aspia");
     setApplicationName("Client");
     setApplicationVersion(ASPIA_VERSION_STRING);
@@ -38,9 +40,18 @@ Application::Application(int& argc, char* argv[])
     setWindowIcon(QIcon(":/img/main.ico"));
 
     if (!hasLocale(settings_.locale()))
+    {
+        LOG(LS_INFO) << "Set default locale";
         settings_.setLocale(DEFAULT_LOCALE);
+    }
 
     setLocale(settings_.locale());
+}
+
+//--------------------------------------------------------------------------------------------------
+Application::~Application()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

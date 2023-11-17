@@ -205,6 +205,8 @@ void ClientSessionFileTransfer::onStarted()
 {
     std::u16string channel_id = base::IpcServer::createUniqueId();
 
+    LOG(LS_INFO) << "Starting ipc channel for file transfer";
+
     ipc_server_ = std::make_unique<base::IpcServer>();
     if (!ipc_server_->start(channel_id, this))
     {
@@ -212,6 +214,8 @@ void ClientSessionFileTransfer::onStarted()
         onError(FROM_HERE);
         return;
     }
+
+    LOG(LS_INFO) << "IPC channel started";
 
 #if defined(OS_WIN)
     base::CommandLine command_line(agentFilePath());

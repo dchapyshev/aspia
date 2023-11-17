@@ -53,6 +53,9 @@ void fileTransferAgentMain(int argc, const char* const* argv)
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
 
 #if defined(OS_WIN)
     MEMORYSTATUSEX memory_status;

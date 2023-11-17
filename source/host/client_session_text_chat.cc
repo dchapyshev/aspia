@@ -46,6 +46,8 @@ void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
 {
+    LOG(LS_INFO) << "Send text chat status";
+
     proto::TextChat text_chat;
     proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
 
@@ -64,13 +66,14 @@ bool ClientSessionTextChat::hasUser() const
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::setHasUser(bool enable)
 {
+    LOG(LS_INFO) << "Has user changed (has_user=" << enable << ")";
     has_user_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onStarted()
 {
-    // Nothing
+    LOG(LS_INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------

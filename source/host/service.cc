@@ -127,7 +127,13 @@ void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId se
                  << ", session_id: " << session_id << ")";
 
     if (server_)
+    {
         server_->setSessionEvent(status, session_id);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No server instance";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,7 +142,13 @@ void Service::onPowerEvent(uint32_t event)
     LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);
 
     if (server_)
+    {
         server_->setPowerEvent(event);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No server instance";
+    }
 }
 #endif // defined(OS_WIN)
 

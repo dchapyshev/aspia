@@ -43,7 +43,7 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onStarted()
 {
-    // Nothing
+    LOG(LS_INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------

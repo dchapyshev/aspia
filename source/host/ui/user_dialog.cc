@@ -119,6 +119,8 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckAllButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Check all button pressed";
+
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
 }
@@ -126,6 +128,8 @@ void UserDialog::onCheckAllButtonPressed()
 //--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckNoneButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Check none button pressed";
+
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
 }

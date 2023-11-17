@@ -36,6 +36,8 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
+    LOG(LS_INFO) << "Ctor";
+
     setOrganizationName("Aspia");
     setApplicationName("Console");
     setApplicationVersion(ASPIA_VERSION_STRING);
@@ -66,9 +68,18 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
+    {
+        LOG(LS_INFO) << "Set default locale";
         settings_.setLocale(DEFAULT_LOCALE);
+    }
 
     setLocale(settings_.locale());
+}
+
+//--------------------------------------------------------------------------------------------------
+Application::~Application()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

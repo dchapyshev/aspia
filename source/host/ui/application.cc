@@ -114,7 +114,10 @@ Application::Application(int& argc, char* argv[])
 
     UserSettings user_settings;
     if (!hasLocale(user_settings.locale()))
+    {
+        LOG(LS_INFO) << "Set default locale";
         user_settings.setLocale(DEFAULT_LOCALE);
+    }
 
     setLocale(user_settings.locale());
 }

@@ -100,11 +100,14 @@ void QtTaskRunner::Impl::customEvent(QEvent* event)
 QtTaskRunner::QtTaskRunner()
     : impl_(std::make_unique<Impl>())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-QtTaskRunner::~QtTaskRunner() = default;
+QtTaskRunner::~QtTaskRunner()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 bool QtTaskRunner::belongsToCurrentThread() const

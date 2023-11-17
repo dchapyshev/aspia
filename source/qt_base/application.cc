@@ -179,7 +179,10 @@ std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
 {
     Application* application = instance();
     if (!application)
+    {
+        LOG(LS_ERROR) << "Invalid application instance";
         return nullptr;
+    }
 
     return application->ui_task_runner_;
 }
@@ -190,7 +193,10 @@ std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
 {
     Application* application = instance();
     if (!application)
+    {
+        LOG(LS_ERROR) << "Invalid application instance";
         return nullptr;
+    }
 
     return application->io_task_runner_;
 }
@@ -199,7 +205,10 @@ std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
 bool Application::isRunning()
 {
     if (!lock_file_->tryLock())
+    {
+        LOG(LS_INFO) << "Application already running";
         return true;
+    }
 
     server_ = new QLocalServer(this);
 

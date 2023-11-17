@@ -36,6 +36,8 @@ const QString kTranslationsDir = QStringLiteral(":/tr/");
 //--------------------------------------------------------------------------------------------------
 LocaleLoader::LocaleLoader()
 {
+    LOG(LS_INFO) << "Ctor";
+
     const QStringList qm_file_list =
         QDir(kTranslationsDir).entryList(QStringList("*.qm"), QDir::Files);
 
@@ -66,6 +68,7 @@ LocaleLoader::LocaleLoader()
 //--------------------------------------------------------------------------------------------------
 LocaleLoader::~LocaleLoader()
 {
+    LOG(LS_INFO) << "Dtor";
     removeTranslators();
 }
 

@@ -56,6 +56,8 @@ UnconfirmedClientSession::~UnconfirmedClientSession()
 //--------------------------------------------------------------------------------------------------
 void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeout)
 {
+    LOG(LS_INFO) << "Timeout changed: " << timeout.count();
+
     if (timeout <= std::chrono::milliseconds(0))
     {
         // An interval set to 0 means that automatic confirmation is disabled. We start a timer that
