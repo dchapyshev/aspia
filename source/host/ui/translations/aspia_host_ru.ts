@@ -896,7 +896,7 @@
         <translation>Разрешить подключение?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="142"/>
+        <location filename="../connect_confirm_dialog.cc" line="148"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation>
             <numerusform>Подключение будет автоматически принято через %n секунду.</numerusform>
@@ -905,7 +905,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="147"/>
+        <location filename="../connect_confirm_dialog.cc" line="153"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation>
             <numerusform>Подключение будет автоматически отклонено через %n секунду.</numerusform>
@@ -917,101 +917,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="513"/>
-        <location filename="../main_window.cc" line="707"/>
-        <location filename="../main_window.cc" line="895"/>
+        <location filename="../main_window.cc" line="539"/>
+        <location filename="../main_window.cc" line="733"/>
+        <location filename="../main_window.cc" line="921"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="192"/>
-        <location filename="../main_window.cc" line="686"/>
+        <location filename="../main_window.cc" line="712"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="386"/>
+        <location filename="../main_window.cc" line="412"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="448"/>
+        <location filename="../main_window.cc" line="474"/>
         <source>Connected to a router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="504"/>
+        <location filename="../main_window.cc" line="530"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Пользователь &quot;%1&quot; (%2) начал запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="730"/>
+        <location filename="../main_window.cc" line="756"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="731"/>
+        <location filename="../main_window.cc" line="757"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="842"/>
+        <location filename="../main_window.cc" line="868"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="896"/>
+        <location filename="../main_window.cc" line="922"/>
         <source>ID: %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="892"/>
+        <location filename="../main_window.cc" line="918"/>
         <source>IP addresses:</source>
         <translation>IP адреса:</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="440"/>
-        <location filename="../main_window.cc" line="827"/>
+        <location filename="../main_window.cc" line="466"/>
+        <location filename="../main_window.cc" line="853"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="452"/>
+        <location filename="../main_window.cc" line="478"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="535"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="832"/>
+        <location filename="../main_window.cc" line="858"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="444"/>
+        <location filename="../main_window.cc" line="470"/>
         <source>Connecting to a router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="837"/>
+        <location filename="../main_window.cc" line="863"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="691"/>
+        <location filename="../main_window.cc" line="717"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="724"/>
+        <location filename="../main_window.cc" line="750"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="725"/>
+        <location filename="../main_window.cc" line="751"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
@@ -1019,37 +1019,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="215"/>
+        <location filename="../notifier_window.cc" line="218"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="270"/>
+        <location filename="../notifier_window.cc" line="273"/>
         <source>Unlock mouse</source>
         <translation>Разблокировать мышь</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="275"/>
+        <location filename="../notifier_window.cc" line="278"/>
         <source>Lock mouse</source>
         <translation>Блокировать мышь</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="297"/>
+        <location filename="../notifier_window.cc" line="300"/>
         <source>Unlock keyboard</source>
         <translation>Разблокировать клавиатуру</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="302"/>
+        <location filename="../notifier_window.cc" line="305"/>
         <source>Lock keyboard</source>
         <translation>Блокировать клавиатуру</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="324"/>
+        <location filename="../notifier_window.cc" line="327"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="329"/>
+        <location filename="../notifier_window.cc" line="332"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
