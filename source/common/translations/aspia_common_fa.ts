@@ -164,7 +164,7 @@
     <name>common::AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.cc" line="117"/>
-        <source>Version: %1</source>
+        <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

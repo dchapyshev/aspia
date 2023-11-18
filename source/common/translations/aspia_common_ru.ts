@@ -189,9 +189,13 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>Version: %1</source>
-        <translation>Версия: %1</translation>
+        <translation type="vanished">Версия: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="117"/>
+        <source>Version: %1 (%2)</source>
+        <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="121"/>

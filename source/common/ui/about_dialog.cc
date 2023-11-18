@@ -114,7 +114,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     ui->setupUi(this);
 
     ui->label_name->setText(application_name);
-    ui->label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
+    ui->label_version->setText(tr("Version: %1 (%2)").arg(ASPIA_VERSION_STRING, ARCH_CPU_STRING));
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
