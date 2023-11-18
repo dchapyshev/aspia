@@ -37,12 +37,13 @@ namespace common {
 ClipboardMonitor::ClipboardMonitor()
     : thread_(std::make_unique<base::Thread>())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::~ClipboardMonitor()
 {
+    LOG(LS_INFO) << "Dtor";
     thread_->stop();
 }
 
@@ -50,6 +51,8 @@ ClipboardMonitor::~ClipboardMonitor()
 void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                              common::Clipboard::Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting clipboard monitor";
+
     caller_task_runner_ = std::move(caller_task_runner);
     delegate_ = delegate;
 
@@ -107,6 +110,8 @@ void ClipboardMonitor::clearClipboard()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onBeforeThreadRunning()
 {
+    LOG(LS_INFO) << "Thread starting";
+
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
@@ -125,6 +130,7 @@ void ClipboardMonitor::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onAfterThreadRunning()
 {
+    LOG(LS_INFO) << "Thread stopping";
     clipboard_.reset();
 }
 

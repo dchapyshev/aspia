@@ -72,6 +72,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
       ui(std::make_unique<Ui::UpdateDialog>()),
       update_info_(update_info)
 {
+    LOG(LS_INFO) << "Ctor";
     initialize();
 
     ui->label_available->setText(QString::fromStdString(update_info_.version().toString(3)));
@@ -91,6 +92,7 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
+        LOG(LS_INFO) << "[ACTION] Escape key pressed";
         close();
         return;
     }
@@ -101,6 +103,8 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event";
+
     if (checker_)
     {
         ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
@@ -161,6 +165,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 
     QTimer::singleShot(0, this, [this]()
     {
+        LOG(LS_INFO) << "Destroy update checker";
         checker_.reset();
     });
 }
@@ -168,7 +173,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateNow()
 {
-    LOG(LS_INFO) << "ACTION: Update now";
+    LOG(LS_INFO) << "[ACTION] Update now";
 
 #if defined(OS_WIN)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
@@ -189,9 +194,12 @@ void UpdateDialog::onUpdateNow()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Update confirmed by user";
+
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
         {
+            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An error occurred while installing the update: %1")
@@ -228,11 +236,14 @@ void UpdateDialog::onUpdateNow()
                                               arguments,
                                               base::win::ProcessExecuteMode::ELEVATE))
                 {
+                    LOG(LS_INFO) << "msiexec is started";
                     // If the process is successfully launched, then the application is terminated.
                     QCoreApplication::quit();
                 }
                 else
                 {
+                    LOG(LS_ERROR) << "Unable to start msiexec process";
+
                     // If the update fails, delete the temporary file.
                     QString file_name = file.fileName();
                     if (!QFile::remove(file_name))
