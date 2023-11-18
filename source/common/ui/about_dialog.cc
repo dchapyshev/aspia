@@ -81,6 +81,7 @@ const char* kThirdParty[] =
     "protobuf &copy; 2014 Google Inc.; BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd.; GNU General Public License 3.0",
     "rapidjson &copy; 2015 THL A29 Limited, a Tencent company, and Milo Yip; MIT License",
+    "rapidxml &copy; 2006, 2009 Marcin Kalicinski; Boost Software License 1.0",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane; Creative Commons Attribution 3.0 License"
 };
@@ -228,6 +229,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     add_version("qt", qVersion());
     add_version("rapidjson", RAPIDJSON_VERSION_STRING);
+    add_version("rapidxml", "1.13");
     add_version("sqlite", SQLITE_VERSION);
     add_version("zstd", ZSTD_versionString());
 
