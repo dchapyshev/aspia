@@ -350,17 +350,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="55"/>
+        <location filename="../ui/download_dialog.cc" line="65"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="56"/>
+        <location filename="../ui/download_dialog.cc" line="66"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>下載更新時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="40"/>
+        <location filename="../ui/download_dialog.cc" line="42"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -500,68 +500,68 @@
         <translation>正在接收訊息...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="106"/>
+        <location filename="../ui/update_dialog.cc" line="110"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>取消檢查更新。請稍候。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="121"/>
+        <location filename="../ui/update_dialog.cc" line="125"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="122"/>
+        <location filename="../ui/update_dialog.cc" line="126"/>
         <source>Error retrieving update information.</source>
         <translation>擷取更新訊息時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="134"/>
-        <location filename="../ui/update_dialog.cc" line="157"/>
+        <location filename="../ui/update_dialog.cc" line="138"/>
+        <location filename="../ui/update_dialog.cc" line="161"/>
         <source>No updates available.</source>
         <translation>沒有可用的更新。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="174"/>
+        <location filename="../ui/update_dialog.cc" line="179"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>將下載更新。下載完成後，應用程式將自動關閉。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="176"/>
+        <location filename="../ui/update_dialog.cc" line="181"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>所有已連線的工作階段將被終止。在更新完成之前，您無法建立連線。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="178"/>
+        <location filename="../ui/update_dialog.cc" line="183"/>
         <source>All unsaved data will be lost.</source>
         <translation>所有尚未儲存的資料將會遺失。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="179"/>
+        <location filename="../ui/update_dialog.cc" line="184"/>
         <source>Continue?</source>
         <translation>是否繼續？</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="182"/>
+        <location filename="../ui/update_dialog.cc" line="187"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="196"/>
+        <location filename="../ui/update_dialog.cc" line="204"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="197"/>
+        <location filename="../ui/update_dialog.cc" line="205"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>安裝更新時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="187"/>
+        <location filename="../ui/update_dialog.cc" line="192"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="188"/>
+        <location filename="../ui/update_dialog.cc" line="193"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
