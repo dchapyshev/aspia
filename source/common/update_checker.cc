@@ -71,11 +71,16 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-UpdateChecker::UpdateChecker() = default;
+UpdateChecker::UpdateChecker()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 
 //--------------------------------------------------------------------------------------------------
 UpdateChecker::~UpdateChecker()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (runner_)
     {
         runner_->dettach();
@@ -99,6 +104,7 @@ void UpdateChecker::setPackageName(std::string_view package_name)
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting update checker";
     runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&UpdateChecker::run, this));
 }
@@ -114,6 +120,8 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
+    LOG(LS_INFO) << "run BEGIN";
+
     std::string os;
 
 #if defined(OS_WIN)
@@ -169,7 +177,10 @@ void UpdateChecker::run()
 
     long verify_peer = 1;
     if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+    {
+        LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;
+    }
 
     base::ByteArray response;
 
@@ -183,16 +194,17 @@ void UpdateChecker::run()
     int still_running = 1;
     do
     {
-        CURLMcode mc = curl_multi_perform(multi_curl.get(), &still_running);
-        if (!mc)
+        CURLMcode error_code = curl_multi_perform(multi_curl.get(), &still_running);
+        if (!error_code)
         {
-              // Wait for activity, timeout or "nothing".
-              mc = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
+            // Wait for activity, timeout or "nothing".
+            error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
         }
 
-        if (mc)
+        if (error_code)
         {
-            LOG(LS_ERROR) << "curl_multi_poll failed: " << mc;
+            LOG(LS_ERROR) << "curl_multi_poll failed: " << curl_multi_strerror(error_code)
+                          << " (" << error_code << ")";
             response.clear();
             break;
         }
@@ -214,6 +226,8 @@ void UpdateChecker::run()
         if (runner_)
             runner_->onFinished(response);
     }
+
+    LOG(LS_INFO) << "run END";
 }
 
 } // namespace common
