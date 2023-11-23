@@ -26,10 +26,6 @@ set(ASPIA_VERSION_MAJOR 2)
 set(ASPIA_VERSION_MINOR 7)
 set(ASPIA_VERSION_PATCH 0)
 
-if ("$ENV{VCPKG_ROOT}" STREQUAL "")
-    message(FATAL_ERROR "VCPKG_ROOT not defined")
-endif()
-
 # On CI installed dir could be outside of vcpkg root
 if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
     set(VCPKG_INSTALLED_DIR $ENV{VCPKG_ROOT}/installed)
@@ -37,10 +33,6 @@ if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
 else()
     set(VCPKG_INSTALLED_DIR $ENV{VCPKG_INSTALLED_DIR})
     message(STATUS "VCPKG_INSTALLED_DIR -> external: ${VCPKG_INSTALLED_DIR}")
-endif()
-
-if ("$ENV{VCPKG_TRIPLET}" STREQUAL "")
-    message(FATAL_ERROR "VCPKG_TRIPLET not defined")
 endif()
 
 add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
