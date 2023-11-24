@@ -433,6 +433,7 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     setPeerVersion(challenge->version());
     setPeerOsName(challenge->os_name());
     setPeerComputerName(challenge->computer_name());
+    setPeerArch(challenge->arch());
 
     LOG(LS_INFO) << "Server Version: " << peerVersion();
     LOG(LS_INFO) << "Server Name: " << challenge->computer_name();

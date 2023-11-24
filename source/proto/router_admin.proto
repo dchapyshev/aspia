@@ -35,6 +35,7 @@ message Session
     Version version            = 6;
     string os_name             = 7;
     string computer_name       = 8;
+    string architecture        = 9;
 }
 
 enum SessionRequestType

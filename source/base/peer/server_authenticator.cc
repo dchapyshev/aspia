@@ -601,6 +601,7 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
     setPeerVersion(session_response->version());
     setPeerOsName(session_response->os_name());
     setPeerComputerName(session_response->computer_name());
+    setPeerArch(session_response->arch());
 
     LOG(LS_INFO) << "Client Session Type: " << session_response->session_type();
     LOG(LS_INFO) << "Client Version: " << peerVersion();

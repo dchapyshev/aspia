@@ -79,6 +79,9 @@
         <file>monitor-7.png</file>
         <file>monitor-8.png</file>
         <file>monitor-9.png</file>
+        <file>pencil.png</file>
+        <file>plus.png</file>
+        <file>minus.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

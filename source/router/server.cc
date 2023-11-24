@@ -213,6 +213,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
         item->mutable_version()->CopyFrom(session->version().toProto());
         item->set_os_name(session->osName());
         item->set_computer_name(session->computerName());
+        item->set_architecture(session->architecture());
 
         switch (session->sessionType())
         {
@@ -427,6 +428,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     session->setVersion(session_info.version);
     session->setOsName(session_info.os_name);
     session->setComputerName(session_info.computer_name);
+    session->setArchitecture(session_info.architecture);
     session->setUserName(session_info.user_name);
 
     sessions_.emplace_back(std::move(session));

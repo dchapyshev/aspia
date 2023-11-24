@@ -136,6 +136,12 @@ void Session::setComputerName(const std::string& computer_name)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Session::setArchitecture(const std::string& architecture)
+{
+    architecture_ = architecture;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Session::setUserName(const std::string& username)
 {
     username_ = username;

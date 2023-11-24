@@ -79,7 +79,8 @@ public:
         proto::Version version = session.version();
         setText(4, QString("%1.%2.%3.%4")
             .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
-        setText(5, QString::fromStdString(session.os_name()));
+        setText(5, QString::fromStdString(session.architecture()));
+        setText(6, QString::fromStdString(session.os_name()));
     }
 
     ~HostTreeItem() override = default;
@@ -112,7 +113,7 @@ public:
     bool operator<(const QTreeWidgetItem& other) const override
     {
         int column = treeWidget()->sortColumn();
-        if (column == 0)
+        if (column == 0) // Name
         {
             QCollator collator;
             collator.setCaseSensitivity(Qt::CaseInsensitive);
@@ -120,7 +121,7 @@ public:
 
             return collator.compare(text(0), other.text(0)) <= 0;
         }
-        else if (column == 2)
+        else if (column == 2) // Time
         {
             const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
             return session.timepoint() < other_item->session.timepoint();
@@ -156,7 +157,8 @@ public:
         setText(3, QString("%1.%2.%3.%4")
             .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
         setText(4, QString::fromStdString(session.computer_name()));
-        setText(5, QString::fromStdString(session.os_name()));
+        setText(5, QString::fromStdString(session.architecture()));
+        setText(6, QString::fromStdString(session.os_name()));
     }
 
     void updateItem(const proto::Session& updated_session)

@@ -113,6 +113,7 @@ void ServerAuthenticatorManager::onComplete()
                     session_info.version       = current->peerVersion();
                     session_info.os_name       = current->peerOsName();
                     session_info.computer_name = current->peerComputerName();
+                    session_info.architecture  = current->peerArch();
                     session_info.user_name     = current->userName();
                     session_info.session_type  = current->sessionType();
 

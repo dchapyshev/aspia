@@ -61,6 +61,8 @@ public:
     const std::string& osName() const { return os_name_; }
     void setComputerName(const std::string& computer_name);
     const std::string& computerName() const { return computer_name_; }
+    void setArchitecture(const std::string& architecture);
+    const std::string& architecture() const { return architecture_; }
     void setUserName(const std::string& username);
     const std::string& userName() const { return username_; }
 
@@ -105,6 +107,7 @@ private:
     base::Version version_;
     std::string os_name_;
     std::string computer_name_;
+    std::string architecture_;
 
     Delegate* delegate_ = nullptr;
 };

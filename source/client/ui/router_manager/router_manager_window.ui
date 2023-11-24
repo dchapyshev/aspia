@@ -34,7 +34,7 @@
       </property>
       <widget class="QWidget" name="tab_hosts">
        <attribute name="icon">
-        <iconset resource="../resources/client.qrc">
+        <iconset resource="../../resources/client.qrc">
          <normaloff>:/img/host.png</normaloff>:/img/host.png</iconset>
        </attribute>
        <attribute name="title">
@@ -94,6 +94,11 @@
           </column>
           <column>
            <property name="text">
+            <string>Architecture</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Operating System</string>
            </property>
           </column>
@@ -148,7 +153,7 @@
       </widget>
       <widget class="QWidget" name="tab_relay">
        <attribute name="icon">
-        <iconset resource="../resources/client.qrc">
+        <iconset resource="../../resources/client.qrc">
          <normaloff>:/img/computer.png</normaloff>:/img/computer.png</iconset>
        </attribute>
        <attribute name="title">
@@ -208,6 +213,11 @@
            <column>
             <property name="text">
              <string>Computer Name</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Architecture</string>
             </property>
            </column>
            <column>
@@ -315,7 +325,7 @@
       </widget>
       <widget class="QWidget" name="tab_users">
        <attribute name="icon">
-        <iconset resource="../resources/client.qrc">
+        <iconset resource="../../resources/client.qrc">
          <normaloff>:/img/user.png</normaloff>:/img/user.png</iconset>
        </attribute>
        <attribute name="title">
@@ -333,7 +343,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../../console/resources/console.qrc">
+             <iconset resource="../../resources/client.qrc">
               <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
             </property>
            </widget>
@@ -350,7 +360,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../../console/resources/console.qrc">
+             <iconset resource="../../resources/client.qrc">
               <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
             </property>
            </widget>
@@ -367,7 +377,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../../console/resources/console.qrc">
+             <iconset resource="../../resources/client.qrc">
               <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
             </property>
            </widget>
@@ -381,7 +391,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources/client.qrc">
+             <iconset resource="../../resources/client.qrc">
               <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
             </property>
            </widget>
@@ -422,8 +432,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="../resources/client.qrc"/>
-  <include location="../../console/resources/console.qrc"/>
+  <include location="../../resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

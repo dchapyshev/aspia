@@ -185,6 +185,12 @@ void Authenticator::setPeerComputerName(const std::string& name)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Authenticator::setPeerArch(const std::string &arch)
+{
+    peer_arch_ = arch;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpConnected()
 {
     // The authenticator receives the channel always in an already connected state.
