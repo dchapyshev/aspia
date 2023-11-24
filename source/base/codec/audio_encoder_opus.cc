@@ -198,7 +198,8 @@ bool AudioEncoderOpus::encode(
         return false;
     }
 
-    int samples_in_packet = input_packet.data(0).size() / kBytesPerSample / uint32_t(channels_);
+    int samples_in_packet =
+        static_cast<int>(input_packet.data(0).size() / kBytesPerSample / uint32_t(channels_));
     const int16_t* next_sample = reinterpret_cast<const int16_t*>(input_packet.data(0).data());
 
     // Create a new packet of encoded data.
