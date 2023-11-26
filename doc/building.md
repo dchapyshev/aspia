@@ -93,6 +93,8 @@ libxcb-randr0-dev
 libxcb-render-util0-dev
 libxcb-xinerama0-dev
 libxcb-util-dev
+libxcb-cursor0
+libxcb-cursor-dev
 libxkbcommon-dev
 libxkbcommon-x11-dev
 libatspi2.0-dev
