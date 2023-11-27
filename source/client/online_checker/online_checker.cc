@@ -19,7 +19,6 @@
 #include "client/online_checker/online_checker.h"
 
 #include "base/logging.h"
-#include "base/net/address.h"
 #include "base/peer/host_id.h"
 
 namespace client {
@@ -62,13 +61,10 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
         }
         else
         {
-            base::Address address =
-                base::Address::fromString(computer.address_or_id, DEFAULT_HOST_TCP_PORT);
-
             OnlineCheckerDirect::Computer direct_computer;
             direct_computer.computer_id = computer.computer_id;
-            direct_computer.address = address.host();
-            direct_computer.port = address.port();
+            direct_computer.address = computer.address_or_id;
+            direct_computer.port = computer.port;
 
             direct_computers_.emplace_back(direct_computer);
         }

@@ -655,12 +655,25 @@ void AddressBookTab::startOnlineChecker()
     for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
     {
         ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
+        if (!computer_item)
+        {
+            LOG(LS_ERROR) << "Unable to get computer item: " << i;
+            continue;
+        }
 
-        client::OnlineChecker::Computer computer;
-        computer.computer_id = computer_item->computerId();
-        computer.address_or_id = base::utf16FromUtf8(computer_item->computer()->address());
+        proto::address_book::Computer* computer = computer_item->computer();
+        if (!computer)
+        {
+            LOG(LS_ERROR) << "Unable to get computer: " << i;
+            continue;
+        }
 
-        computers.emplace_back(std::move(computer));
+        client::OnlineChecker::Computer computer_to_check;
+        computer_to_check.computer_id = computer_item->computerId();
+        computer_to_check.address_or_id = base::utf16FromUtf8(computer->address());
+        computer_to_check.port = computer->port();
+
+        computers.emplace_back(std::move(computer_to_check));
     }
 
     if (computers.empty())

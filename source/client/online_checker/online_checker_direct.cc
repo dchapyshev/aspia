@@ -222,11 +222,16 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
     while (count != 0)
     {
         const Computer& computer = pending_queue_.front();
+
+        uint16_t port = computer.port;
+        if (port == 0)
+            port = DEFAULT_HOST_TCP_PORT;
+
         std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-            computer.computer_id, computer.address, computer.port, task_runner_);
+            computer.computer_id, computer.address, port, task_runner_);
 
         LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
-                     << computer.address << " port: " << computer.port << ")";
+                     << computer.address << " port: " << port << ")";
         work_queue_.emplace_back(std::move(instance));
         pending_queue_.pop_front();
 
