@@ -1011,111 +1011,111 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="203"/>
+        <location filename="../address_book_tab.cc" line="216"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>No se puede abrir el archivo del libro de direcciones &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="210"/>
+        <location filename="../address_book_tab.cc" line="224"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>No se puede leer el archivo del libro de direcciones &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="219"/>
+        <location filename="../address_book_tab.cc" line="234"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>El archivo del libro de direcciones &quot;%1&quot; está dañado o tiene un formato desconocido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="264"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>No se puede descifrar el libro de direcciones con la contraseña especificada.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="270"/>
+        <location filename="../address_book_tab.cc" line="288"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>El archivo del libro de direcciones está dañado o tiene un formato desconocido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="257"/>
+        <location filename="../address_book_tab.cc" line="273"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>El archivo del libro de direcciones está cifrado con un tipo de cifrado no admitido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="594"/>
+        <location filename="../address_book_tab.cc" line="678"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>¿Está seguro de que desea eliminar el grupo de equipos &quot;%1&quot; y todos los elementos secundarios?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="598"/>
-        <location filename="../address_book_tab.cc" line="627"/>
+        <location filename="../address_book_tab.cc" line="682"/>
+        <location filename="../address_book_tab.cc" line="720"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="602"/>
-        <location filename="../address_book_tab.cc" line="631"/>
+        <location filename="../address_book_tab.cc" line="686"/>
+        <location filename="../address_book_tab.cc" line="724"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="603"/>
-        <location filename="../address_book_tab.cc" line="632"/>
+        <location filename="../address_book_tab.cc" line="687"/>
+        <location filename="../address_book_tab.cc" line="725"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="623"/>
+        <location filename="../address_book_tab.cc" line="716"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>¿Está seguro de que desea eliminar el ordenador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="1069"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="930"/>
+        <location filename="../address_book_tab.cc" line="1074"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1069"/>
+        <location filename="../address_book_tab.cc" line="1216"/>
         <source>Save Address Book</source>
         <translation>Guardar Libro de Direcciones</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1071"/>
+        <location filename="../address_book_tab.cc" line="1218"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Libro de Direcciones (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1081"/>
+        <location filename="../address_book_tab.cc" line="1233"/>
         <source>Unable to create or open address book file.</source>
         <translation>No se puede crear o abrir el archivo del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1094"/>
+        <location filename="../address_book_tab.cc" line="1247"/>
         <source>Unable to write address book file.</source>
         <translation>No se puede escribir el archivo del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1124"/>
+        <location filename="../address_book_tab.cc" line="1278"/>
         <source>Root Group</source>
         <translation>Grupo Raíz</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1136"/>
-        <location filename="../address_book_tab.cc" line="1151"/>
+        <location filename="../address_book_tab.cc" line="1290"/>
+        <location filename="../address_book_tab.cc" line="1305"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1138"/>
+        <location filename="../address_book_tab.cc" line="1292"/>
         <source>Could not open address book</source>
         <translation>No se pudo abrir el libro de direcciones</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1153"/>
+        <location filename="../address_book_tab.cc" line="1307"/>
         <source>Failed to save address book</source>
         <translation>No se pudo guardar el libro de direcciones</translation>
     </message>

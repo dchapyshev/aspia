@@ -995,111 +995,111 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="203"/>
+        <location filename="../address_book_tab.cc" line="216"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="210"/>
+        <location filename="../address_book_tab.cc" line="224"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="219"/>
+        <location filename="../address_book_tab.cc" line="234"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="264"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="270"/>
+        <location filename="../address_book_tab.cc" line="288"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="257"/>
+        <location filename="../address_book_tab.cc" line="273"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="594"/>
+        <location filename="../address_book_tab.cc" line="678"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="598"/>
-        <location filename="../address_book_tab.cc" line="627"/>
+        <location filename="../address_book_tab.cc" line="682"/>
+        <location filename="../address_book_tab.cc" line="720"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="602"/>
-        <location filename="../address_book_tab.cc" line="631"/>
+        <location filename="../address_book_tab.cc" line="686"/>
+        <location filename="../address_book_tab.cc" line="724"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="603"/>
-        <location filename="../address_book_tab.cc" line="632"/>
+        <location filename="../address_book_tab.cc" line="687"/>
+        <location filename="../address_book_tab.cc" line="725"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="623"/>
+        <location filename="../address_book_tab.cc" line="716"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="1069"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="930"/>
+        <location filename="../address_book_tab.cc" line="1074"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1069"/>
+        <location filename="../address_book_tab.cc" line="1216"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1071"/>
+        <location filename="../address_book_tab.cc" line="1218"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1081"/>
+        <location filename="../address_book_tab.cc" line="1233"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1094"/>
+        <location filename="../address_book_tab.cc" line="1247"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1124"/>
+        <location filename="../address_book_tab.cc" line="1278"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1136"/>
-        <location filename="../address_book_tab.cc" line="1151"/>
+        <location filename="../address_book_tab.cc" line="1290"/>
+        <location filename="../address_book_tab.cc" line="1305"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1138"/>
+        <location filename="../address_book_tab.cc" line="1292"/>
         <source>Could not open address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1153"/>
+        <location filename="../address_book_tab.cc" line="1307"/>
         <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
