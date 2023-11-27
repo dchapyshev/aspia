@@ -61,6 +61,7 @@ const char* kTranslators[] =
 {
     "Dmitry Chapyshev (Russian)",
     "Felipe Borela (Portuguese Brazilian)",
+    "Giuseppe Bogetti (Italian)",
     "Gregor Doroschenko (German)",
     "Lyhyrda Myhaylo (Ukrainian)",
     "Mark Jansen (Dutch)",
