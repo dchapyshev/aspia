@@ -304,27 +304,27 @@
     <message>
         <location filename="../main_window.ui" line="431"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestione Desktop</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="442"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza Desktop</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="453"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasferimento Files</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="464"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni Sistema</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="475"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat Testuale</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="333"/>
@@ -339,7 +339,7 @@
     <message>
         <location filename="../main_window.ui" line="358"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Accesso</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="377"/>
