@@ -982,12 +982,12 @@
     <message>
         <location filename="../main_window.cc" line="922"/>
         <source>ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ID: %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="918"/>
         <source>IP addresses:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzi IP:</translation>
     </message>
 </context>
 <context>
