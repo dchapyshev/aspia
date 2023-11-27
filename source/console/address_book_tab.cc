@@ -173,6 +173,8 @@ AddressBookTab::~AddressBookTab()
 // static
 AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 {
+    LOG(LS_INFO) << "[ACTION] Create new";
+
     proto::address_book::File file;
     proto::address_book::Data data;
     std::string key;
@@ -181,7 +183,12 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 
     AddressBookDialog dialog(parent, QString(), &file, &data, &key);
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Create new rejected by user";
         return nullptr;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Create new accepted by user";
 
     AddressBookTab* tab = new AddressBookTab(
         QString(), std::move(file), std::move(data), std::move(key), parent);
@@ -194,12 +201,18 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 // static
 AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* parent)
 {
+    LOG(LS_INFO) << "Open address book from file: '" << file_path.toStdString() << "'";
+
     if (file_path.isEmpty())
+    {
+        LOG(LS_ERROR) << "Empty file path";
         return nullptr;
+    }
 
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
+        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
         showOpenError(parent, tr("Unable to open address book file \"%1\".").arg(file_path));
         return nullptr;
     }
@@ -207,6 +220,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     QByteArray buffer = file.readAll();
     if (buffer.isEmpty())
     {
+        LOG(LS_ERROR) << "Unable to read address book file";
         showOpenError(parent, tr("Unable to read address book file \"%1\".").arg(file_path));
         return nullptr;
     }
@@ -215,6 +229,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     if (!address_book_file.ParseFromArray(buffer.constData(), buffer.size()))
     {
+        LOG(LS_ERROR) << "Unable to parse address book file";
         showOpenError(parent,
                       tr("The address book file \"%1\" is corrupted or has an unknown format.")
                       .arg(file_path));
@@ -254,6 +269,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     if (!cryptor)
     {
+        LOG(LS_ERROR) << "Unsupported encryption type";
         showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
         return nullptr;
     }
@@ -261,12 +277,14 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     std::string decrypted_data;
     if (!cryptor->decrypt(address_book_file.data(), &decrypted_data))
     {
+        LOG(LS_ERROR) << "Unable to decrypt address book";
         showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
         return nullptr;
     }
 
     if (!address_book_data.ParseFromString(decrypted_data))
     {
+        LOG(LS_ERROR) << "Unable to parse address book";
         showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
         return nullptr;
     }
@@ -318,6 +336,7 @@ proto::address_book::ComputerGroup* AddressBookTab::rootComputerGroup()
 //--------------------------------------------------------------------------------------------------
 AddressBookTab* AddressBookTab::duplicateTab() const
 {
+    LOG(LS_INFO) << "[ACTION] Duplicate tab";
     return new AddressBookTab(filePath(),
                               proto::address_book::File(file_),
                               proto::address_book::Data(data_),
@@ -328,18 +347,22 @@ AddressBookTab* AddressBookTab::duplicateTab() const
 //--------------------------------------------------------------------------------------------------
 bool AddressBookTab::save()
 {
+    LOG(LS_INFO) << "[ACTION] Save";
     return saveToFile(file_path_);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AddressBookTab::saveAs()
 {
+    LOG(LS_INFO) << "[ACTION] Save as";
     return saveToFile(QString());
 }
 
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::reloadAll()
 {
+    LOG(LS_INFO) << "Reload address book";
+
     ui.tree_group->clear();
     ui.tree_computer->clear();
 
@@ -398,12 +421,16 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::addComputerGroup()
 {
+    LOG(LS_INFO) << "[ACTION] Add computer group";
     stopOnlineChecker();
 
     ComputerGroupItem* parent_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!parent_item)
+    {
+        LOG(LS_ERROR) << "Unable to get parent item";
         return;
+    }
 
     std::unique_ptr<proto::address_book::ComputerGroup> computer_group =
         std::make_unique<proto::address_book::ComputerGroup>();
@@ -424,7 +451,12 @@ void AddressBookTab::addComputerGroup()
                                parentName(parent_item),
                                computer_group.get());
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Add computer group rejected by user";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Add computer group accepted by user";
 
     proto::address_book::ComputerGroup* computer_group_released = computer_group.release();
 
@@ -437,6 +469,7 @@ void AddressBookTab::addComputerGroup()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::addComputer()
 {
+    LOG(LS_INFO) << "[ACTION] Add computer";
     stopOnlineChecker();
 
     ComputerGroupItem* parent_item =
@@ -448,7 +481,12 @@ void AddressBookTab::addComputer()
                           ComputerDialog::Mode::CREATE,
                           parentName(parent_item));
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Add computer rejected by user";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Add computer accepted by user";
 
     proto::address_book::Computer* computer =
         new proto::address_book::Computer(dialog.computer());
@@ -465,22 +503,34 @@ void AddressBookTab::addComputer()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::copyComputer()
 {
+    LOG(LS_INFO) << "[ACTION] Copy computer";
     stopOnlineChecker();
 
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     ComputerGroupItem* parent_group_item = current_item->parentComputerGroupItem();
     if (!parent_group_item)
+    {
+        LOG(LS_ERROR) << "Unable to get parent group item";
         return;
+    }
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::COPY,
                           parentName(parent_group_item),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Copy computer rejected by user";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Copy computer accepted by user";
 
     proto::address_book::Computer* computer =
         new proto::address_book::Computer(dialog.computer());
@@ -497,6 +547,7 @@ void AddressBookTab::copyComputer()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyAddressBook()
 {
+    LOG(LS_INFO) << "[ACTION] Modify address book";
     stopOnlineChecker();
 
     ComputerGroupItem* root_item = rootComputerGroupItem();
@@ -508,7 +559,12 @@ void AddressBookTab::modifyAddressBook()
 
     AddressBookDialog dialog(this, file_path_, &file_, &data_, &key_);
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Address book not modified";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Address book modified";
 
     root_item->updateItem();
     setChanged(true);
@@ -517,16 +573,23 @@ void AddressBookTab::modifyAddressBook()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyComputerGroup()
 {
+    LOG(LS_INFO) << "[ACTION] Modify computer group";
     stopOnlineChecker();
 
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item for group";
         return;
+    }
 
     ComputerGroupItem* parent_item = dynamic_cast<ComputerGroupItem*>(current_item->parent());
     if (!parent_item)
+    {
+        LOG(LS_ERROR) << "Unable to get parent item for group";
         return;
+    }
 
     proto::address_book::ComputerGroup* computer_group = current_item->computerGroup();
     if (!computer_group->has_config())
@@ -549,7 +612,12 @@ void AddressBookTab::modifyComputerGroup()
                                parentName(parent_item),
                                computer_group);
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Computer group not modified";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Computer group modified";
 
     current_item->updateItem();
     setChanged(true);
@@ -558,18 +626,27 @@ void AddressBookTab::modifyComputerGroup()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyComputer()
 {
+    LOG(LS_INFO) << "[ACTION] Modify computer";
     stopOnlineChecker();
 
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::MODIFY,
                           parentName(current_item->parentComputerGroupItem()),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(LS_INFO) << "[ACTION] Computer not modified";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Computer modified";
 
     current_item->computer()->CopyFrom(dialog.computer());
     current_item->updateItem();
@@ -579,16 +656,23 @@ void AddressBookTab::modifyComputer()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::removeComputerGroup()
 {
+    LOG(LS_INFO) << "[ACTION] Remove computer group";
     stopOnlineChecker();
 
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item for group";
         return;
+    }
 
     ComputerGroupItem* parent_item = dynamic_cast<ComputerGroupItem*>(current_item->parent());
     if (!parent_item)
+    {
+        LOG(LS_ERROR) << "Unable to get parent item for group";
         return;
+    }
 
     QString message =
         tr("Are you sure you want to delete computer group \"%1\" and all child items?")
@@ -604,21 +688,30 @@ void AddressBookTab::removeComputerGroup()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Computer group removing confirmed by user";
         cleanupComputerGroup(current_item->computerGroup());
 
         if (parent_item->deleteChildComputerGroup(current_item))
             setChanged(true);
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Computer group removing rejected by user";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::removeComputer()
 {
+    LOG(LS_INFO) << "[ACTION] Remove computer";
     stopOnlineChecker();
 
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     QString message = tr("Are you sure you want to delete computer \"%1\"?")
         .arg(QString::fromStdString(current_item->computer()->name()));
@@ -633,6 +726,7 @@ void AddressBookTab::removeComputer()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Computer removing confirmed by user";
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
 
         cleanupComputer(current_item->computer());
@@ -642,6 +736,10 @@ void AddressBookTab::removeComputer()
             delete current_item;
             setChanged(true);
         }
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Computer removing rejected by user";
     }
 }
 
@@ -711,9 +809,14 @@ void AddressBookTab::stopOnlineChecker()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 {
+    LOG(LS_INFO) << "[ACTION] Group item clicked";
+
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     bool is_root = !current_item->parent();
     emit sig_computerGroupActivated(true, is_root);
@@ -723,10 +826,15 @@ void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupContextMenu(const QPoint& point)
 {
+    LOG(LS_INFO) << "[ACTION] Group context menu";
+
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->itemAt(point));
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     ui.tree_group->setCurrentItem(current_item);
     onGroupItemClicked(current_item, 0);
@@ -738,9 +846,14 @@ void AddressBookTab::onGroupContextMenu(const QPoint& point)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
 {
+    LOG(LS_INFO) << "[ACTION] Group item collapsed";
+
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
+    {
+        LOG(LS_INFO) << "Unable to get current item";
         return;
+    }
 
     current_item->SetExpanded(false);
     setChanged(true);
@@ -749,9 +862,14 @@ void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
 {
+    LOG(LS_INFO) << "[ACTION] Group item expanded";
+
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     current_item->SetExpanded(true);
     setChanged(true);
@@ -760,10 +878,15 @@ void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemDropped()
 {
+    LOG(LS_INFO) << "[ACTION] Group item dropped";
+
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     ui.tree_group->sortItems(0, Qt::AscendingOrder);
     updateComputerList(current_item);
@@ -773,9 +896,14 @@ void AddressBookTab::onGroupItemDropped()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column */)
 {
+    LOG(LS_INFO) << "[ACTION] Computer item clicked";
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     emit sig_computerActivated(true);
 }
@@ -783,6 +911,8 @@ void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column 
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerContextMenu(const QPoint& point)
 {
+    LOG(LS_INFO) << "[ACTION] Computer context menu";
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->itemAt(point));
     if (current_item)
     {
@@ -796,9 +926,14 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* column */)
 {
+    LOG(LS_INFO) << "[ACTION] Computer item double clicked";
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
     if (!current_item)
+    {
+        LOG(LS_ERROR) << "Unable to get current item";
         return;
+    }
 
     emit sig_computerDoubleClicked(current_item->computerToConnect());
 }
@@ -837,6 +972,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
     {
         case Qt::Key_Insert:
         {
+            LOG(LS_INFO) << "[ACTION] Insert key pressed";
             if (focus_widget == ui.tree_group)
                 addComputerGroup();
             else if (focus_widget == ui.tree_computer)
@@ -851,7 +987,12 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
                 ComputerGroupItem* current_item =
                     dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
                 if (!current_item)
+                {
+                    LOG(LS_ERROR) << "Unable to get current item";
                     break;
+                }
+
+                LOG(LS_INFO) << "[ACTION] F2 key pressed";
 
                 if (current_item->parent())
                     modifyComputerGroup();
@@ -860,6 +1001,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
             }
             else if (focus_widget == ui.tree_computer)
             {
+                LOG(LS_INFO) << "[ACTION] F2 key pressed";
                 modifyComputer();
             }
         }
@@ -867,6 +1009,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
 
         case Qt::Key_Delete:
         {
+            LOG(LS_INFO) << "[ACTION] Delete key pressed";
             if (focus_widget == ui.tree_group)
                 removeComputerGroup();
             else if (focus_widget == ui.tree_computer)
@@ -878,6 +1021,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
         {
             if (focus_widget == ui.tree_computer)
             {
+                LOG(LS_INFO) << "[ACTION] Enter key pressed";
                 ComputerItem* current_item =
                     dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
                 if (!current_item)
@@ -1036,6 +1180,8 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 //--------------------------------------------------------------------------------------------------
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
+    LOG(LS_INFO) << "Save address book to file: '" << file_path.toStdString() << "'";
+
     std::string serialized_data = data_.SerializeAsString();
     std::unique_ptr<base::DataCryptor> cryptor;
 
@@ -1063,6 +1209,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     QString path = file_path;
     if (path.isEmpty())
     {
+        LOG(LS_INFO) << "File path is empty. Show dialog to save file";
         Settings settings;
 
         path = QFileDialog::getSaveFileName(this,
@@ -1070,14 +1217,19 @@ bool AddressBookTab::saveToFile(const QString& file_path)
                                             settings.lastDirectory(),
                                             tr("Aspia Address Book (*.aab)"));
         if (path.isEmpty())
+        {
+            LOG(LS_INFO) << "File path not selected";
             return false;
+        }
 
+        LOG(LS_INFO) << "Selected file path: " << path.toStdString();
         settings.setLastDirectory(QFileInfo(path).absolutePath());
     }
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly))
     {
+        LOG(LS_ERROR) << "Unable to open file for write";
         showSaveError(this, tr("Unable to create or open address book file."));
         return false;
     }
@@ -1091,12 +1243,14 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     if (bytes_written != static_cast<int64_t>(buffer.size()))
     {
+        LOG(LS_ERROR) << "Unable to write file: " << file.errorString().toStdString();
         showSaveError(this, tr("Unable to write address book file."));
         return false;
     }
 
     file_path_ = path;
 
+    LOG(LS_INFO) << "Address book saved";
     setChanged(false);
     return true;
 }
