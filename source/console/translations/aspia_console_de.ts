@@ -1069,53 +1069,53 @@
         <translation type="unfinished">Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="912"/>
+        <location filename="../address_book_tab.cc" line="925"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="917"/>
+        <location filename="../address_book_tab.cc" line="930"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1056"/>
+        <location filename="../address_book_tab.cc" line="1069"/>
         <source>Save Address Book</source>
         <translation type="unfinished">Adressbuch speichern</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1058"/>
+        <location filename="../address_book_tab.cc" line="1071"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished">Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1068"/>
+        <location filename="../address_book_tab.cc" line="1081"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished">Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1081"/>
+        <location filename="../address_book_tab.cc" line="1094"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished">Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1111"/>
+        <location filename="../address_book_tab.cc" line="1124"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1123"/>
-        <location filename="../address_book_tab.cc" line="1138"/>
+        <location filename="../address_book_tab.cc" line="1136"/>
+        <location filename="../address_book_tab.cc" line="1151"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1125"/>
+        <location filename="../address_book_tab.cc" line="1138"/>
         <source>Could not open address book</source>
         <translation type="unfinished">Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1140"/>
+        <location filename="../address_book_tab.cc" line="1153"/>
         <source>Failed to save address book</source>
         <translation type="unfinished">Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>

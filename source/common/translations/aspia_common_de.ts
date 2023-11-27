@@ -167,152 +167,152 @@
         <translation type="obsolete">Version: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="119"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="122"/>
+        <location filename="../ui/about_dialog.cc" line="123"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation type="unfinished">Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="123"/>
+        <location filename="../ui/about_dialog.cc" line="124"/>
         <source>You can get a copy of license here:</source>
         <translation type="unfinished">Sie können eine Kopie der Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="128"/>
+        <location filename="../ui/about_dialog.cc" line="129"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation type="unfinished">Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="132"/>
+        <location filename="../ui/about_dialog.cc" line="133"/>
         <source>Links:</source>
         <translation type="unfinished">Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="133"/>
+        <location filename="../ui/about_dialog.cc" line="134"/>
         <source>Home page:</source>
         <translation type="unfinished">Webseite:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="134"/>
+        <location filename="../ui/about_dialog.cc" line="135"/>
         <source>GitHub page:</source>
         <translation type="unfinished">GitHub-Seite:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="137"/>
+        <location filename="../ui/about_dialog.cc" line="138"/>
         <source>Developers:</source>
         <translation type="unfinished">Entwickler:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="139"/>
+        <location filename="../ui/about_dialog.cc" line="140"/>
         <source>Translators:</source>
         <translation type="unfinished">Übersetzer:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="141"/>
+        <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Third-party components:</source>
         <translation type="unfinished">Komponenten von Drittanbietern:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="162"/>
+        <location filename="../ui/about_dialog.cc" line="163"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="163"/>
+        <location filename="../ui/about_dialog.cc" line="164"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="164"/>
+        <location filename="../ui/about_dialog.cc" line="165"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="167"/>
+        <location filename="../ui/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="168"/>
+        <location filename="../ui/about_dialog.cc" line="169"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="179"/>
+        <location filename="../ui/about_dialog.cc" line="180"/>
         <source>Display &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="180"/>
+        <location filename="../ui/about_dialog.cc" line="181"/>
         <source>Pixel ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="181"/>
+        <location filename="../ui/about_dialog.cc" line="182"/>
         <source>Logical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="184"/>
+        <location filename="../ui/about_dialog.cc" line="185"/>
         <source>Physical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="189"/>
+        <location filename="../ui/about_dialog.cc" line="190"/>
         <source>Size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="192"/>
+        <location filename="../ui/about_dialog.cc" line="193"/>
         <source>Available size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="196"/>
+        <location filename="../ui/about_dialog.cc" line="197"/>
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="199"/>
+        <location filename="../ui/about_dialog.cc" line="200"/>
         <source>Depth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="200"/>
+        <location filename="../ui/about_dialog.cc" line="201"/>
         <source>Refresh rate: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="205"/>
+        <location filename="../ui/about_dialog.cc" line="206"/>
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="255"/>
+        <location filename="../ui/about_dialog.cc" line="256"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="261"/>
+        <location filename="../ui/about_dialog.cc" line="262"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="263"/>
+        <location filename="../ui/about_dialog.cc" line="264"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="272"/>
+        <location filename="../ui/about_dialog.cc" line="273"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="273"/>
+        <location filename="../ui/about_dialog.cc" line="274"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
