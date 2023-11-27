@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::shared_ptr<TaskRunner> MessageLoopTaskRunner::current()
 {
@@ -31,11 +32,13 @@ std::shared_ptr<TaskRunner> MessageLoopTaskRunner::current()
     return current->taskRunner();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoopTaskRunner::belongsToCurrentThread() const
 {
     return thread_id_ == std::this_thread::get_id();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoopTaskRunner::postTask(Callback callback)
 {
     std::shared_lock lock(loop_lock_);
@@ -44,6 +47,7 @@ void MessageLoopTaskRunner::postTask(Callback callback)
         loop_->postTask(std::move(callback));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoopTaskRunner::postDelayedTask(Callback callback, const Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
@@ -52,6 +56,7 @@ void MessageLoopTaskRunner::postDelayedTask(Callback callback, const Millisecond
         loop_->postDelayedTask(std::move(callback), delay);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoopTaskRunner::postNonNestableTask(Callback callback)
 {
     std::shared_lock lock(loop_lock_);
@@ -60,6 +65,7 @@ void MessageLoopTaskRunner::postNonNestableTask(Callback callback)
         loop_->postNonNestableTask(std::move(callback));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoopTaskRunner::postNonNestableDelayedTask(Callback callback, const Milliseconds& delay)
 {
     std::shared_lock lock(loop_lock_);
@@ -68,6 +74,7 @@ void MessageLoopTaskRunner::postNonNestableDelayedTask(Callback callback, const 
         loop_->postNonNestableDelayedTask(std::move(callback), delay);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoopTaskRunner::postQuit()
 {
     std::shared_lock lock(loop_lock_);
@@ -76,6 +83,7 @@ void MessageLoopTaskRunner::postQuit()
         loop_->postTask(loop_->quitClosure());
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)
     : loop_(loop),
       thread_id_(std::this_thread::get_id())
@@ -83,6 +91,7 @@ MessageLoopTaskRunner::MessageLoopTaskRunner(MessageLoop* loop)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // Called directly by MessageLoop::~MessageLoop.
 void MessageLoopTaskRunner::willDestroyCurrentMessageLoop()
 {

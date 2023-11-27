@@ -33,6 +33,7 @@ namespace {
 const size_t kSaltSize = 64; // In bytes.
 const char kDefaultGroup[] = "4096";
 
+//--------------------------------------------------------------------------------------------------
 bool isValidUserNameChar(char16_t username_char)
 {
     if (std::iswalnum(username_char))
@@ -54,6 +55,7 @@ bool isValidUserNameChar(char16_t username_char)
 // static
 const User User::kInvalidUser;
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool User::isValidUserName(std::u16string_view username)
 {
@@ -71,6 +73,7 @@ bool User::isValidUserName(std::u16string_view username)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool User::isValidPassword(std::u16string_view password)
 {
@@ -82,6 +85,7 @@ bool User::isValidPassword(std::u16string_view password)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool User::isSafePassword(std::u16string_view password)
 {
@@ -111,19 +115,20 @@ bool User::isSafePassword(std::u16string_view password)
     return has_upper && has_lower && has_digit;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 User User::create(std::u16string_view name, std::u16string_view password)
 {
     if (name.empty() || password.empty())
     {
-        LOG(LS_WARNING) << "Empty user name or password";
+        LOG(LS_ERROR) << "Empty user name or password";
         return User();
     }
 
     std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
     {
-        LOG(LS_WARNING) << "Pair not found for group: " << kDefaultGroup;
+        LOG(LS_ERROR) << "Pair not found for group: " << kDefaultGroup;
         return User();
     }
 
@@ -140,18 +145,20 @@ User User::create(std::u16string_view name, std::u16string_view password)
     user.verifier = v.toByteArray();
     if (user.verifier.empty())
     {
-        LOG(LS_WARNING) << "Empty verifier";
+        LOG(LS_ERROR) << "Empty verifier";
         return User();
     }
 
     return user;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
     return !name.empty() && !salt.empty() && !group.empty() && !verifier.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 User User::parseFrom(const proto::User& serialized_user)
 {
@@ -168,6 +175,7 @@ User User::parseFrom(const proto::User& serialized_user)
     return user;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::User User::serialize() const
 {
     proto::User user;

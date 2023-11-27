@@ -23,24 +23,29 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 TextChatStatusMessage::TextChatStatusMessage(QWidget* parent)
     : TextChatMessage(TextChatMessage::Direction::STATUS, parent)
 {
     ui.setupUi(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 TextChatStatusMessage::~TextChatStatusMessage() = default;
 
+//--------------------------------------------------------------------------------------------------
 void TextChatStatusMessage::setMessageText(const QString& text)
 {
     ui.label_message->setText(text);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString TextChatStatusMessage::messageText() const
 {
     return ui.label_message->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString TextChatStatusMessage::messageTime() const
 {
     return QString();

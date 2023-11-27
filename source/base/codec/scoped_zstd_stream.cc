@@ -20,11 +20,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void ZstdCStreamDeleter::operator()(ZSTD_CStream* cstream)
 {
     ZSTD_freeCStream(cstream);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ZstdDStreamDeleter::operator()(ZSTD_DStream* dstream)
 {
     ZSTD_freeDStream(dstream);

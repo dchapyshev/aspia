@@ -44,12 +44,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedWow64FsRedirection);
 };
 
+//--------------------------------------------------------------------------------------------------
 ScopedWow64FsRedirection::ScopedWow64FsRedirection()
 {
     BOOL wow64 = FALSE;
     if (!IsWow64Process(GetCurrentProcess(), &wow64))
     {
-        PLOG(LS_WARNING) << "IsWow64Process failed";
+        PLOG(LS_ERROR) << "IsWow64Process failed";
         return;
     }
 
@@ -64,7 +65,7 @@ ScopedWow64FsRedirection::ScopedWow64FsRedirection()
 
     if (!Wow64DisableWow64FsRedirection(&old_value_))
     {
-        PLOG(LS_WARNING) << "Wow64DisableWow64FsRedirection failed";
+        PLOG(LS_ERROR) << "Wow64DisableWow64FsRedirection failed";
         return;
     }
 
@@ -72,19 +73,21 @@ ScopedWow64FsRedirection::ScopedWow64FsRedirection()
     succeeded_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedWow64FsRedirection::~ScopedWow64FsRedirection()
 {
     if (required_ && succeeded_)
     {
         if (!Wow64RevertWow64FsRedirection(old_value_))
         {
-            PLOG(LS_WARNING) << "Wow64RevertWow64FsRedirection";
+            PLOG(LS_ERROR) << "Wow64RevertWow64FsRedirection";
         }
     }
 }
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SafeModeUtil::setSafeMode(bool enable)
 {
@@ -93,7 +96,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
     ScopedWow64FsRedirection wow64_fs_redirection;
     if (!wow64_fs_redirection.isSucceeded())
     {
-        LOG(LS_WARNING) << "Failed to disable file system redirection";
+        LOG(LS_ERROR) << "Failed to disable file system redirection";
         return false;
     }
 
@@ -130,7 +133,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
                         &startup_info,
                         &process_info))
     {
-        PLOG(LS_WARNING) << "CreateProcessW failed";
+        PLOG(LS_ERROR) << "CreateProcessW failed";
         return false;
     }
 
@@ -145,30 +148,31 @@ bool SafeModeUtil::setSafeMode(bool enable)
             break;
 
         case WAIT_TIMEOUT:
-            LOG(LS_WARNING) << "Process did not complete its work within the specified time";
+            LOG(LS_ERROR) << "Process did not complete its work within the specified time";
             return false;
 
         default:
-            LOG(LS_WARNING) << "An error occurred while waiting for the process to complete: " << ret;
+            LOG(LS_ERROR) << "An error occurred while waiting for the process to complete: " << ret;
             return false;
     }
 
     DWORD exit_code = 0;
     if (!GetExitCodeProcess(process_info.hProcess, &exit_code))
     {
-        PLOG(LS_WARNING) << "GetExitCodeProcess failed";
+        PLOG(LS_ERROR) << "GetExitCodeProcess failed";
         return false;
     }
 
     if (exit_code != 0)
     {
-        LOG(LS_WARNING) << "Process ended with exit code: " << exit_code;
+        LOG(LS_ERROR) << "Process ended with exit code: " << exit_code;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool enable)
 {
@@ -181,16 +185,16 @@ bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool ena
         LONG status = key.create(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "create failed: "
-                            << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(LS_ERROR) << "create failed: "
+                          << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
 
         status = key.writeValue(L"", L"Service");
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "writeValue failed: "
-                            << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(LS_ERROR) << "writeValue failed: "
+                          << base::SystemError::toString(static_cast<ULONG>(status));
         }
     }
     else
@@ -204,8 +208,8 @@ bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool ena
 
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "RegDeleteTreeW failed: "
-                            << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(LS_ERROR) << "RegDeleteTreeW failed: "
+                          << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
     }

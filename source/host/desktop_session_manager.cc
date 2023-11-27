@@ -28,6 +28,12 @@
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
 
+#if defined(OS_WIN)
+#include "base/win/desktop.h"
+#include "base/win/session_info.h"
+#include "base/win/window_station.h"
+#endif // defined(OS_WIN)
+
 namespace host {
 
 namespace {
@@ -36,6 +42,7 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
@@ -46,6 +53,7 @@ DesktopSessionManager::DesktopSessionManager(
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionManager::~DesktopSessionManager()
 {
     LOG(LS_INFO) << "Dtor";
@@ -54,57 +62,104 @@ DesktopSessionManager::~DesktopSessionManager()
     dettachSession(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::attachSession(
     const base::Location& location, base::SessionId session_id)
 {
     if (state_ == State::ATTACHED)
     {
-        LOG(LS_INFO) << "Already attached. Session ID: " << session_id << " (from: "
+        LOG(LS_INFO) << "Already attached. Session ID: " << session_id << " (from="
                      << location.toString() << ")";
         return;
     }
 
     LOG(LS_INFO) << "Attach session with ID: " << session_id << " current state: "
-                 << stateToString(state_) << " (from: " << location.toString() << ")";
+                 << stateToString(state_) << " (from=" << location.toString() << ")";
+    session_id_ = session_id;
 
     if (state_ == State::STOPPED)
     {
         session_attach_timer_.start(kSessionAttachTimeout, [this]()
         {
-            LOG(LS_WARNING) << "Session attach timeout (" << kSessionAttachTimeout.count()
-                            << " minutes)";
+            LOG(LS_ERROR) << "Session attach timeout (session_id=" << session_id_
+                          << " timeout=" << kSessionAttachTimeout.count() << "min)";
             onErrorOccurred();
         });
     }
 
     setState(FROM_HERE, State::STARTING);
 
+    LOG(LS_INFO) << "Starting desktop session";
+    LOG(LS_INFO) << "#####################################################";
+
+#if defined(OS_WIN)
+    LOG(LS_INFO) << "# Active console session id: " << WTSGetActiveConsoleSessionId();
+    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    {
+        std::wstring desktops;
+
+        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        if (window_station.isValid())
+        {
+            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                desktops += list[i];
+                if ((i + 1) != list.size())
+                    desktops += L", ";
+            }
+        }
+
+        LOG(LS_INFO) << "# " << window_station_name << " (desktops: " << desktops << ")";
+    }
+
+    base::win::SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        return;
+    }
+
+    LOG(LS_INFO) << "# Session info (sid=" << session_id
+                 << " username='" << session_info.userName() << "'"
+                 << " connect_state=" << base::win::SessionInfo::connectStateToString(session_info.connectState())
+                 << " win_station='" << session_info.winStationName() << "'"
+                 << " domain='" << session_info.domain() << "'"
+                 << " locked=" << session_info.isUserLocked() << ")";
+#endif // defined(OS_WIN)
+
     std::u16string channel_id = base::IpcServer::createUniqueId();
+
+    LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
     server_ = std::make_unique<base::IpcServer>();
     if (!server_->start(channel_id, this))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server (channel_id: " << channel_id << ")";
+        LOG(LS_ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
+
+    LOG(LS_INFO) << "Starting desktop session process";
 
     std::unique_ptr<DesktopSessionProcess> process =
         DesktopSessionProcess::create(session_id, channel_id);
     if (!process)
     {
-        LOG(LS_ERROR) << "Failed to create session process (session_id: " << session_id
-                      << " channel_id: " << channel_id << ")";
+        LOG(LS_ERROR) << "Failed to create session process (sid=" << session_id
+                      << " channel_id=" << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
 
-    LOG(LS_INFO) << "Desktop session process created (session_id: " << session_id
-                 << " channel_id: " << channel_id << ")";
+    LOG(LS_INFO) << "Desktop session process created (sid=" << session_id
+                 << " channel_id=" << channel_id << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
@@ -113,8 +168,8 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         return;
     }
 
-    LOG(LS_INFO) << "Dettach session. Current state: << " << stateToString(state_)
-                 << " (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Dettach session (sid=" << session_id_ << " state=" << stateToString(state_)
+                 << " from=" << location.toString() << ")";
 
     if (state_ != State::STOPPING)
         setState(FROM_HERE, State::DETACHED);
@@ -123,15 +178,15 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_proxy_->stopAndDettach();
     task_runner_->deleteSoon(std::move(session_));
 
-    LOG(LS_INFO) << "Session process is detached";
+    LOG(LS_INFO) << "Session process is detached (sid=" << session_id_ << ")";
 
     if (state_ == State::STOPPING)
         return;
 
     session_attach_timer_.start(kSessionAttachTimeout, [this]()
     {
-        LOG(LS_ERROR) << "Timeout while waiting for session (" << kSessionAttachTimeout.count()
-                      << " minutes)";
+        LOG(LS_ERROR) << "Timeout while waiting for session (sid=" << session_id_
+                      << " timeout=" << kSessionAttachTimeout.count() << "min)";
         onErrorOccurred();
     });
 
@@ -140,26 +195,34 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_proxy_->attachAndStart(session_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
 {
     return session_proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
-    if (DesktopSessionProcess::filePath() != channel->peerFilePath())
+#if defined(OS_WIN)
+    std::filesystem::path ref_path = DesktopSessionProcess::filePath();
+    std::filesystem::path path = channel->peerFilePath();
+
+    if (ref_path != path)
     {
-        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application";
+        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application (sid="
+                      << session_id_ << " ref_path=" << ref_path << " path=" << path << ")";
         return;
     }
+#endif // defined(OS_WIN)
 
-    LOG(LS_INFO) << "Session process successfully connected";
+    LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 
     session_attach_timer_.stop();
 
     if (server_)
     {
-        LOG(LS_INFO) << "IPC server already exists. Stop it";
+        LOG(LS_INFO) << "IPC server already exists. Stop it (sid=" << session_id_ << ")";
         server_->stop();
         task_runner_->deleteSoon(std::move(server_));
     }
@@ -170,64 +233,86 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
     session_proxy_->attachAndStart(session_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
+    {
+        LOG(LS_INFO) << "Error skipped (state=" << stateToString(state_) << ")";
         return;
+    }
 
     setState(FROM_HERE, State::STOPPING);
     dettachSession(FROM_HERE);
     setState(FROM_HERE, State::STOPPED);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStarted()
 {
+    LOG(LS_INFO) << "Desktop session started";
     delegate_->onDesktopSessionStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStopped()
 {
+    LOG(LS_INFO) << "Desktop session stopped";
     dettachSession(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenCaptured(
     const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenCaptureError(proto::VideoErrorCode error_code)
 {
     delegate_->onScreenCaptureError(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     delegate_->onAudioCaptured(audio_packet);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     delegate_->onCursorPositionChanged(cursor_position);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 {
     delegate_->onScreenListChanged(list);
 }
 
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::onScreenTypeChanged(const proto::ScreenType& type)
+{
+    delegate_->onScreenTypeChanged(type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     delegate_->onClipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
-                 << " (from: " << location.toString() << ")";
+                 << " (from=" << location.toString() << ")";
     state_ = state;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* DesktopSessionManager::stateToString(State state)
 {

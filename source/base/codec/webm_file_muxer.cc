@@ -27,10 +27,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 WebmFileMuxer::WebmFileMuxer() = default;
 
+//--------------------------------------------------------------------------------------------------
 WebmFileMuxer::~WebmFileMuxer() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::init(FILE* file)
 {
     DCHECK(file);
@@ -64,6 +67,7 @@ bool WebmFileMuxer::init(FILE* file)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::addAudioTrack(int sample_rate, int channels, std::string_view codec_id)
 {
     if (audio_track_num_ != 0)
@@ -97,6 +101,7 @@ bool WebmFileMuxer::addAudioTrack(int sample_rate, int channels, std::string_vie
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::addVideoTrack(int width, int height, std::string_view codec_id)
 {
     if (video_track_num_ != 0)
@@ -130,6 +135,7 @@ bool WebmFileMuxer::addVideoTrack(int width, int height, std::string_view codec_
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::finalize()
 {
     if (!segment_->Finalize())
@@ -141,6 +147,7 @@ bool WebmFileMuxer::finalize()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::writeAudioFrame(std::string_view frame,
                                     const std::chrono::nanoseconds& timestamp)
 {
@@ -153,6 +160,7 @@ bool WebmFileMuxer::writeAudioFrame(std::string_view frame,
     return writeFrame(frame, timestamp, audio_track_num_, false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::writeVideoFrame(std::string_view frame,
                                     const std::chrono::nanoseconds& timestamp,
                                     bool is_key)
@@ -166,6 +174,7 @@ bool WebmFileMuxer::writeVideoFrame(std::string_view frame,
     return writeFrame(frame, timestamp, video_track_num_, is_key);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::writeFrame(std::string_view frame,
                                const std::chrono::nanoseconds& timestamp,
                                uint64_t track_num, bool is_key)

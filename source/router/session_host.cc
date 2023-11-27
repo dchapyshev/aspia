@@ -33,19 +33,23 @@ const size_t kHostKeySize = 512;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SessionHost::SessionHost()
     : Session(proto::ROUTER_SESSION_HOST)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionHost::~SessionHost() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool SessionHost::hasHostId(base::HostId host_id) const
 {
     return base::contains(host_id_list_, host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
 {
     std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
@@ -53,11 +57,13 @@ void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionReady()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
@@ -77,15 +83,17 @@ void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const base:
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from host";
+        LOG(LS_ERROR) << "Unhandled message from host";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 {
     std::unique_ptr<Database> database = openDatabase();
@@ -166,6 +174,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
 {
     base::HostId host_id = reset_host_id.host_id();
@@ -191,7 +200,7 @@ void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
         }
     }
 
-    LOG(LS_WARNING) << "Host ID " << host_id << " NOT found in list";
+    LOG(LS_ERROR) << "Host ID " << host_id << " NOT found in list";
 }
 
 } // namespace router

@@ -27,18 +27,102 @@
 
 namespace base {
 
+namespace {
+
+const char* eventTypeToString(int event)
+{
+    switch (event)
+    {
+        case KeyPress:
+            return "KeyPress";
+        case KeyRelease:
+            return "KeyRelease";
+        case ButtonPress:
+            return "ButtonPress";
+        case ButtonRelease:
+            return "ButtonRelease";
+        case MotionNotify:
+            return "MotionNotify";
+        case EnterNotify:
+            return "EnterNotify";
+        case LeaveNotify:
+            return "LeaveNotify";
+        case FocusIn:
+            return "FocusIn";
+        case FocusOut:
+            return "FocusOut";
+        case KeymapNotify:
+            return "KeymapNotify";
+        case Expose:
+            return "Expose";
+        case GraphicsExpose:
+            return "GraphicsExpose";
+        case NoExpose:
+            return "NoExpose";
+        case VisibilityNotify:
+            return "VisibilityNotify";
+        case CreateNotify:
+            return "CreateNotify";
+        case DestroyNotify:
+            return "DestroyNotify";
+        case UnmapNotify:
+            return "UnmapNotify";
+        case MapNotify:
+            return "MapNotify";
+        case MapRequest:
+            return "MapRequest";
+        case ReparentNotify:
+            return "ReparentNotify";
+        case ConfigureNotify:
+            return "ConfigureNotify";
+        case ConfigureRequest:
+            return "ConfigureRequest";
+        case GravityNotify:
+            return "GravityNotify";
+        case ResizeRequest:
+            return "ResizeRequest";
+        case CirculateNotify:
+            return "CirculateNotify";
+        case CirculateRequest:
+            return "CirculateRequest";
+        case PropertyNotify:
+            return "PropertyNotify";
+        case SelectionClear:
+            return "SelectionClear";
+        case SelectionRequest:
+            return "SelectionRequest";
+        case SelectionNotify:
+            return "SelectionNotify";
+        case ColormapNotify:
+            return "ColormapNotify";
+        case ClientMessage:
+            return "ClientMessage";
+        case MappingNotify:
+            return "MappingNotify";
+        case GenericEvent:
+            return "GenericEvent";
+        default:
+            return "Unknown";
+    }
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
 SharedXDisplay::SharedXDisplay(Display* display)
     : display_(display)
 {
     DCHECK(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedXDisplay::~SharedXDisplay()
 {
     DCHECK(event_handlers_.empty());
     XCloseDisplay(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 base::local_shared_ptr<SharedXDisplay> SharedXDisplay::create(const std::string& display_name)
 {
@@ -52,19 +136,25 @@ base::local_shared_ptr<SharedXDisplay> SharedXDisplay::create(const std::string&
     return base::make_local_shared<SharedXDisplay>(display);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 base::local_shared_ptr<SharedXDisplay> SharedXDisplay::createDefault()
 {
     return create(std::string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::addEventHandler(int type, XEventHandler* handler)
 {
+    LOG(LS_INFO) << "Added event handler: " << eventTypeToString(type) << " (" << type << ")";
     event_handlers_[type].push_back(handler);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
 {
+    LOG(LS_INFO) << "Removed event handler: " << eventTypeToString(type) << " (" << type << ")";
+
     EventHandlersMap::iterator handlers = event_handlers_.find(type);
     if (handlers == event_handlers_.end())
         return;
@@ -78,6 +168,7 @@ void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
         event_handlers_.erase(handlers);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::processPendingXEvents()
 {
     // Hold reference to |this| to prevent it from being destroyed while processing events.
@@ -105,6 +196,7 @@ void SharedXDisplay::processPendingXEvents()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::ignoreXServerGrabs()
 {
     int test_event_base = 0;

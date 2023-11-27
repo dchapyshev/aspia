@@ -28,6 +28,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_group, QWidget* parent)
     : ComputerGroupDialogTab(type, is_root_group, parent)
 {
@@ -60,11 +61,13 @@ ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_gr
     ui.edit_username->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogGeneral::~ComputerGroupDialogGeneral()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::restoreSettings(
     const proto::address_book::ComputerGroupConfig& group_config)
 {
@@ -87,6 +90,7 @@ void ComputerGroupDialogGeneral::restoreSettings(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroupConfig* group_config)
 {
     std::u16string username = ui.edit_username->text().toStdU16String();
@@ -94,6 +98,7 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
 
     if (!username.empty() && !base::User::isValidUserName(username))
     {
+        LOG(LS_INFO) << "Invalid user name: " << username;
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
         ui.edit_username->setFocus();
@@ -112,8 +117,10 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
 {
+    LOG(LS_INFO) << "[ACTION] Show password: " << checked;
     if (checked)
     {
         ui.edit_password->setEchoMode(QLineEdit::Normal);
@@ -129,6 +136,7 @@ void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();

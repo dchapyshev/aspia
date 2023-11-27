@@ -37,6 +37,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_t count)
 {
     static const double kAlpha = 0.1;
@@ -45,6 +46,7 @@ int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_
         ((1.0 - kAlpha) * static_cast<double>(last_fps)));
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 {
     static const double kAlpha = 0.1;
@@ -53,8 +55,66 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
         ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
 }
 
+//--------------------------------------------------------------------------------------------------
+const char* audioEncodingToString(proto::AudioEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::AUDIO_ENCODING_OPUS:
+            return "AUDIO_ENCODING_OPUS";
+
+        case proto::AUDIO_ENCODING_RAW:
+            return "AUDIO_ENCODING_RAW";
+
+        default:
+            return "AUDIO_ENCODING_UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* videoEncodingToString(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::VIDEO_ENCODING_VP8:
+            return "VIDEO_ENCODING_VP8";
+
+        case proto::VIDEO_ENCODING_VP9:
+            return "VIDEO_ENCODING_VP9";
+
+        case proto::VIDEO_ENCODING_ZSTD:
+            return "VIDEO_ENCODING_ZSTD";
+
+        default:
+            return "VIDEO_ENCODING_UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
+{
+    switch (error_code)
+    {
+        case proto::VIDEO_ERROR_CODE_OK:
+            return "VIDEO_ERROR_CODE_OK";
+
+        case proto::VIDEO_ERROR_CODE_TEMPORARY:
+            return "VIDEO_ERROR_CODE_TEMPORARY";
+
+        case proto::VIDEO_ERROR_CODE_PERMANENT:
+            return "VIDEO_ERROR_CODE_PERMANENT";
+
+        case proto::VIDEO_ERROR_CODE_PAUSED:
+            return "VIDEO_ERROR_CODE_PAUSED";
+
+        default:
+            return "VIDEO_ERROR_CODE_UNKNOWN";
+    }
+}
+
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
@@ -64,17 +124,21 @@ ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientDesktop::~ClientDesktop()
 {
     LOG(LS_INFO) << "Dtor";
     desktop_control_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy)
 {
+    LOG(LS_INFO) << "Desktop window installed";
     desktop_window_proxy_ = std::move(desktop_window_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 {
     LOG(LS_INFO) << "Desktop session started";
@@ -91,6 +155,7 @@ void ClientDesktop::onSessionStarted(const base::Version& peer_version)
     audio_player_ = base::AudioPlayer::create();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
@@ -121,9 +186,9 @@ void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     {
         readClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incoming_message_->has_config_request())
+    else if (incoming_message_->has_capabilities())
     {
-        readConfigRequest(incoming_message_->config_request());
+        readCapabilities(incoming_message_->capabilities());
     }
     else if (incoming_message_->has_extension())
     {
@@ -132,10 +197,11 @@ void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     else
     {
         // Unknown messages are ignored.
-        LOG(LS_WARNING) << "Unhandled message from host";
+        LOG(LS_ERROR) << "Unhandled message from host";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionMessageWritten(uint8_t /* channel_id */, size_t pending)
 {
     if (pending >= 2)
@@ -144,6 +210,7 @@ void ClientDesktop::onSessionMessageWritten(uint8_t /* channel_id */, size_t pen
         input_event_filter_.setNetworkOverflow(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     std::optional<proto::ClipboardEvent> out_event = input_event_filter_.sendClipboardEvent(event);
@@ -155,6 +222,7 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 {
     LOG(LS_INFO) << "setDesktopConfig called";
@@ -184,6 +252,7 @@ void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Current screen changed: " << screen.id();
@@ -197,6 +266,7 @@ void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setPreferredSize(int width, int height)
 {
     LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
@@ -215,6 +285,7 @@ void ClientDesktop::setPreferredSize(int width, int height)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setVideoPause(bool enable)
 {
     LOG(LS_INFO) << "Video pause changed: " << enable;
@@ -243,6 +314,7 @@ void ClientDesktop::setVideoPause(bool enable)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setAudioPause(bool enable)
 {
     LOG(LS_INFO) << "Audio pause changed: " << enable;
@@ -271,12 +343,15 @@ void ClientDesktop::setAudioPause(bool enable)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& file_path)
 {
     proto::VideoRecording video_recording;
 
     if (enable)
     {
+        LOG(LS_INFO) << "Video recording enabled (file: " << file_path << ")";
+
         video_recording.set_action(proto::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ = std::make_unique<base::WebmFileWriter>(file_path, computerName());
@@ -297,6 +372,8 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
     }
     else
     {
+        LOG(LS_INFO) << "Video recording disabled";
+
         video_recording.set_action(proto::VideoRecording::ACTION_STOPPED);
 
         webm_video_encode_timer_.reset();
@@ -313,6 +390,7 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
 {
     std::optional<proto::KeyEvent> out_event = input_event_filter_.keyEvent(event);
@@ -325,6 +403,7 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onTextEvent(const proto::TextEvent& event)
 {
     std::optional<proto::TextEvent> out_event = input_event_filter_.textEvent(event);
@@ -337,6 +416,7 @@ void ClientDesktop::onTextEvent(const proto::TextEvent& event)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
 {
     std::optional<proto::MouseEvent> out_event = input_event_filter_.mouseEvent(event);
@@ -349,6 +429,7 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -369,6 +450,7 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRemoteUpdate()
 {
     outgoing_message_->Clear();
@@ -376,6 +458,7 @@ void ClientDesktop::onRemoteUpdate()
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
     outgoing_message_->Clear();
@@ -386,6 +469,7 @@ void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequ
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& message)
 {
     outgoing_message_->Clear();
@@ -396,6 +480,7 @@ void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& messa
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
@@ -462,19 +547,19 @@ void ClientDesktop::onMetricsRequest()
     desktop_window_proxy_->setMetrics(metrics);
 }
 
-void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilities)
 {
-    LOG(LS_INFO) << "Config request received";
+    LOG(LS_INFO) << "Capabilities received";
 
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
-    desktop_window_proxy_->setCapabilities(
-        config_request.extensions(), config_request.video_encodings());
+    desktop_window_proxy_->setCapabilities(capabilities);
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
+    if (!(capabilities.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
     {
-        LOG(LS_WARNING) << "Current video encoding not supported";
+        LOG(LS_ERROR) << "Current video encoding not supported";
 
         // We tell the window about the need to change the encoding.
         desktop_window_proxy_->configRequired();
@@ -486,22 +571,24 @@ void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 {
     proto::VideoErrorCode error_code = packet.error_code();
     if (error_code != proto::VIDEO_ERROR_CODE_OK)
     {
-        LOG(LS_WARNING) << "Video error detected: " << error_code;
+        LOG(LS_ERROR) << "Video error detected: " << videoErrorCodeToString(error_code);
         desktop_window_proxy_->setFrameError(error_code);
         return;
     }
 
     if (video_encoding_ != packet.encoding())
     {
+        LOG(LS_INFO) << "Video encoding changed from: " << videoEncodingToString(video_encoding_)
+                     << " to: " << videoEncodingToString(packet.encoding());
+
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
-
-        LOG(LS_INFO) << "Video encoding changed to: " << video_encoding_;
     }
 
     if (!video_decoder_)
@@ -574,24 +661,31 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     desktop_window_proxy_->drawFrame();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 {
     if (webm_file_writer_)
         webm_file_writer_->addAudioPacket(packet);
 
     if (!audio_player_)
+    {
+        LOG(LS_ERROR) << "Audio packet received but audio player not initialized";
         return;
+    }
 
     if (packet.encoding() != audio_encoding_)
     {
         audio_decoder_ = base::AudioDecoder::create(packet.encoding());
         audio_encoding_ = packet.encoding();
 
-        LOG(LS_INFO) << "Audio encoding changed to: " << audio_encoding_;
+        LOG(LS_INFO) << "Audio encoding changed to: " << audioEncodingToString(audio_encoding_);
     }
 
     if (!audio_decoder_)
+    {
+        LOG(LS_INFO) << "Audio decoder not initialized now";
         return;
+    }
 
     size_t packet_size = packet.ByteSizeLong();
 
@@ -606,17 +700,18 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
         audio_player_->addPacket(std::move(decoded_packet));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(LS_WARNING) << "Cursor shape received not session type not desktop manage";
+        LOG(LS_ERROR) << "Cursor shape received not session type not desktop manage";
         return;
     }
 
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
     {
-        LOG(LS_WARNING) << "Cursor shape received not disabled in client";
+        LOG(LS_ERROR) << "Cursor shape received not disabled in client";
         return;
     }
 
@@ -635,11 +730,12 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
     desktop_window_proxy_->setMouseCursor(mouse_cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorPosition(const proto::CursorPosition& cursor_position)
 {
     if (!(desktop_config_.flags() & proto::CURSOR_POSITION))
     {
-        LOG(LS_WARNING) << "Cursor position received not disabled in client";
+        LOG(LS_ERROR) << "Cursor position received not disabled in client";
         return;
     }
 
@@ -648,11 +744,12 @@ void ClientDesktop::readCursorPosition(const proto::CursorPosition& cursor_posit
     desktop_window_proxy_->setCursorPosition(cursor_position);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (!clipboard_monitor_)
     {
-        LOG(LS_WARNING) << "Clipboard received not disabled in client";
+        LOG(LS_ERROR) << "Clipboard received not disabled in client";
         return;
     }
 
@@ -663,6 +760,7 @@ void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
     clipboard_monitor_->injectClipboardEvent(*out_event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
@@ -707,6 +805,21 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
 
         desktop_window_proxy_->setScreenList(screen_list);
     }
+    else if (extension.name() == common::kScreenTypeExtension)
+    {
+        proto::ScreenType screen_type;
+
+        if (!screen_type.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse screen type extension data";
+            return;
+        }
+
+        LOG(LS_INFO) << "Screen type received (type=" << screen_type.type()
+                     << " name=" << screen_type.name() << ")";
+
+        desktop_window_proxy_->setScreenType(screen_type);
+    }
     else if (extension.name() == common::kSystemInfoExtension)
     {
         proto::system_info::SystemInfo system_info;
@@ -721,7 +834,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
+        LOG(LS_ERROR) << "Unknown extension: " << extension.name();
     }
 }
 

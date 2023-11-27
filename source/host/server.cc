@@ -44,6 +44,7 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -51,6 +52,7 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
     LOG(LS_INFO) << "Dtor";
@@ -66,11 +68,12 @@ Server::~Server()
     LOG(LS_INFO) << "Server is stopped";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::start()
 {
     if (server_)
     {
-        DLOG(LS_WARNING) << "An attempt was start an already running server";
+        DLOG(LS_ERROR) << "An attempt was start an already running server";
         return;
     }
 
@@ -82,7 +85,7 @@ void Server::start()
     std::error_code ignored_code;
     if (!std::filesystem::exists(settings_file, ignored_code))
     {
-        LOG(LS_WARNING) << "Configuration file does not exist";
+        LOG(LS_ERROR) << "Configuration file does not exist";
     }
 
     update_timer_ = std::make_unique<base::WaitableTimer>(
@@ -102,7 +105,7 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start(u"0.0.0.0", settings_.tcpPort(), this);
+    server_->start(u"", settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
     {
@@ -113,6 +116,7 @@ void Server::start()
     LOG(LS_INFO) << "Host server is started successfully";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
@@ -124,10 +128,11 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid user session manager";
+        LOG(LS_ERROR) << "Invalid user session manager";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::setPowerEvent(uint32_t power_event)
 {
 #if defined(OS_WIN)
@@ -158,38 +163,50 @@ void Server::setPowerEvent(uint32_t power_event)
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New DIRECT connection";
     startAuthentication(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state changed";
     user_session_manager_->onRouterStateChanged(router_state);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
     user_session_manager_->onHostIdChanged(session_name, host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onClientConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New RELAY connection";
     startAuthentication(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     LOG(LS_INFO) << "New client session";
 
-    if (session_info.version >= base::Version(2, 6, 0))
-    {
-        LOG(LS_INFO) << "Using channel id support";
+    bool channel_id_support = (session_info.version >= base::Version::kVersion_2_6_0);
+    if (channel_id_support)
         session_info.channel->setChannelIdSupport(true);
+
+    LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
+
+    const base::Version& host_version = base::Version::kVersion_CurrentFull;
+    if (host_version > session_info.version)
+    {
+        LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
+                      << " client: " << session_info.version.toString() << ")";
     }
 
     std::unique_ptr<ClientSession> session = ClientSession::create(
@@ -199,13 +216,13 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     if (session)
     {
-        session->setVersion(session_info.version);
+        session->setClientVersion(session_info.version);
         session->setComputerName(session_info.computer_name);
         session->setUserName(session_info.user_name);
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid client session";
+        LOG(LS_ERROR) << "Invalid client session";
         return;
     }
 
@@ -215,15 +232,16 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid user session manager";
+        LOG(LS_ERROR) << "Invalid user session manager";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostIdRequest(const std::string& session_name)
 {
     if (!router_controller_)
     {
-        LOG(LS_WARNING) << "No router controller";
+        LOG(LS_ERROR) << "No router controller";
         return;
     }
 
@@ -231,11 +249,12 @@ void Server::onHostIdRequest(const std::string& session_name)
     router_controller_->hostIdRequest(session_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onResetHostId(base::HostId host_id)
 {
     if (!router_controller_)
     {
-        LOG(LS_WARNING) << "No router controller";
+        LOG(LS_ERROR) << "No router controller";
         return;
     }
 
@@ -243,45 +262,57 @@ void Server::onResetHostId(base::HostId host_id)
     router_controller_->resetHostId(host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onUserListChanged()
 {
     LOG(LS_INFO) << "User list changed";
     reloadUserList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onUpdateCheckedFinished(const base::ByteArray& result)
 {
-    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
-    if (!update_info.isValid())
+    if (result.empty())
     {
-        LOG(LS_INFO) << "No valid update info";
+        LOG(LS_ERROR) << "Error while retrieving update information";
     }
     else
     {
-        base::Version current_version(
-            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-        base::Version new_version = update_info.version();
-
-        if (new_version > current_version)
+        common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+        if (!update_info.isValid())
         {
-            update_downloader_ = std::make_unique<common::HttpFileDownloader>();
-            update_downloader_->start(update_info.url(), task_runner_, this);
+            LOG(LS_INFO) << "No updates available";
         }
         else
         {
-            LOG(LS_INFO) << "No available updates";
+            const base::Version& current_version = base::Version::kVersion_CurrentShort;
+            const base::Version& update_version = update_info.version();
+
+            if (update_version > current_version)
+            {
+                LOG(LS_INFO) << "New version available: " << update_version.toString();
+
+                update_downloader_ = std::make_unique<common::HttpFileDownloader>();
+                update_downloader_->start(update_info.url(), task_runner_, this);
+            }
+            else
+            {
+                LOG(LS_INFO) << "No available updates";
+            }
         }
     }
 
     task_runner_->deleteSoon(std::move(update_checker_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
-    LOG(LS_WARNING) << "Unable to download update: " << error_code;
+    LOG(LS_ERROR) << "Unable to download update: " << error_code;
     task_runner_->deleteSoon(std::move(update_downloader_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderCompleted()
 {
 #if defined(OS_WIN)
@@ -289,8 +320,8 @@ void Server::onFileDownloaderCompleted()
     std::filesystem::path file_path = std::filesystem::temp_directory_path(error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "Unable to get temp directory: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get temp directory: "
+                      << base::utf16FromLocal8Bit(error_code.message());
     }
     else
     {
@@ -298,7 +329,7 @@ void Server::onFileDownloaderCompleted()
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
-            LOG(LS_WARNING) << "Unable to write file '" << file_path << "'";
+            LOG(LS_ERROR) << "Unable to write file '" << file_path << "'";
         }
         else
         {
@@ -316,13 +347,13 @@ void Server::onFileDownloaderCompleted()
             }
             else
             {
-                LOG(LS_WARNING) << "Unable to create update process (cmd: " << arguments << ")";
+                LOG(LS_ERROR) << "Unable to create update process (cmd: " << arguments << ")";
 
                 // If the update fails, delete the temporary file.
                 if (!std::filesystem::remove(file_path, error_code))
                 {
-                    LOG(LS_WARNING) << "Unable to remove installer file: "
-                                    << base::utf16FromLocal8Bit(error_code.message());
+                    LOG(LS_ERROR) << "Unable to remove installer file: "
+                                  << base::utf16FromLocal8Bit(error_code.message());
                 }
             }
         }
@@ -332,11 +363,13 @@ void Server::onFileDownloaderCompleted()
     task_runner_->deleteSoon(std::move(update_downloader_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderProgress(int percentage)
 {
     LOG(LS_INFO) << "Update downloading progress: " << percentage << "%";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Start authentication";
@@ -352,24 +385,25 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid authenticator manager";
+        LOG(LS_ERROR) << "Invalid authenticator manager";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::addFirewallRules()
 {
 #if defined(OS_WIN)
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecFile failed";
+        LOG(LS_ERROR) << "currentExecFile failed";
         return;
     }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
     {
-        LOG(LS_WARNING) << "Invalid firewall manager";
+        LOG(LS_ERROR) << "Invalid firewall manager";
         return;
     }
 
@@ -377,7 +411,7 @@ void Server::addFirewallRules()
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
     {
-        LOG(LS_WARNING) << "Unable to add firewall rule";
+        LOG(LS_ERROR) << "Unable to add firewall rule";
         return;
     }
 
@@ -385,20 +419,21 @@ void Server::addFirewallRules()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::deleteFirewallRules()
 {
 #if defined(OS_WIN)
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecFile failed";
+        LOG(LS_ERROR) << "currentExecFile failed";
         return;
     }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
     {
-        LOG(LS_WARNING) << "Invalid firewall manager";
+        LOG(LS_ERROR) << "Invalid firewall manager";
         return;
     }
 
@@ -407,6 +442,7 @@ void Server::deleteFirewallRules()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 {
     LOG(LS_INFO) << "Configuration file change detected";
@@ -483,24 +519,31 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
     }
     else
     {
-        LOG(LS_WARNING) << "Error detected";
+        LOG(LS_ERROR) << "Error detected";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::reloadUserList()
 {
     LOG(LS_INFO) << "Reloading user list";
 
     // Read the list of regular users.
-    std::unique_ptr<base::UserList> user_list(settings_.userList().release());
+    std::unique_ptr<base::UserList> user_list = settings_.userList();
 
     // Add a list of one-time users to the list of regular users.
     user_list->merge(*user_session_manager_->userList());
+
+    if (user_list->seedKey().empty())
+    {
+        LOG(LS_ERROR) << "Empty seed key for user list";
+    }
 
     // Updating the list of users.
     authenticator_manager_->setUserList(std::move(user_list));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
@@ -519,6 +562,7 @@ void Server::connectToRouter()
     router_controller_->start(router_info, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::disconnectFromRouter()
 {
     LOG(LS_INFO) << "Disconnect from router";
@@ -534,6 +578,7 @@ void Server::disconnectFromRouter()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::checkForUpdates()
 {
 #if defined(OS_WIN)

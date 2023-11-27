@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
 {
     if (!buffer || !buffer_size)
@@ -31,29 +32,35 @@ BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
     num_.reset(BN_bin2bn(buffer, static_cast<int>(buffer_size), nullptr));
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum::BigNum(BigNum&& other) noexcept
 {
     reset(other.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum& BigNum::operator=(BigNum&& other) noexcept
 {
     reset(other.release());
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum::~BigNum() = default;
 
+//--------------------------------------------------------------------------------------------------
 void BigNum::reset(bignum_st* num)
 {
     num_.reset(num);
 }
 
+//--------------------------------------------------------------------------------------------------
 bignum_st* BigNum::release()
 {
     return num_.release();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BigNum::toStdString() const
 {
     if (!isValid())
@@ -70,6 +77,7 @@ std::string BigNum::toStdString() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray BigNum::toByteArray() const
 {
     if (!isValid())
@@ -86,48 +94,57 @@ ByteArray BigNum::toByteArray() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum BigNum::create()
 {
     return BigNum(BN_new());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum BigNum::fromStdString(std::string_view string)
 {
     return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum BigNum::fromByteArray(const ByteArray& array)
 {
     return BigNum(array.data(), array.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum::Context::Context(Context&& other) noexcept
 {
     reset(other.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum::Context& BigNum::Context::operator=(Context&& other) noexcept
 {
     reset(other.release());
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 BigNum::Context::~Context() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum::Context BigNum::Context::create()
 {
     return Context(BN_CTX_new());
 }
 
+//--------------------------------------------------------------------------------------------------
 void BigNum::Context::reset(bignum_ctx* ctx)
 {
     ctx_.reset(ctx);
 }
 
+//--------------------------------------------------------------------------------------------------
 bignum_ctx* BigNum::Context::release()
 {
     return ctx_.release();

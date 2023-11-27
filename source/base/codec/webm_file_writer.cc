@@ -29,18 +29,22 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string_view name)
     : path_(path),
       name_(name)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor (path=" << path << " name=" << name.data() << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 WebmFileWriter::~WebmFileWriter()
 {
+    LOG(LS_INFO) << "Dtor";
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
 {
     if (packet.encoding() != last_video_encoding_ || packet.has_format())
@@ -69,7 +73,10 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
     if (packet.has_format())
     {
         if (!init())
+        {
+            LOG(LS_ERROR) << "init failed";
             return;
+        }
 
         const char* video_codec_id = mkvmuxer::Tracks::kVp8CodecId;
         if (packet.encoding() == proto::VIDEO_ENCODING_VP9)
@@ -116,6 +123,7 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
     muxer_->writeVideoFrame(packet.data(), timestamp, is_key_frame);
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
 {
     if (packet.encoding() != proto::AUDIO_ENCODING_OPUS ||
@@ -149,6 +157,7 @@ void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileWriter::init()
 {
     std::error_code error_code;
@@ -162,8 +171,8 @@ bool WebmFileWriter::init()
         }
         else
         {
-            LOG(LS_WARNING) << "Unable to create path: "
-                            << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to create path: "
+                          << base::utf16FromLocal8Bit(error_code.message());
             return false;
         }
     }
@@ -217,6 +226,7 @@ bool WebmFileWriter::init()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::close()
 {
     last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
@@ -230,11 +240,13 @@ void WebmFileWriter::close()
             LOG(LS_ERROR) << "WebmFileMuxer::finalize failed";
         }
 
+        LOG(LS_INFO) << "Muxer destroyed";
         muxer_.reset();
     }
 
     if (file_)
     {
+        LOG(LS_INFO) << "File closed";
         fclose(file_);
         file_ = nullptr;
     }

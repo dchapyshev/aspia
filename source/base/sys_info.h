@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 
+#include <cstdint>
 #include <string>
 
 namespace base {

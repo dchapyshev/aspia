@@ -24,11 +24,11 @@
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"
 #include "client/ui/client_settings.h"
-#include "client/ui/desktop_config_dialog.h"
-#include "client/ui/qt_desktop_window.h"
-#include "client/ui/qt_file_manager_window.h"
-#include "client/ui/qt_system_info_window.h"
-#include "client/ui/qt_text_chat_window.h"
+#include "client/ui/desktop/desktop_config_dialog.h"
+#include "client/ui/desktop/qt_desktop_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
+#include "client/ui/sys_info/qt_system_info_window.h"
+#include "client/ui/text_chat/qt_text_chat_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/application.h"
@@ -39,6 +39,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 FastConnectDialog::FastConnectDialog(QWidget* parent,
                                      const QString& address_book_guid,
                                      const proto::address_book::ComputerGroupConfig& default_config,
@@ -82,11 +83,11 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
                                        QVariant(session_type));
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
@@ -135,16 +136,21 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 FastConnectDialog::~FastConnectDialog()
 {
     LOG(LS_INFO) << "Dtor";
     writeState();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
     state_.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
+
+    LOG(LS_INFO) << "[ACTION] Session type changed: "
+                 << common::sessionTypeToString(state_.session_type);
 
     if (ui.checkbox_use_session_params->isChecked())
     {
@@ -165,8 +171,11 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionConfigButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Session config button pressed";
+
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
@@ -201,14 +210,18 @@ void FastConnectDialog::sessionConfigButtonPressed()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Cancel)
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
         close();
         return;
     }
+
+    LOG(LS_INFO) << "[ACTION] Accepted by user";
 
     QComboBox* combo_address = ui.combo_address;
     QString current_address = combo_address->currentText();
@@ -225,6 +238,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (host_id_entered && !router_config_.has_value())
     {
+        LOG(LS_ERROR) << "Router not configured";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Connection by ID is specified but the router is not configured. "
@@ -245,6 +259,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!address.isValid())
         {
+            LOG(LS_ERROR) << "Invalid address entered";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An invalid computer address was entered."),
@@ -339,15 +354,18 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(client_config))
     {
+        LOG(LS_ERROR) << "Unable to connect";
         session_window->close();
     }
     else
     {
+        LOG(LS_INFO) << "Close fast connect dialog";
         accept();
         close();
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::readState()
 {
     QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
@@ -391,6 +409,7 @@ void FastConnectDialog::readState()
     ui.checkbox_use_session_params->setChecked(session_params_from_address_book);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::writeState()
 {
     QByteArray buffer;

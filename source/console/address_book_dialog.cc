@@ -54,6 +54,7 @@ enum ItemType
     ITEM_TYPE_DESKTOP_VIEW
 };
 
+//--------------------------------------------------------------------------------------------------
 bool isSafePassword(const QString& password)
 {
     int length = password.length();
@@ -79,6 +80,7 @@ bool isSafePassword(const QString& password)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AddressBookDialog::AddressBookDialog(QWidget* parent,
                                      const QString& file_path,
                                      proto::address_book::File* file,
@@ -221,22 +223,22 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     });
 
     QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setIcon(0, QIcon(":/img/computer.png"));
     general_item->setText(0, tr("General"));
 
     QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setIcon(0, QIcon(":/img/settings.png"));
     sessions_item->setText(0, tr("Sessions"));
 
     ui.tree_category->addTopLevelItem(general_item);
     ui.tree_category->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
     desktop_manage_item->setText(0, tr("Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
     desktop_view_item->setText(0, tr("View"));
 
     sessions_item->addChild(desktop_manage_item);
@@ -291,11 +293,13 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.edit_name->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 AddressBookDialog::~AddressBookDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -322,6 +326,7 @@ bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::closeEvent(QCloseEvent* event)
 {
     Settings settings;
@@ -329,6 +334,7 @@ void AddressBookDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::keyPressEvent(QKeyEvent* event)
 {
     if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
@@ -343,6 +349,7 @@ void AddressBookDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) != QDialogButtonBox::Ok)
@@ -359,6 +366,7 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::encryptionTypedChanged(int item_index)
 {
     proto::address_book::EncryptionType encryption_type =
@@ -396,12 +404,14 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
         showTab(current->type());
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::setPasswordChanged()
 {
     password_changed_ = true;
@@ -424,11 +434,13 @@ void AddressBookDialog::setPasswordChanged()
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookDialog::showTab(int type)
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
@@ -441,6 +453,7 @@ void AddressBookDialog::showTab(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookDialog::saveChanges()
 {
     QString name = ui.edit_name->text();

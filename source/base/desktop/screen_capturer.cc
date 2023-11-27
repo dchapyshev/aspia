@@ -22,22 +22,32 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenCapturer(Type type)
     : type_(type)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenType ScreenCapturer::screenType()
+{
+    return ScreenType::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
     return shared_memory_factory_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const char* ScreenCapturer::typeToString(Type type)
 {
     switch (type)
@@ -65,9 +75,32 @@ const char* ScreenCapturer::typeToString(Type type)
 
         default:
             return "UNKNOWN";
+        }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char *ScreenCapturer::screenTypeToString(ScreenType screen_type)
+{
+    switch (screen_type)
+    {
+        case ScreenType::DESKTOP:
+            return "DESKTOP";
+
+        case ScreenType::LOCK:
+            return "LOCK";
+
+        case ScreenType::LOGIN:
+            return "LOGIN";
+
+        case ScreenType::OTHER:
+            return "OTHER";
+
+        default:
+            return "UNKNOWN";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::Type ScreenCapturer::type() const
 {
     return type_;

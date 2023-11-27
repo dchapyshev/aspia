@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_reinitialize)
 {
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enumerator;
@@ -52,6 +53,7 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
     return device_enumerator;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Retrieve an audio device specified by |device_id| or a default device
 // specified by data-flow direction and role if |device_id| is default.
 Microsoft::WRL::ComPtr<IMMDevice> createDevice()
@@ -61,7 +63,10 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     // Create the IMMDeviceEnumerator interface.
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enum(createDeviceEnumerator(true));
     if (!device_enum.Get())
+    {
+        LOG(LS_ERROR) << "createDeviceEnumerator failed";
         return audio_endpoint_device;
+    }
 
     // Get the default audio endpoint for the specified data-flow direction and // role. Note that,
     // if only a single rendering or capture device is available, the system always assigns all
@@ -82,13 +87,14 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     if (SUCCEEDED(hr) && !audio_endpoint_device.Get() &&
         !isDeviceActive(audio_endpoint_device.Get()))
     {
-        LOG(LS_WARNING) << "Selected endpoint device is not active";
+        LOG(LS_ERROR) << "Selected endpoint device is not active";
         audio_endpoint_device.Reset();
     }
 
     return audio_endpoint_device;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Creates and activates an IAudioClient COM object given the selected endpoint device.
 Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
 {
@@ -106,6 +112,7 @@ Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
     return audio_client;
 }
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* client)
 {
     DCHECK(client);
@@ -122,6 +129,7 @@ Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* clie
     return audio_render_client;
 }
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioClient* client)
 {
     DCHECK(client);
@@ -136,6 +144,7 @@ Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioCli
     return audio_session_control;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool sharedModeInitialize(IAudioClient* client,
                           const WAVEFORMATEXTENSIBLE* format,
                           HANDLE event_handle,
@@ -148,11 +157,11 @@ bool sharedModeInitialize(IAudioClient* client,
 
     if (buffer_duration != 0)
     {
-        DLOG(LS_WARNING) << "Non-default buffer size is used";
+        DLOG(LS_ERROR) << "Non-default buffer size is used";
     }
     if (auto_convert_pcm)
     {
-        DLOG(LS_WARNING) << "Sample rate converter can be utilized";
+        DLOG(LS_ERROR) << "Sample rate converter can be utilized";
     }
     // The AUDCLNT_STREAMFLAGS_NOPERSIST flag disables persistence of the volume and mute settings
     // for a session that contains rendering streams. By default, the volume level and muting state
@@ -223,6 +232,7 @@ bool sharedModeInitialize(IAudioClient* client,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isFormatSupported(IAudioClient* client,
                        AUDCLNT_SHAREMODE share_mode,
                        const WAVEFORMATEXTENSIBLE* format)
@@ -240,19 +250,19 @@ bool isFormatSupported(IAudioClient* client,
                                            &closest_match);
     if ((hr == S_OK) && (closest_match == nullptr))
     {
-        DLOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(LS_INFO) << "Audio device does not support specified format";
     }
     else if ((hr == S_FALSE) && (closest_match != nullptr))
     {
         // Call succeeded with a closest match to the specified format. This log can
         // only be triggered for shared mode.
-        LOG(LS_WARNING) << "Exact format is not supported, but a closest match exists";
+        LOG(LS_ERROR) << "Exact format is not supported, but a closest match exists";
     }
     else if ((hr == AUDCLNT_E_UNSUPPORTED_FORMAT) && (closest_match == nullptr))
     {
         // The audio engine does not support the caller-specified format or any
         // similar format.
-        DLOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(LS_INFO) << "Audio device does not support specified format";
     }
     else
     {
@@ -263,6 +273,7 @@ bool isFormatSupported(IAudioClient* client,
     return (hr == S_OK);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClient* render_client)
 {
     DCHECK(client);
@@ -312,15 +323,17 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isMMCSSSupported()
 {
     static const wchar_t* const kAvrtDLL = L"%WINDIR%\\system32\\Avrt.dll";
     wchar_t path[MAX_PATH] = { 0 };
 
-    ExpandEnvironmentStringsW(kAvrtDLL, path, std::size(path));
+    ExpandEnvironmentStringsW(kAvrtDLL, path, static_cast<DWORD>(std::size(path)));
     return (LoadLibraryExW(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH) != nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isDeviceActive(IMMDevice* device)
 {
     DWORD state = DEVICE_STATE_DISABLED;

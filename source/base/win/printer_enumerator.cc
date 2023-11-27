@@ -25,6 +25,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 PrinterEnumerator::PrinterEnumerator()
 {
     const DWORD flags = PRINTER_ENUM_FAVORITE | PRINTER_ENUM_LOCAL | PRINTER_ENUM_NETWORK;
@@ -64,28 +65,34 @@ PrinterEnumerator::PrinterEnumerator()
     count_ = static_cast<int>(count);
 }
 
+//--------------------------------------------------------------------------------------------------
 PrinterEnumerator::~PrinterEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool PrinterEnumerator::isAtEnd() const
 {
     return current_ >= count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void PrinterEnumerator::advance()
 {
     ++current_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PrinterEnumerator::isDefault() const
 {
     return info_[current_].pPrinterName == default_printer_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PrinterEnumerator::isShared() const
 {
     return (info_[current_].Attributes & PRINTER_ATTRIBUTE_SHARED);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::name() const
 {
     if (!info_[current_].pPrinterName)
@@ -94,6 +101,7 @@ std::string PrinterEnumerator::name() const
     return utf8FromWide(info_[current_].pPrinterName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::shareName() const
 {
     if (!info_[current_].pShareName)
@@ -102,6 +110,7 @@ std::string PrinterEnumerator::shareName() const
     return utf8FromWide(info_[current_].pShareName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::portName() const
 {
     if (!info_[current_].pPortName)
@@ -110,6 +119,7 @@ std::string PrinterEnumerator::portName() const
     return utf8FromWide(info_[current_].pPortName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::driverName() const
 {
     if (!info_[current_].pDriverName)
@@ -118,6 +128,7 @@ std::string PrinterEnumerator::driverName() const
     return utf8FromWide(info_[current_].pDriverName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::deviceName() const
 {
     if (!info_[current_].pDevMode)
@@ -126,6 +137,7 @@ std::string PrinterEnumerator::deviceName() const
     return utf8FromWide(info_[current_].pDevMode->dmDeviceName);
 }
 
+//--------------------------------------------------------------------------------------------------
 int PrinterEnumerator::paperWidth() const
 {
     if (!info_[current_].pDevMode)
@@ -134,6 +146,7 @@ int PrinterEnumerator::paperWidth() const
     return info_[current_].pDevMode->dmPaperWidth / 10;
 }
 
+//--------------------------------------------------------------------------------------------------
 int PrinterEnumerator::paperHeight() const
 {
     if (!info_[current_].pDevMode)
@@ -142,6 +155,7 @@ int PrinterEnumerator::paperHeight() const
     return info_[current_].pDevMode->dmPaperLength / 10;
 }
 
+//--------------------------------------------------------------------------------------------------
 int PrinterEnumerator::printQuality() const
 {
     if (!info_[current_].pDevMode)
@@ -150,6 +164,7 @@ int PrinterEnumerator::printQuality() const
     return info_[current_].pDevMode->dmPrintQuality;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::printProcessor() const
 {
     if (!info_[current_].pPrintProcessor)
@@ -158,6 +173,7 @@ std::string PrinterEnumerator::printProcessor() const
     return utf8FromWide(info_[current_].pPrintProcessor);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::dataType() const
 {
     if (!info_[current_].pDatatype)
@@ -166,6 +182,7 @@ std::string PrinterEnumerator::dataType() const
     return utf8FromWide(info_[current_].pDatatype);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::serverName() const
 {
     if (!info_[current_].pServerName)
@@ -174,6 +191,7 @@ std::string PrinterEnumerator::serverName() const
     return utf8FromWide(info_[current_].pServerName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::location() const
 {
     if (!info_[current_].pLocation)
@@ -182,6 +200,7 @@ std::string PrinterEnumerator::location() const
     return utf8FromWide(info_[current_].pLocation);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PrinterEnumerator::comment() const
 {
     if (!info_[current_].pComment)
@@ -190,6 +209,7 @@ std::string PrinterEnumerator::comment() const
     return utf8FromWide(info_[current_].pComment);
 }
 
+//--------------------------------------------------------------------------------------------------
 int PrinterEnumerator::jobsCount() const
 {
     return static_cast<int>(info_[current_].cJobs);

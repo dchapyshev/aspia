@@ -33,12 +33,14 @@ namespace base {
 
 static thread_local MessageLoop* message_loop_for_current_thread = nullptr;
 
+//--------------------------------------------------------------------------------------------------
 // static
 MessageLoop* MessageLoop::current()
 {
     return message_loop_for_current_thread;
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageLoop::MessageLoop(Type type)
     : type_(type)
 {
@@ -66,6 +68,7 @@ MessageLoop::MessageLoop(Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageLoop::~MessageLoop()
 {
     DCHECK_EQ(this, current());
@@ -95,6 +98,7 @@ MessageLoop::~MessageLoop()
     message_loop_for_current_thread = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::run(Dispatcher* dispatcher)
 {
     DCHECK_EQ(this, current());
@@ -112,35 +116,41 @@ void MessageLoop::run(Dispatcher* dispatcher)
     pump_->run(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::quit()
 {
     DCHECK_EQ(this, current());
     pump_->quit();
 }
 
+//--------------------------------------------------------------------------------------------------
 PendingTask::Callback MessageLoop::quitClosure()
 {
     return std::bind(&MessageLoop::quit, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::postTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
     addToIncomingQueue(std::move(callback), Milliseconds::zero(), true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::postDelayedTask(PendingTask::Callback callback, const Milliseconds& delay)
 {
     DCHECK(callback != nullptr);
     addToIncomingQueue(std::move(callback), delay, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::postNonNestableTask(PendingTask::Callback callback)
 {
     DCHECK(callback != nullptr);
     addToIncomingQueue(std::move(callback), Milliseconds::zero(), false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::postNonNestableDelayedTask(
     PendingTask::Callback callback, const Milliseconds& delay)
 {
@@ -149,22 +159,26 @@ void MessageLoop::postNonNestableDelayedTask(
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 MessagePumpForWin* MessageLoop::pumpWin() const
 {
     return static_cast<MessagePumpForWin*>(pump_.get());
 }
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 MessagePumpForAsio* MessageLoop::pumpAsio() const
 {
     return static_cast<MessagePumpForAsio*>(pump_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<TaskRunner> MessageLoop::taskRunner() const
 {
     return proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::runTask(const PendingTask& pending_task)
 {
     DCHECK(nestable_tasks_allowed_);
@@ -177,6 +191,7 @@ void MessageLoop::runTask(const PendingTask& pending_task)
     nestable_tasks_allowed_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoop::deferOrRunPendingTask(const PendingTask& pending_task)
 {
     if (pending_task.nestable)
@@ -193,6 +208,7 @@ bool MessageLoop::deferOrRunPendingTask(const PendingTask& pending_task)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::addToDelayedWorkQueue(PendingTask* pending_task)
 {
     // Move to the delayed work queue.  Initialize the sequence number before inserting into the
@@ -204,6 +220,7 @@ void MessageLoop::addToDelayedWorkQueue(PendingTask* pending_task)
                                 next_sequence_num_++);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::addToIncomingQueue(
     PendingTask::Callback&& callback, const Milliseconds& delay, bool nestable)
 {
@@ -226,6 +243,7 @@ void MessageLoop::addToIncomingQueue(
     pump->scheduleWork();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessageLoop::reloadWorkQueue()
 {
     if (!work_queue_.empty())
@@ -240,6 +258,7 @@ void MessageLoop::reloadWorkQueue()
     DCHECK(incoming_queue_.empty());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoop::deletePendingTasks()
 {
     bool did_work = !work_queue_.empty();
@@ -270,6 +289,7 @@ bool MessageLoop::deletePendingTasks()
     return did_work;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(const Milliseconds& delay)
 {
@@ -281,6 +301,7 @@ MessageLoop::TimePoint MessageLoop::calculateDelayedRuntime(const Milliseconds& 
     return delayed_run_time;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoop::doWork()
 {
     if (!nestable_tasks_allowed_)
@@ -325,6 +346,7 @@ bool MessageLoop::doWork()
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoop::doDelayedWork(TimePoint* next_delayed_work_time)
 {
     if (!nestable_tasks_allowed_ || delayed_work_queue_.empty())
@@ -360,6 +382,7 @@ bool MessageLoop::doDelayedWork(TimePoint* next_delayed_work_time)
     return deferOrRunPendingTask(pending_task);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageLoop::doIdleWork()
 {
     if (deferred_non_nestable_work_queue_.empty())

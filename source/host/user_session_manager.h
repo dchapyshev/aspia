@@ -72,7 +72,8 @@ protected:
 
 private:
     void startSessionProcess(const base::Location& location, base::SessionId session_id);
-    void addUserSession(base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel);
+    void addUserSession(const base::Location& location, base::SessionId session_id,
+                        std::unique_ptr<base::IpcChannel> channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;

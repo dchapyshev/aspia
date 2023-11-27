@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 
+#include <map>
 #include <mutex>
 
 namespace relay {
@@ -48,17 +49,20 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Pool);
 };
 
+//--------------------------------------------------------------------------------------------------
 SharedPool::Pool::Pool(Delegate* delegate)
     : delegate_(delegate)
 {
     DCHECK(delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedPool::Pool::dettach()
 {
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 {
     std::scoped_lock lock(pool_lock_);
@@ -70,6 +74,7 @@ uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
     return key_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedPool::Pool::removeKey(uint32_t key_id)
 {
     std::scoped_lock lock(pool_lock_);
@@ -86,6 +91,7 @@ bool SharedPool::Pool::removeKey(uint32_t key_id)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedPool::Pool::setKeyExpired(uint32_t key_id)
 {
     if (removeKey(key_id))
@@ -97,6 +103,7 @@ void SharedPool::Pool::setKeyExpired(uint32_t key_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::Pool::key(
     uint32_t key_id, std::string_view peer_public_key) const
 {
@@ -110,6 +117,7 @@ std::optional<SharedPool::Key> SharedPool::Pool::key(
     return std::make_pair(session_key.sessionKey(peer_public_key), session_key.iv());
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedPool::Pool::clear()
 {
     std::scoped_lock lock(pool_lock_);
@@ -118,6 +126,7 @@ void SharedPool::Pool::clear()
     map_.clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedPool::SharedPool(Delegate* delegate)
     : pool_(std::make_shared<Pool>(delegate)),
       is_primary_(true)
@@ -125,6 +134,7 @@ SharedPool::SharedPool(Delegate* delegate)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedPool::SharedPool(std::shared_ptr<Pool> pool)
     : pool_(std::move(pool)),
       is_primary_(false)
@@ -132,38 +142,45 @@ SharedPool::SharedPool(std::shared_ptr<Pool> pool)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedPool::~SharedPool()
 {
     if (is_primary_)
         pool_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedPool> SharedPool::share()
 {
     return std::unique_ptr<SharedPool>(new SharedPool(pool_));
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t SharedPool::addKey(SessionKey&& session_key)
 {
     return pool_->addKey(std::move(session_key));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedPool::removeKey(uint32_t key_id)
 {
     return pool_->removeKey(key_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedPool::setKeyExpired(uint32_t key_id)
 {
     return pool_->setKeyExpired(key_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::key(
     uint32_t key_id, std::string_view peer_public_key) const
 {
     return pool_->key(key_id, peer_public_key);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedPool::clear()
 {
     pool_->clear();

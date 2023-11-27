@@ -98,8 +98,8 @@ public:
 
     // Enables or disables sending keep alive packets.
     bool setKeepAlive(bool enable,
-                      const Seconds& interval = Seconds(45),
-                      const Seconds& timeout = Seconds(15));
+                      const Seconds& interval = Seconds(60),
+                      const Seconds& timeout = Seconds(30));
 
     void setChannelIdSupport(bool enable);
     bool hasChannelIdSupport() const;
@@ -134,6 +134,12 @@ private:
         READ_SERVICE_DATA,   // Reading the contents of the service data.
         READ_USER_DATA,      // Reading the contents of the user data.
         PENDING              // There is a message about which we did not notify.
+    };
+
+    struct UserDataHeader
+    {
+        uint8_t channel_id;
+        uint8_t reserved;
     };
 
     enum ServiceMessageType
@@ -210,7 +216,7 @@ private:
     ByteArray decrypt_buffer_;
 
     base::HostId host_id_ = base::kInvalidHostId;
-    bool channel_id_support_ = false;
+    bool is_channel_id_supported_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(TcpChannel);
 };

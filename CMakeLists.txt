@@ -16,15 +16,24 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.17.0)
+cmake_minimum_required(VERSION 3.21.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(aspia)
 
 set(ASPIA_VERSION_MAJOR 2)
-set(ASPIA_VERSION_MINOR 6)
+set(ASPIA_VERSION_MINOR 7)
 set(ASPIA_VERSION_PATCH 0)
+
+# On CI installed dir could be outside of vcpkg root
+if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
+    set(VCPKG_INSTALLED_DIR $ENV{VCPKG_ROOT}/installed)
+    message(STATUS "VCPKG_INSTALLED_DIR -> redefine: ${VCPKG_INSTALLED_DIR}")
+else()
+    set(VCPKG_INSTALLED_DIR $ENV{VCPKG_INSTALLED_DIR})
+    message(STATUS "VCPKG_INSTALLED_DIR -> external: ${VCPKG_INSTALLED_DIR}")
+endif()
 
 add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
                 -DASPIA_VERSION_MINOR=${ASPIA_VERSION_MINOR}
@@ -43,8 +52,7 @@ if (WIN32)
     message(STATUS "Windows detected")
 endif()
 
-message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "Host system processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+set(CMAKE_SKIP_BUILD_RPATH ON)
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
@@ -59,9 +67,6 @@ find_package(RapidJSON CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
-find_package(mimalloc CONFIG) # Optional component
-
-message(STATUS "MIMALLOC found: ${mimalloc_FOUND}")
 
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
@@ -86,6 +91,12 @@ if (LINUX)
 
     find_library(XI_LIB NAMES libXi Xi REQUIRED)
     message(STATUS "Xi library: ${XI_LIB}")
+
+    find_library(X11_LIB NAMES libX11 X11 REQUIRED)
+    message(STATUS "X11 library: ${X11_LIB}")
+
+    find_library(XEXT_LIB NAMES libXext Xext REQUIRED)
+    message(STATUS "Xext library: ${XEXT_LIB}")
 endif()
 
 if (APPLE)

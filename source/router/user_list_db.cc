@@ -24,47 +24,55 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 UserListDb::UserListDb(std::unique_ptr<Database> db)
     : db_(std::move(db))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 UserListDb::~UserListDb() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<UserListDb> UserListDb::open(const DatabaseFactory& factory)
 {
     std::unique_ptr<Database> db = factory.openDatabase();
     if (!db)
     {
-        LOG(LS_WARNING) << "Unable to open database";
+        LOG(LS_ERROR) << "Unable to open database";
         return nullptr;
     }
 
     return std::unique_ptr<UserListDb>(new UserListDb(std::move(db)));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserListDb::add(const base::User& user)
 {
     db_->addUser(user);
 }
 
+//--------------------------------------------------------------------------------------------------
 base::User UserListDb::find(std::u16string_view username) const
 {
     return db_->findUser(username);
 }
 
+//--------------------------------------------------------------------------------------------------
 const base::ByteArray& UserListDb::seedKey() const
 {
     return seed_key_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserListDb::setSeedKey(const base::ByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<base::User> UserListDb::list() const
 {
     return db_->userList();

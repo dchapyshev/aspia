@@ -28,13 +28,16 @@ constexpr int kBytesPerPixel = 4;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DxgiCursor::DxgiCursor()
 {
     memset(&pointer_shape_info_, 0, sizeof(pointer_shape_info_));
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiCursor::~DxgiCursor() = default;
 
+//--------------------------------------------------------------------------------------------------
 MouseCursor* DxgiCursor::mouseCursor()
 {
     if (pointer_shape_.empty())
@@ -107,41 +110,49 @@ MouseCursor* DxgiCursor::mouseCursor()
     return mouse_cursor_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 Point DxgiCursor::position() const
 {
     return pointer_position_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiCursor::setPosition(const Point& pointer_position)
 {
     pointer_position_ = pointer_position;
 }
 
+//--------------------------------------------------------------------------------------------------
 Point DxgiCursor::nativePosition() const
 {
     return native_pointer_position_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiCursor::setNativePosition(const Point& native_pointer_position)
 {
     native_pointer_position_ = native_pointer_position;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiCursor::isVisible() const
 {
     return is_visible_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiCursor::setVisible(bool visible)
 {
     is_visible_ = visible;
 }
 
+//--------------------------------------------------------------------------------------------------
 DXGI_OUTDUPL_POINTER_SHAPE_INFO* DxgiCursor::pointerShapeInfo()
 {
     return &pointer_shape_info_;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray* DxgiCursor::pointerShapeBuffer()
 {
     return &pointer_shape_;

@@ -19,19 +19,28 @@
 #include "base/desktop/desktop_resizer.h"
 
 #include "build/build_config.h"
+#include "base/logging.h"
 
 #if defined(OS_WIN)
 #include "base/desktop/desktop_resizer_win.h"
 #endif // defined(OS_WIN)
 
+#if defined(OS_LINUX)
+#include "base/desktop/desktop_resizer_x11.h"
+#endif // defined(OS_LINUX)
+
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopResizer> DesktopResizer::create()
 {
 #if defined(OS_WIN)
     return std::make_unique<DesktopResizerWin>();
+#elif defined(OS_LINUX)
+    return std::make_unique<DesktopResizerX11>();
 #else
+    NOTIMPLEMENTED();
     return nullptr;
 #endif
 }

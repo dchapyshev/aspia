@@ -26,8 +26,11 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionProxy::DesktopSessionProxy()
 {
+    LOG(LS_INFO) << "Ctor";
+
     std::string default_fps_string;
     if (base::Environment::get("ASPIA_DEFAULT_FPS", &default_fps_string))
     {
@@ -101,17 +104,21 @@ DesktopSessionProxy::DesktopSessionProxy()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionProxy::~DesktopSessionProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_session_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::control(proto::internal::DesktopControl::Action action)
 {
     if (desktop_session_)
         desktop_session_->control(action);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 {
     if (is_paused_)
@@ -121,6 +128,7 @@ void DesktopSessionProxy::configure(const DesktopSession::Config& config)
         desktop_session_->configure(config);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
     if (is_paused_)
@@ -130,6 +138,7 @@ void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
         desktop_session_->selectScreen(screen);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::captureScreen()
 {
     if (is_paused_)
@@ -139,6 +148,7 @@ void DesktopSessionProxy::captureScreen()
         desktop_session_->captureScreen();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::setScreenCaptureFps(int fps)
 {
     screen_capture_fps_ = fps;
@@ -147,26 +157,31 @@ void DesktopSessionProxy::setScreenCaptureFps(int fps)
         desktop_session_->setScreenCaptureFps(fps);
 }
 
+//--------------------------------------------------------------------------------------------------
 int DesktopSessionProxy::defaultScreenCaptureFps() const
 {
     return default_capture_fps_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int DesktopSessionProxy::minScreenCaptureFps() const
 {
     return min_capture_fps_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int DesktopSessionProxy::maxScreenCaptureFps() const
 {
     return max_capture_fps_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int DesktopSessionProxy::screenCaptureFps() const
 {
     return screen_capture_fps_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_)
@@ -176,6 +191,7 @@ void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
         desktop_session_->injectKeyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::injectTextEvent(const proto::TextEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_)
@@ -185,6 +201,7 @@ void DesktopSessionProxy::injectTextEvent(const proto::TextEvent& event)
         desktop_session_->injectTextEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 {
     if (is_mouse_locked_ || is_paused_)
@@ -194,6 +211,7 @@ void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
         desktop_session_->injectMouseEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (is_paused_)
@@ -203,21 +221,25 @@ void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& even
         desktop_session_->injectClipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::setMouseLock(bool enable)
 {
     is_mouse_locked_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::setKeyboardLock(bool enable)
 {
     is_keyboard_locked_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::setPaused(bool enable)
 {
     is_paused_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
 {
     LOG(LS_INFO) << "Desktop session attach";
@@ -229,6 +251,7 @@ void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
     desktop_session_->start();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::stopAndDettach()
 {
     LOG(LS_INFO) << "Desktop session dettach";

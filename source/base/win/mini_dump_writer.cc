@@ -28,6 +28,7 @@ namespace {
 
 wchar_t g_file_prefix[32] = { 0 };
 
+//--------------------------------------------------------------------------------------------------
 LONG WINAPI exceptionFilter(EXCEPTION_POINTERS* exception_pointers)
 {
     wchar_t file_dir[MAX_PATH] = { 0 };
@@ -76,6 +77,7 @@ LONG WINAPI exceptionFilter(EXCEPTION_POINTERS* exception_pointers)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void installFailureHandler(const wchar_t* file_prefix)
 {
     StringCbCopyW(g_file_prefix, sizeof(g_file_prefix), file_prefix);

@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                      RouterWindow* router_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -34,12 +35,14 @@ RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     DCHECK(ui_task_runner_ && router_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterWindowProxy::~RouterWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!router_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach router window";
@@ -47,6 +50,7 @@ void RouterWindowProxy::dettach()
     router_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onConnected(const base::Version& peer_version)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -60,6 +64,7 @@ void RouterWindowProxy::onConnected(const base::Version& peer_version)
         router_window_->onConnected(peer_version);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -73,6 +78,21 @@ void RouterWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
         router_window_->onDisconnected(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
+void RouterWindowProxy::onVersionMismatch(const base::Version& router, const base::Version& client)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&RouterWindowProxy::onVersionMismatch, shared_from_this(), router, client));
+        return;
+    }
+
+    if (router_window_)
+        router_window_->onVersionMismatch(router, client);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -86,6 +106,7 @@ void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode erro
         router_window_->onAccessDenied(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onSessionList(std::shared_ptr<proto::SessionList> session_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -99,6 +120,7 @@ void RouterWindowProxy::onSessionList(std::shared_ptr<proto::SessionList> sessio
         router_window_->onSessionList(session_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onSessionResult(std::shared_ptr<proto::SessionResult> session_result)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -112,6 +134,7 @@ void RouterWindowProxy::onSessionResult(std::shared_ptr<proto::SessionResult> se
         router_window_->onSessionResult(session_result);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onUserList(std::shared_ptr<proto::UserList> user_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -125,6 +148,7 @@ void RouterWindowProxy::onUserList(std::shared_ptr<proto::UserList> user_list)
         router_window_->onUserList(user_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

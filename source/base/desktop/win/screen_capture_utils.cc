@@ -20,8 +20,11 @@
 
 #include "base/logging.h"
 #include "base/desktop/win/bitmap_info.h"
+#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/win/desktop.h"
 #include "base/win/scoped_gdi_object.h"
+#include "base/win/session_info.h"
 
 #include <VersionHelpers.h>
 
@@ -29,6 +32,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 Point dpiByRect(const Rect& rect)
 {
     Point result(96, 96);
@@ -48,7 +52,7 @@ Point dpiByRect(const Rect& rect)
     HMONITOR monitor = MonitorFromRect(&native_rect, MONITOR_DEFAULTTONEAREST);
     if (!monitor)
     {
-        PLOG(LS_WARNING) << "MonitorFromRect failed";
+        PLOG(LS_ERROR) << "MonitorFromRect failed";
         return result;
     }
 
@@ -76,8 +80,8 @@ Point dpiByRect(const Rect& rect)
             HRESULT hr = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
             if (FAILED(hr))
             {
-                LOG(LS_WARNING) << "GetDpiForMonitor failed: "
-                                << SystemError(static_cast<DWORD>(hr)).toString();
+                LOG(LS_ERROR) << "GetDpiForMonitor failed: "
+                              << SystemError(static_cast<DWORD>(hr)).toString();
             }
             else
             {
@@ -87,14 +91,14 @@ Point dpiByRect(const Rect& rect)
         }
         else
         {
-            PLOG(LS_WARNING) << "GetProcAddress failed";
+            PLOG(LS_ERROR) << "GetProcAddress failed";
         }
 
         FreeLibrary(module);
     }
     else
     {
-        PLOG(LS_WARNING) << "LoadLibraryW failed";
+        PLOG(LS_ERROR) << "LoadLibraryW failed";
     }
 
     return result;
@@ -102,6 +106,7 @@ Point dpiByRect(const Rect& rect)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 {
@@ -130,7 +135,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 
         if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
         {
-            PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
+            PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
             return false;
         }
 
@@ -148,6 +153,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
 {
@@ -162,7 +168,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
 
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
+        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
         return false;
     }
 
@@ -170,6 +176,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Rect ScreenCaptureUtils::fullScreenRect()
 {
@@ -179,6 +186,7 @@ Rect ScreenCaptureUtils::fullScreenRect()
                           GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                                     const std::wstring& device_key)
@@ -190,7 +198,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
+        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
         return Rect();
     }
 
@@ -200,7 +208,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     // monitor, while DeviceID is not.
     if (device.DeviceKey != device_key)
     {
-        LOG(LS_WARNING) << "Invalid device key";
+        LOG(LS_ERROR) << "Invalid device key";
         return Rect();
     }
 
@@ -210,7 +218,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
+        PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
         return Rect();
     }
 
@@ -220,10 +228,63 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                           static_cast<int32_t>(device_mode.dmPelsHeight));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int ScreenCaptureUtils::screenCount()
 {
     return GetSystemMetrics(SM_CMONITORS);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+ScreenCapturer::ScreenType ScreenCaptureUtils::screenType()
+{
+    Desktop desktop = Desktop::inputDesktop();
+    if (!desktop.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get input desktop";
+        return ScreenCapturer::ScreenType::UNKNOWN;
+    }
+
+    wchar_t desktop_name[128] = { 0 };
+    if (!desktop.name(desktop_name, sizeof(desktop_name)))
+    {
+        LOG(LS_ERROR) << "Unable to get desktop name";
+        return ScreenCapturer::ScreenType::UNKNOWN;
+    }
+
+    if (_wcsicmp(desktop_name, L"winlogon") != 0)
+        return ScreenCapturer::ScreenType::DESKTOP;
+
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
+        return ScreenCapturer::ScreenType::UNKNOWN;
+    }
+
+    base::win::SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Unable to get session info";
+        return ScreenCapturer::ScreenType::UNKNOWN;
+    }
+
+    if (session_info.connectState() == base::win::SessionInfo::ConnectState::ACTIVE)
+    {
+        if (session_info.isUserLocked())
+        {
+            // Lock screen captured.
+            return ScreenCapturer::ScreenType::LOCK;
+        }
+        else
+        {
+            // UAC screen captured.
+            return ScreenCapturer::ScreenType::OTHER;
+        }
+    }
+
+    return ScreenCapturer::ScreenType::LOGIN;
 }
 
 } // namespace base

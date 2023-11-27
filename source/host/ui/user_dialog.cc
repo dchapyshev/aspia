@@ -27,6 +27,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
       exist_names_(exist_names),
@@ -75,11 +76,11 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
@@ -92,11 +93,13 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::~UserDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -113,29 +116,39 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckAllButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Check all button pressed";
+
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckNoneButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Check none button pressed";
+
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (account_changed_)
         {
-            std::u16string name = ui.edit_username->text().toStdU16String();
+            std::u16string username = ui.edit_username->text().toStdU16String();
             std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!base::User::isValidUserName(name))
+            if (!base::User::isValidUserName(username))
             {
+                LOG(LS_ERROR) << "Invalid user name: " << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The user name can not be empty and can contain only alphabet"
@@ -146,8 +159,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (exist_names_.contains(name, Qt::CaseInsensitive))
+            if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
+                LOG(LS_ERROR) << "User name already exists: " << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),
@@ -163,6 +177,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (password != ui.edit_password_repeat->text().toStdU16String())
 #endif
             {
+                LOG(LS_ERROR) << "Passwords do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords you entered do not match."),
@@ -174,6 +189,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!base::User::isValidPassword(password))
             {
+                LOG(LS_ERROR) << "Invalid password";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
@@ -213,9 +229,10 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user_ = base::User::create(name, password);
+            user_ = base::User::create(username, password);
             if (!user_.isValid())
             {
+                LOG(LS_ERROR) << "Unable to create user";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Unknown internal error when creating or modifying a user."),
@@ -243,14 +260,17 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::setAccountChanged(bool changed)
 {
+    LOG(LS_INFO) << "[ACTION] Account changed";
     account_changed_ = changed;
 
     ui.edit_password->setEnabled(changed);

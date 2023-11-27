@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 PendingTask::PendingTask(
     Callback&& callback, TimePoint delayed_run_time, bool nestable, int sequence_num)
     : callback(std::move(callback)),
@@ -30,6 +31,7 @@ PendingTask::PendingTask(
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PendingTask::operator<(const PendingTask& other) const
 {
     // Since the top of a priority queue is defined as the "greatest" element, we need to invert

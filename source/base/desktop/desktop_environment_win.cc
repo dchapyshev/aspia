@@ -29,6 +29,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void updatePerUserSystemParameters()
 {
     win::ScopedHandle user_token;
@@ -36,13 +37,13 @@ void updatePerUserSystemParameters()
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
     else
     {
         if (!WTSQueryUserToken(session_id, user_token.recieve()))
         {
-            PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+            PLOG(LS_ERROR) << "WTSQueryUserToken failed";
         }
     }
 
@@ -53,7 +54,7 @@ void updatePerUserSystemParameters()
     {
         if (!impersonator.loggedOnUser(user_token))
         {
-            LOG(LS_WARNING) << "loggedOnUser failed";
+            LOG(LS_ERROR) << "loggedOnUser failed";
         }
     }
 
@@ -81,33 +82,36 @@ void updatePerUserSystemParameters()
             // Any ideas how to update user settings without using it?
             if (!update_per_user_system_parameters(flags))
             {
-                PLOG(LS_WARNING) << "UpdatePerUserSystemParameters failed";
+                PLOG(LS_ERROR) << "UpdatePerUserSystemParameters failed";
             }
         }
         else
         {
-            PLOG(LS_WARNING) << "GetProcAddress failed";
+            PLOG(LS_ERROR) << "GetProcAddress failed";
         }
     }
     else
     {
-        PLOG(LS_WARNING) << "GetModuleHandleW failed";
+        PLOG(LS_ERROR) << "GetModuleHandleW failed";
     }
 }
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentWin::DesktopEnvironmentWin()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentWin::~DesktopEnvironmentWin()
 {
     LOG(LS_INFO) << "Dtor";
     revertAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void DesktopEnvironmentWin::updateEnvironment()
 {
@@ -115,6 +119,7 @@ void DesktopEnvironmentWin::updateEnvironment()
     updatePerUserSystemParameters();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableWallpaper()
 {
     LOG(LS_INFO) << "Disable desktop wallpaper";
@@ -122,19 +127,21 @@ void DesktopEnvironmentWin::disableWallpaper()
     wchar_t new_path[] = L"";
     if (!SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, new_path, SPIF_SENDCHANGE))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableFontSmoothing()
 {
     LOG(LS_INFO) << "Disable font smoothing";
     if (!SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, nullptr, SPIF_SENDCHANGE))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableEffects()
 {
     LOG(LS_INFO) << "Disable desktop effects";
@@ -146,14 +153,14 @@ void DesktopEnvironmentWin::disableEffects()
         {
             if (!SystemParametersInfoW(SPI_SETDROPSHADOW, 0, FALSE, SPIF_SENDCHANGE))
             {
-                PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+                PLOG(LS_ERROR) << "SystemParametersInfoW failed";
             }
             drop_shadow_changed_ = true;
         }
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 
     ANIMATIONINFO animation;
@@ -166,32 +173,33 @@ void DesktopEnvironmentWin::disableEffects()
             if (!SystemParametersInfoW(
                 SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
             {
-                PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+                PLOG(LS_ERROR) << "SystemParametersInfoW failed";
             }
             animation_changed_ = true;
         }
     }
     else
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 
     if (!SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, nullptr, SPIF_SENDCHANGE))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 
     if (!SystemParametersInfoW(SPI_SETUIEFFECTS, 0, FALSE, SPIF_SENDCHANGE))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 
     if (!SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION, 0, FALSE, SPIF_SENDCHANGE))
     {
-        PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+        PLOG(LS_ERROR) << "SystemParametersInfoW failed";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::revertAll()
 {
     LOG(LS_INFO) << "Reverting desktop environment changes";
@@ -200,7 +208,7 @@ void DesktopEnvironmentWin::revertAll()
     {
         if (!SystemParametersInfoW(SPI_SETDROPSHADOW, 0, reinterpret_cast<PVOID>(TRUE), SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+            PLOG(LS_ERROR) << "SystemParametersInfoW failed";
         }
         drop_shadow_changed_ = false;
     }
@@ -213,7 +221,7 @@ void DesktopEnvironmentWin::revertAll()
 
         if (!SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
         {
-            PLOG(LS_WARNING) << "SystemParametersInfoW failed";
+            PLOG(LS_ERROR) << "SystemParametersInfoW failed";
         }
         animation_changed_ = false;
     }

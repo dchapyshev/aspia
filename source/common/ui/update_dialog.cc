@@ -38,6 +38,7 @@ namespace common {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 QString makeUrl(const QUrl& url)
 {
     return QString("<a href='%1'>%1</a>").arg(url.toString());
@@ -45,6 +46,7 @@ QString makeUrl(const QUrl& url)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(std::string_view update_server,
                            std::string_view package_name,
                            QWidget* parent)
@@ -64,11 +66,13 @@ UpdateDialog::UpdateDialog(std::string_view update_server,
     checker_->start(qt_base::Application::uiTaskRunner(), this);
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
       update_info_(update_info)
 {
+    LOG(LS_INFO) << "Ctor";
     initialize();
 
     ui->label_available->setText(QString::fromStdString(update_info_.version().toString(3)));
@@ -77,15 +81,18 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     ui->button_update->setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::~UpdateDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
+        LOG(LS_INFO) << "[ACTION] Escape key pressed";
         close();
         return;
     }
@@ -93,8 +100,11 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event";
+
     if (checker_)
     {
         ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
@@ -105,47 +115,66 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 {
-    UpdateInfo update_info = UpdateInfo::fromXml(result);
-    if (!update_info.isValid())
+    if (result.empty())
     {
+        LOG(LS_ERROR) << "Error while retrieving update information";
+
         ui->label_available->setText(tr("Unknown"));
         ui->edit_description->setText(tr("Error retrieving update information."));
     }
     else
     {
-        base::Version current_version(
-            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-        base::Version new_version = update_info.version();
+        const base::Version& current_version = base::Version::kVersion_CurrentShort;
 
-        if (new_version > current_version)
+        update_info_ = UpdateInfo::fromXml(result);
+        if (!update_info_.isValid())
         {
-            ui->label_available->setText(QString::fromStdString(new_version.toString(3)));
-            ui->edit_description->setText(QString::fromStdString(update_info.description()));
-            ui->label_url->setText(makeUrl(QString::fromStdString(update_info.url())));
+            LOG(LS_INFO) << "No updates available";
 
-#if defined(OS_WIN)
-            ui->button_update->setEnabled(true);
-#endif // defined(OS_WIN)
-        }
-        else
-        {
             ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
             ui->edit_description->setText(tr("No updates available."));
         }
-    }
+        else
+        {
+            const base::Version& update_version = update_info_.version();
 
-    update_info_ = update_info;
+            if (update_version > current_version)
+            {
+                LOG(LS_INFO) << "New version available: " << update_version.toString();
+
+                ui->label_available->setText(QString::fromStdString(update_version.toString(3)));
+                ui->edit_description->setText(QString::fromStdString(update_info_.description()));
+                ui->label_url->setText(makeUrl(QString::fromStdString(update_info_.url())));
+
+#if defined(OS_WIN)
+                ui->button_update->setEnabled(true);
+#endif // defined(OS_WIN)
+            }
+            else
+            {
+                LOG(LS_INFO) << "New version less then current: " << update_version.toString();
+
+                ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
+                ui->edit_description->setText(tr("No updates available."));
+            }
+        }
+    }
 
     QTimer::singleShot(0, this, [this]()
     {
+        LOG(LS_INFO) << "Destroy update checker";
         checker_.reset();
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateNow()
 {
+    LOG(LS_INFO) << "[ACTION] Update now";
+
 #if defined(OS_WIN)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
                           "application will automatically close.");
@@ -165,9 +194,12 @@ void UpdateDialog::onUpdateNow()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Update confirmed by user";
+
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
         {
+            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An error occurred while installing the update: %1")
@@ -204,13 +236,20 @@ void UpdateDialog::onUpdateNow()
                                               arguments,
                                               base::win::ProcessExecuteMode::ELEVATE))
                 {
+                    LOG(LS_INFO) << "msiexec is started";
                     // If the process is successfully launched, then the application is terminated.
                     QCoreApplication::quit();
                 }
                 else
                 {
+                    LOG(LS_ERROR) << "Unable to start msiexec process";
+
                     // If the update fails, delete the temporary file.
-                    QFile::remove(file.fileName());
+                    QString file_name = file.fileName();
+                    if (!QFile::remove(file_name))
+                    {
+                        LOG(LS_ERROR) << "Unable to remove file: " << file_name.toStdString();
+                    }
                 }
             }
         }
@@ -218,6 +257,7 @@ void UpdateDialog::onUpdateNow()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::initialize()
 {
     ui->setupUi(this);
@@ -225,7 +265,7 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
 
-    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    const base::Version& current_version = base::Version::kVersion_CurrentShort;
 
     ui->label_current->setText(QString::fromStdString(current_version.toString(3)));
 }

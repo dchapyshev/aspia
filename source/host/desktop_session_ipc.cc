@@ -69,6 +69,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
                                      Delegate* delegate)
     : channel_(std::move(channel)),
@@ -76,24 +77,28 @@ DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
       outgoing_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       incoming_message_(std::make_unique<proto::internal::DesktopToService>())
 {
-    LOG(LS_INFO) << "Ctor";
-
     DCHECK(channel_);
     DCHECK(delegate_);
+
+    session_id_ = channel_->peerSessionId();
+
+    LOG(LS_INFO) << "Ctor (sid=" << session_id_ << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::~DesktopSessionIpc()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(LS_INFO) << "Dtor (sid=" << session_id_ << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::start()
 {
-    LOG(LS_INFO) << "Start IPC desktop session";
+    LOG(LS_INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
 
     if (!delegate_)
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
         return;
     }
 
@@ -103,24 +108,28 @@ void DesktopSessionIpc::start()
     delegate_->onDesktopSessionStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::stop()
 {
-    LOG(LS_INFO) << "Stop IPC desktop session";
+    LOG(LS_INFO) << "Stop IPC desktop session (sid=" << session_id_ << ")";
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action);
+    LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action)
+                 << " (sid=" << session_id_ << ")";
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_control()->set_action(action);
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::configure(const Config& config)
 {
-    LOG(LS_INFO) << "Send CONFIGURE";
+    LOG(LS_INFO) << "Send CONFIGURE (sid=" << session_id_ << ")";
 
     outgoing_message_->Clear();
 
@@ -136,15 +145,17 @@ void DesktopSessionIpc::configure(const Config& config)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
-    LOG(LS_INFO) << "Send SELECT_SCREEN";
+    LOG(LS_INFO) << "Send SELECT_SCREEN (sid=" << session_id_ << ")";
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_select_source()->mutable_screen()->CopyFrom(screen);
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::captureScreen()
 {
     if (last_frame_)
@@ -155,19 +166,19 @@ void DesktopSessionIpc::captureScreen()
         {
             if (last_screen_list_)
             {
-                LOG(LS_INFO) << "Has last screen list";
+                LOG(LS_INFO) << "Has last screen list (sid=" << session_id_ << ")";
                 delegate_->onScreenListChanged(*last_screen_list_);
             }
             else
             {
-                LOG(LS_INFO) << "No last screen list";
+                LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
             }
 
             delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid delegate";
+            LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
         }
     }
     else
@@ -178,17 +189,19 @@ void DesktopSessionIpc::captureScreen()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
     if (fps > 60 || fps < 1)
     {
-        LOG(LS_WARNING) << "Invalid fps: " << fps;
+        LOG(LS_ERROR) << "Invalid fps: " << fps << " (sid=" << session_id_ << ")";
         return;
     }
 
     update_interval_ = std::chrono::milliseconds(1000 / fps);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_->Clear();
@@ -196,6 +209,7 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
 {
     outgoing_message_->Clear();
@@ -203,6 +217,7 @@ void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_->Clear();
@@ -210,6 +225,7 @@ void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_->Clear();
@@ -217,9 +233,10 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
-void DesktopSessionIpc::onDisconnected()
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionIpc::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "IPC channel disconnected";
+    LOG(LS_INFO) << "IPC channel disconnected (sid=" << session_id_ << ")";
 
     if (delegate_)
     {
@@ -227,15 +244,16 @@ void DesktopSessionIpc::onDisconnected()
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
     }
 }
 
-void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionIpc::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     if (!delegate_)
     {
-        LOG(LS_INFO) << "Invalid delegate";
+        LOG(LS_INFO) << "Invalid delegate (sid=" << session_id_ << ")";
         return;
     }
 
@@ -243,7 +261,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 
     if (!base::parse(buffer, incoming_message_.get()))
     {
-        LOG(LS_ERROR) << "Invalid message from desktop";
+        LOG(LS_ERROR) << "Invalid message from desktop (sid=" << session_id_ << ")";
         return;
     }
 
@@ -261,8 +279,14 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_->has_screen_list())
     {
+        LOG(LS_INFO) << "Screen list received (sid=" << session_id_ << ")";
         last_screen_list_.reset(incoming_message_->release_screen_list());
         delegate_->onScreenListChanged(*last_screen_list_);
+    }
+    else if (incoming_message_->has_screen_type())
+    {
+        LOG(LS_INFO) << "Screen type received (sid=" << session_id_ << ")";
+        delegate_->onScreenTypeChanged(incoming_message_->screen_type());
     }
     else if (incoming_message_->has_shared_buffer())
     {
@@ -287,11 +311,12 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from desktop";
+        LOG(LS_ERROR) << "Unhandled message from desktop (sid=" << session_id_ << ")";
         return;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
     const base::Frame* frame = nullptr;
@@ -356,7 +381,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
     }
 
     outgoing_message_->Clear();
@@ -364,6 +389,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     if (delegate_)
@@ -372,10 +398,11 @@ void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cur
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     if (delegate_)
@@ -384,46 +411,51 @@ void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id;
+    LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id << " (sid=" << session_id_ << ")";
 
     std::unique_ptr<base::SharedMemory> shared_memory =
         base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
     {
-        LOG(LS_ERROR) << "Failed to create the shared buffer " << shared_buffer_id;
+        LOG(LS_ERROR) << "Failed to create the shared buffer " << shared_buffer_id
+                      << " (sid=" << session_id_ << ")";
         return;
     }
 
     shared_buffers_.emplace(shared_buffer_id, SharedBuffer::wrap(std::move(shared_memory)));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id;
+    LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id << " (sid=" << session_id_ << ")";
 
     shared_buffers_.erase(shared_buffer_id);
 
     if (shared_buffers_.empty())
     {
-        LOG(LS_INFO) << "Reset last frame";
+        LOG(LS_INFO) << "Reset last frame (sid=" << session_id_ << ")";
         last_frame_.reset();
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer(
     int shared_buffer_id)
 {
     auto result = shared_buffers_.find(shared_buffer_id);
     if (result == shared_buffers_.end())
     {
-        LOG(LS_ERROR) << "Failed to find the shared buffer " << shared_buffer_id;
+        LOG(LS_ERROR) << "Failed to find the shared buffer " << shared_buffer_id
+                      << " (sid=" << session_id_ << ")";
         return nullptr;
     }
 

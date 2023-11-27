@@ -33,6 +33,7 @@ public:
     void start();
     void stop();
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void setOneTimeSessions(uint32_t sessions);
     void killClient(uint32_t id);
     void connectConfirmation(uint32_t id, bool accept);
     void setVoiceChat(bool enable);
@@ -48,19 +49,24 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
                                   std::unique_ptr<UserSessionAgent> agent)
     : io_task_runner_(std::move(io_task_runner)),
       agent_(std::move(agent))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_ && agent_);
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::Impl::~Impl()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!agent_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::start()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -73,6 +79,7 @@ void UserSessionAgentProxy::Impl::start()
         agent_->start();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::stop()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -84,6 +91,7 @@ void UserSessionAgentProxy::Impl::stop()
     agent_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::updateCredentials(
     proto::internal::CredentialsRequest::Type request_type)
 {
@@ -98,6 +106,21 @@ void UserSessionAgentProxy::Impl::updateCredentials(
         agent_->updateCredentials(request_type);
 }
 
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgentProxy::Impl::setOneTimeSessions(uint32_t sessions)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&Impl::setOneTimeSessions, shared_from_this(), sessions));
+        return;
+    }
+
+    if (agent_)
+        agent_->setOneTimeSessions(sessions);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::killClient(uint32_t id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -110,6 +133,7 @@ void UserSessionAgentProxy::Impl::killClient(uint32_t id)
         agent_->killClient(id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::connectConfirmation(uint32_t id, bool accept)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -123,6 +147,7 @@ void UserSessionAgentProxy::Impl::connectConfirmation(uint32_t id, bool accept)
         agent_->connectConfirmation(id, accept);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::setVoiceChat(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -135,6 +160,7 @@ void UserSessionAgentProxy::Impl::setVoiceChat(bool enable)
         agent_->setVoiceChat(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::setMouseLock(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -147,6 +173,7 @@ void UserSessionAgentProxy::Impl::setMouseLock(bool enable)
         agent_->setMouseLock(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::setKeyboardLock(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -159,6 +186,7 @@ void UserSessionAgentProxy::Impl::setKeyboardLock(bool enable)
         agent_->setKeyboardLock(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::setPause(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -171,6 +199,7 @@ void UserSessionAgentProxy::Impl::setPause(bool enable)
         agent_->setPause(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::Impl::onTextChat(const proto::TextChat& text_chat)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -183,64 +212,82 @@ void UserSessionAgentProxy::Impl::onTextChat(const proto::TextChat& text_chat)
         agent_->onTextChat(text_chat);
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                              std::unique_ptr<UserSessionAgent> agent)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgentProxy::~UserSessionAgentProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::start()
 {
     impl_->start();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::stop()
 {
     impl_->stop();
 }
 
-void UserSessionAgentProxy::updateCredentials(
-    proto::internal::CredentialsRequest::Type request_type)
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgentProxy::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
     impl_->updateCredentials(request_type);
 }
 
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgentProxy::setOneTimeSessions(uint32_t sessions)
+{
+    impl_->setOneTimeSessions(sessions);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::killClient(uint32_t id)
 {
     impl_->killClient(id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::connectConfirmation(uint32_t id, bool accept)
 {
     impl_->connectConfirmation(id, accept);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::setVoiceChat(bool enable)
 {
     impl_->setVoiceChat(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::setMouseLock(bool enable)
 {
     impl_->setMouseLock(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::setKeyboardLock(bool enable)
 {
     impl_->setKeyboardLock(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::setPause(bool enable)
 {
     impl_->setPause(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgentProxy::onTextChat(const proto::TextChat& text_chat)
 {
     impl_->onTextChat(text_chat);

@@ -58,7 +58,7 @@ public slots:
     void sendMessage(const QByteArray& message);
 
 signals:
-    void messageReceived(const QByteArray& message);
+    void sig_messageReceived(const QByteArray& message);
 
 private slots:
     void onNewConnection();

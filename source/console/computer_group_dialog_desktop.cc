@@ -34,6 +34,7 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
+//--------------------------------------------------------------------------------------------------
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
@@ -46,6 +47,7 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
         static_cast<uint8_t>(format.blue_shift()));
 }
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -59,8 +61,24 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
+const char* videoEncodingToString(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+    case proto::VIDEO_ENCODING_ZSTD:
+        return "VIDEO_ENCODING_ZSTD";
+    case proto::VIDEO_ENCODING_VP8:
+        return "VIDEO_ENCODING_VP8";
+    case proto::VIDEO_ENCODING_VP9:
+        return "VIDEO_ENCODING_VP9";
+    default:
+        return "Unknown";
+    }
+}
+
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent)
     : ComputerGroupDialogTab(type, is_root_group, parent)
 {
@@ -91,11 +109,13 @@ ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, bool is_root_gr
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogDesktop::~ComputerGroupDialogDesktop()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::restoreSettings(
     proto::SessionType session_type, const proto::address_book::ComputerGroupConfig& group_config)
 {
@@ -115,9 +135,9 @@ void ComputerGroupDialogDesktop::restoreSettings(
     }
 
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem(QStringLiteral("VP9"), proto::VIDEO_ENCODING_VP9);
-    combo_codec->addItem(QStringLiteral("VP8"), proto::VIDEO_ENCODING_VP8);
-    combo_codec->addItem(QStringLiteral("ZSTD"), proto::VIDEO_ENCODING_ZSTD);
+    combo_codec->addItem("VP9", proto::VIDEO_ENCODING_VP9);
+    combo_codec->addItem("VP8", proto::VIDEO_ENCODING_VP8);
+    combo_codec->addItem("ZSTD", proto::VIDEO_ENCODING_ZSTD);
 
     QComboBox* combo_color_depth = ui.combobox_color_depth;
     combo_color_depth->addItem(tr("True color (32 bit)"), COLOR_DEPTH_ARGB);
@@ -197,6 +217,7 @@ void ComputerGroupDialogDesktop::restoreSettings(
         ui.checkbox_font_smoothing->setChecked(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::saveSettings(
     proto::SessionType session_type, proto::address_book::ComputerGroupConfig* group_config)
 {
@@ -292,10 +313,15 @@ void ComputerGroupDialogDesktop::saveSettings(
     desktop_config->set_flags(flags);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::onCodecChanged(int item_index)
 {
-    bool has_pixel_format =
-        (ui.combo_codec->itemData(item_index).toInt() == proto::VIDEO_ENCODING_ZSTD);
+    proto::VideoEncoding encoding =
+        static_cast<proto::VideoEncoding>(ui.combo_codec->itemData(item_index).toInt());
+
+    LOG(LS_INFO) << "[ACTION] Video encoding changed: " << videoEncodingToString(encoding);
+
+    bool has_pixel_format = (encoding == proto::VIDEO_ENCODING_ZSTD);
 
     ui.label_color_depth->setEnabled(has_pixel_format);
     ui.combobox_color_depth->setEnabled(has_pixel_format);
@@ -305,8 +331,10 @@ void ComputerGroupDialogDesktop::onCodecChanged(int item_index)
     ui.label_best->setEnabled(has_pixel_format);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::onCompressionRatioChanged(int value)
 {
+    LOG(LS_INFO) << "[ACTION] Compression ratio changed: " << value;
     ui.label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 

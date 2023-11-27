@@ -25,9 +25,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 XServerClipboard::XServerClipboard() = default;
+
+//--------------------------------------------------------------------------------------------------
 XServerClipboard::~XServerClipboard() = default;
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::init(Display* display, const ClipboardChangedCallback& callback)
 {
     display_ = display;
@@ -43,7 +47,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     int xfixes_error_base;
     if (!XFixesQueryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
     {
-        LOG(LS_WARNING) << "X server does not support XFixes";
+        LOG(LS_ERROR) << "X server does not support XFixes";
         return;
     }
 
@@ -83,6 +87,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
                                XFixesSetSelectionOwnerNotifyMask);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::setClipboard(const std::string& data)
 {
     DCHECK(display_);
@@ -96,6 +101,7 @@ void XServerClipboard::setClipboard(const std::string& data)
     assertSelectionOwnership(clipboard_atom_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::processXEvent(XEvent* event)
 {
     if (clipboard_window_ == BadValue || event->xany.window != clipboard_window_)
@@ -127,6 +133,7 @@ void XServerClipboard::processXEvent(XEvent* event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::onSetSelectionOwnerNotify(Atom selection, Time /* timestamp */)
 {
     // Protect against receiving new XFixes selection notifications whilst we're in the middle of
@@ -155,6 +162,7 @@ void XServerClipboard::onSetSelectionOwnerNotify(Atom selection, Time /* timesta
     requestSelectionTargets(selection);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::onPropertyNotify(XEvent* event)
 {
     if (large_selection_property_ != None &&
@@ -181,6 +189,7 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::onSelectionNotify(XEvent* event)
 {
     if (event->xselection.property != None)
@@ -213,6 +222,7 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
     handleSelectionNotify(&event->xselection, 0, 0, 0, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::onSelectionRequest(XEvent* event)
 {
     XSelectionEvent selection_event;
@@ -251,11 +261,13 @@ void XServerClipboard::onSelectionRequest(XEvent* event)
                reinterpret_cast<XEvent*>(&selection_event));
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::onSelectionClear(XEvent* event)
 {
     selections_owned_.erase(event->xselectionclear.selection);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::sendTargetsResponse(Window requestor, Atom property)
 {
     // Respond advertising XA_STRING, UTF8_STRING and TIMESTAMP data for the selection.
@@ -267,6 +279,7 @@ void XServerClipboard::sendTargetsResponse(Window requestor, Atom property)
                     reinterpret_cast<unsigned char*>(targets), 3);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::sendTimestampResponse(Window requestor, Atom property)
 {
     // Respond with the timestamp of our selection; we always return CurrentTime since our
@@ -280,6 +293,7 @@ void XServerClipboard::sendTimestampResponse(Window requestor, Atom property)
                     PropModeReplace, reinterpret_cast<unsigned char*>(&time), 1);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::sendStringResponse(Window requestor, Atom property, Atom target)
 {
     if (!data_.empty())
@@ -291,6 +305,7 @@ void XServerClipboard::sendStringResponse(Window requestor, Atom property, Atom 
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::handleSelectionNotify(XSelectionEvent* event,
                                              Atom /* type */,
                                              int format,
@@ -312,6 +327,7 @@ void XServerClipboard::handleSelectionNotify(XSelectionEvent* event,
         get_selections_time_ = TimePoint();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerClipboard::handleSelectionTargetsEvent(XSelectionEvent* event,
                                                    int format,
                                                    int item_count,
@@ -341,6 +357,7 @@ bool XServerClipboard::handleSelectionTargetsEvent(XSelectionEvent* event,
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerClipboard::handleSelectionStringEvent(XSelectionEvent* event,
                                                   int format,
                                                   int item_count,
@@ -358,24 +375,28 @@ bool XServerClipboard::handleSelectionStringEvent(XSelectionEvent* event,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::notifyClipboardText(const std::string& text)
 {
     data_ = text;
     callback_(data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::requestSelectionTargets(Atom selection)
 {
     XConvertSelection(display_, selection, targets_atom_, targets_atom_,
                       clipboard_window_, CurrentTime);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::requestSelectionString(Atom selection, Atom target)
 {
     XConvertSelection(display_, selection, target, selection_string_atom_,
                       clipboard_window_, CurrentTime);
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerClipboard::assertSelectionOwnership(Atom selection)
 {
     XSetSelectionOwner(display_, selection, clipboard_window_, CurrentTime);
@@ -389,6 +410,7 @@ void XServerClipboard::assertSelectionOwnership(Atom selection)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerClipboard::isSelectionOwner(Atom selection)
 {
     return selections_owned_.find(selection) != selections_owned_.end();

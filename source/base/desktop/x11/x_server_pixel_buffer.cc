@@ -33,6 +33,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool getWindowRect(::Display* display, ::Window window, Rect* rect,
                    XWindowAttributes* attributes /* = nullptr */)
 {
@@ -68,6 +69,7 @@ bool getWindowRect(::Display* display, ::Window window, Rect* rect,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Returns the number of bits |mask| has to be shifted left so its last
 // (most-significant) bit set becomes the most-significant bit of the word.
 // When |mask| is 0 the function returns 31.
@@ -105,6 +107,7 @@ uint32_t maskToShift(uint32_t mask)
     return shift;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Returns true if |image| is in RGB format.
 bool isXImageRGBFormat(XImage* image)
 {
@@ -112,6 +115,7 @@ bool isXImageRGBFormat(XImage* image)
          image->green_mask == 0xff00 && image->blue_mask == 0xff;
 }
 
+//--------------------------------------------------------------------------------------------------
 // We expose two forms of blitting to handle variations in the pixel format.
 // In FastBlit(), the operation is effectively a memcpy.
 void fastBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
@@ -137,6 +141,7 @@ void fastBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void slowBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
 {
     DCHECK_LE(frame->topLeft().x(), rect.left());
@@ -196,13 +201,16 @@ void slowBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 XServerPixelBuffer::XServerPixelBuffer() = default;
 
+//--------------------------------------------------------------------------------------------------
 XServerPixelBuffer::~XServerPixelBuffer()
 {
     release();
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerPixelBuffer::release()
 {
     if (x_image_)
@@ -233,6 +241,7 @@ void XServerPixelBuffer::release()
     window_ = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerPixelBuffer::releaseSharedMemorySegment()
 {
     if (!shm_segment_info_)
@@ -248,6 +257,7 @@ void XServerPixelBuffer::releaseSharedMemorySegment()
     shm_segment_info_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
 {
     release();
@@ -255,7 +265,10 @@ bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
 
     XWindowAttributes attributes;
     if (!getWindowRect(display_, window, &window_rect_, &attributes))
+    {
+        LOG(LS_ERROR) << "getWindowRect failed";
         return false;
+    }
 
     window_ = window;
     initShm(attributes);
@@ -263,6 +276,7 @@ bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 {
     Visual* default_visual = attributes.visual;
@@ -273,7 +287,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 
     if (!XShmQueryVersion(display_, &major, &minor, &have_pixmaps))
     {
-        // Shared memory not supported. CaptureRect will use the XImage API instead.
+        LOG(LS_INFO) << "Shared memory not supported. captureRect will use the XImage API instead";
         return;
     }
 
@@ -313,13 +327,13 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
         }
         else
         {
-            LOG(LS_WARNING) << "Failed to get shared memory segment. Performance may be degraded";
+            LOG(LS_ERROR) << "Failed to get shared memory segment. Performance may be degraded";
         }
     }
 
     if (!using_shm)
     {
-        LOG(LS_WARNING) << "Not using shared memory. Performance may be degraded.";
+        LOG(LS_ERROR) << "Not using shared memory. Performance may be degraded.";
         releaseSharedMemorySegment();
         return;
     }
@@ -334,10 +348,15 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
                  << " with" << (have_pixmaps ? "" : "out") << " pixmaps.";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::initPixmaps(int depth)
 {
-    if (XShmPixmapFormat(display_) != ZPixmap)
+    int format = XShmPixmapFormat(display_);
+    if (format != ZPixmap)
+    {
+        LOG(LS_ERROR) << "Unsupported format: " << format;
         return false;
+    }
 
     {
         XErrorTrap error_trap(display_);
@@ -347,6 +366,8 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         XSync(display_, False);
         if (error_trap.lastErrorAndDisable() != 0)
         {
+            LOG(LS_ERROR) << "XShmCreatePixmap failed";
+
             // |shm_pixmap_| is not not valid because the request was not processed by the X Server,
             // so zero it.
             shm_pixmap_ = 0;
@@ -366,6 +387,8 @@ bool XServerPixelBuffer::initPixmaps(int depth)
 
         if (error_trap.lastErrorAndDisable() != 0)
         {
+            LOG(LS_ERROR) << "XCreateGC failed";
+
             XFreePixmap(display_, shm_pixmap_);
             shm_pixmap_ = 0;
             shm_gc_ = 0;  // See shm_pixmap_ comment above.
@@ -376,6 +399,7 @@ bool XServerPixelBuffer::initPixmaps(int depth)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::isWindowValid() const
 {
     XWindowAttributes attributes;
@@ -390,6 +414,7 @@ bool XServerPixelBuffer::isWindowValid() const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void XServerPixelBuffer::synchronize()
 {
     if (shm_segment_info_ && !shm_pixmap_)
@@ -402,6 +427,7 @@ void XServerPixelBuffer::synchronize()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::captureRect(const Rect& rect, Frame* frame)
 {
     DCHECK_LE(rect.right(), window_rect_.width());

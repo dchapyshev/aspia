@@ -35,6 +35,7 @@ namespace {
 
 const size_t kIvSize = 12; // 12 bytes.
 
+//--------------------------------------------------------------------------------------------------
 bool verifyNg(std::string_view N, std::string_view g)
 {
     switch (N.size())
@@ -70,42 +71,50 @@ bool verifyNg(std::string_view N, std::string_view g)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ClientAuthenticator::ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientAuthenticator::~ClientAuthenticator()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPeerPublicKey(const ByteArray& public_key)
 {
     peer_public_key_ = public_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setIdentify(proto::Identify identify)
 {
     identify_ = identify;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setUserName(std::u16string_view username)
 {
     username_ = username;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPassword(std::u16string_view password)
 {
     password_ = password;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setSessionType(uint32_t session_type)
 {
     session_type_ = session_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::onStarted()
 {
     internal_state_ = InternalState::SEND_CLIENT_HELLO;
@@ -113,6 +122,7 @@ bool ClientAuthenticator::onStarted()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::onReceived(const ByteArray& buffer)
 {
     switch (internal_state_)
@@ -162,6 +172,7 @@ void ClientAuthenticator::onReceived(const ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::onWritten()
 {
     switch (internal_state_)
@@ -204,6 +215,7 @@ void ClientAuthenticator::onWritten()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.
@@ -270,6 +282,7 @@ void ClientAuthenticator::sendClientHello()
     sendMessage(*client_hello);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerHello";
@@ -312,6 +325,7 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendIdentify()
 {
     std::unique_ptr<proto::SrpIdentify> identify = std::make_unique<proto::SrpIdentify>();
@@ -321,6 +335,7 @@ void ClientAuthenticator::sendIdentify()
     sendMessage(*identify);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerKeyExchange";
@@ -360,7 +375,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 
     if (!SrpMath::verify_B_mod_N(B_, N_))
     {
-        LOG(LS_WARNING) << "Invalid B or N";
+        LOG(LS_ERROR) << "Invalid B or N";
         return false;
     }
 
@@ -369,7 +384,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
     if (!key.isValid())
     {
-        LOG(LS_WARNING) << "Empty encryption key generated";
+        LOG(LS_ERROR) << "Empty encryption key generated";
         return false;
     }
 
@@ -384,6 +399,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientKeyExchange()
 {
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
@@ -395,6 +411,7 @@ void ClientAuthenticator::sendClientKeyExchange()
     sendMessage(*client_key_exchange);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionChallenge";
@@ -416,15 +433,18 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     setPeerVersion(challenge->version());
     setPeerOsName(challenge->os_name());
     setPeerComputerName(challenge->computer_name());
+    setPeerArch(challenge->arch());
 
     LOG(LS_INFO) << "Server Version: " << peerVersion();
     LOG(LS_INFO) << "Server Name: " << challenge->computer_name();
     LOG(LS_INFO) << "Server OS: " << challenge->os_name();
     LOG(LS_INFO) << "Server CPU Cores: " << challenge->cpu_cores();
+    LOG(LS_INFO) << "Server Arch: " << challenge->arch();
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendSessionResponse()
 {
     std::unique_ptr<proto::SessionResponse> response = std::make_unique<proto::SessionResponse>();
@@ -439,6 +459,18 @@ void ClientAuthenticator::sendSessionResponse()
     response->set_os_name(SysInfo::operatingSystemName());
     response->set_computer_name(SysInfo::computerName());
     response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
+
+#if defined(ARCH_CPU_X86)
+    response->set_arch("x86");
+#elif defined(ARCH_CPU_X86_64)
+    response->set_arch("x86_64");
+#elif defined(ARCH_CPU_ARMEL)
+    response->set_arch("arm");
+#elif defined(ARCH_CPU_ARM64)
+    response->set_arch("arm64");
+#else
+    response->set_arch(std::string());
+#endif
 
     LOG(LS_INFO) << "Sending: SessionResponse";
     sendMessage(*response);

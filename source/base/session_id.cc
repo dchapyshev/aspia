@@ -32,6 +32,7 @@ namespace base {
 static_assert(std::is_same<SessionId, DWORD>());
 static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
 
+//--------------------------------------------------------------------------------------------------
 SessionId activeConsoleSessionId()
 {
     return WTSGetActiveConsoleSessionId();

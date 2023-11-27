@@ -63,8 +63,8 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcDisconnected() override;
+    void onIpcMessageReceived(const base::ByteArray& buffer) override;
 
     // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) override;
@@ -77,6 +77,7 @@ protected:
                           const base::MouseCursor* mouse_cursor) override;
     void onScreenCaptureError(base::ScreenCapturer::Error error) override;
     void onCursorPositionChanged(const base::Point& position) override;
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const std::string& name) override;
 
     // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() override;

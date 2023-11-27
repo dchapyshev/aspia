@@ -16,7 +16,7 @@
 }*/
 
 void build(Solution &s) {
-    auto &aspia = s.addProject("aspia", "2.6.0");
+    auto &aspia = s.addProject("aspia", "2.7.0");
     aspia += Git("https://github.com/dchapyshev/aspia", "v{v}");
 
     constexpr auto cppstd = cpp17;
@@ -41,6 +41,7 @@ void build(Solution &s) {
         t -= ".*/linux/.*"_rr;
         t -= ".*_pulse.*"_rr;
         t -= ".*_mac.*"_rr;
+        t -= ".*/mac/.*"_rr;
         t -= ".*_posix.*"_rr;
         t -= ".*_x11.*"_rr;
         t -= ".*/x11/.*"_rr;
@@ -50,6 +51,7 @@ void build(Solution &s) {
             t += ".*/win/.*"_rr;
         } else if (t.getBuildSettings().TargetOS.isApple()) {
             t += ".*_mac.*"_rr;
+            t += ".*/mac/.*"_rr;
         } else         {
             t += ".*_pulse.*"_rr;
             t += ".*_linux.*"_rr;
@@ -108,9 +110,10 @@ void build(Solution &s) {
             base += "third_party/xdg_user_dirs/.*"_rr;
         if (base.getBuildSettings().TargetOS.isApple())
             base += "third_party/portaudio/.*"_rr;
-        base += "third_party/custom_c_allocator/.*"_rr;
         base -= "build/.*"_rr;
         setup_target(base, "base", false);
+        base -= "peer/stun_server.cc";
+        base -= "peer/stun_peer.cc";
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
             base.Public += "UNICODE"_def;
             base.Public += "WIN32_LEAN_AND_MEAN"_def;
@@ -189,7 +192,7 @@ void build(Solution &s) {
         if (relay.getBuildSettings().TargetOS.Type == OSType::Windows) {
             relay += "relay/win/.*"_rr;
         } else {
-            relay -= "relay/service.cc";
+            //relay -= "relay/service.cc";
         }
         if (relay.getBuildSettings().TargetOS.Type == OSType::Linux) {
             relay += "relay/linux/.*"_rr;
@@ -205,7 +208,7 @@ void build(Solution &s) {
         if (router.getBuildSettings().TargetOS.Type == OSType::Windows) {
             router += "router/win/.*"_rr;
         } else {
-            router -= "router/service.cc";
+            //router -= "router/service.cc";
         }
         if (router.getBuildSettings().TargetOS.Type == OSType::Linux) {
             router += "router/linux/.*"_rr;
@@ -345,8 +348,8 @@ void build(Solution &s) {
         host += core;
 
         auto &service = add_exe(host, "service");
-        service += "host/win/service_entry_point.cc";
-        service += "host/win/service.rc";
+        service += "host/service_entry_point.cc";
+        service += "host/service.rc";
         service += core;
 
         auto &desktop_agent = add_exe(aspia, "desktop_agent");

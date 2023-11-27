@@ -26,6 +26,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -64,15 +65,22 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     {
         if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
         {
+            LOG(LS_INFO) << "[ACTION] Accepted by user";
+
             Settings settings;
             settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());
             settings.setUpdateServer(ui.edit_server->text());
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Rejected by user";
         }
 
         close();
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateSettingsDialog::~UpdateSettingsDialog()
 {
     LOG(LS_INFO) << "Dtor";

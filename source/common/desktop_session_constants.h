@@ -34,12 +34,25 @@ extern const char kSystemInfoExtension[];
 extern const char kTaskManagerExtension[];
 extern const char kVideoPauseExtension[];
 extern const char kAudioPauseExtension[];
+extern const char kScreenTypeExtension[];
 
 extern const char kSupportedExtensionsForManage[];
 extern const char kSupportedExtensionsForView[];
 
 extern const uint32_t kSupportedVideoEncodings;
 extern const uint32_t kSupportedAudioEncodings;
+
+extern const char kFlagDisablePasteAsKeystrokes[];
+extern const char kFlagDisableAudio[];
+extern const char kFlagDisableClipboard[];
+extern const char kFlagDisableCursorShape[];
+extern const char kFlagDisableCursorPosition[];
+extern const char kFlagDisableDesktopEffects[];
+extern const char kFlagDisableDesktopWallpaper[];
+extern const char kFlagDisableFontSmoothing[];
+extern const char kFlagDisableClearClipboard[];
+extern const char kFlagDisableLockAtDisconnect[];
+extern const char kFlagDisableBlockInput[];
 
 } // namespace common
 

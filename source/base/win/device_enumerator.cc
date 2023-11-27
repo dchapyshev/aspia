@@ -35,26 +35,30 @@ constexpr wchar_t kProviderNameKey[] = L"ProviderName";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::DeviceEnumerator()
     : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT | DIGCF_PROFILE)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
 {
     device_info_.reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
     if (!device_info_.isValid())
     {
-        PLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
+        PLOG(LS_ERROR) << "SetupDiGetClassDevsW failed";
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
     device_info_data_.cbSize = sizeof(device_info_data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::~DeviceEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool DeviceEnumerator::isAtEnd() const
 {
     if (!SetupDiEnumDeviceInfo(device_info_.get(), device_index_, &device_info_data_))
@@ -63,8 +67,8 @@ bool DeviceEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            LOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
-                            << SystemError(error_code).toString();
+            LOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed: "
+                          << SystemError(error_code).toString();
         }
 
         return true;
@@ -73,11 +77,13 @@ bool DeviceEnumerator::isAtEnd() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DeviceEnumerator::advance()
 {
     ++device_index_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::friendlyName() const
 {
     wchar_t friendly_name[MAX_PATH] = { 0 };
@@ -90,13 +96,14 @@ std::string DeviceEnumerator::friendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::string();
     }
 
     return utf8FromWide(friendly_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::description() const
 {
     wchar_t description[MAX_PATH] = { 0 };
@@ -109,13 +116,14 @@ std::string DeviceEnumerator::description() const
                                            ARRAYSIZE(description),
                                            nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::string();
     }
 
     return utf8FromWide(description);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring DeviceEnumerator::driverKeyPath() const
 {
     wchar_t driver[MAX_PATH] = { 0 };
@@ -128,7 +136,7 @@ std::wstring DeviceEnumerator::driverKeyPath() const
                                            ARRAYSIZE(driver),
                                            nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::wstring();
     }
 
@@ -138,6 +146,7 @@ std::wstring DeviceEnumerator::driverKeyPath() const
     return driver_key_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = driverKeyPath();
@@ -145,7 +154,7 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.isValid())
     {
-        DPLOG(LS_WARNING) << "Unable to open registry key";
+        DPLOG(LS_ERROR) << "Unable to open registry key";
         return std::wstring();
     }
 
@@ -155,14 +164,15 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     LONG status = driver_key.readValue(key_name, value, &value_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(LS_WARNING) << "Unable to read key value: "
-                         << SystemError(static_cast<DWORD>(status)).toString();
+        DLOG(LS_ERROR) << "Unable to read key value: "
+                       << SystemError(static_cast<DWORD>(status)).toString();
         return std::wstring();
     }
 
     return value;
 }
 
+//--------------------------------------------------------------------------------------------------
 DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = driverKeyPath();
@@ -170,7 +180,7 @@ DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.isValid())
     {
-        DPLOG(LS_WARNING) << "Unable to open registry key";
+        DPLOG(LS_ERROR) << "Unable to open registry key";
         return 0;
     }
 
@@ -179,29 +189,33 @@ DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
     LONG status = driver_key.readValueDW(key_name, &value);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(LS_WARNING) << "Unable to read key value: "
-                         << SystemError(static_cast<DWORD>(status)).toString();
+        DLOG(LS_ERROR) << "Unable to read key value: "
+                       << SystemError(static_cast<DWORD>(status)).toString();
         return 0;
     }
 
     return value;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverVersion() const
 {
     return utf8FromWide(driverRegistryString(kDriverVersionKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverDate() const
 {
     return utf8FromWide(driverRegistryString(kDriverDateKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverVendor() const
 {
     return utf8FromWide(driverRegistryString(kProviderNameKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::deviceID() const
 {
     wchar_t device_id[MAX_PATH] = { 0 };
@@ -212,7 +226,7 @@ std::string DeviceEnumerator::deviceID() const
                                      ARRAYSIZE(device_id),
                                      nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceInstanceIdW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceInstanceIdW failed";
         return std::string();
     }
 

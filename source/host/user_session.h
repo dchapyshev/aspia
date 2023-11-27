@@ -98,8 +98,8 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcDisconnected() override;
+    void onIpcMessageReceived(const base::ByteArray& buffer) override;
 
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
@@ -109,6 +109,7 @@ protected:
     void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
     void onCursorPositionChanged(const proto::CursorPosition& cursor_position) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
+    void onScreenTypeChanged(const proto::ScreenType& type) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // UnconfirmedClientSession::Delegate implementation.
@@ -156,7 +157,8 @@ private:
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
     base::WaitableTimer password_expire_timer_;
-    std::string password_;
+    std::string one_time_password_;
+    uint32_t one_time_sessions_ = 0;
 
     bool connection_confirmation_ = false;
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;

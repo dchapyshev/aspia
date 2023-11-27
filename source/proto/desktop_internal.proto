@@ -122,4 +122,5 @@ message DesktopToService
     AudioPacket audio_packet       = 4;
     ClipboardEvent clipboard_event = 5;
     CursorPosition cursor_position = 6;
+    ScreenType screen_type         = 7;
 }

@@ -51,10 +51,6 @@ SOFTWARE.
 #include <stdio.h>
 #include <stdint.h>
 
-#if 1 // Changes for Aspia.
-#include "third_party/custom_c_allocator/custom_c_allocator.h"
-#endif
-
 /* Return values from RectIn() */
 #define rgnOUT 0
 #define rgnIN  1
@@ -65,15 +61,9 @@ SOFTWARE.
 
 #define CT_YXBANDED 18
 
-#if 1 // Changes for Aspia.
-#define xalloc(n)        custom_c_malloc(n)
-#define xrealloc(ptr, n) custom_c_realloc((ptr), (n))
-#define xfree(ptr)       custom_c_free(ptr)
-#else
 #define xalloc(n)        malloc(n)
 #define xrealloc(ptr, n) realloc((ptr), (n))
 #define xfree(ptr)       free(ptr)
-#endif
 
 /*
  * X data types

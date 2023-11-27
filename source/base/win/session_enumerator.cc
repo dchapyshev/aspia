@@ -24,29 +24,34 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 SessionEnumerator::SessionEnumerator()
 {
     DWORD level = 1;
 
     if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info_.recieve(), &count_))
     {
-        PLOG(LS_WARNING) << "WTSEnumerateSessionsExW failed";
+        PLOG(LS_ERROR) << "WTSEnumerateSessionsExW failed";
         return;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionEnumerator::~SessionEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 void SessionEnumerator::advance()
 {
     ++current_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionEnumerator::isAtEnd() const
 {
     return current_ >= count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* SessionEnumerator::stateToString(WTS_CONNECTSTATE_CLASS state)
 {
@@ -77,21 +82,25 @@ const char* SessionEnumerator::stateToString(WTS_CONNECTSTATE_CLASS state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 WTS_CONNECTSTATE_CLASS SessionEnumerator::state() const
 {
     return info_[current_]->State;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId SessionEnumerator::sessionId() const
 {
     return info_[current_]->SessionId;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionEnumerator::sessionName() const
 {
     return base::utf8FromUtf16(sessionName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionEnumerator::sessionName16() const
 {
     if (!info_[current_]->pSessionName)
@@ -100,11 +109,13 @@ std::u16string SessionEnumerator::sessionName16() const
     return reinterpret_cast<const char16_t*>(info_[current_]->pSessionName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionEnumerator::hostName() const
 {
     return base::utf8FromUtf16(hostName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionEnumerator::hostName16() const
 {
     if (!info_[current_]->pHostName)
@@ -113,11 +124,13 @@ std::u16string SessionEnumerator::hostName16() const
     return reinterpret_cast<const char16_t*>(info_[current_]->pHostName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionEnumerator::userName() const
 {
     return base::utf8FromUtf16(userName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionEnumerator::userName16() const
 {
     if (!info_[current_]->pUserName)
@@ -126,11 +139,13 @@ std::u16string SessionEnumerator::userName16() const
     return reinterpret_cast<const char16_t*>(info_[current_]->pUserName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionEnumerator::domainName() const
 {
     return base::utf8FromUtf16(domainName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionEnumerator::domainName16() const
 {
     if (!info_[current_]->pDomainName)
@@ -139,11 +154,13 @@ std::u16string SessionEnumerator::domainName16() const
     return reinterpret_cast<const char16_t*>(info_[current_]->pDomainName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionEnumerator::farmName() const
 {
     return base::utf8FromUtf16(farmName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionEnumerator::farmName16() const
 {
     if (!info_[current_]->pFarmName)
@@ -152,12 +169,13 @@ std::u16string SessionEnumerator::farmName16() const
     return reinterpret_cast<const char16_t*>(info_[current_]->pFarmName);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionEnumerator::isUserLocked() const
 {
     SessionInfo session_info(sessionId());
     if (!session_info.isValid())
     {
-        LOG(LS_WARNING) << "Unable to get session info";
+        LOG(LS_ERROR) << "Unable to get session info";
         return false;
     }
 

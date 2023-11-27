@@ -35,6 +35,25 @@
 
 namespace base {
 
+namespace {
+
+std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+{
+    std::string str;
+
+    for (auto it = endpoints.begin(); it != endpoints.end();)
+    {
+        str += it->endpoint().address().to_string();
+        if (++it != endpoints.end())
+            str += ", ";
+    }
+
+    return str;
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
 RelayPeer::RelayPeer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
@@ -43,6 +62,7 @@ RelayPeer::RelayPeer()
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 RelayPeer::~RelayPeer()
 {
     LOG(LS_INFO) << "Dtor";
@@ -53,6 +73,7 @@ RelayPeer::~RelayPeer()
     socket_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
 {
     delegate_ = delegate;
@@ -78,25 +99,33 @@ void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
             return;
         }
 
+        LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
         LOG(LS_INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
                             [this](const std::error_code& error_code,
-                                   const asio::ip::tcp::endpoint& /* endpoint */)
+                                   const asio::ip::tcp::endpoint& endpoint)
         {
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
+                {
                     onErrorOccurred(FROM_HERE, error_code);
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "Operation aborted";
+                }
                 return;
             }
 
-            LOG(LS_INFO) << "Connected";
+            LOG(LS_INFO) << "Connected to: " << endpoint.address().to_string();
             onConnected();
         });
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::onConnected()
 {
     if (message_.empty())
@@ -113,7 +142,13 @@ void RelayPeer::onConnected()
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
+            {
                 onErrorOccurred(FROM_HERE, error_code);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Operation aborted";
+            }
             return;
         }
 
@@ -129,7 +164,13 @@ void RelayPeer::onConnected()
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
+                {
                     onErrorOccurred(FROM_HERE, error_code);
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "Operation aborted";
+                }
                 return;
             }
 
@@ -150,12 +191,13 @@ void RelayPeer::onConnected()
             }
             else
             {
-                LOG(LS_WARNING) << "Invalid delegate";
+                LOG(LS_ERROR) << "Invalid delegate";
             }
         });
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Failed to connect to relay server: "
@@ -169,10 +211,11 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
 {

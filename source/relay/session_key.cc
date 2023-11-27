@@ -23,6 +23,7 @@
 
 namespace relay {
 
+//--------------------------------------------------------------------------------------------------
 SessionKey::SessionKey() = default;
 
 SessionKey::SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv)
@@ -32,6 +33,7 @@ SessionKey::SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionKey::SessionKey(SessionKey&& other) noexcept
     : key_pair_(std::move(other.key_pair_)),
       iv_(std::move(other.iv_))
@@ -39,6 +41,7 @@ SessionKey::SessionKey(SessionKey&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionKey& SessionKey::operator=(SessionKey&& other) noexcept
 {
     if (&other != this)
@@ -50,8 +53,10 @@ SessionKey& SessionKey::operator=(SessionKey&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionKey::~SessionKey() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 SessionKey SessionKey::create()
 {
@@ -66,21 +71,25 @@ SessionKey SessionKey::create()
     return SessionKey(std::move(key_pair), std::move(iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionKey::isValid() const
 {
     return key_pair_.isValid() && !iv_.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray SessionKey::privateKey() const
 {
     return key_pair_.privateKey();
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray SessionKey::publicKey() const
 {
     return key_pair_.publicKey();
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray SessionKey::sessionKey(std::string_view peer_public_key) const
 {
     base::ByteArray temp = key_pair_.sessionKey(base::fromStdString(peer_public_key));
@@ -90,6 +99,7 @@ base::ByteArray SessionKey::sessionKey(std::string_view peer_public_key) const
     return base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray SessionKey::iv() const
 {
     return iv_;

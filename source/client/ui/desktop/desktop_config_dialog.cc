@@ -1,0 +1,400 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2023 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "client/ui/desktop/desktop_config_dialog.h"
+
+#include "base/logging.h"
+#include "base/desktop/pixel_format.h"
+#include "client/config_factory.h"
+#include "ui_desktop_config_dialog.h"
+
+#include <QPushButton>
+#include <QTimer>
+
+namespace client {
+
+namespace {
+
+enum ColorDepth
+{
+    COLOR_DEPTH_ARGB,
+    COLOR_DEPTH_RGB565,
+    COLOR_DEPTH_RGB332,
+    COLOR_DEPTH_RGB222,
+    COLOR_DEPTH_RGB111
+};
+
+//--------------------------------------------------------------------------------------------------
+base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
+{
+    return base::PixelFormat(
+        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<uint16_t>(format.red_max()),
+        static_cast<uint16_t>(format.green_max()),
+        static_cast<uint16_t>(format.blue_max()),
+        static_cast<uint8_t>(format.red_shift()),
+        static_cast<uint8_t>(format.green_shift()),
+        static_cast<uint8_t>(format.blue_shift()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
+{
+    to->set_bits_per_pixel(from.bitsPerPixel());
+
+    to->set_red_max(from.redMax());
+    to->set_green_max(from.greenMax());
+    to->set_blue_max(from.blueMax());
+
+    to->set_red_shift(from.redShift());
+    to->set_green_shift(from.greenShift());
+    to->set_blue_shift(from.blueShift());
+}
+
+const char* videoEncodingToString(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::VIDEO_ENCODING_ZSTD:
+            return "VIDEO_ENCODING_ZSTD";
+        case proto::VIDEO_ENCODING_VP8:
+            return "VIDEO_ENCODING_VP8";
+        case proto::VIDEO_ENCODING_VP9:
+            return "VIDEO_ENCODING_VP9";
+        default:
+            return "Unknown";
+    }
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
+                                         const proto::DesktopConfig& config,
+                                         uint32_t video_encodings,
+                                         QWidget* parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::DesktopConfigDialog>()),
+      config_(config)
+{
+    LOG(LS_INFO) << "Ctor";
+    ui->setupUi(this);
+
+    QPushButton* cancel_button = ui->button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
+    ConfigFactory::fixupDesktopConfig(&config_);
+
+    QComboBox* combo_codec = ui->combo_codec;
+
+    if (video_encodings & proto::VIDEO_ENCODING_VP9)
+        combo_codec->addItem("VP9", proto::VIDEO_ENCODING_VP9);
+
+    if (video_encodings & proto::VIDEO_ENCODING_VP8)
+        combo_codec->addItem("VP8", proto::VIDEO_ENCODING_VP8);
+
+    if (video_encodings & proto::VIDEO_ENCODING_ZSTD)
+        combo_codec->addItem("ZSTD", proto::VIDEO_ENCODING_ZSTD);
+
+    int current_codec = combo_codec->findData(config_.video_encoding());
+    if (current_codec == -1)
+        current_codec = 0;
+
+    combo_codec->setCurrentIndex(current_codec);
+    onCodecChanged(current_codec);
+
+    QComboBox* combo_color_depth = ui->combobox_color_depth;
+    combo_color_depth->addItem(tr("True color (32 bit)"), COLOR_DEPTH_ARGB);
+    combo_color_depth->addItem(tr("High color (16 bit)"), COLOR_DEPTH_RGB565);
+    combo_color_depth->addItem(tr("256 colors (8 bit)"), COLOR_DEPTH_RGB332);
+    combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
+    combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
+
+    base::PixelFormat pixel_format = parsePixelFormat(config_.pixel_format());
+    ColorDepth color_depth = COLOR_DEPTH_ARGB;
+
+    if (pixel_format.isEqual(base::PixelFormat::ARGB()))
+        color_depth = COLOR_DEPTH_ARGB;
+    else if (pixel_format.isEqual(base::PixelFormat::RGB565()))
+        color_depth = COLOR_DEPTH_RGB565;
+    else if (pixel_format.isEqual(base::PixelFormat::RGB332()))
+        color_depth = COLOR_DEPTH_RGB332;
+    else if (pixel_format.isEqual(base::PixelFormat::RGB222()))
+        color_depth = COLOR_DEPTH_RGB222;
+    else if (pixel_format.isEqual(base::PixelFormat::RGB111()))
+        color_depth = COLOR_DEPTH_RGB111;
+
+    int current_color_depth = combo_color_depth->findData(QVariant(color_depth));
+    if (current_color_depth != -1)
+        combo_color_depth->setCurrentIndex(current_color_depth);
+
+    ui->slider_compress_ratio->setValue(static_cast<int>(config_.compress_ratio()));
+    onCompressionRatioChanged(static_cast<int>(config_.compress_ratio()));
+
+    if (config_.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
+        ui->checkbox_audio->setChecked(true);
+
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        if (config_.flags() & proto::LOCK_AT_DISCONNECT)
+            ui->checkbox_lock_at_disconnect->setChecked(true);
+
+        if (config_.flags() & proto::BLOCK_REMOTE_INPUT)
+            ui->checkbox_block_remote_input->setChecked(true);
+
+        if (config_.flags() & proto::ENABLE_CURSOR_SHAPE)
+            ui->checkbox_cursor_shape->setChecked(true);
+
+        if (config_.flags() & proto::ENABLE_CLIPBOARD)
+            ui->checkbox_clipboard->setChecked(true);
+
+        if (config_.flags() & proto::CLEAR_CLIPBOARD)
+            ui->checkbox_clear_clipboard->setChecked(true);
+    }
+    else
+    {
+        ui->groupbox_other->hide();
+        ui->checkbox_cursor_shape->hide();
+        ui->checkbox_clipboard->hide();
+        ui->checkbox_clear_clipboard->hide();
+    }
+
+    if (config_.flags() & proto::CURSOR_POSITION)
+        ui->checkbox_enable_cursor_pos->setChecked(true);
+
+    if (config_.flags() & proto::DISABLE_DESKTOP_EFFECTS)
+        ui->checkbox_desktop_effects->setChecked(true);
+
+    if (config_.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
+        ui->checkbox_desktop_wallpaper->setChecked(true);
+
+    if (config_.flags() & proto::DISABLE_FONT_SMOOTHING)
+        ui->checkbox_font_smoothing->setChecked(true);
+
+    connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &DesktopConfigDialog::onCodecChanged);
+
+    connect(ui->slider_compress_ratio, &QSlider::valueChanged,
+            this, &DesktopConfigDialog::onCompressionRatioChanged);
+
+    connect(ui->button_box, &QDialogButtonBox::clicked,
+            this, &DesktopConfigDialog::onButtonBoxClicked);
+
+    QTimer::singleShot(0, this, [=]()
+    {
+        adjustSize();
+        setFixedHeight(sizeHint().height());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+DesktopConfigDialog::~DesktopConfigDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableAudioFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableAudioFeature: " << enable;
+    ui->checkbox_audio->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableClipboardFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableClipboardFeature: " << enable;
+    ui->checkbox_clipboard->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableCursorShapeFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableCursorShapeFeature: " << enable;
+    ui->checkbox_cursor_shape->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableCursorPositionFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableCursorPositionFeature: " << enable;
+    ui->checkbox_enable_cursor_pos->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableDesktopEffectsFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableDesktopEffectsFeature: " << enable;
+    ui->checkbox_desktop_effects->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableDesktopWallpaperFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableDesktopWallpaperFeature: " << enable;
+    ui->checkbox_desktop_wallpaper->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableFontSmoothingFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableFontSmoothingFeature: " << enable;
+    ui->checkbox_font_smoothing->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableClearClipboardFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableClearClipboardFeature: " << enable;
+    ui->checkbox_clear_clipboard->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableLockAtDisconnectFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableLockAtDisconnectFeature: " << enable;
+    ui->checkbox_lock_at_disconnect->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableBlockInputFeature(bool enable)
+{
+    LOG(LS_INFO) << "enableBlockInputFeature: " << enable;
+    ui->checkbox_block_remote_input->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::onCodecChanged(int item_index)
+{
+    proto::VideoEncoding encoding =
+        static_cast<proto::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
+
+    LOG(LS_INFO) << "[ACTION] Codec changed: " << videoEncodingToString(encoding);
+
+    bool has_pixel_format = (encoding == proto::VIDEO_ENCODING_ZSTD);
+
+    ui->label_color_depth->setEnabled(has_pixel_format);
+    ui->combobox_color_depth->setEnabled(has_pixel_format);
+    ui->label_compress_ratio->setEnabled(has_pixel_format);
+    ui->slider_compress_ratio->setEnabled(has_pixel_format);
+    ui->label_fast->setEnabled(has_pixel_format);
+    ui->label_best->setEnabled(has_pixel_format);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::onCompressionRatioChanged(int value)
+{
+    LOG(LS_INFO) << "[ACTION] Compression ratio changed: " << value;
+    ui->label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
+{
+    if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
+    {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
+        proto::VideoEncoding video_encoding =
+            static_cast<proto::VideoEncoding>(ui->combo_codec->currentData().toInt());
+
+        config_.set_video_encoding(video_encoding);
+
+        if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
+        {
+            base::PixelFormat pixel_format;
+
+            switch (ui->combobox_color_depth->currentData().toInt())
+            {
+                case COLOR_DEPTH_ARGB:
+                    pixel_format = base::PixelFormat::ARGB();
+                    break;
+
+                case COLOR_DEPTH_RGB565:
+                    pixel_format = base::PixelFormat::RGB565();
+                    break;
+
+                case COLOR_DEPTH_RGB332:
+                    pixel_format = base::PixelFormat::RGB332();
+                    break;
+
+                case COLOR_DEPTH_RGB222:
+                    pixel_format = base::PixelFormat::RGB222();
+                    break;
+
+                case COLOR_DEPTH_RGB111:
+                    pixel_format = base::PixelFormat::RGB111();
+                    break;
+
+                default:
+                    DLOG(LS_FATAL) << "Unexpected color depth";
+                    break;
+            }
+
+            serializePixelFormat(pixel_format, config_.mutable_pixel_format());
+
+            config_.set_compress_ratio(static_cast<uint32_t>(ui->slider_compress_ratio->value()));
+        }
+
+        if (ui->checkbox_audio->isChecked())
+            config_.set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+        else
+            config_.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
+
+        uint32_t flags = 0;
+
+        if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
+            flags |= proto::ENABLE_CURSOR_SHAPE;
+
+        if (ui->checkbox_enable_cursor_pos->isChecked())
+            flags |= proto::CURSOR_POSITION;
+
+        if (ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled())
+            flags |= proto::ENABLE_CLIPBOARD;
+
+        if (ui->checkbox_desktop_effects->isChecked())
+            flags |= proto::DISABLE_DESKTOP_EFFECTS;
+
+        if (ui->checkbox_desktop_wallpaper->isChecked())
+            flags |= proto::DISABLE_DESKTOP_WALLPAPER;
+
+        if (ui->checkbox_font_smoothing->isChecked())
+            flags |= proto::DISABLE_FONT_SMOOTHING;
+
+        if (ui->checkbox_block_remote_input->isChecked())
+            flags |= proto::BLOCK_REMOTE_INPUT;
+
+        if (ui->checkbox_lock_at_disconnect->isChecked())
+            flags |= proto::LOCK_AT_DISCONNECT;
+
+        if (ui->checkbox_clear_clipboard->isChecked())
+            flags |= proto::CLEAR_CLIPBOARD;
+
+        config_.set_flags(flags);
+
+        emit sig_configChanged(config_);
+        accept();
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
+    }
+}
+
+} // namespace client

@@ -45,6 +45,7 @@ public:
         virtual void onAudioCaptured(const proto::AudioPacket& audio_packet) = 0;
         virtual void onCursorPositionChanged(const proto::CursorPosition& cursor_position) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
+        virtual void onScreenTypeChanged(const proto::ScreenType& type) = 0;
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
 

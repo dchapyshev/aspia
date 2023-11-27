@@ -30,6 +30,7 @@
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
 #include "base/win/session_info.h"
+#include "base/win/window_station.h"
 
 #include <dxgi.h>
 #include <d3d11.h>
@@ -37,6 +38,7 @@
 #include <wrl/client.h>
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 void desktopAgentMain(int argc, const char* const* argv)
 {
 #if defined(OS_WIN)
@@ -51,7 +53,7 @@ void desktopAgentMain(int argc, const char* const* argv)
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
@@ -84,7 +86,7 @@ void desktopAgentMain(int argc, const char* const* argv)
     }
     else
     {
-        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
     }
 
     LOG(LS_INFO) << "Video adapters";
@@ -129,14 +131,14 @@ void desktopAgentMain(int argc, const char* const* argv)
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
     else
     {
         base::win::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
-            LOG(LS_WARNING) << "Unable to get session info";
+            LOG(LS_ERROR) << "Unable to get session info";
         }
         else
         {
@@ -154,12 +156,36 @@ void desktopAgentMain(int argc, const char* const* argv)
     DWORD username_size = sizeof(username) / sizeof(username[0]);
     if (!GetUserNameW(username, &username_size))
     {
-        PLOG(LS_WARNING) << "GetUserNameW failed";
+        PLOG(LS_ERROR) << "GetUserNameW failed";
     }
 
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+    LOG(LS_INFO) << "Process WindowStation: " << base::WindowStation::forCurrentProcess().name();
+
+    LOG(LS_INFO) << "WindowStation list";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    {
+        std::wstring desktops;
+
+        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        if (window_station.isValid())
+        {
+            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                desktops += list[i];
+                if ((i + 1) != list.size())
+                    desktops += L", ";
+            }
+        }
+
+        LOG(LS_INFO) << window_station_name << " (desktops: " << desktops << ")";
+    }
+    LOG(LS_INFO) << "#####################################################";
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";

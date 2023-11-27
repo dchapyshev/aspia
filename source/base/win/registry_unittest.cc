@@ -191,7 +191,8 @@ TEST_F(RegistryTest, TruncatedCharTest)
     // kData size is not a multiple of sizeof(wchar_t).
     const uint8_t kData[] = { 1, 2, 3, 4, 5 };
     EXPECT_EQ(5u, std::size(kData));
-    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(kName, kData, std::size(kData), REG_BINARY));
+    ASSERT_EQ(ERROR_SUCCESS,
+        key.writeValue(kName, kData, static_cast<DWORD>(std::size(kData)), REG_BINARY));
 
     RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key.c_str());
     ASSERT_TRUE(iterator.valid());

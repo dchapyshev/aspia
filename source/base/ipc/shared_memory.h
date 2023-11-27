@@ -55,16 +55,13 @@ public:
     class ScopedPlatformHandle
     {
     public:
-        ScopedPlatformHandle(PlatformHandle handle)
+        explicit ScopedPlatformHandle(PlatformHandle handle)
             : handle_(handle)
         {
-            NOTIMPLEMENTED();
+            // Nothing
         }
 
-        ~ScopedPlatformHandle()
-        {
-            NOTIMPLEMENTED();
-        }
+        ~ScopedPlatformHandle() = default;
 
         PlatformHandle get() const { return handle_; }
 

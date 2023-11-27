@@ -24,12 +24,15 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 bool integrityCheck()
 {
+#if defined(OS_WIN)
     static const char16_t* kFiles[] =
     {
         u"aspia_host.exe",
         u"aspia_desktop_agent.exe",
+        u"aspia_file_transfer_agent.exe",
         u"aspia_host_service.exe"
     };
     static const size_t kMinFileSize = 5 * 1024; // 5 kB.
@@ -92,6 +95,7 @@ bool integrityCheck()
         LOG(LS_ERROR) << "Current executable file was not found in the list of components";
         return false;
     }
+#endif // defined(OS_WIN)
 
     return true;
 }

@@ -21,13 +21,16 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ScopedImpersonator::ScopedImpersonator() = default;
 
+//--------------------------------------------------------------------------------------------------
 ScopedImpersonator::~ScopedImpersonator()
 {
     revertToSelf();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::loggedOnUser(HANDLE user_token)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -42,6 +45,7 @@ bool ScopedImpersonator::loggedOnUser(HANDLE user_token)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::anonymous()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -56,6 +60,7 @@ bool ScopedImpersonator::anonymous()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::namedPipeClient(HANDLE named_pipe)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -70,6 +75,7 @@ bool ScopedImpersonator::namedPipeClient(HANDLE named_pipe)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedImpersonator::revertToSelf()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);

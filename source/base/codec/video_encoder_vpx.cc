@@ -41,6 +41,7 @@ const int kVp9I420ProfileNumber = 0;
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
 
+//--------------------------------------------------------------------------------------------------
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 {
     // Use millisecond granularity time base.
@@ -76,6 +77,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     config->rc_overshoot_pct = 15;
 }
 
+//--------------------------------------------------------------------------------------------------
 void createImage(const Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  ByteArray* out_image_buffer)
@@ -108,7 +110,7 @@ void createImage(const Size& size,
     ByteArray image_buffer;
 
     // Allocate a YUV buffer large enough for the aligned data & padding.
-    image_buffer.resize(y_stride * y_rows + (2 * uv_stride) * uv_rows);
+    image_buffer.resize(static_cast<size_t>(y_stride * y_rows + (2 * uv_stride) * uv_rows));
 
     // Reset image value to 128 so we just need to fill in the y plane.
     memset(image_buffer.data(), 128, image_buffer.size());
@@ -125,11 +127,13 @@ void createImage(const Size& size,
     *out_image_buffer = std::move(image_buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 int roundToTwosMultiple(int x)
 {
     return x & (~1);
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect alignRect(const Rect& rect)
 {
     int x = roundToTwosMultiple(rect.left());
@@ -142,18 +146,21 @@ Rect alignRect(const Rect& rect)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
     return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
     return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     : VideoEncoder(encoding)
 {
@@ -161,6 +168,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     memset(&active_map_, 0, sizeof(active_map_));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
@@ -204,7 +212,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed: " << ret;
         return false;
     }
 
@@ -218,7 +226,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
                            VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_encode failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_encode failed: " << ret;
         return false;
     }
 
@@ -242,62 +250,73 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
 {
     if (min_quantizer < 10 || min_quantizer > 50)
     {
-        LOG(LS_WARNING) << "Invalid quantizer value: " << min_quantizer;
+        LOG(LS_ERROR) << "Invalid quantizer value: " << min_quantizer;
         return false;
     }
 
     if (config_.rc_min_quantizer == min_quantizer)
+    {
+        LOG(LS_INFO) << "Quantizer value not changed";
         return true;
+    }
 
     config_.rc_min_quantizer = min_quantizer;
 
     vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_set failed: " << ret;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t VideoEncoderVPX::minQuantizer() const
 {
     return config_.rc_min_quantizer;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
 {
     if (max_quantizer < 10 || max_quantizer > 60)
     {
-        LOG(LS_WARNING) << "Invalid quantizer value: " << max_quantizer;
+        LOG(LS_ERROR) << "Invalid quantizer value: " << max_quantizer;
         return false;
     }
 
     if (config_.rc_max_quantizer == max_quantizer)
+    {
+        LOG(LS_INFO) << "Quantizer value not changed";
         return true;
+    }
 
     config_.rc_max_quantizer = max_quantizer;
 
     vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_set failed: " << ret;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t VideoEncoderVPX::maxQuantizer() const
 {
     return config_.rc_max_quantizer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::createActiveMap(const Size& size)
 {
     active_map_.cols = static_cast<unsigned int>(
@@ -311,6 +330,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
     clearActiveMap();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::createVp8Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
@@ -321,7 +341,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed: " << ret;
         return false;
     }
 
@@ -343,7 +363,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -351,14 +371,14 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
         return false;
     }
 
@@ -367,13 +387,14 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed: " << ret;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::createVp9Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
@@ -384,7 +405,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed: " << ret;
         return false;
     }
 
@@ -402,7 +423,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -411,14 +432,14 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 6);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed: " << ret;
         return false;
     }
 
@@ -427,7 +448,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP9E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed: " << ret;
         return false;
     }
 
@@ -435,13 +456,14 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeCyclicRefresh);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed: " << ret;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
 {
@@ -513,6 +535,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
@@ -531,6 +554,7 @@ void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::clearActiveMap()
 {
     memset(active_map_buffer_.data(), 0, active_map_buffer_.size());

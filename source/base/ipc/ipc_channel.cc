@@ -41,57 +41,65 @@ namespace {
 
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
+#if defined(OS_POSIX)
+const char16_t kLocalSocketPrefix[] = u"/tmp/aspia_";
+#endif // defined(OS_POSIX)
+
 #if defined(OS_WIN)
 
 const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
+//--------------------------------------------------------------------------------------------------
 ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = kNullProcessId;
 
     if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeClientProcessId failed";
         return kNullProcessId;
     }
 
     return process_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = kNullProcessId;
 
     if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeServerProcessId failed";
         return kNullProcessId;
     }
 
     return process_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = kInvalidSessionId;
 
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeClientSessionId failed";
         return kInvalidSessionId;
     }
 
     return session_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId serverSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = kInvalidSessionId;
 
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeServerSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -102,13 +110,15 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel()
     : stream_(MessageLoop::current()->pumpAsio()->ioContext()),
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
@@ -120,9 +130,10 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
 #if defined(OS_WIN)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
-#endif
+#endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
     LOG(LS_INFO) << "Dtor";
@@ -136,24 +147,35 @@ IpcChannel::~IpcChannel()
     disconnect();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 {
     return proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::setListener(Listener* listener)
 {
-    LOG(LS_INFO) << "Listener changed (" << (listener != nullptr) << ")";
+    LOG(LS_INFO) << "Listener changed (listener=" << (listener != nullptr) << " channel_name="
+                 << channel_name_ << ")";
     listener_ = listener;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::connect(std::u16string_view channel_id)
 {
-#if defined(OS_WIN)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
+    if (channel_id.empty())
+    {
+        LOG(LS_ERROR) << "Empty channel id";
+        return false;
+    }
+
     channel_name_ = channelName(channel_id);
+
+#if defined(OS_WIN)
+    const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
 
     win::ScopedHandle handle;
 
@@ -173,15 +195,16 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
         if (error_code != ERROR_PIPE_BUSY)
         {
-            LOG(LS_WARNING) << "Failed to connect to the named pipe: "
-                            << SystemError::toString(error_code);
+            LOG(LS_ERROR) << "Failed to connect to the named pipe: "
+                          << SystemError::toString(error_code) << " (channel_name="
+                          << channel_name_ << ")";
             return false;
         }
 
         if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
                             kConnectTimeout))
         {
-            PLOG(LS_WARNING) << "WaitNamedPipeW failed";
+            PLOG(LS_ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
             return false;
         }
     }
@@ -189,27 +212,43 @@ bool IpcChannel::connect(std::u16string_view channel_id)
     std::error_code error_code;
     stream_.assign(handle.release(), error_code);
     if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to assign handle: " << base::utf16FromLocal8Bit(error_code.message());
         return false;
+    }
 
     peer_process_id_ = serverProcessIdImpl(stream_.native_handle());
     peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
 
     is_connected_ = true;
     return true;
-#else
-    NOTIMPLEMENTED();
-    return false;
-#endif
+#else // defined(OS_WIN)
+    asio::local::stream_protocol::endpoint endpoint(base::local8BitFromUtf16(channel_name_));
+    std::error_code error_code;
+    stream_.connect(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    is_connected_ = true;
+    return true;
+#endif // !defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::disconnect()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     if (!is_connected_)
+    {
+        LOG(LS_INFO) << "Channel not in connected state";
         return;
+    }
 
-    LOG(LS_INFO) << "disconnect called";
+    LOG(LS_INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;
@@ -218,24 +257,28 @@ void IpcChannel::disconnect()
     stream_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::isConnected() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_connected_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::isPaused() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_paused_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::pause()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     is_paused_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::resume()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -243,7 +286,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(LS_INFO) << "resume called";
+    LOG(LS_INFO) << "resume channel (channel_name=" << channel_name_ << ")";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -251,10 +294,10 @@ void IpcChannel::resume()
         onMessageReceived();
 
     DCHECK_EQ(read_size_, 0);
-
     doReadMessage();
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::send(ByteArray&& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -268,6 +311,7 @@ void IpcChannel::send(ByteArray&& buffer)
         doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path IpcChannel::peerFilePath() const
 {
 #if defined(OS_WIN)
@@ -275,7 +319,7 @@ std::filesystem::path IpcChannel::peerFilePath() const
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
     {
-        PLOG(LS_WARNING) << "OpenProcess failed";
+        PLOG(LS_ERROR) << "OpenProcess failed";
         return std::filesystem::path();
     }
 
@@ -283,17 +327,18 @@ std::filesystem::path IpcChannel::peerFilePath() const
 
     if (!GetModuleFileNameExW(process.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
-        PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
+        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
         return std::filesystem::path();
     }
 
     return buffer;
-#else
+#else // defined(OS_WIN)
     NOTIMPLEMENTED();
     return std::filesystem::path();
-#endif
+#endif // !defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 {
@@ -301,35 +346,40 @@ std::u16string IpcChannel::channelName(std::u16string_view channel_id)
     std::u16string name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
-#else
-    NOTIMPLEMENTED();
-    return std::u16string();
-#endif
+#else // defined(OS_WIN)
+    std::u16string name(kLocalSocketPrefix);
+    name.append(channel_id);
+    return name;
+#endif // !defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
+    {
+        LOG(LS_ERROR) << "Operation aborted (from=" << location.toString() << ")";
         return;
+    }
 
-    LOG(LS_WARNING) << "Error in IPC channel '" << channel_name_ << "': "
-                    << utf16FromLocal8Bit(error_code.message())
-                    << " (code: " << error_code.value()
-                    << ", location: " << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': "
+                  << utf16FromLocal8Bit(error_code.message())
+                  << " (code=" << error_code.value() << " location=" << location.toString() << ")";
 
     disconnect();
 
     if (listener_)
     {
-        listener_->onDisconnected();
+        listener_->onIpcDisconnected();
         listener_ = nullptr;
     }
     else
     {
-        LOG(LS_WARNING) << "No listener";
+        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::doWrite()
 {
     write_size_ = static_cast<uint32_t>(write_queue_.front().size());
@@ -379,6 +429,7 @@ void IpcChannel::doWrite()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadMessage()
 {
     asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
@@ -426,21 +477,21 @@ void IpcChannel::doReadMessage()
                 return;
 
             DCHECK_EQ(read_size_, 0);
-
             doReadMessage();
         });
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
     if (listener_)
     {
-        listener_->onMessageReceived(read_buffer_);
+        listener_->onIpcMessageReceived(read_buffer_);
     }
     else
     {
-        LOG(LS_WARNING) << "No listener";
+        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
     }
 
     read_size_ = 0;

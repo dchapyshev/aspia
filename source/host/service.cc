@@ -25,12 +25,16 @@
 #include "host/service_constants.h"
 #include "host/server.h"
 
+#if defined(OS_WIN)
 #include <Windows.h>
+#endif // defined(OS_WIN)
 
 namespace host {
 
 namespace {
 
+#if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 std::string powerEventToString(uint32_t event)
 {
     const char* name;
@@ -64,43 +68,50 @@ std::string powerEventToString(uint32_t event)
 
     return base::stringPrintf("%s (%d)", name, static_cast<int>(event));
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Service::Service()
     : base::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
+#if defined(OS_WIN)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_WARNING) << "SetPriorityClass failed";
+        PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 
     if (!base::win::SafeModeUtil::setSafeMode(false))
     {
-        LOG(LS_WARNING) << "Failed to turn off boot in safe mode";
+        LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
     }
 
     if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
     {
-        LOG(LS_WARNING) << "Failed to remove service from boot in Safe Mode";
+        LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
     }
+#endif // defined(OS_WIN)
 
     server_ = std::make_unique<Server>(taskRunner());
     server_->start();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
     LOG(LS_INFO) << "Service stopping...";
@@ -108,21 +119,37 @@ void Service::onStop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
+#if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event detected (status: " << base::win::sessionStatusToString(status)
                  << ", session_id: " << session_id << ")";
 
     if (server_)
+    {
         server_->setSessionEvent(status, session_id);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No server instance";
+    }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(uint32_t event)
 {
     LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);
 
     if (server_)
+    {
         server_->setPowerEvent(event);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No server instance";
+    }
 }
+#endif // defined(OS_WIN)
 
 } // namespace host

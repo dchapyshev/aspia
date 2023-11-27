@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SystemInfoControlProxy::SystemInfoControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                                SystemInfoControl* system_info_control)
     : io_task_runner_(std::move(io_task_runner)),
@@ -34,12 +35,14 @@ SystemInfoControlProxy::SystemInfoControlProxy(std::shared_ptr<base::TaskRunner>
     DCHECK(system_info_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SystemInfoControlProxy::~SystemInfoControlProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!system_info_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SystemInfoControlProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach system info control";
@@ -47,6 +50,7 @@ void SystemInfoControlProxy::dettach()
     system_info_control_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SystemInfoControlProxy::onSystemInfoRequest(
     const proto::system_info::SystemInfoRequest& request)
 {

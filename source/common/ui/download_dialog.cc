@@ -18,6 +18,7 @@
 
 #include "common/ui/download_dialog.h"
 
+#include "base/logging.h"
 #include "qt_base/application.h"
 
 #include <QAbstractButton>
@@ -27,11 +28,13 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* parent)
     : QDialog(parent),
       downloader_(std::make_unique<HttpFileDownloader>()),
       file_(file)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -40,6 +43,7 @@ DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* paren
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {
+        LOG(LS_INFO) << "[ACTION] Cancel downloading";
         reject();
         close();
     });
@@ -47,8 +51,16 @@ DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* paren
     downloader_->start(url, qt_base::Application::uiTaskRunner(), this);
 }
 
+//--------------------------------------------------------------------------------------------------
+DownloadDialog::~DownloadDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderError(int error_code)
 {
+    LOG(LS_ERROR) << "Error while downloading update: " << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("An error occurred while downloading the update: %1").arg(error_code),
@@ -57,8 +69,10 @@ void DownloadDialog::onFileDownloaderError(int error_code)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderCompleted()
 {
+    LOG(LS_INFO) << "File downloaded";
     const base::ByteArray& buffer = downloader_->data();
 
     file_.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
@@ -68,6 +82,7 @@ void DownloadDialog::onFileDownloaderCompleted()
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderProgress(int percentage)
 {
     ui.progress_bar->setValue(percentage);

@@ -19,8 +19,8 @@
 #include "base/desktop/screen_capturer_x11.h"
 
 #include "base/logging.h"
-#include "base/desktop/frame_simple.h"
 #include "base/desktop/mouse_cursor.h"
+#include "base/desktop/shared_memory_frame.h"
 #include "base/desktop/x11/x_error_trap.h"
 #include "base/memory/byte_array.h"
 
@@ -28,6 +28,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerX11::ScreenCapturerX11()
     : ScreenCapturer(ScreenCapturer::Type::LINUX_X11)
 {
@@ -35,6 +36,7 @@ ScreenCapturerX11::ScreenCapturerX11()
     helper_.setLogGridSize(4);
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerX11::~ScreenCapturerX11()
 {
     LOG(LS_INFO) << "Dtor";
@@ -50,6 +52,8 @@ ScreenCapturerX11::~ScreenCapturerX11()
     deinitXlib();
 }
 
+//--------------------------------------------------------------------------------------------------
+// static
 std::unique_ptr<ScreenCapturerX11> ScreenCapturerX11::create()
 {
     std::unique_ptr<ScreenCapturerX11> instance = std::make_unique<ScreenCapturerX11>();
@@ -62,11 +66,13 @@ std::unique_ptr<ScreenCapturerX11> ScreenCapturerX11::create()
     return instance;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ScreenCapturerX11::screenCount()
 {
     return num_monitors_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerX11::screenList(ScreenList* screens)
 {
     DCHECK(screens->screens.size() == 0);
@@ -107,6 +113,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerX11::selectScreen(ScreenId screen_id)
 {
     // Prevent the reuse of any frame buffers allocated for a previously selected source. This is
@@ -139,17 +146,19 @@ bool ScreenCapturerX11::selectScreen(ScreenId screen_id)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerX11::currentScreen() const
 {
     return selected_monitor_name_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerX11::captureFrame(Error* error)
 {
     // Process XEvents for XDamage and cursor shape tracking.
     display_->processPendingXEvents();
 
-    // ProcessPendingXEvents() may call screenConfigurationChanged() which reinitializes
+    // processPendingXEvents() may call screenConfigurationChanged() which reinitializes
     // |m_xServerPixelBuffer|. Check if the pixel buffer is still in a good shape.
     if (!x_server_pixel_buffer_.isInitialized())
     {
@@ -161,8 +170,13 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 
     if (!queue_.currentFrame())
     {
-        std::unique_ptr<FrameSimple> frame =
-            FrameSimple::create(selected_monitor_rect_.size(), PixelFormat::ARGB());
+        std::unique_ptr<Frame> frame = SharedMemoryFrame::create(
+            selected_monitor_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory());
+        if (!frame)
+        {
+            LOG(LS_ERROR) << "Unable to create frame";
+            return nullptr;
+        }
 
         // We set the top-left of the frame so the mouse cursor will be composited
         // properly, and our frame buffer will not be overrun while blitting.
@@ -186,21 +200,28 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerX11::captureCursor()
 {
+    if (!has_xfixes_)
+        return nullptr;
+
     XFixesCursorImage* x_image = nullptr;
     {
         XErrorTrap error_trap(display());
         x_image = XFixesGetCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
+        {
+            LOG(LS_ERROR) << "XFixesGetCursorImage failed";
             return nullptr;
+        }
     }
 
     Size size(x_image->width, x_image->height);
     Point hotspot(std::min(x_image->xhot, x_image->width),
                   std::min(x_image->yhot, x_image->height));
 
-    if (!size.width() || !size.height())
+    if (size.width() <= 0 || size.height() <= 0)
     {
         LOG(LS_ERROR) << "Invalid cursor size: " << size;
         return nullptr;
@@ -212,11 +233,11 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     image_data.resize(image_size * MouseCursor::kBytesPerPixel);
 
     unsigned long* src = x_image->pixels;
-    unsigned long* dst = reinterpret_cast<unsigned long*>(image_data.data());
-    unsigned long* dst_end = dst + image_size;
+    uint32_t* dst = reinterpret_cast<uint32_t*>(image_data.data());
+    uint32_t* dst_end = dst + image_size;
 
     while (dst < dst_end)
-        *dst++ = *src++;
+        *dst++ = static_cast<uint32_t>(*src++);
 
     XFree(x_image);
 
@@ -224,6 +245,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     return mouse_cursor_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 Point ScreenCapturerX11::cursorPosition()
 {
     Window root_window;
@@ -251,11 +273,13 @@ Point ScreenCapturerX11::cursorPosition()
     return Point(root_x, root_y).subtract(selected_monitor_rect_.topLeft());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::reset()
 {
     queue_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerX11::init()
 {
     display_ = SharedXDisplay::createDefault();
@@ -289,6 +313,7 @@ bool ScreenCapturerX11::init()
     // of XDamage.
     if (XFixesQueryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
     {
+        LOG(LS_INFO) << "X server supports XFixes";
         has_xfixes_ = true;
     }
     else
@@ -317,10 +342,16 @@ bool ScreenCapturerX11::init()
     initXrandr();
 
     // Default source set here so that selected_monitor_rect_ is sized correctly.
-    selectScreen(kFullDesktopScreenId);
+    if (!selectScreen(kFullDesktopScreenId))
+    {
+        LOG(LS_ERROR) << "Unable select screen";
+    }
+
+    LOG(LS_INFO) << "X11 screen capturer is initialized!";
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerX11::handleXEvent(const XEvent& event)
 {
     if (use_damage_ && (event.type == damage_event_base_ + XDamageNotify))
@@ -348,6 +379,7 @@ bool ScreenCapturerX11::handleXEvent(const XEvent& event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::initXDamage()
 {
     // Our use of XDamage requires XFixes.
@@ -388,6 +420,7 @@ void ScreenCapturerX11::initXDamage()
     LOG(LS_INFO) << "Using XDamage extension";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::initXrandr()
 {
     int major_version = 0;
@@ -433,6 +466,7 @@ void ScreenCapturerX11::initXrandr()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::updateMonitors()
 {
     if (monitors_)
@@ -468,6 +502,7 @@ void ScreenCapturerX11::updateMonitors()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::screenConfigurationChanged()
 {
     // Make sure the frame buffers will be reallocated.
@@ -483,6 +518,7 @@ void ScreenCapturerX11::screenConfigurationChanged()
         selected_monitor_rect_ = Rect::makeSize(x_server_pixel_buffer_.windowSize());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::synchronizeFrame()
 {
     // Synchronize the current buffer with the previous one since we do not capture the entire
@@ -508,6 +544,7 @@ void ScreenCapturerX11::synchronizeFrame()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::deinitXlib()
 {
     if (monitors_)
@@ -540,6 +577,7 @@ void ScreenCapturerX11::deinitXlib()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 Frame* ScreenCapturerX11::captureFrameImpl()
 {
     Frame* frame = queue_.currentFrame();

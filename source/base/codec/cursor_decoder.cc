@@ -31,31 +31,34 @@ constexpr size_t kMaxCacheSize = 30;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 CursorDecoder::~CursorDecoder()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const
 {
     const std::string& data = cursor_shape.data();
 
     if (data.empty())
     {
-        LOG(LS_WARNING) << "No cursor data";
+        LOG(LS_ERROR) << "No cursor data";
         return ByteArray();
     }
 
     if (cursor_shape.width() <= 0 || cursor_shape.height() <= 0)
     {
-        LOG(LS_WARNING) << "Invalid cursor size: "
-                        << cursor_shape.width() << "x" << cursor_shape.height();
+        LOG(LS_ERROR) << "Invalid cursor size: "
+                      << cursor_shape.width() << "x" << cursor_shape.height();
         return ByteArray();
     }
 
@@ -67,8 +70,8 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_WARNING) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret)
-                        << " (" << ret << ")";
+        LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret)
+                      << " (" << ret << ")";
         return ByteArray();
     }
 
@@ -89,6 +92,7 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
     return image;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
@@ -122,7 +126,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
         ByteArray image = decompressCursor(cursor_shape);
         if (image.empty())
         {
-            LOG(LS_WARNING) << "decompressCursor failed";
+            LOG(LS_ERROR) << "decompressCursor failed";
             return nullptr;
         }
 
@@ -141,7 +145,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
 
             if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
             {
-                LOG(LS_WARNING) << "Invalid cache size: " << cache_size;
+                LOG(LS_ERROR) << "Invalid cache size: " << cache_size;
                 return nullptr;
             }
 
@@ -178,11 +182,13 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
     return cache_[cache_index];
 }
 
+//--------------------------------------------------------------------------------------------------
 int CursorDecoder::cachedCursors() const
 {
     return static_cast<int>(cache_.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 int CursorDecoder::takenCursorsFromCache() const
 {
     return taken_from_cache_;

@@ -27,12 +27,14 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 MonitorEnumerator::MonitorEnumerator()
     : DeviceEnumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Edid> MonitorEnumerator::edid() const
 {
     std::wstring key_path =
@@ -43,8 +45,8 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(LS_WARNING) << "Unable to open registry key: "
-                         << SystemError(static_cast<DWORD>(status)).toString();
+        DLOG(LS_ERROR) << "Unable to open registry key: "
+                       << SystemError(static_cast<DWORD>(status)).toString();
         return nullptr;
     }
 
@@ -63,15 +65,15 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
 
         if (status != ERROR_SUCCESS)
         {
-            DLOG(LS_WARNING) << "Unable to read EDID data from registry: "
-                             << SystemError(static_cast<DWORD>(status)).toString();
+            DLOG(LS_ERROR) << "Unable to read EDID data from registry: "
+                           << SystemError(static_cast<DWORD>(status)).toString();
             return nullptr;
         }
     }
 
     if (type != REG_BINARY)
     {
-        DLOG(LS_WARNING) << "Unexpected data type: " << type;
+        DLOG(LS_ERROR) << "Unexpected data type: " << type;
         return nullptr;
     }
 

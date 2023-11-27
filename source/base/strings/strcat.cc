@@ -24,6 +24,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 // Reserves an additional amount of capacity in the given string, growing by at least 2x if
 // necessary. Used by strAppendT().
 //
@@ -45,6 +46,7 @@ void reserveAdditionalIfNeeded(String* str, typename String::size_type additiona
     str->reserve(std::max(required, str->capacity() * 2));
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename DestString, typename InputString>
 void strAppendT(DestString* dest, std::initializer_list<InputString> pieces)
 {
@@ -61,6 +63,7 @@ void strAppendT(DestString* dest, std::initializer_list<InputString> pieces)
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 std::string strCat(std::initializer_list<std::string_view> pieces)
 {
     std::string result;
@@ -68,6 +71,7 @@ std::string strCat(std::initializer_list<std::string_view> pieces)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string strCat(std::initializer_list<std::u16string_view> pieces)
 {
     std::u16string result;
@@ -75,11 +79,13 @@ std::u16string strCat(std::initializer_list<std::u16string_view> pieces)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 void strAppend(std::string* dest, std::initializer_list<std::string_view> pieces)
 {
     strAppendT(dest, pieces);
 }
 
+//--------------------------------------------------------------------------------------------------
 void strAppend(std::u16string* dest, std::initializer_list<std::u16string_view> pieces)
 {
     strAppendT(dest, pieces);

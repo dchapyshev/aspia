@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DesktopToolBar</class>
+ <widget class="QFrame" name="DesktopToolBar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>287</width>
+    <height>45</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string notr="true"/>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::Panel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QToolBar" name="toolbar">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>18</width>
+       <height>18</height>
+      </size>
+     </property>
+     <addaction name="action_pin"/>
+     <addaction name="separator"/>
+     <addaction name="action_power_control"/>
+     <addaction name="action_cad"/>
+     <addaction name="action_settings"/>
+     <addaction name="separator"/>
+     <addaction name="action_autosize"/>
+     <addaction name="action_fullscreen"/>
+     <addaction name="separator"/>
+     <addaction name="action_file_transfer"/>
+     <addaction name="action_text_chat"/>
+     <addaction name="action_task_manager"/>
+     <addaction name="action_system_info"/>
+     <addaction name="separator"/>
+     <addaction name="action_update"/>
+     <addaction name="action_menu"/>
+     <addaction name="separator"/>
+     <addaction name="action_minimize"/>
+     <addaction name="action_close"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>4</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>5</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <action name="action_pin">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/pin.png</normaloff>:/img/pin.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Lock toolbar</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Session configuration</string>
+   </property>
+  </action>
+  <action name="action_autosize">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/arrow-in-out.png</normaloff>:/img/arrow-in-out.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Automatic window size</string>
+   </property>
+  </action>
+  <action name="action_fullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/application-resize-full.png</normaloff>:/img/application-resize-full.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Switch to full screen mode or back</string>
+   </property>
+  </action>
+  <action name="action_autoscroll">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Automatic scrolling</string>
+   </property>
+  </action>
+  <action name="action_cad">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/ctrl-alt-del.png</normaloff>:/img/ctrl-alt-del.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Send Ctrl+Alt+Delete</string>
+   </property>
+  </action>
+  <action name="action_menu">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/menu.png</normaloff>:/img/menu.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Advanced menu</string>
+   </property>
+  </action>
+  <action name="action_screenshot">
+   <property name="text">
+    <string>Save screenshot...</string>
+   </property>
+   <property name="iconText">
+    <string>Save screenshot...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save screenshot...</string>
+   </property>
+  </action>
+  <action name="action_file_transfer">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>File transfer</string>
+   </property>
+  </action>
+  <action name="action_scale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scale</string>
+   </property>
+  </action>
+  <action name="action_send_key_combinations">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Send key combinations</string>
+   </property>
+  </action>
+  <action name="action_power_control">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/lightning.png</normaloff>:/img/lightning.png</iconset>
+   </property>
+   <property name="text">
+    <string>Power control</string>
+   </property>
+   <property name="toolTip">
+    <string>Power control</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_shutdown">
+   <property name="text">
+    <string>Shutdown</string>
+   </property>
+  </action>
+  <action name="action_reboot">
+   <property name="text">
+    <string>Reboot</string>
+   </property>
+  </action>
+  <action name="action_logoff">
+   <property name="text">
+    <string>Logoff</string>
+   </property>
+  </action>
+  <action name="action_lock">
+   <property name="text">
+    <string>Lock</string>
+   </property>
+  </action>
+  <action name="action_update">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/update.png</normaloff>:/img/update.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remote Update</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+   </property>
+   <property name="text">
+    <string>System Information</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/cross-button.png</normaloff>:/img/cross-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close session</string>
+   </property>
+  </action>
+  <action name="action_scale100">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">100%</string>
+   </property>
+  </action>
+  <action name="action_scale90">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">90%</string>
+   </property>
+  </action>
+  <action name="action_scale80">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">80%</string>
+   </property>
+  </action>
+  <action name="action_scale70">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">70%</string>
+   </property>
+  </action>
+  <action name="action_scale60">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">60%</string>
+   </property>
+  </action>
+  <action name="action_scale50">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">50%</string>
+   </property>
+  </action>
+  <action name="action_fit_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fit window</string>
+   </property>
+  </action>
+  <action name="action_minimize">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/navigation-270-button.png</normaloff>:/img/navigation-270-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minimize</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimize window</string>
+   </property>
+  </action>
+  <action name="action_statistics">
+   <property name="text">
+    <string>Statistics</string>
+   </property>
+   <property name="toolTip">
+    <string>Statistics</string>
+   </property>
+  </action>
+  <action name="action_reboot_safe_mode">
+   <property name="text">
+    <string>Reboot (Safe mode)</string>
+   </property>
+   <property name="toolTip">
+    <string>Reboot in safe mode</string>
+   </property>
+  </action>
+  <action name="action_paste_clipboard_as_keystrokes">
+   <property name="text">
+    <string>Paste clipboard as keystrokes</string>
+   </property>
+  </action>
+  <action name="action_text_chat">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+   </property>
+   <property name="text">
+    <string>Text Chat</string>
+   </property>
+   <property name="toolTip">
+    <string>Text Chat</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_recording_settings">
+   <property name="text">
+    <string>Recording settings...</string>
+   </property>
+  </action>
+  <action name="action_start_recording">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/control-record.png</normaloff>:/img/control-record.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start recording</string>
+   </property>
+   <property name="toolTip">
+    <string>Start recording</string>
+   </property>
+  </action>
+  <action name="action_task_manager">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/task-manager.png</normaloff>:/img/task-manager.png</iconset>
+   </property>
+   <property name="text">
+    <string>Task Manager</string>
+   </property>
+   <property name="toolTip">
+    <string>Task Manager</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_pause_video">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Pause video when minimizing</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_pause_audio">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pause audio when minimizing</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resources/client.qrc"/>
+ </resources>
+ <connections/>
+</ui>

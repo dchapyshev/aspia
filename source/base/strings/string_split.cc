@@ -29,18 +29,21 @@ namespace {
 template <typename CharType>
 std::basic_string_view<CharType> whitespaceForType();
 
+//--------------------------------------------------------------------------------------------------
 template <>
 std::u16string_view whitespaceForType<char16_t>()
 {
     return kWhitespaceUtf16;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <>
 std::string_view whitespaceForType<char>()
 {
     return kWhitespaceASCII;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Optimize the single-character case to call find() on the string instead, since this is the
 // common case and can be made faster. This could have been done with template specialization too,
 // but would have been less clear.
@@ -52,21 +55,25 @@ size_t findFirstOf(std::string_view piece, char c, size_t pos)
     return piece.find(c, pos);
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t findFirstOf(std::u16string_view piece, char16_t c, size_t pos)
 {
     return piece.find(c, pos);
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t findFirstOf(std::string_view piece, std::string_view one_of, size_t pos)
 {
     return piece.find_first_of(one_of, pos);
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t findFirstOf(std::u16string_view piece, std::u16string_view one_of, size_t pos)
 {
     return piece.find_first_of(one_of, pos);
 }
 
+//--------------------------------------------------------------------------------------------------
 // General string splitter template. Can take 8- or 16-bit input, can produce
 // the corresponding string or StringPiece output, and can take single- or
 // multiple-character delimiters.
@@ -117,6 +124,7 @@ std::vector<OutputStringType> splitStringT(InputStringType str,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::string> splitString(std::string_view input,
                                      std::string_view separators,
                                      WhitespaceHandling whitespace,
@@ -132,6 +140,7 @@ std::vector<std::string> splitString(std::string_view input,
         input, separators, whitespace, result_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::u16string> splitString(std::u16string_view input,
                                         std::u16string_view separators,
                                         WhitespaceHandling whitespace,
@@ -147,6 +156,7 @@ std::vector<std::u16string> splitString(std::u16string_view input,
         input, separators, whitespace, result_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::string_view> splitStringView(std::string_view input,
                                               std::string_view separators,
                                               WhitespaceHandling whitespace,
@@ -162,6 +172,7 @@ std::vector<std::string_view> splitStringView(std::string_view input,
         input, separators, whitespace, result_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::u16string_view> splitStringView(std::u16string_view input,
                                                  std::u16string_view separators,
                                                  WhitespaceHandling whitespace,

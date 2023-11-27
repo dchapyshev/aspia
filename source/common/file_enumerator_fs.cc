@@ -24,30 +24,36 @@ namespace common {
 
 // FileEnumerator::FileInfo ----------------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::FileInfo::FileInfo() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool FileEnumerator::FileInfo::isDirectory() const
 {
     std::error_code ignored_error;
     return it_->is_directory(ignored_error);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path FileEnumerator::FileInfo::name() const
 {
     return it_->path().filename();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string FileEnumerator::FileInfo::u8name() const
 {
     return it_->path().filename();
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t FileEnumerator::FileInfo::size() const
 {
     std::error_code ignored_error;
     return it_->file_size(ignored_error);
 }
 
+//--------------------------------------------------------------------------------------------------
 time_t FileEnumerator::FileInfo::lastWriteTime() const
 {
     auto current_system_time = std::chrono::system_clock::now();
@@ -64,19 +70,23 @@ time_t FileEnumerator::FileInfo::lastWriteTime() const
 
 // FileEnumerator --------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
 {
     std::error_code ignored_code;
     file_info_.it_ = std::filesystem::directory_iterator(root_path, ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::~FileEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool FileEnumerator::isAtEnd() const
 {
     return file_info_.it_ == std::filesystem::directory_iterator();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileEnumerator::advance()
 {
     ++file_info_.it_;

@@ -19,7 +19,6 @@
 #include "base/settings/json_settings.h"
 
 #include "base/logging.h"
-#include "base/system_time.h"
 #include "base/crypto/os_crypt.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
@@ -35,6 +34,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string createKey(const std::vector<std::string_view>& segments)
 {
     std::string key;
@@ -49,6 +49,7 @@ std::string createKey(const std::vector<std::string_view>& segments)
     return key;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 void parseObject(const T& object, std::vector<std::string_view>* segments, Settings::Map* map)
 {
@@ -82,7 +83,7 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
             default:
             {
-                LOG(LS_WARNING) << "Unexpected type: " << value.GetType();
+                LOG(LS_ERROR) << "Unexpected type: " << value.GetType();
             }
             break;
         }
@@ -93,9 +94,9 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
 } // namespace
 
-JsonSettings::JsonSettings(std::string_view file_name, Backups backups, Encrypted encrypted)
-    : encrypted_(encrypted),
-      backups_(backups)
+//--------------------------------------------------------------------------------------------------
+JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
+    : encrypted_(encrypted)
 {
     path_ = filePath(file_name);
     if (path_.empty())
@@ -104,13 +105,12 @@ JsonSettings::JsonSettings(std::string_view file_name, Backups backups, Encrypte
     sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 JsonSettings::JsonSettings(Scope scope,
                            std::string_view application_name,
                            std::string_view file_name,
-                           Backups backups,
                            Encrypted encrypted)
-    : encrypted_(encrypted),
-      backups_(backups)
+    : encrypted_(encrypted)
 {
     path_ = filePath(scope, application_name, file_name);
     if (path_.empty())
@@ -119,11 +119,13 @@ JsonSettings::JsonSettings(Scope scope,
     sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 JsonSettings::~JsonSettings()
 {
     flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool JsonSettings::isWritable() const
 {
     std::error_code error_code;
@@ -147,71 +149,14 @@ bool JsonSettings::isWritable() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void JsonSettings::sync()
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        if (readFile(path_, map(), encrypted_))
-        {
-            if (backups_ == Backups::NO)
-                break;
-
-            // A corrupted configuration file may be empty.
-            if (map().empty())
-            {
-                LOG(LS_WARNING) << "Configuration file '" << path_ << "' is empty or missing. "
-                                << "Attempt to restore from a backup...";
-
-                // If there is a backup copy of the configuration, then we restore it.
-                if (hasBackupFor(path_))
-                {
-                    restoreBackupFor(path_, encrypted_);
-                    continue;
-                }
-                else
-                {
-                    LOG(LS_WARNING) << "Backup file does not exist";
-                }
-            }
-            else
-            {
-                // If there was a successful reading of the configuration file and there are no backup
-                // copies yet, then we create a backup copy.
-                if (!hasBackupFor(path_))
-                {
-                    if (!createBackupFor(path_))
-                    {
-                        LOG(LS_WARNING) << "createBackupFor failed";
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (backups_ == Backups::NO)
-                break;
-
-            LOG(LS_WARNING) << "Configuration file '" << path_ << "' is corrupted. "
-                            << "Attempt to restore from a backup...";
-
-            // If there is a backup copy of the configuration, then we restore it.
-            if (hasBackupFor(path_))
-            {
-                restoreBackupFor(path_, encrypted_);
-                continue;
-            }
-            else
-            {
-                LOG(LS_WARNING) << "Backup file does not exist";
-            }
-        }
-
-        break;
-    }
-
+    readFile(path_, map(), encrypted_);
     setChanged(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool JsonSettings::flush()
 {
     // If the configuration has no changes, then exit.
@@ -221,30 +166,22 @@ bool JsonSettings::flush()
         return true;
     }
 
-    // Before writing the configuration file, make a backup copy.
-    if (backups_ == Backups::YES && !map().empty())
-    {
-        if (!createBackupFor(path_))
-        {
-            LOG(LS_WARNING) << "createBackupFor failed for: " << path_;
-        }
-    }
-
     // Write to the configuration file.
     if (writeFile(path_, map(), encrypted_))
     {
         LOG(LS_INFO) << "Configuration file '" << path_ << "' successfully written to disk";
         setChanged(false);
-        return true;
     }
     else
     {
-        LOG(LS_WARNING) << "Unable to write configuration file: " << path_;
+        LOG(LS_ERROR) << "Unable to write configuration file: " << path_;
+        return false;
     }
 
-    return false;
+    return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path JsonSettings::filePath(std::string_view file_name)
 {
@@ -261,6 +198,7 @@ std::filesystem::path JsonSettings::filePath(std::string_view file_name)
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path JsonSettings::filePath(Scope scope,
                                              std::string_view application_name,
@@ -296,6 +234,7 @@ std::filesystem::path JsonSettings::filePath(Scope scope,
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypted encrypted)
 {
@@ -370,6 +309,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, Encrypted encrypted)
 {
@@ -378,8 +318,8 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
     {
         if (error_code)
         {
-            LOG(LS_WARNING) << "create_directories failed: "
-                            << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "create_directories failed: "
+                          << base::utf16FromLocal8Bit(error_code.message());
             return false;
         }
     }
@@ -466,202 +406,6 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
         }
     }
 
-    return true;
-}
-
-// static
-std::filesystem::path JsonSettings::backupFilePathFor(const std::filesystem::path& source_file_path)
-{
-    std::filesystem::path backup_file_path = source_file_path;
-    backup_file_path.replace_extension("backup");
-    return backup_file_path;
-}
-
-// static
-bool JsonSettings::hasBackupFor(const std::filesystem::path& source_file_path)
-{
-    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
-
-    std::error_code ignored_code;
-    if (std::filesystem::exists(backup_file_path, ignored_code))
-    {
-        if (std::filesystem::file_size(backup_file_path, ignored_code) > 8)
-        {
-            return true;
-        }
-        else
-        {
-            std::error_code error_code;
-            if (!std::filesystem::remove(backup_file_path, error_code))
-            {
-                LOG(LS_WARNING) << "Unable to remove invalid backup: "
-                                << utf16FromLocal8Bit(error_code.message());
-            }
-            else
-            {
-                LOG(LS_INFO) << "Invalid backup removed: " << backup_file_path;
-            }
-        }
-    }
-
-    return false;
-}
-
-// static
-bool JsonSettings::removeBackupFileFor(const std::filesystem::path& source_file_path)
-{
-    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
-
-    // Delete the old backup file.
-    std::error_code error_code;
-    if (!std::filesystem::remove(backup_file_path, error_code))
-    {
-        LOG(LS_ERROR) << "Unable to remove old backup file: " << backup_file_path
-                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        return false;
-    }
-
-    return true;
-}
-
-// static
-bool JsonSettings::isValidBackup(const std::filesystem::path& backup_file_path, Encrypted encrypted)
-{
-    std::error_code error_code;
-
-    // If a corrupted configuration file exists.
-    if (!std::filesystem::exists(backup_file_path, error_code))
-    {
-        LOG(LS_WARNING) << "Backup file not exists";
-        return false;
-    }
-
-    Map map;
-    if (!readFile(backup_file_path, map, encrypted))
-    {
-        LOG(LS_WARNING) << "Unable to read backup file";
-        return false;
-    }
-
-    if (map.empty())
-    {
-        LOG(LS_WARNING) << "Empty backup file";
-        return false;
-    }
-
-    return true;
-}
-
-// static
-bool JsonSettings::restoreBackupFor(const std::filesystem::path& source_file_path, Encrypted encrypted)
-{
-    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
-    if (!isValidBackup(backup_file_path, encrypted))
-    {
-        std::error_code error_code;
-        if (!std::filesystem::remove(backup_file_path, error_code))
-        {
-            LOG(LS_WARNING) << "Unable to remove corrupted backup file: "
-                            << utf16FromLocal8Bit(error_code.message());
-        }
-        return false;
-    }
-
-    std::error_code error_code;
-
-    // If a corrupted configuration file exists.
-    if (std::filesystem::exists(source_file_path, error_code))
-    {
-        SystemTime time = SystemTime::now();
-
-        std::ostringstream stream;
-        stream << "currupted-"
-               << std::setfill('0')
-               << std::setw(4) << time.year()
-               << std::setw(2) << time.month()
-               << std::setw(2) << time.day()
-               << '-'
-               << std::setw(2) << time.hour()
-               << std::setw(2) << time.minute()
-               << std::setw(2) << time.second()
-               << '-'
-               << std::setw(3) << time.millisecond();
-
-        std::filesystem::path currupted_file_path = source_file_path;
-        currupted_file_path.replace_extension(stream.str());
-
-        // Create a backup copy of the corrupted configuration.
-        if (!std::filesystem::copy_file(source_file_path, currupted_file_path, error_code))
-        {
-            LOG(LS_ERROR) << "Unable to create backup for corrupted file: " << source_file_path
-                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        }
-        else
-        {
-            LOG(LS_INFO) << "Backup copy of the corrupted file is stored to: " << currupted_file_path;
-        }
-
-        // Delete the corrupted configuration.
-        if (!std::filesystem::remove(source_file_path, error_code))
-        {
-            LOG(LS_ERROR) << "Unable to remove currupted file: " << source_file_path
-                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-            return false;
-        }
-    }
-
-    // Restoring a corrupted configuration from a backup.
-    if (!std::filesystem::copy_file(backup_file_path, source_file_path, error_code))
-    {
-        LOG(LS_ERROR) << "Unable to restore backup file for: " << source_file_path
-                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        return false;
-    }
-
-    LOG(LS_INFO) << "Backup for '" << source_file_path << "' successfully restored";
-    return true;
-}
-
-// static
-bool JsonSettings::createBackupFor(const std::filesystem::path& source_file_path)
-{
-    std::error_code error_code;
-
-    if (!std::filesystem::exists(source_file_path, error_code))
-    {
-        LOG(LS_INFO) << "Source file '" << source_file_path << "' now exists yet";
-        return false;
-    }
-
-    if (std::filesystem::file_size(source_file_path, error_code) <= 8)
-    {
-        LOG(LS_INFO) << "Source file '" << source_file_path << "' is empty";
-        return false;
-    }
-
-    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
-
-    // If an old backup file exists.
-    if (std::filesystem::exists(backup_file_path, error_code))
-    {
-        // Delete the old backup file.
-        if (!std::filesystem::remove(backup_file_path, error_code))
-        {
-            LOG(LS_ERROR) << "Unable to remove old backup file: " << backup_file_path
-                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-            return false;
-        }
-    }
-
-    // Create a new backup copy of the configuration file.
-    if (!std::filesystem::copy_file(source_file_path, backup_file_path, error_code))
-    {
-        LOG(LS_ERROR) << "Unable to create backup file for: " << source_file_path
-                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        return false;
-    }
-
-    LOG(LS_INFO) << "Backup for '" << source_file_path << "' successfully created";
     return true;
 }
 

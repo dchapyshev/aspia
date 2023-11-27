@@ -22,25 +22,31 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorMac::InputInjectorMac() = default;
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorMac::~InputInjectorMac() = default;
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorMac::setScreenOffset(const base::Point& /* offset */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorMac::setBlockInput(bool /* enable */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorMac::injectKeyEvent(const proto::KeyEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorMac::injectMouseEvent(const proto::MouseEvent& /* event */)
 {
     NOTIMPLEMENTED();

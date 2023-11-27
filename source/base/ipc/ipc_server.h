@@ -19,6 +19,7 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
+#include "build/build_config.h"
 #include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
@@ -61,8 +62,14 @@ private:
     asio::io_context& io_context_;
     std::u16string channel_name_;
 
+#if defined(OS_WIN)
+    static const size_t kListenersCount = 8;
+#elif defined(OS_POSIX)
+    static const size_t kListenersCount = 1;
+#endif
+
     class Listener;
-    std::array<base::local_shared_ptr<Listener>, 8> listeners_;
+    std::array<base::local_shared_ptr<Listener>, kListenersCount> listeners_;
 
     THREAD_CHECKER(thread_checker_);
 

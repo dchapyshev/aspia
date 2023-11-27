@@ -32,6 +32,7 @@ namespace base {
 namespace {
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 std::string addressToString(const SOCKET_ADDRESS& address)
 {
     if (!address.lpSockaddr || address.iSockaddrLength <= 0)
@@ -73,6 +74,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
 // AdapterEnumerator
 //
 
+//--------------------------------------------------------------------------------------------------
 AdapterEnumerator::AdapterEnumerator()
 {
 #if defined(OS_WIN)
@@ -112,8 +114,10 @@ AdapterEnumerator::AdapterEnumerator()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 AdapterEnumerator::~AdapterEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool AdapterEnumerator::isAtEnd() const
 {
 #if defined(OS_WIN)
@@ -124,6 +128,7 @@ bool AdapterEnumerator::isAtEnd() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void AdapterEnumerator::advance()
 {
 #if defined(OS_WIN)
@@ -133,6 +138,7 @@ void AdapterEnumerator::advance()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string AdapterEnumerator::adapterName() const
 {
 #if defined(OS_WIN)
@@ -146,6 +152,7 @@ std::string AdapterEnumerator::adapterName() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string AdapterEnumerator::connectionName() const
 {
 #if defined(OS_WIN)
@@ -159,6 +166,7 @@ std::string AdapterEnumerator::connectionName() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string AdapterEnumerator::interfaceType() const
 {
 #if defined(OS_WIN)
@@ -200,6 +208,7 @@ std::string AdapterEnumerator::interfaceType() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t AdapterEnumerator::mtu() const
 {
 #if defined(OS_WIN)
@@ -210,6 +219,7 @@ uint32_t AdapterEnumerator::mtu() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 uint64_t AdapterEnumerator::speed() const
 {
 #if defined(OS_WIN)
@@ -223,6 +233,7 @@ uint64_t AdapterEnumerator::speed() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string AdapterEnumerator::macAddress() const
 {
 #if defined(OS_WIN)
@@ -243,6 +254,7 @@ std::string AdapterEnumerator::macAddress() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AdapterEnumerator::isDhcp4Enabled() const
 {
 #if defined(OS_WIN)
@@ -253,6 +265,7 @@ bool AdapterEnumerator::isDhcp4Enabled() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string AdapterEnumerator::dhcp4Server() const
 {
 #if defined(OS_WIN)

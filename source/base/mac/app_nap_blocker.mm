@@ -48,13 +48,16 @@ private:
     DISALLOW_COPY_AND_ASSIGN(AppNapBlocker);
 };
 
+//--------------------------------------------------------------------------------------------------
 AppNapBlocker::AppNapBlocker() = default;
 
+//--------------------------------------------------------------------------------------------------
 AppNapBlocker::~AppNapBlocker()
 {
     setBlocked(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AppNapBlocker::addBlock()
 {
     std::scoped_lock lock(id_lock_);
@@ -65,6 +68,7 @@ void AppNapBlocker::addBlock()
     ++counter_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AppNapBlocker::releaseBlock()
 {
     std::scoped_lock lock(id_lock_);
@@ -78,12 +82,14 @@ void AppNapBlocker::releaseBlock()
         setBlocked(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AppNapBlocker::isBlocked() const
 {
     std::scoped_lock lock(id_lock_);
     return id_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AppNapBlocker::setBlocked(bool enable)
 {
     if (enable == (id_ != nullptr))
@@ -108,16 +114,19 @@ AppNapBlocker g_app_nap_blocker;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void addAppNapBlock()
 {
     g_app_nap_blocker.addBlock();
 }
 
+//--------------------------------------------------------------------------------------------------
 void releaseAppNapBlock()
 {
     g_app_nap_blocker.releaseBlock();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isAppNapBlocked()
 {
     return g_app_nap_blocker.isBlocked();

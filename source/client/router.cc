@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(io_task_runner),
@@ -37,21 +38,25 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
     authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
 }
 
+//--------------------------------------------------------------------------------------------------
 Router::~Router()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::setUserName(std::u16string_view user_name)
 {
     authenticator_->setUserName(user_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::setPassword(std::u16string_view password)
 {
     authenticator_->setPassword(password);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
     LOG(LS_INFO) << "Connecting to router " << address.data() << ":" << port;
@@ -61,6 +66,7 @@ void Router::connectToRouter(std::u16string_view address, uint16_t port)
     channel_->connect(address, port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::refreshSessionList()
 {
     LOG(LS_INFO) << "Sending session list request";
@@ -70,6 +76,7 @@ void Router::refreshSessionList()
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::stopSession(int64_t session_id)
 {
     LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
@@ -83,6 +90,7 @@ void Router::stopSession(int64_t session_id)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::refreshUserList()
 {
     LOG(LS_INFO) << "Sending user list request";
@@ -92,6 +100,7 @@ void Router::refreshUserList()
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::addUser(const proto::User& user)
 {
     LOG(LS_INFO) << "Sending user add request (username: " << user.name()
@@ -106,6 +115,7 @@ void Router::addUser(const proto::User& user)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::modifyUser(const proto::User& user)
 {
     LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
@@ -120,6 +130,7 @@ void Router::modifyUser(const proto::User& user)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::deleteUser(int64_t entry_id)
 {
     LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
@@ -133,6 +144,7 @@ void Router::deleteUser(int64_t entry_id)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
 {
     LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
@@ -148,6 +160,7 @@ void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_sessi
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::onTcpConnected()
 {
     LOG(LS_INFO) << "Router connected";
@@ -167,16 +180,27 @@ void Router::onTcpConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            const base::Version& router_version = authenticator_->peerVersion();
+            if (router_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            window_proxy_->onConnected(authenticator_->peerVersion());
+            const base::Version& client_version = base::Version::kVersion_CurrentFull;
+            if (router_version > client_version)
+            {
+                LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
+                              << " client: " << client_version.toString();
+                window_proxy_->onVersionMismatch(router_version, client_version);
+            }
+            else
+            {
+                window_proxy_->onConnected(router_version);
 
-            // Now the session will receive incoming messages.
-            channel_->resume();
+                // Now the session will receive incoming messages.
+                channel_->resume();
+            }
         }
         else
         {
@@ -190,12 +214,14 @@ void Router::onTcpConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
     window_proxy_->onDisconnected(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToAdmin message;
@@ -241,6 +267,7 @@ void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArra
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Router::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Not used.

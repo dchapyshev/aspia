@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
 {
     switch (rotation)
@@ -43,6 +44,7 @@ libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
     return libyuv::kRotate0;
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect rotateAndOffsetRect(const Rect& rect,
                          const Size& size,
                          Rotation rotation,
@@ -55,6 +57,7 @@ Rect rotateAndOffsetRect(const Rect& rect,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Rotation reverseRotation(Rotation rotation)
 {
     switch (rotation)
@@ -72,6 +75,7 @@ Rotation reverseRotation(Rotation rotation)
     return Rotation::CLOCK_WISE_0;
 }
 
+//--------------------------------------------------------------------------------------------------
 Size rotateSize(const Size& size, Rotation rotation)
 {
     switch (rotation)
@@ -88,6 +92,7 @@ Size rotateSize(const Size& size, Rotation rotation)
     return Size();
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation)
 {
     switch (rotation)
@@ -108,6 +113,7 @@ Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation)
     return Rect();
 }
 
+//--------------------------------------------------------------------------------------------------
 void rotateDesktopFrame(const Frame& source,
                         const Rect& source_rect,
                         const Rotation& rotation,

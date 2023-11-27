@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Aspia Host
+Name[ru]=Хост Aspia
+Exec=/usr/bin/aspia_host
+Icon=aspia_host.png
+Type=Application
+Categories=Utility;
+Terminal=false

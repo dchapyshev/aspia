@@ -24,6 +24,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration, int64_t bytes)
 {
     static const double kAlpha = 0.1;
@@ -34,6 +35,9 @@ int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration,
 
 } // namespace
 
+const uint32_t NetworkChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+
+//--------------------------------------------------------------------------------------------------
 int NetworkChannel::speedRx()
 {
     TimePoint current_time = Clock::now();
@@ -47,6 +51,7 @@ int NetworkChannel::speedRx()
     return speed_rx_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int NetworkChannel::speedTx()
 {
     TimePoint current_time = Clock::now();
@@ -60,6 +65,7 @@ int NetworkChannel::speedTx()
     return speed_tx_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string NetworkChannel::errorToString(ErrorCode error_code)
 {
@@ -115,18 +121,21 @@ std::string NetworkChannel::errorToString(ErrorCode error_code)
     return stringPrintf("%s (%d)", str, static_cast<int>(error_code));
 }
 
+//--------------------------------------------------------------------------------------------------
 void NetworkChannel::addTxBytes(size_t bytes_count)
 {
     bytes_tx_ += bytes_count;
     total_tx_ += bytes_count;
 }
 
+//--------------------------------------------------------------------------------------------------
 void NetworkChannel::addRxBytes(size_t bytes_count)
 {
     bytes_rx_ += bytes_count;
     total_rx_ += bytes_count;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void NetworkChannel::resizeBuffer(ByteArray* buffer, size_t new_size)
 {

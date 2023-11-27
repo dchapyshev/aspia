@@ -1,0 +1,25 @@
+{
+  "name": "aspia",
+  "version-string": "latest",
+  "dependencies": [
+    "asio",
+    "curl",
+    "gtest",
+    {
+      "name": "icu",
+      "platform": "linux | osx"
+    },
+    "libvpx",
+    "libyuv",
+    "openssl",
+    "opus",
+    "protobuf",
+    "qt5-base",
+    "qt5-translations",
+    {
+      "name": "qt5-winextras",
+      "platform": "windows"
+    },
+    "rapidjson"
+  ]
+}

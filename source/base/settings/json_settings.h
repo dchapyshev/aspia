@@ -31,15 +31,12 @@ class JsonSettings : public Settings
 public:
     enum class Scope { USER, SYSTEM };
     enum class Encrypted { YES, NO };
-    enum class Backups { YES, NO };
 
     JsonSettings(std::string_view file_name,
-                 Backups backups = Backups::NO,
                  Encrypted encrypted = Encrypted::NO);
     JsonSettings(Scope scope,
                  std::string_view application_name,
                  std::string_view file_name,
-                 Backups backups = Backups::NO,
                  Encrypted encrypted = Encrypted::NO);
     ~JsonSettings() override;
 
@@ -61,16 +58,8 @@ public:
                           const Map& map,
                           Encrypted encrypted = Encrypted::NO);
 
-    static std::filesystem::path backupFilePathFor(const std::filesystem::path& source_file_path);
-    static bool hasBackupFor(const std::filesystem::path& source_file_path);
-    static bool removeBackupFileFor(const std::filesystem::path& source_file_path);
-    static bool isValidBackup(const std::filesystem::path& backup_file_path, Encrypted encrypted);
-    static bool restoreBackupFor(const std::filesystem::path& source_file_path, Encrypted encrypted);
-    static bool createBackupFor(const std::filesystem::path& source_file_path);
-
 private:
     const Encrypted encrypted_;
-    const Backups backups_;
     std::filesystem::path path_;
 
     DISALLOW_COPY_AND_ASSIGN(JsonSettings);

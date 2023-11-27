@@ -26,25 +26,32 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
     common::FileTask::Target target)
     : task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_consumer_proxy_);
 
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
+    LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::start(
     const FileRemover::TaskList& items, const FinishCallback& callback)
 {
+    LOG(LS_INFO) << "Start remove queue builder";
+
     pending_tasks_ = items;
     callback_ = callback;
 
@@ -53,11 +60,13 @@ void FileRemoveQueueBuilder::start(
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
 {
     return std::move(tasks_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
@@ -88,6 +97,7 @@ void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::doPendingTasks()
 {
     while (!pending_tasks_.empty())
@@ -105,8 +115,11 @@ void FileRemoveQueueBuilder::doPendingTasks()
     callback_(proto::FILE_ERROR_SUCCESS);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onAborted(proto::FileError error_code)
 {
+    LOG(LS_INFO) << "Aborted: " << error_code;
+
     pending_tasks_.clear();
     tasks_.clear();
 

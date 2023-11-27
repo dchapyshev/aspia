@@ -24,27 +24,34 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserSessionWindowProxy::UserSessionWindowProxy(
     std::shared_ptr<base::TaskRunner> ui_task_runner, UserSessionWindow* window)
     : ui_task_runner_(std::move(ui_task_runner)),
       window_(window)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_ && ui_task_runner_->belongsToCurrentThread());
     DCHECK(window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionWindowProxy::~UserSessionWindowProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     DCHECK(!window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach user session window";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onStatusChanged(UserSessionAgent::Status status)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -58,6 +65,7 @@ void UserSessionWindowProxy::onStatusChanged(UserSessionAgent::Status status)
         window_->onStatusChanged(status);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -71,6 +79,7 @@ void UserSessionWindowProxy::onClientListChanged(const UserSessionAgent::ClientL
         window_->onClientListChanged(clients);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -84,6 +93,7 @@ void UserSessionWindowProxy::onCredentialsChanged(const proto::internal::Credent
         window_->onCredentialsChanged(credentials);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onRouterStateChanged(const proto::internal::RouterState& state)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -97,6 +107,7 @@ void UserSessionWindowProxy::onRouterStateChanged(const proto::internal::RouterS
         window_->onRouterStateChanged(state);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
@@ -111,6 +122,7 @@ void UserSessionWindowProxy::onConnectConfirmationRequest(
         window_->onConnectConfirmationRequest(request);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onVideoRecordingStateChanged(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
@@ -129,6 +141,7 @@ void UserSessionWindowProxy::onVideoRecordingStateChanged(
         window_->onVideoRecordingStateChanged(computer_name, user_name, started);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionWindowProxy::onTextChat(const proto::TextChat& text_chat)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

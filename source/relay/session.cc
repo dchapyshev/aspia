@@ -27,6 +27,7 @@
 
 namespace relay {
 
+//--------------------------------------------------------------------------------------------------
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
                  const base::ByteArray& secret)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
@@ -48,11 +49,13 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
         std::fill(buffer_[i].begin(), buffer_[i].end(), 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 Session::~Session()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::start(Delegate* delegate)
 {
     LOG(LS_INFO) << "Starting peers session";
@@ -64,6 +67,7 @@ void Session::start(Delegate* delegate)
         Session::doReadSome(this, i);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::stop()
 {
     if (!delegate_)
@@ -76,6 +80,7 @@ void Session::stop()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::disconnect()
 {
     std::error_code ignored_code;
@@ -89,6 +94,7 @@ void Session::disconnect()
         delegate_->onSessionFinished(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
 {
     if (start_idle_time_ == TimePoint())
@@ -100,11 +106,13 @@ std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_idle_time_);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::chrono::seconds Session::duration(const TimePoint& current_time) const
 {
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void Session::doReadSome(Session* session, int source)
 {
@@ -141,6 +149,7 @@ void Session::doReadSome(Session* session, int source)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Connection finished: " << base::utf16FromLocal8Bit(error_code.message())

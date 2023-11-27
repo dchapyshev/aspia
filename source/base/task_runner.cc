@@ -59,6 +59,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void TaskRunner::deleteSoonInternal(void(*deleter)(const void*), const void* object)
 {
     postNonNestableTask(

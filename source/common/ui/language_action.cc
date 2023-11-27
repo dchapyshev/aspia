@@ -20,6 +20,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 LanguageAction::LanguageAction(const QString& locale_code,
                                const QString& locale_name,
                                QObject* parent)

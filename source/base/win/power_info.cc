@@ -22,20 +22,23 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 PowerInfo::PowerInfo()
 {
     memset(&power_status_, 0, sizeof(power_status_));
     if (!GetSystemPowerStatus(&power_status_))
     {
-        PLOG(LS_WARNING) << "GetSystemPowerStatus failed";
+        PLOG(LS_ERROR) << "GetSystemPowerStatus failed";
         return;
     }
 
     initialized_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 PowerInfo::~PowerInfo() = default;
 
+//--------------------------------------------------------------------------------------------------
 PowerInfo::PowerSource PowerInfo::powerSource() const
 {
     if (!initialized_)
@@ -54,6 +57,7 @@ PowerInfo::PowerSource PowerInfo::powerSource() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 PowerInfo::BatteryStatus PowerInfo::batteryStatus() const
 {
     if (!initialized_)
@@ -81,6 +85,7 @@ PowerInfo::BatteryStatus PowerInfo::batteryStatus() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t PowerInfo::batteryLifePercent() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)
@@ -89,6 +94,7 @@ uint32_t PowerInfo::batteryLifePercent() const
     return power_status_.BatteryLifePercent;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t PowerInfo::batteryFullLifeTime() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)
@@ -100,6 +106,7 @@ uint32_t PowerInfo::batteryFullLifeTime() const
     return power_status_.BatteryFullLifeTime;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t PowerInfo::batteryRemainingLifeTime() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)

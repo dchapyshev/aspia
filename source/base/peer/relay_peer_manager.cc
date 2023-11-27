@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 RelayPeerManager::RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate)
     : task_runner_(std::move(task_runner)),
       delegate_(delegate)
@@ -32,18 +33,21 @@ RelayPeerManager::RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Dele
     DCHECK(task_runner_ && delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 RelayPeerManager::~RelayPeerManager()
 {
     LOG(LS_INFO) << "Dtor";
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 {
     pending_.emplace_back(std::make_unique<RelayPeer>());
     pending_.back()->start(offer, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<TcpChannel> channel)
 {
     if (delegate_)
@@ -52,17 +56,19 @@ void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<TcpChannel> channe
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 
     cleanup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeerManager::onRelayConnectionError()
 {
     cleanup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeerManager::cleanup()
 {
     auto it = pending_.begin();

@@ -33,16 +33,19 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironment::DesktopEnvironment()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironment::~DesktopEnvironment()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopEnvironment> DesktopEnvironment::create()
 {
@@ -58,6 +61,7 @@ std::unique_ptr<DesktopEnvironment> DesktopEnvironment::create()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::setWallpaper(bool enable)
 {
     static const bool kDefaultValue = true;
@@ -82,6 +86,7 @@ void DesktopEnvironment::setWallpaper(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::setFontSmoothing(bool enable)
 {
     static const bool kDefaultValue = true;
@@ -106,6 +111,7 @@ void DesktopEnvironment::setFontSmoothing(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::setEffects(bool enable)
 {
     static const bool kDefaultValue = true;
@@ -130,11 +136,13 @@ void DesktopEnvironment::setEffects(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::onDesktopChanged()
 {
     applyNewSettings();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::applyNewSettings()
 {
     if (wallpaper_.has_value() && !*wallpaper_)

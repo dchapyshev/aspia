@@ -22,6 +22,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ScopedClipboard::~ScopedClipboard()
 {
     if (opened_)
@@ -40,6 +41,7 @@ ScopedClipboard::~ScopedClipboard()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedClipboard::init(HWND owner)
 {
     const int kMaxAttemptsToOpenClipboard = 5;
@@ -69,22 +71,24 @@ bool ScopedClipboard::init(HWND owner)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 BOOL ScopedClipboard::empty()
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return FALSE;
     }
 
     return EmptyClipboard();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedClipboard::setData(UINT format, HANDLE mem)
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return;
     }
 
@@ -92,11 +96,12 @@ void ScopedClipboard::setData(UINT format, HANDLE mem)
     SetClipboardData(format, mem);
 }
 
+//--------------------------------------------------------------------------------------------------
 HANDLE ScopedClipboard::data(UINT format) const
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return nullptr;
     }
 

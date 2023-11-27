@@ -94,11 +94,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Runner);
 };
 
+//--------------------------------------------------------------------------------------------------
 HttpFileDownloader::HttpFileDownloader()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 HttpFileDownloader::~HttpFileDownloader()
 {
     LOG(LS_INFO) << "Dtor";
@@ -111,17 +113,22 @@ HttpFileDownloader::~HttpFileDownloader()
     thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::start(std::string_view url,
                                std::shared_ptr<base::TaskRunner> owner_task_runner,
                                Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting http file downloader";
     url_ = url;
     runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&HttpFileDownloader::run, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
+    LOG(LS_INFO) << "run BEGIN";
+
     base::ScopedCURL curl;
 
     curl_easy_setopt(curl.get(), CURLOPT_URL, url_.c_str());
@@ -131,7 +138,10 @@ void HttpFileDownloader::run()
 
     long verify_peer = 1;
     if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+    {
+        LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;
+    }
 
     curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, verify_peer);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, writeDataCallback);
@@ -150,13 +160,14 @@ void HttpFileDownloader::run()
         error_code = curl_multi_perform(multi_curl.get(), &still_running);
         if (!error_code)
         {
-              // Wait for activity, timeout or "nothing".
-              error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
+            // Wait for activity, timeout or "nothing".
+            error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
         }
 
         if (error_code)
         {
-            LOG(LS_WARNING) << "curl_multi_poll failed: " << error_code;
+            LOG(LS_ERROR) << "curl_multi_poll failed: " << curl_multi_strerror(error_code)
+                          << " (" << error_code << ")";
             break;
         }
 
@@ -184,8 +195,11 @@ void HttpFileDownloader::run()
                 runner_->onCompleted();
         }
     }
+
+    LOG(LS_INFO) << "run END";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t HttpFileDownloader::writeDataCallback(
     void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self)
@@ -207,6 +221,7 @@ size_t HttpFileDownloader::writeDataCallback(
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int HttpFileDownloader::progressCallback(
     HttpFileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)

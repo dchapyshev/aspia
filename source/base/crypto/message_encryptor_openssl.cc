@@ -33,6 +33,7 @@ const int kTagSize = 16; // 128 bits, 16 bytes.
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv)
     : ctx_(std::move(ctx)),
       iv_(iv)
@@ -41,8 +42,10 @@ MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const B
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(ctx_.get()), kIVSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageEncryptorOpenssl::~MessageEncryptorOpenssl() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
     const ByteArray& key, const ByteArray& iv)
@@ -64,6 +67,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
     return std::unique_ptr<MessageEncryptor>(new MessageEncryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly1305(
     const ByteArray& key, const ByteArray& iv)
@@ -85,16 +89,18 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly
     return std::unique_ptr<MessageEncryptor>(new MessageEncryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t MessageEncryptorOpenssl::encryptedDataSize(size_t in_size)
 {
     return in_size + kTagSize;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
+        LOG(LS_ERROR) << "EVP_EncryptInit_ex failed";
         return false;
     }
 
@@ -104,7 +110,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                           reinterpret_cast<uint8_t*>(out) + kTagSize, &length,
                           reinterpret_cast<const uint8_t*>(in), static_cast<int>(in_size)) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
+        LOG(LS_ERROR) << "EVP_EncryptUpdate failed";
         return false;
     }
 
@@ -112,13 +118,13 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                             reinterpret_cast<uint8_t*>(out) + kTagSize + length,
                             &length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptFinal_ex failed";
+        LOG(LS_ERROR) << "EVP_EncryptFinal_ex failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_GET_TAG, kTagSize, out) != 1)
     {
-        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 

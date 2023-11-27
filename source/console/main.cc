@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/sys_info.h"
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
@@ -27,6 +28,7 @@
 
 #include <QCommandLineParser>
 
+//--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
 #if !defined(I18L_DISABLED)
@@ -52,11 +54,15 @@ int main(int argc, char *argv[])
 
     console::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
@@ -77,21 +83,31 @@ int main(int argc, char *argv[])
 
     if (application.isRunning())
     {
+        LOG(LS_INFO) << "Application already running";
+
         if (file_path.isEmpty())
+        {
+            LOG(LS_INFO) << "File path is empty. Activate window";
             application.activateWindow();
+        }
         else
+        {
+            LOG(LS_INFO) << "Open file: " << file_path;
             application.openFile(file_path);
+        }
 
         return 0;
     }
     else
     {
+        LOG(LS_INFO) << "Application not running yet";
+
         console_window.reset(new console::MainWindow(file_path));
 
-        QObject::connect(&application, &console::Application::windowActivated,
+        QObject::connect(&application, &console::Application::sig_windowActivated,
             console_window.get(), &console::MainWindow::showConsole);
 
-        QObject::connect(&application, &console::Application::fileOpened,
+        QObject::connect(&application, &console::Application::sig_fileOpened,
             console_window.get(), &console::MainWindow::openAddressBook);
 
         console_window->show();

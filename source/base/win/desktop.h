@@ -23,6 +23,9 @@
 
 #include <Windows.h>
 
+#include <string>
+#include <vector>
+
 namespace base {
 
 class Desktop
@@ -40,6 +43,9 @@ public:
 
     // Returns the desktop currently assigned to the calling thread or NULL if an error occurs.
     static Desktop threadDesktop();
+
+    // Returns list of desktops in system.
+    static std::vector<std::wstring> desktopList(HWINSTA winsta = nullptr);
 
     // Returns the name of the desktop represented by the object. Return false if quering the name
     // failed for any reason.
@@ -62,7 +68,8 @@ public:
 private:
     Desktop(HDESK desktop, bool own);
 
-private:
+    static BOOL CALLBACK enumDesktopProc(LPWSTR desktop, LPARAM lparam);
+
     // The desktop handle.
     HDESK desktop_ = nullptr;
 

@@ -27,7 +27,7 @@
 #if defined(OS_WIN)
 #include <asio/windows/stream_handle.hpp>
 #elif defined(OS_POSIX)
-#include <asio/posix/stream_descriptor.hpp>
+#include <asio/local/stream_protocol.hpp>
 #endif
 
 #include <filesystem>
@@ -50,8 +50,8 @@ public:
     public:
         virtual ~Listener() = default;
 
-        virtual void onDisconnected() = 0;
-        virtual void onMessageReceived(const ByteArray& buffer) = 0;
+        virtual void onIpcDisconnected() = 0;
+        virtual void onIpcMessageReceived(const ByteArray& buffer) = 0;
     };
 
     std::shared_ptr<IpcChannelProxy> channelProxy();
@@ -84,7 +84,7 @@ private:
 #if defined(OS_WIN)
     using Stream = asio::windows::stream_handle;
 #elif defined(OS_POSIX)
-    using Stream = asio::posix::stream_descriptor;
+    using Stream = asio::local::stream_protocol::socket;
 #endif
 
     IpcChannel(std::u16string_view channel_name, Stream&& stream);

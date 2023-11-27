@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)
 {
     if (smbios_dump.empty())
@@ -42,18 +43,22 @@ SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)
     pos_ = start_;
 }
 
+//--------------------------------------------------------------------------------------------------
 SmbiosTableEnumerator::~SmbiosTableEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 const SmbiosTable* SmbiosTableEnumerator::table() const
 {
     return reinterpret_cast<const SmbiosTable*>(pos_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SmbiosTableEnumerator::isAtEnd() const
 {
     return pos_ + sizeof(SmbiosTable) >= end_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SmbiosTableEnumerator::advance()
 {
     SmbiosTable* header = reinterpret_cast<SmbiosTable*>(pos_);
@@ -76,21 +81,25 @@ void SmbiosTableEnumerator::advance()
     pos_ += 2;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t SmbiosTableEnumerator::majorVersion() const
 {
     return smbios_.smbios_major_version;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t SmbiosTableEnumerator::minorVersion() const
 {
     return smbios_.smbios_minor_version;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t SmbiosTableEnumerator::length() const
 {
     return smbios_.length;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string smbiosString(const SmbiosTable* table, uint8_t number)
 {
     if (!number)
@@ -109,69 +118,82 @@ std::string smbiosString(const SmbiosTable* table, uint8_t number)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 SmbiosBios::SmbiosBios(const SmbiosTable* table)
     : table_(static_cast<const SmbiosBiosTable*>(table))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosBios::vendor() const
 {
     return smbiosString(table_, table_->vendor);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosBios::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosBios::releaseDate() const
 {
     return smbiosString(table_, table_->release_date);
 }
 
+//--------------------------------------------------------------------------------------------------
 SmbiosBaseboard::SmbiosBaseboard(const SmbiosTable* table)
     : table_(static_cast<const SmbiosBaseboardTable*>(table))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SmbiosBaseboard::isValid() const
 {
     return table_->length >= 0x08;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosBaseboard::manufacturer() const
 {
     return smbiosString(table_, table_->manufactorer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosBaseboard::product() const
 {
     return smbiosString(table_, table_->product);
 }
 
+//--------------------------------------------------------------------------------------------------
 SmbiosMemoryDevice::SmbiosMemoryDevice(const SmbiosTable* table)
     : table_(static_cast<const SmbiosMemoryDeviceTable*>(table))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SmbiosMemoryDevice::isValid() const
 {
     return table_->length >= 0x15;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SmbiosMemoryDevice::isPresent() const
 {
     return size() != 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosMemoryDevice::location() const
 {
     return smbiosString(table_, table_->device_location);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosMemoryDevice::manufacturer() const
 {
     if (table_->length < 0x1B)
@@ -190,6 +212,7 @@ std::string SmbiosMemoryDevice::manufacturer() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint64_t SmbiosMemoryDevice::size() const
 {
     if (table_->length >= 0x20 && table_->module_size == 0x7FFF)
@@ -233,6 +256,7 @@ uint64_t SmbiosMemoryDevice::size() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosMemoryDevice::type() const
 {
     static const char* kType[] =
@@ -266,15 +290,22 @@ std::string SmbiosMemoryDevice::type() const
         "LPDDR",
         "LPDDR2",
         "LPDDR3",
-        "LPDDR4" // 0x1E
+        "LPDDR4",
+        "Logical non-volatile device",
+        "HBM (High Bandwidth Memory)",
+        "HBM2 (High Bandwidth Memory Generation 2)",
+        "DDR5",
+        "LPDDR5",
+        "HBM3 (High Bandwidth Memory Generation 3)" // 0x24
     };
 
-    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x1E)
+    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x24)
         return kType[table_->memory_type - 0x01];
 
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosMemoryDevice::formFactor() const
 {
     static const char* kFormFactor[] =
@@ -302,6 +333,7 @@ std::string SmbiosMemoryDevice::formFactor() const
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SmbiosMemoryDevice::partNumber() const
 {
     if (table_->length < 0x1B)
@@ -320,6 +352,7 @@ std::string SmbiosMemoryDevice::partNumber() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t SmbiosMemoryDevice::speed() const
 {
     if (table_->length < 0x17)

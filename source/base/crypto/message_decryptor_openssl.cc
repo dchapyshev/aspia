@@ -33,6 +33,7 @@ const int kTagSize = 16; // 128 bits, 16 bytes.
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 MessageDecryptorOpenssl::MessageDecryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv)
     : ctx_(std::move(ctx)),
       iv_(iv)
@@ -41,8 +42,10 @@ MessageDecryptorOpenssl::MessageDecryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const B
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(ctx_.get()), kIVSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageDecryptorOpenssl::~MessageDecryptorOpenssl() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
     const ByteArray& key, const ByteArray& iv)
@@ -64,6 +67,7 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
     return std::unique_ptr<MessageDecryptor>(new MessageDecryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly1305(
     const ByteArray& key, const ByteArray& iv)
@@ -85,16 +89,18 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly
     return std::unique_ptr<MessageDecryptor>(new MessageDecryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t MessageDecryptorOpenssl::decryptedDataSize(size_t in_size)
 {
     return in_size - kTagSize;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_DecryptInit_ex failed";
+        LOG(LS_ERROR) << "EVP_DecryptInit_ex failed";
         return false;
     }
 
@@ -105,20 +111,20 @@ bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
                           reinterpret_cast<const uint8_t*>(in) + kTagSize,
                           static_cast<int>(in_size) - kTagSize) != 1)
     {
-        LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
+        LOG(LS_ERROR) << "EVP_DecryptUpdate failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_SET_TAG, kTagSize,
                             const_cast<void*>(in)) != 1)
     {
-        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 
     if (EVP_DecryptFinal_ex(ctx_.get(), reinterpret_cast<uint8_t*>(out) + length, &length) <= 0)
     {
-        LOG(LS_WARNING) << "EVP_DecryptFinal_ex failed";
+        LOG(LS_ERROR) << "EVP_DecryptFinal_ex failed";
         return false;
     }
 

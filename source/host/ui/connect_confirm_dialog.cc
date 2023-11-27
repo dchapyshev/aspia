@@ -28,6 +28,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirmationRequest& request,
                                            QWidget* parent)
     : QDialog(parent),
@@ -86,28 +87,31 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::~ConnectConfirmDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Yes)
     {
-        LOG(LS_INFO) << "'Yes' button clicked";
+        LOG(LS_INFO) << "[ACTION] 'Yes' button clicked";
         accept();
     }
     else
     {
-        LOG(LS_INFO) << "'No' button clicked";
+        LOG(LS_INFO) << "[ACTION] 'No' button clicked";
         reject();
     }
 
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onTimeout()
 {
     time_seconds_ -= 1;
@@ -115,9 +119,15 @@ void ConnectConfirmDialog::onTimeout()
     if (time_seconds_ <= 0)
     {
         if (auto_accept_)
+        {
+            LOG(LS_INFO) << "Accept connection by timeout";
             accept();
+        }
         else
+        {
+            LOG(LS_INFO) << "Reject connection by timeout";
             reject();
+        }
 
         close();
     }
@@ -127,6 +137,7 @@ void ConnectConfirmDialog::onTimeout()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::updateMessage()
 {
     QString timeout_string;

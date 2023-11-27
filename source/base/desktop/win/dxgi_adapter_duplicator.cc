@@ -31,6 +31,7 @@ using Microsoft::WRL::ComPtr;
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isValidRect(const RECT& rect)
 {
     return rect.right > rect.left && rect.bottom > rect.top;
@@ -38,19 +39,23 @@ bool isValidRect(const RECT& rect)
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::DxgiAdapterDuplicator(const D3dDevice& device)
     : device_(device)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::DxgiAdapterDuplicator(DxgiAdapterDuplicator&&) = default;
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::~DxgiAdapterDuplicator()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::initialize()
 {
     ErrorCode error_code = doInitialize();
@@ -59,6 +64,7 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::initialize()
     return error_code;
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 {
     for (int i = 0;; ++i)
@@ -71,16 +77,16 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
         if (error.Error() == DXGI_ERROR_NOT_CURRENTLY_AVAILABLE)
         {
-            LOG(LS_WARNING) << "IDXGIAdapter::EnumOutputs returns NOT_CURRENTLY_AVAILABLE. "
-                               "This may happen when running in session 0";
+            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns NOT_CURRENTLY_AVAILABLE. "
+                             "This may happen when running in session 0";
             break;
         }
 
         if (error.Error() != S_OK || !output)
         {
-            LOG(LS_WARNING) << "IDXGIAdapter::EnumOutputs returns an unexpected result "
-                            << error.ErrorMessage() << " with error code "
-                            << error.Error();
+            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns an unexpected result "
+                          << error.ErrorMessage() << " with error code "
+                          << error.Error();
             continue;
         }
 
@@ -95,15 +101,15 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
                 if (error.Error() != S_OK || !output1)
                 {
-                    LOG(LS_WARNING) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
-                                       "usually means the system does not support DirectX 11";
+                    LOG(LS_ERROR) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
+                                     "usually means the system does not support DirectX 11";
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
                 DxgiOutputDuplicator duplicator(device_, output1, desc);
                 if (!duplicator.initialize())
                 {
-                    LOG(LS_WARNING) << "Failed to initialize DxgiOutputDuplicator on output " << i;
+                    LOG(LS_ERROR) << "Failed to initialize DxgiOutputDuplicator on output " << i;
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
@@ -123,18 +129,19 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
         }
         else
         {
-            LOG(LS_WARNING) << "Failed to get output description of device " << i << ", ignore";
+            LOG(LS_ERROR) << "Failed to get output description of device " << i << ", ignore";
         }
     }
 
     if (duplicators_.empty())
     {
-        LOG(LS_WARNING) << "Cannot initialize any DxgiOutputDuplicator instance";
+        LOG(LS_ERROR) << "Cannot initialize any DxgiOutputDuplicator instance";
     }
 
     return !duplicators_.empty() ? ErrorCode::SUCCESS : ErrorCode::GENERIC_ERROR;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiAdapterDuplicator::setup(Context* context)
 {
     DCHECK(context->contexts.empty());
@@ -145,6 +152,7 @@ void DxgiAdapterDuplicator::setup(Context* context)
         duplicators_[i].setup(&context->contexts[i]);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiAdapterDuplicator::unregister(const Context* const context)
 {
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
@@ -153,6 +161,7 @@ void DxgiAdapterDuplicator::unregister(const Context* const context)
         duplicators_[i].unregister(&context->contexts[i]);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiAdapterDuplicator::duplicate(Context* context, SharedFrame* target, DxgiCursor* cursor)
 {
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
@@ -171,6 +180,7 @@ bool DxgiAdapterDuplicator::duplicate(Context* context, SharedFrame* target, Dxg
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiAdapterDuplicator::duplicateMonitor(
     Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor)
 {
@@ -182,6 +192,7 @@ bool DxgiAdapterDuplicator::duplicateMonitor(
         &context->contexts[static_cast<size_t>(monitor_id)], Point(), target, cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect DxgiAdapterDuplicator::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
@@ -190,6 +201,7 @@ Rect DxgiAdapterDuplicator::screenRect(int id) const
     return duplicators_[static_cast<size_t>(id)].desktopRect();
 }
 
+//--------------------------------------------------------------------------------------------------
 const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
 {
     DCHECK_GE(id, 0);
@@ -198,11 +210,13 @@ const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
     return duplicators_[static_cast<size_t>(id)].deviceName();
 }
 
+//--------------------------------------------------------------------------------------------------
 int DxgiAdapterDuplicator::screenCount() const
 {
     return static_cast<int>(duplicators_.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t DxgiAdapterDuplicator::numFramesCaptured() const
 {
     int64_t min = std::numeric_limits<int64_t>::max();
@@ -213,6 +227,7 @@ int64_t DxgiAdapterDuplicator::numFramesCaptured() const
     return min;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiAdapterDuplicator::translateRect(const Point& position)
 {
     desktop_rect_.translate(position);

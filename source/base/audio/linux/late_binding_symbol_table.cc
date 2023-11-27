@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* dllError()
 {
     char* err = dlerror();
@@ -34,6 +35,7 @@ const char* dllError()
     return "No error";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool loadSymbol(DllHandle handle, const char* symbol_name, void** symbol)
 {
     *symbol = dlsym(handle, symbol_name);
@@ -53,17 +55,19 @@ bool loadSymbol(DllHandle handle, const char* symbol_name, void** symbol)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DllHandle internalLoadDll(const char dll_name[])
 {
     DllHandle handle = dlopen(dll_name, RTLD_NOW);
 
     if (handle == kInvalidDllHandle)
     {
-        LOG(LS_WARNING) << "Can't load " << dll_name << " : " << dllError();
+        LOG(LS_ERROR) << "Can't load " << dll_name << " : " << dllError();
     }
     return handle;
 }
 
+//--------------------------------------------------------------------------------------------------
 void internalUnloadDll(DllHandle handle)
 {
     if (dlclose(handle) != 0)
@@ -72,6 +76,7 @@ void internalUnloadDll(DllHandle handle)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool internalLoadSymbols(DllHandle handle,
                          int num_symbols,
                          const char* const symbol_names[],

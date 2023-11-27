@@ -27,6 +27,7 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 Session::SessionId createSessionId()
 {
     static Session::SessionId last_session_id = 0;
@@ -34,6 +35,7 @@ Session::SessionId createSessionId()
     return last_session_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 Session::Session(proto::RouterSession session_type)
     : session_type_(session_type),
       session_id_(createSessionId())
@@ -41,28 +43,34 @@ Session::Session(proto::RouterSession session_type)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Session::~Session() = default;
 
+//--------------------------------------------------------------------------------------------------
 void Session::setChannel(std::unique_ptr<base::TcpChannel> channel)
 {
     channel_ = std::move(channel);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool)
 {
     relay_key_pool_ = std::move(relay_key_pool);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setDatabaseFactory(base::local_shared_ptr<DatabaseFactory> database_factory)
 {
     database_factory_ = std::move(database_factory);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setServer(Server* server)
 {
     server_ = server;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::start(Delegate* delegate)
 {
     if (!channel_)
@@ -103,31 +111,43 @@ void Session::start(Delegate* delegate)
     onSessionReady();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Database> Session::openDatabase() const
 {
     return database_factory_->openDatabase();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setVersion(const base::Version& version)
 {
     version_ = version;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setOsName(const std::string& os_name)
 {
     os_name_ = os_name;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::setComputerName(const std::string& computer_name)
 {
     computer_name_ = computer_name;
 }
 
+//--------------------------------------------------------------------------------------------------
+void Session::setArchitecture(const std::string& architecture)
+{
+    architecture_ = architecture;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Session::setUserName(const std::string& username)
 {
     username_ = username;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::chrono::seconds Session::duration() const
 {
     std::chrono::time_point<std::chrono::system_clock> time_point =
@@ -137,17 +157,20 @@ std::chrono::seconds Session::duration() const
         std::chrono::system_clock::now() - time_point);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
 {
     if (channel_)
         channel_->send(channel_id, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::onTcpConnected()
 {
     NOTREACHED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
@@ -156,6 +179,7 @@ void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         delegate_->onSessionFinished(session_id_, session_type_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
@@ -164,10 +188,11 @@ void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& bu
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
@@ -176,7 +201,7 @@ void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 

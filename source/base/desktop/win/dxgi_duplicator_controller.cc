@@ -28,6 +28,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* DxgiDuplicatorController::resultName(DxgiDuplicatorController::Result result)
 {
@@ -56,6 +57,7 @@ const char* DxgiDuplicatorController::resultName(DxgiDuplicatorController::Resul
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool DxgiDuplicatorController::isCurrentSessionSupported()
 {
@@ -63,30 +65,34 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
 
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        LOG(LS_WARNING) << "Failed to retrieve current session Id, current binary may not have "
-                           "required priviledge";
+        LOG(LS_ERROR) << "Failed to retrieve current session Id, current binary may not have "
+                         "required priviledge";
         return false;
     }
 
     return session_id != 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::DxgiDuplicatorController()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::~DxgiDuplicatorController()
 {
     LOG(LS_INFO) << "Dtor";
     deinitialize();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::isSupported()
 {
     return initialize();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 {
     bool result = false;
@@ -97,19 +103,21 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 
     if (!result)
     {
-        LOG(LS_WARNING) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
-                           "accurate or out of date";
+        LOG(LS_ERROR) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
+                         "accurate or out of date";
     }
 
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::duplicate(
     DxgiFrame* frame, DxgiCursor* cursor)
 {
     return doDuplicate(frame, cursor, -1);
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
     DxgiFrame* frame, DxgiCursor* cursor, int monitor_id)
 {
@@ -117,6 +125,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
     return doDuplicate(frame, cursor, monitor_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 int DxgiDuplicatorController::screenCount()
 {
     if (initialize())
@@ -125,6 +134,7 @@ int DxgiDuplicatorController::screenCount()
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::deviceNames(std::vector<std::wstring>* output)
 {
     DCHECK(output);
@@ -143,6 +153,7 @@ bool DxgiDuplicatorController::deviceNames(std::vector<std::wstring>* output)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     DxgiFrame* frame, DxgiCursor* cursor, int monitor_id)
 {
@@ -165,8 +176,8 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     {
         if (succeeded_duplications_ == 0 && !isCurrentSessionSupported())
         {
-            LOG(LS_WARNING) << "Current binary is running in session 0. DXGI components cannot be "
-                               "initialized";
+            LOG(LS_ERROR) << "Current binary is running in session 0. DXGI components cannot be "
+                             "initialized";
             return Result::UNSUPPORTED_SESSION;
         }
 
@@ -202,19 +213,25 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
         }
     }
 
-    if (monitor_id >= doScreenCount())
+    int screen_count = doScreenCount();
+    if (monitor_id >= screen_count)
     {
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
+        LOG(LS_ERROR) << "Invalid monitor id:" << monitor_id
+                        << " (screen count=" << screen_count << ")";
         return Result::INVALID_MONITOR_ID;
     }
 
     // If the |monitor_id| is valid, but doDuplicateAll() or doDuplicateOne failed, something must
     // be wrong from capturer APIs. We should deinitialize().
     deinitialize();
+
+    LOG(LS_ERROR) << "Unable to duplicate frame";
     return Result::DUPLICATION_FAILED;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::unregister(const Context* const context)
 {
     if (contextExpired(context))
@@ -228,6 +245,7 @@ void DxgiDuplicatorController::unregister(const Context* const context)
         duplicators_[i].unregister(&context->contexts[i]);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::initialize()
 {
     if (!duplicators_.empty())
@@ -240,6 +258,7 @@ bool DxgiDuplicatorController::initialize()
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::doInitialize()
 {
     DCHECK(desktop_rect_.isEmpty());
@@ -251,7 +270,7 @@ bool DxgiDuplicatorController::doInitialize()
     std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
     {
-        LOG(LS_WARNING) << "No D3dDevice found";
+        LOG(LS_ERROR) << "No D3dDevice found";
         return false;
     }
 
@@ -273,7 +292,7 @@ bool DxgiDuplicatorController::doInitialize()
         DxgiAdapterDuplicator::ErrorCode error_code = duplicator.initialize();
         if (error_code != ErrorCode::SUCCESS)
         {
-            LOG(LS_WARNING) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
+            LOG(LS_ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
 
             if (error_code == ErrorCode::CRITICAL_ERROR)
             {
@@ -296,12 +315,13 @@ bool DxgiDuplicatorController::doInitialize()
 
     if (duplicators_.empty())
     {
-        LOG(LS_WARNING) << "Cannot initialize any DxgiAdapterDuplicator instance";
+        LOG(LS_ERROR) << "Cannot initialize any DxgiAdapterDuplicator instance";
     }
 
     return !duplicators_.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::deinitialize()
 {
     desktop_rect_ = Rect();
@@ -309,12 +329,14 @@ void DxgiDuplicatorController::deinitialize()
     display_configuration_monitor_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::contextExpired(const Context* const context) const
 {
     DCHECK(context);
     return context->controller_id != identity_ || context->contexts.size() != duplicators_.size();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::setup(Context* context)
 {
     if (contextExpired(context))
@@ -331,6 +353,7 @@ void DxgiDuplicatorController::setup(Context* context)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::doDuplicateAll(
     Context* context, SharedFrame* target, DxgiCursor* cursor)
 {
@@ -343,6 +366,7 @@ bool DxgiDuplicatorController::doDuplicateAll(
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::doDuplicateOne(
     Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor)
 {
@@ -368,6 +392,7 @@ bool DxgiDuplicatorController::doDuplicateOne(
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t DxgiDuplicatorController::numFramesCaptured() const
 {
     int64_t min = std::numeric_limits<int64_t>::max();
@@ -378,11 +403,13 @@ int64_t DxgiDuplicatorController::numFramesCaptured() const
     return min;
 }
 
+//--------------------------------------------------------------------------------------------------
 Size DxgiDuplicatorController::desktopSize() const
 {
     return desktop_rect_.size();
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect DxgiDuplicatorController::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
@@ -398,6 +425,7 @@ Rect DxgiDuplicatorController::screenRect(int id) const
     return Rect();
 }
 
+//--------------------------------------------------------------------------------------------------
 int DxgiDuplicatorController::doScreenCount() const
 {
     int result = 0;
@@ -408,6 +436,7 @@ int DxgiDuplicatorController::doScreenCount() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
     if (monitor_id < 0)
@@ -416,6 +445,7 @@ Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
     return screenRect(monitor_id).size();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::ensureFrameCaptured(
     Context* context, SharedFrame* target, DxgiCursor* cursor)
 {
@@ -484,6 +514,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::translateRect()
 {
     const Point position = Point().subtract(desktop_rect_.topLeft());

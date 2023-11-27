@@ -22,11 +22,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 PixelFormat::PixelFormat(const PixelFormat& other)
 {
     set(other);
 }
 
+//--------------------------------------------------------------------------------------------------
 PixelFormat::PixelFormat(uint8_t bits_per_pixel,
                          uint16_t red_max,
                          uint16_t green_max,
@@ -46,6 +48,7 @@ PixelFormat::PixelFormat(uint8_t bits_per_pixel,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 PixelFormat PixelFormat::ARGB()
 {
@@ -58,6 +61,7 @@ PixelFormat PixelFormat::ARGB()
                        0);   // blue shift
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 PixelFormat PixelFormat::RGB565()
 {
@@ -70,6 +74,7 @@ PixelFormat PixelFormat::RGB565()
                        0);  // blue shift
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 PixelFormat PixelFormat::RGB332()
 {
@@ -82,6 +87,7 @@ PixelFormat PixelFormat::RGB332()
                        0); // blue shift
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 PixelFormat PixelFormat::RGB222()
 {
@@ -94,6 +100,7 @@ PixelFormat PixelFormat::RGB222()
                        0); // blue shift
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 PixelFormat PixelFormat::RGB111()
 {
@@ -106,6 +113,7 @@ PixelFormat PixelFormat::RGB111()
                        0); // blue shift
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PixelFormat::isValid() const
 {
     if (bits_per_pixel_ == 0 &&
@@ -122,6 +130,7 @@ bool PixelFormat::isValid() const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void PixelFormat::clear()
 {
     bits_per_pixel_ = 0;
@@ -136,6 +145,7 @@ void PixelFormat::clear()
     blue_shift_  = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PixelFormat::isEqual(const PixelFormat& other) const
 {
     DCHECK_EQ(bytes_per_pixel_, (bits_per_pixel_ / 8));
@@ -155,6 +165,7 @@ bool PixelFormat::isEqual(const PixelFormat& other) const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void PixelFormat::set(const PixelFormat& other)
 {
     bits_per_pixel_ = other.bits_per_pixel_;
@@ -169,20 +180,37 @@ void PixelFormat::set(const PixelFormat& other)
     blue_shift_  = other.blue_shift_;
 }
 
+//--------------------------------------------------------------------------------------------------
 PixelFormat& PixelFormat::operator=(const PixelFormat& other)
 {
     set(other);
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PixelFormat::operator==(const PixelFormat& other) const
 {
     return isEqual(other);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PixelFormat::operator!=(const PixelFormat& other) const
 {
     return !isEqual(other);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& stream, const PixelFormat& pixel_format)
+{
+    return stream << "PixelFormat("
+                  << "bpp=" << pixel_format.bitsPerPixel()
+                  << " red_max=" << pixel_format.redMax()
+                  << " green_max=" << pixel_format.greenMax()
+                  << " blue_max=" << pixel_format.blueMax()
+                  << " red_shift=" << pixel_format.redShift()
+                  << " green_shift=" << pixel_format.greenShift()
+                  << " blue_shift=" << pixel_format.blueShift()
+                  << ")";
 }
 
 } // namespace base

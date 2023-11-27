@@ -22,6 +22,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent),
       animation_timer_(new QTimer(this))
@@ -55,14 +56,18 @@ StatusBar::StatusBar(QWidget* parent)
                 return;
         }
 
-        status_label_->setText(
-            QStringLiteral("<table><tr><td><img src='%1'></td><td>%2</td></tr></table>")
-            .arg(icon, tr("Status update...")));
+        if (status_label_)
+        {
+            status_label_->setText(
+                QStringLiteral("<table><tr><td><img src='%1'></td><td>%2</td></tr></table>")
+                .arg(icon, tr("Status update...")));
+        }
 
         ++animation_index_;
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::setCurrentComputerGroup(
     const proto::address_book::ComputerGroup& computer_group)
 {
@@ -72,15 +77,15 @@ void StatusBar::setCurrentComputerGroup(
     QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
 
     QLabel* first_label = new QLabel(
-        QStringLiteral("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
+        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
         .arg(QString::fromStdString(computer_group.name())), this);
 
     QLabel* second_label = new QLabel(
-        QStringLiteral("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
+        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
         .arg(child_groups), this);
 
     QLabel* third_label = new QLabel(
-        QStringLiteral("<table><tr><td><img src=':/img/computer.png'></td><td>%1</td></tr></table>")
+        QString("<table><tr><td><img src=':/img/computer.png'></td><td>%1</td></tr></table>")
         .arg(child_computers), this);
 
     status_label_ = new QLabel(QString(), this);
@@ -98,6 +103,7 @@ void StatusBar::setCurrentComputerGroup(
     status_label_->setVisible(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::clear()
 {
     animation_timer_->stop();
@@ -112,9 +118,11 @@ void StatusBar::clear()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::setUpdateState(bool enable)
 {
-    status_label_->setVisible(enable);
+    if (status_label_)
+        status_label_->setVisible(enable);
 
     if (enable)
     {
@@ -122,7 +130,8 @@ void StatusBar::setUpdateState(bool enable)
     }
     else
     {
-        status_label_->setText(QString());
+        if (status_label_)
+            status_label_->setText(QString());
         animation_timer_->stop();
         animation_index_ = 0;
     }

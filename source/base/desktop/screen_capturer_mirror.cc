@@ -33,6 +33,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
 {
     std::unique_ptr<MirrorHelper> helper = Mv2Helper::create(screen_rect);
@@ -42,6 +43,7 @@ std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
     return helper;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
     // If the cursors are not showing, we do not care the hCursor handle.
@@ -51,6 +53,7 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::ScreenCapturerMirror()
     : ScreenCapturer(Type::WIN_MIRROR)
 {
@@ -60,18 +63,20 @@ ScreenCapturerMirror::ScreenCapturerMirror()
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::~ScreenCapturerMirror()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::isSupported()
 {
     DWORD session_id;
 
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
         return false;
     }
 
@@ -87,16 +92,19 @@ bool ScreenCapturerMirror::isSupported()
     return helper_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ScreenCapturerMirror::screenCount()
 {
     return ScreenCaptureUtils::screenCount();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
@@ -111,11 +119,13 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerMirror::currentScreen() const
 {
     return current_screen_id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -144,6 +154,7 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     return frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerMirror::captureCursor()
 {
     if (!desktop_dc_.isValid())
@@ -151,7 +162,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
         desktop_dc_.getDC(nullptr);
         if (!desktop_dc_.isValid())
         {
-            LOG(LS_WARNING) << "Unable to get desktop DC";
+            LOG(LS_ERROR) << "Unable to get desktop DC";
             return nullptr;
         }
     }
@@ -174,7 +185,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
                 curr_cursor_info_.hCursor = LoadCursorW(nullptr, IDC_ARROW);
                 if (!curr_cursor_info_.hCursor)
                 {
-                    PLOG(LS_WARNING) << "LoadCursorW failed";
+                    PLOG(LS_ERROR) << "LoadCursorW failed";
                     return nullptr;
                 }
             }
@@ -194,12 +205,13 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
     }
     else
     {
-        PLOG(LS_WARNING) << "GetCursorInfo failed";
+        PLOG(LS_ERROR) << "GetCursorInfo failed";
     }
 
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Point ScreenCapturerMirror::cursorPosition()
 {
     Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
@@ -207,6 +219,13 @@ Point ScreenCapturerMirror::cursorPosition()
     return cursor_pos;
 }
 
+//--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenType ScreenCapturerMirror::screenType()
+{
+    return ScreenCaptureUtils::screenType();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMirror::reset()
 {
     desktop_dc_.close();
@@ -214,6 +233,7 @@ void ScreenCapturerMirror::reset()
     frame_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMirror::updateExcludeRegion()
 {
     exclude_region_.clear();
@@ -248,12 +268,13 @@ void ScreenCapturerMirror::updateExcludeRegion()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 {
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
     if (desktop_rect.isEmpty())
     {
-        LOG(LS_WARNING) << "Failed to get desktop rect";
+        LOG(LS_ERROR) << "Failed to get desktop rect";
         return Error::TEMPORARY;
     }
 
@@ -266,7 +287,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
     Rect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect.isEmpty())
     {
-        LOG(LS_WARNING) << "Failed to get screen rect";
+        LOG(LS_ERROR) << "Failed to get screen rect";
         return Error::PERMANENT;
     }
 
@@ -281,7 +302,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
         helper_ = createHelper(screen_rect);
         if (!helper_)
         {
-            LOG(LS_WARNING) << "Failed to create mirror helper";
+            LOG(LS_ERROR) << "Failed to create mirror helper";
             return Error::PERMANENT;
         }
 
@@ -302,7 +323,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 
         if (!frame_)
         {
-            LOG(LS_WARNING) << "Failed to create frame";
+            LOG(LS_ERROR) << "Failed to create frame";
             return Error::PERMANENT;
         }
 

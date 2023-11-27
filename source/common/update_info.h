@@ -34,12 +34,10 @@ public:
 
     static UpdateInfo fromXml(const base::ByteArray& buffer);
 
-    bool hasUpdate() const;
-
     bool isValid() const { return valid_; }
-    base::Version version() const { return version_; }
-    std::string description() const { return description_; }
-    std::string url() const { return url_; }
+    const base::Version& version() const { return version_; }
+    const std::string& description() const { return description_; }
+    const std::string& url() const { return url_; }
 
 private:
     bool valid_ = false;

@@ -28,19 +28,23 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 SessionClient::SessionClient()
     : Session(proto::ROUTER_SESSION_CLIENT)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionClient::~SessionClient() = default;
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionReady()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
@@ -60,15 +64,17 @@ void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from client";
+        LOG(LS_ERROR) << "Unhandled message from client";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::readConnectionRequest(const proto::ConnectionRequest& request)
 {
     LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
@@ -79,7 +85,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     SessionHost* host = server().hostSessionById(request.host_id());
     if (!host)
     {
-        LOG(LS_WARNING) << "Host with id " << request.host_id() << " NOT found!";
+        LOG(LS_ERROR) << "Host with id " << request.host_id() << " NOT found!";
         offer->set_error_code(proto::ConnectionOffer::PEER_NOT_FOUND);
     }
     else
@@ -89,7 +95,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
         std::optional<SharedKeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
         if (!credentials.has_value())
         {
-            LOG(LS_WARNING) << "Empty key pool";
+            LOG(LS_ERROR) << "Empty key pool";
             offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
         }
         else
@@ -146,6 +152,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host_status)
 {
     std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();

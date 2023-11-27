@@ -17,19 +17,20 @@
 //
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/scoped_logging.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
 #include "build/version.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database.h"
+#include "router/service.h"
 #include "router/settings.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "router/service.h"
 #include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -41,6 +42,7 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
 {
     base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
@@ -62,6 +64,7 @@ bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void generateAndPrintKeys()
 {
     base::ByteArray private_key;
@@ -74,6 +77,7 @@ void generateAndPrintKeys()
     std::cout << "Public key: " << base::toHex(public_key) << std::endl;
 }
 
+//--------------------------------------------------------------------------------------------------
 void createConfig()
 {
     std::cout << "Creation of initial configuration started." << std::endl;
@@ -193,10 +197,19 @@ void createConfig()
         return;
     }
 
+    std::cout << "Generate seed key...";
+    base::ByteArray seed_key = base::Random::byteArray(64);
+    if (seed_key.empty())
+    {
+        std::cout << "Unable to generate seed key";
+    }
+    std::cout << "Seed key successfully generated";
+
     // Save the configuration file.
     router::Settings settings;
     settings.reset();
     settings.setPrivateKey(private_key);
+    settings.setSeedKey(seed_key);
     settings.flush();
 
     std::cout << "Configuration successfully created. Don't forget to change your password!"
@@ -206,6 +219,7 @@ void createConfig()
     std::cout << "Public key file: " << public_key_file << std::endl;
 }
 
+//--------------------------------------------------------------------------------------------------
 void showHelp()
 {
     std::cout << "aspia_router [switch]" << std::endl
@@ -224,15 +238,16 @@ void showHelp()
 } // namespace
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 int wmain()
 {
     base::installFailureHandler(L"aspia_router");
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     if (command_line->hasSwitch(u"install"))
@@ -268,18 +283,18 @@ int wmain()
         router::Service().exec();
     }
 
-    base::shutdownLogging();
     return 0;
 }
 #else
+//--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
@@ -299,20 +314,8 @@ int main(int argc, const char* const* argv)
     }
     else
     {
-        std::unique_ptr<base::MessageLoop> message_loop =
-            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
-
-        std::unique_ptr<router::Server> server =
-            std::make_unique<router::Server>(message_loop->taskRunner());
-
-        server->start();
-        message_loop->run();
-
-        server.reset();
-        message_loop.reset();
+        LOG(LS_INFO) << "Starting router services";
+        router::Service().exec();
     }
-
-    crypto_initializer.reset();
-    base::shutdownLogging();
 }
 #endif

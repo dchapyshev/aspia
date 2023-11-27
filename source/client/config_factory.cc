@@ -32,6 +32,7 @@ const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
 const int kMaxCompressRatio = 22;
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -47,6 +48,7 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
 {
@@ -55,6 +57,7 @@ proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
     return config;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 proto::DesktopConfig ConfigFactory::defaultDesktopViewConfig()
 {
@@ -63,6 +66,7 @@ proto::DesktopConfig ConfigFactory::defaultDesktopViewConfig()
     return config;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
@@ -81,6 +85,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     fixupDesktopConfig(config);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
@@ -98,6 +103,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     fixupDesktopConfig(config);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {

@@ -45,7 +45,13 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_process.h
     desktop_session_proxy.cc
     desktop_session_proxy.h
+    file_transfer_agent.cc
+    file_transfer_agent.h
+    file_transfer_agent_main.cc
+    file_transfer_agent_main.h
     host_export.h
+    host_ipc_storage.cc
+    host_ipc_storage.h
     host_key_storage.cc
     host_key_storage.h
     input_injector.h
@@ -59,6 +65,10 @@ list(APPEND SOURCE_HOST_CORE
     service.h
     service_constants.cc
     service_constants.h
+    service_main.cc
+    service_main.h
+    stat_counter.cc
+    stat_counter.h
     system_settings.cc
     system_settings.h
     unconfirmed_client_session.cc
@@ -69,8 +79,6 @@ list(APPEND SOURCE_HOST_CORE
     user_session_agent.h
     user_session_agent_proxy.cc
     user_session_agent_proxy.h
-    user_session_constants.cc
-    user_session_constants.h
     user_session_manager.cc
     user_session_manager.h
     user_session_window.h
@@ -140,8 +148,6 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
         win/sas_injector.cc
         win/sas_injector.h
-        win/service_main.cc
-        win/service_main.h
         win/updater_launcher.cc
         win/updater_launcher.h)
 endif()
@@ -214,7 +220,17 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(HOST_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ${XDAMAGE_LIB} ${XRANDR_LIB} ${XTST_LIB} ${XI_LIB} ICU::uc ICU::dt)
+    set(HOST_PLATFORM_LIBS
+        stdc++fs
+        ${XFIXES_LIB}
+        ${XDAMAGE_LIB}
+        ${XRANDR_LIB}
+        ${XTST_LIB}
+        ${XI_LIB}
+        ${X11_LIB}
+        ${XEXT_LIB}
+        ICU::uc
+        ICU::dt)
 endif()
 
 # Aspia Host (GUI)
@@ -226,7 +242,7 @@ endif()
 target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
 
 # Aspia Host Service
-add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
+add_executable(aspia_host_service service_entry_point.cc service.rc)
 if (WIN32)
     set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
@@ -235,6 +251,13 @@ target_link_libraries(aspia_host_service aspia_host_core ${HOST_PLATFORM_LIBS})
 # Aspia Desktop Agent
 add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
 if (WIN32)
-set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+    set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})
+
+# Aspia File Transfer Agent
+add_executable(aspia_file_transfer_agent WIN32 file_transfer_agent_entry_point.cc file_transfer_agent.rc)
+if (WIN32)
+    set_target_properties(aspia_file_transfer_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+target_link_libraries(aspia_file_transfer_agent aspia_host_core ${HOST_PLATFORM_LIBS})

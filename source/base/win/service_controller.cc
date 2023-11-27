@@ -25,8 +25,10 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController() = default;
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
     : sc_manager_(sc_manager),
       service_(service)
@@ -34,6 +36,7 @@ ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController(ServiceController&& other) noexcept
     : sc_manager_(std::move(other.sc_manager_)),
       service_(std::move(other.service_))
@@ -41,6 +44,7 @@ ServiceController::ServiceController(ServiceController&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController& ServiceController::operator=(ServiceController&& other) noexcept
 {
     sc_manager_ = std::move(other.sc_manager_);
@@ -48,28 +52,31 @@ ServiceController& ServiceController::operator=(ServiceController&& other) noexc
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::~ServiceController() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 ServiceController ServiceController::open(std::u16string_view name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
     win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
-        PLOG(LS_WARNING) << "OpenServiceW failed";
+        PLOG(LS_ERROR) << "OpenServiceW failed";
         return ServiceController();
     }
 
     return ServiceController(sc_manager.release(), service.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ServiceController ServiceController::install(std::u16string_view name,
                                              std::u16string_view display_name,
@@ -78,7 +85,7 @@ ServiceController ServiceController::install(std::u16string_view name,
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
@@ -97,7 +104,7 @@ ServiceController ServiceController::install(std::u16string_view name,
                                                nullptr));
     if (!service.isValid())
     {
-        PLOG(LS_WARNING) << "CreateServiceW failed";
+        PLOG(LS_ERROR) << "CreateServiceW failed";
         return ServiceController();
     }
 
@@ -114,33 +121,34 @@ ServiceController ServiceController::install(std::u16string_view name,
 
     if (!ChangeServiceConfig2W(service, SERVICE_CONFIG_FAILURE_ACTIONS, &actions))
     {
-        PLOG(LS_WARNING) << "ChangeServiceConfig2W failed";
+        PLOG(LS_ERROR) << "ChangeServiceConfig2W failed";
         return ServiceController();
     }
 
     return ServiceController(sc_manager.release(), service.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::remove(std::u16string_view name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
     win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
-        PLOG(LS_WARNING) << "OpenServiceW failed";
+        PLOG(LS_ERROR) << "OpenServiceW failed";
         return false;
     }
 
     if (!DeleteService(service))
     {
-        PLOG(LS_WARNING) << "DeleteService failed";
+        PLOG(LS_ERROR) << "DeleteService failed";
         return false;
     }
 
@@ -161,13 +169,14 @@ bool ServiceController::remove(std::u16string_view name)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::isInstalled(std::u16string_view name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
@@ -176,7 +185,7 @@ bool ServiceController::isInstalled(std::u16string_view name)
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
         {
-            PLOG(LS_WARNING) << "OpenServiceW failed";
+            PLOG(LS_ERROR) << "OpenServiceW failed";
         }
 
         return false;
@@ -185,20 +194,21 @@ bool ServiceController::isInstalled(std::u16string_view name)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::isRunning(std::u16string_view name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
     win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
-        PLOG(LS_WARNING) << "OpenServiceW failed";
+        PLOG(LS_ERROR) << "OpenServiceW failed";
         return false;
     }
 
@@ -206,19 +216,21 @@ bool ServiceController::isRunning(std::u16string_view name)
 
     if (!QueryServiceStatus(service, &status))
     {
-        PLOG(LS_WARNING) << "QueryServiceStatus failed";
+        PLOG(LS_ERROR) << "QueryServiceStatus failed";
         return false;
     }
 
     return status.dwCurrentState != SERVICE_STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceController::close()
 {
     service_.reset();
     sc_manager_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setDescription(std::u16string_view description)
 {
     SERVICE_DESCRIPTIONW service_description;
@@ -227,13 +239,14 @@ bool ServiceController::setDescription(std::u16string_view description)
     // Set the service description.
     if (!ChangeServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, &service_description))
     {
-        PLOG(LS_WARNING) << "ChangeServiceConfig2W failed";
+        PLOG(LS_ERROR) << "ChangeServiceConfig2W failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string ServiceController::description() const
 {
     DWORD bytes_needed = 0;
@@ -253,7 +266,7 @@ std::u16string ServiceController::description() const
     if (!QueryServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, buffer.get(), bytes_needed,
                              &bytes_needed))
     {
-        PLOG(LS_WARNING) << "QueryServiceConfig2W failed";
+        PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
         return std::u16string();
     }
 
@@ -265,6 +278,7 @@ std::u16string ServiceController::description() const
     return asUtf16(service_description->lpDescription);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setDependencies(const std::vector<std::u16string>& dependencies)
 {
     std::string buffer;
@@ -288,13 +302,14 @@ bool ServiceController::setDependencies(const std::vector<std::u16string>& depen
                               reinterpret_cast<const wchar_t*>(buffer.data()),
                               nullptr, nullptr, nullptr))
     {
-        PLOG(LS_WARNING) << "ChangeServiceConfigW failed";
+        PLOG(LS_ERROR) << "ChangeServiceConfigW failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::u16string> ServiceController::dependencies() const
 {
     DWORD bytes_needed = 0;
@@ -314,7 +329,7 @@ std::vector<std::u16string> ServiceController::dependencies() const
 
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {
-        PLOG(LS_WARNING) << "QueryServiceConfigW failed";
+        PLOG(LS_ERROR) << "QueryServiceConfigW failed";
         return std::vector<std::u16string>();
     }
 
@@ -339,6 +354,7 @@ std::vector<std::u16string> ServiceController::dependencies() const
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setAccount(std::u16string_view username, std::u16string_view password)
 {
     if (!ChangeServiceConfigW(service_,
@@ -349,13 +365,14 @@ bool ServiceController::setAccount(std::u16string_view username, std::u16string_
                               asWide(username), asWide(password),
                               nullptr))
     {
-        PLOG(LS_WARNING) << "ChangeServiceConfigW failed";
+        PLOG(LS_ERROR) << "ChangeServiceConfigW failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path ServiceController::filePath() const
 {
     DWORD bytes_needed = 0;
@@ -375,7 +392,7 @@ std::filesystem::path ServiceController::filePath() const
 
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {
-        PLOG(LS_WARNING) << "QueryServiceConfigW failed";
+        PLOG(LS_ERROR) << "QueryServiceConfigW failed";
         return std::u16string();
     }
 
@@ -385,29 +402,32 @@ std::filesystem::path ServiceController::filePath() const
     return service_config->lpBinaryPathName;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::isValid() const
 {
     return sc_manager_.isValid() && service_.isValid();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::isRunning() const
 {
     SERVICE_STATUS status;
 
     if (!QueryServiceStatus(service_, &status))
     {
-        PLOG(LS_WARNING) << "QueryServiceStatus failed";
+        PLOG(LS_ERROR) << "QueryServiceStatus failed";
         return false;
     }
 
     return status.dwCurrentState != SERVICE_STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::start()
 {
     if (!StartServiceW(service_, 0, nullptr))
     {
-        PLOG(LS_WARNING) << "StartServiceW failed";
+        PLOG(LS_ERROR) << "StartServiceW failed";
         return false;
     }
 
@@ -432,13 +452,14 @@ bool ServiceController::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::stop()
 {
     SERVICE_STATUS status;
 
     if (!ControlService(service_, SERVICE_CONTROL_STOP, &status))
     {
-        PLOG(LS_WARNING) << "ControlService failed";
+        PLOG(LS_ERROR) << "ControlService failed";
         return false;
     }
 

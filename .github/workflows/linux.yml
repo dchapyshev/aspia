@@ -1,0 +1,104 @@
+name: linux
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
+  VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
+  VCPKG_BINARY_SOURCES: 'default,readwrite'
+
+jobs:
+  build-all-matrix:
+    name: ${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push'
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu20.04]
+        arch: [x64]
+        build_type: [release, debug]
+        include:
+          - os: ubuntu20.04
+            arch: x64
+            triplet: x64-linux
+
+    steps:
+      # Step 1
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      # Step 2
+      - name: Checkout Submodule
+        uses: actions/checkout@v4
+        with:
+          repository: dchapyshev/vcpkg4aspia
+          path: vcpkg4aspia
+
+      # Step 3
+      - name: Dependencies, Build, Tests (Linux/Bash)
+        env:
+          # This vars used inside CMake
+          VCPKG_DEFAULT_BINARY_CACHE: /opt/vcpkg/bincache-${{ matrix.triplet }}
+          VCPKG_TRIPLET: ${{ matrix.triplet }}
+          VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
+          VCPKG_DOWNLOADS: /opt/vcpkg/downloads
+        run: |
+          export VCPKG_ROOT=$VCPKG_ROOT_PROJECT
+          env
+
+          if [ -z "${{ matrix.triplet }}" ]; then
+            echo "VCPKG_TRIPLET is empty"
+            exit 1
+          fi
+
+          # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
+          if [ -f $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak ]; then
+            echo "Restore vcpkg executable"
+            cp $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak vcpkg4aspia/vcpkg
+          fi
+
+          mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+          mkdir -p $VCPKG_DOWNLOADS
+
+          # Build vcpkg dependencies
+          cmake --preset ninja-multi-vcpkg-ci
+
+          # Build project
+          cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+
+          # Run tests
+          ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+
+          # Create deb packages
+          cpack --config ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/CPackConfig.cmake -C ${{ matrix.build_type }}
+
+          # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
+          if [ -f vcpkg4aspia/vcpkg ]; then
+            echo "Backup vcpkg executable"
+            cp vcpkg4aspia/vcpkg $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak
+          fi
+
+      # Step 4
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
+          path: |
+            ${{ github.workspace }}/*.deb
+          if-no-files-found: error
+          retention-days: 7

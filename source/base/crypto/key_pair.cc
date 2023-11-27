@@ -24,20 +24,24 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair() = default;
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair(EVP_PKEY_ptr&& pkey) noexcept
     : pkey_(std::move(pkey))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair(KeyPair&& other) noexcept
     : pkey_(std::move(other.pkey_))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair& KeyPair::operator=(KeyPair&& other) noexcept
 {
     if (&other != this)
@@ -46,8 +50,10 @@ KeyPair& KeyPair::operator=(KeyPair&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::~KeyPair() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 KeyPair KeyPair::create(Type type)
 {
@@ -56,26 +62,27 @@ KeyPair KeyPair::create(Type type)
     EVP_PKEY_CTX_ptr ctx(EVP_PKEY_CTX_new_id(EVP_PKEY_X25519, nullptr));
     if (!ctx)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_CTX_new_id failed";
+        LOG(LS_ERROR) << "EVP_PKEY_CTX_new_id failed";
         return KeyPair();
     }
 
     if (EVP_PKEY_keygen_init(ctx.get()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_keygen_init failed";
+        LOG(LS_ERROR) << "EVP_PKEY_keygen_init failed";
         return KeyPair();
     }
 
     EVP_PKEY* private_key = nullptr;
     if (EVP_PKEY_keygen(ctx.get(), &private_key) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_keygen failed";
+        LOG(LS_ERROR) << "EVP_PKEY_keygen failed";
         return KeyPair();
     }
 
     return KeyPair(EVP_PKEY_ptr(private_key));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
 {
@@ -89,24 +96,26 @@ KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
         EVP_PKEY_X25519, nullptr, private_key.data(), private_key.size())));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool KeyPair::isValid() const
 {
     return pkey_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::privateKey() const
 {
     size_t private_key_length = 0;
 
     if (EVP_PKEY_get_raw_private_key(pkey_.get(), nullptr, &private_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_get_raw_private_key failed";
+        LOG(LS_ERROR) << "EVP_PKEY_get_raw_private_key failed";
         return ByteArray();
     }
 
     if (!private_key_length)
     {
-        LOG(LS_WARNING) << "Invalid private key size";
+        LOG(LS_ERROR) << "Invalid private key size";
         return ByteArray();
     }
 
@@ -115,32 +124,33 @@ ByteArray KeyPair::privateKey() const
 
     if (EVP_PKEY_get_raw_private_key(pkey_.get(), private_key.data(), &private_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_get_raw_private_key failed";
+        LOG(LS_ERROR) << "EVP_PKEY_get_raw_private_key failed";
         return ByteArray();
     }
 
     if (private_key.size() != private_key_length)
     {
-        LOG(LS_WARNING) << "Invalid private key size";
+        LOG(LS_ERROR) << "Invalid private key size";
         return ByteArray();
     }
 
     return private_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::publicKey() const
 {
     size_t public_key_length = 0;
 
     if (EVP_PKEY_get_raw_public_key(pkey_.get(), nullptr, &public_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_get_raw_public_key failed";
+        LOG(LS_ERROR) << "EVP_PKEY_get_raw_public_key failed";
         return ByteArray();
     }
 
     if (!public_key_length)
     {
-        LOG(LS_WARNING) << "Invalid public key size";
+        LOG(LS_ERROR) << "Invalid public key size";
         return ByteArray();
     }
 
@@ -149,19 +159,20 @@ ByteArray KeyPair::publicKey() const
 
     if (EVP_PKEY_get_raw_public_key(pkey_.get(), public_key.data(), &public_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_get_raw_public_key failed";
+        LOG(LS_ERROR) << "EVP_PKEY_get_raw_public_key failed";
         return ByteArray();
     }
 
     if (public_key.size() != public_key_length)
     {
-        LOG(LS_WARNING) << "Invalid public key size";
+        LOG(LS_ERROR) << "Invalid public key size";
         return ByteArray();
     }
 
     return public_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
 {
     if (peer_public_key.empty())
@@ -174,26 +185,26 @@ ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
         EVP_PKEY_X25519, nullptr, peer_public_key.data(), peer_public_key.size()));
     if (!public_key)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_new_raw_public_key failed";
+        LOG(LS_ERROR) << "EVP_PKEY_new_raw_public_key failed";
         return ByteArray();
     }
 
     EVP_PKEY_CTX_ptr ctx(EVP_PKEY_CTX_new(pkey_.get(), nullptr));
     if (!ctx)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_CTX_new failed";
+        LOG(LS_ERROR) << "EVP_PKEY_CTX_new failed";
         return ByteArray();
     }
 
     if (EVP_PKEY_derive_init(ctx.get()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_derive_init failed";
+        LOG(LS_ERROR) << "EVP_PKEY_derive_init failed";
         return ByteArray();
     }
 
     if (EVP_PKEY_derive_set_peer(ctx.get(), public_key.get()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_derive_set_pee failed";
+        LOG(LS_ERROR) << "EVP_PKEY_derive_set_pee failed";
         return ByteArray();
     }
 
@@ -201,13 +212,13 @@ ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
 
     if (EVP_PKEY_derive(ctx.get(), nullptr, &session_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_derive failed";
+        LOG(LS_ERROR) << "EVP_PKEY_derive failed";
         return ByteArray();
     }
 
     if (!session_key_length)
     {
-        LOG(LS_WARNING) << "Invalid session key size";
+        LOG(LS_ERROR) << "Invalid session key size";
         return ByteArray();
     }
 
@@ -216,13 +227,13 @@ ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
 
     if (EVP_PKEY_derive(ctx.get(), session_key.data(), &session_key_length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_PKEY_derive failed";
+        LOG(LS_ERROR) << "EVP_PKEY_derive failed";
         return ByteArray();
     }
 
     if (session_key.size() != session_key_length)
     {
-        LOG(LS_WARNING) << "Invalid session key size";
+        LOG(LS_ERROR) << "Invalid session key size";
         return ByteArray();
     }
 

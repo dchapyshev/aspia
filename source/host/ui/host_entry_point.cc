@@ -18,6 +18,7 @@
 
 #include "host/ui/host_main.h"
 
+//--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
     return hostMain(argc, argv);

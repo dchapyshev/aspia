@@ -22,6 +22,8 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session.h"
 
+#include <map>
+
 namespace host {
 
 class DesktopSessionIpc
@@ -47,8 +49,8 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcDisconnected() override;
+    void onIpcMessageReceived(const base::ByteArray& buffer) override;
 
 private:
     class SharedBuffer;
@@ -61,6 +63,7 @@ private:
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);
 
+    base::SessionId session_id_ = base::kInvalidSessionId;
     std::unique_ptr<base::IpcChannel> channel_;
     SharedBuffers shared_buffers_;
     std::unique_ptr<base::Frame> last_frame_;

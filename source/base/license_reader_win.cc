@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
@@ -79,6 +80,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
     return key;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
 {
     std::wstring key_path =
@@ -96,6 +98,7 @@ bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void addMsProduct(proto::system_info::Licenses* message,
                   const std::wstring& product_name,
                   const win::RegistryKey& key)
@@ -159,6 +162,7 @@ void addMsProduct(proto::system_info::Licenses* message,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
 {
     win::RegistryKey key;
@@ -259,6 +263,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
 {
     static const wchar_t kVisualStudioPath[] = L"SOFTWARE\\Microsoft\\VisualStudio";
@@ -322,6 +327,7 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void addVMWareProduct(proto::system_info::Licenses* message, const win::RegistryKey& key)
 {
     std::wstring product_id;
@@ -363,6 +369,7 @@ void addVMWareProduct(proto::system_info::Licenses* message, const win::Registry
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 {
     static const wchar_t kKeyPath[] = L"Software\\VMware, Inc.";
@@ -401,6 +408,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void readLicensesInformation(proto::system_info::Licenses* licenses)
 {
 #if (ARCH_CPU_X86 == 1)

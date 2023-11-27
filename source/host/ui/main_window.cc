@@ -35,6 +35,7 @@
 #include "host/ui/config_dialog.h"
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
+#include "host/ui/user_settings.h"
 #include "qt_base/qt_logging.h"
 
 #include <QActionGroup>
@@ -42,6 +43,7 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QNetworkInterface>
+#include <QProcess>
 #include <QTimer>
 #include <QUrl>
 
@@ -55,6 +57,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
@@ -62,22 +65,22 @@ MainWindow::MainWindow(QWidget* parent)
 {
     LOG(LS_INFO) << "Ctor";
 
-    UserSettings& user_settings = Application::instance()->settings();
+    UserSettings user_settings;
     Application::instance()->setAttribute(
         Qt::AA_DontShowIconsInMenus, !user_settings.showIconsInMenus());
 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
-    ui.edit_id->setText(QStringLiteral("-"));
-    ui.edit_password->setText(QStringLiteral("-"));
+    ui.edit_id->setText("-");
+    ui.edit_password->setText("-");
 
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
-    tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.ico")));
+    tray_icon_.setIcon(QIcon(":/img/main.ico"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
 
@@ -90,15 +93,28 @@ MainWindow::MainWindow(QWidget* parent)
     tray_tooltip_timer->setInterval(std::chrono::seconds(30));
     tray_tooltip_timer->start();
 
+    uint32_t one_time_sessions = user_settings.oneTimeSessions();
+
+    ui.action_desktop_manage->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_MANAGE);
+    ui.action_desktop_view->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_VIEW);
+    ui.action_file_transfer->setChecked(one_time_sessions & proto::SESSION_TYPE_FILE_TRANSFER);
+    ui.action_system_info->setChecked(one_time_sessions & proto::SESSION_TYPE_SYSTEM_INFO);
+    ui.action_text_chat->setChecked(one_time_sessions & proto::SESSION_TYPE_TEXT_CHAT);
+
+    connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
+
     createLanguageMenu(user_settings.locale());
     onSettingsChanged();
 
     ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
+        LOG(LS_INFO) << "[ACTION] Show icons in menus changed: " << enable;
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-        instance->settings().setShowIconsInMenus(enable);
+
+        UserSettings user_settings;
+        user_settings.setShowIconsInMenus(enable);
     });
 
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
@@ -106,6 +122,7 @@ MainWindow::MainWindow(QWidget* parent)
         if (reason == QSystemTrayIcon::Context)
             return;
 
+        LOG(LS_INFO) << "[ACTION] Tray icon activated";
         onShowHide();
     });
 
@@ -120,21 +137,30 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
-        if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
+        LOG(LS_INFO) << "[ACTION] New password";
+        if (!agent_proxy_)
+        {
+            LOG(LS_INFO) << "No agent proxy";
+            return;
+        }
+
+        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectToService()
 {
     if (agent_proxy_)
     {
         LOG(LS_INFO) << "Already connected to service";
+        agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
         agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     }
     else
@@ -148,6 +174,7 @@ void MainWindow::connectToService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::activateHost()
 {
     LOG(LS_INFO) << "Activating host";
@@ -157,6 +184,7 @@ void MainWindow::activateHost()
     connectToService();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::hideToTray()
 {
     LOG(LS_INFO) << "Hide application to system tray";
@@ -165,6 +193,7 @@ void MainWindow::hideToTray()
     setVisible(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
@@ -189,11 +218,21 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onStatusChanged(UserSessionAgent::Status status)
 {
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
         LOG(LS_INFO) << "The connection to the service was successfully established.";
+
+        if (agent_proxy_)
+        {
+            agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "No agent proxy";
+        }
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
@@ -211,10 +250,11 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     }
     else
     {
-        LOG(LS_WARNING) << "Unandled status code: " << static_cast<int>(status);
+        LOG(LS_ERROR) << "Unandled status code: " << static_cast<int>(status);
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!notifier_)
@@ -222,35 +262,53 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, this, &MainWindow::onKillSession);
+        connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
 
-        connect(notifier_, &NotifierWindow::voiceChat, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_voiceChat, this, [=](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setVoiceChat(enable);
         });
 
-        connect(notifier_, &NotifierWindow::textChat, this, [=]()
+        connect(notifier_, &NotifierWindow::sig_textChat, this, [=]()
         {
             // TODO
         });
 
-        connect(notifier_, &NotifierWindow::lockMouse, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockMouse, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setMouseLock(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
-        connect(notifier_, &NotifierWindow::lockKeyboard, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setKeyboardLock(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
-        connect(notifier_, &NotifierWindow::pause, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_pause, this, [=](bool enable)
         {
             if (agent_proxy_)
+            {
                 agent_proxy_->setPause(enable);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "No agent proxy";
+            }
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -285,7 +343,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
             text_chat_widget_ = new common::TextChatWidget();
 
-            connect(text_chat_widget_, &common::TextChatWidget::sendMessage,
+            connect(text_chat_widget_, &common::TextChatWidget::sig_sendMessage,
                     this, [this](const proto::TextChatMessage& message)
             {
                 if (agent_proxy_)
@@ -294,9 +352,13 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                     text_chat.mutable_chat_message()->CopyFrom(message);
                     agent_proxy_->onTextChat(text_chat);
                 }
+                else
+                {
+                    LOG(LS_ERROR) << "No agent proxy";
+                }
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::sendStatus,
+            connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
                     this, [this](const proto::TextChatStatus& status)
             {
                 if (agent_proxy_)
@@ -305,9 +367,13 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                     text_chat.mutable_chat_status()->CopyFrom(status);
                     agent_proxy_->onTextChat(text_chat);
                 }
+                else
+                {
+                    LOG(LS_ERROR) << "No agent proxy";
+                }
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::textChatClosed, this, [this]()
+            connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
             {
                 std::vector<uint32_t> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
                 for (const auto& session : sessions)
@@ -331,8 +397,11 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
+    LOG(LS_INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
+
     ui.button_new_password->setEnabled(true);
 
     bool has_id = credentials.host_id() != base::kInvalidHostId;
@@ -353,8 +422,10 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     updateTrayIconTooltip();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 {
+    LOG(LS_INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
 
     QString router;
@@ -379,8 +450,8 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
         ui.label_icon_password->setEnabled(false);
         ui.button_new_password->setEnabled(false);
 
-        ui.edit_id->setText(QStringLiteral("-"));
-        ui.edit_password->setText(QStringLiteral("-"));
+        ui.edit_id->setText("-");
+        ui.edit_password->setText("-");
     }
     else
     {
@@ -425,19 +496,33 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     status_dialog_->addMessage(status);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
+    LOG(LS_INFO) << "Connection confirmation request (id=" << request.id() << ")";
+
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
-    if (agent_proxy_)
-        agent_proxy_->connectConfirmation(request.id(), accept);
+    LOG(LS_INFO) << "[ACTION] User " << (accept ? "ACCEPT" : "REJECT") << " connection request";
+
+    if (!agent_proxy_)
+    {
+        LOG(LS_ERROR) << "No agent proxy";
+        return;
+    }
+
+    agent_proxy_->connectConfirmation(request.id(), accept);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onVideoRecordingStateChanged(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
+    LOG(LS_INFO) << "Video recoring state changed (user_name=" << user_name
+                 << " started=" << started << ")";
+
     QString message;
 
     if (started)
@@ -454,6 +539,7 @@ void MainWindow::onVideoRecordingStateChanged(
     tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/main.ico"), 1200);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onTextChat(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
@@ -473,10 +559,11 @@ void MainWindow::onTextChat(const proto::TextChat& text_chat)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled text chat message";
+        LOG(LS_ERROR) << "Unhandled text chat message";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::realClose()
 {
     LOG(LS_INFO) << "realClose called";
@@ -485,15 +572,17 @@ void MainWindow::realClose()
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-    LOG(LS_INFO) << "Language changed: " << new_locale;
+    LOG(LS_INFO) << "[ACTION] Language changed: " << new_locale;
 
     Application* application = Application::instance();
 
-    application->settings().setLocale(new_locale);
+    UserSettings user_settings;
+    user_settings.setLocale(new_locale);
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
@@ -512,12 +601,15 @@ void MainWindow::onLanguageChanged(QAction* action)
     }
     else
     {
-        LOG(LS_WARNING) << "No agent proxy";
+        LOG(LS_ERROR) << "No agent proxy";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
+    LOG(LS_INFO) << "[ACTION] Settings";
+
 #if defined(OS_WIN)
     if (!base::win::isProcessElevated())
     {
@@ -567,7 +659,33 @@ void MainWindow::onSettings()
     }
 #endif
 
-    LOG(LS_INFO) << "Settings dialog open";
+#if defined(OS_LINUX)
+    uid_t self_uid = getuid();
+    uid_t effective_uid = geteuid();
+
+    if (self_uid != 0 && self_uid == effective_uid)
+    {
+        LOG(LS_INFO) << "Start settings dialog as super user";
+
+        QProcess* process = new QProcess(this);
+
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
+        {
+            LOG(LS_INFO) << "Process finished with exit code: " << exit_code
+                         << " (status: " << exit_status << ")";
+
+            process->deleteLater();
+            ui.action_settings->setEnabled(true);
+            onSettingsChanged();
+        });
+
+        ui.action_settings->setEnabled(false);
+        process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
+            << QApplication::applicationFilePath() << "--config");
+        return;
+    }
+#endif // defined(OS_LINUX)
 
     SystemSettings settings;
     if (settings.passwordProtection())
@@ -584,10 +702,9 @@ void MainWindow::onSettings()
         ConfigDialog(this).exec();
         onSettingsChanged();
     }
-
-    LOG(LS_INFO) << "Settings dialog close";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onShowHide()
 {
     if (isVisible())
@@ -602,18 +719,21 @@ void MainWindow::onShowHide()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onHelp()
 {
+    LOG(LS_INFO) << "[ACTION] Help";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
-    LOG(LS_INFO) << "About dialog open";
+    LOG(LS_INFO) << "[ACTION] About";
     common::AboutDialog(tr("Aspia Host"), this).exec();
-    LOG(LS_INFO) << "About dialog close";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onExit()
 {
     // If the connection to the service is not established, then exit immediately.
@@ -623,6 +743,8 @@ void MainWindow::onExit()
         realClose();
         return;
     }
+
+    LOG(LS_INFO) << "[ACTION] Exit";
 
     QMessageBox message_box(QMessageBox::Question,
         tr("Confirmation"),
@@ -636,6 +758,7 @@ void MainWindow::onExit()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)
         {
             LOG(LS_INFO) << "No notifier";
@@ -644,18 +767,25 @@ void MainWindow::onExit()
         else
         {
             LOG(LS_INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
-            connect(notifier_, &NotifierWindow::finished, this, &MainWindow::realClose);
+            connect(notifier_, &NotifierWindow::sig_finished, this, &MainWindow::realClose);
             notifier_->onStop();
         }
     }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] User rejected exit";
+    }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettingsChanged()
 {
+    LOG(LS_INFO) << "Settings changed";
     SystemSettings settings;
     ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onKillSession(uint32_t session_id)
 {
     if (agent_proxy_)
@@ -665,10 +795,31 @@ void MainWindow::onKillSession(uint32_t session_id)
     }
     else
     {
-        LOG(LS_WARNING) << "No agent proxy";
+        LOG(LS_ERROR) << "No agent proxy";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onOneTimeSessionsChanged()
+{
+    LOG(LS_INFO) << "[ACTION] One-time sessions changed";
+
+    uint32_t sessions = calcOneTimeSessions();
+
+    UserSettings user_settings;
+    user_settings.setOneTimeSessions(sessions);
+
+    if (agent_proxy_)
+    {
+        agent_proxy_->setOneTimeSessions(sessions);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No agent proxy";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -688,8 +839,11 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::updateStatusBar()
 {
+    LOG(LS_INFO) << "Update status bar";
+
     QString message;
     QString icon;
 
@@ -697,22 +851,22 @@ void MainWindow::updateStatusBar()
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
-            icon = QStringLiteral(":/img/cross-script.png");
+            icon = ":/img/cross-script.png";
             break;
 
         case proto::internal::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
-            icon = QStringLiteral(":/img/arrow-circle-double.png");
+            icon = ":/img/arrow-circle-double.png";
             break;
 
         case proto::internal::RouterState::CONNECTED:
             message = tr("Connected to a router");
-            icon = QStringLiteral(":/img/tick.png");
+            icon = ":/img/tick.png";
             break;
 
         case proto::internal::RouterState::FAILED:
             message = tr("Connection error");
-            icon = QStringLiteral(":/img/cross-script.png");
+            icon = ":/img/cross-script.png";
             break;
 
         default:
@@ -724,8 +878,11 @@ void MainWindow::updateStatusBar()
     ui.button_status->setIcon(QIcon(icon));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
+    LOG(LS_INFO) << "Updating tray tooltip";
+
     QString ip;
 
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
@@ -766,6 +923,29 @@ void MainWindow::updateTrayIconTooltip()
     tooltip += ip;
 
     tray_icon_.setToolTip(tooltip);
+}
+
+//--------------------------------------------------------------------------------------------------
+uint32_t MainWindow::calcOneTimeSessions()
+{
+    uint32_t sessions = 0;
+
+    if (ui.action_desktop_manage->isChecked())
+        sessions |= proto::SESSION_TYPE_DESKTOP_MANAGE;
+
+    if (ui.action_desktop_view->isChecked())
+        sessions |= proto::SESSION_TYPE_DESKTOP_VIEW;
+
+    if (ui.action_file_transfer->isChecked())
+        sessions |= proto::SESSION_TYPE_FILE_TRANSFER;
+
+    if (ui.action_system_info->isChecked())
+        sessions |= proto::SESSION_TYPE_SYSTEM_INFO;
+
+    if (ui.action_text_chat->isChecked())
+        sessions |= proto::SESSION_TYPE_TEXT_CHAT;
+
+    return sessions;
 }
 
 } // namespace host

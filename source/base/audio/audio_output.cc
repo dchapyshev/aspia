@@ -33,12 +33,14 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioOutput::AudioOutput(const NeedMoreDataCB& need_more_data_cb)
     : need_more_data_cb_(need_more_data_cb)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more_data_cb)
 {
@@ -54,6 +56,7 @@ std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutput::onDataRequest(int16_t* audio_samples, size_t audio_samples_count)
 {
     static const size_t kSamplesPerChannel10ms = kSampleRate * 10 / 1000;

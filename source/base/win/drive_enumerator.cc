@@ -26,6 +26,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 DriveEnumerator::DriveEnumerator()
 {
     DWORD size = GetLogicalDriveStringsW(0, nullptr);
@@ -46,22 +47,26 @@ DriveEnumerator::DriveEnumerator()
     current_ = buffer_.data();
 }
 
+//--------------------------------------------------------------------------------------------------
 const DriveEnumerator::DriveInfo& DriveEnumerator::driveInfo() const
 {
     drive_info_.path_.assign(current_);
     return drive_info_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DriveEnumerator::isAtEnd() const
 {
     return !current_ || !current_[0];
 }
 
+//--------------------------------------------------------------------------------------------------
 void DriveEnumerator::advance()
 {
     current_ = wcschr(current_, 0) + 1;
 }
 
+//--------------------------------------------------------------------------------------------------
 DriveEnumerator::DriveInfo::Type DriveEnumerator::DriveInfo::type() const
 {
     switch (GetDriveTypeW(path_.c_str()))
@@ -86,6 +91,7 @@ DriveEnumerator::DriveInfo::Type DriveEnumerator::DriveInfo::type() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint64_t DriveEnumerator::DriveInfo::totalSpace() const
 {
     ULARGE_INTEGER total_space;
@@ -99,6 +105,7 @@ uint64_t DriveEnumerator::DriveInfo::totalSpace() const
     return total_space.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint64_t DriveEnumerator::DriveInfo::freeSpace() const
 {
     ULARGE_INTEGER free_space;
@@ -112,6 +119,7 @@ uint64_t DriveEnumerator::DriveInfo::freeSpace() const
     return free_space.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DriveEnumerator::DriveInfo::fileSystem() const
 {
     wchar_t fs[MAX_PATH];
@@ -119,7 +127,7 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
     if (!GetVolumeInformationW(path_.c_str(), nullptr,
                                0,
                                nullptr, nullptr, nullptr,
-                               fs, std::size(fs)))
+                               fs, static_cast<DWORD>(std::size(fs))))
     {
         PLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return std::string();
@@ -128,12 +136,13 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
     return utf8FromWide(fs);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DriveEnumerator::DriveInfo::volumeName() const
 {
     wchar_t name[MAX_PATH];
 
     if (!GetVolumeInformationW(path_.c_str(), name,
-                               std::size(name),
+                               static_cast<DWORD>(std::size(name)),
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
     {
@@ -144,6 +153,7 @@ std::string DriveEnumerator::DriveInfo::volumeName() const
     return utf8FromWide(name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DriveEnumerator::DriveInfo::volumeSerial() const
 {
     DWORD serial;

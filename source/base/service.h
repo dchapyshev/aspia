@@ -26,6 +26,9 @@
 #include "base/win/session_status.h"
 #endif // defined(OS_WIN)
 
+#include <string_view>
+#include <string>
+
 namespace base {
 
 namespace {
@@ -56,6 +59,11 @@ protected:
 #endif // defined(OS_WIN)
 
 private:
+#if defined(OS_POSIX)
+    void stopHandlerImpl();
+    static void signalHandler(int sig);
+#endif // defined(OS_POSIX)
+
     MessageLoop::Type type_;
     std::u16string name_;
     std::unique_ptr<MessageLoop> message_loop_;

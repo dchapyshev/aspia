@@ -23,6 +23,7 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 SessionRelay::SessionRelay()
     : Session(proto::ROUTER_SESSION_RELAY),
       incoming_message_(std::make_unique<proto::RelayToRouter>()),
@@ -31,11 +32,13 @@ SessionRelay::SessionRelay()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionRelay::~SessionRelay()
 {
     relayKeyPool().removeKeysForRelay(sessionId());
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::sendKeyUsed(uint32_t key_id)
 {
     outgoing_message_->Clear();
@@ -43,6 +46,7 @@ void SessionRelay::sendKeyUsed(uint32_t key_id)
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& request)
 {
     outgoing_message_->Clear();
@@ -50,11 +54,13 @@ void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& req
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::onSessionReady()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
@@ -75,15 +81,17 @@ void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const base
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from relay server";
+        LOG(LS_ERROR) << "Unhandled message from relay server";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
     SharedKeyPool& pool = relayKeyPool();

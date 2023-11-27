@@ -49,27 +49,27 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../ui/session_type.cc" line="30"/>
+        <location filename="../ui/session_type.cc" line="31"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheer</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="33"/>
+        <location filename="../ui/session_type.cc" line="34"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergave</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="36"/>
+        <location filename="../ui/session_type.cc" line="37"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="39"/>
+        <location filename="../ui/session_type.cc" line="40"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="42"/>
+        <location filename="../ui/session_type.cc" line="43"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
@@ -167,152 +167,156 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="114"/>
         <source>Version: %1</source>
-        <translation>Versie: %1</translation>
+        <translation type="vanished">Versie: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="118"/>
+        <source>Version: %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="119"/>
+        <location filename="../ui/about_dialog.cc" line="123"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="124"/>
+        <location filename="../ui/about_dialog.cc" line="128"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="128"/>
+        <location filename="../ui/about_dialog.cc" line="132"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="129"/>
+        <location filename="../ui/about_dialog.cc" line="133"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="130"/>
+        <location filename="../ui/about_dialog.cc" line="134"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="133"/>
+        <location filename="../ui/about_dialog.cc" line="137"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="135"/>
+        <location filename="../ui/about_dialog.cc" line="139"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="137"/>
+        <location filename="../ui/about_dialog.cc" line="141"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="158"/>
+        <location filename="../ui/about_dialog.cc" line="162"/>
         <source>Path: %1</source>
         <translation>Pad: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="159"/>
+        <location filename="../ui/about_dialog.cc" line="163"/>
         <source>Compilation date: %1</source>
         <translation>Compilatie datum: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="160"/>
+        <location filename="../ui/about_dialog.cc" line="164"/>
         <source>Compilation time: %1</source>
         <translation>Compilatie tijd: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="163"/>
+        <location filename="../ui/about_dialog.cc" line="167"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="164"/>
+        <location filename="../ui/about_dialog.cc" line="168"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="175"/>
+        <location filename="../ui/about_dialog.cc" line="179"/>
         <source>Display &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="176"/>
+        <location filename="../ui/about_dialog.cc" line="180"/>
         <source>Pixel ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="177"/>
+        <location filename="../ui/about_dialog.cc" line="181"/>
         <source>Logical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="180"/>
+        <location filename="../ui/about_dialog.cc" line="184"/>
         <source>Physical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="185"/>
+        <location filename="../ui/about_dialog.cc" line="189"/>
         <source>Size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="188"/>
+        <location filename="../ui/about_dialog.cc" line="192"/>
         <source>Available size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="192"/>
+        <location filename="../ui/about_dialog.cc" line="196"/>
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="195"/>
+        <location filename="../ui/about_dialog.cc" line="199"/>
         <source>Depth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="196"/>
+        <location filename="../ui/about_dialog.cc" line="200"/>
         <source>Refresh rate: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="201"/>
+        <location filename="../ui/about_dialog.cc" line="205"/>
         <source>%1 version: %2</source>
         <translation>%1 versie: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="248"/>
+        <location filename="../ui/about_dialog.cc" line="255"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="254"/>
+        <location filename="../ui/about_dialog.cc" line="261"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="256"/>
+        <location filename="../ui/about_dialog.cc" line="263"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="265"/>
+        <location filename="../ui/about_dialog.cc" line="272"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="266"/>
+        <location filename="../ui/about_dialog.cc" line="273"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -320,17 +324,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="39"/>
+        <location filename="../ui/download_dialog.cc" line="42"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="53"/>
+        <location filename="../ui/download_dialog.cc" line="65"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="54"/>
+        <location filename="../ui/download_dialog.cc" line="66"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Er is een probleem opgetreden bij het downloaden van de update: %1</translation>
     </message>
@@ -338,7 +342,7 @@
 <context>
     <name>common::StatusDialog</name>
     <message>
-        <location filename="../ui/status_dialog.cc" line="39"/>
+        <location filename="../ui/status_dialog.cc" line="40"/>
         <source>Close</source>
         <translation type="unfinished">Sluiten</translation>
     </message>
@@ -346,48 +350,48 @@
 <context>
     <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="62"/>
+        <location filename="../ui/text_chat_widget.cc" line="63"/>
         <source>Save chat...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="63"/>
+        <location filename="../ui/text_chat_widget.cc" line="64"/>
         <source>Clear chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="116"/>
+        <location filename="../ui/text_chat_widget.cc" line="120"/>
         <source>%1 is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="122"/>
+        <location filename="../ui/text_chat_widget.cc" line="126"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="129"/>
+        <location filename="../ui/text_chat_widget.cc" line="133"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="136"/>
+        <location filename="../ui/text_chat_widget.cc" line="140"/>
         <source>User %1 is logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="143"/>
+        <location filename="../ui/text_chat_widget.cc" line="147"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="232"/>
-        <location filename="../ui/text_chat_widget.cc" line="285"/>
+        <location filename="../ui/text_chat_widget.cc" line="242"/>
+        <location filename="../ui/text_chat_widget.cc" line="298"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="233"/>
+        <location filename="../ui/text_chat_widget.cc" line="243"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -395,17 +399,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="274"/>
+        <location filename="../ui/text_chat_widget.cc" line="287"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="276"/>
+        <location filename="../ui/text_chat_widget.cc" line="289"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="286"/>
+        <location filename="../ui/text_chat_widget.cc" line="299"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,72 +424,73 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../ui/update_dialog.cc" line="57"/>
+        <location filename="../ui/update_dialog.cc" line="59"/>
         <source>Receiving information...</source>
         <translation>Informatie verkrijgen...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="100"/>
+        <location filename="../ui/update_dialog.cc" line="110"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Annuleer update controle. Een ogenblik geduld aub.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="113"/>
+        <location filename="../ui/update_dialog.cc" line="125"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="114"/>
+        <location filename="../ui/update_dialog.cc" line="126"/>
         <source>Error retrieving update information.</source>
         <translation>Er is een probleem opgetreden bij het downloaden van de update informatie.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="135"/>
+        <location filename="../ui/update_dialog.cc" line="138"/>
+        <location filename="../ui/update_dialog.cc" line="161"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="150"/>
+        <location filename="../ui/update_dialog.cc" line="179"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>De update wordt gedownload. Nadat de download voltooid is zal de applicatie automatisch sluiten.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="152"/>
+        <location filename="../ui/update_dialog.cc" line="181"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle verbonden sessies worden afgesloten. Er kan geen verbinding gemaakt worden tot de update voltooid is.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="154"/>
+        <location filename="../ui/update_dialog.cc" line="183"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle onopgeslagen data zal verloren gaan.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="155"/>
+        <location filename="../ui/update_dialog.cc" line="184"/>
         <source>Continue?</source>
         <translation>Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="158"/>
+        <location filename="../ui/update_dialog.cc" line="187"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="163"/>
+        <location filename="../ui/update_dialog.cc" line="192"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="164"/>
+        <location filename="../ui/update_dialog.cc" line="193"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="172"/>
+        <location filename="../ui/update_dialog.cc" line="204"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="173"/>
+        <location filename="../ui/update_dialog.cc" line="205"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Er is een probleem opgetreden bij het installeren van de update: %1</translation>
     </message>

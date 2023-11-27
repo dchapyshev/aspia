@@ -44,6 +44,7 @@ namespace base {
 namespace {
 
 #if defined(OS_LINUX)
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path xdgUserDirectory(const char* dir_name, const char* fallback_dir)
 {
     std::filesystem::path path;
@@ -65,6 +66,7 @@ std::filesystem::path xdgUserDirectory(const char* dir_name, const char* fallbac
 } // namespace
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::windowsDir(std::filesystem::path* result)
 {
@@ -72,7 +74,7 @@ bool BasePaths::windowsDir(std::filesystem::path* result)
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetWindowsDirectoryW(buffer, std::size(buffer)))
+    if (!GetWindowsDirectoryW(buffer, static_cast<UINT>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
         return false;
@@ -82,6 +84,7 @@ bool BasePaths::windowsDir(std::filesystem::path* result)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::systemDir(std::filesystem::path* result)
 {
@@ -89,7 +92,7 @@ bool BasePaths::systemDir(std::filesystem::path* result)
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetSystemDirectoryW(buffer, std::size(buffer)))
+    if (!GetSystemDirectoryW(buffer, static_cast<UINT>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
         return false;
@@ -101,6 +104,7 @@ bool BasePaths::systemDir(std::filesystem::path* result)
 #endif // defined(OS_WIN)
 
 #if !defined(OS_MAC)
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::userAppData(std::filesystem::path* result)
 {
@@ -139,6 +143,7 @@ bool BasePaths::userAppData(std::filesystem::path* result)
 #endif
 
 #if !defined(OS_MAC)
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::userDesktop(std::filesystem::path* result)
 {
@@ -167,6 +172,7 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
 }
 #endif
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::userHome(std::filesystem::path* result)
 {
@@ -198,6 +204,7 @@ bool BasePaths::userHome(std::filesystem::path* result)
 }
 
 #if !defined(OS_MAC)
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::commonAppData(std::filesystem::path* result)
 {
@@ -227,6 +234,7 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
 #endif
 
 #if !defined(OS_MAC)
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::commonDesktop(std::filesystem::path* result)
 {
@@ -254,6 +262,7 @@ bool BasePaths::commonDesktop(std::filesystem::path* result)
 }
 #endif
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::currentExecDir(std::filesystem::path* result)
 {
@@ -271,6 +280,7 @@ bool BasePaths::currentExecDir(std::filesystem::path* result)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::currentExecFile(std::filesystem::path* result)
 {
@@ -279,7 +289,7 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetModuleFileNameW(nullptr, buffer, std::size(buffer)))
+    if (!GetModuleFileNameW(nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetModuleFileNameW failed";
         return false;

@@ -80,7 +80,7 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
-    void readConfigRequest(const proto::DesktopConfigRequest& config_request);
+    void readCapabilities(const proto::DesktopCapabilities& capabilities);
     void readVideoPacket(const proto::VideoPacket& packet);
     void readAudioPacket(const proto::AudioPacket& packet);
     void readCursorShape(const proto::CursorShape& cursor_shape);

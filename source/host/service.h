@@ -35,8 +35,11 @@ protected:
     // base::Service implementation.
     void onStart() override;
     void onStop() override;
+
+#if defined(OS_WIN)
     void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
     void onPowerEvent(uint32_t event) override;
+#endif // defined(OS_WIN)
 
 private:
     std::unique_ptr<Server> server_;

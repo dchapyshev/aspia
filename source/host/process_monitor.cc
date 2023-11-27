@@ -52,41 +52,6 @@ typedef struct {
 } OWN_SYSTEM_BASIC_INFORMATION;
 
 typedef struct {
-    LARGE_INTEGER IdleProcessTime;
-    LARGE_INTEGER IoReadTransferCount;
-    LARGE_INTEGER IoWriteTransferCount;
-    LARGE_INTEGER IoOtherTransferCount;
-    ULONG IoReadOperationCount;
-    ULONG IoWriteOperationCount;
-    ULONG IoOtherOperationCount;
-    ULONG AvailablePages;
-    ULONG CommittedPages;
-    ULONG CommitLimit;
-    ULONG PeakCommitment;
-    ULONG PageFaultCount;
-    ULONG CopyOnWriteCount;
-    ULONG TransitionCount;
-    ULONG CacheTransitionCount;
-    ULONG DemandZeroCount;
-    ULONG PageReadCount;
-    ULONG PageReadIoCount;
-    ULONG CacheReadCount;
-    ULONG CacheIoCount;
-    ULONG DirtyPagesWriteCount;
-    ULONG DirtyWriteIoCount;
-    ULONG MappedPagesWriteCount;
-    ULONG MappedWriteIoCount;
-    ULONG PagedPoolPages;
-    ULONG NonPagedPoolPages;
-    ULONG PagedPoolAllocs;
-    ULONG PagedPoolFrees;
-    ULONG NonPagedPoolAllocs;
-    ULONG NonPagedPoolFrees;
-    ULONG FreeSystemPtes;
-    BYTE Reserved1[172];
-} OWN_SYSTEM_PERFORMANCE_INFORMATION;
-
-typedef struct {
     ULONG NextEntryOffset;
     ULONG NumberOfThreads;
     LONGLONG WorkingSetPrivateSize;
@@ -135,7 +100,7 @@ public:
         base::win::ScopedHandle token;
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, token.recieve()))
         {
-            PLOG(LS_WARNING) << "OpenProcessToken failed";
+            PLOG(LS_ERROR) << "OpenProcessToken failed";
             return;
         }
 
@@ -147,7 +112,7 @@ public:
         base::win::ScopedHandle token;
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, token.recieve()))
         {
-            PLOG(LS_WARNING) << "OpenProcessToken failed";
+            PLOG(LS_ERROR) << "OpenProcessToken failed";
             return;
         }
 
@@ -160,7 +125,7 @@ private:
         LUID luid;
         if (!LookupPrivilegeValueW(nullptr, privilege, &luid))
         {
-            PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+            PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
             return false;
         }
 
@@ -174,14 +139,14 @@ private:
 
         if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), nullptr, nullptr))
         {
-            PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+            PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
             return false;
         }
 
         if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
         {
-              LOG(LS_WARNING) << "The token does not have the specified privilege";
-              return false;
+            LOG(LS_ERROR) << "The token does not have the specified privilege";
+            return false;
         }
 
         return true;
@@ -192,12 +157,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedPrivilege);
 };
 
+//--------------------------------------------------------------------------------------------------
 std::string userNameByHandle(HANDLE process)
 {
     base::win::ScopedHandle token;
     if (!OpenProcessToken(process, TOKEN_QUERY, token.recieve()))
     {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return std::string();
     }
 
@@ -209,7 +175,7 @@ std::string userNameByHandle(HANDLE process)
     {
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            PLOG(LS_WARNING) << "GetTokenInformation failed";
+            PLOG(LS_ERROR) << "GetTokenInformation failed";
             return std::string();
         }
 
@@ -221,20 +187,20 @@ std::string userNameByHandle(HANDLE process)
 
     if (!token_user)
     {
-        LOG(LS_WARNING) << "Invalid user token buffer";
+        LOG(LS_ERROR) << "Invalid user token buffer";
         return std::string();
     }
 
     if (!GetTokenInformation(token, TokenUser, token_user, length, &length))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return std::string();
     }
 
     wchar_t domain_buffer[128] = {0};
     wchar_t user_buffer[128] = {0};
-    DWORD user_buffer_size = std::size(user_buffer);
-    DWORD domain_buffer_size = std::size(domain_buffer);
+    DWORD user_buffer_size = static_cast<DWORD>(std::size(user_buffer));
+    DWORD domain_buffer_size = static_cast<DWORD>(std::size(domain_buffer));
     SID_NAME_USE sid_type;
 
     if (!LookupAccountSidW(nullptr, token_user->User.Sid,
@@ -242,27 +208,29 @@ std::string userNameByHandle(HANDLE process)
                            domain_buffer, &domain_buffer_size,
                            &sid_type))
     {
-        PLOG(LS_WARNING) << "LookupAccountSidW failed";
+        PLOG(LS_ERROR) << "LookupAccountSidW failed";
         return std::string();
     }
 
     return base::utf8FromWide(user_buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
-    DWORD buffer_size = std::size(buffer);
+    DWORD buffer_size = static_cast<DWORD>(std::size(buffer));
 
     if (!QueryFullProcessImageNameW(process, 0, buffer, &buffer_size))
     {
-        LOG(LS_WARNING) << "QueryFullProcessImageNameW failed";
+        LOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
         return std::string();
     }
 
     return base::utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
 {
     int64_t cpu_ratio =
@@ -272,6 +240,7 @@ int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
     return static_cast<int32_t>(cpu_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS_INFORMATION& info,
                    int64_t total_time, bool update_only)
 {
@@ -307,7 +276,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
             base::win::ScopedHandle process(OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
             if (!process.isValid())
             {
-                PLOG(LS_WARNING) << "OpenProcess failed";
+                PLOG(LS_ERROR) << "OpenProcess failed";
             }
             else
             {
@@ -323,15 +292,18 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::ProcessMonitor()
 {
+    LOG(LS_INFO) << "Ctor";
+
     memset(&prev_cpu_idle_time_, 0, sizeof(prev_cpu_idle_time_));
     memset(&prev_cpu_total_time_, 0, sizeof(prev_cpu_total_time_));
 
     ntdll_library_ = LoadLibraryW(L"ntdll.dll");
     if (!ntdll_library_)
     {
-        PLOG(LS_WARNING) << "LoadLibraryW failed";
+        PLOG(LS_ERROR) << "LoadLibraryW failed";
         return;
     }
 
@@ -339,7 +311,7 @@ ProcessMonitor::ProcessMonitor()
         GetProcAddress(reinterpret_cast<HMODULE>(ntdll_library_), "NtQuerySystemInformation"));
     if (!nt_query_system_info_func_)
     {
-        PLOG(LS_WARNING) << "GetProcAddress failed";
+        PLOG(LS_ERROR) << "GetProcAddress failed";
         return;
     }
 
@@ -351,13 +323,10 @@ ProcessMonitor::ProcessMonitor()
         SystemBasicInformation, &basic_info, sizeof(basic_info), nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
     }
     else
     {
-        page_size_ = basic_info.PageSize / 1024;
-        total_physical_pages_ = basic_info.NumberOfPhysicalPages * page_size_;
-
         processor_count_ = static_cast<uint32_t>(basic_info.NumberOfProcessors);
         if (processor_count_ > kMaxCpuCount)
             processor_count_ = kMaxCpuCount;
@@ -370,7 +339,7 @@ ProcessMonitor::ProcessMonitor()
            nullptr);
         if (!NT_SUCCESS(status))
         {
-            LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+            LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
         }
         else
         {
@@ -385,12 +354,16 @@ ProcessMonitor::ProcessMonitor()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::~ProcessMonitor()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (ntdll_library_)
         FreeLibrary(reinterpret_cast<HMODULE>(ntdll_library_));
 }
 
+//--------------------------------------------------------------------------------------------------
 const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
 {
     if (reset_cache)
@@ -405,6 +378,7 @@ const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
     return table_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcCpuUsage()
 {
     NtQuerySystemInformationFunc nt_query_system_information_func =
@@ -421,7 +395,7 @@ int ProcessMonitor::calcCpuUsage()
        nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
         return 0;
     }
 
@@ -458,39 +432,28 @@ int ProcessMonitor::calcCpuUsage()
     return current_cpu_usage;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcMemoryUsage()
 {
-    NtQuerySystemInformationFunc nt_query_system_information_func =
-        reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
-    if (!nt_query_system_information_func)
-        return 0;
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
 
-    OWN_SYSTEM_PERFORMANCE_INFORMATION perf_info;
-    NTSTATUS status = nt_query_system_information_func(
-        SystemPerformanceInformation, &perf_info, sizeof(perf_info), nullptr);
-    if (!NT_SUCCESS(status))
+    if (!GlobalMemoryStatusEx(&status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
         return 0;
     }
 
-    int current_memory_usage = 0;
-    if (total_physical_pages_)
-    {
-        uint32_t available_physical_pages = perf_info.AvailablePages * page_size_;
-        current_memory_usage = static_cast<int>(
-            100 - (available_physical_pages * 100) / total_physical_pages_);
-    }
-
-    return current_memory_usage;
+    return status.dwMemoryLoad;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::endProcess(ProcessId process_id)
 {
     auto result = table_.find(process_id);
     if (result == table_.end())
     {
-        LOG(LS_WARNING) << "Process not found in table";
+        LOG(LS_ERROR) << "Process not found in table";
         return false;
     }
 
@@ -503,7 +466,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     {
         if (base::compareCaseInsensitive(process_name, kBlackList[i]) == 0)
         {
-            LOG(LS_WARNING) << "Unable to end system process";
+            LOG(LS_ERROR) << "Unable to end system process";
             return false;
         }
     }
@@ -513,19 +476,20 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     base::win::ScopedHandle process(OpenProcess(PROCESS_TERMINATE, FALSE, process_id));
     if (!process.isValid())
     {
-        PLOG(LS_WARNING) << "OpenProcess failed";
+        PLOG(LS_ERROR) << "OpenProcess failed";
         return false;
     }
 
     if (!TerminateProcess(process, 1))
     {
-        PLOG(LS_WARNING) << "TerminateProcess failed";
+        PLOG(LS_ERROR) << "TerminateProcess failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::updateSnapshot()
 {
     while (true)
@@ -535,14 +499,14 @@ bool ProcessMonitor::updateSnapshot()
             NtQuerySystemInformationFunc nt_query_system_information_func =
                 reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
 
-            NTSTATUS status = nt_query_system_information_func(
-                SystemProcessInformation, snapshot_.data(), snapshot_.size(), nullptr);
+            NTSTATUS status = nt_query_system_information_func(SystemProcessInformation,
+                snapshot_.data(), static_cast<DWORD>(snapshot_.size()), nullptr);
             if (NT_SUCCESS(status))
                 return true;
 
             if (status != STATUS_INFO_LENGTH_MISMATCH)
             {
-                LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+                LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
                 return false;
             }
         }
@@ -552,6 +516,7 @@ bool ProcessMonitor::updateSnapshot()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ProcessMonitor::updateTable()
 {
     OWN_SYSTEM_PROCESS_INFORMATION* current;

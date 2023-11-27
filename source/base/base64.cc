@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 void Base64::encode(std::string_view input, std::string* output)
 {
@@ -34,12 +35,14 @@ void Base64::encode(std::string_view input, std::string* output)
     output->swap(temp);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string Base64::encode(std::string_view input)
 {
     return encodeT<std::string_view, std::string>(input);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Base64::decode(std::string_view input, std::string* output)
 {
@@ -47,30 +50,35 @@ bool Base64::decode(std::string_view input, std::string* output)
     return decodeT<std::string_view>(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string Base64::decode(std::string_view input)
 {
     return decodeT<std::string_view, std::string>(input);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t Base64::encodeImpl(char* dest, const char* str, size_t len)
 {
     return modp_b64_encode(dest, str, len);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t Base64::decodeImpl(char* dest, const char* src, size_t len)
 {
     return modp_b64_decode(dest, src, len);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t Base64::encodedLength(size_t len)
 {
     return modp_b64_encode_strlen(len) + 1;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t Base64::decodedLength(size_t len)
 {

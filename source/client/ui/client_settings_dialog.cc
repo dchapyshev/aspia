@@ -28,6 +28,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -81,8 +82,10 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     QTimer::singleShot(0, this, &ClientSettingsDialog::adjustSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSettingsDialog::~ClientSettingsDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
@@ -138,6 +141,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettingsDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();

@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 template <typename T, typename std::enable_if<std::is_signed<T>::value>::type* = nullptr>
 bool isValueNegative(T value)
 {
@@ -33,6 +34,7 @@ bool isValueNegative(T value)
     return value < 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename T, typename std::enable_if<!std::is_signed<T>::value>::type* = nullptr>
 bool isValueNegative(T)
 {
@@ -40,6 +42,7 @@ bool isValueNegative(T)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename T>
 typename std::make_unsigned<T>::type unsignedAbs(T value)
 {
@@ -51,6 +54,7 @@ typename std::make_unsigned<T>::type unsignedAbs(T value)
         0 - static_cast<UnsignedT>(value) : static_cast<UnsignedT>(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename STR, typename INT>
 struct IntToStringT
 {
@@ -137,6 +141,7 @@ public:
     }
 };
 
+//--------------------------------------------------------------------------------------------------
 template <int BASE, typename CHAR>
 bool CharToDigit(CHAR c, uint8_t* digit)
 {
@@ -346,6 +351,7 @@ class StringPieceToNumberTraits
     // Nothing
 };
 
+//--------------------------------------------------------------------------------------------------
 template <typename VALUE>
 bool stringToIntImpl(std::string_view input, VALUE* output)
 {
@@ -353,6 +359,7 @@ bool stringToIntImpl(std::string_view input, VALUE* output)
         input.begin(), input.end(), output);
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename VALUE, int BASE>
 class StringPiece16ToNumberTraits
     : public BaseIteratorRangeToNumberTraits<std::u16string_view::const_iterator, VALUE, BASE>
@@ -360,6 +367,7 @@ class StringPiece16ToNumberTraits
     // Nothing
 };
 
+//--------------------------------------------------------------------------------------------------
 template <typename VALUE>
 bool string16ToIntImpl(std::u16string_view input, VALUE* output)
 {
@@ -369,201 +377,241 @@ bool string16ToIntImpl(std::u16string_view input, VALUE* output)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 bool stringToInt(std::string_view input, int* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToInt(std::u16string_view input, int* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUint(std::string_view input, unsigned int* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUint(std::u16string_view input, unsigned int* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToChar(std::string_view input, signed char* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToChar(std::u16string_view input, signed char* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToShort(std::string_view input, short* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToShort(std::u16string_view input, short* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUChar(std::string_view input, unsigned char* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUChar(std::u16string_view input, unsigned char* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUShort(std::string_view input, unsigned short* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUShort(std::u16string_view input, unsigned short* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToULong(std::string_view input, unsigned long* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToULong(std::u16string_view input, unsigned long* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToInt64(std::string_view input, int64_t* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToInt64(std::u16string_view input, int64_t* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUint64(std::string_view input, unsigned long int* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToUint64(std::u16string_view input, unsigned long int* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToULong64(std::string_view input, unsigned long long* output)
 {
     return stringToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool stringToULong64(std::u16string_view input, unsigned long long* output)
 {
     return string16ToIntImpl(input, output);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(int value)
 {
     return IntToStringT<std::string, int>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(int value)
 {
     return IntToStringT<std::u16string, int>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(unsigned int value)
 {
     return IntToStringT<std::string, unsigned int>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(unsigned int value)
 {
     return IntToStringT<std::u16string, unsigned int>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(long value)
 {
     return IntToStringT<std::string, long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(long value)
 {
     return IntToStringT<std::u16string, long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(signed char value)
 {
     return IntToStringT<std::string, signed char>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(signed char value)
 {
     return IntToStringT<std::u16string, signed char>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(short value)
 {
     return IntToStringT<std::string, short>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(short value)
 {
     return IntToStringT<std::u16string, short>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(unsigned char value)
 {
     return IntToStringT<std::string, unsigned char>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(unsigned char value)
 {
     return IntToStringT<std::u16string, unsigned char>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(unsigned short value)
 {
     return IntToStringT<std::string, unsigned short>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(unsigned short value)
 {
     return IntToStringT<std::u16string, unsigned short>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(unsigned long value)
 {
     return IntToStringT<std::string, unsigned long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(unsigned long value)
 {
     return IntToStringT<std::u16string, unsigned long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(long long value)
 {
     return IntToStringT<std::string, long long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(long long value)
 {
     return IntToStringT<std::u16string, long long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string numberToString(unsigned long long value)
 {
     return IntToStringT<std::string, unsigned long long>::IntToString(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string numberToString16(unsigned long long value)
 {
     return IntToStringT<std::u16string, unsigned long long>::IntToString(value);

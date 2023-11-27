@@ -1,0 +1,108 @@
+name: windows
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
+  VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
+  VCPKG_BINARY_SOURCES: 'default,readwrite'
+
+jobs:
+  build-all-matrix:
+    name: ${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push'
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [win11]
+        arch: [x86, x64]
+        build_type: [release, debug]
+        include:
+          - os: win11
+            arch: x86
+            triplet: x86-windows-static
+          - os: win11
+            arch: x64
+            triplet: x64-windows-static
+
+    steps:
+      # Step 1
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      # Step 2
+      - name: Checkout Submodule
+        uses: actions/checkout@v4
+        with:
+          repository: dchapyshev/vcpkg4aspia
+          path: vcpkg4aspia
+
+      # Step 3
+      # On Windows runners, let's ensure to have the Developer Command Prompt
+      # environment setup correctly. As used here the Developer Command Prompt
+      # created is targeting x86 and using the default the Windows SDK.
+      - name: Set MSVC x86/x64 parameters
+        uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.arch != 'amd64_arm64'
+        with:
+          arch: ${{ matrix.arch }}
+          toolset: 14.29
+
+      # Step 4
+      - name: Dependencies, Build, Tests (Windows/PowerShell)
+        env:
+          # This vars used inside CMake
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-${{ matrix.triplet }}
+          VCPKG_TRIPLET: ${{ matrix.triplet }}
+          VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
+          VCPKG_DOWNLOADS: C:\vcpkg\downloads
+        run: |
+          # Reuired to prevent override by MSVC for e.g. on Win
+          $env:VCPKG_ROOT=$env:VCPKG_ROOT_PROJECT
+          Get-ChildItem env:
+
+          if (!$env:VCPKG_TRIPLET) { echo "VCPKG_TRIPLET is empty"; exit 1; }
+
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DOWNLOADS
+
+          # Build vcpkg dependencies
+          cmake --preset ninja-multi-vcpkg-ci
+
+          # Build project
+          cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+
+          # Run tests
+          ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+
+      # Step 5
+      - name: Build MSI packages
+        run: |
+          installer/build.cmd 2.7.0 ${{ matrix.arch }} ${{ github.workspace }} ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}
+        shell: cmd
+        working-directory: ${{ github.workspace }}
+
+      # Step 6
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
+          path: |
+            ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*-${{ matrix.arch }}.msi
+          if-no-files-found: error
+          retention-days: 7

@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileTransferWindowProxy::FileTransferWindowProxy(
     std::shared_ptr<base::TaskRunner> ui_task_runner, FileTransferWindow* file_transfer_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -35,12 +36,14 @@ FileTransferWindowProxy::FileTransferWindowProxy(
     DCHECK(file_transfer_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransferWindowProxy::~FileTransferWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!file_transfer_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach file transfer window";
@@ -48,6 +51,7 @@ void FileTransferWindowProxy::dettach()
     file_transfer_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::start(std::shared_ptr<FileTransferProxy> file_transfer_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -61,6 +65,7 @@ void FileTransferWindowProxy::start(std::shared_ptr<FileTransferProxy> file_tran
         file_transfer_window_->start(file_transfer_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::stop()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -73,6 +78,7 @@ void FileTransferWindowProxy::stop()
         file_transfer_window_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::setCurrentItem(
     const std::string& source_path, const std::string& target_path)
 {
@@ -87,6 +93,7 @@ void FileTransferWindowProxy::setCurrentItem(
         file_transfer_window_->setCurrentItem(source_path, target_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::setCurrentProgress(int total, int current)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -100,6 +107,21 @@ void FileTransferWindowProxy::setCurrentProgress(int total, int current)
         file_transfer_window_->setCurrentProgress(total, current);
 }
 
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindowProxy::setCurrentSpeed(int64_t speed)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &FileTransferWindowProxy::setCurrentSpeed, shared_from_this(), speed));
+        return;
+    }
+
+    if (file_transfer_window_)
+        file_transfer_window_->setCurrentSpeed(speed);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::errorOccurred(const FileTransfer::Error& error)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

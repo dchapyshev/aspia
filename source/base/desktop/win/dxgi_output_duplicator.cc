@@ -44,11 +44,13 @@ namespace {
 // DxgiOutputDuplicator does not need to actively wait for a new frame.
 const int kAcquireTimeoutMs = 0;
 
+//--------------------------------------------------------------------------------------------------
 Rect RECTToDesktopRect(const RECT& rect)
 {
     return Rect::makeLTRB(rect.left, rect.top, rect.right, rect.bottom);
 }
 
+//--------------------------------------------------------------------------------------------------
 Rotation dxgiRotationToRotation(DXGI_MODE_ROTATION rotation)
 {
     switch (rotation)
@@ -72,6 +74,7 @@ Rotation dxgiRotationToRotation(DXGI_MODE_ROTATION rotation)
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
                                            const ComPtr<IDXGIOutput1>& output,
                                            const DXGI_OUTPUT_DESC& desc)
@@ -91,8 +94,10 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
     memset(&desc_, 0, sizeof(desc_));
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiOutputDuplicator::DxgiOutputDuplicator(DxgiOutputDuplicator&& other) = default;
 
+//--------------------------------------------------------------------------------------------------
 DxgiOutputDuplicator::~DxgiOutputDuplicator()
 {
     LOG(LS_INFO) << "Dtor";
@@ -103,6 +108,7 @@ DxgiOutputDuplicator::~DxgiOutputDuplicator()
     texture_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::initialize()
 {
     if (duplicateOutput())
@@ -123,6 +129,7 @@ bool DxgiOutputDuplicator::initialize()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::duplicateOutput()
 {
     DCHECK(!duplication_);
@@ -147,8 +154,8 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 continue;
             }
 
-            LOG(LS_WARNING) << "Failed to duplicate output from IDXGIOutput1, error "
-                            << error.ErrorMessage() << ", with code " << error.Error();
+            LOG(LS_ERROR) << "Failed to duplicate output from IDXGIOutput1, error "
+                          << error.ErrorMessage() << ", with code " << error.Error();
             return false;
         }
         else
@@ -192,6 +199,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::releaseFrame()
 {
     DCHECK(duplication_);
@@ -207,6 +215,7 @@ bool DxgiOutputDuplicator::releaseFrame()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::duplicate(
     Context* context, const Point& offset, SharedFrame* target, DxgiCursor* cursor)
 {
@@ -253,8 +262,8 @@ bool DxgiOutputDuplicator::duplicate(
                                                            shape_info);
         if (FAILED(hr.Error()))
         {
-            LOG(LS_WARNING) << "Failed to capture cursor, error "
-                            << error.ErrorMessage() << ", code " << error.Error();
+            LOG(LS_ERROR) << "Failed to capture cursor, error "
+                          << error.ErrorMessage() << ", code " << error.Error();
             buffer->clear();
         }
     }
@@ -366,6 +375,7 @@ bool DxgiOutputDuplicator::duplicate(
     return error.Error() == DXGI_ERROR_WAIT_TIMEOUT || releaseFrame();
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect DxgiOutputDuplicator::translatedDesktopRect(const Point& offset) const
 {
     Rect result(Rect::makeSize(desktopSize()));
@@ -373,11 +383,13 @@ Rect DxgiOutputDuplicator::translatedDesktopRect(const Point& offset) const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect DxgiOutputDuplicator::untranslatedDesktopRect() const
 {
     return Rect::makeSize(desktopSize());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
                                                Region* updated_region)
 {
@@ -393,6 +405,7 @@ void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& fr
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
                                                  Region* updated_region)
 {
@@ -493,6 +506,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::setup(Context* context)
 {
     DCHECK(context->updated_region.isEmpty());
@@ -503,6 +517,7 @@ void DxgiOutputDuplicator::setup(Context* context)
     contexts_.push_back(context);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::unregister(const Context* const context)
 {
     auto it = std::find(contexts_.begin(), contexts_.end(), context);
@@ -510,6 +525,7 @@ void DxgiOutputDuplicator::unregister(const Context* const context)
     contexts_.erase(it);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::spreadContextChange(const Context* const source)
 {
     for (Context* dest : contexts_)
@@ -521,11 +537,13 @@ void DxgiOutputDuplicator::spreadContextChange(const Context* const source)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 Size DxgiOutputDuplicator::desktopSize() const
 {
     return desktop_rect_.size();
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t DxgiOutputDuplicator::numFramesCaptured() const
 {
 #if !defined(NDEBUG)
@@ -534,6 +552,7 @@ int64_t DxgiOutputDuplicator::numFramesCaptured() const
     return num_frames_captured_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::translateRect(const Point& position)
 {
     desktop_rect_.translate(position);

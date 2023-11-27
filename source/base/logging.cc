@@ -53,7 +53,7 @@ namespace {
 const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 
-LoggingSeverity g_min_log_level = LOG_LS_WARNING;
+LoggingSeverity g_min_log_level = LOG_LS_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 size_t g_max_log_file_size = kDefaultMaxLogFileSize;
@@ -65,9 +65,10 @@ std::filesystem::path g_log_file_path;
 std::ofstream g_log_file;
 std::mutex g_log_file_lock;
 
+//--------------------------------------------------------------------------------------------------
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = { "I", "W", "E", "F" };
+    static const char* const kLogSeverityNames[] = { "I", "E", "F" };
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
@@ -77,6 +78,7 @@ const char* severityName(LoggingSeverity severity)
     return "UNKNOWN";
 }
 
+//--------------------------------------------------------------------------------------------------
 void removeOldFiles(const std::filesystem::path& path,
                     const std::filesystem::file_time_type& current_time,
                     size_t max_file_age)
@@ -94,6 +96,7 @@ void removeOldFiles(const std::filesystem::path& path,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path defaultLogFileDir()
 {
     std::error_code error_code;
@@ -106,6 +109,7 @@ std::filesystem::path defaultLogFileDir()
     return path;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool initLoggingUnlocked(const std::string& prefix)
 {
     g_log_file.close();
@@ -177,15 +181,16 @@ bool initLoggingUnlocked(const std::string& prefix)
 // operator.
 std::ostream* g_swallow_stream;
 
+//--------------------------------------------------------------------------------------------------
 LoggingSettings::LoggingSettings()
-    : min_log_level(LOG_LS_WARNING),
+    : min_log_level(LOG_LS_ERROR),
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
     std::string log_level_string;
     if (Environment::get("ASPIA_LOG_LEVEL", &log_level_string))
     {
-        LoggingSeverity log_level = LOG_LS_WARNING;
+        LoggingSeverity log_level = LOG_LS_ERROR;
         if (stringToInt(log_level_string, &log_level))
         {
             log_level = std::max(log_level, LOG_LS_INFO);
@@ -252,17 +257,19 @@ LoggingSettings::LoggingSettings()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path execFilePath()
 {
     std::filesystem::path exec_file_path;
 
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
-    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
+    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
     exec_file_path = buffer;
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
-    readlink("/proc/self/exe", buffer, std::size(buffer));
+    if (readlink("/proc/self/exe", buffer, std::size(buffer)) == -1)
+        return std::filesystem::path();
     exec_file_path = buffer;
 #elif defined(OS_MAC)
     char buffer[PATH_MAX] = { 0 };
@@ -276,6 +283,7 @@ std::filesystem::path execFilePath()
     return exec_file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string logFilePrefix()
 {
     std::filesystem::path exec_file_path = execFilePath();
@@ -284,6 +292,7 @@ std::string logFilePrefix()
     return exec_file_name.string();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool initLogging(const LoggingSettings& settings)
 {
     {
@@ -319,6 +328,7 @@ bool initLogging(const LoggingSettings& settings)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void shutdownLogging()
 {
     LOG(LS_INFO) << "Logging finished";
@@ -327,6 +337,7 @@ void shutdownLogging()
     g_log_file.close();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool shouldCreateLogMessage(LoggingSeverity severity)
 {
     if (severity < g_min_log_level)
@@ -338,26 +349,31 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     return g_logging_destination != LOG_NONE || severity >= LOG_LS_ERROR;
 }
 
+//--------------------------------------------------------------------------------------------------
 void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
 {
     (*os) << "nullptr";
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const int& v1, const int& v2, const char* names)
 {
     return makeCheckOpString<int, int>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names)
 {
     return makeCheckOpString<unsigned long, unsigned long>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names)
 {
     return makeCheckOpString<unsigned int, unsigned int>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const unsigned long long& v1,
                                const unsigned long long& v2,
                                const char* names)
@@ -365,21 +381,25 @@ std::string* makeCheckOpString(const unsigned long long& v1,
     return makeCheckOpString<unsigned long long, unsigned long long>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names)
 {
     return makeCheckOpString<unsigned long, unsigned int>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names)
 {
     return makeCheckOpString<unsigned int, unsigned long>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string* makeCheckOpString(const std::string& v1, const std::string& v2, const char* names)
 {
     return makeCheckOpString<std::string, std::string>(v1, v2, names);
 }
 
+//--------------------------------------------------------------------------------------------------
 LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
@@ -389,6 +409,7 @@ LogMessage::LogMessage(std::string_view file,
     init(file, line, function);
 }
 
+//--------------------------------------------------------------------------------------------------
 LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
@@ -399,6 +420,7 @@ LogMessage::LogMessage(std::string_view file,
     stream_ << "Check failed: " << condition << ". ";
 }
 
+//--------------------------------------------------------------------------------------------------
 LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
@@ -410,6 +432,7 @@ LogMessage::LogMessage(std::string_view file,
     stream_ << "Check failed: " << *result;
 }
 
+//--------------------------------------------------------------------------------------------------
 LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
@@ -422,6 +445,7 @@ LogMessage::LogMessage(std::string_view file,
     stream_ << "Check failed: " << *result;
 }
 
+//--------------------------------------------------------------------------------------------------
 LogMessage::~LogMessage()
 {
     stream_ << std::endl;
@@ -449,7 +473,7 @@ LogMessage::~LogMessage()
     {
         std::scoped_lock lock(g_log_file_lock);
 
-        if (g_log_file.tellp() >= g_max_log_file_size)
+        if (static_cast<size_t>(g_log_file.tellp()) >= g_max_log_file_size)
         {
             // The maximum size of the log file has been exceeded. Close the current log file and
             // create a new one.
@@ -467,6 +491,7 @@ LogMessage::~LogMessage()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // Writes the common header info to the stream.
 void LogMessage::init(std::string_view file, int line, std::string_view function)
 {
@@ -488,6 +513,7 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
     message_start_ = stream_.str().length();
 }
 
+//--------------------------------------------------------------------------------------------------
 ErrorLogMessage::ErrorLogMessage(std::string_view file,
                                  int line,
                                  std::string_view function,
@@ -499,6 +525,7 @@ ErrorLogMessage::ErrorLogMessage(std::string_view file,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ErrorLogMessage::~ErrorLogMessage()
 {
     stream() << ": " << error_.toString();
@@ -509,22 +536,26 @@ ErrorLogMessage::~ErrorLogMessage()
 namespace std {
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 {
     return out << base::utf8FromWide(wstr);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
 {
     return out << (ustr ? base::utf8FromUtf16(ustr) : "nullptr");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
 {
     return out << base::utf8FromUtf16(ustr);

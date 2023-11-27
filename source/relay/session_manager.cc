@@ -31,6 +31,7 @@ namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
 
+//--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
 {
@@ -67,6 +68,7 @@ base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPoo
     return target;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Removes a session from the list and returns a pointer to it.
 template<class T>
 std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list, T* session)
@@ -94,15 +96,17 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                               const asio::ip::address& listen_address,
+                               const asio::ip::address& address,
                                uint16_t port,
                                const std::chrono::minutes& idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval)
     : task_runner_(std::move(task_runner)),
-      acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
-                asio::ip::tcp::endpoint(listen_address, port)),
+      acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      address_(address),
+      port_(port),
       idle_timeout_(idle_timeout),
       idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
       stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
@@ -110,10 +114,9 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
       statistics_interval_(statistics_interval)
 {
     DCHECK(task_runner_);
-
-    LOG(LS_INFO) << "Session manager port: " << port;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionManager::~SessionManager()
 {
     std::error_code ignored_code;
@@ -122,9 +125,45 @@ SessionManager::~SessionManager()
     idle_timer_.cancel();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
 {
     LOG(LS_INFO) << "Starting session manager";
+
+    asio::ip::tcp::endpoint endpoint(address_, port_);
+
+    std::error_code error_code;
+    acceptor_.open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.open failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.set_option failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.bind failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_.listen failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
 
     start_time_ = Clock::now();
 
@@ -145,6 +184,7 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     SessionManager::doAccept(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::disconnectSession(uint64_t session_id)
 {
     LOG(LS_INFO) << "Disconnect session by session id: " << session_id;
@@ -158,9 +198,10 @@ void SessionManager::disconnectSession(uint64_t session_id)
         }
     }
 
-    LOG(LS_WARNING) << "Session with id " << session_id << " not found";
+    LOG(LS_ERROR) << "Session with id " << session_id << " not found";
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::onPendingSessionReady(
     PendingSession* session, const proto::PeerToRelay& message)
 {
@@ -207,28 +248,31 @@ void SessionManager::onPendingSessionReady(
         }
         else
         {
-            LOG(LS_WARNING) << "Failed to decrypt shared secret. Connection will be completed";
+            LOG(LS_ERROR) << "Failed to decrypt shared secret. Connection will be completed";
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Key with id " << message.key_id() << " NOT found!";
+        LOG(LS_ERROR) << "Key with id " << message.key_id() << " NOT found!";
     }
 
     // The key was not found in the pool.
     removePendingSession(session);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::onPendingSessionFailed(PendingSession* session)
 {
     removePendingSession(session);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::onSessionFinished(Session* session)
 {
     removeSession(session);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void SessionManager::doAccept(SessionManager* self)
 {
@@ -259,6 +303,7 @@ void SessionManager::doAccept(SessionManager* self)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void SessionManager::doIdleTimeout(SessionManager* self, const std::error_code& error_code)
 {
@@ -268,6 +313,7 @@ void SessionManager::doIdleTimeout(SessionManager* self, const std::error_code& 
     self->doIdleTimeoutImpl(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
 {
     if (!error_code)
@@ -300,6 +346,7 @@ void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
     idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void SessionManager::doStatTimeout(SessionManager* self, const std::error_code& error_code)
 {
@@ -309,6 +356,7 @@ void SessionManager::doStatTimeout(SessionManager* self, const std::error_code& 
     self->doStatTimeoutImpl(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
 {
     if (!error_code)
@@ -324,6 +372,7 @@ void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
     stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::collectAndSendStatistics()
 {
     Session::TimePoint now = Session::Clock::now();
@@ -351,11 +400,13 @@ void SessionManager::collectAndSendStatistics()
         delegate_->onSessionStatistics(relay_stat);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::removePendingSession(PendingSession* session)
 {
     task_runner_->deleteSoon(removeSessionT(&pending_sessions_, session));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionManager::removeSession(Session* session)
 {
     task_runner_->deleteSoon(removeSessionT(&active_sessions_, session));

@@ -30,6 +30,7 @@ namespace base::win {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool batteryInformation(Device& battery,
                         ULONG tag,
                         BATTERY_QUERY_INFORMATION_LEVEL level,
@@ -50,6 +51,7 @@ bool batteryInformation(Device& battery,
                              &bytes_returned);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool batteryStatus(Device& battery, ULONG tag, BATTERY_STATUS* status)
 {
     BATTERY_WAIT_STATUS status_request;
@@ -75,19 +77,22 @@ bool batteryStatus(Device& battery, ULONG tag, BATTERY_STATUS* status)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 BatteryEnumerator::BatteryEnumerator()
 {
     const DWORD flags = DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
     device_info_.reset(SetupDiGetClassDevsW(&GUID_DEVCLASS_BATTERY, nullptr, nullptr, flags));
     if (!device_info_.isValid())
     {
-        PLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
+        PLOG(LS_ERROR) << "SetupDiGetClassDevsW failed";
         return;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 BatteryEnumerator::~BatteryEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool BatteryEnumerator::isAtEnd() const
 {
     SP_DEVICE_INTERFACE_DATA device_iface_data;
@@ -105,8 +110,8 @@ bool BatteryEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
-                             << SystemError(error_code).toString();
+            DLOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed: "
+                           << SystemError(error_code).toString();
         }
 
         return true;
@@ -121,7 +126,7 @@ bool BatteryEnumerator::isAtEnd() const
                                          nullptr) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_WARNING) << "Unexpected return value";
+        PLOG(LS_ERROR) << "Unexpected return value";
         return true;
     }
 
@@ -138,7 +143,7 @@ bool BatteryEnumerator::isAtEnd() const
                                           &required_size,
                                           nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceInterfaceDetailW failed";
         return true;
     }
 
@@ -161,11 +166,13 @@ bool BatteryEnumerator::isAtEnd() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void BatteryEnumerator::advance()
 {
     ++device_index_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::deviceName() const
 {
     wchar_t buffer[256] = { 0 };
@@ -176,6 +183,7 @@ std::string BatteryEnumerator::deviceName() const
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::manufacturer() const
 {
     wchar_t buffer[256] = { 0 };
@@ -186,6 +194,7 @@ std::string BatteryEnumerator::manufacturer() const
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::manufactureDate() const
 {
     BATTERY_MANUFACTURE_DATE date;
@@ -198,6 +207,7 @@ std::string BatteryEnumerator::manufactureDate() const
     return stringPrintf("%u-%u-%u", date.Day, date.Month, date.Year);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::uniqueId() const
 {
     wchar_t buffer[256] = { 0 };
@@ -208,6 +218,7 @@ std::string BatteryEnumerator::uniqueId() const
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::serialNumber() const
 {
     wchar_t buffer[256] = { 0 };
@@ -218,6 +229,7 @@ std::string BatteryEnumerator::serialNumber() const
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::temperature() const
 {
     wchar_t buffer[256] = { 0 };
@@ -228,6 +240,7 @@ std::string BatteryEnumerator::temperature() const
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::designCapacity() const
 {
     BATTERY_INFORMATION battery_info;
@@ -241,6 +254,7 @@ uint32_t BatteryEnumerator::designCapacity() const
     return battery_info.DesignedCapacity;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string BatteryEnumerator::type() const
 {
     BATTERY_INFORMATION battery_info;
@@ -272,6 +286,7 @@ std::string BatteryEnumerator::type() const
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::fullChargedCapacity() const
 {
     BATTERY_INFORMATION battery_info;
@@ -284,6 +299,7 @@ uint32_t BatteryEnumerator::fullChargedCapacity() const
     return battery_info.FullChargedCapacity;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::depreciation() const
 {
     BATTERY_INFORMATION battery_info;
@@ -302,6 +318,7 @@ uint32_t BatteryEnumerator::depreciation() const
     return (percent > 0) ? static_cast<uint32_t>(percent) : 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::currentCapacity() const
 {
     BATTERY_STATUS battery_status;
@@ -311,6 +328,7 @@ uint32_t BatteryEnumerator::currentCapacity() const
     return battery_status.Capacity;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::voltage() const
 {
     BATTERY_STATUS battery_status;
@@ -320,6 +338,7 @@ uint32_t BatteryEnumerator::voltage() const
     return battery_status.Voltage;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t BatteryEnumerator::state() const
 {
     BATTERY_STATUS battery_status;

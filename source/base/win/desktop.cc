@@ -22,6 +22,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Desktop::Desktop(Desktop&& other) noexcept
 {
     desktop_ = other.desktop_;
@@ -30,18 +31,21 @@ Desktop::Desktop(Desktop&& other) noexcept
     other.desktop_ = nullptr;
 }
 
-Desktop::Desktop(HDESK desktop, bool own) :
-    desktop_(desktop),
-    own_(own)
+//--------------------------------------------------------------------------------------------------
+Desktop::Desktop(HDESK desktop, bool own)
+    : desktop_(desktop),
+      own_(own)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Desktop::~Desktop()
 {
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::desktop(const wchar_t* desktop_name)
 {
@@ -54,13 +58,14 @@ Desktop Desktop::desktop(const wchar_t* desktop_name)
     HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
     if (!desktop)
     {
-        PLOG(LS_WARNING) << "OpenDesktopW failed";
+        PLOG(LS_ERROR) << "OpenDesktopW failed";
         return Desktop();
     }
 
     return Desktop(desktop, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::inputDesktop()
 {
@@ -69,26 +74,43 @@ Desktop Desktop::inputDesktop()
     HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
     if (!desktop)
     {
-        PLOG(LS_WARNING) << "OpenInputDesktop failed";
+        PLOG(LS_ERROR) << "OpenInputDesktop failed";
         return Desktop();
     }
 
     return Desktop(desktop, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::threadDesktop()
 {
     HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
     if (!desktop)
     {
-        PLOG(LS_WARNING) << "GetThreadDesktop failed";
+        PLOG(LS_ERROR) << "GetThreadDesktop failed";
         return Desktop();
     }
 
     return Desktop(desktop, false);
 }
 
+//--------------------------------------------------------------------------------------------------
+// static
+std::vector<std::wstring> Desktop::desktopList(HWINSTA winsta)
+{
+    std::vector<std::wstring> list;
+
+    if (!EnumDesktopsW(winsta, enumDesktopProc, reinterpret_cast<LPARAM>(&list)))
+    {
+        PLOG(LS_ERROR) << "EnumDesktopsW failed";
+        return {};
+    }
+
+    return list;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Desktop::name(wchar_t* name, DWORD length) const
 {
     if (!desktop_)
@@ -96,13 +118,14 @@ bool Desktop::name(wchar_t* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        PLOG(LS_WARNING) << "Failed to query the desktop name";
+        PLOG(LS_ERROR) << "Failed to query the desktop name";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::isSame(const Desktop& other) const
 {
     wchar_t this_name[128];
@@ -118,35 +141,39 @@ bool Desktop::isSame(const Desktop& other) const
     return wcscmp(this_name, other_name) == 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::setThreadDesktop() const
 {
     if (!SetThreadDesktop(desktop_))
     {
-        PLOG(LS_WARNING) << "SetThreadDesktop failed";
+        PLOG(LS_ERROR) << "SetThreadDesktop failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::isValid() const
 {
     return (desktop_ != nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Desktop::close()
 {
     if (own_ && desktop_)
     {
         if (!CloseDesktop(desktop_))
         {
-            PLOG(LS_WARNING) << "CloseDesktop failed";
+            PLOG(LS_ERROR) << "CloseDesktop failed";
         }
     }
 
     desktop_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Desktop& Desktop::operator=(Desktop&& other) noexcept
 {
     close();
@@ -157,6 +184,27 @@ Desktop& Desktop::operator=(Desktop&& other) noexcept
     other.desktop_ = nullptr;
 
     return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
+{
+    std::vector<std::wstring>* list = reinterpret_cast<std::vector<std::wstring>*>(lparam);
+    if (!list)
+    {
+        LOG(LS_ERROR) << "Invalid desktop list pointer";
+        return FALSE;
+    }
+
+    if (!desktop)
+    {
+        LOG(LS_ERROR) << "Invalid desktop name";
+        return FALSE;
+    }
+
+    list->emplace_back(desktop);
+    return TRUE;
 }
 
 } // namespace base

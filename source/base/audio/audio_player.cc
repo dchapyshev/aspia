@@ -24,35 +24,40 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioPlayer::AudioPlayer()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioPlayer::~AudioPlayer()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<AudioPlayer> AudioPlayer::create()
 {
     std::unique_ptr<AudioPlayer> player(new AudioPlayer());
     if (!player->init())
     {
-        LOG(LS_WARNING) << "Unable to initialize audio player";
+        LOG(LS_ERROR) << "Unable to initialize audio player";
         return nullptr;
     }
 
     return player;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioPlayer::addPacket(std::unique_ptr<proto::AudioPacket> packet)
 {
     std::scoped_lock lock(incoming_queue_lock_);
     incoming_queue_.emplace(std::move(packet));
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t AudioPlayer::onMoreDataRequired(void* data, size_t size)
 {
     if (work_queue_.empty())
@@ -99,6 +104,7 @@ size_t AudioPlayer::onMoreDataRequired(void* data, size_t size)
     return target_pos;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioPlayer::init()
 {
     output_ = AudioOutput::create(std::bind(

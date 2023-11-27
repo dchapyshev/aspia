@@ -33,20 +33,24 @@ const char kFileName[] = "router";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Settings::Settings()
     : impl_(kScope, kApplicationName, kFileName)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::~Settings() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path Settings::filePath()
 {
     return base::JsonSettings::filePath(kScope, kApplicationName, kFileName);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
@@ -57,85 +61,109 @@ void Settings::reset()
     setRelayWhiteList(WhiteList());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::flush()
 {
     impl_.flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const std::u16string& interface)
 {
     impl_.set<std::u16string>("ListenInterface", interface);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string Settings::listenInterface() const
 {
-    std::u16string interface = impl_.get<std::u16string>("ListenInterface", u"0.0.0.0");
-    if (interface.empty())
-        return u"0.0.0.0";
-
-    return interface;
+    return impl_.get<std::u16string>("ListenInterface", std::u16string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setPort(uint16_t port)
 {
     impl_.set<uint16_t>("Port", port);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t Settings::port() const
 {
     return impl_.get<uint16_t>("Port", DEFAULT_ROUTER_TCP_PORT);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setPrivateKey(const base::ByteArray& private_key)
 {
     impl_.set<std::string>("PrivateKey", base::toHex(private_key));
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray Settings::privateKey() const
 {
     return base::fromHex(impl_.get<std::string>("PrivateKey"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setClientWhiteList(const WhiteList& list)
 {
     setWhiteList("ClientWhiteList", list);
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::clientWhiteList() const
 {
     return whiteList("ClientWhiteList");
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setHostWhiteList(const WhiteList& list)
 {
     setWhiteList("HostWhiteList", list);
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::hostWhiteList() const
 {
     return whiteList("HostWhiteList");
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setAdminWhiteList(const WhiteList& list)
 {
     setWhiteList("AdminWhiteList", list);
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::adminWhiteList() const
 {
     return whiteList("AdminWhiteList");
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setRelayWhiteList(const WhiteList& list)
 {
     setWhiteList("RelayWhiteList", list);
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::relayWhiteList() const
 {
     return whiteList("RelayWhiteList");
 }
 
+//--------------------------------------------------------------------------------------------------
+void Settings::setSeedKey(const base::ByteArray &seed_key)
+{
+    impl_.set<std::string>("SeedKey", base::toHex(seed_key));
+}
+
+//--------------------------------------------------------------------------------------------------
+base::ByteArray Settings::seedKey() const
+{
+    return base::fromHex(impl_.get<std::string>("SeedKey"));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Settings::setWhiteList(std::string_view key, const WhiteList& value)
 {
     std::u16string result;
@@ -155,6 +183,7 @@ void Settings::setWhiteList(std::string_view key, const WhiteList& value)
     impl_.set<std::u16string>(key, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::whiteList(std::string_view key) const
 {
     WhiteList result =

@@ -23,6 +23,7 @@
 #include "base/version.h"
 #include "base/memory/byte_array.h"
 #include "base/net/curl_util.h"
+#include "build/build_config.h"
 
 namespace common {
 
@@ -69,10 +70,17 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Runner);
 };
 
-UpdateChecker::UpdateChecker() = default;
+//--------------------------------------------------------------------------------------------------
+UpdateChecker::UpdateChecker()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 
+//--------------------------------------------------------------------------------------------------
 UpdateChecker::~UpdateChecker()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (runner_)
     {
         runner_->dettach();
@@ -81,22 +89,27 @@ UpdateChecker::~UpdateChecker()
     thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::setUpdateServer(std::string_view update_server)
 {
     update_server_ = update_server;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::setPackageName(std::string_view package_name)
 {
     package_name_ = package_name;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting update checker";
     runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&UpdateChecker::run, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArray* buffer)
 {
     size_t append_size = size * nmemb;
@@ -104,15 +117,56 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
     return append_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
-    base::Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    LOG(LS_INFO) << "run BEGIN";
+
+    std::string os;
+
+#if defined(OS_WIN)
+    os = "windows";
+#elif defined(OS_LINUX)
+    os = "linux";
+#elif defined(OS_MAC)
+    os = "macosx";
+#else
+#error Unknown OS
+#endif
+
+    std::string arch;
+
+#if defined(ARCH_CPU_X86_64)
+    arch = "x86_64";
+#elif defined(ARCH_CPU_X86)
+    arch = "x86";
+#elif defined(ARCH_CPU_ARMEL)
+    arch = "arm";
+#elif defined(ARCH_CPU_ARM64)
+    arch = "arm64";
+#else
+#error Unknown architecture
+#endif
+
+    const base::Version& version = base::Version::kVersion_CurrentShort;
 
     std::string url(update_server_);
     url += "/update.php?";
     url += "package=" + package_name_;
     url += '&';
     url += "version=" + version.toString(3);
+
+    if (!os.empty())
+    {
+        url += '&';
+        url += "os=" + os;
+    }
+
+    if (!arch.empty())
+    {
+        url += '&';
+        url += "arch=" + arch;
+    }
 
     LOG(LS_INFO) << "Start checking for updates. Url: " << url;
 
@@ -123,7 +177,10 @@ void UpdateChecker::run()
 
     long verify_peer = 1;
     if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+    {
+        LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;
+    }
 
     base::ByteArray response;
 
@@ -137,16 +194,17 @@ void UpdateChecker::run()
     int still_running = 1;
     do
     {
-        CURLMcode mc = curl_multi_perform(multi_curl.get(), &still_running);
-        if (!mc)
+        CURLMcode error_code = curl_multi_perform(multi_curl.get(), &still_running);
+        if (!error_code)
         {
-              // Wait for activity, timeout or "nothing".
-              mc = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
+            // Wait for activity, timeout or "nothing".
+            error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
         }
 
-        if (mc)
+        if (error_code)
         {
-            LOG(LS_WARNING) << "curl_multi_poll failed: " << mc;
+            LOG(LS_ERROR) << "curl_multi_poll failed: " << curl_multi_strerror(error_code)
+                          << " (" << error_code << ")";
             response.clear();
             break;
         }
@@ -168,6 +226,8 @@ void UpdateChecker::run()
         if (runner_)
             runner_->onFinished(response);
     }
+
+    LOG(LS_INFO) << "run END";
 }
 
 } // namespace common

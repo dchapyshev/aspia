@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
     <?define Manufacturer="Dmitry Chapyshev"?>
-    <?define Version="2.6.0"?>
-    <?define SourceFiles="..\..\build\Release"?>
+    <?define Version="$(env.ASPIA_VERSION)"?>
+    <?define SourceFiles="$(env.ASPIA_BIN_DIR)"?>
+    <?if $(sys.BUILDARCH)="x86"?>
+        <?define Minimum_Version="100"?>
+        <?define Program_Files="ProgramFilesFolder"?>
+    <?elseif $(sys.BUILDARCH)="x64"?>
+        <?define Minimum_Version="200"?>
+        <?define Program_Files="ProgramFiles64Folder"?>
+    <?else?>
+        <?error Unsupported value of sys.BUILDARCH=$(sys.BUILDARCH)?>
+    <?endif?>
 </Include>

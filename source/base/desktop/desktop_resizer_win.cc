@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isModeValid(const DEVMODEW& mode)
 {
     const DWORD kRequiredFields =
@@ -37,6 +38,7 @@ bool isModeValid(const DEVMODEW& mode)
     return (mode.dmFields & kRequiredFields) == kRequiredFields;
 }
 
+//--------------------------------------------------------------------------------------------------
 Size resolutionFromMode(const DEVMODEW& mode)
 {
     DCHECK(isModeValid(mode));
@@ -45,6 +47,7 @@ Size resolutionFromMode(const DEVMODEW& mode)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // Provide comparison operation for base::Size so we can use it in std::map.
 static inline bool operator<(const Size& a, const Size& b)
 {
@@ -74,6 +77,7 @@ private:
     std::map<Size, DEVMODEW> best_mode_;
 };
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     : screen_id_(screen_id)
 {
@@ -81,7 +85,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen_id), &device, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
+        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
         return;
     }
 
@@ -91,7 +95,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &current_mode, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
+        PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
         return;
     }
 
@@ -112,6 +116,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
     std::vector<Size> result;
@@ -122,6 +127,7 @@ std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
 {
     if (current_resolution_ == resolution)
@@ -134,15 +140,15 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
     DEVMODEW mode;
     if (!modeForResolution(resolution, &mode))
     {
-        LOG(LS_WARNING) << "Specified mode " << resolution << " for screen "
-                        << screen_id_ << " not found";
+        LOG(LS_ERROR) << "Specified mode " << resolution << " for screen "
+                      << screen_id_ << " not found";
         return false;
     }
 
     LONG result = ChangeDisplaySettingsExW(name_.c_str(), &mode, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
         return false;
     }
 
@@ -150,16 +156,18 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::Screen::restoreResolution()
 {
     // Restore the display mode based on the registry configuration.
     LONG result = ChangeDisplaySettingsExW(name_.c_str(), nullptr, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMODEW* mode)
 {
     DCHECK(mode);
@@ -172,6 +180,7 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::Screen::updateBestModeForResolution(
     const DEVMODEW& current_mode, const DEVMODEW& candidate_mode)
 {
@@ -219,9 +228,9 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
             candidate_mode.dmDisplayFrequency == current_mode.dmDisplayFrequency;
         if (best_mode_matches_current_frequency && !candidate_mode_matches_current_frequency)
         {
-            LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                         << candidate_mode.dmPelsHeight
-                         << ": mode matching current frequency already found.";
+            //LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
+            //             << candidate_mode.dmPelsHeight
+            //             << ": mode matching current frequency already found.";
             return;
         }
     }
@@ -231,12 +240,13 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     best_mode_[candidate_resolution] = candidate_mode;
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::DesktopResizerWin()
 {
     ScreenCapturer::ScreenList screen_list;
     if (!ScreenCaptureUtils::screenList(&screen_list))
     {
-        LOG(LS_WARNING) << "ScreenCaptureUtils::screenList failed";
+        LOG(LS_ERROR) << "ScreenCaptureUtils::screenList failed";
         return;
     }
 
@@ -244,47 +254,52 @@ DesktopResizerWin::DesktopResizerWin()
         screens_.emplace(screen.id, std::make_unique<Screen>(screen.id));
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::~DesktopResizerWin()
 {
     restoreResulution();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return {};
     }
 
     return screen->second->supportedResolutions();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return false;
     }
 
     return screen->second->setResolution(resolution);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::restoreResolution(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return;
     }
 
     screen->second->restoreResolution();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::restoreResulution()
 {
     for (const auto& screen : screens_)

@@ -105,6 +105,7 @@ struct Manufacturers
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 static int GetDataType(uint8_t* descriptor)
 {
     const uint8_t kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
@@ -120,6 +121,7 @@ static int GetDataType(uint8_t* descriptor)
     return kDetailedTimingDescriptor;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_size)
 {
@@ -142,21 +144,22 @@ std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_
                 return std::unique_ptr<Edid>(new Edid(std::move(data), data_size));
             }
 
-            LOG(LS_WARNING) << "Invalid EDID checksum: " << checksum;
+            LOG(LS_ERROR) << "Invalid EDID checksum: " << checksum;
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid EDID header: " << edid->header;
+            LOG(LS_ERROR) << "Invalid EDID header: " << edid->header;
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid EDID data";
+        LOG(LS_ERROR) << "Invalid EDID data";
     }
 
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Edid::Edid(std::unique_ptr<uint8_t[]> data, size_t data_size)
     : data_(std::move(data)),
       data_size_(data_size)
@@ -164,19 +167,21 @@ Edid::Edid(std::unique_ptr<uint8_t[]> data, size_t data_size)
     edid_ = reinterpret_cast<Data*>(data_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::weekOfManufacture() const
 {
     uint8_t week = edid_->week_of_manufacture;
 
     if (week < kMinWeekOfManufacture || week > kMaxWeekOfManufacture)
     {
-        LOG(LS_WARNING) << "Wrong week field value: " << week;
+        LOG(LS_ERROR) << "Wrong week field value: " << week;
         return 0;
     }
 
     return week;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::yearOfManufacture() const
 {
     // The Year of Manufacture field is used to represent the year of the monitor’s manufacture.
@@ -187,26 +192,31 @@ int Edid::yearOfManufacture() const
     return 1990 + edid_->year_of_manufacture;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::edidVersion() const
 {
     return edid_->structure_version;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::edidRevision() const
 {
     return edid_->structure_revision;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::maxHorizontalImageSize() const
 {
     return edid_->max_horizontal_image_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::maxVerticalImageSize() const
 {
     return edid_->max_vertical_image_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::horizontalResolution() const
 {
     DetailedTimingDescriptor* descriptor =
@@ -221,6 +231,7 @@ int Edid::horizontalResolution() const
     return static_cast<int>((hi << 8) | lo);
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::verticalResolution() const
 {
     DetailedTimingDescriptor* descriptor =
@@ -235,6 +246,7 @@ int Edid::verticalResolution() const
     return static_cast<int>((hi << 8) | lo);
 }
 
+//--------------------------------------------------------------------------------------------------
 double Edid::gamma() const
 {
     const uint8_t gamma = edid_->gamma;
@@ -245,11 +257,13 @@ double Edid::gamma() const
     return (static_cast<double>(gamma) / 100.0) + 1.0;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t Edid::featureSupport() const
 {
     return edid_->feature_support;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Edid::getManufacturerSignature() const
 {
     BitSet<uint16_t> id = EndianUtil::byteSwap(edid_->id_manufacturer_name);
@@ -266,6 +280,7 @@ std::string Edid::getManufacturerSignature() const
     return signature;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Edid::monitorId() const
 {
     return stringPrintf("%s%04X",
@@ -273,6 +288,7 @@ std::string Edid::monitorId() const
                         edid_->id_product_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Edid::serialNumber() const
 {
     MonitorDescriptor* descriptor =
@@ -300,6 +316,7 @@ std::string Edid::serialNumber() const
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t* Edid::getDescriptor(int type) const
 {
     size_t count = sizeof(Data::detailed_timing_description) /
@@ -316,6 +333,7 @@ uint8_t* Edid::getDescriptor(int type) const
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Edid::manufacturerName() const
 {
     std::string signature = getManufacturerSignature();
@@ -329,6 +347,7 @@ std::string Edid::manufacturerName() const
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Edid::monitorName() const
 {
     MonitorDescriptor* descriptor =
@@ -355,6 +374,7 @@ std::string Edid::monitorName() const
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::minVerticalRate() const
 {
     MonitorDescriptor* descriptor =
@@ -366,6 +386,7 @@ int Edid::minVerticalRate() const
     return descriptor->descriptor_data[0];
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::maxVerticalRate() const
 {
     MonitorDescriptor* descriptor =
@@ -377,6 +398,7 @@ int Edid::maxVerticalRate() const
     return descriptor->descriptor_data[1];
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::minHorizontalRate() const
 {
     MonitorDescriptor* descriptor =
@@ -388,6 +410,7 @@ int Edid::minHorizontalRate() const
     return descriptor->descriptor_data[2];
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::maxHorizontalRate() const
 {
     MonitorDescriptor* descriptor =
@@ -399,6 +422,7 @@ int Edid::maxHorizontalRate() const
     return descriptor->descriptor_data[3];
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::maxSupportedPixelClock() const
 {
     MonitorDescriptor* descriptor =
@@ -410,6 +434,7 @@ int Edid::maxSupportedPixelClock() const
     return descriptor->descriptor_data[4] * 10;
 }
 
+//--------------------------------------------------------------------------------------------------
 double Edid::pixelClock() const
 {
     DetailedTimingDescriptor* descriptor =
@@ -421,6 +446,7 @@ double Edid::pixelClock() const
     return double(descriptor->pixel_clock) / 100.0;
 }
 
+//--------------------------------------------------------------------------------------------------
 Edid::InputSignalType Edid::inputSignalType() const
 {
     if (edid_->video_input_definition & 0x80)
@@ -429,21 +455,25 @@ Edid::InputSignalType Edid::inputSignalType() const
     return INPUT_SIGNAL_TYPE_ANALOG;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t Edid::estabilishedTimings1() const
 {
     return edid_->established_timings[0];
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t Edid::estabilishedTimings2() const
 {
     return edid_->established_timings[1];
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t Edid::manufacturersTimings() const
 {
     return edid_->manufacturers_reserved_timings;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Edid::standardTimingsCount() const
 {
     size_t count = sizeof(Data::standard_timing_identification) /
@@ -451,6 +481,7 @@ int Edid::standardTimingsCount() const
     return static_cast<int>(count);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Edid::standardTimings(int index, int* width, int* height, int* frequency)
 {
     uint8_t byte1 = edid_->standard_timing_identification[index][0];

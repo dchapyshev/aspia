@@ -23,27 +23,34 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileTransferProxy::FileTransferProxy(
     std::shared_ptr<base::TaskRunner> io_task_runner, FileTransfer* file_transfer)
     : io_task_runner_(std::move(io_task_runner)),
       file_transfer_(file_transfer)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
     DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(file_transfer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransferProxy::~FileTransferProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!file_transfer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach file transfer";
     DCHECK(io_task_runner_->belongsToCurrentThread());
     file_transfer_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::stop()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -56,6 +63,7 @@ void FileTransferProxy::stop()
         file_transfer_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::setAction(
     FileTransfer::Error::Type error_type, FileTransfer::Error::Action action)
 {

@@ -27,6 +27,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool searchPathDirectory(NSSearchPathDirectory directory,
                          NSSearchPathDomainMask domain_mask,
                          std::filesystem::path* result)
@@ -40,6 +41,7 @@ bool searchPathDirectory(NSSearchPathDirectory directory,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool userDirectory(NSSearchPathDirectory directory, std::filesystem::path* result)
 {
     return searchPathDirectory(directory, NSUserDomainMask, result);
@@ -47,24 +49,28 @@ bool userDirectory(NSSearchPathDirectory directory, std::filesystem::path* resul
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::userAppData(std::filesystem::path* result)
 {
     return userDirectory(NSDesktopDirectory, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::userDesktop(std::filesystem::path* result)
 {
     return userDirectory(NSDesktopDirectory, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::commonAppData(std::filesystem::path* result)
 {
     return userDirectory(NSApplicationSupportDirectory, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool BasePaths::commonDesktop(std::filesystem::path* result)
 {

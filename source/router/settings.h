@@ -57,6 +57,9 @@ public:
     void setRelayWhiteList(const WhiteList& list);
     WhiteList relayWhiteList() const;
 
+    void setSeedKey(const base::ByteArray& seed_key);
+    base::ByteArray seedKey() const;
+
 private:
     void setWhiteList(std::string_view key, const WhiteList& value);
     WhiteList whiteList(std::string_view key) const;

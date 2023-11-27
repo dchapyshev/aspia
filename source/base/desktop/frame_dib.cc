@@ -25,6 +25,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FrameDib::FrameDib(const Size& size,
                    const PixelFormat& format,
                    int stride,
@@ -38,6 +39,7 @@ FrameDib::FrameDib(const Size& size,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                            const PixelFormat& format,
@@ -52,7 +54,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
 
     bmi.header.biSize      = sizeof(bmi.header);
     bmi.header.biBitCount  = format.bitsPerPixel();
-    bmi.header.biSizeImage = buffer_size;
+    bmi.header.biSizeImage = static_cast<DWORD>(buffer_size);
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = size.width();
     bmi.header.biHeight    = -size.height();
@@ -100,7 +102,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                       0);
     if (!bitmap)
     {
-        LOG(LS_WARNING) << "CreateDIBSection failed";
+        LOG(LS_ERROR) << "CreateDIBSection failed";
         return nullptr;
     }
 

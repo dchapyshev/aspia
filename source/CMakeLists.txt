@@ -25,12 +25,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
-add_definitions(-DUSE_PCG_GENERATOR)
-
-if (mimalloc_FOUND)
-    add_definitions(-DUSE_MIMALLOC)
-endif()
-
 if(NOT Qt5LinguistTools_FOUND)
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
     add_definitions(-DI18L_DISABLED)
@@ -100,7 +94,6 @@ set(THIRD_PARTY_LIBS
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
-    mimalloc-static
     modp_b64
     libwebm
     unofficial::libvpx::libvpx
@@ -112,14 +105,39 @@ include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
 
+message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "CMAKE_HOST_SYSTEM_PROCESSOR: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
+message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+message(STATUS "CMAKE_COMMAND: ${CMAKE_COMMAND}")
+message(STATUS "CMAKE_CPACK_COMMAND: ${CMAKE_CPACK_COMMAND}")
+message(STATUS "CMAKE_MAKE_PROGRAM: ${CMAKE_MAKE_PROGRAM}")
+message(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+
+if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+    message(STATUS "DEBUG build detected")
+else()
+    message(STATUS "RELEASE build detected")
+endif()
+
 if (MSVC)
     # C++ compliller flags.
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /MP /arch:SSE2")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /MP")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 /MP")
 
     # C compiller flags.
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /MP /arch:SSE2")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /MP")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /W3 /MP")
+
+    if (${CMAKE_CL_64} EQUAL 0)
+        message(STATUS "x86 compiller detected")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE2")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /arch:SSE2")
+    else()
+        message(STATUS "x64 compiller detected")
+    endif()
 
     # Linker flags.
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /IGNORE:4099")
@@ -208,7 +226,7 @@ add_subdirectory(relay)
 add_subdirectory(router)
 add_subdirectory(third_party)
 
-if (WIN32)
+if (WIN32 OR LINUX)
     add_subdirectory(host)
 endif()
 
@@ -224,6 +242,54 @@ set(CPACK_PACKAGE_VERSION "${ASPIA_VERSION_MAJOR}.${ASPIA_VERSION_MINOR}.${ASPIA
 set(CPACK_PACKAGE_VERSION_MAJOR "${ASPIA_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${ASPIA_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${ASPIA_VERSION_PATCH}")
+
+#--------------------------------------------------------------------------------------------------
+# Host
+#--------------------------------------------------------------------------------------------------
+
+if (LINUX)
+    install(TARGETS
+        aspia_host_core
+        aspia_host_service
+        aspia_host
+        aspia_desktop_agent
+        aspia_file_transfer_agent
+            BUNDLE DESTINATION . COMPONENT host
+            RUNTIME DESTINATION bin COMPONENT host
+            LIBRARY DESTINATION lib COMPONENT host)
+    set(CPACK_COMPONENT_HOST_NAME "aspia-host")
+    set(CPACK_COMPONENT_HOST_DISPLAY_NAME "Aspia Host")
+    set(CPACK_COMPONENT_HOST_DESCRIPTION "Remote desktop software.")
+
+    if (LINUX)
+        # Desktop file.
+        install(FILES host/linux/aspia-host.desktop
+            DESTINATION share/applications COMPONENT host)
+
+        # Host icons.
+        install(FILES host/linux/icons/16x16/aspia_host.png
+            DESTINATION share/icons/hicolor/16x16/apps COMPONENT host)
+        install(FILES host/linux/icons/24x24/aspia_host.png
+            DESTINATION share/icons/hicolor/24x24/apps COMPONENT host)
+        install(FILES host/linux/icons/32x32/aspia_host.png
+            DESTINATION share/icons/hicolor/32x32/apps COMPONENT host)
+        install(FILES host/linux/icons/48x48/aspia_host.png
+            DESTINATION share/icons/hicolor/48x48/apps COMPONENT host)
+        install(FILES host/linux/icons/64x64/aspia_host.png
+            DESTINATION share/icons/hicolor/64x64/apps COMPONENT host)
+
+        # Service file.
+        install(FILES host/linux/aspia-host-service.service
+            DESTINATION lib/systemd/system COMPONENT host)
+
+        set(CPACK_DEBIAN_HOST_FILE_NAME
+            "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+    endif()
+
+    if (APPLE)
+        set(CPACK_DMG_HOST_FILE_NAME "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}")
+    endif()
+endif()
 
 #--------------------------------------------------------------------------------------------------
 # Console
@@ -362,7 +428,7 @@ if (LINUX)
     set(CPACK_DEBIAN_PACKAGE_SECTION "net")
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
-    set(CPACK_COMPONENTS_ALL console client router relay)
+    set(CPACK_COMPONENTS_ALL host console client router relay)
 endif()
 
 if (APPLE)

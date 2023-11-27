@@ -18,10 +18,6 @@
 
 #include "base/crypto/password_generator.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include "third_party/pcg-cpp/pcg_random.hpp"
-#endif // defined(USE_PCG_GENERATOR)
-
 #include <algorithm>
 #include <random>
 #include <vector>
@@ -31,18 +27,21 @@ namespace base {
 const uint32_t PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
 const size_t PasswordGenerator::kDefaultLength = 8;
 
+//--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setCharacters(uint32_t value)
 {
     if (value)
         characters_ = value;
 }
 
+//--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setLength(size_t value)
 {
     if (value)
         length_ = value;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PasswordGenerator::result() const
 {
     constexpr std::string_view lower_case = "abcdefghijklmnopqrstuvwxyz";
@@ -72,17 +71,10 @@ std::string PasswordGenerator::result() const
     if (characters_ & DIGITS)
         table.append(digits);
 
-#if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> random_device;
-    pcg32_fast engine(random_device);
-
-    pcg_extras::shuffle(table.begin(), table.end(), engine);
-#else // defined(USE_PCG_GENERATOR)
     std::random_device random_device;
     std::mt19937 engine(random_device());
 
     std::shuffle(table.begin(), table.end(), engine);
-#endif
 
     std::uniform_int_distribution<> uniform_distance(0, static_cast<int>(table.size() - 1));
 

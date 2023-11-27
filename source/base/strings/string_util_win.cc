@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 int compareCaseInsensitive(std::u16string_view first, std::u16string_view second)
 {
     int ret = CompareStringW(LOCALE_INVARIANT,
@@ -40,6 +41,7 @@ int compareCaseInsensitive(std::u16string_view first, std::u16string_view second
     return ret - 2;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string toUpper(std::u16string_view in)
 {
     if (in.empty())
@@ -59,6 +61,7 @@ std::u16string toUpper(std::u16string_view in)
     return out;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string toLower(std::u16string_view in)
 {
     if (in.empty())

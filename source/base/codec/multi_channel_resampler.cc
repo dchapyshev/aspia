@@ -27,6 +27,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 MultiChannelResampler::MultiChannelResampler(int channels,
                                              double io_sample_rate_ratio,
                                              size_t request_size,
@@ -46,13 +47,13 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     }
 
     // Setup the wrapped AudioBus for channel data.
-    wrapped_resampler_audio_bus_->set_frames(request_size);
+    wrapped_resampler_audio_bus_->set_frames(static_cast<int>(request_size));
 
     // Allocate storage for all channels except the first, which will use the
     // |destination| provided to ProvideInput() directly.
     if (channels > 1)
     {
-        resampler_audio_bus_ = AudioBus::Create(channels - 1, request_size);
+        resampler_audio_bus_ = AudioBus::Create(channels - 1, static_cast<int>(request_size));
         for (int i = 0; i < resampler_audio_bus_->channels(); ++i)
         {
             wrapped_resampler_audio_bus_->SetChannelData(i + 1, resampler_audio_bus_->channel(i));
@@ -60,8 +61,10 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 MultiChannelResampler::~MultiChannelResampler() = default;
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
 {
     DCHECK_EQ(static_cast<size_t>(audio_bus->channels()), resamplers_.size());
@@ -95,13 +98,14 @@ void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
             // since they all buffer in the same way and are processing the same
             // number of frames.
             resamplers_[i]->Resample(
-                frames_this_time, audio_bus->channel(i) + output_frames_ready_);
+                frames_this_time, audio_bus->channel(static_cast<int>(i)) + output_frames_ready_);
         }
 
         output_frames_ready_ += frames_this_time;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::ProvideInput(int channel, int frames, float* destination)
 {
     // Get the data from the multi-channel provider when the first channel asks
@@ -124,31 +128,35 @@ void MultiChannelResampler::ProvideInput(int channel, int frames, float* destina
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::Flush()
 {
     for (size_t i = 0; i < resamplers_.size(); ++i)
         resamplers_[i]->Flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::SetRatio(double io_sample_rate_ratio)
 {
     for (size_t i = 0; i < resamplers_.size(); ++i)
         resamplers_[i]->SetRatio(io_sample_rate_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 int MultiChannelResampler::ChunkSize() const
 {
     DCHECK(!resamplers_.empty());
     return resamplers_[0]->ChunkSize();
 }
 
-
+//--------------------------------------------------------------------------------------------------
 double MultiChannelResampler::BufferedFrames() const
 {
     DCHECK(!resamplers_.empty());
     return resamplers_[0]->BufferedFrames();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::PrimeWithSilence()
 {
     DCHECK(!resamplers_.empty());

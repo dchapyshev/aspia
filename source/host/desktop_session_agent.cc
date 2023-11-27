@@ -43,6 +43,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* controlActionToString(proto::internal::DesktopControl::Action action)
 {
     switch (action)
@@ -66,6 +67,7 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : io_task_runner_(std::move(task_runner)),
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
@@ -77,12 +79,12 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
-        PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
+        PLOG(LS_ERROR) << "SetProcessShutdownParameters failed";
     }
 
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_WARNING) << "SetPriorityClass failed";
+        PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 #endif // defined(OS_WIN)
 
@@ -96,6 +98,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
@@ -105,15 +108,16 @@ DesktopSessionAgent::~DesktopSessionAgent()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
-    LOG(LS_INFO) << "Starting with channel id: " << channel_id.data();
+    LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
     channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
     {
-        LOG(LS_WARNING) << "Connection failed";
+        LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id.data() << ")";
         return;
     }
 
@@ -121,15 +125,19 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
     channel_->resume();
 }
 
-void DesktopSessionAgent::onDisconnected()
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
 
     setEnabled(false);
+
+    LOG(LS_INFO) << "Post quit";
     io_task_runner_->postQuit();
 }
 
-void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -147,22 +155,46 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     else if (incoming_message_->has_mouse_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectMouseEvent(incoming_message_->mouse_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_key_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectKeyEvent(incoming_message_->key_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_text_event())
     {
         if (input_injector_)
+        {
             input_injector_->injectTextEvent(incoming_message_->text_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
     }
     else if (incoming_message_->has_clipboard_event())
     {
         if (clipboard_monitor_)
+        {
             clipboard_monitor_->injectClipboardEvent(incoming_message_->clipboard_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
+        }
     }
     else if (incoming_message_->has_select_source())
     {
@@ -237,7 +269,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!base::PowerController::logoff())
                 {
-                    LOG(LS_WARNING) << "base::PowerController::logoff failed";
+                    LOG(LS_ERROR) << "base::PowerController::logoff failed";
                 }
             }
             break;
@@ -246,7 +278,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!base::PowerController::lock())
                 {
-                    LOG(LS_WARNING) << "base::PowerController::lock failed";
+                    LOG(LS_ERROR) << "base::PowerController::lock failed";
                 }
             }
             break;
@@ -263,6 +295,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
     LOG(LS_INFO) << "Shared memory created: " << id;
@@ -276,6 +309,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << id;
@@ -289,6 +323,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
@@ -330,6 +365,7 @@ void DesktopSessionAgent::onScreenListChanged(
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenCaptured(
     const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
@@ -392,6 +428,7 @@ void DesktopSessionAgent::onScreenCaptured(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error)
 {
     outgoing_message_->Clear();
@@ -415,6 +452,7 @@ void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
     outgoing_message_->Clear();
@@ -426,6 +464,42 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onScreenTypeChanged(
+    base::ScreenCapturer::ScreenType type, const std::string& name)
+{
+    outgoing_message_->Clear();
+
+    proto::ScreenType* screen_type = outgoing_message_->mutable_screen_type();
+    screen_type->set_name(name);
+
+    switch (type)
+    {
+        case base::ScreenCapturer::ScreenType::DESKTOP:
+            screen_type->set_type(proto::ScreenType::TYPE_DESKTOP);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOCK:
+            screen_type->set_type(proto::ScreenType::TYPE_LOCK);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOGIN:
+            screen_type->set_type(proto::ScreenType::TYPE_LOGIN);
+            break;
+
+        case base::ScreenCapturer::ScreenType::OTHER:
+            screen_type->set_type(proto::ScreenType::TYPE_OTHER);
+            break;
+
+        default:
+            screen_type->set_type(proto::ScreenType::TYPE_UNKNOWN);
+            break;
+    }
+
+    channel_->send(base::serialize(*outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";
@@ -443,18 +517,27 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "UI thread stopping";
+
+#if defined(OS_WIN)
+    message_window_.reset();
+#endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
+    LOG(LS_INFO) << "Send clipboard event";
+
     outgoing_message_->Clear();
     outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::setEnabled(bool enable)
 {
     LOG(LS_INFO) << "Enable session: " << enable;
@@ -473,7 +556,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 #elif defined(OS_LINUX)
         input_injector_ = InputInjectorX11::create();
 #else
-        LOG(LS_WARNING) << "Input injector not supported for platform";
+        LOG(LS_ERROR) << "Input injector not supported for platform";
 #endif
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
@@ -510,7 +593,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
             }
             else
             {
-                LOG(LS_WARNING) << "Clipboard monitor not present";
+                LOG(LS_ERROR) << "Clipboard monitor not present";
             }
 
             clear_clipboard_ = false;
@@ -529,7 +612,11 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
             if (!base::PowerController::lock())
             {
-                LOG(LS_WARNING) << "base::PowerController::lock failed";
+                LOG(LS_ERROR) << "base::PowerController::lock failed";
+            }
+            else
+            {
+                LOG(LS_INFO) << "User session locked";
             }
 
             lock_at_disconnect_ = false;
@@ -539,20 +626,25 @@ void DesktopSessionAgent::setEnabled(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::captureBegin()
 {
     if (!capture_scheduler_ || !screen_capturer_)
+    {
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return;
+    }
 
     capture_scheduler_->beginCapture();
     screen_capturer_->captureFrame();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_interval)
 {
     if (!capture_scheduler_)
     {
-        LOG(LS_WARNING) << "No capture scheduler";
+        LOG(LS_ERROR) << "No capture scheduler";
         return;
     }
 
@@ -575,6 +667,7 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 bool DesktopSessionAgent::onWindowsMessage(
     UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& result)
 {

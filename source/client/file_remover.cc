@@ -28,6 +28,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                          std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
@@ -37,20 +38,27 @@ FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
       task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     DCHECK(remove_window_proxy_);
     DCHECK(task_consumer_proxy_);
 
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::~FileRemover()
 {
+    LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
     remover_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::start(const TaskList& items, const FinishCallback& callback)
 {
+    LOG(LS_INFO) << "Start file remover";
+
     finish_callback_ = callback;
 
     // Asynchronously start UI.
@@ -78,14 +86,18 @@ void FileRemover::start(const TaskList& items, const FinishCallback& callback)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::stop()
 {
+    LOG(LS_INFO) << "File remover stop";
+
     queue_builder_.reset();
     tasks_.clear();
 
-    onFinished();
+    onFinished(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::setAction(Action action)
 {
     switch (action)
@@ -100,7 +112,7 @@ void FileRemover::setAction(Action action)
             break;
 
         case ACTION_ABORT:
-            onFinished();
+            onFinished(FROM_HERE);
             break;
 
         default:
@@ -109,6 +121,7 @@ void FileRemover::setAction(Action action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
@@ -153,6 +166,7 @@ void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
     doNextTask();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::doNextTask()
 {
     // The task is completed. We delete it.
@@ -162,11 +176,12 @@ void FileRemover::doNextTask()
     doCurrentTask();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemover::doCurrentTask()
 {
     if (tasks_.empty())
     {
-        onFinished();
+        onFinished(FROM_HERE);
         return;
     }
 
@@ -182,8 +197,11 @@ void FileRemover::doCurrentTask()
     task_consumer_proxy_->doTask(task_factory_->remove(path));
 }
 
-void FileRemover::onFinished()
+//--------------------------------------------------------------------------------------------------
+void FileRemover::onFinished(const base::Location& location)
 {
+    LOG(LS_INFO) << "File remover finished (from: " << location.toString() << ")";
+
     FinishCallback callback;
     callback.swap(finish_callback_);
 
@@ -194,6 +212,7 @@ void FileRemover::onFinished()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::Task::Task(std::string&& path, bool is_directory)
     : path_(std::move(path)),
       is_directory_(is_directory)
@@ -201,6 +220,7 @@ FileRemover::Task::Task(std::string&& path, bool is_directory)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::Task::Task(Task&& other) noexcept
     : path_(std::move(other.path_)),
       is_directory_(other.is_directory_)
@@ -208,6 +228,7 @@ FileRemover::Task::Task(Task&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::Task& FileRemover::Task::operator=(Task&& other) noexcept
 {
     path_ = std::move(other.path_);

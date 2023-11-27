@@ -32,6 +32,7 @@ int kSilencePeriodThresholdSeconds = 1;
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 AudioSilenceDetector::AudioSilenceDetector(int threshold)
     : threshold_(threshold),
       silence_length_max_(0),
@@ -41,8 +42,10 @@ AudioSilenceDetector::AudioSilenceDetector(int threshold)
     DCHECK_GE(threshold_, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioSilenceDetector::~AudioSilenceDetector() = default;
 
+//--------------------------------------------------------------------------------------------------
 void AudioSilenceDetector::reset(int sampling_rate, int channels)
 {
     DCHECK_GT(sampling_rate, 0);
@@ -53,6 +56,7 @@ void AudioSilenceDetector::reset(int sampling_rate, int channels)
     channels_ = channels;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioSilenceDetector::isSilence(const int16_t* samples, size_t frames)
 {
     const int samples_count = static_cast<int>(frames) * channels();
@@ -79,6 +83,7 @@ bool AudioSilenceDetector::isSilence(const int16_t* samples, size_t frames)
     return silence_length_ > silence_length_max_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int AudioSilenceDetector::channels() const
 {
     return channels_;

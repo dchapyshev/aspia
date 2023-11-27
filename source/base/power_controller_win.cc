@@ -33,6 +33,7 @@ namespace {
 // Delay for shutdown and reboot.
 const DWORD kActionDelayInSeconds = 0;
 
+//--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 {
     win::ScopedHandle process_token;
@@ -40,7 +41,7 @@ bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -51,13 +52,14 @@ bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        PLOG(LS_WARNING) << "DuplicateTokenEx failed";
+        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Creates a copy of the current process with SE_SHUTDOWN_NAME privilege enabled.
 bool createPrivilegedToken(win::ScopedHandle* token_out)
 {
@@ -67,7 +69,7 @@ bool createPrivilegedToken(win::ScopedHandle* token_out)
     win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_WARNING) << "copyProcessToken failed";
+        LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -78,14 +80,14 @@ bool createPrivilegedToken(win::ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_SHUTDOWN_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the SE_SHUTDOWN_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -95,6 +97,7 @@ bool createPrivilegedToken(win::ScopedHandle* token_out)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::shutdown()
 {
@@ -104,21 +107,21 @@ bool PowerController::shutdown()
     win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
-        LOG(LS_WARNING) << "copyProcessToken failed";
+        LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
     win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
-        LOG(LS_WARNING) << "createPrivilegedToken failed";
+        LOG(LS_ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
     win::ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_WARNING) << "loggedOnUser failed";
+        LOG(LS_ERROR) << "loggedOnUser failed";
         return false;
     }
 
@@ -132,12 +135,13 @@ bool PowerController::shutdown()
                                               reason);
     if (!result)
     {
-        PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
+        PLOG(LS_ERROR) << "InitiateSystemShutdownExW failed";
     }
 
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::reboot()
 {
@@ -147,21 +151,21 @@ bool PowerController::reboot()
     win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
-        LOG(LS_WARNING) << "copyProcessToken failed";
+        LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
     win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
-        LOG(LS_WARNING) << "createPrivilegedToken failed";
+        LOG(LS_ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
     win::ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_WARNING) << "loggedOnUser failed";
+        LOG(LS_ERROR) << "loggedOnUser failed";
         return false;
     }
 
@@ -175,19 +179,20 @@ bool PowerController::reboot()
                                               reason);
     if (!result)
     {
-        PLOG(LS_WARNING) << "InitiateSystemShutdownExW failed";
+        PLOG(LS_ERROR) << "InitiateSystemShutdownExW failed";
     }
 
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::logoff()
 {
     DWORD session_id = base::kInvalidSessionId;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
 
     if (session_id != kInvalidSessionId)
@@ -202,19 +207,20 @@ bool PowerController::logoff()
 
     if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
     {
-        PLOG(LS_WARNING) << "WTSLogoffSession failed";
+        PLOG(LS_ERROR) << "WTSLogoffSession failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::lock()
 {
     if (!LockWorkStation())
     {
-        PLOG(LS_WARNING) << "LockWorkStation failed";
+        PLOG(LS_ERROR) << "LockWorkStation failed";
         return false;
     }
 

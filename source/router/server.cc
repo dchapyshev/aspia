@@ -22,6 +22,7 @@
 #include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/net/tcp_channel.h"
@@ -38,6 +39,7 @@ namespace router {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionTypeToString(proto::RouterSession session_type)
 {
     switch (session_type)
@@ -61,6 +63,7 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
       database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
@@ -69,16 +72,18 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Server::start()
 {
     if (server_)
     {
-        LOG(LS_WARNING) << "Server already started";
+        LOG(LS_ERROR) << "Server already started";
         return false;
     }
 
@@ -164,7 +169,16 @@ bool Server::start()
             LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
     }
 
+    base::ByteArray seed_key = settings.seedKey();
+    if (seed_key.empty())
+    {
+        LOG(LS_INFO) << "Empty seed key. New key generated";
+        seed_key = base::Random::byteArray(64);
+        settings.setSeedKey(seed_key);
+    }
+
     std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
+    user_list->setSeedKey(seed_key);
 
     authenticator_manager_ =
         std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
@@ -183,6 +197,7 @@ bool Server::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::SessionList> Server::sessionList() const
 {
     std::unique_ptr<proto::SessionList> result = std::make_unique<proto::SessionList>();
@@ -198,6 +213,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
         item->mutable_version()->CopyFrom(session->version().toProto());
         item->set_os_name(session->osName());
         item->set_computer_name(session->computerName());
+        item->set_architecture(session->architecture());
 
         switch (session->sessionType())
         {
@@ -242,6 +258,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Server::stopSession(Session::SessionId session_id)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
@@ -256,6 +273,7 @@ bool Server::stopSession(Session::SessionId session_id)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostSessionWithId(SessionHost* session)
 {
     for (auto it = sessions_.begin(); it != sessions_.end();)
@@ -282,6 +300,7 @@ void Server::onHostSessionWithId(SessionHost* session)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionHost* Server::hostSessionById(base::HostId host_id)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
@@ -298,6 +317,7 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Session* Server::sessionById(Session::SessionId session_id)
 {
     for (auto& session : sessions_)
@@ -309,6 +329,7 @@ Session* Server::sessionById(Session::SessionId session_id)
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
@@ -320,6 +341,7 @@ void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 {
     for (const auto& session : sessions_)
@@ -330,6 +352,7 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::u16string address = session_info.channel->peerAddress();
@@ -338,7 +361,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
 
-    if (session_info.version >= base::Version(2, 6, 0))
+    if (session_info.version >= base::Version::kVersion_2_6_0)
     {
         LOG(LS_INFO) << "Using channel id support";
         session_info.channel->setChannelIdSupport(true);
@@ -405,12 +428,14 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     session->setVersion(session_info.version);
     session->setOsName(session_info.os_name);
     session->setComputerName(session_info.computer_name);
+    session->setArchitecture(session_info.architecture);
     session->setUserName(session_info.user_name);
 
     sessions_.emplace_back(std::move(session));
     sessions_.back()->start(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)

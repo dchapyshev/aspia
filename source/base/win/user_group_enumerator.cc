@@ -27,6 +27,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 UserGroupEnumerator::UserGroupEnumerator()
 {
     DWORD entries_read = 0;
@@ -38,27 +39,31 @@ UserGroupEnumerator::UserGroupEnumerator()
                                          nullptr);
     if (error_code != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetLocalGroupEnum failed: " << SystemError(error_code).toString();
+        LOG(LS_ERROR) << "NetLocalGroupEnum failed: " << SystemError(error_code).toString();
         return;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 UserGroupEnumerator::~UserGroupEnumerator()
 {
     if (group_info_)
         NetApiBufferFree(group_info_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserGroupEnumerator::advance()
 {
     ++current_entry_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserGroupEnumerator::isAtEnd() const
 {
     return current_entry_ >= total_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserGroupEnumerator::name() const
 {
     if (!group_info_[current_entry_].lgrpi1_name)
@@ -66,6 +71,7 @@ std::string UserGroupEnumerator::name() const
     return utf8FromWide(group_info_[current_entry_].lgrpi1_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserGroupEnumerator::comment() const
 {
     if (!group_info_[current_entry_].lgrpi1_comment)

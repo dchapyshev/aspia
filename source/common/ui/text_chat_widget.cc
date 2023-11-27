@@ -42,6 +42,7 @@ const int kMaxMessageLength = 2048;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 TextChatWidget::TextChatWidget(QWidget* parent)
     : QWidget(parent),
       ui(std::make_unique<Ui::TextChatWidget>()),
@@ -82,11 +83,13 @@ TextChatWidget::TextChatWidget(QWidget* parent)
     ui->edit_message->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 TextChatWidget::~TextChatWidget()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::readMessage(const proto::TextChatMessage& message)
 {
     QListWidget* list_messages = ui->list_messages;
@@ -104,6 +107,7 @@ void TextChatWidget::readMessage(const proto::TextChatMessage& message)
     onUpdateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::readStatus(const proto::TextChatStatus& status)
 {
     status_clear_timer_->stop();
@@ -145,13 +149,14 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
         break;
 
         default:
-            LOG(LS_WARNING) << "Unhandled status code: " << static_cast<int>(status.status());
+            LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.status());
             return;
     }
 
     status_clear_timer_->start(std::chrono::seconds(1));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui->edit_message && event->type() == QEvent::KeyPress)
@@ -177,17 +182,20 @@ bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 {
     onUpdateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::closeEvent(QCloseEvent* event)
 {
-    emit textChatClosed();
+    emit sig_textChatClosed();
     QWidget::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
@@ -204,6 +212,7 @@ void TextChatWidget::addOutgoingMessage(time_t timestamp, const QString& message
     onUpdateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::addStatusMessage(const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
@@ -219,6 +228,7 @@ void TextChatWidget::addStatusMessage(const QString& message)
     onUpdateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::onSendMessage()
 {
     QLineEdit* edit_message = ui->edit_message;
@@ -247,9 +257,10 @@ void TextChatWidget::onSendMessage()
     text_chat_message.set_source(host_name_);
     text_chat_message.set_text(message.toStdString());
 
-    emit sendMessage(text_chat_message);
+    emit sig_sendMessage(text_chat_message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
 {
     proto::TextChatStatus text_chat_status;
@@ -257,9 +268,10 @@ void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
     text_chat_status.set_source(host_name_);
     text_chat_status.set_status(status);
 
-    emit sendStatus(text_chat_status);
+    emit sig_sendStatus(text_chat_status);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::onClearHistory()
 {
     QListWidget* list_messages = ui->list_messages;
@@ -267,6 +279,7 @@ void TextChatWidget::onClearHistory()
         delete list_messages->item(i);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::onSaveChat()
 {
     QString selected_filter;
@@ -329,6 +342,7 @@ void TextChatWidget::onSaveChat()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWidget::onUpdateSize()
 {
     QListWidget* list_messages = ui->list_messages;

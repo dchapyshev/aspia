@@ -69,6 +69,19 @@
         <file>arrow-circle-315.png</file>
         <file>host.png</file>
         <file>users.png</file>
+        <file>monitor-n.png</file>
+        <file>monitor-1.png</file>
+        <file>monitor-2.png</file>
+        <file>monitor-3.png</file>
+        <file>monitor-4.png</file>
+        <file>monitor-5.png</file>
+        <file>monitor-6.png</file>
+        <file>monitor-7.png</file>
+        <file>monitor-8.png</file>
+        <file>monitor-9.png</file>
+        <file>pencil.png</file>
+        <file>plus.png</file>
+        <file>minus.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

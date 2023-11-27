@@ -31,6 +31,7 @@ struct LanguageAndCodePage
     WORD code_page;
 };
 
+//--------------------------------------------------------------------------------------------------
 // Returns the \\VarFileInfo\\Translation value extracted from the VS_VERSION_INFO resource in
 // |data|.
 LanguageAndCodePage* GetTranslate(const void* data)
@@ -47,6 +48,7 @@ LanguageAndCodePage* GetTranslate(const void* data)
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 VS_FIXEDFILEINFO* GetVsFixedFileInfo(const void* data)
 {
     VS_FIXEDFILEINFO* fixed_file_info = nullptr;
@@ -60,6 +62,7 @@ VS_FIXEDFILEINFO* GetVsFixedFileInfo(const void* data)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileVersionInfo::FileVersionInfo(std::vector<uint8_t>&& data, WORD language, WORD code_page)
     : owned_data_(std::move(data)),
       data_(owned_data_.data()),
@@ -70,6 +73,7 @@ FileVersionInfo::FileVersionInfo(std::vector<uint8_t>&& data, WORD language, WOR
     DCHECK(!owned_data_.empty());
 }
 
+//--------------------------------------------------------------------------------------------------
 FileVersionInfo::FileVersionInfo(void* data, WORD language, WORD code_page)
     : data_(data),
       language_(language),
@@ -79,8 +83,10 @@ FileVersionInfo::FileVersionInfo(void* data, WORD language, WORD code_page)
     DCHECK(data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileVersionInfo::~FileVersionInfo() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfoForModule(
     HMODULE module)
@@ -101,6 +107,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfoForModule
         new FileVersionInfo(data, translate->language, translate->code_page));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
     const std::filesystem::path& file_path)
@@ -116,7 +123,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
 
     if (!GetFileVersionInfoW(path, dummy, length, data.data()))
     {
-        PLOG(LS_WARNING) << "GetFileVersionInfoW failed";
+        PLOG(LS_ERROR) << "GetFileVersionInfoW failed";
         return nullptr;
     }
 
@@ -128,86 +135,103 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
         new FileVersionInfo(std::move(data), translate->language, translate->code_page));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::companyName()
 {
     return stringValue(L"CompanyName");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::companyShortName()
 {
     return stringValue(L"CompanyShortName");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::internalName()
 {
     return stringValue(L"InternalName");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::productName()
 {
     return stringValue(L"ProductName");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::productShortName()
 {
     return stringValue(L"ProductShortName");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::comments()
 {
     return stringValue(L"Comments");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::legalCopyright()
 {
     return stringValue(L"LegalCopyright");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::productVersion()
 {
     return stringValue(L"ProductVersion");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::fileDescription()
 {
     return stringValue(L"FileDescription");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::legalTrademarks()
 {
     return stringValue(L"LegalTrademarks");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::privateBuild()
 {
     return stringValue(L"PrivateBuild");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::fileVersion()
 {
     return stringValue(L"FileVersion");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::originalFilename()
 {
     return stringValue(L"OriginalFilename");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::specialBuild()
 {
     return stringValue(L"SpecialBuild");
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::lastChange()
 {
     return stringValue(L"LastChange");
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileVersionInfo::isOfficialBuild()
 {
     return (stringValue(L"Official Build").compare(L"1") == 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
 {
     WORD lang_codepage[8];
@@ -251,6 +275,7 @@ bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring FileVersionInfo::stringValue(const wchar_t* name)
 {
     std::wstring str;

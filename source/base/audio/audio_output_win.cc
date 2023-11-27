@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionStateToString(AudioSessionState state)
 {
     switch (state)
@@ -45,9 +46,12 @@ const char* sessionStateToString(AudioSessionState state)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     : AudioOutput(need_more_data_cb)
 {
+    LOG(LS_INFO) << "Ctor";
+
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
     // processed by the client.
     audio_samples_event_.reset(CreateEventW(nullptr, false, false, nullptr));
@@ -65,11 +69,14 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     is_initialized_ = init();
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputWin::~AudioOutputWin()
 {
+    LOG(LS_INFO) << "Dtor";
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::start()
 {
     if (!is_initialized_)
@@ -82,7 +89,7 @@ bool AudioOutputWin::start()
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
-        LOG(LS_WARNING) << "Failed to prepare output endpoint with silence";
+        LOG(LS_ERROR) << "Failed to prepare output endpoint with silence";
     }
 
     num_frames_written_ = endpoint_buffer_size_frames_;
@@ -112,6 +119,7 @@ bool AudioOutputWin::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::stop()
 {
     if (!is_initialized_)
@@ -119,7 +127,7 @@ bool AudioOutputWin::stop()
 
     if (!is_active_)
     {
-        DLOG(LS_WARNING) << "No output stream is active";
+        DLOG(LS_ERROR) << "No output stream is active";
         releaseCOMObjects();
         is_initialized_ = false;
         return true;
@@ -154,6 +162,7 @@ bool AudioOutputWin::stop()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::threadRun()
 {
     if (!isMMCSSSupported())
@@ -182,7 +191,7 @@ void AudioOutputWin::threadRun()
     {
         // Wait for a close-down event, stream-switch event or a new render event.
         DWORD wait_result = WaitForMultipleObjects(
-            std::size(wait_array), wait_array, false, INFINITE);
+            static_cast<DWORD>(std::size(wait_array)), wait_array, false, INFINITE);
         switch (wait_result)
         {
             case WAIT_OBJECT_0 + 0:
@@ -217,15 +226,22 @@ void AudioOutputWin::threadRun()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::init()
 {
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
     if (!device.Get())
+    {
+        LOG(LS_ERROR) << "createDevice failed";
         return false;
+    }
 
     Microsoft::WRL::ComPtr<IAudioClient> audio_client = createClient(device.Get());
     if (!audio_client.Get())
+    {
+        LOG(LS_ERROR) << "createClient failed";
         return false;
+    }
 
     // Define the output WAVEFORMATEXTENSIBLE format in |format_|.
     WAVEFORMATEXTENSIBLE format_extensible;
@@ -246,7 +262,10 @@ bool AudioOutputWin::init()
     format_extensible.SubFormat                   = KSDATAFORMAT_SUBTYPE_PCM;
 
     if (!isFormatSupported(audio_client.Get(), AUDCLNT_SHAREMODE_SHARED, &format_extensible))
+    {
+        LOG(LS_ERROR) << "Format not supported";
         return false;
+    }
 
     // Initialize the audio stream between the client and the device in shared mode using
     // event-driven buffer handling. Also, using 0 as requested buffer size results in a default
@@ -255,6 +274,7 @@ bool AudioOutputWin::init()
     if (!sharedModeInitialize(audio_client.Get(), &format_extensible, audio_samples_event_,
                               requested_buffer_size, true, &endpoint_buffer_size_frames_))
     {
+        LOG(LS_ERROR) << "sharedModeInitialize failed";
         return false;
     }
 
@@ -263,7 +283,10 @@ bool AudioOutputWin::init()
     Microsoft::WRL::ComPtr<IAudioRenderClient> audio_render_client =
         createRenderClient(audio_client.Get());
     if (!audio_render_client.Get())
+    {
+        LOG(LS_ERROR) << "createRenderClient failed";
         return false;
+    }
 
     // Create an AudioSessionControl interface given the initialized client. The IAudioControl
     // interface enables a client to configure the control parameters for an audio session and to
@@ -271,7 +294,10 @@ bool AudioOutputWin::init()
     Microsoft::WRL::ComPtr<IAudioSessionControl> audio_session_control =
         createAudioSessionControl(audio_client.Get());
     if (!audio_session_control.Get())
+    {
+        LOG(LS_ERROR) << "createAudioSessionControl failed";
         return false;
+    }
 
     // The Sndvol program displays volume and mute controls for sessions that are in the active and
     // inactive states.
@@ -296,6 +322,7 @@ bool AudioOutputWin::init()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::handleDataRequest()
 {
     // Get the padding value which indicates the amount of valid unread data that the endpoint
@@ -323,7 +350,7 @@ bool AudioOutputWin::handleDataRequest()
     UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
     if (num_requested_frames == 0)
     {
-        DLOG(LS_WARNING) << "Audio thread is signaled but no new audio samples are needed";
+        DLOG(LS_ERROR) << "Audio thread is signaled but no new audio samples are needed";
         return true;
     }
 
@@ -354,6 +381,7 @@ bool AudioOutputWin::handleDataRequest()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::handleRestartEvent()
 {
     DCHECK(audio_thread_);
@@ -363,17 +391,27 @@ bool AudioOutputWin::handleRestartEvent()
         return true;
 
     if (!stop())
+    {
+        LOG(LS_ERROR) << "stop failed";
         return false;
+    }
 
     if (!init())
+    {
+        LOG(LS_ERROR) << "init failed";
         return false;
+    }
 
     if (!start())
+    {
+        LOG(LS_ERROR) << "start failed";
         return false;
+    }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::stopThread()
 {
     DCHECK(!is_restarting_);
@@ -394,6 +432,7 @@ void AudioOutputWin::stopThread()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::releaseCOMObjects()
 {
     if (audio_client_)
@@ -406,18 +445,21 @@ void AudioOutputWin::releaseCOMObjects()
         audio_render_client_.Reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 ULONG AudioOutputWin::AddRef()
 {
     ULONG new_ref = InterlockedIncrement(&ref_count_);
     return new_ref;
 }
 
+//--------------------------------------------------------------------------------------------------
 ULONG AudioOutputWin::Release()
 {
     ULONG new_ref = InterlockedDecrement(&ref_count_);
     return new_ref;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
 {
     if (object == nullptr)
@@ -433,16 +475,18 @@ HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
     return E_NOINTERFACE;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnStateChanged(AudioSessionState /* new_state */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disconnect_reason)
 {
     if (is_restarting_)
     {
-        DLOG(LS_WARNING) << "Ignoring since restart is already active";
+        LOG(LS_ERROR) << "Ignoring since restart is already active";
         return S_OK;
     }
 
@@ -459,23 +503,27 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnDisplayNameChanged(
     LPCWSTR /* new_display_name */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnIconPathChanged(LPCWSTR /* new_icon_path */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnSimpleVolumeChanged(
     float /* new_simple_volume */, BOOL /* new_mute */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnChannelVolumeChanged(
     DWORD /* channel_count */, float /* new_channel_volumes */[], DWORD /* changed_channel */,
     LPCGUID /* event_context */)
@@ -483,6 +531,7 @@ HRESULT AudioOutputWin::OnChannelVolumeChanged(
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnGroupingParamChanged(
     LPCGUID /* new_grouping_param */, LPCGUID /* event_context */)
 {

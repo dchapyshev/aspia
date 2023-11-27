@@ -22,11 +22,16 @@
 #include "base/audio/audio_capturer_win.h"
 #endif // defined(OS_WIN)
 
+#if defined(OS_LINUX)
+#include "base/audio/audio_capturer_linux.h"
+#endif // defined(OS_LINUX)
+
 #include "base/logging.h"
 #include "proto/desktop.pb.h"
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // Returns true if the sampling rate is supported by Pepper.
 bool AudioCapturer::isValidSampleRate(int sample_rate)
 {
@@ -43,10 +48,13 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioCapturer> AudioCapturer::create()
 {
 #if defined(OS_WIN)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
+#elif defined(OS_LINUX)
+    return std::unique_ptr<AudioCapturer>(new AudioCapturerLinux());
 #else
     NOTIMPLEMENTED();
     return nullptr;

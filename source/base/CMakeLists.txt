@@ -151,10 +151,14 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_capturer_linux.cc
+        audio/audio_capturer_linux.h
         audio/audio_output_pulse.cc
         audio/audio_output_pulse.h)
 
     list(APPEND SOURCE_BASE_AUDIO_LINUX
+        audio/linux/audio_pipe_reader.cc
+        audio/linux/audio_pipe_reader.h
         audio/linux/late_binding_symbol_table.cc
         audio/linux/late_binding_symbol_table.h
         audio/linux/pulseaudio_symbol_table.cc
@@ -344,6 +348,8 @@ if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_linux.cc
         desktop/desktop_environment_linux.h
+        desktop/desktop_resizer_x11.cc
+        desktop/desktop_resizer_x11.h
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()
@@ -362,6 +368,20 @@ list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/frame_unittest.cc
     desktop/geometry_unittest.cc
     desktop/region_unittest.cc)
+
+if (APPLE)
+    list(APPEND SOURCE_BASE_DESKTOP_MAC
+        desktop/mac/desktop_configuration_monitor.cc
+        desktop/mac/desktop_configuration_monitor.h
+        desktop/mac/desktop_configuration.mm
+        desktop/mac/desktop_configuration.h
+        desktop/mac/frame_cgimage.mm
+        desktop/mac/frame_cgimage.h
+        desktop/mac/frame_iosurface.mm
+        desktop/mac/frame_iosurface.h
+        desktop/mac/frame_provider.mm
+        desktop/mac/frame_provider.h)
+endif()
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
@@ -470,7 +490,8 @@ if (APPLE)
         mac/app_nap_blocker.mm
         mac/app_nap_blocker.h
         mac/nsstring_conversions.mm
-        mac/nsstring_conversions.h)
+        mac/nsstring_conversions.h
+        mac/scoped_cftyperef.h)
 endif()
 
 list(APPEND SOURCE_BASE_MEMORY
@@ -478,7 +499,6 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.h
     memory/byte_array.cc
     memory/byte_array.h
-    memory/custom_new.cc
     memory/local_memory.h
     memory/typed_buffer.h
     memory/local_memory_impl/bad_local_weak_ptr.h
@@ -525,10 +545,6 @@ list(APPEND SOURCE_BASE_NET
     net/curl_util.h
     net/ip_util.cc
     net/ip_util.h
-    net/kcp_channel.cc
-    net/kcp_channel.h
-    net/kcp_channel_proxy.cc
-    net/kcp_channel_proxy.h
     net/network_channel.cc
     net/network_channel.h
     net/tcp_channel.cc
@@ -577,6 +593,11 @@ list(APPEND SOURCE_BASE_PEER
     peer/user_list.cc
     peer/user_list.h
     peer/user_list_base.h)
+
+if (UNIX)
+    list(APPEND SOURCE_BASE_POSIX
+        posix/eintr_wrapper.h)
+endif()
 
 list(APPEND SOURCE_BASE_SETTINGS
     settings/json_settings.cc
@@ -705,6 +726,8 @@ if (WIN32)
         win/user_group_enumerator.h
         win/video_adapter_enumerator.cc
         win/video_adapter_enumerator.h
+        win/window_station.cc
+        win/window_station.h
         win/windows_version.cc
         win/windows_version.h)
 
@@ -737,17 +760,20 @@ source_group(threading FILES ${SOURCE_BASE_THREADING})
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
     source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
+    source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
+    source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
 if (APPLE)
     source_group(mac FILES ${SOURCE_BASE_MAC})
+    source_group(desktop\\mac FILES ${SOURCE_BASE_DESKTOP_MAC})
 endif()
 
 add_library(aspia_base STATIC
@@ -758,6 +784,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
+    ${SOURCE_BASE_DESKTOP_MAC}
     ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
@@ -767,6 +794,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
+    ${SOURCE_BASE_POSIX}
     ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}

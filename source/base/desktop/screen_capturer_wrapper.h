@@ -48,6 +48,7 @@ public:
         virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
         virtual void onScreenCaptureError(ScreenCapturer::Error error) = 0;
         virtual void onCursorPositionChanged(const Point& position) = 0;
+        virtual void onScreenTypeChanged(ScreenCapturer::ScreenType type, const std::string& name) = 0;
     };
 
     ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate);
@@ -63,8 +64,9 @@ public:
 
 private:
     ScreenCapturer::ScreenId defaultScreen();
-    void selectCapturer();
+    void selectCapturer(ScreenCapturer::Error last_error);
     void switchToInputDesktop();
+    void checkScreenType();
 
     SharedMemoryFactory* shared_memory_factory_ = nullptr;
     ScreenCapturer::Type preferred_type_;
@@ -75,8 +77,8 @@ private:
 #endif // defined(OS_WIN)
 
     int screen_count_ = 0;
-    int permanent_error_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
+    ScreenCapturer::ScreenType last_screen_type_ = ScreenCapturer::ScreenType::UNKNOWN;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;
     uint32_t capture_counter_ = 0;

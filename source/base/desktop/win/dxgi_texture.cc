@@ -48,9 +48,13 @@ public:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DxgiTexture::DxgiTexture() = default;
+
+//--------------------------------------------------------------------------------------------------
 DxgiTexture::~DxgiTexture() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResource* resource)
 {
     DCHECK_GT(frame_info.AccumulatedFrames, 0u);
@@ -81,6 +85,7 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
     return copyFromTexture(frame_info, texture.Get());
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame& DxgiTexture::asDesktopFrame()
 {
     if (!frame_)
@@ -89,12 +94,14 @@ const Frame& DxgiTexture::asDesktopFrame()
     return *frame_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTexture::release()
 {
     frame_.reset();
     return doRelease();
 }
 
+//--------------------------------------------------------------------------------------------------
 DXGI_MAPPED_RECT* DxgiTexture::rect()
 {
     return &rect_;

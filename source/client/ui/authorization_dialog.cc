@@ -26,6 +26,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -54,6 +55,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     fitSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 AuthorizationDialog::~AuthorizationDialog()
 {
     LOG(LS_INFO) << "Dtor";
@@ -62,6 +64,7 @@ AuthorizationDialog::~AuthorizationDialog()
     settings.setOneTimePasswordChecked(ui.checkbox_one_time_password->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
     ui.checkbox_one_time_password->setVisible(enable);
@@ -82,26 +85,31 @@ void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
     fitSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AuthorizationDialog::userName() const
 {
     return ui.edit_username->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setUserName(const QString& username)
 {
     ui.edit_username->setText(username);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AuthorizationDialog::password() const
 {
     return ui.edit_password->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setPassword(const QString& password)
 {
     ui.edit_password->setText(password);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::showEvent(QShowEvent* event)
 {
     if (ui.edit_username->text().isEmpty() && !ui.checkbox_one_time_password->isChecked())
@@ -112,6 +120,7 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
     QDialog::showEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
@@ -129,6 +138,7 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 {
     ui.label_username->setVisible(!checked);
@@ -138,6 +148,7 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
     fitSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.buttonbox->standardButton(button) == QDialogButtonBox::Ok)
@@ -173,6 +184,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::fitSize()
 {
     QTimer::singleShot(0, this, [this]()

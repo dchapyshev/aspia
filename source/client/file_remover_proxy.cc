@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemoverProxy::FileRemoverProxy(
     std::shared_ptr<base::TaskRunner> io_task_runner, FileRemover* remover)
     : io_task_runner_(std::move(io_task_runner)),
@@ -34,11 +35,13 @@ FileRemoverProxy::FileRemoverProxy(
     DCHECK(remover_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemoverProxy::~FileRemoverProxy()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoverProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach file remover";
@@ -46,6 +49,7 @@ void FileRemoverProxy::dettach()
     remover_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoverProxy::stop()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -58,6 +62,7 @@ void FileRemoverProxy::stop()
         remover_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoverProxy::setAction(FileRemover::Action action)
 {
     if (!io_task_runner_->belongsToCurrentThread())

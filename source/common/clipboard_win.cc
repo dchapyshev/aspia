@@ -27,8 +27,10 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 ClipboardWin::ClipboardWin() = default;
 
+//--------------------------------------------------------------------------------------------------
 ClipboardWin::~ClipboardWin()
 {
     if (!window_)
@@ -38,6 +40,7 @@ ClipboardWin::~ClipboardWin()
     window_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::init()
 {
     if (window_)
@@ -61,6 +64,7 @@ void ClipboardWin::init()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::setData(const std::string& data)
 {
     if (!window_)
@@ -69,14 +73,14 @@ void ClipboardWin::setData(const std::string& data)
     std::wstring text;
     if (!base::utf8ToWide(base::replaceLfByCrLf(data), &text))
     {
-        LOG(LS_WARNING) << "Couldn't convert data to unicode";
+        LOG(LS_ERROR) << "Couldn't convert data to unicode";
         return;
     }
 
     base::win::ScopedClipboard clipboard;
     if (!clipboard.init(window_->hwnd()))
     {
-        PLOG(LS_WARNING) << "Couldn't open the clipboard";
+        PLOG(LS_ERROR) << "Couldn't open the clipboard";
         return;
     }
 
@@ -88,14 +92,14 @@ void ClipboardWin::setData(const std::string& data)
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
     if (!text_global)
     {
-        PLOG(LS_WARNING) << "GlobalAlloc failed";
+        PLOG(LS_ERROR) << "GlobalAlloc failed";
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        PLOG(LS_WARNING) << "GlobalLock failed";
+        PLOG(LS_ERROR) << "GlobalLock failed";
         GlobalFree(text_global);
         return;
     }
@@ -108,6 +112,7 @@ void ClipboardWin::setData(const std::string& data)
     clipboard.setData(CF_UNICODETEXT, text_global);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClipboardWin::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
@@ -124,6 +129,7 @@ bool ClipboardWin::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::onClipboardUpdate()
 {
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
@@ -137,14 +143,14 @@ void ClipboardWin::onClipboardUpdate()
 
         if (!clipboard.init(window_->hwnd()))
         {
-            PLOG(LS_WARNING) << "Couldn't open the clipboard";
+            PLOG(LS_ERROR) << "Couldn't open the clipboard";
             return;
         }
 
         HGLOBAL text_global = clipboard.data(CF_UNICODETEXT);
         if (!text_global)
         {
-            PLOG(LS_WARNING) << "Couldn't get data from the clipboard";
+            PLOG(LS_ERROR) << "Couldn't get data from the clipboard";
             return;
         }
 
@@ -152,13 +158,13 @@ void ClipboardWin::onClipboardUpdate()
             base::win::ScopedHGLOBAL<wchar_t> text_lock(text_global);
             if (!text_lock.get())
             {
-                PLOG(LS_WARNING) << "Couldn't lock clipboard data";
+                PLOG(LS_ERROR) << "Couldn't lock clipboard data";
                 return;
             }
 
             if (!base::wideToUtf8(text_lock.get(), &data))
             {
-                LOG(LS_WARNING) << "Couldn't convert data to utf8";
+                LOG(LS_ERROR) << "Couldn't convert data to utf8";
                 return;
             }
         }

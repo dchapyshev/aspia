@@ -26,6 +26,7 @@
 #include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
+#include "host/stat_counter.h"
 
 #if defined(OS_WIN)
 #include "host/task_manager.h"
@@ -63,6 +64,7 @@ public:
     void setVideoErrorCode(proto::VideoErrorCode error_code);
     void setCursorPosition(const proto::CursorPosition& cursor_position);
     void setScreenList(const proto::ScreenList& list);
+    void setScreenType(const proto::ScreenType& type);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
@@ -119,6 +121,8 @@ private:
 
     std::unique_ptr<proto::ClientToHost> incoming_message_;
     std::unique_ptr<proto::HostToClient> outgoing_message_;
+
+    StatCounter stat_counter_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };

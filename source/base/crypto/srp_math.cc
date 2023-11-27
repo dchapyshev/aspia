@@ -30,6 +30,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 // xy = BLAKE2b512(PAD(x) || PAD(y))
 BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 {
@@ -56,6 +57,7 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
         GenericHash::hash(GenericHash::BLAKE2b512, xy.data(), xy_size));
 }
 
+//--------------------------------------------------------------------------------------------------
 // k = BLAKE2b512(N | PAD(g))
 BigNum calc_k(const BigNum& N, const BigNum& g)
 {
@@ -64,6 +66,7 @@ BigNum calc_k(const BigNum& N, const BigNum& g)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 // u = BLAKE2b512(PAD(A) | PAD(B))
 BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
@@ -71,6 +74,7 @@ BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
     return calc_xy(A, B, N);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 // B = k*v + g^b % N
 BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const BigNum& v)
@@ -137,6 +141,7 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
     return B;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
 BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p)
@@ -144,6 +149,7 @@ BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_vi
     return calc_x(s, I, fromStdString(utf8FromUtf16(p)));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const ByteArray& p)
 {
@@ -170,6 +176,7 @@ BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const ByteArray& 
     return BigNum::fromByteArray(hash.result());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 // A = g^a % N
 BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
@@ -198,6 +205,7 @@ BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
     return A;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 // S = (A * v^u) ^ b % N
 BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u, const BigNum& b,
@@ -246,6 +254,7 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
     return S;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 // K = (B - (k * g^x)) ^ (a + (u * x)) % N
 BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g, const BigNum& x,
@@ -327,6 +336,7 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
     return K;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
 {
@@ -354,12 +364,14 @@ bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
     return !BN_is_zero(result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 {
     return verify_B_mod_N(A, N);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
@@ -390,6 +402,7 @@ BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNu
     return v;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 BigNum SrpMath::calc_v(std::u16string_view I, const ByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)

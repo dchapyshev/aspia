@@ -19,7 +19,6 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
-#include "base/environment.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -40,9 +39,15 @@
 #endif // defined(OS_WIN)
 
 #include <QMessageBox>
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+#include <QProcess>
+#else
+#include <QProcessEnvironment>
+#endif
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool waitForValidInputDesktop()
 {
 #if defined(OS_WIN)
@@ -70,7 +75,7 @@ bool waitForValidInputDesktop()
 
     if (max_attempt_count == 0)
     {
-        LOG(LS_WARNING) << "Exceeded the number of attempts";
+        LOG(LS_ERROR) << "Exceeded the number of attempts";
         return false;
     }
 #endif // defined(OS_WIN)
@@ -80,6 +85,7 @@ bool waitForValidInputDesktop()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 int hostMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);
@@ -95,7 +101,7 @@ int hostMain(int argc, char* argv[])
     qt_base::ScopedQtLogging scoped_logging(logging_settings);
     base::CommandLine command_line(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
@@ -129,20 +135,20 @@ int hostMain(int argc, char* argv[])
     }
     else
     {
-        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
     }
 
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
     else
     {
         base::win::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
-            LOG(LS_WARNING) << "Unable to get session info";
+            LOG(LS_ERROR) << "Unable to get session info";
         }
         else
         {
@@ -160,7 +166,7 @@ int hostMain(int argc, char* argv[])
     DWORD username_size = sizeof(username) / sizeof(username[0]);
     if (!GetUserNameW(username, &username_size))
     {
-        PLOG(LS_WARNING) << "GetUserNameW failed";
+        PLOG(LS_ERROR) << "GetUserNameW failed";
     }
 
     SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
@@ -175,14 +181,14 @@ int hostMain(int argc, char* argv[])
     {
         if (!CheckTokenMembership(nullptr, admins_group, &is_user_admin))
         {
-            PLOG(LS_WARNING) << "CheckTokenMembership failed";
+            PLOG(LS_ERROR) << "CheckTokenMembership failed";
             is_user_admin = FALSE;
         }
         FreeSid(admins_group);
     }
     else
     {
-        PLOG(LS_WARNING) << "AllocateAndInitializeSid failed";
+        PLOG(LS_ERROR) << "AllocateAndInitializeSid failed";
     }
 
     LOG(LS_INFO) << "Running as user: '" << username << "'";
@@ -190,15 +196,20 @@ int hostMain(int argc, char* argv[])
     LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+#endif
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+    QStringList env = QProcess::systemEnvironment();
+#else
+    QStringList env = QProcessEnvironment::systemEnvironment().toStringList();
+#endif
+    for (int i = 0; i < env.size(); ++i)
     {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
+        LOG(LS_INFO) << env[i];
     }
     LOG(LS_INFO) << "#####################################################";
-#endif
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (is_hidden)
@@ -219,7 +230,7 @@ int hostMain(int argc, char* argv[])
 
     if (!host::integrityCheck())
     {
-        LOG(LS_WARNING) << "Integrity check failed";
+        LOG(LS_ERROR) << "Integrity check failed";
 
         QMessageBox::warning(
             nullptr,
@@ -236,7 +247,7 @@ int hostMain(int argc, char* argv[])
 
     if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
     {
-        LOG(LS_WARNING) << "Import and export are specified at the same time";
+        LOG(LS_ERROR) << "Import and export are specified at the same time";
 
         if (!command_line.hasSwitch(u"silent"))
         {
@@ -326,7 +337,7 @@ int hostMain(int argc, char* argv[])
             LOG(LS_INFO) << "Application not running yet";
 
             host::MainWindow window;
-            QObject::connect(&application, &host::Application::activated,
+            QObject::connect(&application, &host::Application::sig_activated,
                              &window, &host::MainWindow::activateHost);
 
             if (is_hidden)

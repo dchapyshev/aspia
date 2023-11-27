@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DefaultAudioDeviceChangeDetector::DefaultAudioDeviceChangeDetector(
     const Microsoft::WRL::ComPtr<IMMDeviceEnumerator>& enumerator)
     : enumerator_(enumerator)
@@ -33,16 +34,18 @@ DefaultAudioDeviceChangeDetector::DefaultAudioDeviceChangeDetector(
     if (FAILED(hr))
     {
         // We cannot predict which kind of error the API may return, but this is not a fatal error.
-        LOG(LS_WARNING) << "Failed to register IMMNotificationClient, we may not be "
-                           "able to detect the new default audio device. Error " << hr;
+        LOG(LS_ERROR) << "Failed to register IMMNotificationClient, we may not be "
+                         "able to detect the new default audio device. Error " << hr;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 DefaultAudioDeviceChangeDetector::~DefaultAudioDeviceChangeDetector()
 {
     enumerator_->UnregisterEndpointNotificationCallback(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DefaultAudioDeviceChangeDetector::getAndReset()
 {
     bool result = false;
@@ -54,6 +57,7 @@ bool DefaultAudioDeviceChangeDetector::getAndReset()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::OnDefaultDeviceChanged(
     EDataFlow /* flow */, ERole /* role */, LPCWSTR /* pwstrDefaultDevice */)
 {
@@ -64,6 +68,7 @@ HRESULT DefaultAudioDeviceChangeDetector::OnDefaultDeviceChanged(
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::QueryInterface(REFIID iid, void** object)
 {
     if (iid == IID_IUnknown || iid == __uuidof(IMMNotificationClient))
@@ -75,30 +80,36 @@ HRESULT DefaultAudioDeviceChangeDetector::QueryInterface(REFIID iid, void** obje
     return E_NOINTERFACE;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::OnDeviceAdded(LPCWSTR /* pwstrDeviceId */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::OnDeviceRemoved(LPCWSTR /* pwstrDeviceId */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::OnDeviceStateChanged(
     LPCWSTR /* pwstrDeviceId */, DWORD /* dwNewState */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT DefaultAudioDeviceChangeDetector::OnPropertyValueChanged(
     LPCWSTR /* pwstrDeviceId */, const PROPERTYKEY /* key */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 ULONG DefaultAudioDeviceChangeDetector::AddRef() { return 1; }
 
+//--------------------------------------------------------------------------------------------------
 ULONG DefaultAudioDeviceChangeDetector::Release() { return 1; }
 
 } // namespace base

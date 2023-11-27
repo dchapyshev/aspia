@@ -18,6 +18,8 @@
 
 #include "host/ui/user_settings.h"
 
+#include "proto/common.pb.h"
+
 #include <QLocale>
 
 namespace host {
@@ -26,45 +28,51 @@ namespace {
 
 const QString kLocaleParam = QStringLiteral("Locale");
 const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
+const QString kOneTimeSessionsParam = QStringLiteral("OneTimeSessions");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UserSettings::UserSettings()
-    : settings_(QSettings::IniFormat,
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("host"))
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host")
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSettings::~UserSettings() = default;
 
+//--------------------------------------------------------------------------------------------------
 QString UserSettings::filePath() const
 {
     return settings_.fileName();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserSettings::isWritable() const
 {
     return settings_.isWritable();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::sync()
 {
     settings_.sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString UserSettings::locale() const
 {
     return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserSettings::showIconsInMenus() const
 {
     bool defaultValue;
@@ -78,9 +86,22 @@ bool UserSettings::showIconsInMenus() const
     return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::setShowIconsInMenus(bool enable)
 {
     settings_.setValue(kShowIconsInMenusParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+uint32_t UserSettings::oneTimeSessions() const
+{
+    return settings_.value(kOneTimeSessionsParam, proto::SESSION_TYPE_ALL).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setOneTimeSessions(uint32_t sessions)
+{
+    settings_.setValue(kOneTimeSessionsParam, sessions);
 }
 
 } // namespace host

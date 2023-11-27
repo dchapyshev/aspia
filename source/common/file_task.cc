@@ -24,6 +24,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
                    std::unique_ptr<proto::FileRequest> request,
                    Target target)
@@ -36,13 +37,16 @@ FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
     DCHECK(target_ == Target::LOCAL || target_ == Target::REMOTE);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTask::~FileTask() = default;
 
+//--------------------------------------------------------------------------------------------------
 const proto::FileRequest& FileTask::request() const
 {
     return *request_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const proto::FileReply& FileTask::reply() const
 {
     static const proto::FileReply kEmptyReply;
@@ -53,6 +57,7 @@ const proto::FileReply& FileTask::reply() const
     return *reply_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTask::setReply(std::unique_ptr<proto::FileReply> reply)
 {
     // Save the reply inside the request.

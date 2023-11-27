@@ -60,14 +60,15 @@ public:
     void start();
 
 protected:
-    // ipc::Channel::Listener implementation.
-    void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    // base::IpcChannel::Listener implementation.
+    void onIpcDisconnected() override;
+    void onIpcMessageReceived(const base::ByteArray& buffer) override;
 
 private:
     friend class UserSessionAgentProxy;
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void setOneTimeSessions(uint32_t sessions);
     void killClient(uint32_t id);
     void connectConfirmation(uint32_t id, bool accept);
     void setVoiceChat(bool enable);

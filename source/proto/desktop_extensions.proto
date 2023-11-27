@@ -100,3 +100,20 @@ message VideoRecording
 
     Action action = 1;
 }
+
+// Extension name: "screen_type"
+// Sent by host to client.
+message ScreenType
+{
+    enum Type
+    {
+        TYPE_UNKNOWN = 0;
+        TYPE_DESKTOP = 1;
+        TYPE_LOCK    = 2;
+        TYPE_LOGIN   = 3;
+        TYPE_OTHER   = 4;
+    }
+
+    Type type   = 1;
+    string name = 2;
+}

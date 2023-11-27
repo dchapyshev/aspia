@@ -21,15 +21,17 @@
 #include "console/computer_factory.h"
 
 #include <QApplication>
+#include <QCollator>
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                                      ComputerGroupItem* parent_item)
     : QTreeWidgetItem(parent_item),
       computer_group_(computer_group)
 {
-    setIcon(0, QIcon(QStringLiteral(":/img/folder.png")));
+    setIcon(0, QIcon(":/img/folder.png"));
     updateItem();
 
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
@@ -38,6 +40,7 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
     proto::address_book::ComputerGroup* computer_group)
 {
@@ -48,6 +51,7 @@ ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_group_item)
 {
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
@@ -63,6 +67,7 @@ bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_gro
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     ComputerGroupItem* computer_group_item)
 {
@@ -85,11 +90,13 @@ proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     return computer_group;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::addChildComputer(proto::address_book::Computer* computer)
 {
     computer_group_->mutable_computer()->AddAllocated(computer);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::deleteChildComputer(proto::address_book::Computer* computer)
 {
     for (int i = 0; i < computer_group_->computer_size(); ++i)
@@ -104,6 +111,7 @@ bool ComputerGroupItem::deleteChildComputer(proto::address_book::Computer* compu
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     proto::address_book::Computer* computer)
 {
@@ -123,6 +131,7 @@ proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::updateItem()
 {
     bool has_parent = parent() != nullptr;
@@ -132,16 +141,19 @@ void ComputerGroupItem::updateItem()
         setText(0, QApplication::translate("ComputerGroupItem", "Root Group"));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::IsExpanded() const
 {
     return computer_group_->expanded();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::SetExpanded(bool expanded)
 {
     computer_group_->set_expanded(expanded);
 }
 
+//--------------------------------------------------------------------------------------------------
 QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
 {
     QList<QTreeWidgetItem*> list;
@@ -152,6 +164,7 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
 {
     proto::address_book::ComputerGroupConfig result;
@@ -212,6 +225,31 @@ proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ComputerGroupItem::operator<(const QTreeWidgetItem& other) const
+{
+    switch (treeWidget()->sortColumn())
+    {
+        case COLUMN_INDEX_NAME:
+        {
+            QString this_group_name = text(COLUMN_INDEX_NAME);
+            QString other_group_name = other.text(COLUMN_INDEX_NAME);
+
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(this_group_name, other_group_name) <= 0;
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return QTreeWidgetItem::operator<(other);
 }
 
 } // namespace console

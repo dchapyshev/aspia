@@ -24,11 +24,15 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 // static
 UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
 {
     if (buffer.empty())
+    {
+        LOG(LS_INFO) << "Empty XML buffer";
         return UpdateInfo();
+    }
 
     rapidxml::xml_document<> xml;
 
@@ -39,13 +43,16 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
     }
     catch (const rapidxml::parse_error& error)
     {
-        LOG(LS_WARNING) << "Invalid XML for update info: " << error.what();
+        LOG(LS_ERROR) << "Invalid XML for update info: " << error.what();
         return UpdateInfo();
     }
 
     rapidxml::xml_node<>* root_node = xml.first_node("update");
     if (!root_node)
+    {
+        LOG(LS_ERROR) << "Node 'update' not found. No available updates";
         return UpdateInfo();
+    }
 
     UpdateInfo update_info;
 
@@ -62,21 +69,47 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
         if (node && node->type() == rapidxml::node_data)
         {
             if (name == "version")
-                update_info.version_ = base::Version(std::string_view(node->value(), node->value_size()));
+            {
+                update_info.version_ =
+                    base::Version(std::string_view(node->value(), node->value_size()));
+                if (!update_info.version_.isValid())
+                {
+                    LOG(LS_ERROR) << "Invalid version: " << node->value();
+                    return UpdateInfo();
+                }
+            }
             else if (name == "description")
+            {
+                static const size_t kMaxDescriptionLength = 2048;
+
+                if (node->value_size() > kMaxDescriptionLength)
+                {
+                    LOG(LS_ERROR) << "Invalid description length: " << node->value_size()
+                                  << " (max: " << kMaxDescriptionLength << ")";
+                    return UpdateInfo();
+                }
+
                 update_info.description_ = std::string(node->value(), node->value_size());
+            }
             else if (name == "url")
+            {
+                static const size_t kMinUrlLength = 10;
+                static const size_t kMaxUrlLength = 256;
+
+                if (node->value_size() < kMinUrlLength || node->value_size() > kMaxUrlLength)
+                {
+                    LOG(LS_ERROR) << "Invalid URL length: " << node->value_size()
+                                  << " (min: " << kMinUrlLength << " max: " << kMaxUrlLength << ")";
+                    return UpdateInfo();
+                }
+
                 update_info.url_ = std::string(node->value(), node->value_size());
+            }
         }
     }
 
     update_info.valid_ = true;
     return update_info;
-}
-
-bool UpdateInfo::hasUpdate() const
-{
-    return !version_.isValid() && !url_.empty();
 }
 
 } // namespace common

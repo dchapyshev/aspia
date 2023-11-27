@@ -46,6 +46,11 @@ message Credentials
     string password = 2;
 }
 
+message OneTimeSessions
+{
+    uint32 sessions = 1;
+}
+
 message ConnectEvent
 {
     uint32 id                = 1;
@@ -121,9 +126,10 @@ message VideoRecordingState
 message UiToService
 {
     CredentialsRequest credentials_request = 1;
-    ConnectConfirmation connect_confirmation = 2;
-    ServiceControl control = 3;
-    TextChat text_chat = 4;
+    OneTimeSessions one_time_sessions = 2;
+    ConnectConfirmation connect_confirmation = 3;
+    ServiceControl control = 4;
+    TextChat text_chat = 5;
 }
 
 message ServiceToUi

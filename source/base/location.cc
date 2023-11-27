@@ -29,10 +29,16 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Location::Location() = default;
+
+//--------------------------------------------------------------------------------------------------
 Location::Location(const Location& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 Location& Location::operator=(const Location& other) = default;
 
+//--------------------------------------------------------------------------------------------------
 Location::Location(const char* file_name, const void* program_counter)
     : file_name_(file_name),
       program_counter_(program_counter)
@@ -40,6 +46,7 @@ Location::Location(const char* file_name, const void* program_counter)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Location::Location(const char* function_name,
                    const char* file_name,
                    int line_number,
@@ -60,6 +67,7 @@ Location::Location(const char* function_name,
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Location::toString(PathType path_type) const
 {
     if (hasSourceInfo())
@@ -90,12 +98,14 @@ std::string Location::toString(PathType path_type) const
 #define RETURN_ADDRESS() nullptr
 #endif
 
+//--------------------------------------------------------------------------------------------------
 // static
 NOINLINE Location Location::createFromHere(const char* file_name)
 {
     return Location(file_name, RETURN_ADDRESS());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 NOINLINE Location Location::createFromHere(const char* function_name,
                                            const char* file_name,

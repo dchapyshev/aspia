@@ -22,16 +22,20 @@
 // OS detection.
 #if defined(_WIN32)
 #define OS_WIN 1
+#define OS_WINDOWS 1
 #elif defined(linux) || defined(__linux__)
 #define OS_LINUX 1
 #elif defined(__APPLE__)
 #define OS_MAC 1
+#define OS_MACOS 1
+#define OS_MACOSX 1
 #else
 #error Unknown OS
 #endif
 
 #if defined(OS_LINUX) || defined(OS_MAC)
 #define OS_POSIX 1
+#define OS_UNIX 1
 #endif
 
 // Compiler detection. Note: clang masquerades as GCC on POSIX and as MSVC on Windows.
@@ -50,6 +54,7 @@
 #define ARCH_CPU_X86_64        1
 #define ARCH_CPU_64_BITS       1
 #define ARCH_CPU_LITTLE_ENDIAN 1
+#define ARCH_CPU_STRING        "x86_64"
 
 #elif defined(_M_IX86) || defined(__i386__)
 
@@ -57,6 +62,7 @@
 #define ARCH_CPU_X86           1
 #define ARCH_CPU_32_BITS       1
 #define ARCH_CPU_LITTLE_ENDIAN 1
+#define ARCH_CPU_STRING        "x86"
 
 #elif defined(__ARMEL__)
 
@@ -64,6 +70,7 @@
 #define ARCH_CPU_ARMEL         1
 #define ARCH_CPU_32_BITS       1
 #define ARCH_CPU_LITTLE_ENDIAN 1
+#define ARCH_CPU_STRING        "arm"
 
 #elif defined(__aarch64__) || defined(_M_ARM64)
 
@@ -71,6 +78,7 @@
 #define ARCH_CPU_ARM64         1
 #define ARCH_CPU_64_BITS       1
 #define ARCH_CPU_LITTLE_ENDIAN 1
+#define ARCH_CPU_STRING        "arm64"
 
 #else
 #error Unknown architecture

@@ -25,13 +25,16 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 SessionWatcher::SessionWatcher() = default;
 
+//--------------------------------------------------------------------------------------------------
 SessionWatcher::~SessionWatcher()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionWatcher::start(Delegate* delegate)
 {
     if (window_)
@@ -61,6 +64,7 @@ bool SessionWatcher::start(Delegate* delegate)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWatcher::stop()
 {
     if (!window_)
@@ -75,6 +79,7 @@ void SessionWatcher::stop()
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionWatcher::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
     if (message == WM_WTSSESSION_CHANGE)

@@ -31,6 +31,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<uint8_t[]> initializeTcpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_TCPTABLE);
@@ -54,6 +55,7 @@ std::unique_ptr<uint8_t[]> initializeTcpTable()
     return table_buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<uint8_t[]> initializeUdpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_UDPTABLE);
@@ -77,6 +79,7 @@ std::unique_ptr<uint8_t[]> initializeUdpTable()
     return table_buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string processNameByPid(HANDLE process_snapshot, DWORD process_id)
 {
     PROCESSENTRY32W process_entry;
@@ -94,7 +97,8 @@ std::string processNameByPid(HANDLE process_snapshot, DWORD process_id)
     return std::string();
 }
 
-static std::string addressToString(uint32_t address)
+//--------------------------------------------------------------------------------------------------
+std::string addressToString(uint32_t address)
 {
     address = base::EndianUtil::byteSwap(address);
 
@@ -105,6 +109,7 @@ static std::string addressToString(uint32_t address)
                         (address)       & 0xFF);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string stateToString(DWORD state)
 {
     switch (state)
@@ -128,6 +133,7 @@ std::string stateToString(DWORD state)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ConnectEnumerator::ConnectEnumerator(Mode mode)
     : mode_(mode),
       snapshot_(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0))
@@ -153,23 +159,28 @@ ConnectEnumerator::ConnectEnumerator(Mode mode)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ConnectEnumerator::~ConnectEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool ConnectEnumerator::isAtEnd() const
 {
     return pos_ >= num_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectEnumerator::advance()
 {
     ++pos_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ConnectEnumerator::protocol() const
 {
     return (mode_ == Mode::TCP) ? "TCP" : "UDP";
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ConnectEnumerator::processName() const
 {
     if (mode_ == Mode::TCP)
@@ -192,6 +203,7 @@ std::string ConnectEnumerator::processName() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ConnectEnumerator::localAddress() const
 {
     if (mode_ == Mode::TCP)
@@ -214,6 +226,7 @@ std::string ConnectEnumerator::localAddress() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ConnectEnumerator::remoteAddress() const
 {
     if (mode_ == Mode::TCP)
@@ -231,6 +244,7 @@ std::string ConnectEnumerator::remoteAddress() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t ConnectEnumerator::localPort() const
 {
     if (mode_ == Mode::TCP)
@@ -253,6 +267,7 @@ uint16_t ConnectEnumerator::localPort() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t ConnectEnumerator::remotePort() const
 {
     if (mode_ == Mode::TCP)
@@ -270,6 +285,7 @@ uint16_t ConnectEnumerator::remotePort() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ConnectEnumerator::state() const
 {
     if (mode_ == Mode::TCP)

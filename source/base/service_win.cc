@@ -56,6 +56,7 @@ const wchar_t kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
+//--------------------------------------------------------------------------------------------------
 std::string serviceStateToString(DWORD state)
 {
     switch (state)
@@ -134,8 +135,10 @@ private:
 // ServiceThread implementation.
 //================================================================================================
 
+//--------------------------------------------------------------------------------------------------
 ServiceThread* ServiceThread::self = nullptr;
 
+//--------------------------------------------------------------------------------------------------
 ServiceThread::ServiceThread(Service* service)
     : service_(service)
 {
@@ -150,6 +153,7 @@ ServiceThread::ServiceThread(Service* service)
     memset(&status_, 0, sizeof(status_));
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceThread::~ServiceThread()
 {
     LOG(LS_INFO) << "Dtor";
@@ -162,11 +166,13 @@ ServiceThread::~ServiceThread()
     self = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceThread::start()
 {
     thread_.start(std::bind(&ServiceThread::run, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceThread::setStatus(DWORD status)
 {
     LOG(LS_INFO) << "Service status changed: " << serviceStateToString(status);
@@ -192,11 +198,12 @@ void ServiceThread::setStatus(DWORD status)
 
     if (!SetServiceStatus(status_handle_, &status_))
     {
-        PLOG(LS_WARNING) << "SetServiceStatus failed";
+        PLOG(LS_ERROR) << "SetServiceStatus failed";
         return;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceThread::doEvent(EventCallback callback, bool quit)
 {
     std::unique_lock lock(event_lock);
@@ -226,6 +233,7 @@ void ServiceThread::doEvent(EventCallback callback, bool quit)
         event_condition.wait(lock);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceThread::run()
 {
     SERVICE_TABLE_ENTRYW service_table[2];
@@ -246,8 +254,8 @@ void ServiceThread::run()
         }
         else
         {
-            LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
-                            << SystemError::toString(error_code);
+            LOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed: "
+                          << SystemError::toString(error_code);
             self->startup_state = State::ERROR_OCCURRED;
         }
 
@@ -259,6 +267,7 @@ void ServiceThread::run()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 {
@@ -287,7 +296,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     if (!self->status_handle_)
     {
-        PLOG(LS_WARNING) << "RegisterServiceCtrlHandlerExW failed";
+        PLOG(LS_ERROR) << "RegisterServiceCtrlHandlerExW failed";
         return;
     }
 
@@ -296,6 +305,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     self->setStatus(SERVICE_RUNNING);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 DWORD WINAPI ServiceThread::serviceControlHandler(
     DWORD control_code, DWORD event_type, LPVOID event_data, LPVOID /* context */)
@@ -348,6 +358,7 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Service::Service(std::u16string_view name, MessageLoop::Type type)
     : type_(type),
       name_(name)
@@ -355,11 +366,13 @@ Service::Service(std::u16string_view name, MessageLoop::Type type)
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::exec()
 {
     LOG(LS_INFO) << "Begin";

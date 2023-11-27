@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 
+#include <map>
+
 namespace router {
 
 class SharedKeyPool::Impl
@@ -47,17 +49,20 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 SharedKeyPool::Impl::Impl(Delegate* delegate)
     : delegate_(delegate)
 {
     DCHECK(delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::Impl::dettach()
 {
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::Impl::addKey(Session::SessionId session_id, const proto::RelayKey& key)
 {
     auto relay = pool_.find(session_id);
@@ -71,11 +76,12 @@ void SharedKeyPool::Impl::addKey(Session::SessionId session_id, const proto::Rel
     relay->second.emplace_back(key);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 {
     if (pool_.empty())
     {
-        LOG(LS_WARNING) << "Empty key pool";
+        LOG(LS_ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
@@ -94,7 +100,7 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     if (preffered_relay == pool_.end())
     {
-        LOG(LS_WARNING) << "Empty key pool";
+        LOG(LS_ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
@@ -126,18 +132,21 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
     return std::move(credentials);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::Impl::removeKeysForRelay(Session::SessionId session_id)
 {
     LOG(LS_INFO) << "All keys for relay '" << session_id << "' removed";
     pool_.erase(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::Impl::clear()
 {
     LOG(LS_INFO) << "Key pool cleared";
     pool_.clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t SharedKeyPool::Impl::countForRelay(Session::SessionId session_id) const
 {
     auto result = pool_.find(session_id);
@@ -147,6 +156,7 @@ size_t SharedKeyPool::Impl::countForRelay(Session::SessionId session_id) const
     return result->second.size();
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t SharedKeyPool::Impl::count() const
 {
     size_t result = 0;
@@ -157,11 +167,13 @@ size_t SharedKeyPool::Impl::count() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedKeyPool::Impl::isEmpty() const
 {
     return pool_.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedKeyPool::SharedKeyPool(Delegate* delegate)
     : impl_(base::make_local_shared<Impl>(delegate)),
       is_primary_(true)
@@ -169,6 +181,7 @@ SharedKeyPool::SharedKeyPool(Delegate* delegate)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedKeyPool::SharedKeyPool(base::local_shared_ptr<Impl> impl)
     : impl_(std::move(impl)),
       is_primary_(false)
@@ -176,47 +189,56 @@ SharedKeyPool::SharedKeyPool(base::local_shared_ptr<Impl> impl)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedKeyPool::~SharedKeyPool()
 {
     if (is_primary_)
         impl_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedKeyPool> SharedKeyPool::share()
 {
     return std::unique_ptr<SharedKeyPool>(new SharedKeyPool(impl_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::addKey(Session::SessionId session_id, const proto::RelayKey& key)
 {
     impl_->addKey(session_id, key);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::takeCredentials()
 {
     return impl_->takeCredentials();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::removeKeysForRelay(Session::SessionId session_id)
 {
     impl_->removeKeysForRelay(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedKeyPool::clear()
 {
     impl_->clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t SharedKeyPool::countForRelay(Session::SessionId session_id) const
 {
     return impl_->countForRelay(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t SharedKeyPool::count() const
 {
     return impl_->count();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedKeyPool::isEmpty() const
 {
     return impl_->isEmpty();

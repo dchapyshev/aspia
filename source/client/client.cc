@@ -30,6 +30,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner))
 {
@@ -41,6 +42,7 @@ Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
 #endif // defined(OS_MAC)
 }
 
+//--------------------------------------------------------------------------------------------------
 Client::~Client()
 {
     LOG(LS_INFO) << "Dtor";
@@ -52,6 +54,7 @@ Client::~Client()
 #endif // defined(OS_MAC)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::start(const Config& config)
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
@@ -102,6 +105,7 @@ void Client::start(const Config& config)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::stop()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
@@ -121,92 +125,96 @@ void Client::stop()
     }
     else
     {
-        LOG(LS_WARNING) << "Client already stopped";
+        LOG(LS_ERROR) << "Client already stopped";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
 {
     status_window_proxy_ = std::move(status_window_proxy);
 }
 
-// static
-base::Version Client::version()
-{
-    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-}
-
+//--------------------------------------------------------------------------------------------------
 std::u16string Client::computerName() const
 {
     return config_.computer_name;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::SessionType Client::sessionType() const
 {
     return config_.session_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "sendMessage called but channel not initialized";
+        LOG(LS_ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
     channel_->send(channel_id, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t Client::totalRx() const
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "totalRx called but channel not initialized";
+        LOG(LS_ERROR) << "totalRx called but channel not initialized";
         return 0;
     }
 
     return channel_->totalRx();
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t Client::totalTx() const
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "totalTx called but channel not initialized";
+        LOG(LS_ERROR) << "totalTx called but channel not initialized";
         return 0;
     }
 
     return channel_->totalTx();
 }
 
+//--------------------------------------------------------------------------------------------------
 int Client::speedRx()
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "speedRx called but channel not initialized";
+        LOG(LS_ERROR) << "speedRx called but channel not initialized";
         return 0;
     }
 
     return channel_->speedRx();
 }
 
+//--------------------------------------------------------------------------------------------------
 int Client::speedTx()
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "speedTx called but channel not initialized";
+        LOG(LS_ERROR) << "speedTx called but channel not initialized";
         return 0;
     }
 
     return channel_->speedTx();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection established";
     startAuthentication();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
@@ -215,6 +223,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     status_window_proxy_->onDisconnected(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
@@ -227,10 +236,11 @@ void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buf
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
@@ -243,10 +253,11 @@ void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Host connected";
@@ -261,11 +272,13 @@ void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
     io_task_runner_->deleteSoon(std::move(router_controller_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::onErrorOccurred(const RouterController::Error& error)
 {
     status_window_proxy_->onRouterError(error);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Client::startAuthentication()
 {
     LOG(LS_INFO) << "Start authentication for '" << config_.username << "'";
@@ -295,20 +308,31 @@ void Client::startAuthentication()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            const base::Version& host_version = authenticator_->peerVersion();
+            if (host_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            status_window_proxy_->onConnected();
+            const base::Version& client_version = base::Version::kVersion_CurrentFull;
+            if (host_version > client_version)
+            {
+                LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
+                              << " client: " << client_version.toString();
+                status_window_proxy_->onVersionMismatch(host_version, client_version);
+            }
+            else
+            {
+                status_window_proxy_->onConnected();
 
-            // Signal that everything is ready to start the session (connection established,
-            // authentication passed).
-            onSessionStarted(authenticator_->peerVersion());
+                // Signal that everything is ready to start the session (connection established,
+                // authentication passed).
+                onSessionStarted(host_version);
 
-            // Now the session will receive incoming messages.
-            channel_->resume();
+                // Now the session will receive incoming messages.
+                channel_->resume();
+            }
         }
         else
         {

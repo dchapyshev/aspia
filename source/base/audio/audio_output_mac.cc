@@ -94,8 +94,8 @@ bool AudioOutputMac::stop()
         if (!stop_event_.wait(std::chrono::seconds(2)))
         {
             std::scoped_lock crit_scoped(lock_);
-            LOG(LS_WARNING) << "Timed out stopping the render IOProc."
-                               "We may have failed to detect a device removal.";
+            LOG(LS_ERROR) << "Timed out stopping the render IOProc."
+                             "We may have failed to detect a device removal.";
 
             // We assume capturing on a shared device has stopped as well if the IOProc times out.
             AudioDeviceStop(output_device_id_, device_io_proc_id_);
@@ -255,7 +255,7 @@ bool AudioOutputMac::initPlayout()
 
     if (output_device_id_ == kAudioDeviceUnknown)
     {
-        LOG(LS_WARNING) << "No default device exists";
+        LOG(LS_ERROR) << "No default device exists";
         return false;
     }
 
@@ -338,7 +338,7 @@ void AudioOutputMac::threadRun()
         param.sched_priority = max_prio - 1;
         if (pthread_setschedparam(pthread_self(), policy, &param) != 0)
         {
-            LOG(LS_WARNING) << "pthread_setschedparam failed";
+            LOG(LS_ERROR) << "pthread_setschedparam failed";
         }
     }
 
@@ -487,7 +487,7 @@ void AudioOutputMac::handleDeviceChange()
 
     if (err == kAudioHardwareBadDeviceError || device_is_alive == 0)
     {
-        LOG(LS_WARNING) << "Render device is not alive (probably removed)";
+        LOG(LS_ERROR) << "Render device is not alive (probably removed)";
         is_device_alive_ = false;
     }
     else if (err != noErr)

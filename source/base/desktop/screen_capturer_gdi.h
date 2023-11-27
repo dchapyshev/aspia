@@ -42,6 +42,7 @@ public:
     const Frame* captureFrame(Error* error) override;
     const MouseCursor* captureCursor() override;
     Point cursorPosition() override;
+    ScreenType screenType() override;
 
 protected:
     // ScreenCapturer implementation.

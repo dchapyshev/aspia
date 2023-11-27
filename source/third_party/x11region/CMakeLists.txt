@@ -21,6 +21,5 @@ list(APPEND SOURCE_X11_REGION x11region.c x11region.h)
 source_group("" FILES ${SOURCE_X11_REGION})
 
 add_library(x11region STATIC ${SOURCE_X11_REGION})
-target_link_libraries(x11region custom_c_allocator)
 set_target_properties(x11region PROPERTIES LANGUAGE C LINKER_LANGUAGE C)
 set_target_properties(x11region PROPERTIES FOLDER third_party)

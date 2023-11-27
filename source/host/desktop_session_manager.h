@@ -64,6 +64,7 @@ protected:
     void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
     void onCursorPositionChanged(const proto::CursorPosition& cursor_position) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
+    void onScreenTypeChanged(const proto::ScreenType& type) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
@@ -79,6 +80,8 @@ private:
 
     State state_ = State::STOPPED;
     DesktopSession::Delegate* delegate_;
+
+    base::SessionId session_id_ = base::kInvalidSessionId;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionManager);
 };

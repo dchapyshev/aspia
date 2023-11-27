@@ -82,34 +82,49 @@ struct ActionsMap
     }
 };
 
+//--------------------------------------------------------------------------------------------------
+int64_t calculateSpeed(int64_t last_speed, const FileTransfer::Milliseconds& duration, int64_t bytes)
+{
+    static const double kAlpha = 0.9;
+    return static_cast<int64_t>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+}
+
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                            std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                            std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                            Type type)
-    : io_task_runner_(io_task_runner),
+    : type_(type),
+      io_task_runner_(io_task_runner),
       transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
       transfer_window_proxy_(std::move(transfer_window_proxy)),
       task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
       cancel_timer_(base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner),
-      type_(type)
+      speed_update_timer_(base::WaitableTimer::Type::REPEATED, io_task_runner)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::~FileTransfer()
 {
+    LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
     transfer_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::start(const std::string& source_path,
                          const std::string& target_path,
                          const std::vector<Item>& items,
                          const FinishCallback& finish_callback)
 {
+    LOG(LS_INFO) << "File transfer start";
     finish_callback_ = finish_callback;
 
     std::unique_ptr<common::FileTaskFactory> task_factory_local =
@@ -139,6 +154,8 @@ void FileTransfer::start(const std::string& source_path,
     queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
         task_consumer_proxy_, task_factory_source_->target());
 
+    speed_update_timer_.start(Milliseconds(1000), std::bind(&FileTransfer::doUpdateSpeed, this));
+
     // Start building a list of objects for transfer.
     queue_builder_->start(source_path, target_path, items, [this](proto::FileError error_code)
     {
@@ -149,7 +166,7 @@ void FileTransfer::start(const std::string& source_path,
 
             if (tasks_.empty())
             {
-                onFinished();
+                onFinished(FROM_HERE);
             }
             else
             {
@@ -165,25 +182,35 @@ void FileTransfer::start(const std::string& source_path,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::stop()
 {
+    LOG(LS_INFO) << "File transfer stop";
+
     if (queue_builder_)
     {
         queue_builder_.reset();
-        onFinished();
+        onFinished(FROM_HERE);
     }
     else
     {
         is_canceled_ = true;
-        cancel_timer_.start(std::chrono::seconds(5), std::bind(&FileTransfer::onFinished, this));
+        cancel_timer_.start(std::chrono::seconds(5), [this]()
+        {
+            onFinished(FROM_HERE);
+        });
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action action)
 {
+    LOG(LS_INFO) << "Set action for error " << static_cast<int>(error_type) << ": "
+                 << static_cast<int>(action);
     actions_.insert_or_assign(error_type, action);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     if (type_ == Type::DOWNLOADER)
@@ -216,11 +243,13 @@ void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task& FileTransfer::frontTask()
 {
     return tasks_.front();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::targetReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (tasks_.empty())
@@ -275,6 +304,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             }
 
             total_transfered_size_ += packet_size;
+            bytes_per_time_ += packet_size;
 
             const int task_percentage =
                 static_cast<int>(task_transfered_size_ * 100 / full_task_size);
@@ -308,10 +338,14 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (tasks_.empty())
+    {
+        LOG(LS_INFO) << "No more tasks";
         return;
+    }
 
     if (request.has_download_request())
     {
@@ -342,12 +376,16 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::setAction(Error::Type error_type, Error::Action action)
 {
+    LOG(LS_INFO) << "Set action for error " << static_cast<int>(error_type) << ": "
+                 << static_cast<int>(action);
+
     switch (action)
     {
         case Error::ACTION_ABORT:
-            onFinished();
+            onFinished(FROM_HERE);
             break;
 
         case Error::ACTION_REPLACE:
@@ -376,6 +414,7 @@ void FileTransfer::setAction(Error::Type error_type, Error::Action action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::doFrontTask(bool overwrite)
 {
     task_percentage_ = 0;
@@ -398,6 +437,7 @@ void FileTransfer::doFrontTask(bool overwrite)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::doNextTask()
 {
     if (is_canceled_)
@@ -417,13 +457,28 @@ void FileTransfer::doNextTask()
         if (cancel_timer_.isActive())
             cancel_timer_.stop();
 
-        onFinished();
+        onFinished(FROM_HERE);
         return;
     }
 
     doFrontTask(false);
 }
 
+//--------------------------------------------------------------------------------------------------
+void FileTransfer::doUpdateSpeed()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_);
+
+    speed_ = calculateSpeed(speed_, duration, bytes_per_time_);
+
+    begin_time_ = current_time;
+    bytes_per_time_ = 0;
+
+    transfer_window_proxy_->setCurrentSpeed(speed_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onError(Error::Type type, proto::FileError code, const std::string& path)
 {
     auto default_action = actions_.find(type);
@@ -436,10 +491,15 @@ void FileTransfer::onError(Error::Type type, proto::FileError code, const std::s
     transfer_window_proxy_->errorOccurred(Error(type, code, path));
 }
 
-void FileTransfer::onFinished()
+//--------------------------------------------------------------------------------------------------
+void FileTransfer::onFinished(const base::Location& location)
 {
+    LOG(LS_INFO) << "File transfer finished (from: " << location.toString() << ")";
+
     FinishCallback callback;
     callback.swap(finish_callback_);
+
+    speed_update_timer_.stop();
 
     if (callback)
     {
@@ -448,6 +508,7 @@ void FileTransfer::onFinished()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t FileTransfer::Error::availableActions() const
 {
     for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
@@ -459,6 +520,7 @@ uint32_t FileTransfer::Error::availableActions() const
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
 {
     for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
@@ -470,6 +532,7 @@ FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
     return Action::ACTION_ABORT;
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
                          bool is_directory, int64_t size)
     : source_path_(std::move(source_path)),
@@ -480,6 +543,7 @@ FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task::Task(Task&& other) noexcept
     : source_path_(std::move(other.source_path_)),
       target_path_(std::move(other.target_path_)),
@@ -489,6 +553,7 @@ FileTransfer::Task::Task(Task&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task& FileTransfer::Task::operator=(Task&& other) noexcept
 {
     source_path_ = std::move(other.source_path_);

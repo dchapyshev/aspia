@@ -70,12 +70,6 @@ list(APPEND SOURCE_CLIENT_CORE
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
-    online_checker.cc
-    online_checker.h
-    online_checker_direct.cc
-    online_checker_direct.h
-    online_checker_router.cc
-    online_checker_router.h
     router.cc
     router.h
     router_proxy.cc
@@ -108,11 +102,15 @@ list(APPEND SOURCE_CLIENT_CORE
 list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
 
+list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
+    online_checker/online_checker.cc
+    online_checker/online_checker.h
+    online_checker/online_checker_direct.cc
+    online_checker/online_checker_direct.h
+    online_checker/online_checker_router.cc
+    online_checker/online_checker_router.h)
+
 list(APPEND SOURCE_CLIENT_CORE_UI
-    ui/address_bar.cc
-    ui/address_bar.h
-    ui/address_bar_model.cc
-    ui/address_bar_model.h
     ui/application.cc
     ui/application.h
     ui/authorization_dialog.cc
@@ -126,153 +124,179 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_settings_dialog.cc
     ui/client_settings_dialog.h
     ui/client_settings_dialog.ui
-    ui/desktop_config_dialog.cc
-    ui/desktop_config_dialog.h
-    ui/desktop_config_dialog.ui
-    ui/file_name_validator.cc
-    ui/file_name_validator.h
-    ui/desktop_panel.cc
-    ui/desktop_panel.h
-    ui/desktop_panel.ui
-    ui/desktop_widget.cc
-    ui/desktop_widget.h
-    ui/file_error_code.cc
-    ui/file_error_code.h
-    ui/desktop_settings.cc
-    ui/desktop_settings.h
-    ui/file_item_delegate.cc
-    ui/file_item_delegate.h
-    ui/file_list.cc
-    ui/file_list.h
-    ui/file_list_model.cc
-    ui/file_list_model.h
-    ui/file_manager_settings.cc
-    ui/file_manager_settings.h
-    ui/file_mime_data.cc
-    ui/file_mime_data.h
-    ui/file_panel.cc
-    ui/file_panel.h
-    ui/file_panel.ui
-    ui/file_remove_dialog.cc
-    ui/file_remove_dialog.h
-    ui/file_remove_dialog.ui
-    ui/file_transfer_dialog.cc
-    ui/file_transfer_dialog.h
-    ui/file_transfer_dialog.ui
-    ui/frame_factory_qimage.cc
-    ui/frame_factory_qimage.h
-    ui/frame_qimage.cc
-    ui/frame_qimage.h
-    ui/qt_desktop_window.cc
-    ui/qt_desktop_window.h
-    ui/qt_file_manager_window.cc
-    ui/qt_file_manager_window.h
-    ui/qt_file_manager_window.ui
-    ui/qt_system_info_window.cc
-    ui/qt_system_info_window.h
-    ui/qt_system_info_window.ui
-    ui/qt_text_chat_window.cc
-    ui/qt_text_chat_window.h
-    ui/qt_text_chat_window.ui
-    ui/record_settings_dialog.cc
-    ui/record_settings_dialog.h
-    ui/record_settings_dialog.ui
-    ui/router_manager_window.cc
-    ui/router_manager_window.h
-    ui/router_manager_window.ui
-    ui/router_status_dialog.cc
-    ui/router_status_dialog.h
-    ui/router_status_dialog.ui
-    ui/router_user_dialog.cc
-    ui/router_user_dialog.h
-    ui/router_user_dialog.ui
-    ui/select_screen_action.h
     ui/session_window.cc
     ui/session_window.h
-    ui/statistics_dialog.cc
-    ui/statistics_dialog.h
-    ui/statistics_dialog.ui
-    ui/sys_info_widget.cc
-    ui/sys_info_widget.h
-    ui/sys_info_widget_applications.cc
-    ui/sys_info_widget_applications.h
-    ui/sys_info_widget_applications.ui
-    ui/sys_info_widget_connections.cc
-    ui/sys_info_widget_connections.h
-    ui/sys_info_widget_connections.ui
-    ui/sys_info_widget_devices.cc
-    ui/sys_info_widget_devices.h
-    ui/sys_info_widget_devices.ui
-    ui/sys_info_widget_drivers.cc
-    ui/sys_info_widget_drivers.h
-    ui/sys_info_widget_drivers.ui
-    ui/sys_info_widget_env_vars.cc
-    ui/sys_info_widget_env_vars.h
-    ui/sys_info_widget_env_vars.ui
-    ui/sys_info_widget_event_logs.cc
-    ui/sys_info_widget_event_logs.h
-    ui/sys_info_widget_event_logs.ui
-    ui/sys_info_widget_licenses.cc
-    ui/sys_info_widget_licenses.h
-    ui/sys_info_widget_licenses.ui
-    ui/sys_info_widget_local_users.cc
-    ui/sys_info_widget_local_users.h
-    ui/sys_info_widget_local_users.ui
-    ui/sys_info_widget_local_user_groups.cc
-    ui/sys_info_widget_local_user_groups.h
-    ui/sys_info_widget_local_user_groups.ui
-    ui/sys_info_widget_monitors.cc
-    ui/sys_info_widget_monitors.h
-    ui/sys_info_widget_monitors.ui
-    ui/sys_info_widget_net_shares.cc
-    ui/sys_info_widget_net_shares.h
-    ui/sys_info_widget_net_shares.ui
-    ui/sys_info_widget_net_adapters.cc
-    ui/sys_info_widget_net_adapters.h
-    ui/sys_info_widget_net_adapters.ui
-    ui/sys_info_widget_open_files.cc
-    ui/sys_info_widget_open_files.h
-    ui/sys_info_widget_open_files.ui
-    ui/sys_info_widget_power_options.cc
-    ui/sys_info_widget_power_options.h
-    ui/sys_info_widget_power_options.ui
-    ui/sys_info_widget_printers.cc
-    ui/sys_info_widget_printers.h
-    ui/sys_info_widget_printers.ui
-    ui/sys_info_widget_processes.cc
-    ui/sys_info_widget_processes.h
-    ui/sys_info_widget_processes.ui
-    ui/sys_info_widget_routes.cc
-    ui/sys_info_widget_routes.h
-    ui/sys_info_widget_routes.ui
-    ui/sys_info_widget_services.cc
-    ui/sys_info_widget_services.h
-    ui/sys_info_widget_services.ui
-    ui/sys_info_widget_summary.cc
-    ui/sys_info_widget_summary.h
-    ui/sys_info_widget_summary.ui
-    ui/sys_info_widget_video_adapters.cc
-    ui/sys_info_widget_video_adapters.h
-    ui/sys_info_widget_video_adapters.ui
-    ui/task_manager_settings.cc
-    ui/task_manager_settings.h
-    ui/task_manager_window.cc
-    ui/task_manager_window.h
-    ui/task_manager_window.ui
-    ui/tree_to_html.cc
-    ui/tree_to_html.h
     ui/update_settings_dialog.cc
     ui/update_settings_dialog.h
     ui/update_settings_dialog.ui)
 
+list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
+    ui/desktop/desktop_config_dialog.cc
+    ui/desktop/desktop_config_dialog.h
+    ui/desktop/desktop_config_dialog.ui
+    ui/desktop/desktop_toolbar.cc
+    ui/desktop/desktop_toolbar.h
+    ui/desktop/desktop_toolbar.ui
+    ui/desktop/desktop_widget.cc
+    ui/desktop/desktop_widget.h
+    ui/desktop/desktop_settings.cc
+    ui/desktop/desktop_settings.h
+    ui/desktop/frame_factory_qimage.cc
+    ui/desktop/frame_factory_qimage.h
+    ui/desktop/frame_qimage.cc
+    ui/desktop/frame_qimage.h
+    ui/desktop/qt_desktop_window.cc
+    ui/desktop/qt_desktop_window.h
+    ui/desktop/record_settings_dialog.cc
+    ui/desktop/record_settings_dialog.h
+    ui/desktop/record_settings_dialog.ui
+    ui/desktop/select_screen_action.h
+    ui/desktop/statistics_dialog.cc
+    ui/desktop/statistics_dialog.h
+    ui/desktop/statistics_dialog.ui
+    ui/desktop/task_manager_settings.cc
+    ui/desktop/task_manager_settings.h
+    ui/desktop/task_manager_window.cc
+    ui/desktop/task_manager_window.h
+    ui/desktop/task_manager_window.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
+    ui/file_transfer/address_bar.cc
+    ui/file_transfer/address_bar.h
+    ui/file_transfer/address_bar_model.cc
+    ui/file_transfer/address_bar_model.h
+    ui/file_transfer/file_error_code.cc
+    ui/file_transfer/file_error_code.h
+    ui/file_transfer/file_item_delegate.cc
+    ui/file_transfer/file_item_delegate.h
+    ui/file_transfer/file_list.cc
+    ui/file_transfer/file_list.h
+    ui/file_transfer/file_list_model.cc
+    ui/file_transfer/file_list_model.h
+    ui/file_transfer/file_manager_settings.cc
+    ui/file_transfer/file_manager_settings.h
+    ui/file_transfer/file_mime_data.cc
+    ui/file_transfer/file_mime_data.h
+    ui/file_transfer/file_name_validator.cc
+    ui/file_transfer/file_name_validator.h
+    ui/file_transfer/file_panel.cc
+    ui/file_transfer/file_panel.h
+    ui/file_transfer/file_panel.ui
+    ui/file_transfer/file_remove_dialog.cc
+    ui/file_transfer/file_remove_dialog.h
+    ui/file_transfer/file_remove_dialog.ui
+    ui/file_transfer/file_transfer_dialog.cc
+    ui/file_transfer/file_transfer_dialog.h
+    ui/file_transfer/file_transfer_dialog.ui
+    ui/file_transfer/qt_file_manager_window.cc
+    ui/file_transfer/qt_file_manager_window.h
+    ui/file_transfer/qt_file_manager_window.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
+    ui/router_manager/router_manager_window.cc
+    ui/router_manager/router_manager_window.h
+    ui/router_manager/router_manager_window.ui
+    ui/router_manager/router_status_dialog.cc
+    ui/router_manager/router_status_dialog.h
+    ui/router_manager/router_status_dialog.ui
+    ui/router_manager/router_user_dialog.cc
+    ui/router_manager/router_user_dialog.h
+    ui/router_manager/router_user_dialog.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
+    ui/sys_info/qt_system_info_window.cc
+    ui/sys_info/qt_system_info_window.h
+    ui/sys_info/qt_system_info_window.ui
+    ui/sys_info/sys_info_widget.cc
+    ui/sys_info/sys_info_widget.h
+    ui/sys_info/sys_info_widget_applications.cc
+    ui/sys_info/sys_info_widget_applications.h
+    ui/sys_info/sys_info_widget_applications.ui
+    ui/sys_info/sys_info_widget_connections.cc
+    ui/sys_info/sys_info_widget_connections.h
+    ui/sys_info/sys_info_widget_connections.ui
+    ui/sys_info/sys_info_widget_devices.cc
+    ui/sys_info/sys_info_widget_devices.h
+    ui/sys_info/sys_info_widget_devices.ui
+    ui/sys_info/sys_info_widget_drivers.cc
+    ui/sys_info/sys_info_widget_drivers.h
+    ui/sys_info/sys_info_widget_drivers.ui
+    ui/sys_info/sys_info_widget_env_vars.cc
+    ui/sys_info/sys_info_widget_env_vars.h
+    ui/sys_info/sys_info_widget_env_vars.ui
+    ui/sys_info/sys_info_widget_event_logs.cc
+    ui/sys_info/sys_info_widget_event_logs.h
+    ui/sys_info/sys_info_widget_event_logs.ui
+    ui/sys_info/sys_info_widget_licenses.cc
+    ui/sys_info/sys_info_widget_licenses.h
+    ui/sys_info/sys_info_widget_licenses.ui
+    ui/sys_info/sys_info_widget_local_users.cc
+    ui/sys_info/sys_info_widget_local_users.h
+    ui/sys_info/sys_info_widget_local_users.ui
+    ui/sys_info/sys_info_widget_local_user_groups.cc
+    ui/sys_info/sys_info_widget_local_user_groups.h
+    ui/sys_info/sys_info_widget_local_user_groups.ui
+    ui/sys_info/sys_info_widget_monitors.cc
+    ui/sys_info/sys_info_widget_monitors.h
+    ui/sys_info/sys_info_widget_monitors.ui
+    ui/sys_info/sys_info_widget_net_shares.cc
+    ui/sys_info/sys_info_widget_net_shares.h
+    ui/sys_info/sys_info_widget_net_shares.ui
+    ui/sys_info/sys_info_widget_net_adapters.cc
+    ui/sys_info/sys_info_widget_net_adapters.h
+    ui/sys_info/sys_info_widget_net_adapters.ui
+    ui/sys_info/sys_info_widget_open_files.cc
+    ui/sys_info/sys_info_widget_open_files.h
+    ui/sys_info/sys_info_widget_open_files.ui
+    ui/sys_info/sys_info_widget_power_options.cc
+    ui/sys_info/sys_info_widget_power_options.h
+    ui/sys_info/sys_info_widget_power_options.ui
+    ui/sys_info/sys_info_widget_printers.cc
+    ui/sys_info/sys_info_widget_printers.h
+    ui/sys_info/sys_info_widget_printers.ui
+    ui/sys_info/sys_info_widget_processes.cc
+    ui/sys_info/sys_info_widget_processes.h
+    ui/sys_info/sys_info_widget_processes.ui
+    ui/sys_info/sys_info_widget_routes.cc
+    ui/sys_info/sys_info_widget_routes.h
+    ui/sys_info/sys_info_widget_routes.ui
+    ui/sys_info/sys_info_widget_services.cc
+    ui/sys_info/sys_info_widget_services.h
+    ui/sys_info/sys_info_widget_services.ui
+    ui/sys_info/sys_info_widget_summary.cc
+    ui/sys_info/sys_info_widget_summary.h
+    ui/sys_info/sys_info_widget_summary.ui
+    ui/sys_info/sys_info_widget_video_adapters.cc
+    ui/sys_info/sys_info_widget_video_adapters.h
+    ui/sys_info/sys_info_widget_video_adapters.ui
+    ui/sys_info/tree_to_html.cc
+    ui/sys_info/tree_to_html.h)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
+    ui/text_chat/qt_text_chat_window.cc
+    ui/text_chat/qt_text_chat_window.h
+    ui/text_chat/qt_text_chat_window.ui)
+
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
+source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
+source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
+source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
+source_group(ui\\router_manager FILES ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER})
+source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
+source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
     ${SOURCE_CLIENT_CORE_RESOURCES}
-    ${SOURCE_CLIENT_CORE_UI})
+    ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+    ${SOURCE_CLIENT_CORE_UI}
+    ${SOURCE_CLIENT_CORE_UI_DESKTOP}
+    ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
+    ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
+    ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
+    ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 target_link_libraries(aspia_client_core
     aspia_base
     aspia_common
@@ -349,10 +373,4 @@ if (APPLE)
     set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "Aspia Client")
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_client_ICON})
-
-    add_custom_command(TARGET aspia_client POST_BUILD
-        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "./Aspia Client.app"
-        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-        COMMENT "Signing..."
-        VERBATIM)
 endif()

@@ -24,17 +24,20 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 Service::Service()
     : base::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
     LOG(LS_INFO) << "Service start...";
@@ -45,7 +48,7 @@ void Service::onStart()
     server_ = std::make_unique<Server>(task_runner); 
     if (!server_->start())
     {
-        LOG(LS_WARNING) << "Unable to start server. Service not started";
+        LOG(LS_ERROR) << "Unable to start server. Service not started";
         task_runner->postQuit();
         return;
     }
@@ -53,6 +56,7 @@ void Service::onStart()
     LOG(LS_INFO) << "Service started";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
     LOG(LS_INFO) << "Service stop...";
@@ -61,12 +65,14 @@ void Service::onStop()
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(
     base::win::SessionStatus /* event */, base::SessionId /* session_id */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(uint32_t /* event */)
 {
     // Nothing

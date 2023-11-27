@@ -30,12 +30,14 @@ static const int kBitsPerPixel = 32;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Mv2Helper::Mv2Helper(const Rect& screen_rect)
     : screen_rect_(screen_rect)
 {
     DCHECK(!screen_rect_.isEmpty());
 }
 
+//--------------------------------------------------------------------------------------------------
 Mv2Helper::~Mv2Helper()
 {
     if (is_mapped_)
@@ -48,6 +50,7 @@ Mv2Helper::~Mv2Helper()
         update(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 {
@@ -57,13 +60,13 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
                                          &helper->device_name_,
                                          &helper->device_key_))
     {
-        LOG(LS_WARNING) << "Could not find mv2 mirror driver";
+        LOG(LS_ERROR) << "Could not find mv2 mirror driver";
         return nullptr;
     }
 
     if (!MirrorHelper::attachToDesktop(helper->device_key_, true))
     {
-        LOG(LS_WARNING) << "Could not attach mirror driver to desktop";
+        LOG(LS_ERROR) << "Could not attach mirror driver to desktop";
         return nullptr;
     }
 
@@ -71,7 +74,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 
     if (!helper->update(true))
     {
-        LOG(LS_WARNING) << "Could not load mirror driver";
+        LOG(LS_ERROR) << "Could not load mirror driver";
         return nullptr;
     }
 
@@ -79,7 +82,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 
     if (!helper->mapMemory(true))
     {
-        LOG(LS_WARNING) << "Could not map memory for mirror driver";
+        LOG(LS_ERROR) << "Could not map memory for mirror driver";
         return nullptr;
     }
 
@@ -89,6 +92,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
     return helper;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mv2Helper::addUpdatedRects(Region* updated_region) const
 {
     DCHECK(updated_region);
@@ -110,6 +114,7 @@ void Mv2Helper::addUpdatedRects(Region* updated_region) const
     last_update_ = next_update;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
 {
     DCHECK(frame);
@@ -126,6 +131,7 @@ void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mv2Helper::update(bool load)
 {
     DEVMODE device_mode;
@@ -150,13 +156,14 @@ bool Mv2Helper::update(bool load)
         device_name_.c_str(), &device_mode, nullptr, CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsExW failed: " << status;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed: " << status;
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mv2Helper::mapMemory(bool map)
 {
     if (map)
@@ -164,7 +171,7 @@ bool Mv2Helper::mapMemory(bool map)
         driver_dc_.reset(CreateDCW(device_name_.c_str(), nullptr, nullptr, nullptr));
         if (!driver_dc_.isValid())
         {
-            PLOG(LS_WARNING) << "CreateDCW failed";
+            PLOG(LS_ERROR) << "CreateDCW failed";
             return false;
         }
 
@@ -206,7 +213,7 @@ bool Mv2Helper::mapMemory(bool map)
 
         if (!file.isValid())
         {
-            LOG(LS_WARNING) << "Unable to open file";
+            LOG(LS_ERROR) << "Unable to open file";
             return false;
         }
 
@@ -214,7 +221,7 @@ bool Mv2Helper::mapMemory(bool map)
             CreateFileMappingW(file, nullptr, PAGE_READWRITE, 0, 0, nullptr));
         if (!file_map.isValid())
         {
-            PLOG(LS_WARNING) << "CreateFileMappingW failed";
+            PLOG(LS_ERROR) << "CreateFileMappingW failed";
             return false;
         }
 
@@ -222,7 +229,7 @@ bool Mv2Helper::mapMemory(bool map)
             MapViewOfFile(file_map, FILE_MAP_READ, 0, 0, 0));
         if (!shared_buffer_)
         {
-            PLOG(LS_WARNING) << "MapViewOfFile failed";
+            PLOG(LS_ERROR) << "MapViewOfFile failed";
             return false;
         }
 

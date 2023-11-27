@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioDecoder> AudioDecoder::create(proto::AudioEncoding encoding)
 {
     if (encoding == proto::AUDIO_ENCODING_OPUS)

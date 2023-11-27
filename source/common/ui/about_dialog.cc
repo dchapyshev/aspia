@@ -60,6 +60,7 @@ const char* kDevelopers[] = { "Dmitry Chapyshev (dmitry@aspia.ru)" };
 const char* kTranslators[] =
 {
     "Dmitry Chapyshev (Russian)",
+    "Felipe Borela (Portuguese Brazilian)",
     "Gregor Doroschenko (German)",
     "Lyhyrda Myhaylo (Ukrainian)",
     "Mark Jansen (Dutch)",
@@ -70,7 +71,7 @@ const char* kTranslators[] =
 const char* kThirdParty[] =
 {
     "asio &copy; 2003-2018 Christopher M. Kohlhoff; Boost Software License 1.0",
-    "curl &copy; 1996-2022 Daniel Stenberg, <daniel@haxx.se>, and many contributors; CURL License"
+    "curl &copy; 1996-2022 Daniel Stenberg, and many contributors; CURL License",
     "icu &copy; 2016 Unicode, Inc. and others; ICU License",
     "libvpx &copy; 2010, The WebM Project authors; BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors; BSD 3-Clause License",
@@ -80,10 +81,12 @@ const char* kThirdParty[] =
     "protobuf &copy; 2014 Google Inc.; BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd.; GNU General Public License 3.0",
     "rapidjson &copy; 2015 THL A29 Limited, a Tencent company, and Milo Yip; MIT License",
+    "rapidxml &copy; 2006, 2009 Marcin Kalicinski; Boost Software License 1.0",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane; Creative Commons Attribution 3.0 License"
 };
 
+//--------------------------------------------------------------------------------------------------
 QString createList(const QString& title, const char* array[], size_t array_size)
 {
     if (!array_size)
@@ -103,6 +106,7 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     : QDialog(parent),
       ui(new Ui::AboutDialog())
@@ -111,7 +115,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     ui->setupUi(this);
 
     ui->label_name->setText(application_name);
-    ui->label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
+    ui->label_version->setText(tr("Version: %1 (%2)").arg(ASPIA_VERSION_STRING, ARCH_CPU_STRING));
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
@@ -225,6 +229,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     add_version("qt", qVersion());
     add_version("rapidjson", RAPIDJSON_VERSION_STRING);
+    add_version("rapidxml", "1.13");
     add_version("sqlite", SQLITE_VERSION);
     add_version("zstd", ZSTD_versionString());
 
@@ -236,11 +241,13 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);
 }
 
+//--------------------------------------------------------------------------------------------------
 AboutDialog::~AboutDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void AboutDialog::onServiceContextMenu(const QPoint& pos)
 {
     QMenu menu;

@@ -1,0 +1,163 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ninja-multi-vcpkg-ci",
+      "binaryDir": "${sourceDir}/builds/${presetName}",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_WARN_DEPRECATED": "OFF",
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        "VCPKG_TARGET_TRIPLET": {
+          "type": "STRING",
+          "value": "$env{VCPKG_TRIPLET}"
+        }
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-base",
+      "hidden": true,
+      "inherits": [
+        "ninja-multi-vcpkg-ci"
+      ],
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/vcpkg",
+        "VCPKG_BINARY_SOURCES": "default,readwrite",
+        "VCPKG_INSTALLED_DIR": "${sourceDir}/builds/${presetName}/vcpkg_installed"
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-unix",
+      "inherits": [
+        "ninja-multi-vcpkg-local-base"
+      ],
+      "environment": {
+        "VCPKG_DOWNLOADS": "/opt/vcpkg/downloads"
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-mac-arm64",
+      "inherits": [
+        "ninja-multi-vcpkg-local-unix"
+      ],
+      "architecture": {
+        "value": "arm64",
+        "strategy": "external"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "macOS"
+          ]
+        }
+      },
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-osx"
+      },
+      "environment": {
+        "VCPKG_TRIPLET": "arm64-osx",
+        "VCPKG_DEFAULT_BINARY_CACHE": "/opt/vcpkg/bincache-$env{VCPKG_TRIPLET}"
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86",
+      "description": "Run x86 Native Tools Command Prompt for VS 2019 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
+      "inherits": [
+        "ninja-multi-vcpkg-local-base"
+      ],
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      },
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x86-windows-static"
+      },
+      "environment": {
+        "VCPKG_TRIPLET": "x86-windows-static",
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x86-windows-static",
+        "VCPKG_DOWNLOADS": "C:/vcpkg/downloads",
+        "VCPKG_DEFAULT_BINARY_CACHE": "C:/vcpkg/bincache-$env{VCPKG_TRIPLET}",
+        "NINJAPATH": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86-gui",
+      "inherits": [
+        "ninja-multi-vcpkg-local-win-x86"
+      ],
+      "environment": {
+        "FORCE_WITHGUIAPP": "1"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-multi-vcpkg-ci-release",
+      "configurePreset": "ninja-multi-vcpkg-ci",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-multi-vcpkg-ci-debug",
+      "configurePreset": "ninja-multi-vcpkg-ci",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86-release",
+      "configurePreset": "ninja-multi-vcpkg-local-win-x86",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86-debug",
+      "configurePreset": "ninja-multi-vcpkg-local-win-x86",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86-release-gui",
+      "configurePreset": "ninja-multi-vcpkg-local-win-x86-gui",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-win-x86-debug-gui",
+      "configurePreset": "ninja-multi-vcpkg-local-win-x86-gui",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-unix-release",
+      "configurePreset": "ninja-multi-vcpkg-local-unix",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-multi-vcpkg-local-unix-debug",
+      "configurePreset": "ninja-multi-vcpkg-local-unix",
+      "configuration": "Debug"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ninja-multi-vcpkg-ci-release", 
+      "configurePreset": "ninja-multi-vcpkg-ci",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-multi-vcpkg-ci-debug", 
+      "configurePreset": "ninja-multi-vcpkg-ci",
+      "configuration": "Debug"
+    }
+  ]
+}

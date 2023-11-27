@@ -23,6 +23,7 @@
 
 namespace relay {
 
+//--------------------------------------------------------------------------------------------------
 SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
                                uint16_t peer_port,
                                const std::chrono::minutes& peer_idle_timeout,
@@ -40,11 +41,13 @@ SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
     DCHECK(peer_port_ && shared_pool_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionsWorker::~SessionsWorker()
 {
     thread_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                            SessionManager::Delegate* delegate)
 {
@@ -57,6 +60,7 @@ void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
     thread_->start(base::MessageLoop::Type::ASIO, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::disconnectSession(uint64_t session_id)
 {
     if (!self_task_runner_->belongsToCurrentThread())
@@ -68,13 +72,33 @@ void SessionsWorker::disconnectSession(uint64_t session_id)
     session_manager_->disconnectSession(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::onBeforeThreadRunning()
 {
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
-    asio::ip::address listen_address =
-        asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface_));
+    asio::ip::address listen_address;
+
+    if (!listen_interface_.empty())
+    {
+        std::error_code error_code;
+        listen_address = asio::ip::make_address(
+            base::local8BitFromUtf16(listen_interface_), error_code);
+        if (error_code)
+        {
+            LOG(LS_ERROR) << "Unable to get listen address: "
+                          << base::utf16FromLocal8Bit(error_code.message());
+            return;
+        }
+    }
+    else
+    {
+        listen_address = asio::ip::address_v6::any();
+    }
+
+    LOG(LS_INFO) << "Listen interface: "
+                 << (listen_interface_.empty() ? u"ANY" : listen_interface_) << ":" << peer_port_;
 
     session_manager_ = std::make_unique<SessionManager>(
         self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,
@@ -82,11 +106,13 @@ void SessionsWorker::onBeforeThreadRunning()
     session_manager_->start(std::move(shared_pool_), this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::onAfterThreadRunning()
 {
     session_manager_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::onSessionStarted()
 {
     if (!caller_task_runner_->belongsToCurrentThread())
@@ -99,6 +125,7 @@ void SessionsWorker::onSessionStarted()
         delegate_->onSessionStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
     if (!caller_task_runner_->belongsToCurrentThread())
@@ -112,6 +139,7 @@ void SessionsWorker::onSessionStatistics(const proto::RelayStat& relay_stat)
         delegate_->onSessionStatistics(relay_stat);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionsWorker::onSessionFinished()
 {
     if (!caller_task_runner_->belongsToCurrentThread())

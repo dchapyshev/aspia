@@ -33,6 +33,7 @@ public:
     virtual void onStopped() = 0;
     virtual void onConnected() = 0;
     virtual void onDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
+    virtual void onVersionMismatch(const base::Version& host, const base::Version& client) = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onRouterError(const RouterController::Error& error) = 0;
 };

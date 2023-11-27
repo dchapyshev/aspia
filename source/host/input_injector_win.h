@@ -22,6 +22,8 @@
 #include "base/win/scoped_thread_desktop.h"
 #include "host/input_injector.h"
 
+#include <set>
+
 namespace host {
 
 class InputInjectorWin : public InputInjector

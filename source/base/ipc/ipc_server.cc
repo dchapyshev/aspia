@@ -26,10 +26,6 @@
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include "third_party/pcg-cpp/pcg_random.hpp"
-#endif // defined(USE_PCG_GENERATOR)
-
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
@@ -37,6 +33,10 @@
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
 #endif // defined(OS_WIN)
+
+#if defined(OS_POSIX)
+#include <asio/local/stream_protocol.hpp>
+#endif // defined(OS_POSIX)
 
 #include <random>
 
@@ -60,7 +60,13 @@ public:
     void dettach() { server_ = nullptr; }
 
     bool listen(asio::io_context& io_context, std::u16string_view channel_name);
+
+#if defined(OS_WIN)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
+#elif defined(OS_POSIX)
+    void onNewConnetion(const std::error_code& error_code,
+                        asio::local::stream_protocol::socket socket);
+#endif
 
 private:
     IpcServer* server_;
@@ -70,12 +76,14 @@ private:
     std::unique_ptr<asio::windows::stream_handle> handle_;
     std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
 #elif defined(OS_POSIX)
-    std::unique_ptr<asio::posix::stream_descriptor> handle_;
+    std::unique_ptr<asio::local::stream_protocol::acceptor> acceptor_;
+    std::unique_ptr<asio::local::stream_protocol::socket> handle_;
 #endif
 
     DISALLOW_COPY_AND_ASSIGN(Listener);
 };
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::Listener::Listener(IpcServer* server, size_t index)
     : server_(server),
       index_(index)
@@ -83,8 +91,10 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::Listener::~Listener() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
 {
 #if defined(OS_WIN)
@@ -129,7 +139,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
                          &security_attributes));
     if (!handle.isValid())
     {
-        PLOG(LS_WARNING) << "CreateNamedPipeW failed";
+        PLOG(LS_ERROR) << "CreateNamedPipeW failed";
         return false;
     }
 
@@ -165,19 +175,63 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    NOTIMPLEMENTED();
-    return false;
+    std::string channel_file = base::local8BitFromUtf16(channel_name);
+
+    asio::local::stream_protocol::endpoint endpoint(channel_file);
+    acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
+
+    std::error_code error_code;
+    acceptor_->open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_->open failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    acceptor_->bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_->bind failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    std::string command_line = base::stringPrintf("chmod 777 %s", channel_file.data());
+
+    int ret = system(command_line.c_str());
+    LOG(LS_INFO) << "Set security attributes: " << command_line << " (ret: " << ret << ")";
+
+    acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "acceptor_->listen failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    acceptor_->async_accept(std::bind(&Listener::onNewConnetion,
+                                      shared_from_this(),
+                                      std::placeholders::_1,
+                                      std::placeholders::_2));
+    return true;
 #endif
 }
 
+#if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
 {
     if (!server_)
+    {
+        LOG(LS_ERROR) << "Invalid pointer";
         return;
+    }
 
     if (error_code)
     {
+        LOG(LS_ERROR) << "Error code: " << base::utf16FromLocal8Bit(error_code.message());
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -187,7 +241,34 @@ void IpcServer::Listener::onNewConnetion(
 
     server_->onNewConnection(index_, std::move(channel));
 }
+#endif // defined(OS_WIN)
 
+#if defined(OS_POSIX)
+//--------------------------------------------------------------------------------------------------
+void IpcServer::Listener::onNewConnetion(
+    const std::error_code& error_code, asio::local::stream_protocol::socket socket)
+{
+    if (!server_)
+    {
+        LOG(LS_ERROR) << "Invalid pointer";
+        return;
+    }
+
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Error code: " << base::utf16FromLocal8Bit(error_code.message());
+        server_->onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    std::unique_ptr<IpcChannel> channel =
+        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(socket)));
+
+    server_->onNewConnection(index_, std::move(channel));
+}
+#endif // defined(OS_POSIX)
+
+//--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
 {
@@ -197,6 +278,7 @@ IpcServer::IpcServer()
         listeners_[i] = base::make_local_shared<Listener>(this, i);
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::~IpcServer()
 {
     LOG(LS_INFO) << "Dtor";
@@ -204,6 +286,7 @@ IpcServer::~IpcServer()
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::u16string IpcServer::createUniqueId()
 {
@@ -219,13 +302,8 @@ std::u16string IpcServer::createUniqueId()
 #error Not implemented
 #endif
 
-#if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> device;
-    pcg32_fast engine(device);
-#else // defined(USE_PCG_GENERATOR)
     std::random_device device;
     std::mt19937 engine(device());
-#endif
 
     std::uniform_int_distribution<uint32_t> distance(0, std::numeric_limits<uint32_t>::max());
 
@@ -236,12 +314,13 @@ std::u16string IpcServer::createUniqueId()
         stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
 
-    LOG(LS_INFO) << "Starting IPC server";
+    LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id.data() << ")";
 
     if (channel_id.empty())
     {
@@ -255,15 +334,19 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
         if (!runListener(i))
+        {
+            LOG(LS_ERROR) << "runListener failed (i=" << i << ")";
             return false;
+        }
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::stop()
 {
-    LOG(LS_INFO) << "Stopping IPC server";
+    LOG(LS_INFO) << "Stopping IPC server (channel_name=" << channel_name_ << ")";
     delegate_ = nullptr;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
@@ -276,18 +359,23 @@ void IpcServer::stop()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::runListener(size_t index)
 {
     base::local_shared_ptr<Listener> listener = listeners_[index];
     if (!listener)
+    {
+        LOG(LS_ERROR) << "Unable to get listener (index=" << index << ")";
         return false;
+    }
 
     return listener->listen(io_context_, channel_name_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel)
 {
-    LOG(LS_INFO) << "New IPC connecting";
+    LOG(LS_INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
 
     if (delegate_)
     {
@@ -296,14 +384,15 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
     }
     else
     {
-        LOG(LS_WARNING) << "No delegate";
+        LOG(LS_ERROR) << "No delegate (channel_name=" << channel_name_ << ")";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
-    LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
-                    << " (" << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC server (channel_name=" << channel_name_
+                  << " from=" << location.toString() << ")";
 
     if (delegate_)
     {
@@ -311,7 +400,7 @@ void IpcServer::onErrorOccurred(const Location& location)
     }
     else
     {
-        LOG(LS_WARNING) << "No delegate";
+        LOG(LS_ERROR) << "No delegate (channel_name=" << channel_name_ << ")";
     }
 }
 

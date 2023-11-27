@@ -40,6 +40,7 @@ constexpr uint32_t kPixelRgbaTransparent = RGBA(0,    0,    0,    0);
 
 constexpr uint32_t kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
 
+//--------------------------------------------------------------------------------------------------
 // Scans a 32bpp bitmap looking for any pixels with non-zero alpha component.
 // Returns true if non-zero alpha is found. |stride| is expressed in pixels.
 bool hasAlphaChannel(const uint32_t* data, int width, int height)
@@ -60,8 +61,8 @@ bool hasAlphaChannel(const uint32_t* data, int width, int height)
     return false;
 }
 
-// Expands the cursor shape to add a white outline for visibility against
-// dark backgrounds.
+//--------------------------------------------------------------------------------------------------
+// Expands the cursor shape to add a white outline for visibility against dark backgrounds.
 void addCursorOutline(int width, int height, uint32_t* data)
 {
     for (int y = 0; y < height; ++y)
@@ -89,6 +90,7 @@ void addCursorOutline(int width, int height, uint32_t* data)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // Premultiplies RGB components of the pixel data in the given image by
 // the corresponding alpha components.
 void alphaMul(uint32_t* data, int width, int height)
@@ -109,6 +111,7 @@ void alphaMul(uint32_t* data, int width, int height)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // Converts an HCURSOR into a |MouseCursor| instance.
 MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
@@ -117,7 +120,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        PLOG(LS_WARNING) << "GetIconInfo failed";
+        PLOG(LS_ERROR) << "GetIconInfo failed";
         return nullptr;
     }
 
@@ -132,7 +135,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        PLOG(LS_WARNING) << "GetObjectW failed";
+        PLOG(LS_ERROR) << "GetObjectW failed";
         return nullptr;
     }
 
@@ -164,7 +167,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        PLOG(LS_WARNING) << "GetDIBits failed";
+        PLOG(LS_ERROR) << "GetDIBits failed";
         return nullptr;
     }
 
@@ -186,7 +189,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            PLOG(LS_WARNING) << "GetDIBits failed";
+            PLOG(LS_ERROR) << "GetDIBits failed";
             return nullptr;
         }
 

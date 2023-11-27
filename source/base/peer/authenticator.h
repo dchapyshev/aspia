@@ -61,6 +61,7 @@ public:
     [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
     [[nodiscard]] const std::string& peerOsName() const { return peer_os_name_; }
     [[nodiscard]] const std::string& peerComputerName() const { return peer_computer_name_; }
+    [[nodiscard]] const std::string& peerArch() const { return peer_arch_; }
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
     [[nodiscard]] const std::string& userName() const { return user_name_; }
 
@@ -84,6 +85,7 @@ protected:
     void setPeerVersion(const proto::Version& version);
     void setPeerOsName(const std::string& name);
     void setPeerComputerName(const std::string& name);
+    void setPeerArch(const std::string& arch);
 
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
@@ -110,6 +112,7 @@ private:
     Version peer_version_; // Remote peer version.
     std::string peer_os_name_;
     std::string peer_computer_name_;
+    std::string peer_arch_;
 };
 
 } // namespace base

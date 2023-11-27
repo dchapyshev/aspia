@@ -30,16 +30,19 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 CpuidUtil::CpuidUtil(int leaf, int subleaf)
 {
     get(leaf, subleaf);
 }
 
+//--------------------------------------------------------------------------------------------------
 CpuidUtil::CpuidUtil(const CpuidUtil& other)
 {
     *this = other;
 }
 
+//--------------------------------------------------------------------------------------------------
 CpuidUtil& CpuidUtil::operator=(const CpuidUtil& other)
 {
     if (&other == this)
@@ -52,6 +55,7 @@ CpuidUtil& CpuidUtil::operator=(const CpuidUtil& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 void CpuidUtil::get(int leaf, int subleaf)
 {
 #if defined(CC_MSVC)
@@ -68,6 +72,7 @@ void CpuidUtil::get(int leaf, int subleaf)
     edx_ = static_cast<uint32_t>(cpu_info[3]);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool CpuidUtil::hasAesNi()
 {
