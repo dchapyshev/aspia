@@ -48,15 +48,3 @@ message Version
     uint32 patch    = 3;
     uint32 revision = 4;
 }
-
-message DirectConnectionOffer
-{
-    uint32 conv = 1;
-    string host = 2;
-    uint32 port = 3;
-}
-
-message Service_ClientToHost
-{
-    DirectConnectionOffer direct_connection_offer = 1;
-}
