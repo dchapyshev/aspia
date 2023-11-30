@@ -47,7 +47,7 @@ bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
             std::wstring_view device_key_view(device_info.DeviceKey);
             std::wstring_view prefix(L"\\Registry\\Machine\\");
 
-            if (base::startsWith(device_key_view, prefix))
+            if (device_key_view.starts_with(prefix))
             {
                 device_key_view.remove_prefix(prefix.size());
                 device_key->assign(device_key_view);

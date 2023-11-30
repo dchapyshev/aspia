@@ -88,7 +88,7 @@ Settings Settings::getGroup(std::string_view key) const
 
     for (auto it = map_.cbegin(); it != map_.cend(); ++it)
     {
-        if (startsWith(it->first, prefix))
+        if (it->first.starts_with(prefix))
             map.insert_or_assign(it->first.substr(prefix.length()), it->second);
     }
 
@@ -113,7 +113,7 @@ void Settings::remove(std::string_view key)
 
     for (auto it = map_.begin(); it != map_.end();)
     {
-        if (startsWith(it->first, prefix))
+        if (it->first.starts_with(prefix))
             it = map_.erase(it);
         else
             ++it;

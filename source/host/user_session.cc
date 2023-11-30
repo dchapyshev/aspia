@@ -1069,7 +1069,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     for (const auto& client : desktop_clients_)
     {
         const std::string& user_name = client->userName();
-        if (base::startsWith(user_name, "#"))
+        if (user_name.starts_with("#"))
         {
             LOG(LS_INFO) << "Stop one-time desktop client (id=" << client->id()
                          << " user_name=" << user_name << " sid=" << session_id_ << ")";

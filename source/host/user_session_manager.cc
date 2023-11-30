@@ -357,7 +357,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
     base::SessionId session_id = base::kInvalidSessionId;
 
     std::string username = client_session->userName();
-    if (base::startsWith(username, "#"))
+    if (username.starts_with("#"))
     {
         LOG(LS_INFO) << "Connection with one-time password";
 

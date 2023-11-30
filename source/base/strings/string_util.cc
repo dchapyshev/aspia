@@ -376,69 +376,6 @@ int compareCaseInsensitiveASCII(std::u16string_view first, std::u16string_view s
     return compareCaseInsensitiveASCIIT<char16_t>(first, second);
 }
 
-//--------------------------------------------------------------------------------------------------
-template<typename CharType>
-bool startsWithT(std::basic_string_view<CharType> str, std::basic_string_view<CharType> search_for)
-{
-    if (search_for.size() > str.size())
-        return false;
-
-    return str.substr(0, search_for.size()) == search_for;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool startsWith(std::string_view str, std::string_view search_for)
-{
-    return startsWithT<char>(str, search_for);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool startsWith(std::u16string_view str, std::u16string_view search_for)
-{
-    return startsWithT<char16_t>(str, search_for);
-}
-
-#if defined(OS_WIN)
-//--------------------------------------------------------------------------------------------------
-bool startsWith(std::wstring_view str, std::wstring_view search_for)
-{
-    return startsWithT<wchar_t>(str, search_for);
-}
-#endif // defined(OS_WIN)
-
-//--------------------------------------------------------------------------------------------------
-template <typename CharType>
-bool endsWithT(std::basic_string_view<CharType> str, std::basic_string_view<CharType> search_for)
-{
-    if (search_for.size() > str.size())
-        return false;
-
-    std::basic_string_view<CharType> source =
-        str.substr(str.size() - search_for.size(), search_for.size());
-
-    return source == search_for;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool endsWith(std::string_view str, std::string_view search_for)
-{
-    return endsWithT<char>(str, search_for);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool endsWith(std::u16string_view str, std::u16string_view search_for)
-{
-    return endsWithT<char16_t>(str, search_for);
-}
-
-#if defined(OS_WIN)
-//--------------------------------------------------------------------------------------------------
-bool endsWith(std::wstring_view str, std::wstring_view search_for)
-{
-    return endsWithT<wchar_t>(str, search_for);
-}
-#endif // defined(OS_WIN)
-
 namespace {
 
 //--------------------------------------------------------------------------------------------------
