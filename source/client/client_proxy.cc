@@ -46,12 +46,14 @@ ClientProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
     : io_task_runner_(std::move(io_task_runner)),
       client_(std::move(client))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_ && client_);
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientProxy::Impl::~Impl()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!client_);
 }
 
@@ -65,7 +67,10 @@ void ClientProxy::Impl::start(const Config& config)
     }
 
     if (client_)
+    {
+        LOG(LS_INFO) << "Starting client";
         client_->start(config);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,8 +84,12 @@ void ClientProxy::Impl::stop()
 
     if (client_)
     {
+        LOG(LS_INFO) << "Client stopping...";
+
         client_->stop();
         client_.reset();
+
+        LOG(LS_INFO) << "Client stopped";
     }
 }
 
@@ -91,12 +100,13 @@ ClientProxy::ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(client))),
       config_(config)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientProxy::~ClientProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 
