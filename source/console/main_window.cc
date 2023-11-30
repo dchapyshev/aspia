@@ -227,8 +227,8 @@ MainWindow::MainWindow(const QString& file_path)
     {
         update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        update_checker_->setUpdateServer(settings.updateServer().toStdString());
-        update_checker_->setPackageName("console");
+        update_checker_->setUpdateServer(settings.updateServer().toStdU16String());
+        update_checker_->setPackageName(u"console");
 
         update_checker_->start(Application::uiTaskRunner(), this);
     }
@@ -721,8 +721,8 @@ void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
     LOG(LS_INFO) << "[ACTION] Check for updates";
-    common::UpdateDialog(Application::instance()->settings().updateServer().toStdString(),
-                         "console",
+    common::UpdateDialog(Application::instance()->settings().updateServer().toStdU16String(),
+                         u"console",
                          this).exec();
 #endif
 }

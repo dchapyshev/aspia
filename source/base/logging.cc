@@ -550,6 +550,18 @@ std::ostream& operator<<(std::ostream& out, const wchar_t* wstr)
 #endif // defined(OS_WIN)
 
 //--------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& out, const char8_t* ustr)
+{
+    return out << (ustr ? reinterpret_cast<const char*>(ustr) : "nullptr");
+}
+
+//--------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& out, const std::u8string& ustr)
+{
+    return out << reinterpret_cast<const char*>(ustr.data());
+}
+
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
 {
     return out << (ustr ? base::utf8FromUtf16(ustr) : "nullptr");

@@ -615,7 +615,7 @@ void Server::checkForUpdates()
     update_checker_ = std::make_unique<common::UpdateChecker>();
 
     update_checker_->setUpdateServer(settings_.updateServer());
-    update_checker_->setPackageName("host");
+    update_checker_->setPackageName(u"host");
 
     update_checker_->start(task_runner_, this);
 #endif // defined(OS_WIN)

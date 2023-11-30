@@ -25,6 +25,7 @@
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
+#include "base/files/file_path.h"
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/route_enumerator.h"
@@ -41,6 +42,7 @@
 #include "base/win/user_enumerator.h"
 #include "base/win/user_group_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
+#include "base/strings/unicode.h"
 #include "common/system_info_constants.h"
 #include "host/process_monitor.h"
 
@@ -667,9 +669,9 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 void fillComputer(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
-    computer->set_name(base::SysInfo::computerName());
-    computer->set_domain(base::SysInfo::computerDomain());
-    computer->set_workgroup(base::SysInfo::computerWorkgroup());
+    computer->set_name(base::utf8FromUtf16(base::SysInfo::computerName()));
+    computer->set_domain(base::utf8FromUtf16(base::SysInfo::computerDomain()));
+    computer->set_workgroup(base::utf8FromUtf16(base::SysInfo::computerWorkgroup()));
     computer->set_uptime(base::SysInfo::uptime());
 }
 
@@ -677,10 +679,10 @@ void fillComputer(proto::system_info::SystemInfo* system_info)
 void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::OperatingSystem* operating_system = system_info->mutable_operating_system();
-    operating_system->set_name(base::SysInfo::operatingSystemName());
-    operating_system->set_version(base::SysInfo::operatingSystemVersion());
-    operating_system->set_arch(base::SysInfo::operatingSystemArchitecture());
-    operating_system->set_key(base::SysInfo::operatingSystemKey());
+    operating_system->set_name(base::utf8FromUtf16(base::SysInfo::operatingSystemName()));
+    operating_system->set_version(base::utf8FromUtf16(base::SysInfo::operatingSystemVersion()));
+    operating_system->set_arch(base::utf8FromUtf16(base::SysInfo::operatingSystemArchitecture()));
+    operating_system->set_key(base::utf8FromUtf16(base::SysInfo::operatingSystemKey()));
     operating_system->set_install_date(base::SysInfo::operatingSystemInstallDate());
 }
 
@@ -688,8 +690,8 @@ void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 void fillProcessor(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Processor* processor = system_info->mutable_processor();
-    processor->set_vendor(base::SysInfo::processorVendor());
-    processor->set_model(base::SysInfo::processorName());
+    processor->set_vendor(base::utf8FromUtf16(base::SysInfo::processorVendor()));
+    processor->set_model(base::utf8FromUtf16(base::SysInfo::processorName()));
     processor->set_packages(static_cast<uint32_t>(base::SysInfo::processorPackages()));
     processor->set_cores(static_cast<uint32_t>(base::SysInfo::processorCores()));
     processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));
@@ -800,7 +802,7 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
         proto::system_info::LogicalDrives::Drive* drive =
             system_info->mutable_logical_drives()->add_drive();
 
-        drive->set_path(drive_info.path().u8string());
+        drive->set_path(base::utf8FromFilePath(drive_info.path()));
         drive->set_file_system(drive_info.fileSystem());
         drive->set_total_size(drive_info.totalSpace());
         drive->set_free_size(drive_info.freeSpace());

@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_path.h"
 #include "build/build_config.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
@@ -132,7 +133,7 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
             break;
         }
 
-        item->set_path(drive_info.path().u8string());
+        item->set_path(base::utf8FromFilePath(drive_info.path()));
         item->set_name(drive_info.volumeName());
         item->set_total_space(static_cast<int64_t>(drive_info.totalSpace()));
         item->set_free_space(static_cast<int64_t>(drive_info.freeSpace()));
@@ -153,7 +154,7 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
         proto::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(desktop_path.u8string());
+        item->set_path(base::utf8FromFilePath(desktop_path));
         item->set_total_space(-1);
         item->set_free_space(-1);
     }
@@ -166,7 +167,7 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
         proto::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(home_path.u8string());
+        item->set_path(base::utf8FromFilePath(home_path));
         item->set_total_space(-1);
         item->set_free_space(-1);
     }
@@ -181,7 +182,7 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
 void FileWorkerImpl::doFileListRequest(
     const proto::FileListRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path path = std::filesystem::u8path(request.path());
+    std::filesystem::path path = base::filePathFromUtf8(request.path());
 
     std::error_code ignored_code;
     std::filesystem::file_status status = std::filesystem::status(path, ignored_code);
@@ -221,7 +222,7 @@ void FileWorkerImpl::doFileListRequest(
 void FileWorkerImpl::doCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path directory_path = std::filesystem::u8path(request.path());
+    std::filesystem::path directory_path = base::filePathFromUtf8(request.path());
 
     std::error_code ignored_code;
     if (std::filesystem::exists(directory_path, ignored_code))
@@ -243,8 +244,8 @@ void FileWorkerImpl::doCreateDirectoryRequest(
 void FileWorkerImpl::doRenameRequest(
     const proto::RenameRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path old_name = std::filesystem::u8path(request.old_name());
-    std::filesystem::path new_name = std::filesystem::u8path(request.new_name());
+    std::filesystem::path old_name = base::filePathFromUtf8(request.old_name());
+    std::filesystem::path new_name = base::filePathFromUtf8(request.new_name());
 
     if (old_name == new_name)
     {
@@ -292,7 +293,7 @@ void FileWorkerImpl::doRenameRequest(
 void FileWorkerImpl::doRemoveRequest(
     const proto::RemoveRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path path = std::filesystem::u8path(request.path());
+    std::filesystem::path path = base::filePathFromUtf8(request.path());
 
     std::error_code error_code;
     if (!std::filesystem::exists(path, error_code))
@@ -325,7 +326,7 @@ void FileWorkerImpl::doRemoveRequest(
 void FileWorkerImpl::doDownloadRequest(
     const proto::DownloadRequest& request, proto::FileReply* reply)
 {
-    packetizer_ = FilePacketizer::create(std::filesystem::u8path(request.path()));
+    packetizer_ = FilePacketizer::create(base::filePathFromUtf8(request.path()));
     if (!packetizer_)
         reply->set_error_code(proto::FILE_ERROR_FILE_OPEN_ERROR);
     else
@@ -336,7 +337,7 @@ void FileWorkerImpl::doDownloadRequest(
 void FileWorkerImpl::doUploadRequest(
     const proto::UploadRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path file_path = std::filesystem::u8path(request.path());
+    std::filesystem::path file_path = base::filePathFromUtf8(request.path());
 
     do
     {

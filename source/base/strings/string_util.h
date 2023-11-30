@@ -109,6 +109,7 @@ TrimPositions trimWhitespaceASCII(std::string_view input,
 std::string_view trimWhitespaceASCII(std::string_view input, TrimPositions positions);
 
 void removeChars(std::string* str, std::string_view substr);
+void removeChars(std::u16string* str, std::u16string_view substr);
 void removeChars(std::wstring* str, std::wstring_view substr);
 
 // ASCII-specific tolower.  The standard library's tolower is locale sensitive, so we don't want to

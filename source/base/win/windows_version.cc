@@ -188,7 +188,7 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
         version_number_.major, version_number_.minor, version_number_.build);
     service_pack_.major = version_info.wServicePackMajor;
     service_pack_.minor = version_info.wServicePackMinor;
-    service_pack_str_ = base::utf8FromWide(version_info.szCSDVersion);
+    service_pack_str_ = base::utf16FromWide(version_info.szCSDVersion);
 
     switch (system_info.wProcessorArchitecture)
     {
@@ -348,7 +348,7 @@ base::Version OSInfo::kernel32BaseVersion() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string OSInfo::processorModelName()
+std::u16string OSInfo::processorModelName()
 {
     if (processor_model_name_.empty())
     {
@@ -360,7 +360,7 @@ std::string OSInfo::processorModelName()
         std::wstring value;
         key.readValue(L"ProcessorNameString", &value);
 
-        processor_model_name_ = utf8FromWide(value);
+        processor_model_name_ = utf16FromWide(value);
     }
 
     return processor_model_name_;

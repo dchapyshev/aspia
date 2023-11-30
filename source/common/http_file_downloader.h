@@ -42,7 +42,7 @@ public:
         virtual void onFileDownloaderProgress(int percentage) = 0;
     };
 
-    void start(std::string_view url,
+    void start(std::u16string_view url,
                std::shared_ptr<base::TaskRunner> owner_task_runner,
                Delegate* delegate);
     const base::ByteArray& data() const { return data_; }
@@ -59,7 +59,7 @@ private:
     class Runner;
     std::shared_ptr<Runner> runner_;
 
-    std::string url_;
+    std::u16string url_;
     base::ByteArray data_;
 
     DISALLOW_COPY_AND_ASSIGN(HttpFileDownloader);

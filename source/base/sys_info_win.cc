@@ -75,7 +75,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
+std::u16string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
     constexpr int kKeyMapSize = 24;
@@ -85,14 +85,14 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
     constexpr int kGroupLength = 5;
 
     if (product_id_size < kStartIndex + kDecodeLength)
-        return std::string();
+        return std::u16string();
 
     // The keys starting with Windows 8 / Office 2013 can contain the symbol N.
     int containsN = (product_id[kStartIndex + 14] >> 3) & 1;
     product_id[kStartIndex + 14] =
         static_cast<uint8_t>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
 
-    std::string key;
+    std::u16string key;
 
     for (int i = kDecodeLength - 1; i >= 0; --i)
     {
@@ -114,13 +114,13 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
         key.erase(key.begin());
 
         // Insert the symbol N after the first group.
-        key.insert(kGroupLength, 1, 'N');
+        key.insert(kGroupLength, 1, u'N');
     }
 
     for (size_t i = kGroupLength; i < key.length(); i += kGroupLength + 1)
     {
         // Insert group separators.
-        key.insert(i, 1, '-');
+        key.insert(i, 1, u'-');
     }
 
     return key;
@@ -130,7 +130,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
 
 //--------------------------------------------------------------------------------------------------
 //static
-std::string SysInfo::operatingSystemName()
+std::u16string SysInfo::operatingSystemName()
 {
     base::win::OSInfo* os_info = base::win::OSInfo::instance();
 
@@ -141,19 +141,19 @@ std::string SysInfo::operatingSystemName()
         switch (os_info->versionType())
         {
             case base::win::SUITE_HOME:
-                return "Windows 11 Home";
+                return u"Windows 11 Home";
             case base::win::SUITE_PROFESSIONAL:
-                return "Windows 11 Pro";
+                return u"Windows 11 Pro";
             case base::win::SUITE_SERVER:
-                return "Windows 11 Server";
+                return u"Windows 11 Server";
             case base::win::SUITE_ENTERPRISE:
-                return "Windows 11 Enterprise";
+                return u"Windows 11 Enterprise";
             case base::win::SUITE_EDUCATION:
-                return "Windows 11 Education";
+                return u"Windows 11 Education";
             case base::win::SUITE_EDUCATION_PRO:
-                return "Windows 11 Education Pro";
+                return u"Windows 11 Education Pro";
             default:
-                return "Windows 11";
+                return u"Windows 11";
         }
     }
 
@@ -172,7 +172,7 @@ std::string SysInfo::operatingSystemName()
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to open registry key: " << SystemError::toString(status);
-        return std::string();
+        return std::u16string();
     }
 
     std::wstring value;
@@ -181,57 +181,57 @@ std::string SysInfo::operatingSystemName()
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to read registry key: " << SystemError::toString(status);
-        return std::string();
+        return std::u16string();
     }
 
-    return utf8FromWide(value);
+    return utf16FromWide(value);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemVersion()
+std::u16string SysInfo::operatingSystemVersion()
 {
     return win::OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemArchitecture()
+std::u16string SysInfo::operatingSystemArchitecture()
 {
     switch (win::OSInfo::instance()->architecture())
     {
         case win::OSInfo::X64_ARCHITECTURE:
-            return "AMD64";
+            return u"AMD64";
 
         case win::OSInfo::X86_ARCHITECTURE:
-            return "X86";
+            return u"X86";
 
         case win::OSInfo::IA64_ARCHITECTURE:
-            return "IA64";
+            return u"IA64";
 
         case win::OSInfo::ARM_ARCHITECTURE:
-            return "ARM";
+            return u"ARM";
 
         default:
-            return std::string();
+            return std::u16string();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemDir()
+std::u16string SysInfo::operatingSystemDir()
 {
     std::filesystem::path dir;
 
     if (!BasePaths::windowsDir(&dir))
-        return std::string();
+        return std::u16string();
 
-    return dir.u8string();
+    return dir.u16string();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemKey()
+std::u16string SysInfo::operatingSystemKey()
 {
     win::RegistryKey key;
 
@@ -247,7 +247,7 @@ std::string SysInfo::operatingSystemKey()
                            L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access | KEY_READ);
     if (status != ERROR_SUCCESS)
-        return std::string();
+        return std::u16string();
 
     DWORD product_id_size = 0;
 
@@ -256,7 +256,7 @@ std::string SysInfo::operatingSystemKey()
     {
         status = key.readValue(L"DPID", nullptr, &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return std::string();
+            return std::u16string();
     }
 
     std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
@@ -266,7 +266,7 @@ std::string SysInfo::operatingSystemKey()
     {
         status = key.readValue(L"DPID", product_id.get(), &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return std::string();
+            return std::u16string();
     }
 
     return digitalProductIdToString(product_id.get(), product_id_size);
@@ -324,7 +324,7 @@ uint64_t SysInfo::uptime()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerName()
+std::u16string SysInfo::computerName()
 {
     wchar_t buffer[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD buffer_size = ARRAYSIZE(buffer);
@@ -332,15 +332,15 @@ std::string SysInfo::computerName()
     if (!GetComputerNameW(buffer, &buffer_size))
     {
         PLOG(LS_ERROR) << "GetComputerNameW failed";
-        return std::string();
+        return std::u16string();
     }
 
-    return utf8FromWide(buffer);
+    return utf16FromWide(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerDomain()
+std::u16string SysInfo::computerDomain()
 {
     DWORD buffer_size = 0;
 
@@ -348,7 +348,7 @@ std::string SysInfo::computerDomain()
         GetLastError() != ERROR_MORE_DATA)
     {
         LOG(LS_ERROR) << "Unexpected return value";
-        return std::string();
+        return std::u16string();
     }
 
     std::unique_ptr<wchar_t[]> buffer = std::make_unique<wchar_t[]>(buffer_size);
@@ -356,15 +356,15 @@ std::string SysInfo::computerDomain()
     if (!GetComputerNameExW(ComputerNameDnsDomain, buffer.get(), &buffer_size))
     {
         PLOG(LS_ERROR) << "GetComputerNameExW failed";
-        return std::string();
+        return std::u16string();
     }
 
-    return utf8FromWide(buffer.get());
+    return utf16FromWide(buffer.get());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerWorkgroup()
+std::u16string SysInfo::computerWorkgroup()
 {
     NETSETUP_JOIN_STATUS buffer_type = NetSetupWorkgroupName;
     wchar_t* buffer = nullptr;
@@ -373,13 +373,13 @@ std::string SysInfo::computerWorkgroup()
     if (ret != NERR_Success)
     {
         LOG(LS_ERROR) << "NetGetJoinInformation failed: " << ret;
-        return std::string();
+        return std::u16string();
     }
 
     if (!buffer)
-        return std::string();
+        return std::u16string();
 
-    std::string result = utf8FromWide(buffer);
+    std::u16string result = utf16FromWide(buffer);
     NetApiBufferFree(buffer);
     return result;
 }

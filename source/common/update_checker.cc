@@ -23,6 +23,7 @@
 #include "base/version.h"
 #include "base/memory/byte_array.h"
 #include "base/net/curl_util.h"
+#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 namespace common {
@@ -90,13 +91,13 @@ UpdateChecker::~UpdateChecker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setUpdateServer(std::string_view update_server)
+void UpdateChecker::setUpdateServer(std::u16string_view update_server)
 {
     update_server_ = update_server;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setPackageName(std::string_view package_name)
+void UpdateChecker::setPackageName(std::u16string_view package_name)
 {
     package_name_ = package_name;
 }
@@ -122,51 +123,53 @@ void UpdateChecker::run()
 {
     LOG(LS_INFO) << "run BEGIN";
 
-    std::string os;
+    std::u16string os;
 
 #if defined(OS_WIN)
-    os = "windows";
+    os = u"windows";
 #elif defined(OS_LINUX)
-    os = "linux";
+    os = u"linux";
 #elif defined(OS_MAC)
-    os = "macosx";
+    os = u"macosx";
 #else
 #error Unknown OS
 #endif
 
-    std::string arch;
+    std::u16string arch;
 
 #if defined(ARCH_CPU_X86_64)
-    arch = "x86_64";
+    arch = u"x86_64";
 #elif defined(ARCH_CPU_X86)
-    arch = "x86";
+    arch = u"x86";
 #elif defined(ARCH_CPU_ARMEL)
-    arch = "arm";
+    arch = u"arm";
 #elif defined(ARCH_CPU_ARM64)
-    arch = "arm64";
+    arch = u"arm64";
 #else
 #error Unknown architecture
 #endif
 
     const base::Version& version = base::Version::kVersion_CurrentShort;
 
-    std::string url(update_server_);
-    url += "/update.php?";
-    url += "package=" + package_name_;
-    url += '&';
-    url += "version=" + version.toString(3);
+    std::u16string unicode_url(update_server_);
+    unicode_url += u"/update.php?";
+    unicode_url += u"package=" + package_name_;
+    unicode_url += u'&';
+    unicode_url += u"version=" + version.toString(3);
 
     if (!os.empty())
     {
-        url += '&';
-        url += "os=" + os;
+        unicode_url += u'&';
+        unicode_url += u"os=" + os;
     }
 
     if (!arch.empty())
     {
-        url += '&';
-        url += "arch=" + arch;
+        unicode_url += u'&';
+        unicode_url += u"arch=" + arch;
     }
+
+    std::string url = base::local8BitFromUtf16(unicode_url);
 
     LOG(LS_INFO) << "Start checking for updates. Url: " << url;
 

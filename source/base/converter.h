@@ -20,6 +20,7 @@
 #define BASE_CONVERTER_H
 
 #include "build/build_config.h"
+#include "base/files/file_path.h"
 #include "base/memory/byte_array.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
@@ -103,13 +104,13 @@ struct ConverterImpl<std::filesystem::path>
 {
     static bool fromString(std::string_view str, std::filesystem::path* value)
     {
-        *value = std::filesystem::u8path(str);
+        *value = base::filePathFromUtf8(str);
         return true;
     }
 
     static std::string toString(const std::filesystem::path& value)
     {
-        return value.u8string();
+        return base::utf8FromFilePath(value);
     }
 };
 

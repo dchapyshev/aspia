@@ -475,7 +475,7 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
                                .arg(peer_address_)
                                .arg(peer_port_)
-                               .arg(QString::fromStdString(peer_version.toString())));
+                               .arg(QString::fromStdU16String(peer_version.toString())));
     show();
     activateWindow();
 
@@ -548,8 +548,8 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onVersionMismatch(const base::Version& router, const base::Version& client)
 {
-    QString router_version = QString::fromStdString(router.toString());
-    QString client_version = QString::fromStdString(client.toString());
+    QString router_version = QString::fromStdU16String(router.toString());
+    QString client_version = QString::fromStdU16String(client.toString());
     QString message = tr("The Router version is newer than the Client version (%1 > %2). "
                          "Please update the application.").arg(router_version).arg(client_version);
 

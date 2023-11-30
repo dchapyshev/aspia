@@ -47,8 +47,8 @@ QString makeUrl(const QUrl& url)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UpdateDialog::UpdateDialog(std::string_view update_server,
-                           std::string_view package_name,
+UpdateDialog::UpdateDialog(std::u16string_view update_server,
+                           std::u16string_view package_name,
                            QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>())
@@ -75,9 +75,9 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     initialize();
 
-    ui->label_available->setText(QString::fromStdString(update_info_.version().toString(3)));
-    ui->label_url->setText(makeUrl(QString::fromStdString(update_info_.url())));
-    ui->edit_description->setText(QString::fromStdString(update_info_.description()));
+    ui->label_available->setText(QString::fromStdU16String(update_info_.version().toString(3)));
+    ui->label_url->setText(makeUrl(QString::fromStdU16String(update_info_.url())));
+    ui->edit_description->setText(QString::fromStdU16String(update_info_.description()));
     ui->button_update->setEnabled(true);
 }
 
@@ -134,7 +134,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
         {
             LOG(LS_INFO) << "No updates available";
 
-            ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
+            ui->label_available->setText(QString::fromStdU16String(current_version.toString(3)));
             ui->edit_description->setText(tr("No updates available."));
         }
         else
@@ -145,9 +145,9 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
             {
                 LOG(LS_INFO) << "New version available: " << update_version.toString();
 
-                ui->label_available->setText(QString::fromStdString(update_version.toString(3)));
-                ui->edit_description->setText(QString::fromStdString(update_info_.description()));
-                ui->label_url->setText(makeUrl(QString::fromStdString(update_info_.url())));
+                ui->label_available->setText(QString::fromStdU16String(update_version.toString(3)));
+                ui->edit_description->setText(QString::fromStdU16String(update_info_.description()));
+                ui->label_url->setText(makeUrl(QString::fromStdU16String(update_info_.url())));
 
 #if defined(OS_WIN)
                 ui->button_update->setEnabled(true);
@@ -157,7 +157,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
             {
                 LOG(LS_INFO) << "New version less then current: " << update_version.toString();
 
-                ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
+                ui->label_available->setText(QString::fromStdU16String(current_version.toString(3)));
                 ui->edit_description->setText(tr("No updates available."));
             }
         }
@@ -267,7 +267,7 @@ void UpdateDialog::initialize()
 
     const base::Version& current_version = base::Version::kVersion_CurrentShort;
 
-    ui->label_current->setText(QString::fromStdString(current_version.toString(3)));
+    ui->label_current->setText(QString::fromStdU16String(current_version.toString(3)));
 }
 
 } // namespace common

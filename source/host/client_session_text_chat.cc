@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/sys_info.h"
+#include "base/strings/unicode.h"
 #include "proto/text_chat.pb.h"
 
 namespace host {
@@ -52,7 +53,7 @@ void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
     proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
 
     text_chat_status->set_status(status);
-    text_chat_status->set_source(base::SysInfo::computerName());
+    text_chat_status->set_source(base::utf8FromUtf16(base::SysInfo::computerName()));
 
     sendTextChat(text_chat);
 }

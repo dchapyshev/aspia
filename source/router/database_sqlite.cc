@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_path.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
@@ -363,7 +364,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
         return nullptr;
     }
 
-    std::string file_path_utf8 = file_path.u8string();
+    std::string file_path_utf8 = base::utf8FromFilePath(file_path);
     LOG(LS_INFO) << "Opening database: " << file_path_utf8;
 
     sqlite3* db = nullptr;

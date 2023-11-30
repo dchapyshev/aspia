@@ -19,6 +19,7 @@
 #include "common/update_info.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 
 #include "third_party/rapidxml/rapidxml.hpp"
 
@@ -70,8 +71,8 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
         {
             if (name == "version")
             {
-                update_info.version_ =
-                    base::Version(std::string_view(node->value(), node->value_size()));
+                update_info.version_ = base::Version(base::utf16FromUtf8(
+                    std::string_view(node->value(), node->value_size())));
                 if (!update_info.version_.isValid())
                 {
                     LOG(LS_ERROR) << "Invalid version: " << node->value();
@@ -89,7 +90,8 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
                     return UpdateInfo();
                 }
 
-                update_info.description_ = std::string(node->value(), node->value_size());
+                update_info.description_ = base::utf16FromUtf8(
+                    std::string_view(node->value(), node->value_size()));
             }
             else if (name == "url")
             {
@@ -103,7 +105,8 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
                     return UpdateInfo();
                 }
 
-                update_info.url_ = std::string(node->value(), node->value_size());
+                update_info.url_ = base::utf16FromUtf8(
+                    std::string_view(node->value(), node->value_size()));
             }
         }
     }

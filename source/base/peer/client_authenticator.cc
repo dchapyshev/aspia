@@ -456,8 +456,8 @@ void ClientAuthenticator::sendSessionResponse()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    response->set_os_name(SysInfo::operatingSystemName());
-    response->set_computer_name(SysInfo::computerName());
+    response->set_os_name(utf8FromUtf16(SysInfo::operatingSystemName()));
+    response->set_computer_name(utf8FromUtf16(SysInfo::computerName()));
     response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
 
 #if defined(ARCH_CPU_X86)

@@ -560,6 +560,12 @@ void removeChars(std::string* str, std::string_view substr)
 }
 
 //--------------------------------------------------------------------------------------------------
+void removeChars(std::u16string* str, std::u16string_view substr)
+{
+    removeCharsT(str, substr);
+}
+
+//--------------------------------------------------------------------------------------------------
 void removeChars(std::wstring* str, std::wstring_view substr)
 {
     removeCharsT(str, substr);

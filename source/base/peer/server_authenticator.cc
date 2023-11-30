@@ -565,8 +565,8 @@ void ServerAuthenticator::doSessionChallenge()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    session_challenge->set_os_name(SysInfo::operatingSystemName());
-    session_challenge->set_computer_name(SysInfo::computerName());
+    session_challenge->set_os_name(utf8FromUtf16(SysInfo::operatingSystemName()));
+    session_challenge->set_computer_name(utf8FromUtf16(SysInfo::computerName()));
     session_challenge->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
 
 #if defined(ARCH_CPU_X86)

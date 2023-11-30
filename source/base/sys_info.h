@@ -29,21 +29,21 @@ namespace base {
 class SysInfo
 {
 public:
-    static std::string operatingSystemName();
-    static std::string operatingSystemVersion();
-    static std::string operatingSystemArchitecture();
-    static std::string operatingSystemDir();
-    static std::string operatingSystemKey();
+    static std::u16string operatingSystemName();
+    static std::u16string operatingSystemVersion();
+    static std::u16string operatingSystemArchitecture();
+    static std::u16string operatingSystemDir();
+    static std::u16string operatingSystemKey();
     static int64_t operatingSystemInstallDate();
 
     static uint64_t uptime();
 
-    static std::string computerName();
-    static std::string computerDomain();
-    static std::string computerWorkgroup();
+    static std::u16string computerName();
+    static std::u16string computerDomain();
+    static std::u16string computerWorkgroup();
 
-    static std::string processorName();
-    static std::string processorVendor();
+    static std::u16string processorName();
+    static std::u16string processorVendor();
     static int processorPackages();
     static int processorCores();
     static int processorThreads();

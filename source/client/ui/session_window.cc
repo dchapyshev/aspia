@@ -164,8 +164,8 @@ void SessionWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::onVersionMismatch(const base::Version& host, const base::Version& client)
 {
-    QString host_version = QString::fromStdString(host.toString());
-    QString client_version = QString::fromStdString(client.toString());
+    QString host_version = QString::fromStdU16String(host.toString());
+    QString client_version = QString::fromStdU16String(client.toString());
 
     onErrorOccurred(
         tr("The Host version is newer than the Client version (%1 > %2). "

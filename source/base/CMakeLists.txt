@@ -442,6 +442,8 @@ endif()
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
     files/base_paths.h
+    files/file_path.cc
+    files/file_path.h
     files/file_path_watcher.cc
     files/file_path_watcher.h
     files/file_util.cc

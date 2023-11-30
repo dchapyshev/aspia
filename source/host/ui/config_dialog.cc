@@ -108,7 +108,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         ui.edit_update_server->setEnabled(checked);
 
         if (!checked)
-            ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+            ui.edit_update_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
     });
 
     connect(ui.edit_update_server, &QLineEdit::textEdited,
@@ -116,7 +116,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        common::UpdateDialog(SystemSettings().updateServer(), "host", this).exec();
+        common::UpdateDialog(SystemSettings().updateServer(), u"host", this).exec();
     });
 
     //---------------------------------------------------------------------------------------------
@@ -706,7 +706,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUserList(*user_list);
         settings.setAutoUpdateEnabled(ui.checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui.combobox_update_check_freq->currentData().toInt());
-        settings.setUpdateServer(ui.edit_update_server->text().toStdString());
+        settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
         settings.setPreferredVideoCapturer(ui.combo_video_capturer->currentData().toUInt());
 
         settings.setOneTimePassword(ui.checkbox_onetime_password->isChecked());
@@ -844,7 +844,7 @@ void ConfigDialog::reloadAll()
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
-    ui.edit_update_server->setText(QString::fromStdString(settings.updateServer()));
+    ui.edit_update_server->setText(QString::fromStdU16String(settings.updateServer()));
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 

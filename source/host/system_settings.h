@@ -63,8 +63,8 @@ public:
     std::unique_ptr<base::UserList> userList() const;
     void setUserList(const base::UserList& user_list);
 
-    std::string updateServer() const;
-    void setUpdateServer(const std::string& server);
+    std::u16string updateServer() const;
+    void setUpdateServer(const std::u16string& server);
 
     uint32_t preferredVideoCapturer() const;
     void setPreferredVideoCapturer(uint32_t type);

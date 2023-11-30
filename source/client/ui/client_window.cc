@@ -115,8 +115,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     {
         update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        update_checker_->setUpdateServer(settings.updateServer().toStdString());
-        update_checker_->setPackageName("client");
+        update_checker_->setUpdateServer(settings.updateServer().toStdU16String());
+        update_checker_->setPackageName(u"client");
 
         update_checker_->start(Application::uiTaskRunner(), this);
     }
@@ -378,8 +378,8 @@ void ClientWindow::connectToHost()
 void ClientWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
-    common::UpdateDialog(Application::instance()->settings().updateServer().toStdString(),
-                         "client", this).exec();
+    common::UpdateDialog(Application::instance()->settings().updateServer().toStdU16String(),
+                         u"client", this).exec();
 #endif
 }
 
