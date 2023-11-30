@@ -53,12 +53,14 @@ RouterProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
     : io_task_runner_(std::move(io_task_runner)),
       router_(std::move(router))
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_ && router_);
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterProxy::Impl::~Impl()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!router_);
 }
 
@@ -73,7 +75,10 @@ void RouterProxy::Impl::connectToRouter(const std::u16string& address, uint16_t 
     }
 
     if (router_)
+    {
+        LOG(LS_INFO) << "Connect to router (address=" << address << " port=" << port << ")";
         router_->connectToRouter(address, port);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,6 +91,7 @@ void RouterProxy::Impl::disconnectFromRouter()
         return;
     }
 
+    LOG(LS_INFO) << "Disconnect from router";
     router_.reset();
 }
 
@@ -186,12 +192,13 @@ RouterProxy::RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::unique_ptr<Router> router)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(router)))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterProxy::~RouterProxy()
 {
+    LOG(LS_INFO) << "Dtor";
     impl_->disconnectFromRouter();
 }
 

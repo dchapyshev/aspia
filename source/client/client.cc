@@ -132,6 +132,7 @@ void Client::stop()
 //--------------------------------------------------------------------------------------------------
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
 {
+    LOG(LS_INFO) << "Status window installed";
     status_window_proxy_ = std::move(status_window_proxy);
 }
 
