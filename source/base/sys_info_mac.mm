@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/strings/string_printf.h"
+#include "base/strings/unicode.h"
 
 #include <sys/utsname.h>
 #include <unistd.h>
@@ -30,50 +31,50 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 //static
-std::string SysInfo::operatingSystemName()
+std::u16string SysInfo::operatingSystemName()
 {
-    return "Mac OS X";
+    return u"Mac OS X";
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemVersion()
+std::u16string SysInfo::operatingSystemVersion()
 {
     if (@available(macOS 10.10, *))
     {
         NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
-        return stringPrintf("%d.%d.%d",
-                            static_cast<int32_t>(version.majorVersion),
-                            static_cast<int32_t>(version.minorVersion),
-                            static_cast<int32_t>(version.patchVersion));
+        return base::utf16FromAscii(stringPrintf("%d.%d.%d",
+                                    static_cast<int32_t>(version.majorVersion),
+                                    static_cast<int32_t>(version.minorVersion),
+                                    static_cast<int32_t>(version.patchVersion)));
     }
     else
     {
         NOTREACHED();
-        return std::string();
+        return std::u16string();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemArchitecture()
+std::u16string SysInfo::operatingSystemArchitecture()
 {
     struct utsname info;
     if (uname(&info) < 0)
-        return std::string();
+        return std::u16string();
 
-    std::string arch(info.machine);
-    if (arch == "i386" || arch == "i486" || arch == "i586" || arch == "i686")
+    std::u16string arch = base::utf16FromUtf8(info.machine);
+    if (arch == u"i386" || arch == u"i486" || arch == u"i586" || arch == u"i686")
     {
-        arch = "x86";
+        arch = u"x86";
     }
-    else if (arch == "amd64")
+    else if (arch == u"amd64")
     {
-        arch = "x86_64";
+        arch = u"x86_64";
     }
     else if (std::string(info.sysname) == "AIX")
     {
-        arch = "ppc64";
+        arch = u"ppc64";
     }
 
     return arch;
@@ -81,10 +82,10 @@ std::string SysInfo::operatingSystemArchitecture()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::operatingSystemDir()
+std::u16string SysInfo::operatingSystemDir()
 {
     NOTIMPLEMENTED();
-    return std::string();
+    return std::u16string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,29 +98,29 @@ uint64_t SysInfo::uptime()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerName()
+std::u16string SysInfo::computerName()
 {
     char buffer[256];
     if (gethostname(buffer, std::size(buffer)) < 0)
         return std::string();
 
-    return std::string(buffer);
+    return base::utf16FromAscii(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerDomain()
+std::u16string SysInfo::computerDomain()
 {
     NOTIMPLEMENTED();
-    return std::string();
+    return std::u16string();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SysInfo::computerWorkgroup()
+std::u16string SysInfo::computerWorkgroup()
 {
     NOTIMPLEMENTED();
-    return std::string();
+    return std::u16string();
 }
 
 //--------------------------------------------------------------------------------------------------
