@@ -102,7 +102,7 @@ std::u16string SysInfo::computerName()
 {
     char buffer[256];
     if (gethostname(buffer, std::size(buffer)) < 0)
-        return std::string();
+        return std::u16string();
 
     return base::utf16FromAscii(buffer);
 }
