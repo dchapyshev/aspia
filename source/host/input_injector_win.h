@@ -42,6 +42,7 @@ public:
 private:
     void beforeInput();
     bool isCtrlAndAltPressed();
+    void setBlockInputImpl(bool enable);
 
     bool block_input_ = false;
     std::set<uint32_t> pressed_keys_;

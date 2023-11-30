@@ -107,7 +107,7 @@ InputInjectorWin::~InputInjectorWin()
 {
     LOG(LS_INFO) << "Dtor";
 
-    setBlockInput(false);
+    setBlockInputImpl(false);
     for (const auto& key : pressed_keys_)
     {
         int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
@@ -132,9 +132,7 @@ void InputInjectorWin::setScreenOffset(const base::Point& offset)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::setBlockInput(bool enable)
 {
-    beforeInput();
-    block_input_ = enable;
-    BlockInput(!!enable);
+    setBlockInputImpl(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -350,6 +348,14 @@ bool InputInjectorWin::isCtrlAndAltPressed()
     }
 
     return ctrl_pressed && alt_pressed;
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorWin::setBlockInputImpl(bool enable)
+{
+    beforeInput();
+    block_input_ = enable;
+    BlockInput(!!enable);
 }
 
 } // namespace host
