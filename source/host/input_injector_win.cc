@@ -24,6 +24,8 @@
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
 
+#include <Windows.h>
+
 namespace host {
 
 namespace {

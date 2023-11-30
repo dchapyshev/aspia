@@ -19,7 +19,6 @@
 #ifndef HOST_INPUT_INJECTOR_WIN_H
 #define HOST_INPUT_INJECTOR_WIN_H
 
-#include "base/win/scoped_thread_desktop.h"
 #include "host/input_injector.h"
 
 #include <set>
