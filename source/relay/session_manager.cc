@@ -113,12 +113,15 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionManager::~SessionManager()
 {
+    LOG(LS_INFO) << "Dtor";
+
     std::error_code ignored_code;
     acceptor_.cancel(ignored_code);
     acceptor_.close(ignored_code);
@@ -308,7 +311,10 @@ void SessionManager::doAccept(SessionManager* self)
 void SessionManager::doIdleTimeout(SessionManager* self, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
+    {
+        LOG(LS_ERROR) << "Operation aborted";
         return;
+    }
 
     self->doIdleTimeoutImpl(error_code);
 }
@@ -351,7 +357,10 @@ void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
 void SessionManager::doStatTimeout(SessionManager* self, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
+    {
+        LOG(LS_ERROR) << "Operation aborted";
         return;
+    }
 
     self->doStatTimeoutImpl(error_code);
 }

@@ -29,7 +29,7 @@ class SharedPool::Pool
 {
 public:
     explicit Pool(Delegate* delegate);
-    ~Pool() = default;
+    ~Pool();
 
     void dettach();
 
@@ -53,12 +53,19 @@ private:
 SharedPool::Pool::Pool(Delegate* delegate)
     : delegate_(delegate)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(delegate_);
+}
+
+SharedPool::Pool::~Pool()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void SharedPool::Pool::dettach()
 {
+    LOG(LS_INFO) << "Pool is dettached";
     delegate_ = nullptr;
 }
 

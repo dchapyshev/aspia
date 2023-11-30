@@ -38,12 +38,14 @@ SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
       shared_pool_(std::move(shared_pool)),
       thread_(std::make_unique<base::Thread>())
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(peer_port_ && shared_pool_);
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionsWorker::~SessionsWorker()
 {
+    LOG(LS_INFO) << "Dtor";
     thread_->stop();
 }
 
@@ -51,6 +53,8 @@ SessionsWorker::~SessionsWorker()
 void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                            SessionManager::Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting session worker";
+
     caller_task_runner_ = std::move(caller_task_runner);
     delegate_ = delegate;
 
@@ -75,6 +79,8 @@ void SessionsWorker::disconnectSession(uint64_t session_id)
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::onBeforeThreadRunning()
 {
+    LOG(LS_INFO) << "Before thread running";
+
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
@@ -109,6 +115,7 @@ void SessionsWorker::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::onAfterThreadRunning()
 {
+    LOG(LS_INFO) << "After thread running";
     session_manager_.reset();
 }
 

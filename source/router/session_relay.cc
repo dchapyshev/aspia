@@ -29,12 +29,13 @@ SessionRelay::SessionRelay()
       incoming_message_(std::make_unique<proto::RelayToRouter>()),
       outgoing_message_(std::make_unique<proto::RouterToRelay>())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionRelay::~SessionRelay()
 {
+    LOG(LS_INFO) << "Dtor";
     relayKeyPool().removeKeysForRelay(sessionId());
 }
 

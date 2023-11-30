@@ -30,11 +30,14 @@ namespace router {
 SessionAdmin::SessionAdmin()
     : Session(proto::ROUTER_SESSION_ADMIN)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionAdmin::~SessionAdmin() = default;
+SessionAdmin::~SessionAdmin()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::onSessionReady()

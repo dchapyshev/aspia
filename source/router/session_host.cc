@@ -37,11 +37,14 @@ const size_t kHostKeySize = 512;
 SessionHost::SessionHost()
     : Session(proto::ROUTER_SESSION_HOST)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionHost::~SessionHost() = default;
+SessionHost::~SessionHost()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 bool SessionHost::hasHostId(base::HostId host_id) const

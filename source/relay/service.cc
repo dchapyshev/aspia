@@ -28,11 +28,14 @@ namespace relay {
 Service::Service()
     : base::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Service::~Service() = default;
+Service::~Service()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStart()

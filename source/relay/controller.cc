@@ -303,14 +303,16 @@ void Controller::onSessionFinished()
 
     // After disconnecting the peer, one key is released.
     // Add a new key to the pool and send it to the router.
+    LOG(LS_INFO) << "Session finished. Add new key to pool";
     sendKeyPool(1);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onPoolKeyExpired(uint32_t /* key_id */)
+void Controller::onPoolKeyExpired(uint32_t key_id)
 {
     // The key has expired and has been removed from the pool.
     // Add a new key to the pool and send it to the router.
+    LOG(LS_INFO) << "Key with id " << key_id << " has expired and removed from pool";
     sendKeyPool(1);
 }
 
@@ -349,7 +351,10 @@ void Controller::sendKeyPool(uint32_t key_count)
     {
         SessionKey session_key = SessionKey::create();
         if (!session_key.isValid())
+        {
+            LOG(LS_ERROR) << "Unable to create session key (i=" << i << ")";
             return;
+        }
 
         // Add the key to the outgoing message.
         proto::RelayKey* key = relay_key_pool->add_key();

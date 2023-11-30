@@ -32,11 +32,14 @@ namespace router {
 SessionClient::SessionClient()
     : Session(proto::ROUTER_SESSION_CLIENT)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionClient::~SessionClient() = default;
+SessionClient::~SessionClient()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionReady()
