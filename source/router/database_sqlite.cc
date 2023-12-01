@@ -400,7 +400,7 @@ std::vector<base::User> DatabaseSqlite::userList() const
     sqlite3_stmt* statement;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -442,7 +442,7 @@ bool DatabaseSqlite::addUser(const base::User& user)
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -507,7 +507,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -567,7 +567,7 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -607,7 +607,7 @@ base::User DatabaseSqlite::findUser(std::u16string_view username)
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -659,7 +659,7 @@ Database::ErrorCode DatabaseSqlite::hostId(
     sqlite3_stmt* statement;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
@@ -715,7 +715,7 @@ bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
     sqlite3_stmt* statement = nullptr;
     int error_code = sqlite3_prepare(db_,
                                      kQuery,
-                                     std::ssize(kQuery),
+                                     static_cast<int>(std::size(kQuery)),
                                      &statement,
                                      nullptr);
     if (error_code != SQLITE_OK)
