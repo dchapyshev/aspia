@@ -4,6 +4,7 @@
   "dependencies": [
     "asio",
     "curl",
+    "fmt",
     "gtest",
     {
       "name": "icu",
