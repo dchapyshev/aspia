@@ -271,7 +271,7 @@ void ClientSessionFileTransfer::onStarted()
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
         std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
-        if (!line.contains(u":0"))
+        if (!base::contains(line, u":0"))
             continue;
 
         std::vector<std::u16string_view> splitted = base::splitStringView(
