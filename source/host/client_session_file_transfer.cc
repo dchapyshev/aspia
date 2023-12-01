@@ -38,6 +38,7 @@
 #endif // defined(OS_WIN)
 
 #if defined(OS_LINUX)
+#include <fmt/format.h>
 #include <signal.h>
 #include <spawn.h>
 #endif // defined(OS_LINUX)
@@ -270,7 +271,7 @@ void ClientSessionFileTransfer::onStarted()
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
         std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
-        if (!base::contains(line, u":0"))
+        if (!line.contains(u":0"))
             continue;
 
         std::vector<std::u16string_view> splitted = base::splitStringView(
@@ -280,10 +281,10 @@ void ClientSessionFileTransfer::onStarted()
 
         std::string user_name = base::local8BitFromUtf16(splitted.front());
         std::string command_line =
-            base::stringPrintf("sudo -u %s %s --channel_id=%s &",
-                               user_name.c_str(),
-                               agentFilePath().c_str(),
-                               base::local8BitFromUtf16(channel_id).c_str());
+            fmt::format("sudo -u {} {} --channel_id={} &",
+                        user_name,
+                        agentFilePath(),
+                        base::local8BitFromUtf16(channel_id));
 
         LOG(LS_INFO) << "Start file transfer session agent: " << command_line;
 
