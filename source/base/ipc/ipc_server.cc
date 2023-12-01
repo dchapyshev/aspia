@@ -196,7 +196,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
         return false;
     }
 
-    std::string command_line = base::stringPrintf("chmod 777 %s", channel_file.data());
+    std::string command_line = fmt::format("chmod 777 {}", channel_file.data());
 
     int ret = system(command_line.c_str());
     LOG(LS_INFO) << "Set security attributes: " << command_line << " (ret: " << ret << ")";
