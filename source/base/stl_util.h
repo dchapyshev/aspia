@@ -101,6 +101,39 @@ bool contains(const Container& container, const Value& value)
     return std::find(std::begin(container), std::end(container), value) != std::end(container);
 }
 
+// Specialized contains() implementation for when |container| has a find() member function and a
+// static npos member, but no contains() member function.
+template <typename Container,
+          typename Value,
+          std::enable_if_t<internal::HasFindWithNpos<Container, Value>::value &&
+                           !internal::HasContains<Container, Value>::value>* = nullptr>
+bool contains(const Container& container, const Value& value)
+{
+    return container.find(value) != Container::npos;
+}
+
+// Specialized contains() implementation for when |container| has a find() and end() member function,
+// but no contains() member function.
+template <typename Container,
+          typename Value,
+          std::enable_if_t<internal::HasFindWithEnd<Container, Value>::value &&
+                           !internal::HasContains<Container, Value>::value>* = nullptr>
+bool contains(const Container& container, const Value& value)
+{
+    return container.find(value) != container.end();
+}
+
+// Specialized contains() implementation for when |container| has a contains() member function.
+template <
+    typename Container,
+    typename Value,
+    std::enable_if_t<internal::HasContains<Container, Value>::value>* = nullptr>
+bool contains(const Container& container, const Value& value)
+{
+    return container.contains(value);
+}
+
+
 } // namespace base
 
 #endif // BASE_STL_UTIL_H
