@@ -17,8 +17,6 @@
 //
 
 #include "base/strings/string_number_conversions.h"
-
-#include "base/strings/string_printf.h"
 #include "build/build_config.h"
 
 #include <gtest/gtest.h>
@@ -26,6 +24,7 @@
 #include <cerrno>
 #include <climits>
 #include <cmath>
+#include <cstdarg>
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
@@ -54,6 +53,60 @@ struct NumberToStringTest
     const char* sexpected;
     const char* uexpected;
 };
+
+//--------------------------------------------------------------------------------------------------
+int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list args)
+{
+#if defined(OS_WIN)
+    return _vsnprintf_s(buffer, buffer_size, _TRUNCATE, format, args);
+#elif (OS_POSIX)
+    return vsnprintf(buffer, buffer_size, format, args);
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class StringType>
+StringType stringPrintfVT(const typename StringType::value_type* format, va_list args)
+{
+    va_list args_copy;
+    va_copy(args_copy, args);
+
+    const int length = _vscprintf(format, args_copy);
+    if (length <= 0)
+    {
+        va_end(args_copy);
+        return StringType();
+    }
+
+    StringType result;
+    result.resize(static_cast<size_t>(length));
+
+    const int ret = vsnprintfT(result.data(), static_cast<size_t>(length + 1), format, args_copy);
+    va_end(args_copy);
+
+    if (ret < 0 || ret > length)
+        return StringType();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string stringPrintfV(const char* format, va_list args)
+{
+    return stringPrintfVT<std::string>(format, args);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string stringPrintf(const char* format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    std::string result = stringPrintfV(format, args);
+    va_end(args);
+
+    return result;
+}
 
 }  // namespace
 

@@ -19,8 +19,9 @@
 #include "base/win/battery_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+
+#include <fmt/format.h>
 
 #include <batclass.h>
 #include <winioctl.h>
@@ -204,7 +205,7 @@ std::string BatteryEnumerator::manufactureDate() const
     if (!batteryInformation(battery_, battery_tag_, BatteryManufactureDate, &date, sizeof(date)))
         return std::string();
 
-    return stringPrintf("%u-%u-%u", date.Day, date.Month, date.Year);
+    return fmt::format("{}-{}-{}", date.Day, date.Month, date.Year);
 }
 
 //--------------------------------------------------------------------------------------------------

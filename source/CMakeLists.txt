@@ -89,6 +89,7 @@ endif()
 
 set(THIRD_PARTY_LIBS
     CURL::libcurl
+    fmt::fmt-header-only
     protobuf::libprotobuf-lite
     zstd::libzstd_static
     OpenSSL::Crypto

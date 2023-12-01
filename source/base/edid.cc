@@ -21,7 +21,8 @@
 #include "base/bitset.h"
 #include "base/endian_util.h"
 #include "base/logging.h"
-#include "base/strings/string_printf.h"
+
+#include <fmt/format.h>
 
 #include <cstring>
 
@@ -283,9 +284,7 @@ std::string Edid::getManufacturerSignature() const
 //--------------------------------------------------------------------------------------------------
 std::string Edid::monitorId() const
 {
-    return stringPrintf("%s%04X",
-                        getManufacturerSignature().c_str(),
-                        edid_->id_product_code);
+    return fmt::format("{}{:x}", getManufacturerSignature(), edid_->id_product_code);
 }
 
 //--------------------------------------------------------------------------------------------------

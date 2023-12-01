@@ -28,7 +28,6 @@
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/string_split.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
@@ -43,6 +42,8 @@
 
 #include <UserEnv.h>
 #endif // defined(OS_WIN)
+
+#include <fmt/format.h>
 
 namespace host {
 
@@ -738,12 +739,11 @@ void UserSessionManager::startSessionProcess(
                 file_path.append(kExecutableNameForUi);
 
                 std::string command_line =
-                    base::stringPrintf("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
-                                       "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %s)/bus "
-                                       "-u %s %s --hidden &",
-                                       user_name.c_str(),
-                                       user_name.c_str(),
-                                       file_path.c_str());
+                    fmt::format("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
+                                "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u {0})/bus "
+                                "-u {0} {1} --hidden &",
+                                user_name,
+                                file_path);
 
                 int ret = system(command_line.c_str());
                 LOG(LS_INFO) << "system result: " << ret;

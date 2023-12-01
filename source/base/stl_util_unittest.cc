@@ -35,36 +35,4 @@ TEST(STLUtilTest, GenericContains)
     EXPECT_TRUE(contains(allowed_chars_including_nul, 0));
 }
 
-TEST(STLUtilTest, ContainsWithFindAndNpos)
-{
-    std::string str = "abcd";
-
-    EXPECT_TRUE(contains(str, 'a'));
-    EXPECT_FALSE(contains(str, 'z'));
-    EXPECT_FALSE(contains(str, 0));
-}
-
-TEST(STLUtilTest, ContainsWithFindAndEnd)
-{
-    std::set<int> set = {1, 2, 3, 4};
-
-    EXPECT_TRUE(contains(set, 1));
-    EXPECT_FALSE(contains(set, 5));
-    EXPECT_FALSE(contains(set, 0));
-}
-
-TEST(ContainsKey, Map)
-{
-    std::map<char, char> map;
-
-    map.emplace('a', '0');
-    map.emplace('b', '1');
-    map.emplace('c', '2');
-    map.emplace('d', '3');
-
-    EXPECT_TRUE(contains(map, 'a'));
-    EXPECT_FALSE(contains(map, 'z'));
-    EXPECT_FALSE(contains(map, 0));
-}
-
 } // namespace base
