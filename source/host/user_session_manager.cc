@@ -743,7 +743,7 @@ void UserSessionManager::startSessionProcess(
                                 "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u {0})/bus "
                                 "-u {0} {1} --hidden &",
                                 user_name,
-                                file_path);
+                                file_path.c_str());
 
                 int ret = system(command_line.c_str());
                 LOG(LS_INFO) << "system result: " << ret;
