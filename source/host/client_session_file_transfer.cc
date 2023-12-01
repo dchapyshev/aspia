@@ -283,7 +283,7 @@ void ClientSessionFileTransfer::onStarted()
         std::string command_line =
             fmt::format("sudo -u {} {} --channel_id={} &",
                         user_name,
-                        agentFilePath(),
+                        agentFilePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
         LOG(LS_INFO) << "Start file transfer session agent: " << command_line;
