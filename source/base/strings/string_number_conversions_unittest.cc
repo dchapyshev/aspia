@@ -54,6 +54,18 @@ struct NumberToStringTest
     const char* uexpected;
 };
 
+#if defined(OS_POSIX)
+//--------------------------------------------------------------------------------------------------
+int _vscprintf(const char* format, va_list pargs)
+{
+    va_list argcopy;
+    va_copy(argcopy, pargs);
+    int ret = vsnprintf(nullptr, 0, format, argcopy);
+    va_end(argcopy);
+    return ret;
+}
+#endif // defined(OS_POSIX)
+
 //--------------------------------------------------------------------------------------------------
 int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list args)
 {
@@ -65,13 +77,19 @@ int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list arg
 }
 
 //--------------------------------------------------------------------------------------------------
+int vscprintfT(const char* format, va_list args)
+{
+    return _vscprintf(format, args);
+}
+
+//--------------------------------------------------------------------------------------------------
 template<class StringType>
 StringType stringPrintfVT(const typename StringType::value_type* format, va_list args)
 {
     va_list args_copy;
     va_copy(args_copy, args);
 
-    const int length = _vscprintf(format, args_copy);
+    const int length = vscprintfT(format, args_copy);
     if (length <= 0)
     {
         va_end(args_copy);
