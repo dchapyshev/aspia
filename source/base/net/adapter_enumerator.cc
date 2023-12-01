@@ -19,8 +19,9 @@
 #include "base/net/adapter_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+
+#include <format>
 
 #if defined(OS_WIN)
 #include <WS2tcpip.h>
@@ -240,14 +241,13 @@ std::string AdapterEnumerator::macAddress() const
     if (!adapter_->PhysicalAddressLength)
         return std::string();
 
-    return base::stringPrintf("%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
-                              adapter_->PhysicalAddress[0],
-                              adapter_->PhysicalAddress[1],
-                              adapter_->PhysicalAddress[2],
-                              adapter_->PhysicalAddress[3],
-                              adapter_->PhysicalAddress[4],
-                              adapter_->PhysicalAddress[5],
-                              adapter_->PhysicalAddress[6]);
+    return std::format("{:02x}-{:02x}-{:02x}-{:02x}-{:02x}-{:02x}",
+                       adapter_->PhysicalAddress[0],
+                       adapter_->PhysicalAddress[1],
+                       adapter_->PhysicalAddress[2],
+                       adapter_->PhysicalAddress[3],
+                       adapter_->PhysicalAddress[4],
+                       adapter_->PhysicalAddress[5]);
 #else
     NOTIMPLEMENTED();
     return std::string();

@@ -19,8 +19,9 @@
 #include "base/win/drive_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+
+#include <format>
 
 #include <Windows.h>
 
@@ -164,7 +165,7 @@ std::string DriveEnumerator::DriveInfo::volumeSerial() const
         return std::string();
     }
 
-    return stringPrintf("%04X-%04X", HIWORD(serial), LOWORD(serial));
+    return std::format("{:04x}-{:04x}", HIWORD(serial), LOWORD(serial));
 }
 
 } // namespace base::win

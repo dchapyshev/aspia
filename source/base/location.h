@@ -37,24 +37,13 @@ public:
 
     // Only initializes the file name and program counter, the source information will be null for
     // the strings, and -1 for the line number.
-    Location(const char* file_name, const void* program_counter);
+    Location(const char* file_name);
 
     // Constructor should be called with a long-lived char*, such as __FILE__. It assumes the
     // provided value will persist as a global constant, and it will not make a copy of it.
     Location(const char* function_name,
              const char* file_name,
-             int line_number,
-             const void* program_counter);
-
-    // Comparator for hash map insertion. The program counter should uniquely identify a location.
-    bool operator==(const Location& other) const
-    {
-        return program_counter_ == other.program_counter_;
-    }
-
-    // Returns true if there is source code location info. If this is false, the Location object
-    // only contains a program counter or is default-initialized (the program counter is also null).
-    bool hasSourceInfo() const { return function_name_ && file_name_; }
+             int line_number);
 
     // Will be nullptr for default initialized Location objects and when source names are disabled.
     const char* functionName() const { return function_name_; }
@@ -64,10 +53,6 @@ public:
 
     // Will be -1 for default initialized Location objects and when source names are disabled.
     int lineNumber() const { return line_number_; }
-
-    // The address of the code generating this Location object. Should always be valid except for
-    // default initialized Location objects, which will be nullptr.
-    const void* programCounter() const { return program_counter_; }
 
     enum PathType
     {
@@ -88,7 +73,6 @@ private:
     const char* function_name_ = nullptr;
     const char* file_name_ = nullptr;
     int line_number_ = -1;
-    const void* program_counter_ = nullptr;
 };
 
 #if defined(ENABLE_LOCATION_SOURCE)
