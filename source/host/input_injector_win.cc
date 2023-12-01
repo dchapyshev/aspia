@@ -153,7 +153,7 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
     }
     else
     {
-        if (!base::contains(pressed_keys_, event.usb_keycode()))
+        if (!pressed_keys_.contains(event.usb_keycode()))
         {
             LOG(LS_INFO) << "No pressed key in the list";
             return;

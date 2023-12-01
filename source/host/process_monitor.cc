@@ -591,7 +591,7 @@ void ProcessMonitor::updateTable()
     // Remove obsolete processes.
     for (auto it = table_.begin(); it != table_.end();)
     {
-        if (!base::contains(active_pids, it->first))
+        if (!active_pids.contains(it->first))
             it = table_.erase(it);
         else
             ++it;
