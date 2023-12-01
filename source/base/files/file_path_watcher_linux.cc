@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/posix/eintr_wrapper.h"
-#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/threading/simple_thread.h"
 
@@ -576,7 +575,7 @@ void FilePathWatcherImpl::onFilePathChanged(InotifyReader::Watch fired_watch,
         }
     }
 
-    if (!exceeded_limit && contains(recursive_paths_by_watch_, fired_watch))
+    if (!exceeded_limit && recursive_paths_by_watch_.contains(fired_watch))
     {
         if (!did_update)
         {
@@ -722,7 +721,7 @@ bool FilePathWatcherImpl::updateRecursiveWatches(InotifyReader::Watch fired_watc
 
     // Check to see if this is a forced update or if some component of |target_| has changed. For
     // these cases, redo the watches for |target_| and below.
-    if (!contains(recursive_paths_by_watch_, fired_watch) && fired_watch != watches_.back().watch)
+    if (!recursive_paths_by_watch_.contains(fired_watch) && fired_watch != watches_.back().watch)
     {
         return updateRecursiveWatchesForPath(target_);
     }
@@ -731,7 +730,7 @@ bool FilePathWatcherImpl::updateRecursiveWatches(InotifyReader::Watch fired_watc
     if (!is_dir)
         return true;
 
-    const std::filesystem::path& changed_dir = contains(recursive_paths_by_watch_, fired_watch)
+    const std::filesystem::path& changed_dir = recursive_paths_by_watch_.contains(fired_watch)
         ? recursive_paths_by_watch_[fired_watch] : target_;
 
     auto start_it = recursive_watches_by_path_.lower_bound(changed_dir);
@@ -778,7 +777,7 @@ bool FilePathWatcherImpl::updateRecursiveWatchesForPath(const std::filesystem::p
         if (!current.is_directory())
             continue;
 
-        if (!contains(recursive_watches_by_path_, current))
+        if (!recursive_watches_by_path_.contains(current))
         {
             // Add new watches.
             InotifyReader::Watch watch = InotifyReader::instance().addWatch(current, this);

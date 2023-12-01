@@ -19,9 +19,9 @@
 #include "base/sys_info.h"
 
 #include "base/logging.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
+#include <fmt/format.h>
 #include <sys/utsname.h>
 #include <unistd.h>
 
@@ -43,7 +43,7 @@ std::u16string SysInfo::operatingSystemVersion()
     if (@available(macOS 10.10, *))
     {
         NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
-        return base::utf16FromAscii(stringPrintf("%d.%d.%d",
+        return base::utf16FromAscii(fmt::format("{}.{}.{}",
                                     static_cast<int32_t>(version.majorVersion),
                                     static_cast<int32_t>(version.minorVersion),
                                     static_cast<int32_t>(version.patchVersion)));
