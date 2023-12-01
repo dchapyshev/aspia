@@ -23,6 +23,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
@@ -37,7 +38,6 @@
 #include <asio/local/stream_protocol.hpp>
 #endif // defined(OS_POSIX)
 
-#include <format>
 #include <random>
 
 namespace base {
@@ -109,7 +109,10 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     // Create a security descriptor that gives full access to the caller and authenticated users
     // and denies access by anyone else.
     std::wstring security_descriptor =
-        std::format(L"O:{0}G:{0}D:(A;;GA;;;{0})(A;;GA;;;AU)", user_sid);
+        stringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
+                     user_sid.c_str(),
+                     user_sid.c_str(),
+                     user_sid.c_str());
 
     win::ScopedSd sd = win::convertSddlToSd(security_descriptor);
     if (!sd.get())
@@ -307,7 +310,8 @@ std::u16string IpcServer::createUniqueId()
     uint32_t random_number = distance(engine);
     uint32_t channel_id = last_channel_id++;
 
-    return base::utf16FromAscii(std::format("{}.{}.{}", process_id, channel_id, random_number));
+    return utf16FromAscii(
+        stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@
 
 #include "base/net/network_channel.h"
 
-#include <format>
+#include "base/strings/string_printf.h"
 
 namespace base {
 
@@ -118,7 +118,7 @@ std::string NetworkChannel::errorToString(ErrorCode error_code)
             break;
     }
 
-    return std::format("{} ({})", str, static_cast<int>(error_code));
+    return stringPrintf("%s (%d)", str, static_cast<int>(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------

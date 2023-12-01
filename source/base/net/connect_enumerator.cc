@@ -20,9 +20,8 @@
 
 #include "base/endian_util.h"
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-
-#include <format>
 
 #include <iphlpapi.h>
 #include <TlHelp32.h>
@@ -103,11 +102,11 @@ std::string addressToString(uint32_t address)
 {
     address = base::EndianUtil::byteSwap(address);
 
-    return std::format("{}.{}.{}.{}",
-                       (address >> 24) & 0xFF,
-                       (address >> 16) & 0xFF,
-                       (address >> 8)  & 0xFF,
-                       (address)       & 0xFF);
+    return stringPrintf("%u.%u.%u.%u",
+                        (address >> 24) & 0xFF,
+                        (address >> 16) & 0xFF,
+                        (address >> 8)  & 0xFF,
+                        (address)       & 0xFF);
 }
 
 //--------------------------------------------------------------------------------------------------

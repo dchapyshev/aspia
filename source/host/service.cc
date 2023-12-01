@@ -19,12 +19,11 @@
 #include "host/service.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/win/safe_mode_util.h"
 #include "base/win/session_status.h"
 #include "host/service_constants.h"
 #include "host/server.h"
-
-#include <format>
 
 #if defined(OS_WIN)
 #include <Windows.h>
@@ -67,7 +66,7 @@ std::string powerEventToString(uint32_t event)
             break;
     }
 
-    return std::format("{} ({})", name, static_cast<int>(event));
+    return base::stringPrintf("%s (%d)", name, static_cast<int>(event));
 }
 #endif // defined(OS_WIN)
 

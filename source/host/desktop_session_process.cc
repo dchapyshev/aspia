@@ -22,12 +22,14 @@
 #include "base/logging.h"
 #include "base/stl_util.h"
 #include "base/files/base_paths.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_split.h"
 #include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_impersonator.h"
+
 #include <UserEnv.h>
 #endif // defined(OS_WIN)
 
@@ -35,8 +37,6 @@
 #include <signal.h>
 #include <spawn.h>
 #endif // defined(OS_LINUX)
-
-#include <format>
 
 namespace host {
 
@@ -324,10 +324,10 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
         std::string user_name = base::local8BitFromUtf16(splitted.front());
         std::string command_line =
-            std::format("sudo DISPLAY=':0' -u {} {} --channel_id={} &",
-                        user_name,
-                        filePath(),
-                        base::local8BitFromUtf16(channel_id));
+            base::stringPrintf("sudo DISPLAY=':0' -u %s %s --channel_id=%s &",
+                               user_name.c_str(),
+                               filePath().c_str(),
+                               base::local8BitFromUtf16(channel_id).c_str());
 
         LOG(LS_INFO) << "Start desktop session agent: " << command_line;
 
@@ -348,9 +348,9 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     LOG(LS_ERROR) << "Connected X sessions not found";
 
     std::string command_line =
-        std::format("sudo DISPLAY=':0' -u root {} --channel_id={} &",
-                    filePath(),
-                    base::local8BitFromUtf16(channel_id));
+        base::stringPrintf("sudo DISPLAY=':0' -u root %s --channel_id=%s &",
+                           filePath().c_str(),
+                           base::local8BitFromUtf16(channel_id).c_str());
 
     LOG(LS_INFO) << "Start desktop session agent: " << command_line;
 

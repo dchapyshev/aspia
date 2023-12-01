@@ -28,6 +28,7 @@
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_split.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"

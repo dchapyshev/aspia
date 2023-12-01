@@ -25,6 +25,7 @@
 #include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_split.h"
 #include "base/strings/unicode.h"
 #include "proto/file_transfer.pb.h"

@@ -19,12 +19,12 @@
 #include "base/system_error.h"
 
 #if defined(OS_WIN)
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #endif // defined(OS_WIN)
 
 #if defined(OS_WIN)
-#include <format>
 #include <Windows.h>
 #elif defined(OS_POSIX)
 #include <cstring>
@@ -77,11 +77,13 @@ std::string SystemError::toString(Code code)
                                code, 0, msgbuf, static_cast<DWORD>(std::size(msgbuf)), nullptr);
     if (len)
     {
-        std::wstring msg = collapseWhitespace(msgbuf, true) + std::format(L" (0x{:x})", code);
+        std::wstring msg = collapseWhitespace(msgbuf, true) + stringPrintf(L" (0x%lX)", code);
         return utf8FromWide(msg);
     }
 
-    return std::format("Error (0x{:x} while retrieving error. (0x{:x})", GetLastError(), code);
+    return stringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
+                        GetLastError(),
+                        code);
 #elif defined(OS_POSIX)
     return std::strerror(code);
 #else

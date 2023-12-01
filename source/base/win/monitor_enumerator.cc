@@ -19,10 +19,9 @@
 #include "base/win/monitor_enumerator.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
-
-#include <format>
 
 #include <devguid.h>
 
@@ -39,8 +38,8 @@ MonitorEnumerator::MonitorEnumerator()
 std::unique_ptr<Edid> MonitorEnumerator::edid() const
 {
     std::wstring key_path =
-        std::format(L"SYSTEM\\CurrentControlSet\\Enum\\{}\\Device Parameters",
-                     wideFromUtf8(deviceID()));
+        stringPrintf(L"SYSTEM\\CurrentControlSet\\Enum\\%s\\Device Parameters",
+                     wideFromUtf8(deviceID()).c_str());
 
     RegistryKey key;
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);

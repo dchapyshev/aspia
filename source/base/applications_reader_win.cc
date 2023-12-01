@@ -19,10 +19,9 @@
 #include "base/applications_reader.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
-
-#include <format>
 
 namespace base {
 
@@ -41,7 +40,7 @@ const wchar_t kParentKeyName[] = L"ParentKeyName";
 bool addApplication(
     proto::system_info::Applications* message, const wchar_t* key_name, REGSAM access)
 {
-    std::wstring key_path = std::format(L"{}\\{}", kUninstallKeyPath, key_name);
+    std::wstring key_path = stringPrintf(L"%s\\%s", kUninstallKeyPath, key_name);
 
     win::RegistryKey key;
 

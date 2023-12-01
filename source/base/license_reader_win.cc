@@ -19,11 +19,10 @@
 #include "base/license_reader.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
-
-#include <format>
 
 namespace base {
 
@@ -85,7 +84,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
 bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
 {
     std::wstring key_path =
-        std::format(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{}", id);
+        stringPrintf(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\%s", id);
 
     win::RegistryKey key;
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
@@ -237,7 +236,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
         while (key_iterator.valid())
         {
             std::wstring key_path =
-                std::format(L"{}\\{}\\Registration", kMsProducts[i], key_iterator.name());
+                stringPrintf(L"%s\\%s\\Registration", kMsProducts[i], key_iterator.name());
 
             win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
 
@@ -249,7 +248,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
                 if (msProductName(sub_key_iterator.name(), &product_name, access))
                 {
                     std::wstring sub_key_path =
-                        std::format(L"{}\\{}", key_path.c_str(), sub_key_iterator.name());
+                        stringPrintf(L"%s\\%s", key_path.c_str(), sub_key_iterator.name());
 
                     status = key.open(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access | KEY_READ);
                     if (status == ERROR_SUCCESS)
@@ -276,14 +275,14 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
     while (key_iterator.valid())
     {
         std::wstring key_path =
-            std::format(L"{}\\{}\\Registration", kVisualStudioPath, key_iterator.name());
+            stringPrintf(L"%s\\%s\\Registration", kVisualStudioPath, key_iterator.name());
 
         win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
 
         while (sub_key_iterator.valid())
         {
             std::wstring sub_key_path =
-                std::format(L"{}\\{}", key_path.c_str(), sub_key_iterator.name());
+                stringPrintf(L"%s\\%s", key_path.c_str(), sub_key_iterator.name());
 
             win::RegistryKey key;
 
@@ -380,7 +379,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
     // Enumerate products types (Workstation, Server, etc).
     while (key_iterator.valid())
     {
-        std::wstring sub_key_path = std::format(L"{}\\{}", kKeyPath, key_iterator.name());
+        std::wstring sub_key_path = stringPrintf(L"%s\\%s", kKeyPath, key_iterator.name());
 
         win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access);
 
@@ -389,7 +388,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
             if (wcsncmp(sub_key_iterator.name(), L"License.ws", 10) == 0)
             {
                 std::wstring license_key_path =
-                    std::format(L"{}\\{}", sub_key_path.c_str(), sub_key_iterator.name());
+                    stringPrintf(L"%s\\%s", sub_key_path.c_str(), sub_key_iterator.name());
 
                 win::RegistryKey key;
 
