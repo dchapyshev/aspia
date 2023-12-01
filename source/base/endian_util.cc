@@ -20,6 +20,8 @@
 
 #include "build/build_config.h"
 
+#include <bit>
+
 #if defined(CC_MSVC)
 #include <intrin.h>
 #endif // defined(CC_MSVC)
@@ -30,13 +32,7 @@ namespace base {
 // static
 bool EndianUtil::isLittle()
 {
-    const union
-    {
-        long one;
-        char little;
-    } is_endian = { 1 };
-
-    return is_endian.little;
+    return std::endian::native == std::endian::little;
 }
 
 //--------------------------------------------------------------------------------------------------
