@@ -325,7 +325,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         std::string command_line =
             fmt::format("sudo DISPLAY=':0' -u {} {} --channel_id={} &",
                         user_name,
-                        filePath(),
+                        filePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
         LOG(LS_INFO) << "Start desktop session agent: " << command_line;
@@ -348,7 +348,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     std::string command_line =
         fmt::format("sudo DISPLAY=':0' -u root {} --channel_id={} &",
-                    filePath(),
+                    filePath().c_str(),
                     base::local8BitFromUtf16(channel_id));
 
     LOG(LS_INFO) << "Start desktop session agent: " << command_line;
