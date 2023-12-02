@@ -121,6 +121,9 @@ const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
         case Authenticator::ErrorCode::PROTOCOL_ERROR:
             return "PROTOCOL_ERROR";
 
+        case Authenticator::ErrorCode::VERSION_ERROR:
+            return "VERSION_ERROR";
+
         case Authenticator::ErrorCode::ACCESS_DENIED:
             return "ACCESS_DENIED";
 

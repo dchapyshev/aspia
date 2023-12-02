@@ -424,6 +424,11 @@ QString SessionWindow::authErrorToString(base::ClientAuthenticator::ErrorCode er
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
+        case base::ClientAuthenticator::ErrorCode::VERSION_ERROR:
+            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
+                                 " the minimum supported version.");
+            break;
+
         case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Wrong user name or password.");
             break;

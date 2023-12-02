@@ -610,6 +610,12 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
     LOG(LS_INFO) << "Client CPU Cores: " << session_response->cpu_cores();
     LOG(LS_INFO) << "Client Arch: " << session_response->arch();
 
+    if (peerVersion() < base::Version::kMinimumSupportedVersion)
+    {
+        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+        return;
+    }
+
     BitSet<uint32_t> session_type = session_response->session_type();
     if (session_type.count() != 1)
     {

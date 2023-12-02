@@ -339,6 +339,8 @@ void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 
     if (authenticator_manager_)
         authenticator_manager_->addNewChannel(std::move(channel));
+    else
+        LOG(LS_ERROR) << "Authenticator not available";
 }
 
 //--------------------------------------------------------------------------------------------------

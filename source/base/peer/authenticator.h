@@ -48,6 +48,7 @@ public:
         UNKNOWN_ERROR,
         NETWORK_ERROR,
         PROTOCOL_ERROR,
+        VERSION_ERROR,
         ACCESS_DENIED,
         SESSION_DENIED
     };

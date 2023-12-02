@@ -441,6 +441,12 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     LOG(LS_INFO) << "Server CPU Cores: " << challenge->cpu_cores();
     LOG(LS_INFO) << "Server Arch: " << challenge->arch();
 
+    if (peerVersion() < base::Version::kMinimumSupportedVersion)
+    {
+        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+        return false;
+    }
+
     return true;
 }
 
