@@ -31,6 +31,7 @@
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
 #include "host/service_constants.h"
+#include "host/system_settings.h"
 #include "proto/desktop_internal.pb.h"
 #include "proto/task_manager.pb.h"
 #include "proto/text_chat.pb.h"
@@ -729,6 +730,9 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
             if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
             {
                 LOG(LS_INFO) << "Service added successfully to start in safe mode";
+
+                SystemSettings settings;
+                settings.setBootToSafeMode(true);
 
                 if (base::win::SafeModeUtil::setSafeMode(true))
                 {

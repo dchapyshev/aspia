@@ -117,6 +117,9 @@ public:
     int64_t lastUpdateCheck() const;
     void setLastUpdateCheck(int64_t timepoint);
 
+    bool isBootToSafeMode() const;
+    void setBootToSafeMode(bool enable);
+
 private:
     base::JsonSettings settings_;
 

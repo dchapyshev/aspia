@@ -97,14 +97,29 @@ void Service::onStart()
         PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 
-    if (!base::win::SafeModeUtil::setSafeMode(false))
+    SystemSettings settings;
+    if (settings.isBootToSafeMode())
     {
-        LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
-    }
+        settings.setBootToSafeMode(false);
+        settings.flush();
 
-    if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
-    {
-        LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
+        if (!base::win::SafeModeUtil::setSafeMode(false))
+        {
+            LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Safe mode is disabled";
+        }
+
+        if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
+        {
+            LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Service removed from safe mode loading";
+        }
     }
 #endif // defined(OS_WIN)
 

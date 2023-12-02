@@ -466,4 +466,16 @@ void SystemSettings::setLastUpdateCheck(int64_t timepoint)
     settings_.set("LastUpdateCheck", timepoint);
 }
 
+//--------------------------------------------------------------------------------------------------
+bool SystemSettings::isBootToSafeMode() const
+{
+    return settings_.get<bool>("BootToSafeMode");
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setBootToSafeMode(bool enable)
+{
+    settings_.set("BootToSafeMode", enable);
+}
+
 } // namespace host
