@@ -3318,7 +3318,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1087"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -3333,17 +3333,17 @@
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1054"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1056"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1087"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -4071,137 +4071,184 @@
 <context>
     <name>client::SessionWindow</name>
     <message>
-        <location filename="../ui/session_window.cc" line="138"/>
         <source>Attempt to connect to %1.</source>
-        <translation>Попытка подключения к %1.</translation>
+        <translation type="vanished">Попытка подключения к %1.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="153"/>
         <source>Connection established.</source>
-        <translation>Соединение установлено.</translation>
+        <translation type="vanished">Соединение установлено.</translation>
     </message>
     <message>
         <source>The Host version is newer than the Client version (%1 &gt; %2).Please update the application.</source>
         <translation type="vanished">Версия Хоста новее, чем версия Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="171"/>
+        <location filename="../ui/session_window.cc" line="137"/>
+        <source>Session started.</source>
+        <translation>Сессия запущена.</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="152"/>
+        <source>Connecting to router %1:%2...</source>
+        <translation>Подключение к маршрутизатору %1:%2...</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="161"/>
+        <source>Connection to router %1:%2 established.</source>
+        <translation>Подключение к маршрутизатору %1:%2 установлено.</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="174"/>
+        <source>Connecting to host %1...</source>
+        <translation>Подключение к хосту %1...</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="179"/>
+        <source>Connecting to host %1:%2...</source>
+        <translation>Подключение к хосту %1:%2...</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="195"/>
+        <source>Connection to host %1 established.</source>
+        <translation>Подключение к хосту %1 установлено.</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="200"/>
+        <source>Connection to host %1:%2 established.</source>
+        <translation>Подключение к хосту %1:%2 установлено.</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="219"/>
+        <source>Host is unavailable yet. Waiting to reconnect...</source>
+        <translation>Хост недоступен. Ожидание переподключения...</translation>
+    </message>
+    <message>
+        <source>Timeout waiting for reconnection</source>
+        <translation type="vanished">Превышено время ожидания для переподключения</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="226"/>
+        <source>Timeout waiting for reconnection.</source>
+        <translation>Превышено время ожидания при попытке повторного подключения.</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="236"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Хоста новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="192"/>
+        <location filename="../ui/session_window.cc" line="257"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Сетевая ошибка при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="199"/>
+        <location filename="../ui/session_window.cc" line="264"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Ошибка аутентификации при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="224"/>
+        <location filename="../ui/session_window.cc" line="289"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="228"/>
+        <location filename="../ui/session_window.cc" line="293"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="232"/>
+        <location filename="../ui/session_window.cc" line="297"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="236"/>
+        <location filename="../ui/session_window.cc" line="301"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="240"/>
+        <location filename="../ui/session_window.cc" line="305"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="284"/>
+        <location filename="../ui/session_window.cc" line="343"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="288"/>
+        <location filename="../ui/session_window.cc" line="347"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="292"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="296"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="300"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="304"/>
+        <location filename="../ui/session_window.cc" line="363"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="308"/>
+        <location filename="../ui/session_window.cc" line="367"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="312"/>
+        <location filename="../ui/session_window.cc" line="371"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="316"/>
+        <location filename="../ui/session_window.cc" line="375"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="326"/>
-        <location filename="../ui/session_window.cc" line="363"/>
+        <location filename="../ui/session_window.cc" line="385"/>
+        <location filename="../ui/session_window.cc" line="422"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="343"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="347"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="351"/>
+        <location filename="../ui/session_window.cc" line="410"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="355"/>
+        <location filename="../ui/session_window.cc" line="414"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="359"/>
+        <location filename="../ui/session_window.cc" line="418"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="379"/>
+        <location filename="../ui/session_window.cc" line="438"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
@@ -4210,22 +4257,22 @@
         <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="383"/>
+        <location filename="../ui/session_window.cc" line="442"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="387"/>
+        <location filename="../ui/session_window.cc" line="446"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="391"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="395"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
