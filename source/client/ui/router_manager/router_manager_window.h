@@ -32,11 +32,14 @@ class RouterManagerWindow;
 class QTreeWidget;
 class QTreeWidgetItem;
 
+namespace common {
+class StatusDialog;
+} // namespace common
+
 namespace client {
 
 class RouterProxy;
 class RouterWindowProxy;
-class RouterStatusDialog;
 
 class RouterManagerWindow
     : public QMainWindow,
@@ -51,8 +54,11 @@ public:
     void connectToRouter(const RouterConfig& router_config);
 
     // RouterWindow implementation.
+    void onConnecting() override;
     void onConnected(const base::Version& peer_version) override;
     void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
+    void onWaitForRouter() override;
+    void onWaitForRouterTimeout() override;
     void onVersionMismatch(const base::Version& router, const base::Version& client) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onSessionList(std::shared_ptr<proto::SessionList> session_list) override;
@@ -104,8 +110,9 @@ private:
 
     QString peer_address_;
     uint16_t peer_port_ = 0;
+    bool is_connected_ = false;
 
-    RouterStatusDialog* status_dialog_;
+    common::StatusDialog* status_dialog_;
 
     std::shared_ptr<RouterWindowProxy> window_proxy_;
     std::unique_ptr<RouterProxy> router_proxy_;

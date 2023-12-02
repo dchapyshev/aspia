@@ -26,7 +26,7 @@
 #include "client/router_window_proxy.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/router_manager/router_user_dialog.h"
-#include "client/ui/router_manager/router_status_dialog.h"
+#include "common/ui/status_dialog.h"
 #include "ui_router_manager_window.h"
 
 #include <QClipboard>
@@ -307,12 +307,22 @@ void copyTextToClipboard(const QString& text)
 RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(std::make_unique<Ui::RouterManagerWindow>()),
-      status_dialog_(new RouterStatusDialog(this)),
+      status_dialog_(new common::StatusDialog(this)),
       window_proxy_(std::make_shared<RouterWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
+
+    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    // After closing the status dialog, close the session window.
+    connect(status_dialog_, &common::StatusDialog::finished, this, [this]()
+    {
+        LOG(LS_INFO) << "Session closed";
+        router_proxy_.reset();
+        close();
+    });
 
     ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
 
@@ -438,21 +448,11 @@ RouterManagerWindow::~RouterManagerWindow()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 {
-    LOG(LS_INFO) << "Connecting to router";
+    LOG(LS_INFO) << "Connecting to router (address=" << peer_address_.toStdString()
+                 << " port=" << peer_port_ << ")";
 
     peer_address_ = QString::fromStdU16String(router_config.address);
     peer_port_ = router_config.port;
-
-    status_dialog_->setStatus(tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
-    status_dialog_->show();
-    status_dialog_->activateWindow();
-
-    connect(status_dialog_, &RouterStatusDialog::sig_canceled, [this]()
-    {
-        LOG(LS_INFO) << "Connection canceled";
-        router_proxy_.reset();
-        close();
-    });
 
     std::unique_ptr<Router> router = std::make_unique<Router>(
         window_proxy_, qt_base::Application::ioTaskRunner());
@@ -467,9 +467,20 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterManagerWindow::onConnecting()
+{
+    LOG(LS_INFO) << "Connecting to router";
+    status_dialog_->addMessageAndActivate(
+        tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onConnected(const base::Version& peer_version)
 {
     LOG(LS_INFO) << "Connected to router";
+    is_connected_ = true;
+
+    status_dialog_->addMessageAndActivate(tr("Connected to %1:%2.").arg(peer_address_).arg(peer_port_));
     status_dialog_->hide();
 
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
@@ -484,13 +495,18 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
         router_proxy_->refreshSessionList();
         router_proxy_->refreshUserList();
     }
+    else
+    {
+        LOG(LS_ERROR) << "No router proxy";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
-    const char* message;
+    is_connected_ = false;
 
+    const char* message;
     switch (error_code)
     {
         case base::TcpChannel::ErrorCode::INVALID_PROTOCOL:
@@ -541,8 +557,22 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
         break;
     }
 
-    status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
-    status_dialog_->show();
+    status_dialog_->addMessageAndActivate(tr("Error: %1").arg(tr(message)));
+    hide();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManagerWindow::onWaitForRouter()
+{
+    LOG(LS_INFO) << "Wait for router";
+    status_dialog_->addMessageAndActivate(tr("Router is unavailable. Waiting for reconnection..."));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManagerWindow::onWaitForRouterTimeout()
+{
+    LOG(LS_INFO) << "Wait for router timeout";
+    status_dialog_->addMessageAndActivate(tr("Timeout waiting for reconnection."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -551,10 +581,9 @@ void RouterManagerWindow::onVersionMismatch(const base::Version& router, const b
     QString router_version = QString::fromStdU16String(router.toString());
     QString client_version = QString::fromStdU16String(client.toString());
     QString message = tr("The Router version is newer than the Client version (%1 > %2). "
-                         "Please update the application.").arg(router_version).arg(client_version);
+                         "Please update the application.").arg(router_version, client_version);
 
-    status_dialog_->setStatus(tr("Error: %1").arg(message));
-    status_dialog_->show();
+    status_dialog_->addMessageAndActivate(tr("Error: %1").arg(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -589,8 +618,7 @@ void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode er
             break;
     }
 
-    status_dialog_->setStatus(tr("Error: %1").arg(tr(message)));
-    status_dialog_->show();
+    status_dialog_->addMessageAndActivate(tr("Error: %1").arg(tr(message)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -934,7 +962,7 @@ void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
     }
     else if (action == disconnect)
     {
-        if (router_proxy_)
+        if (router_proxy_ && peer_item)
         {
             router_proxy_->disconnectPeerSession(
                 relay_item->session.session_id(), peer_item->conn.session_id());
@@ -1152,19 +1180,31 @@ void RouterManagerWindow::updateRelayStatistics()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::refreshSessionList()
 {
+    if (!is_connected_)
+        return;
+
     if (router_proxy_)
     {
         beforeRequest();
         router_proxy_->refreshSessionList();
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No router proxy";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectRelay()
 {
+    LOG(LS_INFO) << "[ACTION] Disconnect relay";
+
     RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
+    {
+        LOG(LS_ERROR) << "No current item";
         return;
+    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1190,8 +1230,13 @@ void RouterManagerWindow::disconnectRelay()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllRelays()
 {
+    LOG(LS_INFO) << "[ACTION] Disconnect all relays";
+
     if (!router_proxy_)
+    {
+        LOG(LS_ERROR) << "No router proxy";
         return;
+    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1202,7 +1247,12 @@ void RouterManagerWindow::disconnectAllRelays()
     message_box.button(QMessageBox::No)->setText(tr("No"));
 
     if (message_box.exec() == QMessageBox::No)
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Accepted by user";
 
     beforeRequest();
 
@@ -1218,9 +1268,14 @@ void RouterManagerWindow::disconnectAllRelays()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectHost()
 {
+    LOG(LS_INFO) << "[ACTION] Disconnect host";
+
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
+    {
+        LOG(LS_INFO) << "No current item";
         return;
+    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1233,21 +1288,33 @@ void RouterManagerWindow::disconnectHost()
 
     if (message_box.exec() == QMessageBox::No)
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         return;
     }
+
+    LOG(LS_INFO) << "[ACTION] Accepted by user";
 
     if (router_proxy_)
     {
         beforeRequest();
         router_proxy_->stopSession(tree_item->session.session_id());
     }
+    else
+    {
+        LOG(LS_INFO) << "No router proxy";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllHosts()
 {
+    LOG(LS_INFO) << "[ACTION] Disconnect all hosts";
+
     if (!router_proxy_)
+    {
+        LOG(LS_INFO) << "No router proxy";
         return;
+    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1258,8 +1325,12 @@ void RouterManagerWindow::disconnectAllHosts()
     message_box.button(QMessageBox::No)->setText(tr("No"));
 
     if (message_box.exec() == QMessageBox::No)
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         return;
+    }
 
+    LOG(LS_INFO) << "[ACTION] Accepted by user";
     beforeRequest();
 
     QTreeWidget* tree_hosts = ui->tree_hosts;
@@ -1284,6 +1355,8 @@ void RouterManagerWindow::refreshUserList()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::addUser()
 {
+    LOG(LS_INFO) << "[ACTION] Add user";
+
     QTreeWidget* tree_users = ui->tree_users;
     std::vector<std::u16string> users;
 
@@ -1293,11 +1366,21 @@ void RouterManagerWindow::addUser()
     RouterUserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
+        LOG(LS_INFO) << "[ACTION] Accepeted by user";
+
         if (router_proxy_)
         {
             beforeRequest();
             router_proxy_->addUser(dialog.user().serialize());
         }
+        else
+        {
+            LOG(LS_ERROR) << "No router proxy";
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
     }
 }
 
@@ -1326,13 +1409,22 @@ void RouterManagerWindow::modifyUser()
     RouterUserDialog dialog(tree_item->user, users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (router_proxy_)
         {
             beforeRequest();
             router_proxy_->modifyUser(dialog.user().serialize());
         }
+        else
+        {
+            LOG(LS_ERROR) << "No router proxy";
+        }
     }
-
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -127,6 +127,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Action rejected";
         reject();
         close();
         return;
@@ -235,6 +236,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!user_.isValid())
         {
+            LOG(LS_ERROR) << "Unable to create user";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Unknown internal error when creating or modifying a user."),
@@ -258,6 +260,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     user_.sessions = sessions;
     user_.flags = flags;
 
+    LOG(LS_INFO) << "[ACTION] Action accepted";
     accept();
     close();
 }

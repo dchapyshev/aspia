@@ -51,6 +51,19 @@ void RouterWindowProxy::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWindowProxy::onConnecting()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(&RouterWindowProxy::onConnecting, shared_from_this()));
+        return;
+    }
+
+    if (router_window_)
+        router_window_->onConnecting();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onConnected(const base::Version& peer_version)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -76,6 +89,34 @@ void RouterWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 
     if (router_window_)
         router_window_->onDisconnected(error_code);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWindowProxy::onWaitForRouter()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&RouterWindowProxy::onWaitForRouter, shared_from_this()));
+        return;
+    }
+
+    if (router_window_)
+        router_window_->onWaitForRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWindowProxy::onWaitForRouterTimeout()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&RouterWindowProxy::onWaitForRouterTimeout, shared_from_this()));
+        return;
+    }
+
+    if (router_window_)
+        router_window_->onWaitForRouterTimeout();
 }
 
 //--------------------------------------------------------------------------------------------------

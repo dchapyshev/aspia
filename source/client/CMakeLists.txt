@@ -196,9 +196,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
     ui/router_manager/router_manager_window.cc
     ui/router_manager/router_manager_window.h
     ui/router_manager/router_manager_window.ui
-    ui/router_manager/router_status_dialog.cc
-    ui/router_manager/router_status_dialog.h
-    ui/router_manager/router_status_dialog.ui
     ui/router_manager/router_user_dialog.cc
     ui/router_manager/router_user_dialog.h
     ui/router_manager/router_user_dialog.ui)

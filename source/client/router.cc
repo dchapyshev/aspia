@@ -29,13 +29,9 @@ namespace client {
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(io_task_runner),
-      authenticator_(std::make_unique<base::ClientAuthenticator>(io_task_runner)),
       window_proxy_(std::move(window_proxy))
 {
     LOG(LS_INFO) << "Ctor";
-
-    authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,31 +41,54 @@ Router::~Router()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::setUserName(std::u16string_view user_name)
+void Router::setUserName(std::u16string_view username)
 {
-    authenticator_->setUserName(user_name);
+    router_username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router::setPassword(std::u16string_view password)
 {
-    authenticator_->setPassword(password);
+    router_password_ = password;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::setAutoReconnect(bool enable)
+{
+    auto_reconnect_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::isAutoReconnect() const
+{
+    return auto_reconnect_;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
-    LOG(LS_INFO) << "Connecting to router " << address.data() << ":" << port;
+    router_address_ = address;
+    router_port_ = port;
+
+    LOG(LS_INFO) << "Connecting to router " << router_address_ << ":" << router_port_;
+
+    window_proxy_->onConnecting();
 
     channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
-    channel_->connect(address, port);
+    channel_->connect(router_address_, router_port_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router::refreshSessionList()
 {
     LOG(LS_INFO) << "Sending session list request";
+
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
 
     proto::AdminToRouter message;
     message.mutable_session_list_request()->set_dummy(1);
@@ -80,6 +99,12 @@ void Router::refreshSessionList()
 void Router::stopSession(int64_t session_id)
 {
     LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
+
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
 
     proto::AdminToRouter message;
 
@@ -95,6 +120,12 @@ void Router::refreshUserList()
 {
     LOG(LS_INFO) << "Sending user list request";
 
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
+
     proto::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
@@ -105,6 +136,12 @@ void Router::addUser(const proto::User& user)
 {
     LOG(LS_INFO) << "Sending user add request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
+
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
 
     proto::AdminToRouter message;
 
@@ -121,6 +158,12 @@ void Router::modifyUser(const proto::User& user)
     LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
 
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
+
     proto::AdminToRouter message;
 
     proto::UserRequest* request = message.mutable_user_request();
@@ -134,6 +177,12 @@ void Router::modifyUser(const proto::User& user)
 void Router::deleteUser(int64_t entry_id)
 {
     LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
+
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
 
     proto::AdminToRouter message;
 
@@ -150,6 +199,12 @@ void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_sessi
     LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
                  << " (relay: " << relay_session_id << ")";
 
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        return;
+    }
+
     proto::AdminToRouter message;
 
     proto::PeerConnectionRequest* request = message.mutable_peer_connection_request();
@@ -165,8 +220,18 @@ void Router::onTcpConnected()
 {
     LOG(LS_INFO) << "Router connected";
 
+    reconnect_in_progress_ = false;
+    reconnect_timer_.reset();
+    timeout_timer_.reset();
+
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
+
+    authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
+    authenticator_->setIdentify(proto::IDENTIFY_SRP);
+    authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
+    authenticator_->setUserName(router_username_);
+    authenticator_->setPassword(router_password_);
 
     authenticator_->start(std::move(channel_),
                           [this](base::ClientAuthenticator::ErrorCode error_code)
@@ -219,6 +284,50 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
     window_proxy_->onDisconnected(error_code);
+
+    if (isAutoReconnect())
+    {
+        LOG(LS_INFO) << "Reconnect to router enabled";
+        reconnect_in_progress_ = true;
+
+        if (!timeout_timer_)
+        {
+            timeout_timer_ = std::make_unique<base::WaitableTimer>(
+                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+            timeout_timer_->start(std::chrono::minutes(5), [this]()
+            {
+                LOG(LS_INFO) << "Reconnect timeout";
+                window_proxy_->onWaitForRouterTimeout();
+
+                reconnect_timer_.reset();
+                reconnect_in_progress_ = false;
+                setAutoReconnect(false);
+
+                if (channel_)
+                {
+                    channel_->setListener(nullptr);
+                    channel_.reset();
+                }
+            });
+        }
+
+        // Delete old channel.
+        if (channel_)
+        {
+            channel_->setListener(nullptr);
+            io_task_runner_->deleteSoon(std::move(channel_));
+        }
+
+        window_proxy_->onWaitForRouter();
+
+        reconnect_timer_ = std::make_unique<base::WaitableTimer>(
+            base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+        reconnect_timer_->start(std::chrono::seconds(5), [this]()
+        {
+            LOG(LS_INFO) << "Reconnecting to router";
+            connectToRouter(router_address_, router_port_);
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

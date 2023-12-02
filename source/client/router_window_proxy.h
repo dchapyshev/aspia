@@ -36,8 +36,11 @@ public:
 
     void dettach();
 
+    void onConnecting();
     void onConnected(const base::Version& peer_version);
     void onDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onWaitForRouter();
+    void onWaitForRouterTimeout();
     void onVersionMismatch(const base::Version& router, const base::Version& client);
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onSessionList(std::shared_ptr<proto::SessionList> session_list);
