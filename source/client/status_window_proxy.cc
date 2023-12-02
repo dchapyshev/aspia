@@ -147,6 +147,33 @@ void StatusWindowProxy::onHostDisconnected(base::TcpChannel::ErrorCode error_cod
 }
 
 //--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onWaitForRouter()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onWaitForRouter, shared_from_this()));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onWaitForRouter();
+}
+
+void StatusWindowProxy::onWaitForRouterTimeout()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onWaitForRouterTimeout, shared_from_this()));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onWaitForRouterTimeout();
+}
+
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onWaitForHost()
 {
     if (!ui_task_runner_->belongsToCurrentThread())

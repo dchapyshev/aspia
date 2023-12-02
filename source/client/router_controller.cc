@@ -159,6 +159,8 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
         error.code.router = ErrorCode::UNKNOWN_ERROR;
         if (delegate_)
             delegate_->onErrorOccurred(error);
+        else
+            LOG(LS_ERROR) << "Invalid delegate";
         return;
     }
 
@@ -246,6 +248,8 @@ void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* p
 //--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel)
 {
+    LOG(LS_INFO) << "Relay connection ready";
+
     if (delegate_)
         delegate_->onHostConnected(std::move(channel));
     else
@@ -255,6 +259,8 @@ void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> 
 //--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionError()
 {
+    LOG(LS_INFO) << "Relay connection error";
+
     if (!delegate_)
     {
         LOG(LS_ERROR) << "Invalid delegate";
@@ -281,6 +287,8 @@ void RouterController::sendConnectionRequest()
 //--------------------------------------------------------------------------------------------------
 void RouterController::waitForHost()
 {
+    LOG(LS_INFO) << "Wait for host";
+
     status_request_timer_ = std::make_unique<base::WaitableTimer>(
         base::WaitableTimer::Type::SINGLE_SHOT, task_runner_);
 

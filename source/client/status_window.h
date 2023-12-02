@@ -36,6 +36,8 @@ public:
     virtual void onHostConnecting(const std::u16string& address_or_id, uint16_t port) = 0;
     virtual void onHostConnected(const std::u16string& address_or_id, uint16_t port) = 0;
     virtual void onHostDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
+    virtual void onWaitForRouter() = 0;
+    virtual void onWaitForRouterTimeout() = 0;
     virtual void onWaitForHost() = 0;
     virtual void onWaitForHostTimeout() = 0;
     virtual void onVersionMismatch(const base::Version& host, const base::Version& client) = 0;

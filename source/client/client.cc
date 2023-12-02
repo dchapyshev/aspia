@@ -66,6 +66,7 @@ void Client::start(const Config& config)
 
     config_ = config;
     state_ = State::STARTED;
+    is_connected_to_router_ = false;
 
     if (base::isHostId(config_.address_or_id))
     {
@@ -260,24 +261,34 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
             timeout_timer_->start(std::chrono::minutes(5), [this]()
             {
                 LOG(LS_INFO) << "Reconnect timeout";
-                status_window_proxy_->onWaitForHostTimeout();
+
+                if (base::isHostId(config_.address_or_id) && !is_connected_to_router_)
+                    status_window_proxy_->onWaitForRouterTimeout();
+                else
+                    status_window_proxy_->onWaitForHostTimeout();
 
                 reconnect_in_progress_ = false;
                 setAutoReconnect(false);
 
                 if (channel_)
                 {
+                    LOG(LS_INFO) << "Destroy channel";
                     channel_->setListener(nullptr);
                     channel_.reset();
                 }
 
-                router_controller_.reset();
+                if (router_controller_)
+                {
+                    LOG(LS_INFO) << "Destroy router controller";
+                    router_controller_.reset();
+                }
             });
         }
 
         // Delete old channel.
         if (channel_)
         {
+            LOG(LS_INFO) << "Post task to destroy channel";
             channel_->setListener(nullptr);
             io_task_runner_->deleteSoon(std::move(channel_));
         }
@@ -291,14 +302,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         }
         else
         {
-            reconnect_timer_ = std::make_unique<base::WaitableTimer>(
-                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
-            reconnect_timer_->start(std::chrono::seconds(5), [this]()
-            {
-                LOG(LS_INFO) << "Reconnecting to host";
-                state_ = State::CREATED;
-                start(config_);
-            });
+            delayedReconnectToHost();
         }
     }
 }
@@ -342,6 +346,7 @@ void Client::onRouterConnected(const std::u16string& address, uint16_t port)
 {
     LOG(LS_INFO) << "Router connected (address=" << address << " port=" << port << ")";
     status_window_proxy_->onRouterConnected(address, port);
+    is_connected_to_router_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -363,13 +368,25 @@ void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
     startAuthentication();
 
     // Router controller is no longer needed.
+    LOG(LS_INFO) << "Post task to destroy router controller";
     io_task_runner_->deleteSoon(std::move(router_controller_));
+    is_connected_to_router_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onErrorOccurred(const RouterController::Error& error)
 {
     status_window_proxy_->onRouterError(error);
+
+    LOG(LS_INFO) << "Post task to destroy router controller";
+    io_task_runner_->deleteSoon(std::move(router_controller_));
+    is_connected_to_router_ = false;
+
+    if (error.type == RouterController::ErrorType::NETWORK && reconnect_in_progress_)
+    {
+        status_window_proxy_->onWaitForRouter();
+        delayedReconnectToRouter();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -441,6 +458,34 @@ void Client::startAuthentication()
 
         // Authenticator is no longer needed.
         io_task_runner_->deleteSoon(std::move(authenticator_));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::delayedReconnectToRouter()
+{
+    reconnect_timer_ = std::make_unique<base::WaitableTimer>(
+        base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+
+    reconnect_timer_->start(std::chrono::seconds(5), [this]()
+    {
+        LOG(LS_INFO) << "Reconnecting to router";
+        state_ = State::CREATED;
+        start(config_);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::delayedReconnectToHost()
+{
+    reconnect_timer_ = std::make_unique<base::WaitableTimer>(
+        base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+
+    reconnect_timer_->start(std::chrono::seconds(5), [this]()
+    {
+        LOG(LS_INFO) << "Reconnecting to host";
+        state_ = State::CREATED;
+        start(config_);
     });
 }
 

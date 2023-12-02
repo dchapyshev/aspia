@@ -70,6 +70,8 @@ protected:
     void onHostConnecting(const std::u16string& address_or_id, uint16_t port) override;
     void onHostConnected(const std::u16string& address_or_id, uint16_t port) override;
     void onHostDisconnected(base::TcpChannel::ErrorCode error_code) override;
+    void onWaitForRouter() override;
+    void onWaitForRouterTimeout() override;
     void onWaitForHost() override;
     void onWaitForHostTimeout() override;
     void onVersionMismatch(const base::Version& host, const base::Version& client) override;

@@ -213,6 +213,20 @@ void SessionWindow::onHostDisconnected(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SessionWindow::onWaitForRouter()
+{
+    LOG(LS_INFO) << "Wait for router";
+    onErrorOccurred(tr("Router is unavailable yet. Waiting to reconnect..."));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onWaitForRouterTimeout()
+{
+    LOG(LS_INFO) << "Wait for router timeout";
+    onErrorOccurred(tr("Timeout waiting for reconnection to router."));
+}
+
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onWaitForHost()
 {
     LOG(LS_INFO) << "Wait for host";
@@ -223,7 +237,7 @@ void SessionWindow::onWaitForHost()
 void SessionWindow::onWaitForHostTimeout()
 {
     LOG(LS_INFO) << "Wait for host timeout";
-    onErrorOccurred(tr("Timeout waiting for reconnection."));
+    onErrorOccurred(tr("Timeout waiting for reconnection to host."));
 }
 
 //--------------------------------------------------------------------------------------------------

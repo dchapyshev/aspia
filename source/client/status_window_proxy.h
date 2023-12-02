@@ -46,6 +46,8 @@ public:
     void onHostConnecting(const std::u16string& address_or_id, uint16_t port);
     void onHostConnected(const std::u16string& address_or_id, uint16_t port);
     void onHostDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onWaitForRouter();
+    void onWaitForRouterTimeout();
     void onWaitForHost();
     void onWaitForHostTimeout();
     void onVersionMismatch(const base::Version& host, const base::Version& client);

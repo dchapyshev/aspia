@@ -93,6 +93,8 @@ protected:
 
 private:
     void startAuthentication();
+    void delayedReconnectToRouter();
+    void delayedReconnectToHost();
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<base::WaitableTimer> timeout_timer_;
@@ -109,6 +111,7 @@ private:
 
     bool auto_reconnect_ = true;
     bool reconnect_in_progress_ = false;
+    bool is_connected_to_router_ = false;
 };
 
 } // namespace client
