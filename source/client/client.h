@@ -96,6 +96,7 @@ private:
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<base::WaitableTimer> timeout_timer_;
+    std::unique_ptr<base::WaitableTimer> reconnect_timer_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;

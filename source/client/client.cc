@@ -267,20 +267,41 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 reconnect_in_progress_ = false;
                 setAutoReconnect(false);
 
-                channel_->setListener(nullptr);
+                if (channel_)
+                {
+                    channel_->setListener(nullptr);
+                    channel_.reset();
+                }
+
                 router_controller_.reset();
-                channel_.reset();
             });
         }
 
         // Delete old channel.
-        channel_->setListener(nullptr);
-        io_task_runner_->deleteSoon(std::move(channel_));
+        if (channel_)
+        {
+            channel_->setListener(nullptr);
+            io_task_runner_->deleteSoon(std::move(channel_));
+        }
 
-        // If you are using an ID connection, then start the connection immediately. The Router
-        // will notify you when the Host comes online again.
-        state_ = State::CREATED;
-        start(config_);
+        if (base::isHostId(config_.address_or_id))
+        {
+            // If you are using an ID connection, then start the connection immediately. The Router
+            // will notify you when the Host comes online again.
+            state_ = State::CREATED;
+            start(config_);
+        }
+        else
+        {
+            reconnect_timer_ = std::make_unique<base::WaitableTimer>(
+                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+            reconnect_timer_->start(std::chrono::seconds(5), [this]()
+            {
+                LOG(LS_INFO) << "Reconnecting to host";
+                state_ = State::CREATED;
+                start(config_);
+            });
+        }
     }
 }
 
@@ -359,6 +380,7 @@ void Client::startAuthentication()
     LOG(LS_INFO) << "Start authentication for '" << config_.username << "'";
 
     reconnect_in_progress_ = false;
+    reconnect_timer_.reset();
     timeout_timer_.reset();
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
