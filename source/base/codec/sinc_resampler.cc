@@ -225,7 +225,8 @@ void SincResampler::InitializeKernel()
     const double sinc_scale_factor = SincScaleFactor(io_sample_rate_ratio_);
     for (int offset_idx = 0; offset_idx <= kKernelOffsetCount; ++offset_idx)
     {
-        const float subsample_offset = static_cast<float>(offset_idx) / kKernelOffsetCount;
+        const float subsample_offset =
+            static_cast<float>(offset_idx) / static_cast<float>(kKernelOffsetCount);
 
         for (int i = 0; i < kKernelSize; ++i)
         {
@@ -234,7 +235,7 @@ void SincResampler::InitializeKernel()
             kernel_pre_sinc_storage_[idx] = pre_sinc;
 
             // Compute Blackman window, matching the offset of the sinc().
-            const float x = (i - subsample_offset) / kKernelSize;
+            const float x = (i - subsample_offset) / static_cast<float>(kKernelSize);
             const float window =
                 static_cast<float>(kA0 - kA1 * cos(2.0 * base::kPiDouble * x) +
                                    kA2 * cos(4.0 * base::kPiDouble * x));
@@ -300,7 +301,7 @@ void SincResampler::Resample(int frames, float* destination)
                 // out what they are.
                 const int source_idx = static_cast<int>(virtual_source_idx_);
                 const double virtual_offset_idx =
-                    (virtual_source_idx_ - source_idx) * kKernelOffsetCount;
+                    (virtual_source_idx_ - source_idx) * static_cast<double>(kKernelOffsetCount);
                 const int offset_idx = static_cast<int>(virtual_offset_idx);
 
                 // We'll compute "convolutions" for the two kernels which straddle
