@@ -590,25 +590,23 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
-    std::unique_ptr<proto::SessionResponse> session_response =
+    std::unique_ptr<proto::SessionResponse> response =
         std::make_unique<proto::SessionResponse>();
-    if (!parse(buffer, session_response.get()))
+    if (!parse(buffer, response.get()))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    setPeerVersion(session_response->version());
-    setPeerOsName(session_response->os_name());
-    setPeerComputerName(session_response->computer_name());
-    setPeerArch(session_response->arch());
+    setPeerVersion(response->version());
+    setPeerOsName(response->os_name());
+    setPeerComputerName(response->computer_name());
+    setPeerArch(response->arch());
 
-    LOG(LS_INFO) << "Client Session Type: " << session_response->session_type();
-    LOG(LS_INFO) << "Client Version: " << peerVersion();
-    LOG(LS_INFO) << "Client Name: " << session_response->computer_name();
-    LOG(LS_INFO) << "Client OS: " << session_response->os_name();
-    LOG(LS_INFO) << "Client CPU Cores: " << session_response->cpu_cores();
-    LOG(LS_INFO) << "Client Arch: " << session_response->arch();
+    LOG(LS_INFO) << "Client (session_type=" << response->session_type()
+                 << " version=" << peerVersion() << " name=" << response->computer_name()
+                 << " os=" << response->os_name() << " cores=" << response->cpu_cores()
+                 << " arch=" << response->arch() << ")";
 
     if (peerVersion() < base::Version::kMinimumSupportedVersion)
     {
@@ -616,7 +614,7 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
         return;
     }
 
-    BitSet<uint32_t> session_type = session_response->session_type();
+    BitSet<uint32_t> session_type = response->session_type();
     if (session_type.count() != 1)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);

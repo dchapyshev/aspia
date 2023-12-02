@@ -435,11 +435,9 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     setPeerComputerName(challenge->computer_name());
     setPeerArch(challenge->arch());
 
-    LOG(LS_INFO) << "Server Version: " << peerVersion();
-    LOG(LS_INFO) << "Server Name: " << challenge->computer_name();
-    LOG(LS_INFO) << "Server OS: " << challenge->os_name();
-    LOG(LS_INFO) << "Server CPU Cores: " << challenge->cpu_cores();
-    LOG(LS_INFO) << "Server Arch: " << challenge->arch();
+    LOG(LS_INFO) << "Server (version=" << peerVersion() << " name=" << challenge->computer_name()
+                 << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
+                 << " arch=" << challenge->arch() << ")";
 
     if (peerVersion() < base::Version::kMinimumSupportedVersion)
     {
