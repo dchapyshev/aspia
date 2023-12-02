@@ -34,6 +34,13 @@ namespace {
 // xy = BLAKE2b512(PAD(x) || PAD(y))
 BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 {
+    if (!x.isValid() || !y.isValid() || !N.isValid())
+    {
+        LOG(LS_ERROR) << "Invalid arguments (x=" << x.isValid() << " y=" << y.isValid()
+                      << " N=" << N.isValid() << ")";
+        return BigNum();
+    }
+
     if (x.get() != N.get() && BN_ucmp(x, N) >= 0)
         return BigNum();
 
@@ -61,6 +68,12 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 // k = BLAKE2b512(N | PAD(g))
 BigNum calc_k(const BigNum& N, const BigNum& g)
 {
+    if (!N.isValid() || !g.isValid())
+    {
+        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << " g=" << g.isValid() << ")";
+        return BigNum();
+    }
+
     return calc_xy(N, g, N);
 }
 
@@ -71,6 +84,13 @@ BigNum calc_k(const BigNum& N, const BigNum& g)
 // u = BLAKE2b512(PAD(A) | PAD(B))
 BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
 {
+    if (!A.isValid() || !B.isValid() || !N.isValid())
+    {
+        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << " B=" << B.isValid()
+                      << " N=" << N.isValid() << ")";
+        return BigNum();
+    }
+
     return calc_xy(A, B, N);
 }
 
@@ -81,7 +101,8 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 {
     if (!b.isValid() || !N.isValid() || !g.isValid() || !v.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (b=" << b.isValid() << " N=" << N.isValid()
+                      << " g=" << g.isValid() << " v=" << v.isValid() << ")";
         return BigNum();
     }
 
@@ -146,6 +167,13 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
 BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p)
 {
+    if (!s.isValid() || I.empty() || p.empty())
+    {
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.empty()
+                      << " p=" << p.empty() << ")";
+        return BigNum();
+    }
+
     return calc_x(s, I, fromStdString(utf8FromUtf16(p)));
 }
 
@@ -155,7 +183,8 @@ BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const ByteArray& 
 {
     if (!s.isValid() || I.empty() || p.empty())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.empty()
+                      << " p=" << p.empty() << ")";
         return BigNum();
     }
 
@@ -183,7 +212,8 @@ BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
 {
     if (!a.isValid() || !N.isValid() || !g.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (a=" << a.isValid() << " N=" << N.isValid()
+                      << " g=" << g.isValid() << ")";
         return BigNum();
     }
 
@@ -213,7 +243,8 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
 {
     if (!A.isValid() || !v.isValid() || !u.isValid() || !b.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid parameters";
+        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << " v=" << v.isValid()
+                      << " u=" << u.isValid() << " b=" << b.isValid() << " N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -262,7 +293,9 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
 {
     if (!N.isValid() || !B.isValid() || !g.isValid() || !x.isValid() || !a.isValid() || !u.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << " B=" << B.isValid()
+                      << " g=" << g.isValid() << " x=" << x.isValid() << " a=" << a.isValid()
+                      << " u=" << u.isValid() << ")";
         return BigNum();
     }
 
@@ -279,7 +312,8 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
 
     if (!tmp.isValid() || !tmp2.isValid() || !tmp3.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(LS_ERROR) << "BigNum::create failed (tmp=" << tmp.isValid()
+                      << " tmp2=" << tmp2.isValid() << " tmp3=" << tmp3.isValid() << ")";
         return BigNum();
     }
 
@@ -342,7 +376,7 @@ bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
 {
     if (!B.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (B=" << B.isValid() << " N=" << N.isValid() << ")";
         return false;
     }
 
@@ -378,7 +412,8 @@ BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNu
 {
     if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.empty()
+                      << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
         return BigNum();
     }
 
@@ -409,7 +444,8 @@ BigNum SrpMath::calc_v(std::u16string_view I, const ByteArray& p, const BigNum& 
 {
     if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid params";
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.empty()
+                      << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
         return BigNum();
     }
 
@@ -423,6 +459,11 @@ BigNum SrpMath::calc_v(std::u16string_view I, const ByteArray& p, const BigNum& 
     }
 
     BigNum x = calc_x(s, I, p);
+    if (!x.isValid())
+    {
+        LOG(LS_ERROR) << "calc_x failed";
+        return BigNum();
+    }
 
     if (!BN_mod_exp(v, g, x, N, ctx))
     {

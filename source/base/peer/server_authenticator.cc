@@ -79,7 +79,10 @@ bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
+    {
+        LOG(LS_ERROR) << "Authenticator not in stopped state";
         return false;
+    }
 
     if (private_key.empty())
     {
@@ -110,7 +113,10 @@ bool ServerAuthenticator::setAnonymousAccess(
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
+    {
+        LOG(LS_ERROR) << "Authenticator not in stopped state";
         return false;
+    }
 
     if (anonymous_access == AnonymousAccess::ENABLE)
     {
