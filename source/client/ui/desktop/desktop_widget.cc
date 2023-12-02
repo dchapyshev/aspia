@@ -140,7 +140,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     enableKeyHooks(true);
 
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
-            this, [=](Qt::ApplicationState state)
+            this, [this](Qt::ApplicationState state)
     {
         LOG(LS_ERROR) << "Application state changed: " << applicationStateToString(state);
         if (state != Qt::ApplicationActive)
@@ -165,7 +165,7 @@ base::Frame* DesktopWidget::desktopFrame()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
+void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame> frame)
 {
     frame_ = std::move(frame);
 }
@@ -183,7 +183,7 @@ void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
         delete error_timer_;
 
     error_timer_ = new QTimer(this);
-    connect(error_timer_, &QTimer::timeout, this, [=]()
+    connect(error_timer_, &QTimer::timeout, this, [this]()
     {
         if (last_error_code_ != proto::VIDEO_ERROR_CODE_OK)
         {

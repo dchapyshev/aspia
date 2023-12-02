@@ -426,6 +426,12 @@ void QtSystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& sys
 }
 
 //--------------------------------------------------------------------------------------------------
+void QtSystemInfoWindow::onInternalReset()
+{
+    // TODO
+}
+
+//--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);

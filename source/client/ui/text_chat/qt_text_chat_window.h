@@ -54,6 +54,10 @@ public:
 signals:
     void sig_textChatMessage(const proto::TextChat& text_chat);
 
+protected:
+    // SessionWindow implementation.
+    void onInternalReset() override;
+
 private:
     std::unique_ptr<Ui::TextChatWindow> ui;
 

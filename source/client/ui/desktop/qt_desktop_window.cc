@@ -296,7 +296,7 @@ void QtDesktopWindow::showWindow(
     desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
-    show();
+    showNormal();
     activateWindow();
 
     toolbar_->enableTextChat(peer_version_ >= base::Version::kVersion_2_4_0);
@@ -588,6 +588,58 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
 void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
     desktop_control_proxy_->onSystemInfoRequest(request);
+}
+
+//--------------------------------------------------------------------------------------------------
+void QtDesktopWindow::onInternalReset()
+{
+    if (system_info_)
+    {
+        LOG(LS_INFO) << "Close System Info window";
+        system_info_->close();
+    }
+
+    if (task_manager_)
+    {
+        LOG(LS_INFO) << "Close Task Manager window";
+        task_manager_->close();
+    }
+
+    if (statistics_dialog_)
+    {
+        LOG(LS_INFO) << "Close Statistics window";
+        statistics_dialog_->close();
+    }
+
+    peer_version_ = base::Version();
+    video_encodings_ = 0;
+
+    if (resize_timer_)
+        resize_timer_->stop();
+    screen_size_ = QSize();
+    if (scroll_timer_)
+        scroll_timer_->stop();
+    scroll_delta_ = QPoint();
+
+    enable_video_pause_ = true;
+    video_pause_last_ = false;
+    enable_audio_pause_ = true;
+    audio_pause_last_ = false;
+
+    disable_feature_audio_ = false;
+    disable_feature_clipboard_ = false;
+    disable_feature_cursor_shape_ = false;
+    disable_feature_cursor_position_ = false;
+    disable_feature_desktop_effects_ = false;
+    disable_feature_desktop_wallpaper_ = false;
+    disable_feature_font_smoothing_ = false;
+    disable_feature_clear_clipboard_ = false;
+    disable_feature_lock_at_disconnect_ = false;
+    disable_feature_block_input_ = false;
+
+    wheel_angle_ = QPoint();
+
+    desktop_->setDesktopFrame(nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

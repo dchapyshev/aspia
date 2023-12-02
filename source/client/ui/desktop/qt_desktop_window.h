@@ -81,6 +81,9 @@ public:
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
 
 protected:
+    // SessionWindow implementation.
+    void onInternalReset() override;
+
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;

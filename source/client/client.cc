@@ -79,20 +79,29 @@ void Client::start(const Config& config)
             return;
         }
 
-        // Show the status window.
-        status_window_proxy_->onStarted(config_.address_or_id);
-
         router_controller_ =
             std::make_unique<RouterController>(*config_.router_config, io_task_runner_);
-        router_controller_->connectTo(base::stringToHostId(config_.address_or_id), this);
+
+        if (!reconnect_in_progress_)
+        {
+            // Show the status window.
+            status_window_proxy_->onStarted();
+        }
+
+        status_window_proxy_->onRouterConnecting(
+            config_.router_config->address, config_.router_config->port);
+        router_controller_->connectTo(
+            base::stringToHostId(config_.address_or_id), reconnect_in_progress_, this);
     }
     else
     {
         LOG(LS_INFO) << "Starting DIRECT connection";
 
-        // Show the status window.
-        status_window_proxy_->onStarted(
-            base::strCat({ config_.address_or_id, u":", base::numberToString16(config_.port) }));
+        if (!reconnect_in_progress_)
+        {
+            // Show the status window.
+            status_window_proxy_->onStarted();
+        }
 
         // Create a network channel for messaging.
         channel_ = std::make_unique<base::TcpChannel>();
@@ -101,6 +110,7 @@ void Client::start(const Config& config)
         channel_->setListener(this);
 
         // Now connect to the host.
+        status_window_proxy_->onHostConnecting(config_.address_or_id, config_.port);
         channel_->connect(config_.address_or_id, config_.port);
     }
 }
@@ -118,6 +128,10 @@ void Client::stop()
         router_controller_.reset();
         authenticator_.reset();
         channel_.reset();
+        timeout_timer_.reset();
+
+        auto_reconnect_ = false;
+        reconnect_in_progress_ = false;
 
         status_window_proxy_->onStopped();
 
@@ -134,6 +148,19 @@ void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_pr
 {
     LOG(LS_INFO) << "Status window installed";
     status_window_proxy_ = std::move(status_window_proxy);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Client::isAutoReconnect()
+{
+    return auto_reconnect_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::setAutoReconnect(bool enable)
+{
+    LOG(LS_INFO) << "Auto reconnect changed: " << enable;
+    auto_reconnect_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,7 +248,40 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
-    status_window_proxy_->onDisconnected(error_code);
+    status_window_proxy_->onHostDisconnected(error_code);
+
+    if (isAutoReconnect())
+    {
+        LOG(LS_INFO) << "Reconnect to host enabled";
+        reconnect_in_progress_ = true;
+
+        if (!timeout_timer_)
+        {
+            timeout_timer_ = std::make_unique<base::WaitableTimer>(
+                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+            timeout_timer_->start(std::chrono::minutes(5), [this]()
+            {
+                LOG(LS_INFO) << "Reconnect timeout";
+                status_window_proxy_->onWaitForHostTimeout();
+
+                reconnect_in_progress_ = false;
+                setAutoReconnect(false);
+
+                channel_->setListener(nullptr);
+                router_controller_.reset();
+                channel_.reset();
+            });
+        }
+
+        // Delete old channel.
+        channel_->setListener(nullptr);
+        io_task_runner_->deleteSoon(std::move(channel_));
+
+        // If you are using an ID connection, then start the connection immediately. The Router
+        // will notify you when the Host comes online again.
+        state_ = State::CREATED;
+        start(config_);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -259,6 +319,20 @@ void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::onRouterConnected(const std::u16string& address, uint16_t port)
+{
+    LOG(LS_INFO) << "Router connected (address=" << address << " port=" << port << ")";
+    status_window_proxy_->onRouterConnected(address, port);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onHostAwaiting()
+{
+    LOG(LS_INFO) << "Host awaiting";
+    status_window_proxy_->onWaitForHost();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Host connected";
@@ -283,6 +357,9 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 void Client::startAuthentication()
 {
     LOG(LS_INFO) << "Start authentication for '" << config_.username << "'";
+
+    reconnect_in_progress_ = false;
+    timeout_timer_.reset();
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
@@ -325,7 +402,7 @@ void Client::startAuthentication()
             }
             else
             {
-                status_window_proxy_->onConnected();
+                status_window_proxy_->onHostConnected(config_.address_or_id, config_.port);
 
                 // Signal that everything is ready to start the session (connection established,
                 // authentication passed).

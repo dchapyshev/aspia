@@ -56,6 +56,10 @@ public:
 signals:
     void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
 
+protected:
+    // SessionWindow implementation.
+    void onInternalReset() override;
+
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);
     void onRefresh();

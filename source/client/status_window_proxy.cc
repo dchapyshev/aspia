@@ -48,17 +48,16 @@ void StatusWindowProxy::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatusWindowProxy::onStarted(const std::u16string& address_or_id)
+void StatusWindowProxy::onStarted()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(
-            std::bind(&StatusWindowProxy::onStarted, shared_from_this(), address_or_id));
+        ui_task_runner_->postTask(std::bind(&StatusWindowProxy::onStarted, shared_from_this()));
         return;
     }
 
     if (status_window_)
-        status_window_->onStarted(address_or_id);
+        status_window_->onStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,30 +77,101 @@ void StatusWindowProxy::onStopped()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatusWindowProxy::onConnected()
-{
-    if (!ui_task_runner_->belongsToCurrentThread())
-    {
-        ui_task_runner_->postTask(std::bind(&StatusWindowProxy::onConnected, shared_from_this()));
-        return;
-    }
-
-    if (status_window_)
-        status_window_->onConnected();
-}
-
-//--------------------------------------------------------------------------------------------------
-void StatusWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void StatusWindowProxy::onRouterConnecting(const std::u16string& address, uint16_t port)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&StatusWindowProxy::onDisconnected, shared_from_this(), error_code));
+            std::bind(&StatusWindowProxy::onRouterConnecting, shared_from_this(), address, port));
         return;
     }
 
     if (status_window_)
-        status_window_->onDisconnected(error_code);
+        status_window_->onRouterConnecting(address, port);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onRouterConnected(const std::u16string& address, uint16_t port)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onRouterConnected, shared_from_this(), address, port));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onRouterConnected(address, port);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onHostConnecting(const std::u16string& address_or_id, uint16_t port)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onHostConnecting, shared_from_this(), address_or_id, port));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onHostConnecting(address_or_id, port);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onHostConnected(const std::u16string& address_or_id, uint16_t port)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onHostConnected, shared_from_this(), address_or_id, port));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onHostConnected(address_or_id, port);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onHostDisconnected(base::TcpChannel::ErrorCode error_code)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onHostDisconnected, shared_from_this(), error_code));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onHostDisconnected(error_code);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onWaitForHost()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onWaitForHost, shared_from_this()));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onWaitForHost();
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusWindowProxy::onWaitForHostTimeout()
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onWaitForHostTimeout, shared_from_this()));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onWaitForHostTimeout();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -29,10 +29,15 @@ class StatusWindow
 public:
     virtual ~StatusWindow() = default;
 
-    virtual void onStarted(const std::u16string& address_or_id) = 0;
+    virtual void onStarted() = 0;
     virtual void onStopped() = 0;
-    virtual void onConnected() = 0;
-    virtual void onDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
+    virtual void onRouterConnecting(const std::u16string& address, uint16_t port) = 0;
+    virtual void onRouterConnected(const std::u16string& address, uint16_t port) = 0;
+    virtual void onHostConnecting(const std::u16string& address_or_id, uint16_t port) = 0;
+    virtual void onHostConnected(const std::u16string& address_or_id, uint16_t port) = 0;
+    virtual void onHostDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
+    virtual void onWaitForHost() = 0;
+    virtual void onWaitForHostTimeout() = 0;
     virtual void onVersionMismatch(const base::Version& host, const base::Version& client) = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onRouterError(const RouterController::Error& error) = 0;

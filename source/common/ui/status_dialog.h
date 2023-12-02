@@ -41,6 +41,10 @@ public:
     void addMessageAndActivate(const QString& message);
     void retranslateUi();
 
+protected:
+    // QDialog implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     std::unique_ptr<Ui::StatusDialog> ui;
 

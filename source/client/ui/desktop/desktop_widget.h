@@ -52,7 +52,7 @@ public:
     ~DesktopWidget() override;
 
     base::Frame* desktopFrame();
-    void setDesktopFrame(std::shared_ptr<base::Frame>& frame);
+    void setDesktopFrame(std::shared_ptr<base::Frame> frame);
     void setDesktopFrameError(proto::VideoErrorCode error_code);
     void drawDesktopFrame();
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);

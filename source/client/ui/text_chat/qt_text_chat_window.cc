@@ -115,4 +115,10 @@ void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+void QtTextChatWindow::onInternalReset()
+{
+    // TODO
+}
+
 } // namespace client

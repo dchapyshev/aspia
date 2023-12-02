@@ -19,6 +19,7 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
+#include "base/waitable_timer.h"
 #include "base/version.h"
 #include "client/client_config.h"
 #include "client/router_controller.h"
@@ -52,6 +53,9 @@ public:
     // The method must be called before calling method start().
     void setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy);
 
+    bool isAutoReconnect();
+    void setAutoReconnect(bool enable);
+
     Config config() const { return config_; }
 
 protected:
@@ -82,6 +86,8 @@ protected:
     void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // RouterController::Delegate implementation.
+    void onRouterConnected(const std::u16string& address, uint16_t port) override;
+    void onHostAwaiting() override;
     void onHostConnected(std::unique_ptr<base::TcpChannel> channel) override;
     void onErrorOccurred(const RouterController::Error& error) override;
 
@@ -89,6 +95,7 @@ private:
     void startAuthentication();
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::unique_ptr<base::WaitableTimer> timeout_timer_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
@@ -98,6 +105,9 @@ private:
 
     enum class State { CREATED, STARTED, STOPPPED };
     State state_ = State::CREATED;
+
+    bool auto_reconnect_ = true;
+    bool reconnect_in_progress_ = false;
 };
 
 } // namespace client

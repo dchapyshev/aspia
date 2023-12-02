@@ -42,15 +42,17 @@ RouterController::~RouterController()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
+void RouterController::connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate)
 {
     host_id_ = host_id;
+    wait_for_host_ = wait_for_host;
     delegate_ = delegate;
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
     DCHECK(delegate_);
 
-    LOG(LS_INFO) << "Connecting to router...";
+    LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << " wait_for_host="
+                 << wait_for_host_ << ")";
 
     channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
@@ -77,6 +79,11 @@ void RouterController::onTcpConnected()
     {
         if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
+            if (delegate_)
+                delegate_->onRouterConnected(router_config_.address, router_config_.port);
+            else
+                LOG(LS_ERROR) << "Invalid delegate";
+
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
@@ -93,10 +100,7 @@ void RouterController::onTcpConnected()
             // Now the session will receive incoming messages.
             channel_->resume();
 
-            // Send connection request.
-            proto::PeerToRouter message;
-            message.mutable_connection_request()->set_host_id(host_id_);
-            channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+            sendConnectionRequest();
         }
         else
         {
@@ -110,6 +114,10 @@ void RouterController::onTcpConnected()
                 error.code.authentication = error_code;
 
                 delegate_->onErrorOccurred(error);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Invalid delegate";
             }
         }
 
@@ -188,7 +196,15 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
                         break;
                 }
 
-                delegate_->onErrorOccurred(error);
+                if (error.code.router == ErrorCode::PEER_NOT_FOUND && wait_for_host_)
+                {
+                    LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
+                    waitForHost();
+                }
+                else
+                {
+                    delegate_->onErrorOccurred(error);
+                }
             }
             else
             {
@@ -199,6 +215,20 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
         {
             relay_peer_ = std::make_unique<base::RelayPeer>();
             relay_peer_->start(connection_offer, this);
+        }
+    }
+    else if (message.has_host_status())
+    {
+        const proto::HostStatus& host_status = message.host_status();
+        if (host_status.status() == proto::HostStatus::STATUS_ONLINE)
+        {
+            LOG(LS_INFO) << "Host is ONLINE now. Sending connection request";
+            sendConnectionRequest();
+        }
+        else
+        {
+            LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
+            waitForHost();
         }
     }
     else
@@ -217,13 +247,9 @@ void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* p
 void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel)
 {
     if (delegate_)
-    {
         delegate_->onHostConnected(std::move(channel));
-    }
     else
-    {
         LOG(LS_ERROR) << "Invalid delegate";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,6 +266,37 @@ void RouterController::onRelayConnectionError()
     error.code.router = ErrorCode::RELAY_ERROR;
 
     delegate_->onErrorOccurred(error);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::sendConnectionRequest()
+{
+    LOG(LS_INFO) << "Sending connection request (host_id=" << host_id_ << ")";
+
+    proto::PeerToRouter message;
+    message.mutable_connection_request()->set_host_id(host_id_);
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::waitForHost()
+{
+    status_request_timer_ = std::make_unique<base::WaitableTimer>(
+        base::WaitableTimer::Type::SINGLE_SHOT, task_runner_);
+
+    if (delegate_)
+        delegate_->onHostAwaiting();
+    else
+        LOG(LS_ERROR) << "Invalid delegate";
+
+    status_request_timer_->start(std::chrono::milliseconds(5000), [this]()
+    {
+        LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
+
+        proto::PeerToRouter message;
+        message.mutable_check_host_status()->set_host_id(host_id_);
+        channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    });
 }
 
 } // namespace client

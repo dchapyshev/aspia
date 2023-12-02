@@ -42,7 +42,10 @@ StatusDialog::StatusDialog(QWidget* parent)
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         if (ui->buttonbox->standardButton(button) == QDialogButtonBox::Close)
+        {
+            LOG(LS_INFO) << "[ACTION] Close button clicked";
             close();
+        }
     });
 }
 
@@ -64,6 +67,7 @@ void StatusDialog::addMessageAndActivate(const QString& message)
 {
     if (isHidden())
     {
+        LOG(LS_INFO) << "Window is hidden. Show and activate";
         show();
         activateWindow();
     }
@@ -75,6 +79,13 @@ void StatusDialog::addMessageAndActivate(const QString& message)
 void StatusDialog::retranslateUi()
 {
     ui->retranslateUi(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusDialog::closeEvent(QCloseEvent* event)
+{
+    LOG(LS_INFO) << "Close event detected";
+    QDialog::closeEvent(event);
 }
 
 } // namespace common

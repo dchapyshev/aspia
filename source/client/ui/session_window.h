@@ -57,15 +57,21 @@ public:
 
 protected:
     virtual std::unique_ptr<Client> createClient() = 0;
+    virtual void onInternalReset() = 0;
 
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
 
     // StatusWindow implementation.
-    void onStarted(const std::u16string& address_or_id) override;
+    void onStarted() override;
     void onStopped() override;
-    void onConnected() override;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
+    void onRouterConnecting(const std::u16string& address, uint16_t port) override;
+    void onRouterConnected(const std::u16string& address, uint16_t port) override;
+    void onHostConnecting(const std::u16string& address_or_id, uint16_t port) override;
+    void onHostConnected(const std::u16string& address_or_id, uint16_t port) override;
+    void onHostDisconnected(base::TcpChannel::ErrorCode error_code) override;
+    void onWaitForHost() override;
+    void onWaitForHostTimeout() override;
     void onVersionMismatch(const base::Version& host, const base::Version& client) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onRouterError(const RouterController::Error& error) override;

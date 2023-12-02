@@ -71,6 +71,8 @@ public:
     public:
         virtual ~Delegate() = default;
 
+        virtual void onRouterConnected(const std::u16string& address, uint16_t port) = 0;
+        virtual void onHostAwaiting() = 0;
         virtual void onHostConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
         virtual void onErrorOccurred(const Error& error) = 0;
     };
@@ -79,7 +81,7 @@ public:
                      std::shared_ptr<base::TaskRunner> task_runner);
     ~RouterController() override;
 
-    void connectTo(base::HostId host_id, Delegate* delegate);
+    void connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate);
 
 protected:
     // base::TcpChannel::Listener implementation.
@@ -93,13 +95,18 @@ protected:
     void onRelayConnectionError() override;
 
 private:
+    void sendConnectionRequest();
+    void waitForHost();
+
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::WaitableTimer> status_request_timer_;
     std::unique_ptr<base::RelayPeer> relay_peer_;
     RouterConfig router_config_;
 
     base::HostId host_id_ = base::kInvalidHostId;
+    bool wait_for_host_ = false;
     Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);

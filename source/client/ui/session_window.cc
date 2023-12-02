@@ -35,6 +35,13 @@ SessionWindow::SessionWindow(QWidget* parent)
           std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    // Create a dialog to display the connection status.
+    status_dialog_ = new common::StatusDialog(this);
+    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    // After closing the status dialog, close the session window.
+    connect(status_dialog_, &common::StatusDialog::finished, this, &SessionWindow::close);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,18 +131,10 @@ void SessionWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onStarted(const std::u16string& address_or_id)
+void SessionWindow::onStarted()
 {
-    LOG(LS_INFO) << "Attempt to establish a connection";
-
-    // Create a dialog to display the connection status.
-    status_dialog_ = new common::StatusDialog(this);
-
-    // After closing the status dialog, close the session window.
-    connect(status_dialog_, &common::StatusDialog::finished, this, &SessionWindow::close);
-
-    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
-    status_dialog_->addMessageAndActivate(tr("Attempt to connect to %1.").arg(address_or_id));
+    LOG(LS_INFO) << "Session started";
+    status_dialog_->addMessageAndActivate(tr("Session started."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,19 +145,85 @@ void SessionWindow::onStopped()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onConnected()
+void SessionWindow::onRouterConnecting(const std::u16string& address, uint16_t port)
 {
-    LOG(LS_INFO) << "Connection established";
+    LOG(LS_INFO) << "Connecting to router";
 
-    status_dialog_->addMessageAndActivate(tr("Connection established."));
+    status_dialog_->addMessageAndActivate(tr("Connecting to router %1:%2...")
+                                              .arg(QString::fromStdU16String(address)).arg(port));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onRouterConnected(const std::u16string& address, uint16_t port)
+{
+    LOG(LS_INFO) << "Connection to router established";
+
+    status_dialog_->addMessageAndActivate(tr("Connection to router %1:%2 established.")
+                                              .arg(QString::fromStdU16String(address)).arg(port));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onHostConnecting(const std::u16string& address_or_id, uint16_t port)
+{
+    LOG(LS_INFO) << "Connecting to host";
+
+    QString message;
+
+    if (base::isHostId(address_or_id))
+    {
+        message = tr("Connecting to host %1...")
+                      .arg(QString::fromStdU16String(address_or_id));
+    }
+    else
+    {
+        message = tr("Connecting to host %1:%2...")
+                      .arg(QString::fromStdU16String(address_or_id)).arg(port);
+    }
+
+    status_dialog_->addMessageAndActivate(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onHostConnected(const std::u16string& address_or_id, uint16_t port)
+{
+    LOG(LS_INFO) << "Connection to host established";
+
+    QString message;
+
+    if (base::isHostId(address_or_id))
+    {
+        message = tr("Connection to host %1 established.")
+                      .arg(QString::fromStdU16String(address_or_id));
+    }
+    else
+    {
+        message = tr("Connection to host %1:%2 established.")
+                      .arg(QString::fromStdU16String(address_or_id)).arg(port);
+    }
+
+    status_dialog_->addMessageAndActivate(message);
     status_dialog_->hide();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void SessionWindow::onHostDisconnected(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error";
+    LOG(LS_INFO) << "Host disconnected";
     onErrorOccurred(netErrorToString(error_code));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onWaitForHost()
+{
+    LOG(LS_INFO) << "Wait for host";
+    onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionWindow::onWaitForHostTimeout()
+{
+    LOG(LS_INFO) << "Wait for host timeout";
+    onErrorOccurred(tr("Timeout waiting for reconnection."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,7 +235,7 @@ void SessionWindow::onVersionMismatch(const base::Version& host, const base::Ver
     onErrorOccurred(
         tr("The Host version is newer than the Client version (%1 > %2). "
            "Please update the application.")
-           .arg(host_version).arg(client_version));
+           .arg(host_version, client_version));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -254,20 +319,14 @@ void SessionWindow::setClientTitle(const Config& config)
             computer_name = QString("%1:%2").arg(config.address_or_id).arg(config.port);
     }
 
-    setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
+    setWindowTitle(QString("%1 - %2").arg(computer_name, session_name));
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::onErrorOccurred(const QString& message)
 {
     hide();
-
-    for (const auto& object : children())
-    {
-        QWidget* widget = dynamic_cast<QWidget*>(object);
-        if (widget)
-            widget->hide();
-    }
+    onInternalReset();
 
     status_dialog_->addMessageAndActivate(message);
 }

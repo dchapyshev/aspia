@@ -198,6 +198,12 @@ void QtFileManagerWindow::refresh()
 }
 
 //--------------------------------------------------------------------------------------------------
+void QtFileManagerWindow::onInternalReset()
+{
+    // TODO
+}
+
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::closeEvent(QCloseEvent* event)
 {
     if (transfer_dialog_)

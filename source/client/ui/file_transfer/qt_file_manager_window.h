@@ -69,6 +69,9 @@ public slots:
     void refresh();
 
 protected:
+    // SessionWindow implementation.
+    void onInternalReset() override;
+
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
 
