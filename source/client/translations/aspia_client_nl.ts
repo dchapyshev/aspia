@@ -3901,152 +3901,162 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="219"/>
-        <source>Host is unavailable yet. Waiting to reconnect...</source>
+        <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="226"/>
-        <source>Timeout waiting for reconnection.</source>
+        <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="236"/>
+        <location filename="../ui/session_window.cc" line="233"/>
+        <source>Host is unavailable yet. Waiting to reconnect...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="240"/>
+        <source>Timeout waiting for reconnection to host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="257"/>
+        <location filename="../ui/session_window.cc" line="271"/>
         <source>Network error when connecting to the router: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="264"/>
+        <location filename="../ui/session_window.cc" line="278"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="289"/>
+        <location filename="../ui/session_window.cc" line="303"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="293"/>
+        <location filename="../ui/session_window.cc" line="307"/>
         <source>Desktop View</source>
         <translation type="unfinished">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="297"/>
+        <location filename="../ui/session_window.cc" line="311"/>
         <source>File Transfer</source>
         <translation type="unfinished">Bestands overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="301"/>
+        <location filename="../ui/session_window.cc" line="315"/>
         <source>System Information</source>
         <translation type="unfinished">Systeem Informatie</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="305"/>
+        <location filename="../ui/session_window.cc" line="319"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="343"/>
+        <location filename="../ui/session_window.cc" line="357"/>
         <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="347"/>
+        <location filename="../ui/session_window.cc" line="361"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="351"/>
+        <location filename="../ui/session_window.cc" line="365"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Er is een probleem opgetreden in het netwerk (bijv, de netwerk kabel is per ongelijk verwijderd).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="355"/>
+        <location filename="../ui/session_window.cc" line="369"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">Verbinding is geweigerd door de peer (of er was een timeout).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="359"/>
+        <location filename="../ui/session_window.cc" line="373"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">De remote host heeft de verbinding gesloten.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="363"/>
+        <location filename="../ui/session_window.cc" line="377"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Host adres is niet gevonden.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="367"/>
+        <location filename="../ui/session_window.cc" line="381"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Socket operatie gaf een timeout.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="371"/>
+        <location filename="../ui/session_window.cc" line="385"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Het opgegeven adres is al in gebruik, en is ingesteld als exclusief.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="375"/>
+        <location filename="../ui/session_window.cc" line="389"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Het opgegeven adres behoort niet toe aan de host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="385"/>
-        <location filename="../ui/session_window.cc" line="422"/>
+        <location filename="../ui/session_window.cc" line="399"/>
+        <location filename="../ui/session_window.cc" line="436"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Een onbekende error is opgetreden.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="416"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="420"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="410"/>
+        <location filename="../ui/session_window.cc" line="424"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Schending van het data uitwisselings protocol.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="414"/>
+        <location filename="../ui/session_window.cc" line="428"/>
         <source>Wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="418"/>
+        <location filename="../ui/session_window.cc" line="432"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Het gespecificeerde sessie type is niet toegestaan voor de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="438"/>
+        <location filename="../ui/session_window.cc" line="452"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="442"/>
+        <location filename="../ui/session_window.cc" line="456"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="446"/>
+        <location filename="../ui/session_window.cc" line="460"/>
         <source>Failed to connect to the relay server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="450"/>
+        <location filename="../ui/session_window.cc" line="464"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="468"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
