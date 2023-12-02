@@ -351,7 +351,7 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
 
     if (base::contains(extensions_list, common::kRemoteUpdateExtension))
     {
-        if (base::Version::kVersion_CurrentFull > peer_version_)
+        if (base::Version::kCurrentFullVersion > peer_version_)
             toolbar_->enableRemoteUpdate(true);
     }
 

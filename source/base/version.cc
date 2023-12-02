@@ -144,10 +144,11 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
 
 //--------------------------------------------------------------------------------------------------
 // static
-const Version& Version::kVersion_CurrentFull =
+const Version& Version::kCurrentFullVersion =
     Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
-const Version& Version::kVersion_CurrentShort =
+const Version& Version::kCurrentShortVersion =
     Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+const Version& Version::kMinimumSupportedVersion = Version(2, 2, 1);
 const Version& Version::kVersion_2_4_0 = Version(2, 4, 0);
 const Version& Version::kVersion_2_6_0 = Version(2, 6, 0);
 

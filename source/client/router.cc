@@ -252,7 +252,7 @@ void Router::onTcpConnected()
                 channel_->setChannelIdSupport(true);
             }
 
-            const base::Version& client_version = base::Version::kVersion_CurrentFull;
+            const base::Version& client_version = base::Version::kCurrentFullVersion;
             if (router_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()

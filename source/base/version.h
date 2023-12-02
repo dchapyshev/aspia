@@ -32,8 +32,9 @@ namespace base {
 class Version
 {
 public:
-    static const Version& kVersion_CurrentFull; // Version of application (with build number).
-    static const Version& kVersion_CurrentShort; // Version of application (without build number).
+    static const Version& kCurrentFullVersion; // Version of application (with build number).
+    static const Version& kCurrentShortVersion; // Version of application (without build number).
+    static const Version& kMinimumSupportedVersion;
     static const Version& kVersion_2_4_0;
     static const Version& kVersion_2_6_0;
 

@@ -127,7 +127,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
     }
     else
     {
-        const base::Version& current_version = base::Version::kVersion_CurrentShort;
+        const base::Version& current_version = base::Version::kCurrentShortVersion;
 
         update_info_ = UpdateInfo::fromXml(result);
         if (!update_info_.isValid())
@@ -265,7 +265,7 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
 
-    const base::Version& current_version = base::Version::kVersion_CurrentShort;
+    const base::Version& current_version = base::Version::kCurrentShortVersion;
 
     ui->label_current->setText(QString::fromStdU16String(current_version.toString(3)));
 }
