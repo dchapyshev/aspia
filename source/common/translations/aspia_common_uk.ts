@@ -296,27 +296,27 @@
         <translation>%1 версія: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="256"/>
+        <location filename="../ui/about_dialog.cc" line="263"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="262"/>
+        <location filename="../ui/about_dialog.cc" line="271"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="264"/>
+        <location filename="../ui/about_dialog.cc" line="273"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">TXT файли (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="273"/>
+        <location filename="../ui/about_dialog.cc" line="288"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="274"/>
+        <location filename="../ui/about_dialog.cc" line="289"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
@@ -430,68 +430,68 @@
         <translation>Отримання інформації...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="110"/>
+        <location filename="../ui/update_dialog.cc" line="111"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="125"/>
+        <location filename="../ui/update_dialog.cc" line="126"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="126"/>
+        <location filename="../ui/update_dialog.cc" line="127"/>
         <source>Error retrieving update information.</source>
         <translation>Виникла помилка під час отримання інформації про оновлення.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="138"/>
-        <location filename="../ui/update_dialog.cc" line="161"/>
+        <location filename="../ui/update_dialog.cc" line="139"/>
+        <location filename="../ui/update_dialog.cc" line="162"/>
         <source>No updates available.</source>
         <translation>Немає доступних оновлень.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="179"/>
+        <location filename="../ui/update_dialog.cc" line="180"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Оновлення буде завантажено. Після завершення завантаження програму буде закрито автоматично.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="182"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Всі підключені сесії буде завершено. Ви не зможете встановити з&apos;єднання до завершення оновлення.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="183"/>
+        <location filename="../ui/update_dialog.cc" line="184"/>
         <source>All unsaved data will be lost.</source>
         <translation>Всі не збережені дані буде втрачено.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="184"/>
+        <location filename="../ui/update_dialog.cc" line="185"/>
         <source>Continue?</source>
         <translation>Продовжити?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="187"/>
+        <location filename="../ui/update_dialog.cc" line="188"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="192"/>
+        <location filename="../ui/update_dialog.cc" line="193"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="193"/>
+        <location filename="../ui/update_dialog.cc" line="194"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="204"/>
+        <location filename="../ui/update_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="205"/>
+        <location filename="../ui/update_dialog.cc" line="206"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Виникла помилка під час встановлення оновлення: %1</translation>
     </message>
