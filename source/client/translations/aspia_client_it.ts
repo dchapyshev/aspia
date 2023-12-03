@@ -3754,193 +3754,193 @@
         <translation type="vanished">Connessione stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="133"/>
+        <location filename="../ui/session_window.cc" line="134"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="152"/>
+        <location filename="../ui/session_window.cc" line="153"/>
         <source>Connecting to router %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="157"/>
+        <location filename="../ui/session_window.cc" line="158"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="170"/>
+        <location filename="../ui/session_window.cc" line="171"/>
         <source>Connection to router %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="175"/>
+        <location filename="../ui/session_window.cc" line="176"/>
         <source>Connection to router established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="188"/>
+        <location filename="../ui/session_window.cc" line="189"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="193"/>
+        <location filename="../ui/session_window.cc" line="194"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="210"/>
+        <location filename="../ui/session_window.cc" line="211"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="215"/>
+        <location filename="../ui/session_window.cc" line="216"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="235"/>
+        <location filename="../ui/session_window.cc" line="236"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="242"/>
+        <location filename="../ui/session_window.cc" line="243"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="249"/>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="256"/>
+        <location filename="../ui/session_window.cc" line="257"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="267"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="287"/>
+        <location filename="../ui/session_window.cc" line="288"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Errore di connessione durante la connessione al router: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="294"/>
+        <location filename="../ui/session_window.cc" line="295"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Errore di autenticazione durante la connessione al router: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="319"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Desktop Manage</source>
         <translation>Gestione Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="323"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Desktop View</source>
         <translation>Visualizzazione Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="327"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>File Transfer</source>
         <translation>Trasferimento File</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="331"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>System Information</source>
         <translation>Informazioni Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="335"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>Text Chat</source>
         <translation>Chat Testuale</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="373"/>
+        <location filename="../ui/session_window.cc" line="374"/>
         <source>Violation of the communication protocol.</source>
         <translation>Violazione del protocollo di comunicazione.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="377"/>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Errore Crittografia (decifratura o cifratura messaggio fallita).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="381"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Si è verificato un errore di rete (es., il cavo di rete è stato accidentalmente scollegato).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="385"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Connessione rifiutata (o fuori tempo massimo).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="389"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Remote host closed the connection.</source>
         <translation>L&apos;host remoto ha chiuso la connessione.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="393"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Host address was not found.</source>
         <translation>L&apos;indirizzo dell&apos;host non e stato trovato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="397"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Socket operation timed out.</source>
         <translation>Operazione sul socket fuori tempo massimo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="401"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>L&apos;indirizzo specificato è già in uso ed è stato impostato per essere esclusivo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="405"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified does not belong to the host.</source>
         <translation>L&apos;indirizzo specificato non appartiene all&apos;host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="415"/>
-        <location filename="../ui/session_window.cc" line="457"/>
+        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>An unknown error occurred.</source>
         <translation>Si è verificato un errore sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="432"/>
+        <location filename="../ui/session_window.cc" line="433"/>
         <source>Authentication successfully completed.</source>
         <translation>Autenticazione completata con successo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="436"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Network authentication error.</source>
         <translation>Errore di autenticazione di rete.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="440"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Violazione del protocollo di scambio dei dati.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="444"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="449"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Wrong user name or password.</source>
         <translation>Nome utente o password errati.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="453"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>La tipologia di sessione specificata non è ammessa per l&apos;utente.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="473"/>
+        <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3949,24 +3949,31 @@
         <translation type="vanished">Non è stato trovato un host con l&apos;ID specificato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="477"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Non ci sono relay disponibili o il pool di chiavi è vuoto.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="481"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Connession a relay server fallita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="485"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Access is denied.</source>
         <translation>L&apos;accesso è stato rifiutato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="489"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Unknown error.</source>
         <translation>Errore sconosciuto.</translation>
+    </message>
+</context>
+<context>
+    <name>client::StatisticsDialog</name>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">No</translation>
     </message>
 </context>
 <context>
@@ -4855,23 +4862,43 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <source>Host Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <source>Client Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
+        <source>Router Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
+        <source>Aspia Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="139"/>
         <source>Domain</source>
         <translation>Dominio</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="142"/>
         <source>Workgroup</source>
         <translation>Workgroup</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="145"/>
         <source>Uptime</source>
         <translation>Periodo di Attività</translation>
     </message>
@@ -4881,131 +4908,132 @@
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="161"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="233"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Version</source>
         <translation>Versione</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="173"/>
         <source>Architecture</source>
         <translation>Architettura</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="176"/>
         <source>License Key</source>
         <translation>Chiave Licenza</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="179"/>
         <source>Install Date</source>
         <translation>Data Installazione</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="184"/>
         <source>Operating System</source>
         <translation>Sistema Operativo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
         <source>Manufacturer</source>
         <translation>Produttore</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="188"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="197"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Model</source>
         <translation>Modello</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="202"/>
         <source>Motherboard</source>
         <translation>Scheda Madre</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="206"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="239"/>
         <source>Vendor</source>
         <translation>Produttore</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="218"/>
         <source>Packages</source>
         <translation>Pacchetti</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="221"/>
         <source>Cores</source>
         <translation>Cores</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="224"/>
         <source>Threads</source>
         <translation>Processi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Processor</source>
         <translation>Processore</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="236"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="245"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="260"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
         <source>Size</source>
         <translation>Dimensione</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Speed</source>
         <translation>Velocità</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="275"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
         <translation>Fattore di Forma</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="281"/>
         <source>Part Number</source>
         <translation>Nmero di Serie</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
         <source>Installed</source>
         <translation>Installato</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="356"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Memory</source>
         <translation>Memoria</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="315"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="324"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 libera)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="325"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="334"/>
         <source>Logical Drives</source>
         <translation>Dischi Logici</translation>
     </message>

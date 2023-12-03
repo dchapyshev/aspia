@@ -4131,62 +4131,62 @@
         <translation type="vanished">Версия Хоста новее, чем версия Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="133"/>
+        <location filename="../ui/session_window.cc" line="134"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="152"/>
+        <location filename="../ui/session_window.cc" line="153"/>
         <source>Connecting to router %1:%2...</source>
         <translation>Подключение к маршрутизатору %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="157"/>
+        <location filename="../ui/session_window.cc" line="158"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="170"/>
+        <location filename="../ui/session_window.cc" line="171"/>
         <source>Connection to router %1:%2 established.</source>
         <translation>Подключение к маршрутизатору %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="175"/>
+        <location filename="../ui/session_window.cc" line="176"/>
         <source>Connection to router established.</source>
         <translation>Подключение к маршрутизатору установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="188"/>
+        <location filename="../ui/session_window.cc" line="189"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="193"/>
+        <location filename="../ui/session_window.cc" line="194"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Подключение к хосту %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="210"/>
+        <location filename="../ui/session_window.cc" line="211"/>
         <source>Connection to host %1 established.</source>
         <translation>Подключение к хосту %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="215"/>
+        <location filename="../ui/session_window.cc" line="216"/>
         <source>Connection to host %1:%2 established.</source>
         <translation>Подключение к хосту %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="235"/>
+        <location filename="../ui/session_window.cc" line="236"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation>Маршрутизатор недоступен. Ожидание переподключения...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="242"/>
+        <location filename="../ui/session_window.cc" line="243"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к маршрутизатору.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="249"/>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступен. Ожидание переподключения...</translation>
     </message>
@@ -4199,133 +4199,133 @@
         <translation type="vanished">Превышено время ожидания при попытке повторного подключения.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="256"/>
+        <location filename="../ui/session_window.cc" line="257"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="267"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Хоста новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="287"/>
+        <location filename="../ui/session_window.cc" line="288"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Сетевая ошибка при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="294"/>
+        <location filename="../ui/session_window.cc" line="295"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Ошибка аутентификации при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="319"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="323"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="327"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="331"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="335"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="373"/>
+        <location filename="../ui/session_window.cc" line="374"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="377"/>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="381"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="385"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="389"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="393"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="397"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="401"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="405"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="415"/>
-        <location filename="../ui/session_window.cc" line="457"/>
+        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="432"/>
+        <location filename="../ui/session_window.cc" line="433"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="436"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="440"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="444"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation>Версия приложения, к которому вы подключаетесь, меньше чем минимально поддерживаемая версия.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="449"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="453"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="473"/>
+        <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
@@ -4334,24 +4334,31 @@
         <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="477"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="481"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="485"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="489"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
+    </message>
+</context>
+<context>
+    <name>client::StatisticsDialog</name>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">Нет</translation>
     </message>
 </context>
 <context>
@@ -5602,23 +5609,43 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <source>Host Version</source>
+        <translation>Версия Хоста</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <source>Client Version</source>
+        <translation>Версия Клиента</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
+        <source>Router Version</source>
+        <translation>Версия Маршрутизатора</translation>
+    </message>
+    <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
+        <source>Aspia Information</source>
+        <translation>Информация о Aspia</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="139"/>
         <source>Domain</source>
         <translation>Домен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="142"/>
         <source>Workgroup</source>
         <translation>Рабочая группа</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="145"/>
         <source>Uptime</source>
         <translation>Время работы</translation>
     </message>
@@ -5628,131 +5655,132 @@
         <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="161"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="233"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="173"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="176"/>
         <source>License Key</source>
         <translation>Лицензионный ключ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="179"/>
         <source>Install Date</source>
         <translation>Дата установки</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="184"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
         <source>Manufacturer</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="188"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="197"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="202"/>
         <source>Motherboard</source>
         <translation>Материнская плата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="206"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="239"/>
         <source>Vendor</source>
         <translation>Поставщик</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="218"/>
         <source>Packages</source>
         <translation>Сокетов</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="221"/>
         <source>Cores</source>
         <translation>Ядер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="224"/>
         <source>Threads</source>
         <translation>Потоков</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Processor</source>
         <translation>Процессор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="236"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="245"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="260"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Speed</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="275"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
         <translation>Форм-фактор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="281"/>
         <source>Part Number</source>
         <translation>Номер партии</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
         <source>Installed</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="356"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="315"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="324"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 свободно)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="325"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="334"/>
         <source>Logical Drives</source>
         <translation>Логические диски</translation>
     </message>

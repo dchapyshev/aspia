@@ -3855,188 +3855,188 @@
         <translation type="vanished">連線已建立。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="133"/>
+        <location filename="../ui/session_window.cc" line="134"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="152"/>
+        <location filename="../ui/session_window.cc" line="153"/>
         <source>Connecting to router %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="157"/>
+        <location filename="../ui/session_window.cc" line="158"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="170"/>
+        <location filename="../ui/session_window.cc" line="171"/>
         <source>Connection to router %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="175"/>
+        <location filename="../ui/session_window.cc" line="176"/>
         <source>Connection to router established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="188"/>
+        <location filename="../ui/session_window.cc" line="189"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="193"/>
+        <location filename="../ui/session_window.cc" line="194"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="210"/>
+        <location filename="../ui/session_window.cc" line="211"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="215"/>
+        <location filename="../ui/session_window.cc" line="216"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="235"/>
+        <location filename="../ui/session_window.cc" line="236"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="242"/>
+        <location filename="../ui/session_window.cc" line="243"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="249"/>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="256"/>
+        <location filename="../ui/session_window.cc" line="257"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="267"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="287"/>
+        <location filename="../ui/session_window.cc" line="288"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>連線到路由器時的身份驗證錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="294"/>
+        <location filename="../ui/session_window.cc" line="295"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>連線到路由器時的身份驗證錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="319"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Desktop Manage</source>
         <translation>桌面管理</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="323"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Desktop View</source>
         <translation>桌面檢視</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="327"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>File Transfer</source>
         <translation>檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="331"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>System Information</source>
         <translation>系統訊息</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="373"/>
+        <location filename="../ui/session_window.cc" line="374"/>
         <source>Violation of the communication protocol.</source>
         <translation>違反通訊協定。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="377"/>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密錯誤（訊息加密或解密失敗）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="381"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>網路出現錯誤（例如網路電纜被意外拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="385"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>連接被對方拒絕（或逾時）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="389"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Remote host closed the connection.</source>
         <translation>遠端主機關閉了連線。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="393"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Host address was not found.</source>
         <translation>未找到主機位址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="397"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Socket operation timed out.</source>
         <translation>Socket 操作逾時。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="401"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的位址已被使用並設定為獨占。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="405"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定位址的主機無法使用。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="415"/>
-        <location filename="../ui/session_window.cc" line="457"/>
+        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>An unknown error occurred.</source>
         <translation>出現未知錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="432"/>
+        <location filename="../ui/session_window.cc" line="433"/>
         <source>Authentication successfully completed.</source>
         <translation>身分驗證成功完成。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="436"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Network authentication error.</source>
         <translation>網路認證錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="440"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>違反資料交換協定。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="444"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="449"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Wrong user name or password.</source>
         <translation>錯誤的使用者名稱或密碼。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="453"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>使用者不允許使用指定的工作階段類型。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="473"/>
+        <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4045,29 +4045,36 @@
         <translation type="vanished">未找到具有指定 ID 的主機。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="477"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>沒有可用的中繼或密鑰池為空。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="481"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>Failed to connect to the relay server.</source>
         <translation>無法連線到中繼伺服器。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="485"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Access is denied.</source>
         <translation>存取被拒。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="489"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Unknown error.</source>
         <translation>未知錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="335"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>Text Chat</source>
         <translation type="unfinished">文字聊天</translation>
+    </message>
+</context>
+<context>
+    <name>client::StatisticsDialog</name>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">否</translation>
     </message>
 </context>
 <context>
@@ -4957,23 +4964,43 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <source>Host Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <source>Client Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
+        <source>Router Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
+        <source>Aspia Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="139"/>
         <source>Domain</source>
         <translation>網域</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="142"/>
         <source>Workgroup</source>
         <translation>工作群組</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="145"/>
         <source>Uptime</source>
         <translation>正常運作時間</translation>
     </message>
@@ -4983,131 +5010,132 @@
         <translation>電腦</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="161"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="233"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="173"/>
         <source>Architecture</source>
         <translation>架構</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="176"/>
         <source>License Key</source>
         <translation>產品金鑰</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="179"/>
         <source>Install Date</source>
         <translation>安裝日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="184"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="257"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
         <source>Manufacturer</source>
         <translation>製造商</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="188"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="197"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Model</source>
         <translation>型號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="202"/>
         <source>Motherboard</source>
         <translation>主機板</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="206"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="239"/>
         <source>Vendor</source>
         <translation>供應商</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="218"/>
         <source>Packages</source>
         <translation>個數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="221"/>
         <source>Cores</source>
         <translation>核心數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="224"/>
         <source>Threads</source>
         <translation>執行緒數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Processor</source>
         <translation>處理器</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="236"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="245"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="260"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="275"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
         <translation>尺寸</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="281"/>
         <source>Part Number</source>
         <translation>型號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="356"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Memory</source>
         <translation>記憶體</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="315"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="324"/>
         <source>%1 (%2 free)</source>
         <translation>%1（%2 可用）</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="325"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="334"/>
         <source>Logical Drives</source>
         <translation>邏輯磁碟機</translation>
     </message>
