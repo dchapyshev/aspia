@@ -2913,9 +2913,9 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="615"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
@@ -2927,18 +2927,18 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="619"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="640"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="629"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="620"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="630"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -2948,22 +2948,28 @@
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="616"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <source>Wait for host</source>
+        <translation>Ожидание хоста</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="637"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="658"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="762"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="782"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -3335,34 +3341,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="326"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="333"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="327"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="342"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1056"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1071"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1058"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1073"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

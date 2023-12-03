@@ -2406,9 +2406,9 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="615"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2420,18 +2420,18 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="619"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="640"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="629"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="620"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="630"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
@@ -2441,22 +2441,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="616"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <source>Wait for host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="637"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="658"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="762"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="782"/>
         <source>Scale</source>
         <translation type="unfinished">Échelle</translation>
     </message>
@@ -2786,34 +2792,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="326"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="333"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="327"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="342"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1056"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1071"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1058"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1073"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
