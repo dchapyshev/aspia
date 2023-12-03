@@ -2700,18 +2700,18 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="161"/>
-        <location filename="../ui/authorization_dialog.cc" line="171"/>
+        <location filename="../ui/authorization_dialog.cc" line="170"/>
+        <location filename="../ui/authorization_dialog.cc" line="181"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="162"/>
+        <location filename="../ui/authorization_dialog.cc" line="171"/>
         <source>Username cannot be empty.</source>
         <translation>Имя пользователя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="172"/>
+        <location filename="../ui/authorization_dialog.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
@@ -2969,7 +2969,7 @@
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="782"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -3153,22 +3153,22 @@
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="161"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="164"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -3226,27 +3226,27 @@
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
         <source>TB/s</source>
         <translation>ТБ/с</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>GB/s</source>
         <translation>ГБ/с</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>MB/s</source>
         <translation>МБ/с</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
         <source>kB/s</source>
         <translation>кБ/с</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="374"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
         <source>B/s</source>
         <translation>Б/с</translation>
     </message>
@@ -3271,27 +3271,27 @@
         <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="307"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="306"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="328"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="335"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="330"/>
         <source>Unknown error type while copying files</source>
         <translation>Неизвестный тип ошибки при копировании файлов</translation>
     </message>
@@ -3343,7 +3343,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -3358,17 +3358,17 @@
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1071"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1073"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

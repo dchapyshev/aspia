@@ -2473,18 +2473,18 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="161"/>
-        <location filename="../ui/authorization_dialog.cc" line="171"/>
+        <location filename="../ui/authorization_dialog.cc" line="170"/>
+        <location filename="../ui/authorization_dialog.cc" line="181"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="162"/>
+        <location filename="../ui/authorization_dialog.cc" line="171"/>
         <source>Username cannot be empty.</source>
         <translation>使用者名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="172"/>
+        <location filename="../ui/authorization_dialog.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
@@ -2735,7 +2735,7 @@
         <translation type="unfinished">您是否確定要鎖定遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="782"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
         <source>Scale</source>
         <translation type="unfinished">縮放</translation>
     </message>
@@ -2914,22 +2914,22 @@
         <translation>無法刪除 &quot;%1&quot;：%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="161"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="164"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
@@ -2987,27 +2987,27 @@
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="374"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3032,27 +3032,27 @@
         <translation>無法建立資料夾 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="307"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="306"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>無法建立檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>無法開啟檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>無法寫入檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="328"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>無法讀取檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="335"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="330"/>
         <source>Unknown error type while copying files</source>
         <translation>複製檔案時出現未知錯誤類型</translation>
     </message>
@@ -3090,7 +3090,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -3105,17 +3105,17 @@
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1071"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1073"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>

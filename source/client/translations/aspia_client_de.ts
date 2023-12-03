@@ -2334,18 +2334,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="161"/>
-        <location filename="../ui/authorization_dialog.cc" line="171"/>
+        <location filename="../ui/authorization_dialog.cc" line="170"/>
+        <location filename="../ui/authorization_dialog.cc" line="181"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="162"/>
+        <location filename="../ui/authorization_dialog.cc" line="171"/>
         <source>Username cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="172"/>
+        <location filename="../ui/authorization_dialog.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2547,7 +2547,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="782"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2731,22 +2731,22 @@
         <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="161"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip</source>
         <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="164"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Skip All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
@@ -2804,27 +2804,27 @@
         <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="374"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2849,27 +2849,27 @@
         <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="307"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="306"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="328"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="335"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="330"/>
         <source>Unknown error type while copying files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2902,7 +2902,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -2917,17 +2917,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1071"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1073"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1104"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
