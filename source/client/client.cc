@@ -53,7 +53,7 @@ Client::~Client()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::start(const Config& config)
+void Client::start()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(status_window_proxy_);
@@ -64,39 +64,45 @@ void Client::start(const Config& config)
         return;
     }
 
-    config_ = config;
+    if (!session_state_)
+    {
+        LOG(LS_ERROR) << "Session state not installed";
+        return;
+    }
+
     state_ = State::STARTED;
     is_connected_to_router_ = false;
 
-    if (base::isHostId(config_.address_or_id))
+    Config config = session_state_->config();
+
+    if (base::isHostId(config.address_or_id))
     {
         LOG(LS_INFO) << "Starting RELAY connection";
 
-        if (!config_.router_config.has_value())
+        if (!config.router_config.has_value())
         {
             LOG(LS_FATAL) << "No router config. Continuation is impossible";
             return;
         }
 
         router_controller_ =
-            std::make_unique<RouterController>(*config_.router_config, io_task_runner_);
+            std::make_unique<RouterController>(*config.router_config, io_task_runner_);
 
-        if (!reconnect_in_progress_)
+        bool reconnecting = session_state_->isReconnecting();
+        if (!reconnecting)
         {
             // Show the status window.
             status_window_proxy_->onStarted();
         }
 
-        status_window_proxy_->onRouterConnecting(
-            config_.router_config->address, config_.router_config->port);
-        router_controller_->connectTo(
-            base::stringToHostId(config_.address_or_id), reconnect_in_progress_, this);
+        status_window_proxy_->onRouterConnecting();
+        router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting, this);
     }
     else
     {
         LOG(LS_INFO) << "Starting DIRECT connection";
 
-        if (!reconnect_in_progress_)
+        if (!session_state_->isReconnecting())
         {
             // Show the status window.
             status_window_proxy_->onStarted();
@@ -109,8 +115,8 @@ void Client::start(const Config& config)
         channel_->setListener(this);
 
         // Now connect to the host.
-        status_window_proxy_->onHostConnecting(config_.address_or_id, config_.port);
-        channel_->connect(config_.address_or_id, config_.port);
+        status_window_proxy_->onHostConnecting();
+        channel_->connect(config.address_or_id, config.port);
     }
 }
 
@@ -129,8 +135,8 @@ void Client::stop()
         channel_.reset();
         timeout_timer_.reset();
 
-        auto_reconnect_ = false;
-        reconnect_in_progress_ = false;
+        session_state_->setAutoReconnect(false);
+        session_state_->setReconnecting(false);
 
         status_window_proxy_->onStopped();
 
@@ -150,28 +156,10 @@ void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_pr
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Client::isAutoReconnect()
+void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 {
-    return auto_reconnect_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::setAutoReconnect(bool enable)
-{
-    LOG(LS_INFO) << "Auto reconnect changed: " << enable;
-    auto_reconnect_ = enable;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string Client::computerName() const
-{
-    return config_.computer_name;
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::SessionType Client::sessionType() const
-{
-    return config_.session_type;
+    LOG(LS_INFO) << "Session state installed";
+    session_state_ = session_state;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,10 +237,10 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     // Show an error to the user.
     status_window_proxy_->onHostDisconnected(error_code);
 
-    if (isAutoReconnect())
+    if (session_state_->isAutoReconnect())
     {
         LOG(LS_INFO) << "Reconnect to host enabled";
-        reconnect_in_progress_ = true;
+        session_state_->setReconnecting(true);
 
         if (!timeout_timer_)
         {
@@ -262,13 +250,13 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
             {
                 LOG(LS_INFO) << "Reconnect timeout";
 
-                if (base::isHostId(config_.address_or_id) && !is_connected_to_router_)
+                if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
                     status_window_proxy_->onWaitForRouterTimeout();
                 else
                     status_window_proxy_->onWaitForHostTimeout();
 
-                reconnect_in_progress_ = false;
-                setAutoReconnect(false);
+                session_state_->setReconnecting(false);
+                session_state_->setAutoReconnect(false);
 
                 if (channel_)
                 {
@@ -293,12 +281,12 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
             io_task_runner_->deleteSoon(std::move(channel_));
         }
 
-        if (base::isHostId(config_.address_or_id))
+        if (session_state_->isConnectionByHostId())
         {
             // If you are using an ID connection, then start the connection immediately. The Router
             // will notify you when the Host comes online again.
             state_ = State::CREATED;
-            start(config_);
+            start();
         }
         else
         {
@@ -342,10 +330,11 @@ void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterConnected(const std::u16string& address, uint16_t port)
+void Client::onRouterConnected(const base::Version& router_version)
 {
-    LOG(LS_INFO) << "Router connected (address=" << address << " port=" << port << ")";
-    status_window_proxy_->onRouterConnected(address, port);
+    LOG(LS_INFO) << "Router connected";
+    session_state_->setRouterVersion(router_version);
+    status_window_proxy_->onRouterConnected();
     is_connected_to_router_ = true;
 }
 
@@ -382,7 +371,7 @@ void Client::onErrorOccurred(const RouterController::Error& error)
     io_task_runner_->deleteSoon(std::move(router_controller_));
     is_connected_to_router_ = false;
 
-    if (error.type == RouterController::ErrorType::NETWORK && reconnect_in_progress_)
+    if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
     {
         status_window_proxy_->onWaitForRouter();
         delayedReconnectToRouter();
@@ -392,9 +381,9 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 //--------------------------------------------------------------------------------------------------
 void Client::startAuthentication()
 {
-    LOG(LS_INFO) << "Start authentication for '" << config_.username << "'";
+    LOG(LS_INFO) << "Start authentication for '" << session_state_->hostUserName() << "'";
 
-    reconnect_in_progress_ = false;
+    session_state_->setReconnecting(false);
     reconnect_timer_.reset();
     timeout_timer_.reset();
 
@@ -407,10 +396,10 @@ void Client::startAuthentication()
     authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setUserName(config_.username);
-    authenticator_->setPassword(config_.password);
-    authenticator_->setSessionType(static_cast<uint32_t>(config_.session_type));
-    authenticator_->setDisplayName(config_.display_name);
+    authenticator_->setUserName(session_state_->hostUserName());
+    authenticator_->setPassword(session_state_->hostPassword());
+    authenticator_->setSessionType(static_cast<uint32_t>(session_state_->sessionType()));
+    authenticator_->setDisplayName(session_state_->displayName());
 
     authenticator_->start(std::move(channel_),
                           [this](base::ClientAuthenticator::ErrorCode error_code)
@@ -425,6 +414,8 @@ void Client::startAuthentication()
             channel_->setListener(this);
 
             const base::Version& host_version = authenticator_->peerVersion();
+            session_state_->setHostVersion(host_version);
+
             if (host_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
@@ -436,15 +427,15 @@ void Client::startAuthentication()
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
                               << " client: " << client_version.toString();
-                status_window_proxy_->onVersionMismatch(host_version, client_version);
+                status_window_proxy_->onVersionMismatch();
             }
             else
             {
-                status_window_proxy_->onHostConnected(config_.address_or_id, config_.port);
+                status_window_proxy_->onHostConnected();
 
                 // Signal that everything is ready to start the session (connection established,
                 // authentication passed).
-                onSessionStarted(host_version);
+                onSessionStarted();
 
                 // Now the session will receive incoming messages.
                 channel_->resume();
@@ -472,7 +463,7 @@ void Client::delayedReconnectToRouter()
     {
         LOG(LS_INFO) << "Reconnecting to router";
         state_ = State::CREATED;
-        start(config_);
+        start();
     });
 }
 
@@ -486,7 +477,7 @@ void Client::delayedReconnectToHost()
     {
         LOG(LS_INFO) << "Reconnecting to host";
         state_ = State::CREATED;
-        start(config_);
+        start();
     });
 }
 

@@ -62,7 +62,7 @@ void ClientFileTransfer::setFileManagerWindow(
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
+void ClientFileTransfer::onSessionStarted()
 {
     LOG(LS_INFO) << "File transfer session started";
 

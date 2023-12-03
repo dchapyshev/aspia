@@ -96,7 +96,7 @@ void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_con
     text_chat_control_proxy_ = std::move(text_chat_control_proxy);
     DCHECK(text_chat_control_proxy_);
 
-    ui->text_chat_widget->setDisplayName(base::utf8FromUtf16(config().display_name));
+    ui->text_chat_widget->setDisplayName(base::utf8FromUtf16(sessionState()->displayName()));
 
     show();
     activateWindow();
@@ -110,7 +110,10 @@ void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
         ui->text_chat_widget->readMessage(text_chat.chat_message());
 
         if (QApplication::applicationState() != Qt::ApplicationActive)
+        {
+            LOG(LS_INFO) << "Activate text chat window";
             activateWindow();
+        }
     }
     else if (text_chat.has_chat_status())
     {
@@ -125,7 +128,7 @@ void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
 //--------------------------------------------------------------------------------------------------
 void QtTextChatWindow::onInternalReset()
 {
-    // TODO
+    // Nothing
 }
 
 } // namespace client

@@ -55,7 +55,7 @@ void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoR
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionStarted(const base::Version& /* peer_version */)
+void ClientSystemInfo::onSessionStarted()
 {
     LOG(LS_INFO) << "System info session started";
 

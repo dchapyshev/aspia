@@ -22,6 +22,7 @@
 #include "base/waitable_timer.h"
 #include "base/version.h"
 #include "client/client_config.h"
+#include "client/client_session_state.h"
 #include "client/router_controller.h"
 #include "base/net/tcp_channel.h"
 
@@ -44,7 +45,7 @@ public:
     virtual ~Client() override;
 
     // Starts a session.
-    void start(const Config& config);
+    void start();
 
     // Stops a session.
     void stop();
@@ -53,20 +54,18 @@ public:
     // The method must be called before calling method start().
     void setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy);
 
-    bool isAutoReconnect();
-    void setAutoReconnect(bool enable);
+    // Sets an instance of a class that stores session state.
+    // The method must be called before calling method start().
+    void setSessionState(std::shared_ptr<SessionState> session_state);
 
-    Config config() const { return config_; }
+    std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
 protected:
     std::shared_ptr<base::TaskRunner> ioTaskRunner() const { return io_task_runner_; }
 
-    std::u16string computerName() const;
-    proto::SessionType sessionType() const;
-
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
-    virtual void onSessionStarted(const base::Version& peer_version) = 0;
+    virtual void onSessionStarted() = 0;
     virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
@@ -86,7 +85,7 @@ protected:
     void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // RouterController::Delegate implementation.
-    void onRouterConnected(const std::u16string& address, uint16_t port) override;
+    void onRouterConnected(const base::Version& router_version) override;
     void onHostAwaiting() override;
     void onHostConnected(std::unique_ptr<base::TcpChannel> channel) override;
     void onErrorOccurred(const RouterController::Error& error) override;
@@ -104,13 +103,11 @@ private:
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
-    Config config_;
+    std::shared_ptr<SessionState> session_state_;
 
     enum class State { CREATED, STARTED, STOPPPED };
     State state_ = State::CREATED;
 
-    bool auto_reconnect_ = true;
-    bool reconnect_in_progress_ = false;
     bool is_connected_to_router_ = false;
 };
 

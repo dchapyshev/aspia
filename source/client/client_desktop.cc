@@ -139,15 +139,15 @@ void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionStarted(const base::Version& peer_version)
+void ClientDesktop::onSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session started";
 
     start_time_ = Clock::now();
     started_ = true;
 
-    input_event_filter_.setSessionType(sessionType());
-    desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
+    input_event_filter_.setSessionType(sessionState()->sessionType());
+    desktop_window_proxy_->showWindow(desktop_control_proxy_);
 
     clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
     clipboard_monitor_->start(ioTaskRunner(), this);
@@ -354,7 +354,8 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
 
         video_recording.set_action(proto::VideoRecording::ACTION_STARTED);
 
-        webm_file_writer_ = std::make_unique<base::WebmFileWriter>(file_path, computerName());
+        webm_file_writer_ =
+            std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
         webm_video_encoder_ = std::make_unique<base::WebmVideoEncoder>();
 
         webm_video_encode_timer_ = std::make_unique<base::WaitableTimer>(
@@ -432,7 +433,7 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionState()->sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_INFO) << "Power control supported only for desktop manage session";
         return;
@@ -703,7 +704,7 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionState()->sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_ERROR) << "Cursor shape received not session type not desktop manage";
         return;

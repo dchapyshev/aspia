@@ -86,6 +86,8 @@ list(APPEND SOURCE_CLIENT_CORE
     status_window.h
     status_window_proxy.cc
     status_window_proxy.h
+    client_session_state.cc
+    client_session_state.h
     system_info_control.h
     system_info_control_proxy.cc
     system_info_control_proxy.h

@@ -20,6 +20,7 @@
 #define CLIENT_UI_SESSION_WINDOW_H
 
 #include "client/client_config.h"
+#include "client/client_session_state.h"
 #include "client/status_window.h"
 
 #include <QWidget>
@@ -53,7 +54,7 @@ public:
     // authorization dialog will be displayed.
     bool connectToHost(Config config);
 
-    Config config() const;
+    std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
 protected:
     virtual std::unique_ptr<Client> createClient() = 0;
@@ -65,16 +66,16 @@ protected:
     // StatusWindow implementation.
     void onStarted() override;
     void onStopped() override;
-    void onRouterConnecting(const std::u16string& address, uint16_t port) override;
-    void onRouterConnected(const std::u16string& address, uint16_t port) override;
-    void onHostConnecting(const std::u16string& address_or_id, uint16_t port) override;
-    void onHostConnected(const std::u16string& address_or_id, uint16_t port) override;
+    void onRouterConnecting() override;
+    void onRouterConnected() override;
+    void onHostConnecting() override;
+    void onHostConnected() override;
     void onHostDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onWaitForRouter() override;
     void onWaitForRouterTimeout() override;
     void onWaitForHost() override;
     void onWaitForHostTimeout() override;
-    void onVersionMismatch(const base::Version& host, const base::Version& client) override;
+    void onVersionMismatch() override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onRouterError(const RouterController::Error& error) override;
 
@@ -86,6 +87,7 @@ private:
     static QString authErrorToString(base::ClientAuthenticator::ErrorCode error_code);
     static QString routerErrorToString(RouterController::ErrorCode error_code);
 
+    std::shared_ptr<SessionState> session_state_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
     std::unique_ptr<ClientProxy> client_proxy_;
     common::StatusDialog* status_dialog_ = nullptr;

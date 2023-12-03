@@ -79,8 +79,10 @@ void RouterController::onTcpConnected()
     {
         if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
+            const base::Version& router_version = authenticator_->peerVersion();
+
             if (delegate_)
-                delegate_->onRouterConnected(router_config_.address, router_config_.port);
+                delegate_->onRouterConnected(router_version);
             else
                 LOG(LS_ERROR) << "Invalid delegate";
 
@@ -89,7 +91,7 @@ void RouterController::onTcpConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version::kVersion_2_6_0)
+            if (router_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);

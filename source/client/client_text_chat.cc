@@ -55,7 +55,7 @@ void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionStarted(const base::Version& /* peer_version */)
+void ClientTextChat::onSessionStarted()
 {
     LOG(LS_INFO) << "Text chat session started";
     text_chat_window_proxy_->start(text_chat_control_proxy_);

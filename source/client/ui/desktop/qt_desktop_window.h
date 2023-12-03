@@ -61,8 +61,7 @@ public:
     std::unique_ptr<Client> createClient() override;
 
     // DesktopWindow implementation.
-    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
-                    const base::Version& peer_version) override;
+    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy) override;
     void configRequired() override;
     void setCapabilities(const proto::DesktopCapabilities& capabilities) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
@@ -112,7 +111,6 @@ private:
 
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
-    base::Version peer_version_;
     uint32_t video_encodings_ = 0;
 
     QHBoxLayout* layout_ = nullptr;

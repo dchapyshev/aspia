@@ -31,16 +31,16 @@ public:
 
     virtual void onStarted() = 0;
     virtual void onStopped() = 0;
-    virtual void onRouterConnecting(const std::u16string& address, uint16_t port) = 0;
-    virtual void onRouterConnected(const std::u16string& address, uint16_t port) = 0;
-    virtual void onHostConnecting(const std::u16string& address_or_id, uint16_t port) = 0;
-    virtual void onHostConnected(const std::u16string& address_or_id, uint16_t port) = 0;
+    virtual void onRouterConnecting() = 0;
+    virtual void onRouterConnected() = 0;
+    virtual void onHostConnecting() = 0;
+    virtual void onHostConnected() = 0;
     virtual void onHostDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
     virtual void onWaitForRouter() = 0;
     virtual void onWaitForRouterTimeout() = 0;
     virtual void onWaitForHost() = 0;
     virtual void onWaitForHostTimeout() = 0;
-    virtual void onVersionMismatch(const base::Version& host, const base::Version& client) = 0;
+    virtual void onVersionMismatch() = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onRouterError(const RouterController::Error& error) = 0;
 };

@@ -71,7 +71,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onRouterConnected(const std::u16string& address, uint16_t port) = 0;
+        virtual void onRouterConnected(const base::Version& version) = 0;
         virtual void onHostAwaiting() = 0;
         virtual void onHostConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
         virtual void onErrorOccurred(const Error& error) = 0;

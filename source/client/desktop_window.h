@@ -30,7 +30,6 @@ namespace base {
 class Frame;
 class MouseCursor;
 class Size;
-class Version;
 } // namespace base
 
 namespace proto {
@@ -87,9 +86,7 @@ public:
         int cursor_taken_from_cache = 0;
     };
 
-    virtual void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
-                            const base::Version& peer_version) = 0;
-
+    virtual void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy) = 0;
     virtual void configRequired() = 0;
 
     virtual void setCapabilities(const proto::DesktopCapabilities& capabilities) = 0;

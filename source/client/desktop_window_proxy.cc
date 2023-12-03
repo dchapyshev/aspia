@@ -176,19 +176,18 @@ std::shared_ptr<base::Frame> DesktopWindowProxy::allocateFrame(const base::Size&
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::showWindow(
-    std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
+    std::shared_ptr<DesktopControlProxy> desktop_control_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(std::bind(&DesktopWindowProxy::showWindow,
                                             shared_from_this(),
-                                            desktop_control_proxy,
-                                            peer_version));
+                                            desktop_control_proxy));
         return;
     }
 
     if (desktop_window_)
-        desktop_window_->showWindow(desktop_control_proxy, peer_version);
+        desktop_window_->showWindow(desktop_control_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------

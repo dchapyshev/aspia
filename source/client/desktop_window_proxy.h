@@ -41,9 +41,7 @@ public:
 
     void dettach();
 
-    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
-                    const base::Version& peer_version);
-
+    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy);
     void configRequired();
 
     void setCapabilities(const proto::DesktopCapabilities& capabilities);

@@ -41,16 +41,16 @@ public:
 
     void onStarted();
     void onStopped();
-    void onRouterConnecting(const std::u16string& address, uint16_t port);
-    void onRouterConnected(const std::u16string& address, uint16_t port);
-    void onHostConnecting(const std::u16string& address_or_id, uint16_t port);
-    void onHostConnected(const std::u16string& address_or_id, uint16_t port);
+    void onRouterConnecting();
+    void onRouterConnected();
+    void onHostConnecting();
+    void onHostConnected();
     void onHostDisconnected(base::TcpChannel::ErrorCode error_code);
     void onWaitForRouter();
     void onWaitForRouterTimeout();
     void onWaitForHost();
     void onWaitForHostTimeout();
-    void onVersionMismatch(const base::Version& host, const base::Version& client);
+    void onVersionMismatch();
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onRouterError(const RouterController::Error& error);
 

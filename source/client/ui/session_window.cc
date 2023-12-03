@@ -93,24 +93,20 @@ bool SessionWindow::connectToHost(Config config)
         config.username = u"#" + config.address_or_id;
     }
 
+    session_state_ = std::make_shared<SessionState>(config);
+
     // Create a client instance.
     std::unique_ptr<Client> client = createClient();
 
-    // Set the window that will receive notifications.
     client->setStatusWindow(status_window_proxy_);
+    client->setSessionState(session_state_);
 
     client_proxy_ = std::make_unique<ClientProxy>(
-        qt_base::Application::ioTaskRunner(), std::move(client), config);
+        qt_base::Application::ioTaskRunner(), std::move(client));
 
     LOG(LS_INFO) << "Start client proxy";
     client_proxy_->start();
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-Config SessionWindow::config() const
-{
-    return client_proxy_->config();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,60 +141,80 @@ void SessionWindow::onStopped()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onRouterConnecting(const std::u16string& address, uint16_t port)
+void SessionWindow::onRouterConnecting()
 {
     LOG(LS_INFO) << "Connecting to router";
 
-    status_dialog_->addMessageAndActivate(tr("Connecting to router %1:%2...")
-                                              .arg(QString::fromStdU16String(address)).arg(port));
+    const std::optional<RouterConfig>& router = session_state_->router();
+    if (router.has_value())
+    {
+        status_dialog_->addMessageAndActivate(
+            tr("Connecting to router %1:%2...")
+               .arg(QString::fromStdU16String(router->address)).arg(router->port));
+    }
+    else
+    {
+        status_dialog_->addMessageAndActivate(tr("Connecting to router..."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onRouterConnected(const std::u16string& address, uint16_t port)
+void SessionWindow::onRouterConnected()
 {
     LOG(LS_INFO) << "Connection to router established";
 
-    status_dialog_->addMessageAndActivate(tr("Connection to router %1:%2 established.")
-                                              .arg(QString::fromStdU16String(address)).arg(port));
+    const std::optional<RouterConfig>& router = session_state_->router();
+    if (router.has_value())
+    {
+        status_dialog_->addMessageAndActivate(
+            tr("Connection to router %1:%2 established.")
+               .arg(QString::fromStdU16String(router->address)).arg(router->port));
+    }
+    else
+    {
+        status_dialog_->addMessageAndActivate(tr("Connection to router established."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onHostConnecting(const std::u16string& address_or_id, uint16_t port)
+void SessionWindow::onHostConnecting()
 {
     LOG(LS_INFO) << "Connecting to host";
 
     QString message;
 
-    if (base::isHostId(address_or_id))
+    if (session_state_->isConnectionByHostId())
     {
         message = tr("Connecting to host %1...")
-                      .arg(QString::fromStdU16String(address_or_id));
+                      .arg(QString::fromStdU16String(session_state_->hostAddress()));
     }
     else
     {
         message = tr("Connecting to host %1:%2...")
-                      .arg(QString::fromStdU16String(address_or_id)).arg(port);
+                      .arg(QString::fromStdU16String(session_state_->hostAddress()))
+                      .arg(session_state_->hostPort());
     }
 
     status_dialog_->addMessageAndActivate(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onHostConnected(const std::u16string& address_or_id, uint16_t port)
+void SessionWindow::onHostConnected()
 {
     LOG(LS_INFO) << "Connection to host established";
 
     QString message;
 
-    if (base::isHostId(address_or_id))
+    if (session_state_->isConnectionByHostId())
     {
         message = tr("Connection to host %1 established.")
-                      .arg(QString::fromStdU16String(address_or_id));
+                      .arg(QString::fromStdU16String(session_state_->hostAddress()));
     }
     else
     {
         message = tr("Connection to host %1:%2 established.")
-                      .arg(QString::fromStdU16String(address_or_id)).arg(port);
+                      .arg(QString::fromStdU16String(session_state_->hostAddress()))
+                      .arg(session_state_->hostPort());
     }
 
     status_dialog_->addMessageAndActivate(message);
@@ -241,10 +257,10 @@ void SessionWindow::onWaitForHostTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onVersionMismatch(const base::Version& host, const base::Version& client)
+void SessionWindow::onVersionMismatch()
 {
-    QString host_version = QString::fromStdU16String(host.toString());
-    QString client_version = QString::fromStdU16String(client.toString());
+    QString host_version = QString::fromStdU16String(session_state_->hostVersion().toString());
+    QString client_version = QString::fromStdU16String(base::Version::kCurrentFullVersion.toString());
 
     onErrorOccurred(
         tr("The Host version is newer than the Client version (%1 > %2). "

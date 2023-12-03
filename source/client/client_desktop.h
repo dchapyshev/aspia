@@ -72,7 +72,7 @@ public:
 
 protected:
     // Client implementation.
-    void onSessionStarted(const base::Version& peer_version) override;
+    void onSessionStarted() override;
     void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
 

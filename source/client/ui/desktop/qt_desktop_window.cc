@@ -221,7 +221,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     connect(toolbar_, &DesktopToolBar::sig_startSession, this, [this](proto::SessionType session_type)
     {
-        client::Config session_config = config();
+        client::Config session_config = sessionState()->config();
         session_config.session_type = session_type;
 
         client::SessionWindow* session_window = nullptr;
@@ -293,18 +293,16 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::showWindow(
-    std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
+void QtDesktopWindow::showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy)
 {
     LOG(LS_INFO) << "Show window";
 
     desktop_control_proxy_ = std::move(desktop_control_proxy);
-    peer_version_ = peer_version;
 
     showNormal();
     activateWindow();
 
-    toolbar_->enableTextChat(peer_version_ >= base::Version::kVersion_2_4_0);
+    toolbar_->enableTextChat(sessionState()->hostVersion() >= base::Version::kVersion_2_4_0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -356,7 +354,7 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
 
     if (base::contains(extensions_list, common::kRemoteUpdateExtension))
     {
-        if (base::Version::kCurrentFullVersion > peer_version_)
+        if (base::Version::kCurrentFullVersion > sessionState()->hostVersion())
             toolbar_->enableRemoteUpdate(true);
     }
 
@@ -616,7 +614,6 @@ void QtDesktopWindow::onInternalReset()
         statistics_dialog_->close();
     }
 
-    peer_version_ = base::Version();
     video_encodings_ = 0;
 
     if (resize_timer_)

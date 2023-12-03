@@ -36,19 +36,15 @@ class ClientProxy
 {
 public:
     ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
-                std::unique_ptr<Client> client,
-                const Config& config);
+                std::unique_ptr<Client> client);
     ~ClientProxy();
 
     void start();
     void stop();
 
-    const Config& config() const { return config_; }
-
 private:
     class Impl;
     std::shared_ptr<Impl> impl_;
-    Config config_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientProxy);
 };

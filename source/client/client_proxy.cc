@@ -30,7 +30,7 @@ public:
     Impl(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Client> client);
     ~Impl();
 
-    void start(const Config& config);
+    void start();
     void stop();
 
 private:
@@ -58,18 +58,18 @@ ClientProxy::Impl::~Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientProxy::Impl::start(const Config& config)
+void ClientProxy::Impl::start()
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::start, shared_from_this(), config));
+        io_task_runner_->postTask(std::bind(&Impl::start, shared_from_this()));
         return;
     }
 
     if (client_)
     {
         LOG(LS_INFO) << "Starting client";
-        client_->start(config);
+        client_->start();
     }
 }
 
@@ -95,10 +95,8 @@ void ClientProxy::Impl::stop()
 
 //--------------------------------------------------------------------------------------------------
 ClientProxy::ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
-                         std::unique_ptr<Client> client,
-                         const Config& config)
-    : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(client))),
-      config_(config)
+                         std::unique_ptr<Client> client)
+    : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(client)))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -113,7 +111,7 @@ ClientProxy::~ClientProxy()
 //--------------------------------------------------------------------------------------------------
 void ClientProxy::start()
 {
-    impl_->start(config_);
+    impl_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
