@@ -63,6 +63,9 @@ public:
     QByteArray routerManagerState() const;
     void setRouterManagerState(const QByteArray& state);
 
+    QString displayName() const;
+    void setDisplayName(const QString& display_name);
+
 private:
     QSettings settings_;
 

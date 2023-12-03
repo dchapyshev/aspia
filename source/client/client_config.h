@@ -34,6 +34,7 @@ struct Config
     std::optional<RouterConfig> router_config;
 
     std::u16string computer_name;
+    std::u16string display_name;
     std::u16string address_or_id;
     uint16_t port;
     std::u16string username;

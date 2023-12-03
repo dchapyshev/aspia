@@ -124,6 +124,9 @@ message Data
 
     // Unique GUID for address book.
     string guid = 6;
+
+    // Display name when connected.
+    string display_name = 7;
 }
 
 message File

@@ -432,6 +432,10 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Password of user."),
         "password");
 
+    QCommandLineOption display_name_option("display-name",
+        QApplication::translate("Client", "Display name when connected"),
+        "display-name");
+
     QCommandLineOption session_type_option("session-type",
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
                                 "desktop-view, file-transfer, system-info, text-chat."),
@@ -515,6 +519,7 @@ int clientMain(int argc, char* argv[])
     parser.addOption(name_option);
     parser.addOption(username_option);
     parser.addOption(password_option);
+    parser.addOption(display_name_option);
     parser.addOption(session_type_option);
     parser.addOption(codec_option);
     parser.addOption(color_depth_option);
@@ -549,10 +554,11 @@ int clientMain(int argc, char* argv[])
         config.username = parser.value(username_option).toStdU16String();
         config.password = parser.value(password_option).toStdU16String();
 
+        if (parser.isSet(display_name_option))
+            config.display_name = parser.value(display_name_option).toStdU16String();
+
         if (parser.isSet(name_option))
-        {
             config.computer_name = parser.value(name_option).toStdU16String();
-        }
 
         QString session_type = parser.value(session_type_option);
 

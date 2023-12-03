@@ -45,6 +45,7 @@ constexpr int kMaxPasswordLength = 64;
 constexpr int kSafePasswordLength = 8;
 constexpr int kMaxCommentLength = 2048;
 constexpr int kHashingSaltSize = 256;
+constexpr int kMaxDisplayNameLength = 16;
 
 enum ItemType
 {
@@ -163,11 +164,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     else
     {
         DCHECK_EQ(file->encryption_type(), proto::address_book::ENCRYPTION_TYPE_NONE);
-
         ui.edit_password->setEnabled(false);
-
-        // Disable Advanced tab.
-        ui.tab_widget->setTabEnabled(3, false);
     }
 
     const proto::address_book::Router& router = data_->router();
@@ -190,6 +187,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.edit_router_address->setText(QString::fromStdU16String(address.toString()));
     ui.edit_router_username->setText(QString::fromStdString(router.username()));
     ui.edit_router_password->setText(QString::fromStdString(router.password()));
+
+    ui.edit_display_name->setText(QString::fromStdString(data_->display_name()));
 
     connect(ui.button_show_password, &QPushButton::toggled, this, [this](bool checked)
     {
@@ -382,9 +381,6 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
 
             ui.edit_password->clear();
             ui.edit_password_repeat->clear();
-
-            // Disable Advanced tab.
-            ui.tab_widget->setTabEnabled(3, false);
         }
         break;
 
@@ -392,9 +388,6 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         {
             ui.edit_password->setEnabled(true);
             ui.edit_password_repeat->setEnabled(true);
-
-            // Enable Advanced tab.
-            ui.tab_widget->setTabEnabled(3, true);
         }
         break;
 
@@ -474,6 +467,14 @@ bool AddressBookDialog::saveChanges()
     {
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", kMaxCommentLength));
+        return false;
+    }
+
+    QString display_name = ui.edit_display_name->text();
+    if (display_name.length() > kMaxDisplayNameLength)
+    {
+        showError(tr("Too long display name. The maximum length of the display name is %n characters.",
+                     "", kMaxDisplayNameLength));
         return false;
     }
 
@@ -628,6 +629,7 @@ bool AddressBookDialog::saveChanges()
     data_->mutable_root_group()->set_name(name.toStdString());
     data_->mutable_root_group()->set_comment(comment.toStdString());
     data_->set_enable_router(ui.checkbox_use_router->isChecked());
+    data_->set_display_name(display_name.toStdString());
 
     if (data_->guid().empty())
         data_->set_guid(base::Guid::create().toStdString());

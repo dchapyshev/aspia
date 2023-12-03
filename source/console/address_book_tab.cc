@@ -317,6 +317,12 @@ ComputerItem* AddressBookTab::currentComputer() const
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string AddressBookTab::displayName() const
+{
+    return data_.display_name();
+}
+
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
 {
     ComputerGroupItem* current_item =

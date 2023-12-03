@@ -35,6 +35,7 @@ public:
     void setUserName(std::u16string_view username);
     void setPassword(std::u16string_view password);
     void setSessionType(uint32_t session_type);
+    void setDisplayName(std::u16string_view display_name);
 
 protected:
     // Authenticator implementation.
@@ -67,6 +68,7 @@ private:
     ByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
+    std::u16string display_name_;
 
     BigNum N_;
     BigNum g_;

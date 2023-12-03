@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_APPLICATION_H
 #define CLIENT_UI_APPLICATION_H
 
-#include "client/ui/client_settings.h"
 #include "qt_base/application.h"
 
 namespace client {
@@ -34,11 +33,7 @@ public:
 
     static Application* instance();
 
-    ClientSettings& settings() { return settings_; }
-
 private:
-    ClientSettings settings_;
-
     DISALLOW_COPY_AND_ASSIGN(Application);
 };
 

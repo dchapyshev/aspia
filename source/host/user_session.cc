@@ -904,7 +904,7 @@ void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid=" << session_id_ << ")";
 
-    scoped_task_runner_->postTask([=]()
+    scoped_task_runner_->postTask([this, id]()
     {
         for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
         {
@@ -925,7 +925,7 @@ void UserSession::onUnconfirmedSessionReject(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid=" << session_id_ << ")";
 
-    scoped_task_runner_->postTask([=]()
+    scoped_task_runner_->postTask([this, id]()
     {
         for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
         {
@@ -1141,6 +1141,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
     event->set_computer_name(client_session.computerName());
+    event->set_display_name(client_session.displayName());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
@@ -1430,7 +1431,12 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
             proto::TextChatStatus* text_chat_status =
                  outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
-            text_chat_status->set_source(text_chat_client->computerName());
+
+            std::string display_name = text_chat_client->displayName();
+            if (display_name.empty())
+                display_name = text_chat_client->computerName();
+
+            text_chat_status->set_source(display_name);
 
             break;
         }
@@ -1472,7 +1478,12 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
             proto::TextChatStatus* text_chat_status =
                 outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
-            text_chat_status->set_source(text_chat_session->computerName());
+
+            std::string display_name = text_chat_session->displayName();
+            if (display_name.empty())
+                display_name = text_chat_session->computerName();
+
+            text_chat_status->set_source(display_name);
 
             break;
         }

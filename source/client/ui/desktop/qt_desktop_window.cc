@@ -242,7 +242,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         }
 
         if (!session_window)
+        {
+            LOG(LS_ERROR) << "Session window not created";
             return;
+        }
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
         if (!session_window->connectToHost(session_config))
@@ -278,6 +281,8 @@ QtDesktopWindow::~QtDesktopWindow()
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtDesktopWindow::createClient()
 {
+    LOG(LS_INFO) << "Create client";
+
     std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(
         qt_base::Application::ioTaskRunner());
 

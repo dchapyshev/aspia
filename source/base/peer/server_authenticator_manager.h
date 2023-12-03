@@ -40,6 +40,7 @@ public:
         Version version;
         std::string os_name;
         std::string computer_name;
+        std::string display_name;
         std::string architecture;
         std::string user_name;
         uint32_t session_type = 0;

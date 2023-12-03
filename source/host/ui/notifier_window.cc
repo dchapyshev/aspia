@@ -38,7 +38,9 @@ class SessionTreeItem : public QTreeWidgetItem
 public:
     SessionTreeItem(const UserSessionAgent::Client& client)
         : session_type_(client.session_type),
-          id_(client.id)
+          id_(client.id),
+          display_name_(QString::fromStdString(client.display_name)),
+          computer_name_(QString::fromStdString(client.computer_name))
     {
         switch (client.session_type)
         {
@@ -67,15 +69,40 @@ public:
                 return;
         }
 
-        setText(0, QString::fromStdString(client.computer_name));
+        if (display_name_.isEmpty())
+        {
+            is_display_name_ = false;
+            setText(0, computer_name_);
+        }
+        else
+        {
+            is_display_name_ = true;
+            setText(0, display_name_);
+        }
     }
 
     proto::SessionType sessionType() const { return session_type_; }
     uint32_t id() const { return id_; }
 
+    void switchName()
+    {
+        if (display_name_.isEmpty())
+            return;
+
+        if (is_display_name_)
+            setText(0, computer_name_);
+        else
+            setText(0, display_name_);
+
+        is_display_name_ = !is_display_name_;
+    }
+
 private:
     const proto::SessionType session_type_;
     const uint32_t id_;
+    const QString display_name_;
+    const QString computer_name_;
+    bool is_display_name_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
@@ -147,6 +174,14 @@ NotifierWindow::NotifierWindow(QWidget* parent)
             std::chrono::milliseconds(500), this, &NotifierWindow::updateWindowPosition);
     });
 
+    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+            this, [](QTreeWidgetItem* item, int /* column */)
+    {
+        SessionTreeItem* session_item = dynamic_cast<SessionTreeItem*>(item);
+        if (session_item)
+            session_item->switchName();
+    });
+
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]
     {
@@ -213,12 +248,12 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
             ui.tree->addTopLevelItem(tree_item);
 
             QToolButton* stop_button =
-                createSessionButton(ui.tree,
-                                    ":/img/control-stop.png",
-                                    tr("Disconnect"));
-            connect(stop_button, &QToolButton::clicked, this, [=]()
+                createSessionButton(ui.tree, ":/img/control-stop.png", tr("Disconnect"));
+            uint32_t tree_item_id = tree_item->id();
+
+            connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
             {
-                emit sig_killSession(tree_item->id());
+                emit sig_killSession(tree_item_id);
             });
 
             ui.tree->setItemWidget(tree_item, 1, stop_button);

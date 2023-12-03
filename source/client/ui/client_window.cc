@@ -48,7 +48,9 @@ namespace client {
 ClientWindow::ClientWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-    ClientSettings& settings = Application::instance()->settings();
+    LOG(LS_INFO) << "Ctor";
+
+    ClientSettings settings;
     Application::instance()->setAttribute(
         Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
 
@@ -66,9 +68,13 @@ ClientWindow::ClientWindow(QWidget* parent)
     ui.action_show_icons_in_menus->setChecked(settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
+        LOG(LS_INFO) << "[ACTION] Show icons in menus: " << enable;
+
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-        instance->settings().setShowIconsInMenus(enable);
+
+        ClientSettings settings;
+        settings.setShowIconsInMenus(enable);
     });
 
     connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
@@ -80,6 +86,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(ui.action_exit, &QAction::triggered, this, &ClientWindow::close);
     connect(ui.action_clear_history, &QAction::triggered, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] Clear history";
+
         QMessageBox messagebox(this);
         messagebox.setWindowTitle(tr("Confirmation"));
         messagebox.setText(tr("Are you sure you want to clear your connection history?"));
@@ -90,9 +98,15 @@ ClientWindow::ClientWindow(QWidget* parent)
 
         if (messagebox.exec() == QMessageBox::Yes)
         {
-            ClientSettings& settings = Application::instance()->settings();
+            LOG(LS_INFO) << "[ACTION] Accepted by user";
+
+            ClientSettings settings;
             settings.setAddressList(QStringList());
             ui.combo_address->clear();
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Rejected by user";
         }
     });
 
@@ -108,6 +122,7 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(ui.action_check_for_updates, &QAction::triggered, this, &ClientWindow::onCheckUpdates);
     connect(ui.action_update_settings, &QAction::triggered, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] Update settings dialog";
         UpdateSettingsDialog(this).exec();
     });
 
@@ -118,6 +133,7 @@ ClientWindow::ClientWindow(QWidget* parent)
         update_checker_->setUpdateServer(settings.updateServer().toStdU16String());
         update_checker_->setPackageName(u"client");
 
+        LOG(LS_INFO) << "Start update checker";
         update_checker_->start(Application::uiTaskRunner(), this);
     }
 #else
@@ -129,11 +145,15 @@ ClientWindow::ClientWindow(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientWindow::~ClientWindow() = default;
+ClientWindow::~ClientWindow()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
+    LOG(LS_INFO) << "Close event detected";
     QApplication::quit();
 }
 
@@ -166,6 +186,7 @@ void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 
     QTimer::singleShot(0, this, [this]()
     {
+        LOG(LS_INFO) << "Destroy update checker";
         update_checker_.reset();
     });
 }
@@ -176,7 +197,10 @@ void ClientWindow::onLanguageChanged(QAction* action)
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
     client::Application* application = client::Application::instance();
 
-    application->settings().setLocale(new_locale);
+    LOG(LS_INFO) << "[ACTION] Language changed: " << new_locale.toStdString();
+
+    ClientSettings settings;
+    settings.setLocale(new_locale);
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
@@ -186,18 +210,21 @@ void ClientWindow::onLanguageChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onSettings()
 {
+    LOG(LS_INFO) << "[ACTION] Settings button";
     ClientSettingsDialog(this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onHelp()
 {
+    LOG(LS_INFO) << "[ACTION] Help button";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onAbout()
 {
+    LOG(LS_INFO) << "[ACTION] About button";
     common::AboutDialog(tr("Aspia Client"), this).exec();
 }
 
@@ -206,6 +233,8 @@ void ClientWindow::sessionTypeChanged(int item_index)
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
+
+    LOG(LS_INFO) << "[ACTION] Session type changed: " << session_type;
 
     switch (session_type)
     {
@@ -219,15 +248,18 @@ void ClientWindow::sessionTypeChanged(int item_index)
             break;
     }
 
-    Application::instance()->settings().setSessionType(session_type);
+    ClientSettings settings;
+    settings.setSessionType(session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::sessionConfigButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Session config button";
+
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
-    ClientSettings& settings = Application::instance()->settings();
+    ClientSettings settings;
 
     switch (session_type)
     {
@@ -263,6 +295,8 @@ void ClientWindow::sessionConfigButtonPressed()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::connectToHost()
 {
+    LOG(LS_INFO) << "[ACTION] Connect to host";
+
     RouterConfig router_config = RouterConfigStorage().routerConfig();
     Config config;
 
@@ -289,6 +323,7 @@ void ClientWindow::connectToHost()
 
         if (!address.isValid())
         {
+            LOG(LS_ERROR) << "Invalid computer address";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An invalid computer address was entered."),
@@ -306,6 +341,7 @@ void ClientWindow::connectToHost()
 
         if (!router_config.isValid())
         {
+            LOG(LS_ERROR) << "Router not configured";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("A host ID was entered, but the router was not configured. "
@@ -328,7 +364,7 @@ void ClientWindow::connectToHost()
     for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
         address_list.append(combo_address->itemText(i));
 
-    ClientSettings& settings = Application::instance()->settings();
+    ClientSettings settings;
     settings.setAddressList(address_list);
 
     if (host_id_entered)
@@ -336,6 +372,7 @@ void ClientWindow::connectToHost()
 
     config.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
+    config.display_name = settings.displayName().toStdU16String();
 
     SessionWindow* session_window = nullptr;
 
@@ -367,18 +404,26 @@ void ClientWindow::connectToHost()
     }
 
     if (!session_window)
+    {
+        LOG(LS_ERROR) << "Session window not created";
         return;
+    }
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(config))
+    {
+        LOG(LS_ERROR) << "Unable to connect to host";
         session_window->close();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onCheckUpdates()
 {
+    LOG(LS_INFO) << "[ACTION] Check updates";
 #if defined(OS_WIN)
-    common::UpdateDialog(Application::instance()->settings().updateServer().toStdU16String(),
+    ClientSettings settings;
+    common::UpdateDialog(settings.updateServer().toStdU16String(),
                          u"client", this).exec();
 #endif
 }
@@ -406,7 +451,8 @@ void ClientWindow::createLanguageMenu(const QString& current_locale)
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::reloadSessionTypes()
 {
-    proto::SessionType current_session_type = Application::instance()->settings().sessionType();
+    ClientSettings settings;
+    proto::SessionType current_session_type = settings.sessionType();
     QComboBox* combobox = ui.combo_session_type;
 
     auto add_session = [=](const QString& icon, proto::SessionType session_type)
@@ -418,11 +464,11 @@ void ClientWindow::reloadSessionTypes()
 
     combobox->clear();
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

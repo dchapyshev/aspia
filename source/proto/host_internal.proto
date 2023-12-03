@@ -55,7 +55,8 @@ message ConnectEvent
 {
     uint32 id                = 1;
     string computer_name     = 2;
-    SessionType session_type = 3;
+    string display_name      = 3;
+    SessionType session_type = 4;
 }
 
 message DisconnectEvent

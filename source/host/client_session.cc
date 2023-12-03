@@ -130,9 +130,21 @@ void ClientSession::setComputerName(std::string_view computer_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ClientSession::computerName() const
+const std::string& ClientSession::computerName() const
 {
     return computer_name_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSession::setDisplayName(std::string_view display_name)
+{
+    display_name_ = display_name;
+}
+
+//--------------------------------------------------------------------------------------------------
+const std::string& ClientSession::displayName() const
+{
+    return display_name_;
 }
 
 //--------------------------------------------------------------------------------------------------

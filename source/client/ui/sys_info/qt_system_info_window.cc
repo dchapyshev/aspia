@@ -130,7 +130,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
             sys_info_widgets_[i]->hide();
 
         connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest,
-                this, [=](const proto::system_info::SystemInfoRequest& request)
+                this, [this](const proto::system_info::SystemInfoRequest& request)
         {
             if (system_info_control_proxy_)
                 system_info_control_proxy_->onSystemInfoRequest(request);
@@ -384,6 +384,8 @@ QtSystemInfoWindow::~QtSystemInfoWindow()
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtSystemInfoWindow::createClient()
 {
+    LOG(LS_INFO) << "Create client";
+
     std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>(
         qt_base::Application::ioTaskRunner());
 
@@ -395,6 +397,8 @@ std::unique_ptr<Client> QtSystemInfoWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy)
 {
+    LOG(LS_INFO) << "Show window";
+
     system_info_control_proxy_ = std::move(system_info_control_proxy);
     show();
     activateWindow();

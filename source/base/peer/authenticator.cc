@@ -188,9 +188,15 @@ void Authenticator::setPeerComputerName(const std::string& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerArch(const std::string &arch)
+void Authenticator::setPeerArch(const std::string& arch)
 {
     peer_arch_ = arch;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::setPeerDisplayName(const std::string& display_name)
+{
+    peer_display_name_ = display_name;
 }
 
 //--------------------------------------------------------------------------------------------------

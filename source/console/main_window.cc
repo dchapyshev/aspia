@@ -757,7 +757,7 @@ void MainWindow::onDesktopManageConnect()
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
             computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-            connectToComputer(computer, tab->routerConfig());
+            connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
         {
@@ -783,7 +783,7 @@ void MainWindow::onDesktopViewConnect()
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
             computer.set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
-            connectToComputer(computer, tab->routerConfig());
+            connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
         {
@@ -809,7 +809,7 @@ void MainWindow::onFileTransferConnect()
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
             computer.set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
-            connectToComputer(computer, tab->routerConfig());
+            connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
         {
@@ -835,7 +835,7 @@ void MainWindow::onSystemInfoConnect()
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
             computer.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
-            connectToComputer(computer, tab->routerConfig());
+            connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
         {
@@ -861,7 +861,7 @@ void MainWindow::onTextChatConnect()
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
             computer.set_session_type(proto::SESSION_TYPE_TEXT_CHAT);
-            connectToComputer(computer, tab->routerConfig());
+            connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
         {
@@ -1159,7 +1159,7 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
         return;
     }
 
-    connectToComputer(computer_to_connect, tab->routerConfig());
+    connectToComputer(computer_to_connect, tab->displayName(), tab->routerConfig());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1640,6 +1640,7 @@ bool MainWindow::hasUnpinnedTabs() const
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::connectToComputer(const proto::address_book::Computer& computer,
+                                   const std::string& display_name,
                                    const std::optional<client::RouterConfig>& router_config)
 {
     QString address = QString::fromStdString(computer.address());
@@ -1673,6 +1674,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     config.username      = base::utf16FromUtf8(computer.username());
     config.password      = base::utf16FromUtf8(computer.password());
     config.session_type  = computer.session_type();
+    config.display_name  = base::utf16FromUtf8(display_name);
 
     client::SessionWindow* session_window = nullptr;
 

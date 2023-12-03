@@ -608,11 +608,13 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
     setPeerOsName(response->os_name());
     setPeerComputerName(response->computer_name());
     setPeerArch(response->arch());
+    setPeerDisplayName(response->display_name());
 
     LOG(LS_INFO) << "Client (session_type=" << response->session_type()
                  << " version=" << peerVersion() << " name=" << response->computer_name()
                  << " os=" << response->os_name() << " cores=" << response->cpu_cores()
-                 << " arch=" << response->arch() << ")";
+                 << " arch=" << response->arch() << " display_name=" << response->display_name()
+                 << ")";
 
     if (peerVersion() < base::Version::kMinimumSupportedVersion)
     {

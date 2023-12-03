@@ -410,6 +410,7 @@ void Client::startAuthentication()
     authenticator_->setUserName(config_.username);
     authenticator_->setPassword(config_.password);
     authenticator_->setSessionType(static_cast<uint32_t>(config_.session_type));
+    authenticator_->setDisplayName(config_.display_name);
 
     authenticator_->start(std::move(channel_),
                           [this](base::ClientAuthenticator::ErrorCode error_code)

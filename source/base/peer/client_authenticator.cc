@@ -115,6 +115,12 @@ void ClientAuthenticator::setSessionType(uint32_t session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientAuthenticator::setDisplayName(std::u16string_view display_name)
+{
+    display_name_ = display_name;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::onStarted()
 {
     internal_state_ = InternalState::SEND_CLIENT_HELLO;
@@ -434,10 +440,12 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     setPeerOsName(challenge->os_name());
     setPeerComputerName(challenge->computer_name());
     setPeerArch(challenge->arch());
+    setPeerDisplayName(challenge->display_name());
 
     LOG(LS_INFO) << "Server (version=" << peerVersion() << " name=" << challenge->computer_name()
                  << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
-                 << " arch=" << challenge->arch() << ")";
+                 << " arch=" << challenge->arch() << " display_name=" << challenge->display_name()
+                 << ")";
 
     if (peerVersion() < base::Version::kMinimumSupportedVersion)
     {
@@ -463,6 +471,7 @@ void ClientAuthenticator::sendSessionResponse()
     response->set_os_name(utf8FromUtf16(SysInfo::operatingSystemName()));
     response->set_computer_name(utf8FromUtf16(SysInfo::computerName()));
     response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
+    response->set_display_name(utf8FromUtf16(display_name_));
 
 #if defined(ARCH_CPU_X86)
     response->set_arch("x86");

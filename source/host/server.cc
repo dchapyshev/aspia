@@ -218,6 +218,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     {
         session->setClientVersion(session_info.version);
         session->setComputerName(session_info.computer_name);
+        session->setDisplayName(session_info.display_name);
         session->setUserName(session_info.user_name);
     }
     else

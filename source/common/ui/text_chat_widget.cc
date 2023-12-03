@@ -40,16 +40,22 @@ namespace {
 
 const int kMaxMessageLength = 2048;
 
+QString currentTime()
+{
+    return QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 TextChatWidget::TextChatWidget(QWidget* parent)
     : QWidget(parent),
       ui(std::make_unique<Ui::TextChatWidget>()),
-      host_name_(QHostInfo::localHostName().toStdString()),
+      display_name_(QHostInfo::localHostName().toStdString()),
       status_clear_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
+
     ui->setupUi(this);
     ui->edit_message->installEventFilter(this);
     ui->list_messages->horizontalScrollBar()->installEventFilter(this);
@@ -57,8 +63,10 @@ TextChatWidget::TextChatWidget(QWidget* parent)
 
     connect(status_clear_timer_, &QTimer::timeout, ui->label_status, &QLabel::clear);
     connect(ui->button_send, &QToolButton::clicked, this, &TextChatWidget::onSendMessage);
-    connect(ui->button_tools, &QToolButton::clicked, this, [=]()
+    connect(ui->button_tools, &QToolButton::clicked, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] Show tool menu";
+
         QMenu menu;
         QAction* save_chat_action = menu.addAction(tr("Save chat..."));
         QAction* clear_history_action = menu.addAction(tr("Clear chat"));
@@ -121,39 +129,35 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
             break;
 
         case proto::TextChatStatus::STATUS_STARTED:
-        {
-            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-            addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, time));
-        }
-        break;
+            addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, currentTime()));
+            break;
 
         case proto::TextChatStatus::STATUS_STOPPED:
-        {
-            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-            addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, time));
-        }
-        break;
+            addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, currentTime()));
+            break;
 
         case proto::TextChatStatus::STATUS_USER_CONNECTED:
-        {
-            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-            addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, time));
-        }
-        break;
+            addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, currentTime()));
+            break;
 
         case proto::TextChatStatus::STATUS_USER_DISCONNECTED:
-        {
-            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-            addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, time));
-        }
-        break;
+            addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
+            break;
 
         default:
             LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.status());
             return;
     }
 
-    status_clear_timer_->start(std::chrono::seconds(1));
+        status_clear_timer_->start(std::chrono::seconds(1));
+}
+
+void TextChatWidget::setDisplayName(const std::string& display_name)
+{
+    display_name_ = display_name;
+
+    if (display_name_.empty())
+        display_name_ = QHostInfo::localHostName().toStdString();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,6 +195,8 @@ void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event detected";
+
     emit sig_textChatClosed();
     QWidget::closeEvent(event);
 }
@@ -238,6 +244,7 @@ void TextChatWidget::onSendMessage()
 
     if (message.length() > kMaxMessageLength)
     {
+        LOG(LS_ERROR) << "Too long message: " << message.length();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The message is too long. The maximum message length is %n "
@@ -254,7 +261,7 @@ void TextChatWidget::onSendMessage()
 
     proto::TextChatMessage text_chat_message;
     text_chat_message.set_timestamp(timestamp);
-    text_chat_message.set_source(host_name_);
+    text_chat_message.set_source(display_name_);
     text_chat_message.set_text(message.toStdString());
 
     emit sig_sendMessage(text_chat_message);
@@ -265,7 +272,7 @@ void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
 {
     proto::TextChatStatus text_chat_status;
     text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
-    text_chat_status.set_source(host_name_);
+    text_chat_status.set_source(display_name_);
     text_chat_status.set_status(status);
 
     emit sig_sendStatus(text_chat_status);
@@ -274,6 +281,8 @@ void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::onClearHistory()
 {
+    LOG(LS_INFO) << "[ACTION] Clear history";
+
     QListWidget* list_messages = ui->list_messages;
     for (int i = list_messages->count() - 1; i >= 0; --i)
         delete list_messages->item(i);
@@ -282,6 +291,8 @@ void TextChatWidget::onClearHistory()
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::onSaveChat()
 {
+    LOG(LS_INFO) << "[ACTION] Save chat";
+
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
                                                      tr("Save File"),
@@ -289,11 +300,17 @@ void TextChatWidget::onSaveChat()
                                                      tr("TXT files (*.txt)"),
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(LS_INFO) << "File path not selected";
         return;
+    }
+
+    LOG(LS_INFO) << "Selected file path: " << file_path.toStdString();
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
+        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),

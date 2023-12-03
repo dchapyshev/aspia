@@ -35,6 +35,9 @@ public:
     explicit ClientSettingsDialog(QWidget* parent = nullptr);
     ~ClientSettingsDialog() override;
 
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 

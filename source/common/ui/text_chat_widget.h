@@ -40,6 +40,8 @@ public:
     void readMessage(const proto::TextChatMessage& message);
     void readStatus(const proto::TextChatStatus& status);
 
+    void setDisplayName(const std::string& display_name);
+
 signals:
     void sig_sendMessage(const proto::TextChatMessage& message);
     void sig_sendStatus(const proto::TextChatStatus& status);
@@ -60,7 +62,7 @@ private:
     void onUpdateSize();
 
     std::unique_ptr<Ui::TextChatWidget> ui;
-    std::string host_name_;
+    std::string display_name_;
     QTimer* status_clear_timer_;
 };
 

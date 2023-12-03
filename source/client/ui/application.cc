@@ -18,8 +18,9 @@
 
 #include "client/ui/application.h"
 
+#include "base/logging.h"
 #include "build/version.h"
-#include "qt_base/qt_logging.h"
+#include "client/ui/client_settings.h"
 
 #include <QIcon>
 
@@ -39,13 +40,15 @@ Application::Application(int& argc, char* argv[])
 #endif
     setWindowIcon(QIcon(":/img/main.ico"));
 
-    if (!hasLocale(settings_.locale()))
+    ClientSettings settings;
+
+    if (!hasLocale(settings.locale()))
     {
         LOG(LS_INFO) << "Set default locale";
-        settings_.setLocale(QString::fromStdU16String(DEFAULT_LOCALE));
+        settings.setLocale(QString::fromStdU16String(DEFAULT_LOCALE));
     }
 
-    setLocale(settings_.locale());
+    setLocale(settings.locale());
 }
 
 //--------------------------------------------------------------------------------------------------

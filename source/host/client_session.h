@@ -75,7 +75,10 @@ public:
     const std::string& userName() const { return username_; }
 
     void setComputerName(std::string_view computer_name);
-    std::string computerName() const;
+    const std::string& computerName() const;
+
+    void setDisplayName(std::string_view display_name);
+    const std::string& displayName() const;
 
     proto::SessionType sessionType() const { return session_type_; }
 
@@ -114,6 +117,7 @@ private:
     base::Version version_;
     std::string username_;
     std::string computer_name_;
+    std::string display_name_;
 
     std::unique_ptr<base::TcpChannel> channel_;
 };

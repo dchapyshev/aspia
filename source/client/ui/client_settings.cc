@@ -37,6 +37,7 @@ const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
 const QString kUpdateServerParam = QStringLiteral("UpdateServer");
 const QString kOneTimePasswordCheckedParam = QStringLiteral("OneTimePasswordChecked");
 const QString kRouterManagerStateParam = QStringLiteral("RouterManagerState");
+const QString kDisplayNameParam = QStringLiteral("DisplayName");
 
 } // namespace
 
@@ -201,6 +202,18 @@ QByteArray ClientSettings::routerManagerState() const
 void ClientSettings::setRouterManagerState(const QByteArray& state)
 {
     settings_.setValue(kRouterManagerStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ClientSettings::displayName() const
+{
+    return settings_.value(kDisplayNameParam).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSettings::setDisplayName(const QString& display_name)
+{
+    settings_.setValue(kDisplayNameParam, display_name);
 }
 
 } // namespace client

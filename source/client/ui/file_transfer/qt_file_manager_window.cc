@@ -68,6 +68,8 @@ QtFileManagerWindow::~QtFileManagerWindow()
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtFileManagerWindow::createClient()
 {
+    LOG(LS_INFO) << "Create client";
+
     std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
         qt_base::Application::ioTaskRunner());
 
@@ -79,6 +81,8 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_proxy)
 {
+    LOG(LS_INFO) << "Show window";
+
     file_control_proxy_ = std::move(file_control_proxy);
     DCHECK(file_control_proxy_);
 
@@ -90,6 +94,7 @@ void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_p
 //--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
 {
+    LOG(LS_ERROR) << "Session error: " << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("Session error: %1").arg(fileErrorToString(error_code)),
@@ -206,11 +211,19 @@ void QtFileManagerWindow::onInternalReset()
 //--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event detected";
+
     if (transfer_dialog_)
+    {
+        LOG(LS_INFO) << "Stopping transfer dialog";
         transfer_dialog_->stop();
+    }
 
     if (remove_dialog_)
+    {
+        LOG(LS_INFO) << "Stopping remove dialog";
         remove_dialog_->stop();
+    }
 
     FileManagerSettings settings;
 
@@ -226,7 +239,7 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
     remove_dialog_ = new FileRemoveDialog(this);
     remove_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(remove_dialog_, &FileRemoveDialog::finished, [this]()
+    connect(remove_dialog_, &FileRemoveDialog::finished, this, [this]()
     {
         refresh();
         activateWindow();
@@ -349,6 +362,8 @@ void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
 void QtFileManagerWindow::initPanel(
     common::FileTask::Target target, const QString& title, const QString& mime_type, FilePanel* panel)
 {
+    LOG(LS_INFO) << "Init file manager panel (target=" << static_cast<int>(target) << ")";
+
     panel->setPanelName(title);
     panel->setMimeType(mime_type);
 

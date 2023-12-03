@@ -63,6 +63,7 @@ public:
     [[nodiscard]] const std::string& peerOsName() const { return peer_os_name_; }
     [[nodiscard]] const std::string& peerComputerName() const { return peer_computer_name_; }
     [[nodiscard]] const std::string& peerArch() const { return peer_arch_; }
+    [[nodiscard]] const std::string& peerDisplayName() const { return peer_display_name_; }
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
     [[nodiscard]] const std::string& userName() const { return user_name_; }
 
@@ -87,6 +88,7 @@ protected:
     void setPeerOsName(const std::string& name);
     void setPeerComputerName(const std::string& name);
     void setPeerArch(const std::string& arch);
+    void setPeerDisplayName(const std::string& display_name);
 
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
@@ -114,6 +116,7 @@ private:
     std::string peer_os_name_;
     std::string peer_computer_name_;
     std::string peer_arch_;
+    std::string peer_display_name_;
 };
 
 } // namespace base

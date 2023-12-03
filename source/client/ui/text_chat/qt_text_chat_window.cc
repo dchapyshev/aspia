@@ -19,6 +19,7 @@
 #include "client/ui/text_chat/qt_text_chat_window.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "client/client_text_chat.h"
 #include "client/text_chat_control_proxy.h"
 #include "qt_base/application.h"
@@ -77,6 +78,8 @@ QtTextChatWindow::~QtTextChatWindow()
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtTextChatWindow::createClient()
 {
+    LOG(LS_INFO) << "Create client";
+
     std::unique_ptr<ClientTextChat> client = std::make_unique<ClientTextChat>(
         qt_base::Application::ioTaskRunner());
 
@@ -88,8 +91,12 @@ std::unique_ptr<Client> QtTextChatWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy)
 {
+    LOG(LS_INFO) << "Show window";
+
     text_chat_control_proxy_ = std::move(text_chat_control_proxy);
     DCHECK(text_chat_control_proxy_);
+
+    ui->text_chat_widget->setDisplayName(base::utf8FromUtf16(config().display_name));
 
     show();
     activateWindow();
