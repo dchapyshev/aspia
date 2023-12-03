@@ -74,6 +74,21 @@
         <source>Default Configuration</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="300"/>
+        <source>Other</source>
+        <translation type="unfinished">Overige</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="308"/>
+        <source>Display name when connected:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="318"/>
+        <source>Enter a name or leave the field empty</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -889,53 +904,53 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="112"/>
+        <location filename="../address_book_dialog.cc" line="113"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="114"/>
+        <location filename="../address_book_dialog.cc" line="115"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translatorcomment>Why are we translating this?</translatorcomment>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="143"/>
+        <location filename="../address_book_dialog.cc" line="144"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="126"/>
+        <location filename="../address_book_dialog.cc" line="127"/>
         <source>Address Book</source>
         <translation>Adresboek</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="99"/>
+        <location filename="../address_book_dialog.cc" line="100"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="227"/>
+        <location filename="../address_book_dialog.cc" line="226"/>
         <source>General</source>
         <translation type="unfinished">Basis</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="231"/>
+        <location filename="../address_book_dialog.cc" line="230"/>
         <source>Sessions</source>
         <translation type="unfinished">Sessies</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="237"/>
         <source>Manage</source>
         <translation type="unfinished">Beheren</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="242"/>
+        <location filename="../address_book_dialog.cc" line="241"/>
         <source>View</source>
         <translation type="unfinished">Weergave</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="462"/>
+        <location filename="../address_book_dialog.cc" line="455"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -943,25 +958,33 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="468"/>
+        <location filename="../address_book_dialog.cc" line="461"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="475"/>
+        <location filename="../address_book_dialog.cc" line="468"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="476"/>
+        <source>Too long display name. The maximum length of the display name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="501"/>
+        <location filename="../address_book_dialog.cc" line="502"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="507"/>
+        <location filename="../address_book_dialog.cc" line="508"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakter zijn.</numerusform>
@@ -969,12 +992,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="515"/>
+        <location filename="../address_book_dialog.cc" line="516"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="518"/>
+        <location filename="../address_book_dialog.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -982,38 +1005,38 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="522"/>
+        <location filename="../address_book_dialog.cc" line="523"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="440"/>
-        <location filename="../address_book_dialog.cc" line="525"/>
+        <location filename="../address_book_dialog.cc" line="433"/>
+        <location filename="../address_book_dialog.cc" line="526"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="529"/>
+        <location filename="../address_book_dialog.cc" line="530"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="530"/>
+        <location filename="../address_book_dialog.cc" line="531"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="563"/>
+        <location filename="../address_book_dialog.cc" line="564"/>
         <source>An invalid router address was entered.</source>
         <translation>Er is een ongeldig router adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="574"/>
+        <location filename="../address_book_dialog.cc" line="575"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="583"/>
+        <location filename="../address_book_dialog.cc" line="584"/>
         <source>Router password cannot be empty.</source>
         <translation>Router wachtwoord mag niet leeg zijn.</translation>
     </message>
@@ -1051,81 +1074,81 @@
         <translation>Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="678"/>
+        <location filename="../address_book_tab.cc" line="684"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Weet U zeker dat U de computer groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="682"/>
-        <location filename="../address_book_tab.cc" line="720"/>
+        <location filename="../address_book_tab.cc" line="688"/>
+        <location filename="../address_book_tab.cc" line="726"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="686"/>
-        <location filename="../address_book_tab.cc" line="724"/>
+        <location filename="../address_book_tab.cc" line="692"/>
+        <location filename="../address_book_tab.cc" line="730"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="687"/>
-        <location filename="../address_book_tab.cc" line="725"/>
+        <location filename="../address_book_tab.cc" line="693"/>
+        <location filename="../address_book_tab.cc" line="731"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="716"/>
+        <location filename="../address_book_tab.cc" line="722"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1069"/>
+        <location filename="../address_book_tab.cc" line="1075"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1074"/>
+        <location filename="../address_book_tab.cc" line="1080"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1216"/>
+        <location filename="../address_book_tab.cc" line="1222"/>
         <source>Save Address Book</source>
         <translation>Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1218"/>
+        <location filename="../address_book_tab.cc" line="1224"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1233"/>
+        <location filename="../address_book_tab.cc" line="1239"/>
         <source>Unable to create or open address book file.</source>
         <translation>Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1247"/>
+        <location filename="../address_book_tab.cc" line="1253"/>
         <source>Unable to write address book file.</source>
         <translation>Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1278"/>
+        <location filename="../address_book_tab.cc" line="1284"/>
         <source>Root Group</source>
         <translation>Hoofd Groep</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1290"/>
-        <location filename="../address_book_tab.cc" line="1305"/>
+        <location filename="../address_book_tab.cc" line="1296"/>
+        <location filename="../address_book_tab.cc" line="1311"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1292"/>
+        <location filename="../address_book_tab.cc" line="1298"/>
         <source>Could not open address book</source>
         <translation>Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1307"/>
+        <location filename="../address_book_tab.cc" line="1313"/>
         <source>Failed to save address book</source>
         <translation>Kon adresboek niet opslaan</translation>
     </message>
@@ -1420,7 +1443,7 @@
         <location filename="../main_window.cc" line="613"/>
         <location filename="../main_window.cc" line="667"/>
         <location filename="../main_window.cc" line="680"/>
-        <location filename="../main_window.cc" line="1660"/>
+        <location filename="../main_window.cc" line="1661"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1555,7 +1578,7 @@
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1661"/>
+        <location filename="../main_window.cc" line="1662"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>

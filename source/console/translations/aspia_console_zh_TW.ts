@@ -74,6 +74,21 @@
         <source>Default Configuration</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="300"/>
+        <source>Other</source>
+        <translation type="unfinished">其他</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="308"/>
+        <source>Display name when connected:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="318"/>
+        <source>Enter a name or leave the field empty</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -884,126 +899,133 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="112"/>
+        <location filename="../address_book_dialog.cc" line="113"/>
         <source>Without Encryption</source>
         <translation>沒有加密</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="114"/>
+        <location filename="../address_book_dialog.cc" line="115"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="126"/>
+        <location filename="../address_book_dialog.cc" line="127"/>
         <source>Address Book</source>
         <translation>通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="143"/>
+        <location filename="../address_book_dialog.cc" line="144"/>
         <source>Double-click to change</source>
         <translation>點選兩次以修改</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="462"/>
+        <location filename="../address_book_dialog.cc" line="455"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="468"/>
+        <location filename="../address_book_dialog.cc" line="461"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="475"/>
+        <location filename="../address_book_dialog.cc" line="468"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location filename="../address_book_dialog.cc" line="476"/>
+        <source>Too long display name. The maximum length of the display name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="501"/>
+        <location filename="../address_book_dialog.cc" line="502"/>
         <source>The passwords you entered do not match.</source>
         <translation>您輸入的密碼不符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="507"/>
+        <location filename="../address_book_dialog.cc" line="508"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="515"/>
+        <location filename="../address_book_dialog.cc" line="516"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="518"/>
+        <location filename="../address_book_dialog.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="522"/>
+        <location filename="../address_book_dialog.cc" line="523"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="440"/>
-        <location filename="../address_book_dialog.cc" line="525"/>
+        <location filename="../address_book_dialog.cc" line="433"/>
+        <location filename="../address_book_dialog.cc" line="526"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="563"/>
+        <location filename="../address_book_dialog.cc" line="564"/>
         <source>An invalid router address was entered.</source>
         <translation>輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="574"/>
+        <location filename="../address_book_dialog.cc" line="575"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>使用者名稱不能為空，只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="583"/>
+        <location filename="../address_book_dialog.cc" line="584"/>
         <source>Router password cannot be empty.</source>
         <translation>路由器密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="227"/>
+        <location filename="../address_book_dialog.cc" line="226"/>
         <source>General</source>
         <translation type="unfinished">一般</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="231"/>
+        <location filename="../address_book_dialog.cc" line="230"/>
         <source>Sessions</source>
         <translation type="unfinished">工作階段</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="237"/>
         <source>Manage</source>
         <translation type="unfinished">管理</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="242"/>
+        <location filename="../address_book_dialog.cc" line="241"/>
         <source>View</source>
         <translation type="unfinished">檢視</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="99"/>
+        <location filename="../address_book_dialog.cc" line="100"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="529"/>
+        <location filename="../address_book_dialog.cc" line="530"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="530"/>
+        <location filename="../address_book_dialog.cc" line="531"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1041,81 +1063,81 @@
         <translation>通訊錄檔案已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="678"/>
+        <location filename="../address_book_tab.cc" line="684"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您確定要刪除電腦群組「%1」和所有子項目嗎？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="682"/>
-        <location filename="../address_book_tab.cc" line="720"/>
+        <location filename="../address_book_tab.cc" line="688"/>
+        <location filename="../address_book_tab.cc" line="726"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="716"/>
+        <location filename="../address_book_tab.cc" line="722"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1216"/>
+        <location filename="../address_book_tab.cc" line="1222"/>
         <source>Save Address Book</source>
         <translation>儲存通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1218"/>
+        <location filename="../address_book_tab.cc" line="1224"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1233"/>
+        <location filename="../address_book_tab.cc" line="1239"/>
         <source>Unable to create or open address book file.</source>
         <translation>無法建立或開啟通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1247"/>
+        <location filename="../address_book_tab.cc" line="1253"/>
         <source>Unable to write address book file.</source>
         <translation>無法寫入通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1278"/>
+        <location filename="../address_book_tab.cc" line="1284"/>
         <source>Root Group</source>
         <translation>根群組</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1290"/>
-        <location filename="../address_book_tab.cc" line="1305"/>
+        <location filename="../address_book_tab.cc" line="1296"/>
+        <location filename="../address_book_tab.cc" line="1311"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1292"/>
+        <location filename="../address_book_tab.cc" line="1298"/>
         <source>Could not open address book</source>
         <translation>無法開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1307"/>
+        <location filename="../address_book_tab.cc" line="1313"/>
         <source>Failed to save address book</source>
         <translation>儲存通訊錄失敗</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="686"/>
-        <location filename="../address_book_tab.cc" line="724"/>
+        <location filename="../address_book_tab.cc" line="692"/>
+        <location filename="../address_book_tab.cc" line="730"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="687"/>
-        <location filename="../address_book_tab.cc" line="725"/>
+        <location filename="../address_book_tab.cc" line="693"/>
+        <location filename="../address_book_tab.cc" line="731"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1069"/>
+        <location filename="../address_book_tab.cc" line="1075"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1074"/>
+        <location filename="../address_book_tab.cc" line="1080"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1404,7 +1426,7 @@
         <location filename="../main_window.cc" line="613"/>
         <location filename="../main_window.cc" line="667"/>
         <location filename="../main_window.cc" line="680"/>
-        <location filename="../main_window.cc" line="1660"/>
+        <location filename="../main_window.cc" line="1661"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1527,7 +1549,7 @@
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1661"/>
+        <location filename="../main_window.cc" line="1662"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>

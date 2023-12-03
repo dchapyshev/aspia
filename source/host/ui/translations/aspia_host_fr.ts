@@ -993,37 +993,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="218"/>
+        <location filename="../notifier_window.cc" line="251"/>
         <source>Disconnect</source>
         <translation>Déconnexion</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="273"/>
+        <location filename="../notifier_window.cc" line="308"/>
         <source>Unlock mouse</source>
         <translation>Déverrouiller la souris</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="278"/>
+        <location filename="../notifier_window.cc" line="313"/>
         <source>Lock mouse</source>
         <translation>Verrouiller la souris</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="300"/>
+        <location filename="../notifier_window.cc" line="335"/>
         <source>Unlock keyboard</source>
         <translation>Déverrouiller le clavier</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="305"/>
+        <location filename="../notifier_window.cc" line="340"/>
         <source>Lock keyboard</source>
         <translation>Verrouiller le clavier</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="327"/>
+        <location filename="../notifier_window.cc" line="362"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="332"/>
+        <location filename="../notifier_window.cc" line="367"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>

@@ -1017,37 +1017,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="218"/>
+        <location filename="../notifier_window.cc" line="251"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="273"/>
+        <location filename="../notifier_window.cc" line="308"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="278"/>
+        <location filename="../notifier_window.cc" line="313"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="300"/>
+        <location filename="../notifier_window.cc" line="335"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="305"/>
+        <location filename="../notifier_window.cc" line="340"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="327"/>
+        <location filename="../notifier_window.cc" line="362"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="332"/>
+        <location filename="../notifier_window.cc" line="367"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
