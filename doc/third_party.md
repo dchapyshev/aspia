@@ -5,6 +5,7 @@ Third-party components information
 |------------|--------------------------------|--------------------------------------------------|
 | asio       | Boost Software License 1.0     | https://github.com/chriskohlhoff/asio            |
 | curl       | Curl License (MIT-based)       | https://github.com/curl/curl                     |
+| fmt        | MIT License                    | https://github.com/fmtlib/fmt                    |
 | googletest | BSD 3-Clause License           | https://github.com/google/googletest             |
 | icu        | ICU License                    | https://github.com/unicode-org/icu               |
 | libvpx     | BSD 3-Clause License           | https://chromium.googlesource.com/webm/libvpx    |
