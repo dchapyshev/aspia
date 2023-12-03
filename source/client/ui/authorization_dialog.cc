@@ -112,6 +112,8 @@ void AuthorizationDialog::setPassword(const QString& password)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::showEvent(QShowEvent* event)
 {
+    LOG(LS_INFO) << "Show event detected";
+
     if (ui.edit_username->text().isEmpty() && !ui.checkbox_one_time_password->isChecked())
         ui.edit_username->setFocus();
     else
@@ -123,6 +125,8 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
+    LOG(LS_INFO) << "[ACTION] Show passowrd button toggled: " << checked;
+
     if (checked)
     {
         ui.edit_password->setEchoMode(QLineEdit::Normal);
@@ -141,6 +145,8 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 {
+    LOG(LS_INFO) << "[ACTION] One time password toggled: " << checked;
+
     ui.label_username->setVisible(!checked);
     ui.edit_username->setVisible(!checked);
     ui.edit_username->clear();
@@ -153,10 +159,13 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.buttonbox->standardButton(button) == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (!ui.checkbox_one_time_password->isChecked())
         {
             if (ui.edit_username->text().isEmpty())
             {
+                LOG(LS_ERROR) << "Empty user name";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Username cannot be empty."),
@@ -167,6 +176,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.edit_password->text().isEmpty())
         {
+            LOG(LS_ERROR) << "Empty password";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password cannot be empty."),
@@ -178,6 +188,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

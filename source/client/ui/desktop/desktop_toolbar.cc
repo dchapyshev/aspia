@@ -765,6 +765,8 @@ void DesktopToolBar::onShowRecordSettings()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
 {
+    LOG(LS_INFO) << "Create additional menu";
+
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
 
@@ -839,6 +841,8 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
         else
             return;
 
+        LOG(LS_INFO) << "[ACTION] Scale chenged: " << scale_;
+
         emit sig_scaleChanged();
     });
 
@@ -866,6 +870,8 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
             else
                 scale_ = 100;
         }
+
+        LOG(LS_INFO) << "[ACTION] Fit window changed (checked=" << checked << " scale=" << scale_ << ")";
 
         emit sig_scaleChanged();
     });
@@ -898,6 +904,8 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::showFullScreenButtons(bool show)
 {
+    LOG(LS_INFO) << "Show full screen buttons: " << show;
+
     // MacOS does not have the ability to minimize a window from full screen mode. Therefore, for
     // MacOS we disable the minimize button from full screen mode.
     // For more info see: https://bugreports.qt.io/browse/QTBUG-62991

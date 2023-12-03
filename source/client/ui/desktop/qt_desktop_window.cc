@@ -489,6 +489,8 @@ void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     if (!statistics_dialog_)
     {
+        LOG(LS_INFO) << "Statistics dialog not created yet";
+
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -611,6 +613,8 @@ void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRe
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onInternalReset()
 {
+    LOG(LS_INFO) << "Internal reset";
+
     if (system_info_)
     {
         LOG(LS_INFO) << "Close System Info window";
@@ -765,6 +769,7 @@ void QtDesktopWindow::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 {
+    LOG(LS_INFO) << "Focus out event";
     desktop_->userLeftFromWindow();
     QWidget::focusOutEvent(event);
 }
@@ -1124,12 +1129,19 @@ void QtDesktopWindow::scaleDesktop()
     int scale = toolbar_->scale();
 
     if (scale != -1)
+    {
         target_size = scaledSize(source_size, scale);
+        LOG(LS_INFO) << "Scaling enabled (source_size=" << source_size << " target_size="
+                     << target_size << " scale=" << scale << ")";
+    }
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
 
     if (resize_timer_->isActive())
+    {
+        LOG(LS_INFO) << "Resize timer stopped";
         resize_timer_->stop();
+    }
 
     LOG(LS_INFO) << "Starting resize timer (scale=" << scale << " size=" << size()
                  << " target_size=" << target_size << ")";

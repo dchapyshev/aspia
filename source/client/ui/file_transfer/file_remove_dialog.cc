@@ -144,8 +144,7 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
     else
     {
         message = tr("Failed to delete \"%1\": %2.")
-            .arg(QString::fromStdString(path))
-            .arg(fileErrorToString(error_code));
+            .arg(QString::fromStdString(path), fileErrorToString(error_code));
     }
 
     QPointer<QMessageBox> dialog(new QMessageBox(this));

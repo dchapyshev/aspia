@@ -297,37 +297,32 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
         case FileTransfer::Error::Type::CREATE_DIRECTORY:
         {
             return tr("Failed to create directory \"%1\": %2")
-                .arg(QString::fromStdString(error.path()))
-                .arg(fileErrorToString(error.code()));
+                .arg(QString::fromStdString(error.path()), fileErrorToString(error.code()));
         }
 
         case FileTransfer::Error::Type::CREATE_FILE:
         case FileTransfer::Error::Type::ALREADY_EXISTS:
         {
             return tr("Failed to create file \"%1\": %2")
-                .arg(QString::fromStdString(error.path()))
-                .arg(fileErrorToString(error.code()));
+                .arg(QString::fromStdString(error.path()), fileErrorToString(error.code()));
         }
 
         case FileTransfer::Error::Type::OPEN_FILE:
         {
             return tr("Failed to open file \"%1\": %2")
-                .arg(QString::fromStdString(error.path()))
-                .arg(fileErrorToString(error.code()));
+                .arg(QString::fromStdString(error.path()), fileErrorToString(error.code()));
         }
 
         case FileTransfer::Error::Type::WRITE_FILE:
         {
             return tr("Failed to write file \"%1\": %2")
-                .arg(QString::fromStdString(error.path()))
-                .arg(fileErrorToString(error.code()));
+                .arg(QString::fromStdString(error.path()), fileErrorToString(error.code()));
         }
 
         case FileTransfer::Error::Type::READ_FILE:
         {
             return tr("Failed to read file \"%1\": %2")
-                .arg(QString::fromStdString(error.path()))
-                .arg(fileErrorToString(error.code()));
+                .arg(QString::fromStdString(error.path()), fileErrorToString(error.code()));
         }
 
         default:
