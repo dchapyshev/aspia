@@ -236,10 +236,15 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     connect(ui->push_button_donate, &QPushButton::clicked, this, []()
     {
+        LOG(LS_INFO) << "[ACTION] Donate button clicked";
         QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
     });
 
-    connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);
+    connect(ui->push_button_close, &QPushButton::clicked, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Close button clicked";
+        close();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -251,12 +256,16 @@ AboutDialog::~AboutDialog()
 //--------------------------------------------------------------------------------------------------
 void AboutDialog::onServiceContextMenu(const QPoint& pos)
 {
+    LOG(LS_INFO) << "[ACTION] Service context menu";
+
     QMenu menu;
 
     QAction* save_action = menu.addAction(tr("Save to file..."));
 
     if (menu.exec(ui->list_service->viewport()->mapToGlobal(pos)) == save_action)
     {
+        LOG(LS_INFO) << "[ACTION] Save action";
+
         QString selected_filter;
         QString file_path = QFileDialog::getSaveFileName(this,
                                                          tr("Save File"),
@@ -264,11 +273,17 @@ void AboutDialog::onServiceContextMenu(const QPoint& pos)
                                                          tr("TXT files (*.txt)"),
                                                          &selected_filter);
         if (file_path.isEmpty() || selected_filter.isEmpty())
+        {
+            LOG(LS_INFO) << "File path not selected";
             return;
+        }
+
+        LOG(LS_INFO) << "Selected file path: " << file_path.toStdString();
 
         QFile file(file_path);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
+            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Could not open file for writing."),

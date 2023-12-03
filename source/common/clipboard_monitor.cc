@@ -89,6 +89,8 @@ void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
 
     if (clipboard_)
         clipboard_->injectClipboardEvent(event);
+    else
+        LOG(LS_ERROR) << "No clipboard instance";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,6 +107,8 @@ void ClipboardMonitor::clearClipboard()
 
     if (clipboard_)
         clipboard_->clearClipboard();
+    else
+        LOG(LS_ERROR) << "No clipboard instance";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,6 +149,8 @@ void ClipboardMonitor::onClipboardEvent(const proto::ClipboardEvent& event)
 
     if (delegate_)
         delegate_->onClipboardEvent(event);
+    else
+        LOG(LS_ERROR) << "Invalid delegate";
 }
 
 } // namespace common

@@ -28,13 +28,21 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-ClipboardWin::ClipboardWin() = default;
+ClipboardWin::ClipboardWin()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 
 //--------------------------------------------------------------------------------------------------
 ClipboardWin::~ClipboardWin()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (!window_)
+    {
+        LOG(LS_ERROR) << "Window not created";
         return;
+    }
 
     RemoveClipboardFormatListener(window_->hwnd());
     window_.reset();
@@ -44,7 +52,10 @@ ClipboardWin::~ClipboardWin()
 void ClipboardWin::init()
 {
     if (window_)
+    {
+        LOG(LS_ERROR) << "Window already created";
         return;
+    }
 
     window_ = std::make_unique<base::win::MessageWindow>();
 
@@ -68,7 +79,10 @@ void ClipboardWin::init()
 void ClipboardWin::setData(const std::string& data)
 {
     if (!window_)
+    {
+        LOG(LS_ERROR) << "Window not created";
         return;
+    }
 
     std::wstring text;
     if (!base::utf8ToWide(base::replaceLfByCrLf(data), &text))

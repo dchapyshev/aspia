@@ -107,6 +107,7 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 
     if (checker_)
     {
+        LOG(LS_INFO) << "Distroy checker...";
         ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
         ui->button_close->setEnabled(false);
         checker_.reset();
@@ -186,7 +187,7 @@ void UpdateDialog::onUpdateNow()
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
                             QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                                .arg(message1).arg(message2).arg(message3).arg(question),
+                                .arg(message1, message2, message3, question),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
     message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
