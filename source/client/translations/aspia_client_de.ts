@@ -2894,34 +2894,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="319"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="328"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1092"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="326"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="320"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="329"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="327"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1059"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1056"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1061"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1058"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1092"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1089"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3580,7 +3580,7 @@
         <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen. {1.?}</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="137"/>
+        <location filename="../ui/session_window.cc" line="133"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3590,193 +3590,203 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="161"/>
+        <location filename="../ui/session_window.cc" line="157"/>
+        <source>Connecting to router...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="170"/>
         <source>Connection to router %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="174"/>
+        <location filename="../ui/session_window.cc" line="175"/>
+        <source>Connection to router established.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="188"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="179"/>
+        <location filename="../ui/session_window.cc" line="193"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="195"/>
+        <location filename="../ui/session_window.cc" line="210"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="200"/>
+        <location filename="../ui/session_window.cc" line="215"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="219"/>
+        <location filename="../ui/session_window.cc" line="235"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="226"/>
+        <location filename="../ui/session_window.cc" line="242"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="233"/>
+        <location filename="../ui/session_window.cc" line="249"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="240"/>
+        <location filename="../ui/session_window.cc" line="256"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="250"/>
+        <location filename="../ui/session_window.cc" line="266"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="271"/>
+        <location filename="../ui/session_window.cc" line="287"/>
         <source>Network error when connecting to the router: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="278"/>
+        <location filename="../ui/session_window.cc" line="294"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="303"/>
+        <location filename="../ui/session_window.cc" line="319"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Desktopverwaltung</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="307"/>
+        <location filename="../ui/session_window.cc" line="323"/>
         <source>Desktop View</source>
         <translation type="unfinished">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="311"/>
+        <location filename="../ui/session_window.cc" line="327"/>
         <source>File Transfer</source>
         <translation type="unfinished">Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="315"/>
+        <location filename="../ui/session_window.cc" line="331"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="319"/>
+        <location filename="../ui/session_window.cc" line="335"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="357"/>
+        <location filename="../ui/session_window.cc" line="373"/>
         <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="361"/>
+        <location filename="../ui/session_window.cc" line="377"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="365"/>
+        <location filename="../ui/session_window.cc" line="381"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="369"/>
+        <location filename="../ui/session_window.cc" line="385"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="373"/>
+        <location filename="../ui/session_window.cc" line="389"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="377"/>
+        <location filename="../ui/session_window.cc" line="393"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="381"/>
+        <location filename="../ui/session_window.cc" line="397"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="385"/>
+        <location filename="../ui/session_window.cc" line="401"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="389"/>
+        <location filename="../ui/session_window.cc" line="405"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="399"/>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="415"/>
+        <location filename="../ui/session_window.cc" line="457"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="432"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="420"/>
+        <location filename="../ui/session_window.cc" line="436"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="424"/>
+        <location filename="../ui/session_window.cc" line="440"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="428"/>
+        <location filename="../ui/session_window.cc" line="444"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="433"/>
+        <location filename="../ui/session_window.cc" line="449"/>
         <source>Wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="453"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="457"/>
+        <location filename="../ui/session_window.cc" line="473"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="461"/>
+        <location filename="../ui/session_window.cc" line="477"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="465"/>
+        <location filename="../ui/session_window.cc" line="481"/>
         <source>Failed to connect to the relay server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="469"/>
+        <location filename="../ui/session_window.cc" line="485"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="473"/>
+        <location filename="../ui/session_window.cc" line="489"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
