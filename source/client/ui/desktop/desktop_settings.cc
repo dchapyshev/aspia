@@ -32,6 +32,7 @@ const QString kRecordSessionsParam = QStringLiteral("Desktop/RecordSessions");
 const QString kToolBarPinnedParam = QStringLiteral("Desktop/ToolBarPinned");
 const QString kPauseVideoParam = QStringLiteral("Desktop/PauseVideo");
 const QString kPauseAudioParam = QStringLiteral("Desktop/PauseAudio");
+const QString kWaitForHostParam = QStringLiteral("Desktop/WaitForHost");
 
 } // namespace
 
@@ -156,6 +157,18 @@ bool DesktopSettings::pauseAudioWhenMinimizing() const
 void DesktopSettings::setPauseAudioWhenMinimizing(bool enable)
 {
     settings_.setValue(kPauseAudioParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DesktopSettings::waitForHost() const
+{
+    return settings_.value(kWaitForHostParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSettings::setWaitForHost(bool enable)
+{
+    settings_.setValue(kWaitForHostParam, enable);
 }
 
 } // namespace client

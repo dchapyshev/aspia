@@ -290,6 +290,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         }
         else
         {
+            status_window_proxy_->onWaitForHost();
             delayedReconnectToHost();
         }
     }

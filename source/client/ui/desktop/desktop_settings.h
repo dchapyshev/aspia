@@ -54,6 +54,9 @@ public:
     bool pauseAudioWhenMinimizing() const;
     void setPauseAudioWhenMinimizing(bool enable);
 
+    bool waitForHost() const;
+    void setWaitForHost(bool enable);
+
 private:
     QSettings settings_;
 

@@ -146,8 +146,20 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         desktop_control_proxy_->setCurrentScreen(screen);
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_powerControl, this, [this](proto::PowerControl::Action action)
+    connect(toolbar_, &DesktopToolBar::sig_powerControl,
+            this, [this](proto::PowerControl::Action action, bool wait)
     {
+        switch (action)
+        {
+            case proto::PowerControl::ACTION_REBOOT:
+            case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
+                sessionState()->setAutoReconnect(wait);
+                break;
+
+            default:
+                break;
+        }
+
         desktop_control_proxy_->onPowerControl(action);
     });
 
@@ -249,7 +261,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
         if (!session_window->connectToHost(session_config))
+        {
+            LOG(LS_ERROR) << "Unable to connect to host";
             session_window->close();
+        }
     });
 
     connect(toolbar_, &DesktopToolBar::sig_recordingStateChanged, this, [this](bool enable)

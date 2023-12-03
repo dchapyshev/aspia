@@ -580,7 +580,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Shutdown accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_SHUTDOWN);
+            emit sig_powerControl(proto::PowerControl::ACTION_SHUTDOWN, false);
         }
         else
         {
@@ -598,10 +598,20 @@ void DesktopToolBar::onPowerControl(QAction* action)
         message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
         message_box.button(QMessageBox::No)->setText(tr("No"));
 
+        DesktopSettings settings;
+
+        QCheckBox* wait_checkbox = new QCheckBox(&message_box);
+        wait_checkbox->setText(tr("Wait for host"));
+        wait_checkbox->setChecked(settings.waitForHost());
+        message_box.setCheckBox(wait_checkbox);
+
         if (message_box.exec() == QMessageBox::Yes)
         {
-            LOG(LS_INFO) << "[ACTION] Reboot accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT);
+            bool wait = wait_checkbox->isChecked();
+            settings.setWaitForHost(wait);
+
+            LOG(LS_INFO) << "[ACTION] Reboot accepted by user (wait=" << wait << ")";
+            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT, wait);
         }
         else
         {
@@ -619,10 +629,20 @@ void DesktopToolBar::onPowerControl(QAction* action)
         message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
         message_box.button(QMessageBox::No)->setText(tr("No"));
 
+        DesktopSettings settings;
+
+        QCheckBox* wait_checkbox = new QCheckBox(&message_box);
+        wait_checkbox->setText(tr("Wait for host"));
+        wait_checkbox->setChecked(settings.waitForHost());
+        message_box.setCheckBox(wait_checkbox);
+
         if (message_box.exec() == QMessageBox::Yes)
         {
-            LOG(LS_INFO) << "[ACTION] Reboot (safe mode) accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
+            bool wait = wait_checkbox->isChecked();
+            settings.setWaitForHost(wait);
+
+            LOG(LS_INFO) << "[ACTION] Reboot (safe mode) accepted by user (wait=" << wait << ")";
+            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE, wait);
         }
         else
         {
@@ -643,7 +663,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Logoff accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_LOGOFF);
+            emit sig_powerControl(proto::PowerControl::ACTION_LOGOFF, false);
         }
         else
         {
@@ -664,7 +684,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Lock accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_LOCK);
+            emit sig_powerControl(proto::PowerControl::ACTION_LOCK, false);
         }
         else
         {
@@ -722,7 +742,7 @@ void DesktopToolBar::onMenuHide()
 {
     allow_hide_ = true;
 
-    QTimer::singleShot(std::chrono::milliseconds(500), this, [=]()
+    QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
     {
         if (!allow_hide_)
             return;

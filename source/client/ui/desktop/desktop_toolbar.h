@@ -70,7 +70,7 @@ signals:
     void sig_keyCombinationsChanged(bool enabled);
     void sig_takeScreenshot();
     void sig_startSession(proto::SessionType session_type);
-    void sig_powerControl(proto::PowerControl::Action action);
+    void sig_powerControl(proto::PowerControl::Action action, bool wait);
     void sig_startRemoteUpdate();
     void sig_startSystemInfo();
     void sig_startTaskManager();
