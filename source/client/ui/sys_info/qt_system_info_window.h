@@ -43,7 +43,8 @@ class QtSystemInfoWindow
     Q_OBJECT
 
 public:
-    explicit QtSystemInfoWindow(QWidget* parent = nullptr);
+    explicit QtSystemInfoWindow(std::shared_ptr<SessionState> session_state = nullptr,
+                                QWidget* parent = nullptr);
     ~QtSystemInfoWindow() override;
 
     // SessionWindow implementation.

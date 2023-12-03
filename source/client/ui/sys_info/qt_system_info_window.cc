@@ -88,8 +88,8 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
-    : SessionWindow(parent),
+QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
+    : SessionWindow(session_state, parent),
       ui(std::make_unique<Ui::SystemInfoWindow>()),
       system_info_window_proxy_(
           std::make_shared<SystemInfoWindowProxy>(qt_base::Application::uiTaskRunner(), this))
@@ -400,6 +400,20 @@ void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_in
     LOG(LS_INFO) << "Show window";
 
     system_info_control_proxy_ = std::move(system_info_control_proxy);
+
+    for (int i = 0; i < sys_info_widgets_.size(); ++i)
+    {
+        if (sys_info_widgets_[i]->category() == common::kSystemInfo_Summary)
+        {
+            SysInfoWidgetSummary* summary = static_cast<SysInfoWidgetSummary*>(sys_info_widgets_[i]);
+
+            summary->setClientVersion(base::Version::kCurrentFullVersion);
+            summary->setHostVersion(sessionState()->hostVersion());
+            summary->setRouterVersion(sessionState()->routerVersion());
+            break;
+        }
+    }
+
     show();
     activateWindow();
     onRefresh();

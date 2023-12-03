@@ -19,6 +19,7 @@
 #include "client/ui/sys_info/sys_info_widget_summary.h"
 
 #include "base/macros_magic.h"
+#include "base/version.h"
 #include "common/system_info_constants.h"
 
 #include <QMenu>
@@ -144,9 +145,17 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             items << mk(tr("Uptime"), delayToString(computer.uptime()));
 
         if (!items.isEmpty())
-        {
             ui.tree->addTopLevelItem(new Item(":/img/computer.png", tr("Computer"), items));
-        }
+    }
+
+    {
+        QList<QTreeWidgetItem*> items;
+
+        items << mk(tr("Host Version"), host_version_);
+        items << mk(tr("Client Version"), client_version_);
+        items << mk(tr("Router Version"), router_version_);
+
+        ui.tree->addTopLevelItem(new Item(":/img/main.png", tr("Aspia Information"), items));
     }
 
     if (system_info.has_operating_system())
@@ -336,6 +345,27 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 QTreeWidget* SysInfoWidgetSummary::treeWidget()
 {
     return ui.tree;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetSummary::setRouterVersion(const base::Version& router_version)
+{
+    if (router_version.isValid())
+        router_version_ = QString::fromStdU16String(router_version.toString());
+    else
+        router_version_ = tr("No");
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetSummary::setHostVersion(const base::Version& host_version)
+{
+    host_version_ = QString::fromStdU16String(host_version.toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetSummary::setClientVersion(const base::Version& client_version)
+{
+    client_version_ = QString::fromStdU16String(client_version.toString());
 }
 
 //--------------------------------------------------------------------------------------------------

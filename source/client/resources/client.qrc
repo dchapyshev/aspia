@@ -82,6 +82,7 @@
         <file>pencil.png</file>
         <file>plus.png</file>
         <file>minus.png</file>
+        <file>main.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

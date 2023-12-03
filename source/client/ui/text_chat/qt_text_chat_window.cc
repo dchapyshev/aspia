@@ -29,7 +29,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 QtTextChatWindow::QtTextChatWindow(QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(nullptr, parent),
       ui(std::make_unique<Ui::TextChatWindow>()),
       text_chat_window_proxy_(
           std::make_shared<TextChatWindowProxy>(qt_base::Application::uiTaskRunner(), this))

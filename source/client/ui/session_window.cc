@@ -29,8 +29,9 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-SessionWindow::SessionWindow(QWidget* parent)
+SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
     : QWidget(parent),
+      session_state_(std::move(session_state)),
       status_window_proxy_(
           std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {

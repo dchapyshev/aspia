@@ -78,7 +78,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(nullptr, parent),
       session_type_(session_type),
       desktop_config_(desktop_config),
       desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
@@ -172,7 +172,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     {
         if (!system_info_)
         {
-            system_info_ = new QtSystemInfoWindow();
+            system_info_ = new QtSystemInfoWindow(sessionState());
             system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
             connect(system_info_, &QtSystemInfoWindow::sig_systemInfoRequired,
