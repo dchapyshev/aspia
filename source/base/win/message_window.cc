@@ -65,7 +65,10 @@ bool MessageWindow::create(MessageCallback message_callback)
     }
 
     if (!registerWindowClass(instance))
+    {
+        LOG(LS_ERROR) << "Unable to create window class";
         return false;
+    }
 
     hwnd_ = CreateWindowW(kWindowClassName,
                           kWindowName,
@@ -148,7 +151,10 @@ LRESULT CALLBACK MessageWindow::windowProc(HWND window, UINT msg, WPARAM wParam,
 bool MessageWindow::registerWindowClass(HINSTANCE instance)
 {
     if (_class_registered)
+    {
+        LOG(LS_INFO) << "Window class already registered";
         return true;
+    }
 
     WNDCLASSEXW window_class;
     memset(&window_class, 0, sizeof(window_class));

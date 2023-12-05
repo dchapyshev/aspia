@@ -48,7 +48,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
     if (GetLogicalProcessorInformation(nullptr, &returned_length) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        DLOG(LS_ERROR) << "Unexpected return value";
+        LOG(LS_ERROR) << "Unexpected return value";
         return 0;
     }
 

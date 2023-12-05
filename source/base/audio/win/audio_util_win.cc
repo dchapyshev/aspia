@@ -157,11 +157,11 @@ bool sharedModeInitialize(IAudioClient* client,
 
     if (buffer_duration != 0)
     {
-        DLOG(LS_ERROR) << "Non-default buffer size is used";
+        LOG(LS_ERROR) << "Non-default buffer size is used";
     }
     if (auto_convert_pcm)
     {
-        DLOG(LS_ERROR) << "Sample rate converter can be utilized";
+        LOG(LS_ERROR) << "Sample rate converter can be utilized";
     }
     // The AUDCLNT_STREAMFLAGS_NOPERSIST flag disables persistence of the volume and mute settings
     // for a session that contains rendering streams. By default, the volume level and muting state
@@ -177,7 +177,7 @@ bool sharedModeInitialize(IAudioClient* client,
     if (use_event)
     {
         stream_flags |= AUDCLNT_STREAMFLAGS_EVENTCALLBACK;
-        DLOG(LS_INFO) << "The stream is initialized to be event driven";
+        LOG(LS_INFO) << "The stream is initialized to be event driven";
     }
 
     // Check if sample-rate conversion is requested.
@@ -186,7 +186,7 @@ bool sharedModeInitialize(IAudioClient* client,
         // Add channel matrixer (not utilized here) and rate converter to convert from our (the
         // client's) format to the audio engine mix format. Currently only supported for testing,
         // i.e., not possible to enable using public APIs.
-        DLOG(LS_INFO) << "The stream is initialized to support rate conversion";
+        LOG(LS_INFO) << "The stream is initialized to support rate conversion";
         stream_flags |= AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM;
         stream_flags |= AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY;
     }
@@ -297,11 +297,11 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
                       << SystemError(hr).toString();
         return false;
     }
-    DLOG(LS_INFO) << "num_queued_frames: " << num_queued_frames;
+    LOG(LS_INFO) << "num_queued_frames: " << num_queued_frames;
 
     BYTE* data = nullptr;
     int num_frames_to_fill = endpoint_buffer_size - num_queued_frames;
-    DLOG(LS_INFO) << "num_frames_to_fill: " << num_frames_to_fill;
+    LOG(LS_INFO) << "num_frames_to_fill: " << num_frames_to_fill;
 
     hr = render_client->GetBuffer(num_frames_to_fill, &data);
     if (FAILED(hr))

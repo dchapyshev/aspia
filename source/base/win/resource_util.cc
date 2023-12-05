@@ -30,7 +30,10 @@ bool resourceFromModule(HMODULE module,
                         size_t* length)
 {
     if (!module)
+    {
+        LOG(LS_ERROR) << "Invalid module handle";
         return false;
+    }
 
     if (!IS_INTRESOURCE(resource_id))
     {

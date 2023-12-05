@@ -86,7 +86,7 @@ bool ObjectWatcher::Impl::startWatching(HANDLE object, Delegate* delegate, bool 
 
     if (wait_object_)
     {
-        DLOG(LS_ERROR) << "Already watching an object";
+        LOG(LS_ERROR) << "Already watching an object";
         return false;
     }
 

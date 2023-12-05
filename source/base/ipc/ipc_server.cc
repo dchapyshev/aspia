@@ -322,7 +322,7 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
 
     if (channel_id.empty())
     {
-        DLOG(LS_ERROR) << "Empty channel id";
+        LOG(LS_ERROR) << "Empty channel id";
         return false;
     }
 

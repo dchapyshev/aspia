@@ -305,7 +305,7 @@ bool FilePathWatcherImpl::updateWatch()
 
         if (parent == watched_path)
         {
-            DLOG(LS_ERROR) << "Reached the root directory";
+            LOG(LS_ERROR) << "Reached the root directory";
             return false;
         }
 

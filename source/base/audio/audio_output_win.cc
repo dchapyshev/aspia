@@ -127,7 +127,7 @@ bool AudioOutputWin::stop()
 
     if (!is_active_)
     {
-        DLOG(LS_ERROR) << "No output stream is active";
+        LOG(LS_ERROR) << "No output stream is active";
         releaseCOMObjects();
         is_initialized_ = false;
         return true;
@@ -334,7 +334,7 @@ bool AudioOutputWin::handleDataRequest()
         // Avoid breaking the thread loop implicitly by returning false and return true instead for
         // AUDCLNT_E_DEVICE_INVALIDATED even it is a valid error message. We will use notifications
         // about device changes instead to stop data callbacks and attempt to restart streaming.
-        DLOG(LS_ERROR) << "AUDCLNT_E_DEVICE_INVALIDATED";
+        LOG(LS_ERROR) << "AUDCLNT_E_DEVICE_INVALIDATED";
         return true;
     }
 
@@ -350,7 +350,7 @@ bool AudioOutputWin::handleDataRequest()
     UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
     if (num_requested_frames == 0)
     {
-        DLOG(LS_ERROR) << "Audio thread is signaled but no new audio samples are needed";
+        LOG(LS_ERROR) << "Audio thread is signaled but no new audio samples are needed";
         return true;
     }
 

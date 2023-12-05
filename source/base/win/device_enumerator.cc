@@ -154,7 +154,7 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.isValid())
     {
-        DPLOG(LS_ERROR) << "Unable to open registry key";
+        PLOG(LS_ERROR) << "Unable to open registry key";
         return std::wstring();
     }
 
@@ -164,8 +164,8 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     LONG status = driver_key.readValue(key_name, value, &value_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(LS_ERROR) << "Unable to read key value: "
-                       << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(LS_ERROR) << "Unable to read key value: "
+                      << SystemError(static_cast<DWORD>(status)).toString();
         return std::wstring();
     }
 
@@ -189,8 +189,8 @@ DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
     LONG status = driver_key.readValueDW(key_name, &value);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(LS_ERROR) << "Unable to read key value: "
-                       << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(LS_ERROR) << "Unable to read key value: "
+                      << SystemError(static_cast<DWORD>(status)).toString();
         return 0;
     }
 

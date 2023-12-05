@@ -19,7 +19,6 @@
 #include "base/win/process_util.h"
 
 #include "base/logging.h"
-#include "base/win/process.h"
 
 #include <Windows.h>
 #include <TlHelp32.h>
