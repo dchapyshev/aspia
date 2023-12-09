@@ -101,7 +101,7 @@ set(THIRD_PARTY_LIBS
     x11region
     yuv)
 
-include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
+include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source ${WTL_INCLUDE_DIRS})
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 20)

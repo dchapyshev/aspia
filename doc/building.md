@@ -36,6 +36,7 @@ cd vcpkg4aspia
 * qt5-winextras
 * rapidjson
 * sqlite3
+* wtl
 * zstd
 7. Go to the directory with source code (root directory) and run the following commands:
 ```bash
