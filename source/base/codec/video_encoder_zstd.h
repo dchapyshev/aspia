@@ -45,9 +45,7 @@ public:
 
 private:
     VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio);
-    bool compressPacket(proto::VideoPacket* packet,
-                        const uint8_t* input_data,
-                        size_t input_size);
+    bool compressPacket(const uint8_t* input_data, size_t input_size, std::string* output_buffer);
 
     Region updated_region_;
     PixelFormat target_format_;

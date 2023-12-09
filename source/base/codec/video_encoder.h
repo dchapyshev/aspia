@@ -36,16 +36,19 @@ public:
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
     bool isKeyFrameRequired() const { return key_frame_required_; }
+    void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
 
     proto::VideoEncoding encoding() const { return encoding_; }
 
 protected:
     void fillPacketInfo(const Frame* frame, proto::VideoPacket* packet);
+    std::string* encodeBuffer() { return &encode_buffer_; }
 
 private:
     const proto::VideoEncoding encoding_;
     Size last_size_;
     bool key_frame_required_ = false;
+    std::string encode_buffer_;
 };
 
 } // namespace base

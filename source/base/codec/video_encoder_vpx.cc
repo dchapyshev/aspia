@@ -216,6 +216,23 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
         return false;
     }
 
+    std::string* encode_buffer = encodeBuffer();
+    if (encode_buffer->capacity())
+    {
+        encode_buffer->resize(encode_buffer->capacity());
+
+        vpx_fixed_buf_t buffer;
+        buffer.buf = encode_buffer->data();
+        buffer.sz = encode_buffer->size();
+
+        ret = vpx_codec_set_cx_data_buf(codec_.get(), &buffer, 0, 0);
+        if (ret != VPX_CODEC_OK)
+        {
+            LOG(LS_ERROR) << "vpx_codec_set_cx_data_buf failed: " << ret;
+            return false;
+        }
+    }
+
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
@@ -241,7 +258,17 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 
         if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
         {
-            packet->set_data(pkt->data.frame.buf, pkt->data.frame.sz);
+            size_t frame_size = pkt->data.frame.sz;
+
+            if (encode_buffer->capacity() < frame_size)
+                encode_buffer->reserve(frame_size);
+
+            encode_buffer->resize(frame_size);
+
+            if (encode_buffer->data() != pkt->data.frame.buf)
+                memcpy(encode_buffer->data(), pkt->data.frame.buf, frame_size);
+
+            packet->set_data(std::move(*encode_buffer));
             break;
         }
     }

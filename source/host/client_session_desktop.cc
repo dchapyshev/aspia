@@ -364,7 +364,13 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
     if (outgoing_message_->has_video_packet() || outgoing_message_->has_cursor_shape())
     {
         sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
-        stat_counter_.addVideoPacket();
+
+        if (outgoing_message_->has_video_packet())
+        {
+            video_encoder_->setEncodeBuffer(
+                std::move(*outgoing_message_->mutable_video_packet()->mutable_data()));
+            stat_counter_.addVideoPacket();
+        }
     }
 }
 

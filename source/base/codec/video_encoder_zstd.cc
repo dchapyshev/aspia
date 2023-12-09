@@ -29,10 +29,13 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
+uint8_t* outputBuffer(std::string* data, size_t size)
 {
-    packet->mutable_data()->resize(size);
-    return reinterpret_cast<uint8_t*>(packet->mutable_data()->data());
+    if (data->capacity() < size)
+        data->reserve(size);
+
+    data->resize(size);
+    return reinterpret_cast<uint8_t*>(data->data());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,9 +91,8 @@ std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
-                                      const uint8_t* input_data,
-                                      size_t input_size)
+bool VideoEncoderZstd::compressPacket(
+    const uint8_t* input_data, size_t input_size, std::string* output_buffer)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
     if (ZSTD_isError(ret))
@@ -100,7 +102,7 @@ bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
     }
 
     const size_t output_size = ZSTD_compressBound(input_size);
-    uint8_t* output_data = outputBuffer(packet, output_size);
+    uint8_t* output_data = outputBuffer(output_buffer, output_size);
 
     ZSTD_inBuffer input = { input_data, input_size, 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
@@ -122,7 +124,7 @@ bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
         return false;
     }
 
-    packet->mutable_data()->resize(output.pos);
+    output_buffer->resize(output.pos);
     return true;
 }
 
@@ -197,13 +199,16 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
         translate_pos += rect.height() * stride;
     }
 
+    std::string* encode_buffer = encodeBuffer();
+
     // Compress data with using Zstd compressor.
-    if (!compressPacket(packet, translate_buffer_.get(), data_size))
+    if (!compressPacket(translate_buffer_.get(), data_size, encode_buffer))
     {
         LOG(LS_ERROR) << "compressPacket failed";
         return false;
     }
 
+    packet->set_data(std::move(*encode_buffer));
     setKeyFrameRequired(false);
 
     return true;
