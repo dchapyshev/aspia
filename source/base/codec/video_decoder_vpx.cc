@@ -28,6 +28,8 @@
 #include <vpx/vpx_decoder.h>
 #include <vpx/vp8dx.h>
 
+#include <thread>
+
 namespace base {
 
 namespace {
