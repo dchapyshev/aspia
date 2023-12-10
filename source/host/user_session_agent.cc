@@ -159,6 +159,12 @@ void UserSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onIpcMessageWritten(base::ByteArray&& buffer)
+{
+    serializer_.addBuffer(std::move(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
     LOG(LS_INFO) << "Update credentials request: " << request_type;
@@ -168,7 +174,7 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
     proto::internal::CredentialsRequest* request = outgoing_message_.mutable_credentials_request();
     request->set_type(request_type);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,7 +188,7 @@ void UserSessionAgent::setOneTimeSessions(uint32_t sessions)
         outgoing_message_.mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -196,7 +202,7 @@ void UserSessionAgent::killClient(uint32_t id)
     control->set_code(proto::internal::ServiceControl::CODE_KILL);
     control->set_unsigned_integer(id);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -210,7 +216,7 @@ void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
     confirmation->set_id(id);
     confirmation->set_accept_connection(accept);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,7 +230,7 @@ void UserSessionAgent::setVoiceChat(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_VOICE_CHAT);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,7 +244,7 @@ void UserSessionAgent::setMouseLock(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,7 +258,7 @@ void UserSessionAgent::setKeyboardLock(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,7 +272,7 @@ void UserSessionAgent::setPause(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,7 +282,7 @@ void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 } // namespace host

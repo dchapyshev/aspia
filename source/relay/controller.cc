@@ -269,7 +269,8 @@ void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::Byte
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Controller::onTcpMessageWritten(
+    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
 {
     // Nothing
 }

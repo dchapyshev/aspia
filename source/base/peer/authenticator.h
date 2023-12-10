@@ -94,7 +94,7 @@ protected:
     void onTcpConnected() final;
     void onTcpDisconnected(NetworkChannel::ErrorCode error_code) final;
     void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onTcpMessageWritten(uint8_t channel_id, ByteArray&& buffer, size_t pending) final;
 
     [[nodiscard]] bool onSessionKeyChanged();
 

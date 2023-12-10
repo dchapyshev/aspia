@@ -377,7 +377,8 @@ void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArra
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Router::onTcpMessageWritten(
+    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
 {
     // Not used.
 }

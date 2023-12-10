@@ -229,7 +229,8 @@ void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Authenticator::onTcpMessageWritten(
+    uint8_t /* channel_id */, ByteArray&& /* buffer */, size_t /* pending */)
 {
     if (state() != State::PENDING)
         return;

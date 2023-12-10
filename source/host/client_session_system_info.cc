@@ -19,7 +19,6 @@
 #include "host/client_session_system_info.h"
 
 #include "base/logging.h"
-#include "base/net/tcp_channel_proxy.h"
 
 #if defined(OS_WIN)
 #include "host/system_info.h"
@@ -61,7 +60,7 @@ void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::B
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(system_info));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, system_info);
 #endif // defined(OS_WIN)
 }
 

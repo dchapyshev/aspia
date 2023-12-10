@@ -430,10 +430,10 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageWritten(uint8_t channel_id)
+void TcpChannel::onMessageWritten(uint8_t channel_id, ByteArray&& buffer)
 {
     if (listener_)
-        listener_->onTcpMessageWritten(channel_id, write_queue_.size());
+        listener_->onTcpMessageWritten(channel_id, std::move(buffer), write_queue_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -581,6 +581,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     const WriteTask& task = write_queue_.front();
     WriteTask::Type task_type = task.type();
     uint8_t channel_id = task.channelId();
+    ByteArray buffer = std::move(task.data());
 
     // Delete the sent message from the queue.
     write_queue_.pop();
@@ -589,7 +590,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     bool schedule_write = !write_queue_.empty() || proxy_->reloadWriteQueue(&write_queue_);
 
     if (task_type == WriteTask::Type::USER_DATA)
-        onMessageWritten(channel_id);
+        onMessageWritten(channel_id, std::move(buffer));
 
     if (schedule_write)
         doWrite();

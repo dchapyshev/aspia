@@ -53,6 +53,7 @@ protected:
     // base::IpcChannel::Listener implemenation.
     void onIpcDisconnected() override;
     void onIpcMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcMessageWritten(base::ByteArray&& buffer) override;
 
 private:
     void onError(const base::Location& location);

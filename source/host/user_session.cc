@@ -412,7 +412,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             if (channel_)
             {
                 LOG(LS_INFO) << "Sending connect request to UI process (sid=" << session_id_ << ")";
-                channel_->send(base::serialize(outgoing_message_));
+                channel_->send(serializer_.serialize(outgoing_message_));
             }
             else
             {
@@ -792,6 +792,12 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onIpcMessageWritten(base::ByteArray&& buffer)
+{
+    serializer_.addBuffer(std::move(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
@@ -1015,7 +1021,7 @@ void UserSession::onClientSessionVideoRecording(
     video_recording_state->set_user_name(user_name);
     video_recording_state->set_started(started);
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1039,7 +1045,7 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 
 }
 
@@ -1145,7 +1151,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1162,7 +1168,7 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_id(session_id);
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1230,7 +1236,7 @@ void UserSession::sendCredentials(const base::Location& location)
     credentials->set_host_id(host_id_);
     credentials->set_password(one_time_password_);
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1275,7 +1281,7 @@ void UserSession::sendRouterState(const base::Location& location)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1458,7 +1464,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
         return;
     }
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1505,7 +1511,7 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
         return;
     }
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(serializer_.serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------

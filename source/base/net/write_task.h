@@ -39,11 +39,12 @@ public:
     Type type() const { return type_; }
     uint8_t channelId() const { return channel_id_; }
     const ByteArray& data() const { return data_; }
+    ByteArray& data() { return data_; }
 
 private:
     const Type type_;
     const uint8_t channel_id_;
-    const ByteArray data_;
+    ByteArray data_;
 };
 
 } // namespace base

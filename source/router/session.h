@@ -84,7 +84,7 @@ protected:
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
     void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }

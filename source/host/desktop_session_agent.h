@@ -23,6 +23,7 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
+#include "base/memory/serializer.h"
 #include "base/threading/thread.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
@@ -65,6 +66,7 @@ protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() override;
     void onIpcMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcMessageWritten(base::ByteArray&& buffer) override;
 
     // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) override;
@@ -117,6 +119,7 @@ private:
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
+    base::Serializer serializer_;
     std::unique_ptr<proto::internal::ServiceToDesktop> incoming_message_;
     std::unique_ptr<proto::internal::DesktopToService> outgoing_message_;
 

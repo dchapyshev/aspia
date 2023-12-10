@@ -72,7 +72,7 @@ protected:
     void onTcpConnected() override;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
 
     // base::RelayPeerManager::Delegate implementation.
     void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) override;

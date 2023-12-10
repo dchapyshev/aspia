@@ -296,6 +296,12 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onIpcMessageWritten(base::ByteArray&& buffer)
+{
+    serializer_.addBuffer(std::move(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
     LOG(LS_INFO) << "Shared memory created: " << id;
@@ -306,7 +312,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -320,7 +326,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,7 +368,7 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -420,7 +426,7 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
     {
-        channel_->send(base::serialize(*outgoing_message_));
+        channel_->send(serializer_.serialize(*outgoing_message_));
     }
     else
     {
@@ -449,7 +455,7 @@ void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error
             return;
     }
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -461,7 +467,7 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -496,7 +502,7 @@ void DesktopSessionAgent::onScreenTypeChanged(
             break;
     }
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -534,7 +540,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(serializer_.serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------

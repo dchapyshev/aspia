@@ -21,6 +21,7 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
+#include "base/memory/serializer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/desktop_extensions.pb.h"
 #include "proto/text_chat.pb.h"
@@ -98,12 +99,13 @@ protected:
 
     std::shared_ptr<base::TcpChannelProxy> channelProxy();
     void sendMessage(uint8_t channel_id, base::ByteArray&& buffer);
+    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
 
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() override;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
 
     size_t pendingMessages() const;
 
@@ -120,6 +122,7 @@ private:
     std::string display_name_;
 
     std::unique_ptr<base::TcpChannel> channel_;
+    base::Serializer serializer_;
 };
 
 } // namespace host

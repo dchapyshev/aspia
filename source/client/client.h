@@ -21,6 +21,7 @@
 
 #include "base/waitable_timer.h"
 #include "base/version.h"
+#include "base/memory/serializer.h"
 #include "client/client_config.h"
 #include "client/client_session_state.h"
 #include "client/router_controller.h"
@@ -82,7 +83,7 @@ protected:
     void onTcpConnected() override;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
 
     // RouterController::Delegate implementation.
     void onRouterConnected(const base::Version& router_version) override;
@@ -109,6 +110,7 @@ private:
     State state_ = State::CREATED;
 
     bool is_connected_to_router_ = false;
+    base::Serializer serializer_;
 };
 
 } // namespace client

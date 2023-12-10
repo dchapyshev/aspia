@@ -52,6 +52,7 @@ public:
 
         virtual void onIpcDisconnected() = 0;
         virtual void onIpcMessageReceived(const ByteArray& buffer) = 0;
+        virtual void onIpcMessageWritten(ByteArray&& buffer) = 0;
     };
 
     std::shared_ptr<IpcChannelProxy> channelProxy();
@@ -94,6 +95,7 @@ private:
     void doWrite();
     void doReadMessage();
     void onMessageReceived();
+    void onMessageWritten(ByteArray&& buffer);
 
     std::u16string channel_name_;
     Stream stream_;

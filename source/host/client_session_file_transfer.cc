@@ -324,7 +324,7 @@ void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base:
         proto::FileReply reply;
         reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
 
-        sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(reply));
+        sendMessage(proto::HOST_CHANNEL_ID_SESSION, reply);
         return;
     }
 
@@ -379,6 +379,12 @@ void ClientSessionFileTransfer::onIpcDisconnected()
 void ClientSessionFileTransfer::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::ByteArray(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionFileTransfer::onIpcMessageWritten(base::ByteArray&& /* buffer */)
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

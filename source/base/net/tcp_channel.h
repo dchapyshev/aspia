@@ -53,7 +53,7 @@ public:
         virtual void onTcpConnected() = 0;
         virtual void onTcpDisconnected(ErrorCode error_code) = 0;
         virtual void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) = 0;
-        virtual void onTcpMessageWritten(uint8_t channel_id, size_t pending) = 0;
+        virtual void onTcpMessageWritten(uint8_t channel_id, ByteArray&& buffer, size_t pending) = 0;
     };
 
     std::shared_ptr<TcpChannelProxy> channelProxy();
@@ -164,7 +164,7 @@ private:
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
-    void onMessageWritten(uint8_t channel_id);
+    void onMessageWritten(uint8_t channel_id, ByteArray&& buffer);
     void onMessageReceived();
 
     void addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data);

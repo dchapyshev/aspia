@@ -166,6 +166,12 @@ void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientSession::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
+{
+    channel_->send(channel_id, serializer_.serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpConnected()
 {
     NOTREACHED();
@@ -199,8 +205,10 @@ void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
+void ClientSession::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending)
 {
+    serializer_.addBuffer(std::move(buffer));
+
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
         onWritten(channel_id, pending);

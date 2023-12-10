@@ -242,7 +242,8 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void RouterController::onTcpMessageWritten(
+    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
 {
     // Nothing
 }

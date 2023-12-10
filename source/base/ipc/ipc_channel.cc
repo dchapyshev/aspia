@@ -417,8 +417,12 @@ void IpcChannel::doWrite()
             DCHECK_EQ(bytes_transferred, write_size_);
             DCHECK(!write_queue_.empty());
 
+            ByteArray buffer = std::move(write_queue_.front());
+
             // Delete the sent message from the queue.
             write_queue_.pop();
+
+            onMessageWritten(std::move(buffer));
 
             // If the queue is not empty, then we send the following message.
             if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
@@ -495,6 +499,19 @@ void IpcChannel::onMessageReceived()
     }
 
     read_size_ = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcChannel::onMessageWritten(ByteArray&& buffer)
+{
+    if (listener_)
+    {
+        listener_->onIpcMessageWritten(std::move(buffer));
+    }
+    else
+    {
+        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
+    }
 }
 
 } // namespace base

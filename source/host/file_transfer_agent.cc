@@ -73,7 +73,13 @@ void FileTransferAgent::onIpcMessageReceived(const base::ByteArray& buffer)
     }
 
     worker_->doRequest(request_, &reply_);
-    channel_->send(base::serialize(reply_));
+    channel_->send(serializer_.serialize(reply_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferAgent::onIpcMessageWritten(base::ByteArray&& buffer)
+{
+    serializer_.addBuffer(std::move(buffer));
 }
 
 } // namespace host

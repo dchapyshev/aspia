@@ -23,6 +23,7 @@
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/memory/serializer.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
 #include "base/win/session_status.h"
@@ -100,6 +101,7 @@ protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() override;
     void onIpcMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcMessageWritten(base::ByteArray&& buffer) override;
 
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
@@ -180,6 +182,7 @@ private:
 
     Delegate* delegate_ = nullptr;
 
+    base::Serializer serializer_;
     proto::internal::UiToService incoming_message_;
     proto::internal::ServiceToUi outgoing_message_;
 

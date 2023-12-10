@@ -20,6 +20,7 @@
 #define HOST_DESKTOP_SESSION_IPC_H
 
 #include "base/ipc/ipc_channel.h"
+#include "base/memory/serializer.h"
 #include "host/desktop_session.h"
 
 #include <map>
@@ -51,6 +52,7 @@ protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() override;
     void onIpcMessageReceived(const base::ByteArray& buffer) override;
+    void onIpcMessageWritten(base::ByteArray&& buffer) override;
 
 private:
     class SharedBuffer;
@@ -73,6 +75,7 @@ private:
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 
+    base::Serializer serializer_;
     std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
     std::unique_ptr<proto::internal::DesktopToService> incoming_message_;
 

@@ -193,7 +193,7 @@ void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& bu
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
+void Session::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& /* buffer */, size_t pending)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {

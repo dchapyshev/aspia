@@ -51,7 +51,7 @@ protected:
     void onTcpConnected() override;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
 
 private:
     void onFinished(const base::Location& location, bool online);
@@ -164,7 +164,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpMessageWritten(
-    uint8_t /* channel_id */, size_t /* pending */)
+    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
 {
     // Nothing
 }

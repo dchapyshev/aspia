@@ -165,7 +165,8 @@ void OnlineCheckerRouter::onTcpMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void OnlineCheckerRouter::onTcpMessageWritten(
+    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
 {
     // Nothing
 }
