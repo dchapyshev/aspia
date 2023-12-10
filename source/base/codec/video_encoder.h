@@ -29,6 +29,8 @@ class Frame;
 class VideoEncoder
 {
 public:
+    static const size_t kInitialEncodeBufferSize;
+
     explicit VideoEncoder(proto::VideoEncoding encoding);
     virtual ~VideoEncoder() = default;
 

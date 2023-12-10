@@ -23,10 +23,14 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
+// static
+const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
+
+//--------------------------------------------------------------------------------------------------
 VideoEncoder::VideoEncoder(proto::VideoEncoding encoding)
     : encoding_(encoding)
 {
-    // Nothing
+    encode_buffer_.reserve(kInitialEncodeBufferSize);
 }
 
 //--------------------------------------------------------------------------------------------------
