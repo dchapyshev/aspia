@@ -58,112 +58,107 @@
     </message>
     <message>
         <location filename="../client_main.cc" line="436"/>
-        <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="440"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Type de session. Valeurs possibles: Gestion du bureau, Vue du bureau, Transfert de fichier, Informations système, fenêtre de dialogue.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Type de codec. Valeurs possibles: vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Profondeur de couleur. Valeurs possibles: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Taux de compression. Valeurs possibles: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le son. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Active ou désactive la forme du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Active ou désactive la position du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="469"/>
+        <location filename="../client_main.cc" line="465"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le presse-papiers. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="473"/>
+        <location filename="../client_main.cc" line="469"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Active ou désactive les effets de bureau. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="477"/>
+        <location filename="../client_main.cc" line="473"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le fond d&apos;écran. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="481"/>
+        <location filename="../client_main.cc" line="477"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le lissage des polices. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="485"/>
+        <location filename="../client_main.cc" line="481"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Efface le presse-papiers lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="489"/>
+        <location filename="../client_main.cc" line="485"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Verrouiller l ordinateur lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="493"/>
+        <location filename="../client_main.cc" line="489"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Blocage de l accès à distance. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="497"/>
+        <location filename="../client_main.cc" line="493"/>
         <source>Router address.</source>
         <translation>Adresse du routeur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="501"/>
+        <location filename="../client_main.cc" line="497"/>
         <source>Router port.</source>
         <translation>Port du routeur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="506"/>
+        <location filename="../client_main.cc" line="502"/>
         <source>Router name of user.</source>
         <translation>Nom d utilisateur du routeur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="510"/>
+        <location filename="../client_main.cc" line="506"/>
         <source>Router password of user.</source>
         <translation>Mot de passe de l utilisateur du routeur.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="514"/>
+        <location filename="../client_main.cc" line="510"/>
         <source>Aspia Client</source>
         <translation>Client Aspia</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="60"/>
-        <location filename="../client_main.cc" line="701"/>
+        <location filename="../client_main.cc" line="695"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="702"/>
+        <location filename="../client_main.cc" line="696"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>l ID de l hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
@@ -203,22 +198,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n&apos;y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_settings_dialog.ui" line="116"/>
-        <source>Other</source>
-        <translation type="unfinished">Autre</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_settings_dialog.ui" line="124"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_settings_dialog.ui" line="134"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Un routeur est nécessaire pour se connecter à un ordinateur s&apos;il n y a pas de connexion directe (contournement du NAT). Aspia ne fournit pas de routeur public, mais vous pouvez installer le vôtre. Vous pouvez télécharger le routeur ici &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -319,7 +299,7 @@
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="201"/>
         <source>Block remote input</source>
-        <translation>Blocage de l&apos;accès à distance</translation>
+        <translation>Blocage de l accès à distance</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="43"/>
@@ -344,7 +324,7 @@
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="108"/>
         <source>Enable audio</source>
-        <translation>Activer l audio</translation>
+        <translation>Activer le son</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="115"/>
@@ -369,7 +349,7 @@
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="158"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Désactiver le fond d&apos;écran</translation>
+        <translation>Désactiver le fond d écran</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.ui" line="165"/>
@@ -537,7 +517,7 @@
         <location filename="../ui/desktop/desktop_toolbar.ui" line="414"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="417"/>
         <source>Text Chat</source>
-        <translation>Fenêtre de dialogue</translation>
+        <translation>Fenêtre de dialogues</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="425"/>
@@ -548,7 +528,7 @@
         <location filename="../ui/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="437"/>
         <source>Start recording</source>
-        <translation>Démarrer l&apos;enregistrement</translation>
+        <translation>Démarrer l enregistrement</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="446"/>
@@ -807,13 +787,13 @@
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.ui" line="49"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="168"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="163"/>
         <source>Connections count:</source>
         <translation>Nombre de connexion:</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.ui" line="82"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="200"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="195"/>
         <source>Connect Time</source>
         <translation>Temps de connexion</translation>
     </message>
@@ -824,24 +804,24 @@
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.ui" line="92"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="210"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="205"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.ui" line="72"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="215"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="210"/>
         <source>Computer Name</source>
         <translation>Nom de l ordinateur</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="102"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="225"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="97"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="215"/>
         <source>Operating System</source>
         <translation>Système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="132"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="127"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
@@ -851,97 +831,91 @@
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="125"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="311"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="120"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="301"/>
         <source>Save to file...</source>
         <translation>Enregistrer dans un fichier...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="139"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="134"/>
         <source>Disconnect All</source>
-        <translation>Tout déconnecter </translation>
+        <translation>Déconnecter tout</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="146"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="318"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="388"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="141"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="308"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="378"/>
         <source>Refresh</source>
         <translation>Actualiser</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="160"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="155"/>
         <source>Relay</source>
         <translation>Relais</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="195"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="190"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="205"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="200"/>
         <source>Pool Size</source>
         <translation>Taille du tampon</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="264"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="254"/>
         <source>Host Address</source>
         <translation>Adresse de l hôte</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="259"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="249"/>
         <source>Host ID</source>
         <translation>ID de l hôte</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="97"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="220"/>
-        <source>Architecture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="269"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="259"/>
         <source>Client Address</source>
         <translation>Adresse du client</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="274"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="264"/>
         <source>Transferred</source>
         <translation>Transféré</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="279"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="269"/>
         <source>Duration</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="284"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="274"/>
         <source>Idle</source>
         <translation>Inactif</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="332"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="322"/>
         <source>Users</source>
         <translation>Utilisateurs</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="340"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="330"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="357"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="347"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="374"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="364"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="254"/>
-        <location filename="../ui/router_manager/router_manager_window.ui" line="421"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="244"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="411"/>
         <source>User Name</source>
         <translation>Nom de l utilisateur</translation>
     </message>
@@ -949,8 +923,9 @@
 <context>
     <name>RouterStatusDialog</name>
     <message>
+        <location filename="../ui/router_manager/router_status_dialog.ui" line="14"/>
         <source>Status</source>
-        <translation type="vanished">Etat</translation>
+        <translation>Etat</translation>
     </message>
 </context>
 <context>
@@ -1037,7 +1012,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="232"/>
         <source>Demand Start</source>
-        <translation>Demande démarrage</translation>
+        <translation>Demande Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="235"/>
@@ -1047,7 +1022,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="238"/>
         <source>Boot Start</source>
-        <translation>Démarrage du Boot</translation>
+        <translation>Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="241"/>
@@ -1837,7 +1812,7 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Processus</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="65"/>
@@ -1859,12 +1834,12 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID du processus</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished">Gestionnaire de tâches</translation>
+        <translation>Gestionnaire de tâches</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="75"/>
@@ -1874,48 +1849,48 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire (ensemble de travail privé)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire (ensemble de travail)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire (ensemble de travail de pointe)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire (delta de l&apos;ensemble de travail)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Fils</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin de l&apos;image</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="153"/>
         <location filename="../ui/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Fin de la tâche</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Services</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de démarrage</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="203"/>
@@ -1926,12 +1901,12 @@
         <location filename="../ui/desktop/task_manager_window.ui" line="293"/>
         <location filename="../ui/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished">Déconnexion</translation>
+        <translation>Déconnexion</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="318"/>
@@ -1952,17 +1927,17 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Haut</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Moyen</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="357"/>
@@ -1982,12 +1957,12 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du client</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la session</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.ui" line="283"/>
@@ -2011,7 +1986,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished">Enregistrer (Ctrl+S)</translation>
+        <translation>Enregistrer (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="57"/>
@@ -2021,7 +1996,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished">Imprimer (Ctrl+P)</translation>
+        <translation>Imprimer (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="68"/>
@@ -2046,7 +2021,7 @@
     <message>
         <location filename="../ui/text_chat/qt_text_chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Actualiser (F5)</translation>
+        <translation>Actualiser (F5)</translation>
     </message>
 </context>
 <context>
@@ -2054,22 +2029,22 @@
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation type="unfinished">Mise à jour des paramètres</translation>
+        <translation>Mise à jour des paramètres</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier les mises à jour au démarrage</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser un serveur de mise à jour personnalisé</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur:</translation>
     </message>
 </context>
 <context>
@@ -2077,57 +2052,57 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="272"/>
         <source>&lt;no user&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;Pas d utilisateur&gt;</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="307"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Actif</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="310"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="313"/>
         <source>Connect Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecter une requête</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="316"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>Ombre</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="319"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Déconnecté</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="322"/>
         <source>Idle</source>
-        <translation type="unfinished">Inactif</translation>
+        <translation>Inactif</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="325"/>
         <source>Listen</source>
-        <translation type="unfinished"></translation>
+        <translation>Écouter</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="328"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="331"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>En bas</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="334"/>
         <source>Init</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="337"/>
@@ -2145,7 +2120,7 @@
     <message>
         <location filename="../ui/file_transfer/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le chemin d&apos;accès au dossier est incorrect.</translation>
     </message>
 </context>
 <context>
@@ -2154,12 +2129,12 @@
         <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier accueil</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureau</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
@@ -2174,12 +2149,12 @@
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace total</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
@@ -2189,67 +2164,67 @@
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Disque optique</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Disque amovible</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Disque Fixe</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecteur réseau</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecteur RAM</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier du bureau</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier racine</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Disque inconnu</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -2260,46 +2235,46 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="170"/>
-        <location filename="../ui/authorization_dialog.cc" line="181"/>
+        <location filename="../ui/authorization_dialog.cc" line="161"/>
+        <location filename="../ui/authorization_dialog.cc" line="171"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="171"/>
+        <location filename="../ui/authorization_dialog.cc" line="162"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d utilisateur ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="182"/>
+        <location filename="../ui/authorization_dialog.cc" line="172"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le mot de passe ne peut pas être vide.</translation>
     </message>
 </context>
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="42"/>
+        <location filename="../ui/client_settings_dialog.cc" line="39"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="131"/>
+        <location filename="../ui/client_settings_dialog.cc" line="102"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une adresse de routeur non valide a été saisie.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="150"/>
+        <location filename="../ui/client_settings_dialog.cc" line="113"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d utilisateur ne peut pas être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, .</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="167"/>
+        <location filename="../ui/client_settings_dialog.cc" line="122"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le mot de passe ne peut pas être vide.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="196"/>
+        <location filename="../ui/client_settings_dialog.cc" line="147"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -2307,45 +2282,45 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="92"/>
+        <location filename="../ui/client_window.cc" line="84"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="93"/>
+        <location filename="../ui/client_window.cc" line="85"/>
         <source>Are you sure you want to clear your connection history?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes vous sûr de vouloir effacer l historique de vos connexions ?</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="96"/>
+        <location filename="../ui/client_window.cc" line="88"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="97"/>
+        <location filename="../ui/client_window.cc" line="89"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="228"/>
+        <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Client Aspia</translation>
+        <translation>Client Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="328"/>
-        <location filename="../ui/client_window.cc" line="346"/>
+        <location filename="../ui/client_window.cc" line="293"/>
+        <location filename="../ui/client_window.cc" line="310"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="329"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An invalid computer address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une adresse informatique non valide a été saisie.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="347"/>
+        <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished">ID de l&apos;hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
+        <translation>ID de l hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
 </context>
 <context>
@@ -2363,27 +2338,27 @@
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.cc" line="124"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur élevée (16 bits)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.cc" line="125"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>256 couleurs (8 bits)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.cc" line="126"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 couleurs (6 bits)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.cc" line="127"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 couleurs (3 bits)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_config_dialog.cc" line="304"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux de compression: %1</translation>
     </message>
 </context>
 <context>
@@ -2391,80 +2366,74 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="372"/>
         <source>Resolution selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix de la résolution</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="434"/>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter l enregistrement</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
         <source>Start recording</source>
-        <translation type="unfinished">Démarrer l&apos;enregistrement</translation>
+        <translation>Démarrer l enregistrement</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="615"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmation</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir arrêter l ordinateur distant?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="629"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="619"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="640"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="630"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="620"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="595"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir redémarrer l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
-        <source>Wait for host</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="616"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir redémarrer l ordinateur distant en mode sans échec?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="637"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir mettre fin à la session de l utilisateur sur l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="658"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir verrouiller la session de l utilisateur sur l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="762"/>
         <source>Scale</source>
-        <translation type="unfinished">Échelle</translation>
+        <translation>Échelle</translation>
     </message>
 </context>
 <context>
@@ -2472,22 +2441,22 @@
     <message>
         <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>La session a été interrompue par un utilisateur distant</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>La session est temporairement indisponible</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>La session est définitivement indisponible</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur lors de la réception du flux vidéo: %1</translation>
     </message>
 </context>
 <context>
@@ -2495,7 +2464,7 @@
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="105"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="382"/>
@@ -2510,37 +2479,37 @@
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="388"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="391"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifié</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="558"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="563"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="568"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="573"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_list_model.cc" line="578"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -2553,64 +2522,64 @@
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="103"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l obtention de la liste des lecteurs: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="119"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l obtention de la liste des fichiers: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="144"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la création du répertoire: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="156"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du renommage de l élément: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="283"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 objet(s) sélectionné(s)</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="303"/>
         <location filename="../ui/file_transfer/file_panel.cc" line="322"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom du dossier ne peut pas être vide.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="309"/>
         <location filename="../ui/file_transfer/file_panel.cc" line="328"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom contient des caractères non valides.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="349"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Envoyer F11</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="350"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Effacer Effacer</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="360"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Créer un dossier</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmation</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir supprimer les éléments sélectionnés?</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
@@ -2633,37 +2602,37 @@
     <message>
         <location filename="../ui/file_transfer/file_remove_dialog.cc" line="110"/>
         <source>Deleting: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Suppression: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_remove_dialog.cc" line="141"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s est produite lors de la récupération de la liste des fichiers: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_remove_dialog.cc" line="146"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la suppression de &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="152"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="161"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="164"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout passer</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="167"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abandonner</translation>
     </message>
 </context>
 <context>
@@ -2676,17 +2645,17 @@
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="118"/>
         <source>Current Task: Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâche en cours: Copier des éléments.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="132"/>
         <source>From: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="137"/>
         <source>To: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinataire: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="177"/>
@@ -2696,12 +2665,12 @@
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout passer</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="195"/>
@@ -2711,117 +2680,117 @@
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="198"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer tout</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="201"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
-        <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>Abandonner</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
-        <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <source>TB/s</source>
+        <translation>TB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
-        <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <source>GB/s</source>
+        <translation>GB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
-        <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <source>MB/s</source>
+        <translation>MB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
+        <source>kB/s</source>
+        <translation>kB/s</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="374"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation>B/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="162"/>
         <source>Speed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vitesse: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="279"/>
         <source>Current Task: Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâche en cours: Annuler le transfert de fichiers.</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="294"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors de la création de la file d&apos;attente des fichiers à copier</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="299"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la création du répertoire &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="306"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="307"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la création du fichier &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l ouverture du fichier &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="321"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l écriture du fichier &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="328"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la lecture du fichier &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="330"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="335"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>Type d&apos;erreur inconnu lors de la copie de fichiers</translation>
     </message>
 </context>
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="314"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="323"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="333"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="315"/>
         <source>There are no supported video encodings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun encodage vidéo n est pris en charge.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="342"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="324"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>L encodage vidéo actuel n est pas pris en charge par l hôte. Veuillez spécifier un autre encodage vidéo.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1002"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1004"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1035"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;enregistrer l&apos;image</translation>
     </message>
 </context>
 <context>
@@ -2829,22 +2798,22 @@
     <message>
         <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="55"/>
         <source>Local Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordinateur local</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="56"/>
         <source>Remote Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordinateur distant</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="99"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="94"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="100"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="95"/>
         <source>Session error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de session: %1</translation>
     </message>
 </context>
 <context>
@@ -2852,112 +2821,112 @@
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="145"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Résumé</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="153"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="158"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositifs</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="164"/>
         <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaptateurs vidéo</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="170"/>
         <source>Monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>Moniteurs</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="176"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimantes</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="182"/>
         <source>Power Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options d&apos;alimentation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="196"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Logiciel</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="201"/>
         <source>Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Applications</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="207"/>
         <source>Drivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilotes</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="213"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Services</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="219"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Processus</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="282"/>
         <source>Operating System</source>
-        <translation type="unfinished">Système d&apos;exploitation</translation>
+        <translation>Système d exploitation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="287"/>
         <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>Variables d environnement</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="293"/>
         <source>Event Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Journaux d événements</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="225"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Licences</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="239"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Réseau</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="244"/>
         <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaptateurs de réseau</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="250"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Routes</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="256"/>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="262"/>
         <source>Network Shares</source>
-        <translation type="unfinished"></translation>
+        <translation>Partage de réseau</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="268"/>
         <source>Open Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers ouverts</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="299"/>
@@ -2967,17 +2936,17 @@
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="305"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupes d utilisateurs</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="332"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier HTML</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="334"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier HTML (*.html)</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="345"/>
@@ -2987,7 +2956,7 @@
     <message>
         <location filename="../ui/sys_info/qt_system_info_window.cc" line="346"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l enregistrement du fichier: %1</translation>
     </message>
 </context>
 <context>
@@ -3000,375 +2969,356 @@
     <message>
         <location filename="../ui/desktop/record_settings_dialog.cc" line="52"/>
         <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir un chemin</translation>
     </message>
 </context>
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="474"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="444"/>
         <source>Connecting to %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexion à %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="575"/>
-        <source>Timeout waiting for reconnection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="486"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="473"/>
         <source>Connected to: %1:%2 (version %3)</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté à:%1:%2 (version %3)</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="513"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="495"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Violation du protocole de communication.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="517"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="499"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de cryptographie (le cryptage ou le décryptage du message a échoué).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="521"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="503"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s est produite au niveau du réseau (par exemple, le câble réseau a été accidentellement débranché).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="525"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="507"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>La connexion a été refusée par l homologue (ou s est interrompue).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="529"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="511"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>L hôte distant a fermé la connexion.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="533"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="515"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>L adresse de l hôte n a pas été trouvée.</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="519"/>
+        <source>Socket operation timed out.</source>
+        <translation>L opération de la prise a dépassé le temps imparti.</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="523"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation>L adresse spécifiée est déjà utilisée et a été définie comme exclusive.</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="527"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation>L adresse spécifiée n appartient pas à l hôte.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="537"/>
-        <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="541"/>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="545"/>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="555"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="622"/>
-        <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="560"/>
         <location filename="../ui/router_manager/router_manager_window.cc" line="586"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="626"/>
+        <source>An unknown error occurred.</source>
+        <translation>Une erreur inconnue s est produite.</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="542"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="554"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="590"/>
         <source>Error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="568"/>
-        <source>Router is unavailable. Waiting for reconnection...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="566"/>
         <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
+        <translation>L authentification a été effectuée avec succès.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="601"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="570"/>
         <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d authentification réseau.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="605"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="574"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Violation du protocole d échange de données.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="609"/>
-        <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="614"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="578"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s est produite lors de l authentification: nom d utilisateur ou mot de passe erroné.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="618"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="582"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le type de session spécifié n est pas autorisé pour l utilisateur.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="748"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="713"/>
         <source>Invalid request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Demande non valide.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="752"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="793"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="717"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="758"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur interne inconnue.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="756"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="721"/>
         <source>Invalid session ID was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un identifiant de session invalide a été transmis.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="828"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="887"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="940"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="793"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="852"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="905"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="832"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="889"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="942"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="797"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="854"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="907"/>
         <source>Disconnect All</source>
-        <translation>Tout déconnecter </translation>
+        <translation>Déconnecter tout</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="833"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="890"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1019"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="798"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="855"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="984"/>
         <source>Refresh</source>
         <translation>Actualiser</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="837"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="892"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="944"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="802"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="857"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="909"/>
         <source>Copy Row</source>
         <translation>Ligne de copie</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="838"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="893"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="945"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="803"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="858"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="910"/>
         <source>Copy Value</source>
         <translation>Valeur de la copie</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="842"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="895"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="807"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="860"/>
         <source>Save to file...</source>
         <translation>Enregistrer dans un fichier...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="999"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="964"/>
         <source>Modify</source>
-        <translation type="unfinished">Modifier</translation>
+        <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1002"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="967"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1016"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="981"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1248"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1196"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous sûr de vouloir déconnecter tous les relais?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1521"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1601"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1422"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1502"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1523"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1603"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1424"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1504"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1537"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1617"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1438"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1518"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d ouvrir le fichier pour écriture.</translation>
     </message>
     <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1489"/>
         <location filename="../ui/router_manager/router_manager_window.cc" line="1588"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1687"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d écrire dans le fichier.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1766"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1667"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n secondes</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1767"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1668"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n minutes</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1768"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1669"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n heures</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1792"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1693"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n jours</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1815"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1716"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1820"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1721"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1825"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1726"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1830"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1731"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1835"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1736"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1216"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1287"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1169"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1225"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes vous sûr de vouloir déconnecter la session &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="327"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1142"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1182"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="315"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1107"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1147"/>
         <source>Active peers: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pairs actifs:%1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="483"/>
-        <source>Connected to %1:%2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="583"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="551"/>
         <source>The Router version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>La version du routeur est plus récente que celle du client (%1 &gt; %2). Veuillez mettre à jour l application.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="760"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="805"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="725"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="770"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Type d&apos;erreur inconnu.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="764"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="809"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1451"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1536"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="729"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="774"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1352"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1437"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1488"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1517"/>
         <location filename="../ui/router_manager/router_manager_window.cc" line="1587"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1616"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1686"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="797"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="762"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Des données non valides ont été transmises.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="801"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="766"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un utilisateur portant le même nom existe déjà.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1215"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1247"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1286"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1325"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1456"/>
-        <source>Confirmation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1220"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1168"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1195"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1224"/>
         <location filename="../ui/router_manager/router_manager_window.cc" line="1251"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1291"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1329"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1461"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1357"/>
+        <source>Confirmation</source>
+        <translation>Confirmation</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1173"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1199"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1229"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1255"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1362"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1221"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1252"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1292"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1330"/>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1462"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1174"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1200"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1230"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1256"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1363"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1326"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1252"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes vous sûr de vouloir déconnecter tous les hôtes?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1451"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1352"/>
         <source>You cannot delete a built-in user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas supprimer un utilisateur intégré.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_manager_window.cc" line="1457"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1358"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes vous sûr de vouloir supprimer l utilisateur &quot;%1&quot;?</translation>
     </message>
 </context>
 <context>
     <name>client::RouterStatusDialog</name>
     <message>
+        <location filename="../ui/router_manager/router_status_dialog.cc" line="37"/>
         <source>Cancel</source>
-        <translation type="vanished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -3379,83 +3329,83 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="144"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="160"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="174"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="189"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="212"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="241"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="143"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="159"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="173"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="188"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="211"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="239"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="145"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="144"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Le nom d utilisateur ne peut être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, ., @.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="161"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="160"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom d utilisateur que vous avez saisi existe déjà.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="175"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="174"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les mots de passe que vous avez saisis ne correspondent pas.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="190"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="189"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="201"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Le mot de passe que vous avez saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="205"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="204"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="208"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous entrer un autre mot de passe ?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="216"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="215"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="216"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="242"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="240"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur interne inconnue lors de la création ou de la modification d un utilisateur.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="292"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="289"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Double cliquez pour modifier</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="317"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="314"/>
         <source>Administrator</source>
         <translation>Administrateur</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="321"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="318"/>
         <source>Client</source>
         <translation>Client</translation>
     </message>
@@ -3465,238 +3415,171 @@
     <message>
         <location filename="../ui/desktop/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureau complet</translation>
     </message>
     <message>
         <location filename="../ui/desktop/select_screen_action.h" line="50"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished"></translation>
+        <translation>Moniteur %1 (primaire)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/select_screen_action.h" line="52"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Moniteur %1</translation>
     </message>
 </context>
 <context>
     <name>client::SessionWindow</name>
     <message>
-        <location filename="../ui/session_window.cc" line="134"/>
-        <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/session_window.cc" line="138"/>
+        <source>Attempt to connect to %1.</source>
+        <translation>Tentative de connexion à %1.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="153"/>
-        <source>Connecting to router %1:%2...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="158"/>
-        <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <source>Connection established.</source>
+        <translation>Connexion établie.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="171"/>
-        <source>Connection to router %1:%2 established.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="176"/>
-        <source>Connection to router established.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="189"/>
-        <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="194"/>
-        <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="211"/>
-        <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="216"/>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="236"/>
-        <source>Router is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="243"/>
-        <source>Timeout waiting for reconnection to router.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="250"/>
-        <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="257"/>
-        <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="267"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>La version de l hôte est plus récente que celle du client (%1 &gt; %2). Veuillez mettre à jour l application.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="288"/>
+        <location filename="../ui/session_window.cc" line="192"/>
         <source>Network error when connecting to the router: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de réseau lors de la connexion au routeur: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="295"/>
+        <location filename="../ui/session_window.cc" line="199"/>
         <source>Authentication error when connecting to the router: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d authentification lors de la connexion au routeur: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="224"/>
         <source>Desktop Manage</source>
         <translation>Gestion bureau</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="228"/>
         <source>Desktop View</source>
         <translation>Vue bureau</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="232"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Transfert de fichiers</translation>
+        <translation>Transfert de fichiers</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="236"/>
         <source>System Information</source>
         <translation>Informations système</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="336"/>
+        <location filename="../ui/session_window.cc" line="240"/>
         <source>Text Chat</source>
-        <translation type="unfinished">Fenêtre de dialogue</translation>
+        <translation>Fenêtre de dialogues</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="374"/>
+        <location filename="../ui/session_window.cc" line="284"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Violation du protocole de communication.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="288"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de cryptographie (le cryptage ou le décryptage du message a échoué).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="292"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s est produite au niveau du réseau (par exemple, le câble réseau a été accidentellement débranché).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="296"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>La connexion a été refusée par l homologue (ou s est interrompue).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="300"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>L hôte distant a fermé la connexion.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="304"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>L adresse de l hôte n a pas été trouvée.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="308"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>L opération de la prise a dépassé le temps imparti.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="312"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>L adresse spécifiée est déjà utilisée et a été définie comme exclusive.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>L adresse spécifiée n appartient pas à l hôte.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="416"/>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="326"/>
+        <location filename="../ui/session_window.cc" line="363"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur inconnue s est produite.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="433"/>
+        <location filename="../ui/session_window.cc" line="343"/>
         <source>Authentication successfully completed.</source>
-        <translation type="unfinished"></translation>
+        <translation>L authentification a été effectuée avec succès.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="347"/>
         <source>Network authentication error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d authentification réseau.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>Violation of the data exchange protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Violation du protocole d échange de données.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
-        <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/session_window.cc" line="450"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>Wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d utilisateur ou mot de passe incorrect.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le type de session spécifié n est pas autorisé pour l utilisateur.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="474"/>
+        <location filename="../ui/session_window.cc" line="379"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>L hôte avec l ID spécifié n&apos;est pas en ligne.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="383"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il n y a pas de relais disponibles ou la réserve de clés est vide.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="387"/>
         <source>Failed to connect to the relay server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la connexion au serveur relais.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="391"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>L accès est refusé.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="395"/>
         <source>Unknown error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::StatisticsDialog</name>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">Non</translation>
+        <translation>Erreur inconnue.</translation>
     </message>
 </context>
 <context>
@@ -3704,79 +3587,79 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="105"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="110"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="115"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="120"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="125"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/sys_info/sys_info_widget.cc" line="142"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n secondes</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/sys_info/sys_info_widget.cc" line="143"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n minutes</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/sys_info/sys_info_widget.cc" line="144"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n heures</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/sys_info/sys_info_widget.cc" line="168"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n jours</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="190"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gbps</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="195"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbps</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="200"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kbps</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget.cc" line="205"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>bps</translation>
     </message>
 </context>
 <context>
@@ -3784,12 +3667,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Continue Pending</source>
-        <translation type="unfinished">Poursuivre l attente</translation>
+        <translation>Poursuivre l attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
         <source>Pause Pending</source>
-        <translation type="unfinished">Pause en attente</translation>
+        <translation>Pause en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="142"/>
@@ -3804,17 +3687,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="148"/>
         <source>Start Pending</source>
-        <translation type="unfinished">Démarrage en attente</translation>
+        <translation>Démarrage en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="151"/>
         <source>Stop Pending</source>
-        <translation type="unfinished">Arrêt en attente</translation>
+        <translation>Arrêt en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="154"/>
         <source>Stopped</source>
-        <translation type="unfinished">Arrêté</translation>
+        <translation>Arrêté</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="157"/>
@@ -3830,7 +3713,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="172"/>
         <source>Demand Start</source>
-        <translation type="unfinished">Demande démarrage</translation>
+        <translation>Demande Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="175"/>
@@ -3840,12 +3723,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="178"/>
         <source>Boot Start</source>
-        <translation type="unfinished">Démarrage du Boot</translation>
+        <translation>Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="181"/>
         <source>System Start</source>
-        <translation type="unfinished">Démarrage du système</translation>
+        <translation>Démarrage du système</translation>
     </message>
 </context>
 <context>
@@ -3853,17 +3736,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="67"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Application</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="69"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Sécurité</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="71"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Système</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="325"/>
@@ -3873,12 +3756,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="195"/>
         <source>Page %1/%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Page %1/%2</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="313"/>
@@ -3888,17 +3771,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="319"/>
         <source>Audit Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Succès de l audit</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="322"/>
         <source>Audit Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l audit</translation>
     </message>
 </context>
 <context>
@@ -3906,37 +3789,37 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de licence</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="142"/>
         <source>License Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version de la licence</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="146"/>
         <source>Organization</source>
-        <translation type="unfinished"></translation>
+        <translation>Organisation</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétaire</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="154"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID du produit</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="158"/>
         <source>Product Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé de produit</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="162"/>
         <source>Unknown Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Champ inconnu</translation>
     </message>
 </context>
 <context>
@@ -3944,7 +3827,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="149"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom complet</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="152"/>
@@ -3954,7 +3837,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire principal</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
@@ -3982,47 +3865,47 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Password Can&apos;t Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Le mot de passe ne peut pas être modifié</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe expiré</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe non expiré</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Lockout</source>
-        <translation type="unfinished"></translation>
+        <translation>Verrouillage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Jamais</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="169"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>Dernière connexion</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="170"/>
         <source>Number Logons</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de connexions</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="171"/>
         <source>Bad Password Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de mots de passe incorrects</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="183"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupes</translation>
     </message>
 </context>
 <context>
@@ -4030,103 +3913,103 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="155"/>
         <source>Monitor Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du moniteur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="158"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du fabricant</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="161"/>
         <source>Monitor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID du moniteur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="164"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro de série</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="168"/>
         <source>EDID Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version EDID</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="180"/>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamma</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="194"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de la diagonale</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="244"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de fabrication</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="175"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Semaine %1 / %2</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de l image</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="185"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1x%2 cm</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="199"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolution</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence horizontale</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="207"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 kHz</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence verticale</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="214"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 Hz</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Horloge Pixel</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Horloge maximale du pixel</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
@@ -4151,27 +4034,27 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="235"/>
         <source>Supported Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonctionnalités prises en charge</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="248"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Modes vidéo pris en charge</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="224"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de signal d entrée</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
-        <translation type="unfinished"></translation>
+        <translation>Numérique</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Analog</source>
-        <translation type="unfinished"></translation>
+        <translation>Analogique</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="300"/>
@@ -4184,27 +4067,27 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="139"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l adaptateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="142"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type d interface</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="145"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Vitesse de connexion</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="148"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse MAC</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP activé</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
@@ -4219,17 +4102,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur DHCP #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur DHCP</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
@@ -4239,12 +4122,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Passerelle #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
         <source>Gateway</source>
-        <translation type="unfinished">Passerelle</translation>
+        <translation>Passerelle</translation>
     </message>
 </context>
 <context>
@@ -4257,27 +4140,27 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin local</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisations actuelles</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Non limité</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisations maximales</translation>
     </message>
 </context>
 <context>
@@ -4285,105 +4168,105 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="146"/>
         <source>Power Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source d énergie</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="148"/>
         <source>Battery Status</source>
-        <translation type="unfinished"></translation>
+        <translation>État de la batterie</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="154"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Pourcentage d autonomie de la batterie</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="160"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée de vie complète de la batterie</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="167"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée de vie restante de la batterie</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="183"/>
         <source>Device Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l appareil</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="186"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Fabricant</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="189"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de fabrication</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="192"/>
         <source>Unique Id</source>
-        <translation type="unfinished"></translation>
+        <translation>ID unique</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="195"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro de série</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="198"/>
         <source>Tempareture</source>
-        <translation type="unfinished"></translation>
+        <translation>Température</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
         <source>Design Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Capacité nominale</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>%1 mWh</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mWh</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="204"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Capacité de charge totale</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="210"/>
         <source>Depreciation</source>
-        <translation type="unfinished"></translation>
+        <translation>Amortissement</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>Current Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Capacité actuelle</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Voltage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="308"/>
         <source>Charging</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
@@ -4397,37 +4280,37 @@
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="305"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>Critique</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
         <source>Discharging</source>
-        <translation type="unfinished"></translation>
+        <translation>Décharge</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
         <source>Power OnLine</source>
-        <translation type="unfinished"></translation>
+        <translation>Puissance en ligne</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <source>State</source>
-        <translation type="unfinished">État</translation>
+        <translation>État</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
         <source>Battery #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Batterie #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="281"/>
         <source>DC Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Batterie DC</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="284"/>
         <source>AC Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne AC</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="287"/>
@@ -4438,17 +4321,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="299"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Haut</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="302"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>No Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de batterie</translation>
     </message>
 </context>
 <context>
@@ -4456,7 +4339,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
@@ -4473,27 +4356,27 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilote</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Partagé</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du partage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre d&apos;impressions</translation>
     </message>
 </context>
 <context>
@@ -4501,12 +4384,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
         <source>System Idle Process</source>
-        <translation type="unfinished">Processus de veille du système</translation>
+        <translation>Processus d&apos;inactivité du système</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
         <source>Unknown Process</source>
-        <translation type="unfinished">Processus inconnu</translation>
+        <translation>Processus inconnu</translation>
     </message>
 </context>
 <context>
@@ -4514,12 +4397,12 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished">Poursuivre l attente</translation>
+        <translation>Poursuivre l attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="141"/>
         <source>Pause Pending</source>
-        <translation type="unfinished">Pause en attente</translation>
+        <translation>Pause en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="144"/>
@@ -4534,17 +4417,17 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Start Pending</source>
-        <translation type="unfinished">Démarrage en attente</translation>
+        <translation>Démarrage en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="153"/>
         <source>Stop Pending</source>
-        <translation type="unfinished">Arrêt en attente</translation>
+        <translation>Arrêt en attente</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="156"/>
         <source>Stopped</source>
-        <translation type="unfinished">Arrêté</translation>
+        <translation>Arrêté</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="159"/>
@@ -4560,7 +4443,7 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Demand Start</source>
-        <translation type="unfinished">Demande démarrage</translation>
+        <translation>Demande Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="177"/>
@@ -4570,56 +4453,36 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="180"/>
         <source>Boot Start</source>
-        <translation type="unfinished">Démarrage du Boot</translation>
+        <translation>Démarrage</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_services.cc" line="183"/>
         <source>System Start</source>
-        <translation type="unfinished">Démarrage du système</translation>
+        <translation>Démarrage du système</translation>
     </message>
 </context>
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
-        <source>Host Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
-        <source>Client Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
-        <source>Router Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
-        <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="136"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Domaine</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupe de travail</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps de fonctionnement</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="148"/>
@@ -4627,134 +4490,133 @@
         <translation>Ordinateur</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="242"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="233"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="173"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="164"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architecture</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="176"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé de licence</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
         <source>Install Date</source>
-        <translation type="unfinished">Date d installation</translation>
+        <translation>Date d installation</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
         <source>Operating System</source>
-        <translation type="unfinished">Système d&apos;exploitation</translation>
+        <translation>Système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="194"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="257"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Fabricant</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="197"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="188"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="202"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte mère</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="230"/>
+        <source>Vendor</source>
+        <translation>Vendeur</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="209"/>
+        <source>Packages</source>
+        <translation>Emballages</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <source>Cores</source>
+        <translation>Cœurs</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="239"/>
-        <source>Vendor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="218"/>
-        <source>Packages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="221"/>
-        <source>Cores</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="224"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Fils</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Processeur</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="245"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="236"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="260"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <source>Speed</source>
+        <translation>Vitesse</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
+        <source>%1 MHz</source>
+        <translation>%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <source>Type</source>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
-        <source>Size</source>
-        <translation>Dimension</translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <source>Speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
-        <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="275"/>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="281"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro de pièce</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Installé</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="285"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="356"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Memory</source>
         <translation>Mémoire</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="324"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="315"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 Libre)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="334"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="325"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecteurs logiques</translation>
     </message>
 </context>
 <context>
@@ -4767,47 +4629,47 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
         <source>Adapter String</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaptateur</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
         <source>BIOS String</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
         <source>Chip Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de puce</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
         <source>DAC Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de CNA</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de la mémoire</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 octets</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
         <source>Driver Date</source>
-        <translation type="unfinished">Date du pilote</translation>
+        <translation>Date du pilote</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
         <source>Driver Version</source>
-        <translation type="unfinished">Version du pilote</translation>
+        <translation>Version du pilote</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
         <source>Driver Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur du pilote</translation>
     </message>
 </context>
 <context>
@@ -4815,19 +4677,19 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="1008"/>
         <source>Update Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Vitesse de mise à jour</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="688"/>
         <location filename="../ui/desktop/task_manager_window.cc" line="753"/>
         <location filename="../ui/desktop/task_manager_window.cc" line="783"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmation</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="689"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment mettre fin au processus &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="693"/>
@@ -4846,27 +4708,27 @@
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="754"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment déconnecter la session de l utilisateur &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="784"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment mettre fin à la session de l&apos;utilisateur &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="990"/>
         <source>Processes: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Processus: %1</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="1002"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire physique: %1%</translation>
     </message>
     <message>
         <location filename="../ui/desktop/task_manager_window.cc" line="996"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement du processeur: %1%</translation>
     </message>
 </context>
 <context>
