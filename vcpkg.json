@@ -21,6 +21,10 @@
       "name": "qt5-winextras",
       "platform": "windows"
     },
-    "rapidjson"
+    "rapidjson",
+    {
+      "name": "wtl",
+      "platform": "windows"
+    }
   ]
 }
