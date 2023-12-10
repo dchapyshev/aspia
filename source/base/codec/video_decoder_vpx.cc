@@ -96,11 +96,18 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
     LOG(LS_INFO) << "VPX(" << encoding << ") Ctor";
     codec_.reset(new vpx_codec_ctx_t());
 
-    vpx_codec_dec_cfg_t config;
+    uint32_t thread_count = std::thread::hardware_concurrency();
+    if (thread_count >= 12)
+        thread_count = 8;
+    else if (thread_count >= 8)
+        thread_count = 4;
+    else
+        thread_count = 2;
 
+    vpx_codec_dec_cfg_t config;
     config.w = 0;
     config.h = 0;
-    config.threads = 2;
+    config.threads = thread_count;
 
     vpx_codec_iface_t* algo;
 

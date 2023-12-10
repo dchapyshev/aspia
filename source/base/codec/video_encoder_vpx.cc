@@ -418,6 +418,13 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
         return false;
     }
 
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_TOKEN_PARTITIONS, 3);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_TOKEN_PARTITIONS) failed: " << ret;
+        return false;
+    }
+
     return true;
 }
 
