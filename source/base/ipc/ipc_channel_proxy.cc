@@ -72,7 +72,7 @@ void IpcChannelProxy::scheduleWrite()
     if (!reloadWriteQueue(&channel_->write_queue_))
         return;
 
-    channel_->doWrite();
+    channel_->doWriteSize();
 }
 
 //--------------------------------------------------------------------------------------------------

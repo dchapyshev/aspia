@@ -20,6 +20,7 @@
 #define BASE_NET_TCP_CHANNEL_H
 
 #include "base/memory/byte_array.h"
+#include "base/memory/local_memory.h"
 #include "base/net/network_channel.h"
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
@@ -164,6 +165,11 @@ private:
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
+
+    void onResolved(const std::error_code& error_code,
+                    const asio::ip::tcp::resolver::results_type& endpoints);
+    void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
+
     void onMessageWritten(uint8_t channel_id, ByteArray&& buffer);
     void onMessageReceived();
 
@@ -217,6 +223,9 @@ private:
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;
+
+    class Handler;
+    base::local_shared_ptr<Handler> handler_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpChannel);
 };

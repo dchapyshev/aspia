@@ -52,6 +52,113 @@ std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 
 } // namespace
 
+class TcpChannel::Handler
+{
+public:
+    explicit Handler(TcpChannel* channel);
+    ~Handler();
+
+    void dettach();
+
+    void onResolved(const std::error_code& error_code,
+                    const asio::ip::tcp::resolver::results_type& endpoints);
+    void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
+    void onWrite(const std::error_code& error_code, size_t bytes_transferred);
+    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
+    void onReadUserData(const std::error_code& error_code, size_t bytes_transferred);
+    void onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred);
+    void onReadServiceData(const std::error_code& error_code, size_t bytes_transferred);
+    void onKeepAliveInterval(const std::error_code& error_code);
+    void onKeepAliveTimeout(const std::error_code& error_code);
+
+private:
+    TcpChannel* channel_;
+    DISALLOW_COPY_AND_ASSIGN(Handler);
+};
+
+//--------------------------------------------------------------------------------------------------
+TcpChannel::Handler::Handler(TcpChannel* channel)
+    : channel_(channel)
+{
+    DCHECK(channel_);
+}
+
+//--------------------------------------------------------------------------------------------------
+TcpChannel::Handler::~Handler() = default;
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::dettach()
+{
+    channel_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onResolved(
+    const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+{
+    if (channel_)
+        channel_->onResolved(error_code, endpoints);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onConnected(
+    const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+{
+    if (channel_)
+        channel_->onConnected(error_code, endpoint);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onWrite(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (channel_)
+        channel_->onWrite(error_code, bytes_transferred);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (channel_)
+        channel_->onReadSize(error_code, bytes_transferred);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onReadUserData(const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (channel_)
+        channel_->onReadUserData(error_code, bytes_transferred);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onReadServiceHeader(
+    const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (channel_)
+        channel_->onReadServiceHeader(error_code, bytes_transferred);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onReadServiceData(
+    const std::error_code& error_code, size_t bytes_transferred)
+{
+    if (channel_)
+        channel_->onReadServiceData(error_code, bytes_transferred);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onKeepAliveInterval(const std::error_code& error_code)
+{
+    if (channel_)
+        channel_->onKeepAliveInterval(error_code);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
+{
+    if (channel_)
+        channel_->onKeepAliveTimeout(error_code);
+}
+
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel()
     : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
@@ -59,7 +166,8 @@ TcpChannel::TcpChannel()
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       encryptor_(std::make_unique<MessageEncryptorFake>()),
-      decryptor_(std::make_unique<MessageDecryptorFake>())
+      decryptor_(std::make_unique<MessageDecryptorFake>()),
+      handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -71,7 +179,8 @@ TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
       socket_(std::move(socket)),
       connected_(true),
       encryptor_(std::make_unique<MessageEncryptorFake>()),
-      decryptor_(std::make_unique<MessageDecryptorFake>())
+      decryptor_(std::make_unique<MessageDecryptorFake>()),
+      handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(socket_.is_open());
@@ -80,13 +189,15 @@ TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(LS_INFO) << "Dtor (start)";
 
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
 
     listener_ = nullptr;
     disconnect();
+
+    LOG(LS_INFO) << "Dtor (end)";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,45 +273,10 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
     LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
 
     resolver_->async_resolve(host, service,
-        [this, host](const std::error_code& error_code,
-                     const asio::ip::tcp::resolver::results_type& endpoints)
-    {
-        if (error_code)
-        {
-            onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        LOG(LS_INFO) << "Resolved endpoints for '" << host << "': " << endpointsToString(endpoints);
-
-        asio::async_connect(socket_, endpoints,
-            [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
-        {
-            if (error_code == asio::error::operation_aborted)
-            {
-                // If more than one address for a host was resolved, then we return false and cancel
-                // attempts to connect to all addresses.
-                return false;
-            }
-
-            return true;
-        },
-            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
-        {
-            if (error_code)
-            {
-                onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
-
-            LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
-                         << ":" << endpoint.port();
-            connected_ = true;
-
-            if (listener_)
-                listener_->onTcpConnected();
-        });
-    });
+                             std::bind(&Handler::onResolved,
+                                       handler_,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -315,7 +391,7 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
         keep_alive_timer_ = std::make_unique<asio::high_resolution_timer>(io_context_);
         keep_alive_timer_->expires_after(keep_alive_interval_);
         keep_alive_timer_->async_wait(
-            std::bind(&TcpChannel::onKeepAliveInterval, this, std::placeholders::_1));
+            std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
     }
 
     return true;
@@ -375,11 +451,27 @@ void TcpChannel::disconnect()
     LOG(LS_INFO) << "Disconnect";
     connected_ = false;
 
+    handler_->dettach();
+
+    if (resolver_)
+    {
+        LOG(LS_INFO) << "Destroy resolver";
+        resolver_->cancel();
+        resolver_.reset();
+    }
+
     if (socket_.is_open())
     {
+        LOG(LS_INFO) << "Cancel async operations";
         std::error_code ignored_code;
         socket_.cancel(ignored_code);
+
+        LOG(LS_INFO) << "Close socket";
         socket_.close(ignored_code);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Socket already closed";
     }
 }
 
@@ -427,6 +519,50 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
         listener_->onTcpDisconnected(error_code);
         listener_ = nullptr;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onResolved(
+    const std::error_code &error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+{
+    if (error_code)
+    {
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
+
+    asio::async_connect(socket_, endpoints,
+        [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
+    {
+        if (error_code == asio::error::operation_aborted)
+        {
+            // If more than one address for a host was resolved, then we return false and cancel
+            // attempts to connect to all addresses.
+            return false;
+        }
+
+        return true;
+    },
+        std::bind(&Handler::onConnected, handler_, std::placeholders::_1, std::placeholders::_2));
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onConnected(const std::error_code &error_code, const asio::ip::tcp::endpoint &endpoint)
+{
+    if (error_code)
+    {
+        onErrorOccurred(FROM_HERE, error_code);
+        return;
+    }
+
+    LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
+                 << ":" << endpoint.port();
+    connected_ = true;
+
+    if (listener_)
+        listener_->onTcpConnected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -558,8 +694,8 @@ void TcpChannel::doWrite()
     // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
-                      std::bind(&TcpChannel::onWrite,
-                                this,
+                      std::bind(&Handler::onWrite,
+                                handler_,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }
@@ -602,8 +738,8 @@ void TcpChannel::doReadSize()
     state_ = ReadState::READ_SIZE;
     asio::async_read(socket_,
                      variable_size_reader_.buffer(),
-                     std::bind(&TcpChannel::onReadSize,
-                               this,
+                     std::bind(&Handler::onReadSize,
+                               handler_,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
@@ -656,8 +792,8 @@ void TcpChannel::doReadUserData(size_t length)
     state_ = ReadState::READ_USER_DATA;
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&TcpChannel::onReadUserData,
-                               this,
+                     std::bind(&Handler::onReadUserData,
+                               handler_,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
@@ -703,8 +839,8 @@ void TcpChannel::doReadServiceHeader()
     state_ = ReadState::READ_SERVICE_HEADER;
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&TcpChannel::onReadServiceHeader,
-                               this,
+                     std::bind(&Handler::onReadServiceHeader,
+                               handler_,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
@@ -766,8 +902,8 @@ void TcpChannel::doReadServiceData(size_t length)
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
                                   read_buffer_.size() - sizeof(ServiceHeader)),
-                     std::bind(&TcpChannel::onReadServiceData,
-                               this,
+                     std::bind(&Handler::onReadServiceData,
+                               handler_,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
@@ -845,7 +981,7 @@ void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t byt
                 // Restart keep alive timer.
                 keep_alive_timer_->expires_after(keep_alive_interval_);
                 keep_alive_timer_->async_wait(
-                    std::bind(&TcpChannel::onKeepAliveInterval, this, std::placeholders::_1));
+                    std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
             }
         }
     }
@@ -873,7 +1009,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
         // Restarting the timer.
         keep_alive_timer_->expires_after(keep_alive_interval_);
         keep_alive_timer_->async_wait(
-            std::bind(&TcpChannel::onKeepAliveInterval, this, std::placeholders::_1));
+            std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
     }
     else
     {
@@ -887,7 +1023,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
         // terminated.
         keep_alive_timer_->expires_after(keep_alive_timeout_);
         keep_alive_timer_->async_wait(
-            std::bind(&TcpChannel::onKeepAliveTimeout, this, std::placeholders::_1));
+            std::bind(&Handler::onKeepAliveTimeout, handler_, std::placeholders::_1));
     }
 }
 

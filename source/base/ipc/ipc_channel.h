@@ -22,6 +22,7 @@
 #include "base/process_handle.h"
 #include "base/session_id.h"
 #include "base/memory/byte_array.h"
+#include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
 #if defined(OS_WIN)
@@ -92,8 +93,15 @@ private:
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
-    void doWrite();
-    void doReadMessage();
+    void doWriteSize();
+    void onWriteSize(const std::error_code& error_code, size_t bytes_transferred);
+    void doWriteData();
+    void onWriteData(const std::error_code& error_code, size_t bytes_transferred);
+    void doReadSize();
+    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
+    void doReadData();
+    void onReadData(const std::error_code& error_code, size_t bytes_transferred);
+
     void onMessageReceived();
     void onMessageWritten(ByteArray&& buffer);
 
@@ -114,6 +122,9 @@ private:
 
     ProcessId peer_process_id_ = kNullProcessId;
     SessionId peer_session_id_ = kInvalidSessionId;
+
+    class Handler;
+    base::local_shared_ptr<Handler> handler_;
 
     THREAD_CHECKER(thread_checker_);
 
