@@ -226,6 +226,7 @@ add_subdirectory(qt_base)
 add_subdirectory(relay)
 add_subdirectory(router)
 add_subdirectory(third_party)
+add_subdirectory(tools)
 
 if (WIN32 OR LINUX)
     add_subdirectory(host)
