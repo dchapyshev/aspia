@@ -126,6 +126,32 @@ void HttpFileDownloader::start(std::u16string_view url,
 }
 
 //--------------------------------------------------------------------------------------------------
+static int debugFunc(
+    CURL* /* handle */, curl_infotype type, char* data, size_t size, void* /* clientp */)
+{
+    switch (type)
+    {
+        case CURLINFO_TEXT:
+        {
+            std::string_view message(data, size);
+
+            if (message.ends_with("\n"))
+                message = message.substr(0, message.size() - 1);
+            if (message.ends_with("\r"))
+                message = message.substr(0, message.size() - 1);
+
+            LOG(LS_INFO) << message;
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
     LOG(LS_INFO) << "run BEGIN";
@@ -151,6 +177,8 @@ void HttpFileDownloader::run()
     curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, this);
     curl_easy_setopt(curl.get(), CURLOPT_XFERINFOFUNCTION, progressCallback);
     curl_easy_setopt(curl.get(), CURLOPT_XFERINFODATA, this);
+    curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_DEBUGFUNCTION, debugFunc);
 
     base::ScopedCURLM multi_curl;
     curl_multi_add_handle(multi_curl.get(), curl.get());

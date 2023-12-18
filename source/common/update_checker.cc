@@ -119,6 +119,32 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
 }
 
 //--------------------------------------------------------------------------------------------------
+static int debugFunc(
+    CURL* /* handle */, curl_infotype type, char* data, size_t size, void* /* clientp */)
+{
+    switch (type)
+    {
+        case CURLINFO_TEXT:
+        {
+            std::string_view message(data, size);
+
+            if (message.ends_with("\n"))
+                message = message.substr(0, message.size() - 1);
+            if (message.ends_with("\r"))
+                message = message.substr(0, message.size() - 1);
+
+            LOG(LS_INFO) << message;
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
     LOG(LS_INFO) << "run BEGIN";
@@ -177,6 +203,9 @@ void UpdateChecker::run()
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
+    curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_DEBUGFUNCTION, debugFunc);
 
     long verify_peer = 1;
     if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
