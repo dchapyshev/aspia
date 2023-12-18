@@ -70,12 +70,29 @@ function getUpdates($mysqli, $package, $version, $arch)
     if (empty($target_version))
         die('Empty target version');
 
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    echo "<update>";
-    echo "<version>".$target_version."</version>";
-    echo "<description>".$description."</description>";
-    echo "<url>".$url."</url>";
-    echo "</update>";
+    $xml = xmlwriter_open_memory();
+    xmlwriter_set_indent($xml, 1);
+    xmlwriter_set_indent_string($xml, ' ');
+
+    xmlwriter_start_document($xml, '1.0', 'UTF-8');
+    xmlwriter_start_element($xml, 'update');
+
+    xmlwriter_start_element($xml, 'version');
+    xmlwriter_text($xml, $target_version);
+    xmlwriter_end_element($xml); // version
+
+    xmlwriter_start_element($xml, 'description');
+    xmlwriter_text($xml, $description);
+    xmlwriter_end_element($xml); // description
+
+    xmlwriter_start_element($xml, 'url');
+    xmlwriter_text($xml, $url);
+    xmlwriter_end_element($xml); // url
+
+    xmlwriter_end_element($xml); // update
+    xmlwriter_end_document($xml);
+
+    echo xmlwriter_output_memory($xml);
 }
 
 function doWork()
