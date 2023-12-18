@@ -39,12 +39,13 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
 
     try
     {
-        xml.parse<rapidxml::parse_non_destructive>(
+        xml.parse<rapidxml::parse_default>(
             reinterpret_cast<char*>(const_cast<uint8_t*>(buffer.data())));
     }
     catch (const rapidxml::parse_error& error)
     {
-        LOG(LS_ERROR) << "Invalid XML for update info: " << error.what();
+        LOG(LS_ERROR) << "Invalid XML for update info: " << error.what() << " at "
+                      << error.where<char>();
         return UpdateInfo();
     }
 
