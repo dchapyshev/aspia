@@ -164,7 +164,7 @@
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>
-        <translation>Version: %1</translation>
+        <translation type="vanished">Version: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="121"/>
@@ -389,7 +389,10 @@
     <message numerus="yes">
         <location filename="../ui/text_chat_widget.cc" line="250"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation>Le message est trop long. La longueur maximale du message est de %n caractères.</translation>
+        <translation>
+            <numerusform>Le message est trop long. La longueur maximale du message est de %n caractères.</numerusform>
+            <numerusform>Le message est trop long. La longueur maximale du message est de %n caractères.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="298"/>
