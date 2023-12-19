@@ -67,7 +67,7 @@
     <message>
         <location filename="../ui/session_type.cc" line="43"/>
         <source>Text Chat</source>
-        <translation>Fenêtre textuelle</translation>
+        <translation>Fenêtre de conversation</translation>
     </message>
 </context>
 <context>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../ui/text_chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation>Aspia discussion</translation>
+        <translation>Conversation Aspia</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.ui" line="179"/>
@@ -164,12 +164,12 @@
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>
-        <translation type="vanished">Version: %1</translation>
+        <translation>Version: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="125"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="277"/>
         <source>TXT files (*.txt)</source>
-        <translation>Fichier TXT</translation>
+        <translation>Fichier TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="292"/>
@@ -314,7 +314,7 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="293"/>
         <source>Could not open file for writing.</source>
-        <translation>Impossible d&apos;ouvrir le fichier en écriture.</translation>
+        <translation>Impossible d ouvrir le fichier en écriture.</translation>
     </message>
 </context>
 <context>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../ui/download_dialog.cc" line="66"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation>Une erreur s&apos;est produite lors du téléchargement de la mise à jour: %1</translation>
+        <translation>Une erreur s est produite lors du téléchargement de la mise à jour: %1</translation>
     </message>
 </context>
 <context>
@@ -358,27 +358,27 @@
     <message>
         <location filename="../ui/text_chat_widget.cc" line="128"/>
         <source>%1 is typing...</source>
-        <translation>%1 est en train d&apos;écrire...</translation>
+        <translation>%1 est en train d écrire...</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="132"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation>L&apos;utilisateur %1 a rejoint la conversation (%2)</translation>
+        <translation>L utilisateur %1 a rejoint la conversation (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="136"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation>L&apos;utilisateur %1 a quitter la conversation (%2)</translation>
+        <translation>L utilisateur %1 a quitter la conversation (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="140"/>
         <source>User %1 is logged in (%2)</source>
-        <translation>L&apos;utilisateur %1 est connecté (%2)</translation>
+        <translation>L utilisateur %1 est connecté (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="144"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation>L&apos;utilisateur %1 n&apos;est pas connecté (%2)</translation>
+        <translation>L utilisateur %1 n est pas connecté (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="249"/>
@@ -389,10 +389,7 @@
     <message numerus="yes">
         <location filename="../ui/text_chat_widget.cc" line="250"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation>
-            <numerusform>Le message est trop long. La longueur maximale du message est de %n caractères.</numerusform>
-            <numerusform>Le message est trop long. La longueur maximale du message est de %n caractères.</numerusform>
-        </translation>
+        <translation>Le message est trop long. La longueur maximale du message est de %n caractères.</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="298"/>
@@ -402,12 +399,12 @@
     <message>
         <location filename="../ui/text_chat_widget.cc" line="300"/>
         <source>TXT files (*.txt)</source>
-        <translation>Fichier TXT</translation>
+        <translation>Fichier TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="316"/>
         <source>Could not open file for writing.</source>
-        <translation>Impossible d&apos;ouvrir le fichier en écriture.</translation>
+        <translation>Impossible d ouvrir le fichier en écriture.</translation>
     </message>
 </context>
 <context>
@@ -415,7 +412,7 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="59"/>
         <source>Receiving information...</source>
-        <translation>Réception d&apos;informations en cours...</translation>
+        <translation>Réception d informations en cours...</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="111"/>
@@ -436,12 +433,12 @@
         <location filename="../ui/update_dialog.cc" line="139"/>
         <location filename="../ui/update_dialog.cc" line="162"/>
         <source>No updates available.</source>
-        <translation>Aucune mise à jour n&apos;est disponible.</translation>
+        <translation>Aucune mise à jour n est disponible.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="180"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation>Une mise à jour sera téléchargée. Une fois le téléchargement terminé, l&apos;application se fermera automatiquement.</translation>
+        <translation>Une mise à jour sera téléchargée. Une fois le téléchargement terminé, l application se fermera automatiquement.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="182"/>
@@ -481,7 +478,7 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="206"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation>Une erreur s&apos;est produite lors de l&apos;installation de la mise à jour: %1</translation>
+        <translation>Une erreur s est produite lors de l installation de la mise à jour: %1</translation>
     </message>
 </context>
 </TS>
