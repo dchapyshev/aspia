@@ -50,6 +50,7 @@ namespace base {
 
 namespace {
 
+const LoggingSeverity kDefaultLogLevel = LOG_LS_FATAL;
 const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 
@@ -183,14 +184,14 @@ std::ostream* g_swallow_stream;
 
 //--------------------------------------------------------------------------------------------------
 LoggingSettings::LoggingSettings()
-    : min_log_level(LOG_LS_ERROR),
+    : min_log_level(kDefaultLogLevel),
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
     std::string log_level_string;
     if (Environment::get("ASPIA_LOG_LEVEL", &log_level_string))
     {
-        LoggingSeverity log_level = LOG_LS_ERROR;
+        LoggingSeverity log_level = kDefaultLogLevel;
         if (stringToInt(log_level_string, &log_level))
         {
             log_level = std::max(log_level, LOG_LS_INFO);
