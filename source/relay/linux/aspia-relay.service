@@ -7,7 +7,7 @@ Conflicts=shutdown.target
 [Service]
 WorkingDirectory=/usr/bin
 #EnvironmentFile=/usr/bin/env.sh
-#Environment=SVC=aspia-relay
+Environment=ASPIA_LOG_LEVEL=2
 Restart=always
 ExecStart=/usr/bin/aspia_relay
 RestartSec=5000ms
