@@ -43,23 +43,6 @@ constexpr int kMaxCompressRatio = 22;
 constexpr int kDefaultCompressRatio = 8;
 
 //--------------------------------------------------------------------------------------------------
-bool isValidSessionType(int session_type)
-{
-    switch (static_cast<proto::SessionType>(session_type))
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-        case proto::SESSION_TYPE_SYSTEM_INFO:
-        case proto::SESSION_TYPE_TEXT_CHAT:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 bool isValidVideoEncoding(int video_encoding)
 {
     switch (static_cast<proto::VideoEncoding>(video_encoding))
@@ -401,11 +384,13 @@ int readComputerGroup(
     }
 
     QJsonObject json_config = json_computer_group["config"].toObject();
-    proto::address_book::ComputerGroupConfig session_config = readComputerGroupConfig(json_config);
+    proto::address_book::ComputerGroupConfig computer_group_config =
+        readComputerGroupConfig(json_config);
 
     proto::address_book::ComputerGroup* computer_group = parent_group->add_computer_group();
     computer_group->set_name(name.toStdString());
     computer_group->set_comment(comment.toStdString());
+    computer_group->mutable_config()->CopyFrom(computer_group_config);
     computer_group->set_expanded(false);
 
     int count = 0;
@@ -531,7 +516,7 @@ QJsonObject writeComputerGroup(const proto::address_book::ComputerGroup& compute
     {
         QJsonObject json_computer_group =
             writeComputerGroup(computer_group.computer_group(i), count);
-        json_computers.append(json_computer_group);
+        json_computer_groups.append(json_computer_group);
     }
 
     QJsonObject json_computer_group;
