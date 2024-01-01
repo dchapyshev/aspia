@@ -1248,26 +1248,26 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="233"/>
+        <location filename="../computer_group_dialog.cc" line="235"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="242"/>
+        <location filename="../computer_group_dialog.cc" line="244"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="251"/>
+        <location filename="../computer_group_dialog.cc" line="253"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="210"/>
+        <location filename="../computer_group_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>

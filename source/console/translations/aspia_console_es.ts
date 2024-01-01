@@ -1276,7 +1276,7 @@
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="233"/>
+        <location filename="../computer_group_dialog.cc" line="235"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -1284,12 +1284,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="242"/>
+        <location filename="../computer_group_dialog.cc" line="244"/>
         <source>Name can not be empty.</source>
         <translation>El nombre no puede estar vacío.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="251"/>
+        <location filename="../computer_group_dialog.cc" line="253"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -1297,7 +1297,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="210"/>
+        <location filename="../computer_group_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
