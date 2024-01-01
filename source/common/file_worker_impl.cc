@@ -107,36 +107,48 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
         proto::DriveList::Item* item = drive_list->add_item();
 
         const base::win::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
-        switch (drive_info.type())
+        base::win::DriveEnumerator::DriveInfo::Type drive_type = drive_info.type();
+
+        switch (drive_type)
         {
-        case base::win::DriveEnumerator::DriveInfo::Type::FIXED:
-            item->set_type(proto::DriveList::Item::TYPE_FIXED);
-            break;
+            case base::win::DriveEnumerator::DriveInfo::Type::FIXED:
+                item->set_type(proto::DriveList::Item::TYPE_FIXED);
+                break;
 
-        case base::win::DriveEnumerator::DriveInfo::Type::CDROM:
-            item->set_type(proto::DriveList::Item::TYPE_CDROM);
-            break;
+            case base::win::DriveEnumerator::DriveInfo::Type::CDROM:
+                item->set_type(proto::DriveList::Item::TYPE_CDROM);
+                break;
 
-        case base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE:
-            item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);
-            break;
+            case base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE:
+                item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);
+                break;
 
-        case base::win::DriveEnumerator::DriveInfo::Type::RAM:
-            item->set_type(proto::DriveList::Item::TYPE_RAM);
-            break;
+            case base::win::DriveEnumerator::DriveInfo::Type::RAM:
+                item->set_type(proto::DriveList::Item::TYPE_RAM);
+                break;
 
-        case base::win::DriveEnumerator::DriveInfo::Type::REMOTE:
-            item->set_type(proto::DriveList::Item::TYPE_REMOTE);
-            break;
+            case base::win::DriveEnumerator::DriveInfo::Type::REMOTE:
+                item->set_type(proto::DriveList::Item::TYPE_REMOTE);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         item->set_path(base::utf8FromFilePath(drive_info.path()));
         item->set_name(drive_info.volumeName());
-        item->set_total_space(static_cast<int64_t>(drive_info.totalSpace()));
-        item->set_free_space(static_cast<int64_t>(drive_info.freeSpace()));
+
+        if (drive_type == base::win::DriveEnumerator::DriveInfo::Type::FIXED ||
+            drive_type == base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE)
+        {
+            item->set_total_space(static_cast<int64_t>(drive_info.totalSpace()));
+            item->set_free_space(static_cast<int64_t>(drive_info.freeSpace()));
+        }
+        else
+        {
+            item->set_total_space(-1);
+            item->set_free_space(-1);
+        }
     }
 #elif (OS_POSIX)
     proto::DriveList::Item* root_directory = drive_list->add_item();
