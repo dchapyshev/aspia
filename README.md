@@ -50,8 +50,9 @@ For more information, see [license agreement](LICENSE.md).
 
 See also
 --------
-- [Code of conduct](CODE_OF_CONDUCT.md)
+- [Documentation](https://aspia.org/documentation.html)
 - [Instructions for building the project (Windows)](https://aspia.org/docs/building-windows)
 - [Instructions for building the project (Linux)](https://aspia.org/docs/building-linux)
 - [Instructions for building the project (MacOSX)](https://aspia.org/docs/building-macos)
 - [Instructions for translators](https://aspia.org/docs/translators)
+- [Code of conduct](CODE_OF_CONDUCT.md)
