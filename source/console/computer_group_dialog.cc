@@ -130,6 +130,8 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 
     ui.tree_category->setCurrentItem(general_item);
     ui.tree_category->expandAll();
+
+    ui.edit_name->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
