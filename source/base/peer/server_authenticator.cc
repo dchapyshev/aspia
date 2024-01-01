@@ -281,6 +281,33 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
         return;
     }
 
+    if (client_hello->has_version())
+    {
+        LOG(LS_INFO) << "ClientHello with version info";
+        setPeerVersion(client_hello->version());
+
+        const base::Version& peer_version = peerVersion();
+
+        if (!peer_version.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return;
+        }
+
+        // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
+        if (peer_version < base::Version::kVersion_2_7_0)
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return;
+        }
+
+        if (peer_version < base::Version::kMinimumSupportedVersion)
+        {
+            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+            return;
+        }
+    }
+
     const uint32_t encryption = client_hello->encryption();
 
     LOG(LS_INFO) << "Supported by client:";
@@ -384,6 +411,12 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
     // Now we are in the authentication phase.
     internal_state_ = InternalState::SEND_SERVER_HELLO;
     encryption_ = server_hello->encryption();
+
+    proto::Version* version = server_hello->mutable_version();
+    version->set_major(ASPIA_VERSION_MAJOR);
+    version->set_minor(ASPIA_VERSION_MINOR);
+    version->set_patch(ASPIA_VERSION_PATCH);
+    version->set_revision(GIT_COMMIT_COUNT);
 
     LOG(LS_INFO) << "Sending: ServerHello";
     sendMessage(*server_hello);
@@ -604,7 +637,33 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
         return;
     }
 
-    setPeerVersion(response->version());
+    if (!peerVersion().isValid())
+    {
+        setPeerVersion(response->version());
+
+        const base::Version& peer_version = peerVersion();
+
+        if (!peer_version.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return;
+        }
+
+        // Versions greater than or equal to 2.7.0 must send the peer version in
+        // ServerHello/ClientHello message.
+        if (peer_version >= base::Version::kVersion_2_7_0)
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return;
+        }
+
+        if (peer_version < base::Version::kMinimumSupportedVersion)
+        {
+            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+            return;
+        }
+    }
+
     setPeerOsName(response->os_name());
     setPeerComputerName(response->computer_name());
     setPeerArch(response->arch());
@@ -615,12 +674,6 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
                  << " os=" << response->os_name() << " cores=" << response->cpu_cores()
                  << " arch=" << response->arch() << " display_name=" << response->display_name()
                  << ")";
-
-    if (peerVersion() < base::Version::kMinimumSupportedVersion)
-    {
-        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-        return;
-    }
 
     BitSet<uint32_t> session_type = response->session_type();
     if (session_type.count() != 1)

@@ -284,6 +284,12 @@ void ClientAuthenticator::sendClientHello()
         client_hello->set_iv(toStdString(encrypt_iv_));
     }
 
+    proto::Version* version = client_hello->mutable_version();
+    version->set_major(ASPIA_VERSION_MAJOR);
+    version->set_minor(ASPIA_VERSION_MINOR);
+    version->set_patch(ASPIA_VERSION_PATCH);
+    version->set_revision(GIT_COMMIT_COUNT);
+
     LOG(LS_INFO) << "Sending: ClientHello";
     sendMessage(*client_hello);
 }
@@ -298,6 +304,33 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
+    }
+
+    if (server_hello->has_version())
+    {
+        LOG(LS_INFO) << "ServerHello with version info";
+        setPeerVersion(server_hello->version());
+
+        const base::Version& peer_version = peerVersion();
+
+        if (!peer_version.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return false;
+        }
+
+        // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
+        if (peer_version < base::Version::kVersion_2_7_0)
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return false;
+        }
+
+        if (peer_version < base::Version::kMinimumSupportedVersion)
+        {
+            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+            return false;
+        }
     }
 
     LOG(LS_INFO) << "Encryption: " << server_hello->encryption();
@@ -430,13 +463,38 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
         return false;
     }
 
+    if (!peerVersion().isValid())
+    {
+        setPeerVersion(challenge->version());
+
+        const base::Version& peer_version = peerVersion();
+
+        if (!peer_version.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return false;
+        }
+
+        // Versions greater than or equal to 2.7.0 must send the peer version in ServerHello message.
+        if (peer_version >= base::Version::kVersion_2_7_0)
+        {
+            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            return false;
+        }
+
+        if (peer_version < base::Version::kMinimumSupportedVersion)
+        {
+            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+            return false;
+        }
+    }
+
     if (!(challenge->session_types() & session_type_))
     {
         finish(FROM_HERE, ErrorCode::SESSION_DENIED);
         return false;
     }
 
-    setPeerVersion(challenge->version());
     setPeerOsName(challenge->os_name());
     setPeerComputerName(challenge->computer_name());
     setPeerArch(challenge->arch());
@@ -446,12 +504,6 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
                  << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
                  << " arch=" << challenge->arch() << " display_name=" << challenge->display_name()
                  << ")";
-
-    if (peerVersion() < base::Version::kMinimumSupportedVersion)
-    {
-        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-        return false;
-    }
 
     return true;
 }

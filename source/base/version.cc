@@ -151,6 +151,7 @@ const Version& Version::kCurrentShortVersion =
 const Version& Version::kMinimumSupportedVersion = Version(2, 2, 1);
 const Version& Version::kVersion_2_4_0 = Version(2, 4, 0);
 const Version& Version::kVersion_2_6_0 = Version(2, 6, 0);
+const Version& Version::kVersion_2_7_0 = Version(2, 7, 0);
 
 //--------------------------------------------------------------------------------------------------
 Version::Version() = default;
