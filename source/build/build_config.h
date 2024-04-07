@@ -96,7 +96,7 @@
 #endif
 
 #define DEFAULT_LOCALE        u"en"
-#define DEFAULT_UPDATE_SERVER u"https://update.aspia.org"
+#define DEFAULT_UPDATE_SERVER u"https://update.aspia.net"
 
 #define DEFAULT_HOST_TCP_PORT             8050
 #define DEFAULT_ROUTER_TCP_PORT           8060
