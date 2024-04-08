@@ -822,9 +822,10 @@ void MainWindow::onOneTimeSessionsChanged()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
+    Application::LocaleList locale_list = qt_base::Application::instance()->localeList();
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : qt_base::Application::instance()->localeList())
+    for (const auto& locale : std::as_const(locale_list))
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);

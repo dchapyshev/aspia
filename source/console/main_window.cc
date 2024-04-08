@@ -1471,9 +1471,10 @@ void MainWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
+    Application::LocaleList locale_list = Application::instance()->localeList();
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : Application::instance()->localeList())
+    for (const auto& locale : std::as_const(locale_list))
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);
@@ -1491,7 +1492,8 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::rebuildMruMenu()
 {
-    for (QAction* action : ui.menu_recent_open->actions())
+    QList<QAction*> actions = ui.menu_recent_open->actions();
+    for (QAction* action : std::as_const(actions))
     {
         MruAction* mru_action = dynamic_cast<MruAction*>(action);
         if (mru_action)

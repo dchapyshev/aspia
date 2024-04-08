@@ -410,9 +410,10 @@ void FilePanel::removeSelected()
     FileListModel* model = static_cast<FileListModel*>(ui.list->model());
     std::string current_path = currentPath().toStdString();
 
+    QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
     FileRemover::TaskList items;
 
-    for (const auto& index : ui.list->selectionModel()->selectedRows())
+    for (const auto& index : std::as_const(selected_rows))
     {
         items.emplace_back(current_path + model->nameAt(index).toStdString(),
                            model->isFolder(index));
@@ -445,9 +446,10 @@ void FilePanel::sendSelected()
 
     FileListModel* model = static_cast<FileListModel*>(ui.list->model());
 
+    QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
     std::vector<FileTransfer::Item> items;
 
-    for (const auto& index : ui.list->selectionModel()->selectedRows())
+    for (const auto& index : std::as_const(selected_rows))
     {
         items.emplace_back(model->nameAt(index).toStdString(),
                            model->sizeAt(index),

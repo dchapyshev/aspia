@@ -197,7 +197,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     //---------------------------------------------------------------------------------------------
     // Other
-    connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, [=]()
+    connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, this, [this]()
     {
         setConfigChanged(FROM_HERE, true);
     });
