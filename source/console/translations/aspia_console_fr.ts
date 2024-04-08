@@ -1399,7 +1399,7 @@
         <location filename="../main_window.cc" line="613"/>
         <location filename="../main_window.cc" line="667"/>
         <location filename="../main_window.cc" line="680"/>
-        <location filename="../main_window.cc" line="1661"/>
+        <location filename="../main_window.cc" line="1663"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -1537,7 +1537,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="734"/>
-        <location filename="../main_window.cc" line="1525"/>
+        <location filename="../main_window.cc" line="1527"/>
         <source>Aspia Console</source>
         <translation>Console Aspia</translation>
     </message>
@@ -1552,7 +1552,7 @@
         <translation>L&apos;importation a été effectuée avec succès.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1662"/>
+        <location filename="../main_window.cc" line="1664"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>La connexion par ID est spécifiée dans les propriétés de l&apos;ordinateur, mais le routeur n&apos;est pas configuré. Vérifiez les paramètres du routeur dans les propriétés du carnet d&apos;adresses.</translation>
     </message>

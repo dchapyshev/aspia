@@ -919,7 +919,7 @@
     <message>
         <location filename="../main_window.cc" line="539"/>
         <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="921"/>
+        <location filename="../main_window.cc" line="922"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -955,23 +955,23 @@
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="868"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="923"/>
         <source>ID: %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="918"/>
+        <location filename="../main_window.cc" line="919"/>
         <source>IP addresses:</source>
         <translation>IP адреса:</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="853"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -986,7 +986,7 @@
         <translation>Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="858"/>
+        <location filename="../main_window.cc" line="859"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
@@ -996,7 +996,7 @@
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="863"/>
+        <location filename="../main_window.cc" line="864"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>

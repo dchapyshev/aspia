@@ -2871,27 +2871,27 @@
         <translation>建立資料夾 （&amp;C）</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="427"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>您是否確定要刪除所選項目？</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="466"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="468"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="431"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>

@@ -2539,7 +2539,7 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="466"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="468"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2596,22 +2596,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="427"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="431"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>

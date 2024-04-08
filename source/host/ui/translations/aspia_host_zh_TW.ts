@@ -891,7 +891,7 @@
     <message>
         <location filename="../main_window.cc" line="539"/>
         <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="921"/>
+        <location filename="../main_window.cc" line="922"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -908,7 +908,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="853"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Router is disabled</source>
         <translation>已停用路由器</translation>
     </message>
@@ -943,27 +943,27 @@
         <translation>如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="858"/>
+        <location filename="../main_window.cc" line="859"/>
         <source>Connecting to a router...</source>
         <translation>正在連線到路由器...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="863"/>
+        <location filename="../main_window.cc" line="864"/>
         <source>Connected to a router</source>
         <translation>已連線到路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="868"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Connection error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="923"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="918"/>
+        <location filename="../main_window.cc" line="919"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>

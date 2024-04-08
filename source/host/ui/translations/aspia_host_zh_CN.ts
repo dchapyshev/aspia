@@ -915,7 +915,7 @@
     <message>
         <location filename="../main_window.cc" line="539"/>
         <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="921"/>
+        <location filename="../main_window.cc" line="922"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
@@ -946,23 +946,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="868"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="923"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="918"/>
+        <location filename="../main_window.cc" line="919"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="853"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
@@ -972,7 +972,7 @@
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="858"/>
+        <location filename="../main_window.cc" line="859"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
@@ -982,7 +982,7 @@
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="863"/>
+        <location filename="../main_window.cc" line="864"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
