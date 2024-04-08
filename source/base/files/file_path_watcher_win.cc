@@ -27,21 +27,22 @@ namespace base {
 
 namespace {
 
-class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate,
-                            public win::ObjectWatcher::Delegate
+class FilePathWatcherImpl final
+    : public FilePathWatcher::PlatformDelegate,
+      public win::ObjectWatcher::Delegate
 {
 public:
     FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
-    ~FilePathWatcherImpl() override;
+    ~FilePathWatcherImpl() final;
 
     // FilePathWatcher::PlatformDelegate implementation.
     bool watch(const std::filesystem::path& path,
                bool recursive,
-               const FilePathWatcher::Callback& callback) override;
-    void cancel() override;
+               const FilePathWatcher::Callback& callback) final;
+    void cancel() final;
 
     // win::ObjectWatcher::Delegate implementation.
-    void onObjectSignaled(HANDLE object) override;
+    void onObjectSignaled(HANDLE object) final;
 
 private:
     using Clock = std::chrono::high_resolution_clock;

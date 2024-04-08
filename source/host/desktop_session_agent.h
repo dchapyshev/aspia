@@ -48,7 +48,7 @@ namespace host {
 
 class InputInjector;
 
-class DesktopSessionAgent
+class DesktopSessionAgent final
     : public std::enable_shared_from_this<DesktopSessionAgent>,
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
@@ -58,35 +58,35 @@ class DesktopSessionAgent
 {
 public:
     explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
-    ~DesktopSessionAgent() override;
+    ~DesktopSessionAgent() final;
 
     void start(std::u16string_view channel_id);
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
     // base::SharedMemoryFactory::Delegate implementation.
-    void onSharedMemoryCreate(int id) override;
-    void onSharedMemoryDestroy(int id) override;
+    void onSharedMemoryCreate(int id) final;
+    void onSharedMemoryDestroy(int id) final;
 
     // base::ScreenCapturerWrapper::Delegate implementation.
     void onScreenListChanged(const base::ScreenCapturer::ScreenList& list,
-                             base::ScreenCapturer::ScreenId current) override;
+                             base::ScreenCapturer::ScreenId current) final;
     void onScreenCaptured(const base::Frame* frame,
-                          const base::MouseCursor* mouse_cursor) override;
-    void onScreenCaptureError(base::ScreenCapturer::Error error) override;
-    void onCursorPositionChanged(const base::Point& position) override;
-    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const std::string& name) override;
+                          const base::MouseCursor* mouse_cursor) final;
+    void onScreenCaptureError(base::ScreenCapturer::Error error) final;
+    void onCursorPositionChanged(const base::Point& position) final;
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const std::string& name) final;
 
     // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
+    void onBeforeThreadRunning() final;
+    void onAfterThreadRunning() final;
 
     // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
     void setEnabled(bool enable);

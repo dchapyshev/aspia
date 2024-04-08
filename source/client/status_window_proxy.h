@@ -30,7 +30,7 @@ class TaskRunner;
 
 namespace client {
 
-class StatusWindowProxy : public std::enable_shared_from_this<StatusWindowProxy>
+class StatusWindowProxy final : public std::enable_shared_from_this<StatusWindowProxy>
 {
 public:
     StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,

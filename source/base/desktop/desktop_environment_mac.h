@@ -23,17 +23,17 @@
 
 namespace base {
 
-class DesktopEnvironmentMac : public DesktopEnvironment
+class DesktopEnvironmentMac final : public DesktopEnvironment
 {
 public:
     DesktopEnvironmentMac();
-    ~DesktopEnvironmentMac() override;
+    ~DesktopEnvironmentMac() final;
 
 protected:
-    void disableWallpaper() override;
-    void disableFontSmoothing() override;
-    void disableEffects() override;
-    void revertAll() override;
+    void disableWallpaper() final;
+    void disableFontSmoothing() final;
+    void disableEffects() final;
+    void revertAll() final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentMac);

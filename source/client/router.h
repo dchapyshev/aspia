@@ -33,12 +33,12 @@ namespace client {
 
 class RouterWindowProxy;
 
-class Router : public base::TcpChannel::Listener
+class Router final : public base::TcpChannel::Listener
 {
 public:
     Router(std::shared_ptr<RouterWindowProxy> window_proxy,
            std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~Router() override;
+    ~Router() final;
 
     void setUserName(std::u16string_view username);
     void setPassword(std::u16string_view password);
@@ -59,10 +59,10 @@ public:
 
 protected:
     // net::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;

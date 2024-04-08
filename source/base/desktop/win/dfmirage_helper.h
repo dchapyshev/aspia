@@ -25,16 +25,16 @@
 
 namespace base {
 
-class DFMirageHelper : public MirrorHelper
+class DFMirageHelper final : public MirrorHelper
 {
 public:
-    ~DFMirageHelper() override;
+    ~DFMirageHelper() final;
 
     static std::unique_ptr<DFMirageHelper> create(const Rect& screen_rect);
 
-    const Rect& screenRect() const override { return screen_rect_; }
-    void addUpdatedRects(Region* updated_region) const override;
-    void copyRegion(Frame* frame, const Region& updated_region) const override;
+    const Rect& screenRect() const final { return screen_rect_; }
+    void addUpdatedRects(Region* updated_region) const final;
+    void copyRegion(Frame* frame, const Region& updated_region) const final;
 
 private:
     explicit DFMirageHelper(const Rect& screen_rect);

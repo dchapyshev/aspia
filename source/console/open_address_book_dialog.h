@@ -25,7 +25,7 @@
 
 namespace console {
 
-class OpenAddressBookDialog : public QDialog
+class OpenAddressBookDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -33,7 +33,7 @@ public:
     OpenAddressBookDialog(QWidget* parent,
                           const QString& file_path,
                           proto::address_book::EncryptionType encryption_type);
-    ~OpenAddressBookDialog() override;
+    ~OpenAddressBookDialog() final;
 
     QString password() const;
 

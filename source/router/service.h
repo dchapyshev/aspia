@@ -25,20 +25,20 @@ namespace router {
 
 class Server;
 
-class Service : public base::Service
+class Service final : public base::Service
 {
 public:
     Service();
-    ~Service() override;
+    ~Service() final;
 
 protected:
     // base::Service implementation.
-    void onStart() override;
-    void onStop() override;
+    void onStart() final;
+    void onStop() final;
 
 #if defined(OS_WIN)
-    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
-    void onPowerEvent(uint32_t event) override;
+    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) final;
+    void onPowerEvent(uint32_t event) final;
 #endif // defined(OS_WIN)
 
 private:

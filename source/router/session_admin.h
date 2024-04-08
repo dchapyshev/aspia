@@ -26,17 +26,17 @@ namespace router {
 
 class ServerProxy;
 
-class SessionAdmin : public Session
+class SessionAdmin final : public Session
 {
 public:
     SessionAdmin();
-    ~SessionAdmin() override;
+    ~SessionAdmin() final;
 
 protected:
     // Session implementation.
-    void onSessionReady() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionReady() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     void doUserListRequest();

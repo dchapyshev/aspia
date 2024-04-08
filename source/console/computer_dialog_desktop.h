@@ -26,13 +26,13 @@
 
 namespace console {
 
-class ComputerDialogDesktop : public ComputerDialogTab
+class ComputerDialogDesktop final : public ComputerDialogTab
 {
     Q_OBJECT
 
 public:
     ComputerDialogDesktop(int type, QWidget* parent);
-    ~ComputerDialogDesktop() override = default;
+    ~ComputerDialogDesktop() final = default;
 
     void restoreSettings(proto::SessionType session_type,
         const proto::address_book::Computer& computer);

@@ -27,7 +27,7 @@ class TaskRunner;
 
 namespace client {
 
-class RouterWindowProxy : public std::enable_shared_from_this<RouterWindowProxy>
+class RouterWindowProxy final : public std::enable_shared_from_this<RouterWindowProxy>
 {
 public:
     RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,

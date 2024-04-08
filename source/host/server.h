@@ -36,7 +36,7 @@ class WaitableTimer;
 
 namespace host {
 
-class Server
+class Server final
     : public base::TcpServer::Delegate,
       public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
@@ -46,7 +46,7 @@ class Server
 {
 public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Server() override;
+    ~Server() final;
 
     void start();
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
@@ -54,28 +54,28 @@ public:
 
 protected:
     // net::TcpServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) override;
+    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) final;
 
     // RouterController::Delegate implementation.
-    void onRouterStateChanged(const proto::internal::RouterState& router_state) override;
-    void onHostIdAssigned(const std::string& session_name, base::HostId host_id) override;
-    void onClientConnected(std::unique_ptr<base::TcpChannel> channel) override;
+    void onRouterStateChanged(const proto::internal::RouterState& router_state) final;
+    void onHostIdAssigned(const std::string& session_name, base::HostId host_id) final;
+    void onClientConnected(std::unique_ptr<base::TcpChannel> channel) final;
 
     // base::AuthenticatorManager::Delegate implementation.
-    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
 
     // UserSessionManager::Delegate implementation.
-    void onHostIdRequest(const std::string& session_name) override;
-    void onResetHostId(base::HostId host_id) override;
-    void onUserListChanged() override;
+    void onHostIdRequest(const std::string& session_name) final;
+    void onResetHostId(base::HostId host_id) final;
+    void onUserListChanged() final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+    void onUpdateCheckedFinished(const base::ByteArray& result) final;
 
     // common::HttpFileDownloader::Delegate implementation.
-    void onFileDownloaderError(int error_code) override;
-    void onFileDownloaderCompleted() override;
-    void onFileDownloaderProgress(int percentage) override;
+    void onFileDownloaderError(int error_code) final;
+    void onFileDownloaderCompleted() final;
+    void onFileDownloaderProgress(int percentage) final;
 
 private:
     void startAuthentication(std::unique_ptr<base::TcpChannel> channel);

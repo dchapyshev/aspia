@@ -30,7 +30,7 @@ class TaskRunner;
 
 namespace client {
 
-class SystemInfoControlProxy : public std::enable_shared_from_this<SystemInfoControlProxy>
+class SystemInfoControlProxy final : public std::enable_shared_from_this<SystemInfoControlProxy>
 {
 public:
     SystemInfoControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner,

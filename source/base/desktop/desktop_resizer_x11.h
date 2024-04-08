@@ -24,17 +24,17 @@
 
 namespace base {
 
-class DesktopResizerX11 : public DesktopResizer
+class DesktopResizerX11 final : public DesktopResizer
 {
 public:
     DesktopResizerX11();
-    ~DesktopResizerX11() override;
+    ~DesktopResizerX11() final;
 
     // DesktopResizer implementation.
-    std::vector<Size> supportedResolutions(ScreenId screen_id) override;
-    bool setResolution(ScreenId screen_id, const Size& resolution) override;
-    void restoreResolution(ScreenId screen_id) override;
-    void restoreResulution() override;
+    std::vector<Size> supportedResolutions(ScreenId screen_id) final;
+    bool setResolution(ScreenId screen_id, const Size& resolution) final;
+    void restoreResolution(ScreenId screen_id) final;
+    void restoreResulution() final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DesktopResizerX11);

@@ -25,10 +25,10 @@
 
 namespace base {
 
-class FrameSimple : public Frame
+class FrameSimple final : public Frame
 {
 public:
-    ~FrameSimple() override;
+    ~FrameSimple() final;
 
     static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
 

@@ -25,13 +25,13 @@
 
 namespace console {
 
-class ComputerDialogParent : public ComputerDialogTab
+class ComputerDialogParent final : public ComputerDialogTab
 {
     Q_OBJECT
 
 public:
     ComputerDialogParent(int type, QWidget* parent);
-    ~ComputerDialogParent() override = default;
+    ~ComputerDialogParent() final = default;
 
 private:
     Ui::ComputerDialogParent ui;

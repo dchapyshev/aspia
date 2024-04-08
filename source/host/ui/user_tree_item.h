@@ -29,17 +29,17 @@ namespace host {
 
 class User;
 
-class UserTreeItem : public QTreeWidgetItem
+class UserTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit UserTreeItem(const base::User& user);
-    ~UserTreeItem() override = default;
+    ~UserTreeItem() final = default;
 
     const base::User& user() const { return user_; }
     void setUser(const base::User& user);
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const override
+    bool operator<(const QTreeWidgetItem& other) const final
     {
         int column = treeWidget()->sortColumn();
         if (column == 0)

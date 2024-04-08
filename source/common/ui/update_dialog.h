@@ -31,7 +31,7 @@ class UpdateDialog;
 
 namespace common {
 
-class UpdateDialog
+class UpdateDialog final
     : public QDialog,
       public common::UpdateChecker::Delegate
 {
@@ -42,15 +42,15 @@ public:
                  std::u16string_view package_name,
                  QWidget* parent = nullptr);
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
-    ~UpdateDialog() override;
+    ~UpdateDialog() final;
 
 protected:
     // QDialog implementation.
-    void keyPressEvent(QKeyEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+    void onUpdateCheckedFinished(const base::ByteArray& result) final;
 
 private slots:
     void onUpdateNow();

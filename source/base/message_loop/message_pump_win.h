@@ -25,17 +25,17 @@
 
 namespace base {
 
-class MessagePumpForWin : public MessagePump
+class MessagePumpForWin final : public MessagePump
 {
 public:
     MessagePumpForWin();
-    ~MessagePumpForWin() override;
+    ~MessagePumpForWin() final;
 
     // MessagePump methods:
-    void run(Delegate* delegate) override;
-    void quit() override;
-    void scheduleWork() override;
-    void scheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void run(Delegate* delegate) final;
+    void quit() final;
+    void scheduleWork() final;
+    void scheduleDelayedWork(const TimePoint& delayed_work_time) final;
 
     void runWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher);
 

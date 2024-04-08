@@ -39,7 +39,7 @@ const asio::ip::address_v4::bytes_type kRdpLoopbackAddress { 127, 0, 0, 2 };
 // The core of RdpClient is ref-counted since it services calls and notifies
 // events on the caller task runner, but runs the ActiveX control on the UI
 // task runner.
-class RdpClient::Core
+class RdpClient::Core final
     : public std::enable_shared_from_this<Core>,
       public RdpClientWindow::EventHandler
 {
@@ -47,7 +47,7 @@ public:
     Core(std::shared_ptr<base::TaskRunner> caller_task_runner,
          std::shared_ptr<base::TaskRunner> ui_task_runner,
          RdpClient::EventHandler* event_handler);
-    ~Core() override;
+    ~Core() final;
 
     // Initiates a loopback RDP connection.
     void connect(const base::Size& resolution,
@@ -64,8 +64,8 @@ public:
     void changeResolution(const base::Size& resolution);
 
     // RdpClientWindow::EventHandler interface.
-    void onConnected() override;
-    void onDisconnected() override;
+    void onConnected() final;
+    void onDisconnected() final;
 
 private:
     // Helpers for the event handler's methods that make sure that onRdpClosed()

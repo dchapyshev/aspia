@@ -34,21 +34,21 @@ namespace base {
 //
 // An ID3D11Texture2D is created by an ID3D11Device, so a DxgiTexture cannot be shared between two
 // DxgiAdapterDuplicators.
-class DxgiTextureStaging : public DxgiTexture
+class DxgiTextureStaging final : public DxgiTexture
 {
 public:
     // Creates a DxgiTextureStaging instance. Caller must maintain the lifetime of input device to
     // make sure it outlives this instance.
     explicit DxgiTextureStaging(const D3dDevice& device);
-    ~DxgiTextureStaging() override;
+    ~DxgiTextureStaging() final;
 
 protected:
     // Copies selected regions of a frame represented by frame_info and texture.
     // Returns false if anything wrong.
     bool copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                         ID3D11Texture2D* texture) override;
+                         ID3D11Texture2D* texture) final;
 
-    bool doRelease() override;
+    bool doRelease() final;
 
 private:
     // Initializes stage_ from a CPU inaccessible IDXGIResource. Returns false if it failed to

@@ -25,11 +25,11 @@
 
 namespace console {
 
-class ComputerMimeData : public QMimeData
+class ComputerMimeData final : public QMimeData
 {
 public:
     ComputerMimeData() = default;
-    virtual ~ComputerMimeData() override = default;
+    virtual ~ComputerMimeData() final = default;
 
     void setComputerItem(ComputerItem* computer_item, const QString& mime_type)
     {

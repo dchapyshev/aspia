@@ -30,7 +30,7 @@
 
 namespace host {
 
-class ClientSessionFileTransfer
+class ClientSessionFileTransfer final
     : public ClientSession,
       public base::IpcServer::Delegate,
       public base::IpcChannel::Listener
@@ -38,22 +38,22 @@ class ClientSessionFileTransfer
 public:
     ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
                               std::shared_ptr<base::TaskRunner> task_runner);
-    ~ClientSessionFileTransfer() override;
+    ~ClientSessionFileTransfer() final;
 
 protected:
     // ClientSession implementation.
-    void onStarted() override;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onWritten(uint8_t channel_id, size_t pending) override;
+    void onStarted() final;
+    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onWritten(uint8_t channel_id, size_t pending) final;
 
     // base::IpcServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) override;
-    void onErrorOccurred() override;
+    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onErrorOccurred() final;
 
     // base::IpcChannel::Listener implemenation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
 private:
     void onError(const base::Location& location);

@@ -33,12 +33,12 @@ class TaskRunner;
 
 namespace client {
 
-class OnlineCheckerRouter : public base::TcpChannel::Listener
+class OnlineCheckerRouter final : public base::TcpChannel::Listener
 {
 public:
     OnlineCheckerRouter(const RouterConfig& router_config,
                         std::shared_ptr<base::TaskRunner> task_runner);
-    ~OnlineCheckerRouter() override;
+    ~OnlineCheckerRouter() final;
 
     class Delegate
     {
@@ -60,10 +60,10 @@ public:
 
 protected:
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
 private:
     void checkNextComputer();

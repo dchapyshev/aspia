@@ -33,7 +33,7 @@ namespace client {
 class FileControlProxy;
 class FileManagerWindow;
 
-class FileManagerWindowProxy : public std::enable_shared_from_this<FileManagerWindowProxy>
+class FileManagerWindowProxy final : public std::enable_shared_from_this<FileManagerWindowProxy>
 {
 public:
     FileManagerWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,

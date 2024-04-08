@@ -26,17 +26,17 @@
 
 namespace base {
 
-class MessagePumpForAsio : public MessagePump
+class MessagePumpForAsio final : public MessagePump
 {
 public:
     MessagePumpForAsio() = default;
-    ~MessagePumpForAsio() override = default;
+    ~MessagePumpForAsio() final = default;
 
     // MessagePump methods:
-    void run(Delegate* delegate) override;
-    void quit() override;
-    void scheduleWork() override;
-    void scheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void run(Delegate* delegate) final;
+    void quit() final;
+    void scheduleWork() final;
+    void scheduleDelayedWork(const TimePoint& delayed_work_time) final;
 
     asio::io_context& ioContext() { return io_context_; }
 

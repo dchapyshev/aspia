@@ -33,13 +33,13 @@ class ClientAuthenticator;
 
 namespace host {
 
-class RouterController
+class RouterController final
     : public base::TcpChannel::Listener,
       public base::RelayPeerManager::Delegate
 {
 public:
     explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
-    ~RouterController() override;
+    ~RouterController() final;
 
     struct RouterInfo
     {
@@ -69,13 +69,13 @@ public:
 
 protected:
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
     // base::RelayPeerManager::Delegate implementation.
-    void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) override;
+    void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) final;
 
 private:
     void connectToRouter();

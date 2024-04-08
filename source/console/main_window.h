@@ -35,7 +35,7 @@ class AddressBookTab;
 class ComputerItem;
 class Client;
 
-class MainWindow
+class MainWindow final
     : public QMainWindow,
       public common::UpdateChecker::Delegate
 {
@@ -43,7 +43,7 @@ class MainWindow
 
 public:
     explicit MainWindow(const QString& file_path);
-    ~MainWindow() override;
+    ~MainWindow() final;
 
 public slots:
     void showConsole();
@@ -51,11 +51,11 @@ public slots:
 
 protected:
     // QMainWindow implementation.
-    void changeEvent(QEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
+    void changeEvent(QEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+    void onUpdateCheckedFinished(const base::ByteArray& result) final;
 
 private slots:
     void onNew();

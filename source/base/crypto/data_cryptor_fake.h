@@ -24,14 +24,14 @@
 
 namespace base {
 
-class DataCryptorFake : public DataCryptor
+class DataCryptorFake final : public DataCryptor
 {
 public:
     DataCryptorFake() = default;
-    ~DataCryptorFake() override = default;
+    ~DataCryptorFake() final = default;
 
-    bool encrypt(std::string_view in, std::string* out) override;
-    bool decrypt(std::string_view in, std::string* out) override;
+    bool encrypt(std::string_view in, std::string* out) final;
+    bool decrypt(std::string_view in, std::string* out) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DataCryptorFake);

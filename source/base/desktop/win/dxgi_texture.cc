@@ -30,7 +30,7 @@ namespace base {
 
 namespace {
 
-class DxgiDesktopFrame : public Frame
+class DxgiDesktopFrame final : public Frame
 {
 public:
     explicit DxgiDesktopFrame(const DxgiTexture& texture)
@@ -43,7 +43,7 @@ public:
         // Nothing
     }
 
-    ~DxgiDesktopFrame() override = default;
+    ~DxgiDesktopFrame() final = default;
 };
 
 } // namespace

@@ -44,7 +44,7 @@ class FileTransferProxy;
 class FileTransferQueueBuilder;
 class FileTransferWindowProxy;
 
-class FileTransfer : public common::FileTaskProducer
+class FileTransfer final : public common::FileTaskProducer
 {
 public:
     enum class Type
@@ -164,7 +164,7 @@ public:
                  std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                  std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                  Type type);
-    ~FileTransfer() override;
+    ~FileTransfer() final;
 
     void start(const std::string& source_path,
                const std::string& target_path,
@@ -176,7 +176,7 @@ public:
 
 protected:
     // common::FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
+    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
 
 private:
     Task& frontTask();

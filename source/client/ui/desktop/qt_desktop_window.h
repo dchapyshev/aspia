@@ -44,10 +44,10 @@ class QtSystemInfoWindow;
 class StatisticsDialog;
 class TaskManagerWindow;
 
-class QtDesktopWindow :
-    public SessionWindow,
-    public DesktopWindow,
-    public SystemInfoControl
+class QtDesktopWindow final
+    : public SessionWindow,
+      public DesktopWindow,
+      public SystemInfoControl
 {
     Q_OBJECT
 
@@ -55,42 +55,42 @@ public:
     QtDesktopWindow(proto::SessionType session_type,
                     const proto::DesktopConfig& desktop_config,
                     QWidget* parent = nullptr);
-    ~QtDesktopWindow() override;
+    ~QtDesktopWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() override;
+    std::unique_ptr<Client> createClient() final;
 
     // DesktopWindow implementation.
-    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy) override;
-    void configRequired() override;
-    void setCapabilities(const proto::DesktopCapabilities& capabilities) override;
-    void setScreenList(const proto::ScreenList& screen_list) override;
-    void setScreenType(const proto::ScreenType& screen_type) override;
-    void setCursorPosition(const proto::CursorPosition& cursor_position) override;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
-    void setTaskManager(const proto::task_manager::HostToClient& message) override;
-    void setMetrics(const DesktopWindow::Metrics& metrics) override;
-    std::unique_ptr<FrameFactory> frameFactory() override;
-    void setFrameError(proto::VideoErrorCode error_code) override;
-    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
-    void drawFrame() override;
-    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
+    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy) final;
+    void configRequired() final;
+    void setCapabilities(const proto::DesktopCapabilities& capabilities) final;
+    void setScreenList(const proto::ScreenList& screen_list) final;
+    void setScreenType(const proto::ScreenType& screen_type) final;
+    void setCursorPosition(const proto::CursorPosition& cursor_position) final;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
+    void setTaskManager(const proto::task_manager::HostToClient& message) final;
+    void setMetrics(const DesktopWindow::Metrics& metrics) final;
+    std::unique_ptr<FrameFactory> frameFactory() final;
+    void setFrameError(proto::VideoErrorCode error_code) final;
+    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) final;
+    void drawFrame() final;
+    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) final;
 
     // SystemInfoControl implementation.
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
 
 protected:
     // SessionWindow implementation.
-    void onInternalReset() override;
+    void onInternalReset() final;
 
     // QWidget implementation.
-    void resizeEvent(QResizeEvent* event) override;
-    void leaveEvent(QEvent* event) override;
-    void changeEvent(QEvent* event) override;
-    void showEvent(QShowEvent* event) override;
-    void focusOutEvent(QFocusEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
-    bool eventFilter(QObject* object, QEvent* event) override;
+    void resizeEvent(QResizeEvent* event) final;
+    void leaveEvent(QEvent* event) final;
+    void changeEvent(QEvent* event) final;
+    void showEvent(QShowEvent* event) final;
+    void focusOutEvent(QFocusEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
+    bool eventFilter(QObject* object, QEvent* event) final;
 
 private slots:
     void onMouseEvent(const proto::MouseEvent& event);

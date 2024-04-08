@@ -32,31 +32,31 @@ class ClientAuthenticator;
 
 namespace relay {
 
-class Controller
+class Controller final
     : public base::TcpChannel::Listener,
       public SessionManager::Delegate,
       public SharedPool::Delegate
 {
 public:
     explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Controller() override;
+    ~Controller() final;
 
     bool start();
 
 protected:
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
     // SessionManager::Delegate implementation.
-    void onSessionStarted() override;
-    void onSessionStatistics(const proto::RelayStat& relay_stat) override;
-    void onSessionFinished() override;
+    void onSessionStarted() final;
+    void onSessionStatistics(const proto::RelayStat& relay_stat) final;
+    void onSessionFinished() final;
 
     // SharedPool::Delegate implementation.
-    void onPoolKeyExpired(uint32_t key_id) override;
+    void onPoolKeyExpired(uint32_t key_id) final;
 
 private:
     void connectToRouter();

@@ -27,13 +27,13 @@
 
 namespace host {
 
-class ConfigDialog : public QDialog
+class ConfigDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit ConfigDialog(QWidget* parent = nullptr);
-    ~ConfigDialog() override;
+    ~ConfigDialog() final;
 
 private slots:
     void onOneTimeStateChanged(int state);

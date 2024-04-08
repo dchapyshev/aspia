@@ -64,20 +64,20 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
     // StatusWindow implementation.
-    void onStarted() override;
-    void onStopped() override;
-    void onRouterConnecting() override;
-    void onRouterConnected() override;
-    void onHostConnecting() override;
-    void onHostConnected() override;
-    void onHostDisconnected(base::TcpChannel::ErrorCode error_code) override;
-    void onWaitForRouter() override;
-    void onWaitForRouterTimeout() override;
-    void onWaitForHost() override;
-    void onWaitForHostTimeout() override;
-    void onVersionMismatch() override;
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
-    void onRouterError(const RouterController::Error& error) override;
+    void onStarted() final;
+    void onStopped() final;
+    void onRouterConnecting() final;
+    void onRouterConnected() final;
+    void onHostConnecting() final;
+    void onHostConnected() final;
+    void onHostDisconnected(base::TcpChannel::ErrorCode error_code) final;
+    void onWaitForRouter() final;
+    void onWaitForRouterTimeout() final;
+    void onWaitForHost() final;
+    void onWaitForHostTimeout() final;
+    void onVersionMismatch() final;
+    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) final;
+    void onRouterError(const RouterController::Error& error) final;
 
 private:
     void setClientTitle(const Config& config);

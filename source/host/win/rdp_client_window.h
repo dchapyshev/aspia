@@ -46,7 +46,7 @@ namespace host {
 // RdpClientWindow is used to establish a connection to the given RDP endpoint. It is a GUI window
 // class that hosts Microsoft RDP ActiveX control, which takes care of handling RDP properly.
 // RdpClientWindow must be used only on a UI thread.
-class RdpClientWindow
+class RdpClientWindow final
     : public CWindowImpl<RdpClientWindow, CWindow, CFrameWinTraits>,
       public IDispEventImpl<1, RdpClientWindow,
                             &__uuidof(mstsc::IMsTscAxEvents),
@@ -86,7 +86,7 @@ public:
                     const std::string& terminal_id,
                     std::shared_ptr<base::TaskRunner> ui_task_runner,
                     EventHandler* event_handler);
-    ~RdpClientWindow() override;
+    ~RdpClientWindow() final;
 
     // Creates the window along with the ActiveX control and initiates the connection. |resolution|
     // specifies resolution of the screen. Returns false if an error occurs.

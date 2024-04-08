@@ -35,15 +35,15 @@ namespace base {
 
 class SimpleThread;
 
-class AudioOutputMac : public AudioOutput
+class AudioOutputMac final : public AudioOutput
 {
 public:
     explicit AudioOutputMac(const NeedMoreDataCB& need_more_data_cb);
     ~AudioOutputMac();
 
     // AudioOutput implementation.
-    bool start() override;
-    bool stop() override;
+    bool start() final;
+    bool stop() final;
 
 private:
     bool initDevice();

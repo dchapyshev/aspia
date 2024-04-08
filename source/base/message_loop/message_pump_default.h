@@ -27,17 +27,17 @@
 
 namespace base {
 
-class MessagePumpDefault : public MessagePump
+class MessagePumpDefault final : public MessagePump
 {
 public:
     MessagePumpDefault() = default;
-    ~MessagePumpDefault() override = default;
+    ~MessagePumpDefault() final = default;
 
     // MessagePump methods:
-    void run(Delegate* delegate) override;
-    void quit() override;
-    void scheduleWork() override;
-    void scheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void run(Delegate* delegate) final;
+    void quit() final;
+    void scheduleWork() final;
+    void scheduleDelayedWork(const TimePoint& delayed_work_time) final;
 
 private:
     // This flag is set to false when run() should return.

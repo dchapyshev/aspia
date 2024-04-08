@@ -45,7 +45,7 @@ private:
 #if defined(OS_WIN)
 
 // Windows specific implementation of ScopedClearLastError.
-class ScopedClearLastError : public ScopedClearLastErrorBase
+class ScopedClearLastError final : public ScopedClearLastErrorBase
 {
 public:
     ScopedClearLastError();

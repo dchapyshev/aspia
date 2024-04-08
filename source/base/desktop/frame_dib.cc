@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/win/bitmap_info.h"
-#include "base/ipc/shared_memory.h"
 #include "base/ipc/shared_memory_factory.h"
 
 namespace base {

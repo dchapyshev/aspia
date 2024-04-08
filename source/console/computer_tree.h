@@ -25,24 +25,24 @@
 
 namespace console {
 
-class ComputerTree : public QTreeWidget
+class ComputerTree final : public QTreeWidget
 {
     Q_OBJECT
 
 public:
     explicit ComputerTree(QWidget* parent = nullptr);
-    ~ComputerTree() override = default;
+    ~ComputerTree() final = default;
 
     QString mimeType() const { return mime_type_; }
 
 protected:
     // QTreeWidget implementation.
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void dragEnterEvent(QDragEnterEvent* event) override;
-    void dragMoveEvent(QDragMoveEvent* event) override;
-    void dropEvent(QDropEvent* event) override;
-    void startDrag(Qt::DropActions supported_actions) override;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
+    void dragEnterEvent(QDragEnterEvent* event) final;
+    void dragMoveEvent(QDragMoveEvent* event) final;
+    void dropEvent(QDropEvent* event) final;
+    void startDrag(Qt::DropActions supported_actions) final;
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);

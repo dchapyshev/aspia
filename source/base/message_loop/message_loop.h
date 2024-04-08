@@ -36,7 +36,7 @@ class MessagePumpForAsio;
 class MessagePumpForWin;
 class Thread;
 
-class MessageLoop : public MessagePump::Delegate
+class MessageLoop final : public MessagePump::Delegate
 {
 public:
     enum class Type
@@ -51,7 +51,7 @@ public:
     using Dispatcher = MessagePumpDispatcher;
 
     explicit MessageLoop(Type type = Type::DEFAULT);
-    virtual ~MessageLoop() override;
+    virtual ~MessageLoop() final;
 
     Type type() const { return type_; }
 
@@ -109,9 +109,9 @@ protected:
     static TimePoint calculateDelayedRuntime(const Milliseconds& delay);
 
     // MessagePump::Delegate methods:
-    bool doWork() override;
-    bool doDelayedWork(TimePoint* next_delayed_work_time) override;
-    bool doIdleWork() override;
+    bool doWork() final;
+    bool doDelayedWork(TimePoint* next_delayed_work_time) final;
+    bool doIdleWork() final;
 
     const Type type_;
 

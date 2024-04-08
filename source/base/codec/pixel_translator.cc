@@ -30,7 +30,7 @@ namespace {
 const int kBlockSize = 16;
 
 template<typename SourceT, typename TargetT>
-class PixelTranslatorT : public PixelTranslator
+class PixelTranslatorT final : public PixelTranslator
 {
 public:
     PixelTranslatorT(const PixelFormat& source_format,
@@ -61,7 +61,7 @@ public:
         }
     }
 
-    ~PixelTranslatorT() override = default;
+    ~PixelTranslatorT() final = default;
 
     void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
     {
@@ -77,7 +77,7 @@ public:
 
     void translate(const uint8_t* src, int src_stride,
                    uint8_t* dst, int dst_stride,
-                   int width, int height) override
+                   int width, int height) final
     {
         const int block_count = width / kBlockSize;
         const int partial_width = width - (block_count * kBlockSize);
@@ -127,7 +127,7 @@ private:
 };
 
 template<typename SourceT, typename TargetT>
-class PixelTranslatorFrom8_16bppT : public PixelTranslator
+class PixelTranslatorFrom8_16bppT final : public PixelTranslator
 {
 public:
     PixelTranslatorFrom8_16bppT(const PixelFormat& source_format,
@@ -161,11 +161,11 @@ public:
         }
     }
 
-    ~PixelTranslatorFrom8_16bppT() override = default;
+    ~PixelTranslatorFrom8_16bppT() final = default;
 
     void translate(const uint8_t* src, int src_stride,
                    uint8_t* dst, int dst_stride,
-                   int width, int height) override
+                   int width, int height) final
     {
         const int block_count = width / kBlockSize;
         const int partial_width = width - (block_count * kBlockSize);

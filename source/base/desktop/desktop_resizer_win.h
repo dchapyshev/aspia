@@ -26,16 +26,16 @@
 
 namespace base {
 
-class DesktopResizerWin : public DesktopResizer
+class DesktopResizerWin final : public DesktopResizer
 {
 public:
     DesktopResizerWin();
-    ~DesktopResizerWin() override;
+    ~DesktopResizerWin() final;
 
-    std::vector<Size> supportedResolutions(ScreenId screen_id) override;
-    bool setResolution(ScreenId screen_id, const Size& resolution) override;
-    void restoreResolution(ScreenId screen_id) override;
-    void restoreResulution() override;
+    std::vector<Size> supportedResolutions(ScreenId screen_id) final;
+    bool setResolution(ScreenId screen_id, const Size& resolution) final;
+    void restoreResolution(ScreenId screen_id) final;
+    void restoreResulution() final;
 
 private:
     class Screen;

@@ -27,16 +27,16 @@ class QAbstractButton;
 
 namespace client {
 
-class ClientSettingsDialog : public QDialog
+class ClientSettingsDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit ClientSettingsDialog(QWidget* parent = nullptr);
-    ~ClientSettingsDialog() override;
+    ~ClientSettingsDialog() final;
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

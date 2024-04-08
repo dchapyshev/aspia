@@ -24,14 +24,14 @@
 
 namespace router {
 
-class DatabaseFactorySqlite : public DatabaseFactory
+class DatabaseFactorySqlite final : public DatabaseFactory
 {
 public:
     DatabaseFactorySqlite();
-    ~DatabaseFactorySqlite() override;
+    ~DatabaseFactorySqlite() final;
 
-    std::unique_ptr<Database> createDatabase() const override;
-    std::unique_ptr<Database> openDatabase() const override;
+    std::unique_ptr<Database> createDatabase() const final;
+    std::unique_ptr<Database> openDatabase() const final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DatabaseFactorySqlite);

@@ -26,13 +26,13 @@
 
 namespace console {
 
-class ComputerGroupDialogDesktop : public ComputerGroupDialogTab
+class ComputerGroupDialogDesktop final : public ComputerGroupDialogTab
 {
     Q_OBJECT
 
 public:
     ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent);
-    ~ComputerGroupDialogDesktop() override;
+    ~ComputerGroupDialogDesktop() final;
 
     void restoreSettings(proto::SessionType session_type,
         const proto::address_book::ComputerGroupConfig& group_config);

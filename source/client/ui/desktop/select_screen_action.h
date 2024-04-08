@@ -26,7 +26,7 @@
 
 namespace client {
 
-class SelectScreenAction : public QAction
+class SelectScreenAction final : public QAction
 {
     Q_OBJECT
 

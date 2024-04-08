@@ -26,14 +26,14 @@
 
 namespace host {
 
-class ConnectConfirmDialog : public QDialog
+class ConnectConfirmDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit ConnectConfirmDialog(const proto::internal::ConnectConfirmationRequest& request,
                                   QWidget* parent = nullptr);
-    ~ConnectConfirmDialog() override;
+    ~ConnectConfirmDialog() final;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

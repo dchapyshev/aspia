@@ -26,11 +26,11 @@
 
 namespace base::win {
 
-class MonitorEnumerator : public DeviceEnumerator
+class MonitorEnumerator final : public DeviceEnumerator
 {
 public:
     MonitorEnumerator();
-    ~MonitorEnumerator() override = default;
+    ~MonitorEnumerator() final = default;
 
     std::unique_ptr<Edid> edid() const;
 

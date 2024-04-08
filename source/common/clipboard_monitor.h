@@ -24,13 +24,13 @@
 
 namespace common {
 
-class ClipboardMonitor
+class ClipboardMonitor final
     : public base::Thread::Delegate,
       public common::Clipboard::Delegate
 {
 public:
     ClipboardMonitor();
-    ~ClipboardMonitor() override;
+    ~ClipboardMonitor() final;
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                common::Clipboard::Delegate* delegate);
@@ -40,11 +40,11 @@ public:
 
 protected:
     // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
+    void onBeforeThreadRunning() final;
+    void onAfterThreadRunning() final;
 
     // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
     common::Clipboard::Delegate* delegate_ = nullptr;

@@ -24,17 +24,17 @@
 
 namespace host {
 
-class ClientSessionSystemInfo : public ClientSession
+class ClientSessionSystemInfo final : public ClientSession
 {
 public:
     explicit ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel);
-    ~ClientSessionSystemInfo() override;
+    ~ClientSessionSystemInfo() final;
 
 protected:
     // ClientSession implementation.
-    void onStarted() override;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onWritten(uint8_t channel_id, size_t pending) override;
+    void onStarted() final;
+    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);

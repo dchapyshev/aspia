@@ -27,10 +27,10 @@
 namespace base {
 
 // SharedFrame is a Frame that may have multiple instances all sharing the same buffer.
-class SharedFrame : public Frame
+class SharedFrame final : public Frame
 {
 public:
-    ~SharedFrame() override;
+    ~SharedFrame() final;
 
     static std::unique_ptr<SharedFrame> wrap(std::unique_ptr<Frame> desktop_frame);
 

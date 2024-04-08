@@ -24,13 +24,13 @@
 
 namespace host {
 
-class NotifierWindow : public QWidget
+class NotifierWindow final : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit NotifierWindow(QWidget* parent = nullptr);
-    ~NotifierWindow() override;
+    ~NotifierWindow() final;
 
     std::vector<uint32_t> sessions(proto::SessionType session_type);
 
@@ -56,10 +56,10 @@ signals:
 
 protected:
     // QWidget implementation.
-    bool eventFilter(QObject* object, QEvent* event) override;
-    void hideEvent(QHideEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
-    void moveEvent(QMoveEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) final;
+    void hideEvent(QHideEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
+    void moveEvent(QMoveEvent* event) final;
 
 private slots:
     void onShowHidePressed();

@@ -29,13 +29,13 @@ class TextChatWidget;
 
 namespace common {
 
-class TextChatWidget : public QWidget
+class TextChatWidget final : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit TextChatWidget(QWidget* parent = nullptr);
-    ~TextChatWidget() override;
+    ~TextChatWidget() final;
 
     void readMessage(const proto::TextChatMessage& message);
     void readStatus(const proto::TextChatStatus& status);
@@ -48,9 +48,9 @@ signals:
     void sig_textChatClosed();
 
 protected:
-    bool eventFilter(QObject* object, QEvent* event) override;
-    void resizeEvent(QResizeEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) final;
+    void resizeEvent(QResizeEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
 
 private:
     void addOutgoingMessage(time_t timestamp, const QString& message);

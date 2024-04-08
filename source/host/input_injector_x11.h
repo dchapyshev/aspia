@@ -29,7 +29,7 @@
 
 namespace host {
 
-class InputInjectorX11 : public InputInjector
+class InputInjectorX11 final : public InputInjector
 {
 public:
     ~InputInjectorX11();
@@ -37,11 +37,11 @@ public:
     static std::unique_ptr<InputInjectorX11> create();
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) override;
-    void setBlockInput(bool enable) override;
-    void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectTextEvent(const proto::TextEvent& event) override;
-    void injectMouseEvent(const proto::MouseEvent& event) override;
+    void setScreenOffset(const base::Point& offset) final;
+    void setBlockInput(bool enable) final;
+    void injectKeyEvent(const proto::KeyEvent& event) final;
+    void injectTextEvent(const proto::TextEvent& event) final;
+    void injectMouseEvent(const proto::MouseEvent& event) final;
 
 private:
     InputInjectorX11();

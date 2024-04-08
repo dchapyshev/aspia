@@ -39,12 +39,12 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannel : public NetworkChannel
+class TcpChannel final : public NetworkChannel
 {
 public:
     // Constructor available for client.
     TcpChannel();
-    ~TcpChannel() override;
+    ~TcpChannel() final;
 
     class Listener
     {

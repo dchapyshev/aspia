@@ -26,10 +26,10 @@
 
 namespace host {
 
-class DesktopSessionIpc::SharedBuffer : public base::SharedMemoryBase
+class DesktopSessionIpc::SharedBuffer final : public base::SharedMemoryBase
 {
 public:
-    ~SharedBuffer() override = default;
+    ~SharedBuffer() final = default;
 
     static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
     {
@@ -42,17 +42,17 @@ public:
         return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_memory_));
     }
 
-    void* data() override
+    void* data() final
     {
         return shared_memory_->data();
     }
 
-    PlatformHandle handle() const override
+    PlatformHandle handle() const final
     {
         return shared_memory_->handle();
     }
 
-    int id() const override
+    int id() const final
     {
         return shared_memory_->id();
     }

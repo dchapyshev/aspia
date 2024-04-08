@@ -28,7 +28,7 @@ namespace qt_base {
 
 namespace {
 
-class TaskEvent : public QEvent
+class TaskEvent final : public QEvent
 {
 public:
     static const int kType = QEvent::User + 1;
@@ -48,18 +48,18 @@ private:
 
 } // namespace
 
-class QtTaskRunner::Impl : public QObject
+class QtTaskRunner::Impl final : public QObject
 {
 public:
     Impl();
-    ~Impl() override;
+    ~Impl() final;
 
     bool belongsToCurrentThread() const;
     void postTask(Callback&& callback, int priority);
 
 protected:
     // QObject implementation.
-    void customEvent(QEvent* event) override;
+    void customEvent(QEvent* event) final;
 
 private:
     Qt::HANDLE current_thread_;

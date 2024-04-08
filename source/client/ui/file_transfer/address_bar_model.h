@@ -27,7 +27,7 @@
 
 namespace client {
 
-class AddressBarModel : public QAbstractItemModel
+class AddressBarModel final : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -48,15 +48,15 @@ public:
     static const QString& computerPath();
 
     // QAbstractItemModel implementation.
-    QModelIndex index(int row, int column, const QModelIndex& parent) const override;
-    QModelIndex parent(const QModelIndex& child) const override;
-    int rowCount(const QModelIndex& parent) const override;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
-    bool insertRows(int row, int count, const QModelIndex& parent) override;
+    QModelIndex index(int row, int column, const QModelIndex& parent) const final;
+    QModelIndex parent(const QModelIndex& child) const final;
+    int rowCount(const QModelIndex& parent) const final;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const final;
+    QVariant data(const QModelIndex& index, int role) const final;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) final;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const final;
+    Qt::ItemFlags flags(const QModelIndex& index) const final;
+    bool insertRows(int row, int count, const QModelIndex& parent) final;
 
 signals:
     void sig_pathIndexChanged(const QModelIndex& index);

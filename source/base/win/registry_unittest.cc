@@ -40,7 +40,7 @@ protected:
 
     RegistryTest() = default;
 
-    void SetUp() override
+    void SetUp() final
     {
         // Create a temporary key.
         RegistryKey key(HKEY_CURRENT_USER, L"", KEY_ALL_ACCESS);
@@ -52,7 +52,7 @@ protected:
         foo_software_key_ += L"\\Foo";
     }
 
-    void TearDown() override
+    void TearDown() final
     {
         // Clean up the temporary key.
         RegistryKey key(HKEY_CURRENT_USER, L"", KEY_SET_VALUE);

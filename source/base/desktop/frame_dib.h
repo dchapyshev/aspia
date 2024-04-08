@@ -20,19 +20,19 @@
 #define BASE_DESKTOP_FRAME_DIB_H
 
 #include "base/desktop/frame.h"
+#include "base/ipc/shared_memory.h"
 #include "base/win/scoped_gdi_object.h"
 
 #include <memory>
 
 namespace base {
 
-class SharedMemory;
 class SharedMemoryFactory;
 
-class FrameDib : public Frame
+class FrameDib final : public Frame
 {
 public:
-    ~FrameDib() override = default;
+    ~FrameDib() final = default;
 
     static std::unique_ptr<FrameDib> create(const Size& size,
                                             const PixelFormat& format,

@@ -27,17 +27,17 @@ namespace router {
 class ServerProxy;
 class SharedKeyPool;
 
-class SessionClient : public Session
+class SessionClient final : public Session
 {
 public:
     SessionClient();
-    ~SessionClient() override;
+    ~SessionClient() final;
 
 protected:
     // Session implementation.
-    void onSessionReady() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionReady() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     void readConnectionRequest(const proto::ConnectionRequest& request);

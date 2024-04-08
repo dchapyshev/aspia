@@ -64,7 +64,7 @@ enum UserColumn
     USER_COL_SESSION_NAME = 4
 };
 
-class ProcessItem : public QTreeWidgetItem
+class ProcessItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(ProcessItem)
 
@@ -122,7 +122,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const override
+    bool operator<(const QTreeWidgetItem& other) const final
     {
         const ProcessItem* other_item = static_cast<const ProcessItem*>(&other);
 
@@ -168,7 +168,7 @@ private:
     proto::task_manager::Process process_;
 };
 
-class ServiceItem : public QTreeWidgetItem
+class ServiceItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(ServiceItem)
 
@@ -250,7 +250,7 @@ private:
     const proto::task_manager::Service::StartupType startup_type_;
 };
 
-class UserItem : public QTreeWidgetItem
+class UserItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(UserItem)
 
@@ -282,7 +282,7 @@ public:
     uint32_t sessionId() const { return session_id_; }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const override
+    bool operator<(const QTreeWidgetItem& other) const final
     {
         const UserItem* other_item = static_cast<const UserItem*>(&other);
 
@@ -341,7 +341,7 @@ private:
     const uint32_t session_id_;
 };
 
-class ColumnAction : public QAction
+class ColumnAction final : public QAction
 {
 public:
     ColumnAction(const QString& text, int index, QObject* parent)

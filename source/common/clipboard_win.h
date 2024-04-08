@@ -30,16 +30,16 @@ class MessageWindow;
 
 namespace common {
 
-class ClipboardWin : public Clipboard
+class ClipboardWin final : public Clipboard
 {
 public:
     ClipboardWin();
-    ~ClipboardWin() override;
+    ~ClipboardWin() final;
 
 protected:
     // Clipboard implementation.
-    void init() override;
-    void setData(const std::string& data) override;
+    void init() final;
+    void setData(const std::string& data) final;
 
 private:
     void onClipboardUpdate();

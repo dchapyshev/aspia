@@ -24,13 +24,13 @@
 
 namespace client {
 
-class FrameFactoryQImage : public FrameFactory
+class FrameFactoryQImage final : public FrameFactory
 {
 public:
     FrameFactoryQImage();
-    ~FrameFactoryQImage() override;
+    ~FrameFactoryQImage() final;
 
-    std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) override;
+    std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);

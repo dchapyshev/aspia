@@ -31,15 +31,15 @@
 
 namespace base {
 
-class VideoEncoderVPX : public VideoEncoder
+class VideoEncoderVPX final : public VideoEncoder
 {
 public:
-    ~VideoEncoderVPX() override = default;
+    ~VideoEncoderVPX() final = default;
 
     static std::unique_ptr<VideoEncoderVPX> createVP8();
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    bool encode(const Frame* frame, proto::VideoPacket* packet) override;
+    bool encode(const Frame* frame, proto::VideoPacket* packet) final;
 
     bool setMinQuantizer(uint32_t min_quantizer);
     uint32_t minQuantizer() const;

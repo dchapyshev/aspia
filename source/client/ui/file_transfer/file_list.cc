@@ -30,7 +30,7 @@ namespace client {
 
 namespace {
 
-class TreeViewProxyStyle : public QProxyStyle
+class TreeViewProxyStyle final : public QProxyStyle
 {
 public:
     explicit TreeViewProxyStyle(QStyle* style)
@@ -42,7 +42,7 @@ public:
     void drawPrimitive(PrimitiveElement element,
                        const QStyleOption* option,
                        QPainter* painter,
-                       const QWidget* widget) const override
+                       const QWidget* widget) const final
     {
         if (element == QStyle::PE_IndicatorItemViewItemDrop && !option->rect.isNull())
         {

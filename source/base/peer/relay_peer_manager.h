@@ -34,7 +34,7 @@ namespace base {
 class TcpChannel;
 class TaskRunner;
 
-class RelayPeerManager : public RelayPeer::Delegate
+class RelayPeerManager final : public RelayPeer::Delegate
 {
 public:
     class Delegate
@@ -46,14 +46,14 @@ public:
     };
 
     RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
-    ~RelayPeerManager() override;
+    ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
 
 protected:
     // RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) override;
-    void onRelayConnectionError() override;
+    void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) final;
+    void onRelayConnectionError() final;
 
 private:
     void cleanup();

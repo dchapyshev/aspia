@@ -25,7 +25,7 @@
 
 namespace client {
 
-class FileNameValidator : public QValidator
+class FileNameValidator final : public QValidator
 {
     Q_OBJECT
 
@@ -33,8 +33,8 @@ public:
     explicit FileNameValidator(QObject* parent);
 
     // QValidator implementation.
-    State validate(QString& input, int& pos) const override;
-    void fixup(QString& input) const override;
+    State validate(QString& input, int& pos) const final;
+    void fixup(QString& input) const final;
 
 signals:
     void sig_invalidNameEntered() const;

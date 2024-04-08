@@ -24,12 +24,12 @@
 
 namespace console {
 
-class ComputerGroupItem : public QTreeWidgetItem
+class ComputerGroupItem final : public QTreeWidgetItem
 {
 public:
     ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                       ComputerGroupItem* parent_item);
-    virtual ~ComputerGroupItem() override = default;
+    virtual ~ComputerGroupItem() final = default;
 
     enum ColumnIndex
     {
@@ -53,7 +53,7 @@ public:
     proto::address_book::ComputerGroupConfig defaultConfig();
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override;
+    bool operator<(const QTreeWidgetItem &other) const final;
 
 private:
     friend class ComputerGroupTree;

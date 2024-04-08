@@ -27,13 +27,13 @@
 
 namespace client {
 
-class DesktopToolBar : public QFrame
+class DesktopToolBar final : public QFrame
 {
     Q_OBJECT
 
 public:
     DesktopToolBar(proto::SessionType session_type, QWidget* parent);
-    ~DesktopToolBar() override;
+    ~DesktopToolBar() final;
 
     void enableScreenSelect(bool enable);
     void enablePowerControl(bool enable);
@@ -85,11 +85,11 @@ signals:
 protected:
     // QFrame implementation.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void enterEvent(QEvent* event) override;
+    void enterEvent(QEvent* event) final;
 #else
-    void enterEvent(QEnterEvent* event) override;
+    void enterEvent(QEnterEvent* event) final;
 #endif
-    void leaveEvent(QEvent* event) override;
+    void leaveEvent(QEvent* event) final;
 
 private slots:
     void onHideTimer();

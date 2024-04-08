@@ -30,7 +30,7 @@ class TaskRunner;
 
 namespace client {
 
-class TextChatControlProxy : public std::enable_shared_from_this<TextChatControlProxy>
+class TextChatControlProxy final : public std::enable_shared_from_this<TextChatControlProxy>
 {
 public:
     TextChatControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner,

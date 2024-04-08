@@ -30,7 +30,7 @@ class QAbstractButton;
 
 namespace console {
 
-class FastConnectDialog : public QDialog
+class FastConnectDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ public:
                       const QString& address_book_guid,
                       const proto::address_book::ComputerGroupConfig& default_config,
                       const std::optional<client::RouterConfig>& router_config);
-    ~FastConnectDialog() override;
+    ~FastConnectDialog() final;
 
 private slots:
     void sessionTypeChanged(int item_index);

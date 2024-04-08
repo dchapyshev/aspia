@@ -28,7 +28,7 @@ namespace host {
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent : public base::IpcChannel::Listener
+class UserSessionAgent final : public base::IpcChannel::Listener
 {
 public:
     enum class Status
@@ -58,15 +58,15 @@ public:
     using ClientList = std::vector<Client>;
 
     explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
-    ~UserSessionAgent() override;
+    ~UserSessionAgent() final;
 
     void start();
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
 private:
     friend class UserSessionAgentProxy;

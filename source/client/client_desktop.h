@@ -43,41 +43,41 @@ class DesktopControlProxy;
 class DesktopWindow;
 class DesktopWindowProxy;
 
-class ClientDesktop
+class ClientDesktop final
     : public Client,
       public DesktopControl,
       public common::Clipboard::Delegate
 {
 public:
     explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientDesktop() override;
+    ~ClientDesktop() final;
 
     void setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy);
 
     // DesktopControl implementation.
-    void setDesktopConfig(const proto::DesktopConfig& config) override;
-    void setCurrentScreen(const proto::Screen& screen) override;
-    void setPreferredSize(int width, int height) override;
-    void setVideoPause(bool enable) override;
-    void setAudioPause(bool enable) override;
-    void setVideoRecording(bool enable, const std::filesystem::path& file_path) override;
-    void onKeyEvent(const proto::KeyEvent& event) override;
-    void onTextEvent(const proto::TextEvent& event) override;
-    void onMouseEvent(const proto::MouseEvent& event) override;
-    void onPowerControl(proto::PowerControl::Action action) override;
-    void onRemoteUpdate() override;
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
-    void onTaskManager(const proto::task_manager::ClientToHost& message) override;
-    void onMetricsRequest() override;
+    void setDesktopConfig(const proto::DesktopConfig& config) final;
+    void setCurrentScreen(const proto::Screen& screen) final;
+    void setPreferredSize(int width, int height) final;
+    void setVideoPause(bool enable) final;
+    void setAudioPause(bool enable) final;
+    void setVideoRecording(bool enable, const std::filesystem::path& file_path) final;
+    void onKeyEvent(const proto::KeyEvent& event) final;
+    void onTextEvent(const proto::TextEvent& event) final;
+    void onMouseEvent(const proto::MouseEvent& event) final;
+    void onPowerControl(proto::PowerControl::Action action) final;
+    void onRemoteUpdate() final;
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
+    void onTaskManager(const proto::task_manager::ClientToHost& message) final;
+    void onMetricsRequest() final;
 
 protected:
     // Client implementation.
-    void onSessionStarted() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionStarted() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
     // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
     void readCapabilities(const proto::DesktopCapabilities& capabilities);

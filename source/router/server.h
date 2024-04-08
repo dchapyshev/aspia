@@ -33,7 +33,7 @@ class DatabaseFactory;
 class SessionHost;
 class SessionRelay;
 
-class Server
+class Server final
     : public base::TcpServer::Delegate,
       public SharedKeyPool::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
@@ -41,7 +41,7 @@ class Server
 {
 public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Server() override;
+    ~Server() final;
 
     bool start();
 
@@ -54,17 +54,17 @@ public:
 
 protected:
     // base::TcpServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) override;
+    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) final;
 
     // SharedKeyPool::Delegate implementation.
-    void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) override;
+    void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) final;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
-    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
+    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
 
     // Session::Delegate implementation.
     void onSessionFinished(Session::SessionId session_id,
-                           proto::RouterSession session_type) override;
+                           proto::RouterSession session_type) final;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;

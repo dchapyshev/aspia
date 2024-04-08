@@ -28,23 +28,23 @@
 
 namespace router {
 
-class DatabaseSqlite : public Database
+class DatabaseSqlite final : public Database
 {
 public:
-    ~DatabaseSqlite() override;
+    ~DatabaseSqlite() final;
 
     static std::unique_ptr<DatabaseSqlite> create();
     static std::unique_ptr<DatabaseSqlite> open();
     static std::filesystem::path filePath();
 
     // Database implementation.
-    std::vector<base::User> userList() const override;
-    bool addUser(const base::User& user) override;
-    bool modifyUser(const base::User& user) override;
-    bool removeUser(int64_t entry_id) override;
-    base::User findUser(std::u16string_view username) override;
-    ErrorCode hostId(const base::ByteArray& key_hash, base::HostId* host_id) const override;
-    bool addHost(const base::ByteArray& key_hash) override;
+    std::vector<base::User> userList() const final;
+    bool addUser(const base::User& user) final;
+    bool modifyUser(const base::User& user) final;
+    bool removeUser(int64_t entry_id) final;
+    base::User findUser(std::u16string_view username) final;
+    ErrorCode hostId(const base::ByteArray& key_hash, base::HostId* host_id) const final;
+    bool addHost(const base::ByteArray& key_hash) final;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

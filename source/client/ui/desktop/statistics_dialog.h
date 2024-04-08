@@ -27,13 +27,13 @@
 
 namespace client {
 
-class StatisticsDialog : public QDialog
+class StatisticsDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
-    ~StatisticsDialog() override;
+    ~StatisticsDialog() final;
 
     void setMetrics(const DesktopWindow::Metrics& metrics);
 

@@ -26,16 +26,16 @@
 
 namespace base {
 
-class Mv2Helper : public MirrorHelper
+class Mv2Helper final : public MirrorHelper
 {
 public:
-    ~Mv2Helper() override;
+    ~Mv2Helper() final;
 
     static std::unique_ptr<Mv2Helper> create(const Rect& screen_rect);
 
-    const Rect& screenRect() const override { return screen_rect_; }
-    void addUpdatedRects(Region* updated_region) const override;
-    void copyRegion(Frame* frame, const Region& updated_region) const override;
+    const Rect& screenRect() const final { return screen_rect_; }
+    void addUpdatedRects(Region* updated_region) const final;
+    void copyRegion(Frame* frame, const Region& updated_region) const final;
 
 private:
     explicit Mv2Helper(const Rect& screen_rect);

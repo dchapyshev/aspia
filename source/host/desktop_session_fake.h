@@ -28,24 +28,24 @@ class TaskRunner;
 
 namespace host {
 
-class DesktopSessionFake : public DesktopSession
+class DesktopSessionFake final : public DesktopSession
 {
 public:
     DesktopSessionFake(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
-    ~DesktopSessionFake() override;
+    ~DesktopSessionFake() final;
 
     // DesktopSession implementation.
-    void start() override;
-    void stop() override;
-    void control(proto::internal::DesktopControl::Action action) override;
-    void configure(const Config& config) override;
-    void selectScreen(const proto::Screen& screen) override;
-    void captureScreen() override;
-    void setScreenCaptureFps(int fps) override;
-    void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectTextEvent(const proto::TextEvent& event) override;
-    void injectMouseEvent(const proto::MouseEvent& event) override;
-    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
+    void start() final;
+    void stop() final;
+    void control(proto::internal::DesktopControl::Action action) final;
+    void configure(const Config& config) final;
+    void selectScreen(const proto::Screen& screen) final;
+    void captureScreen() final;
+    void setScreenCaptureFps(int fps) final;
+    void injectKeyEvent(const proto::KeyEvent& event) final;
+    void injectTextEvent(const proto::TextEvent& event) final;
+    void injectMouseEvent(const proto::MouseEvent& event) final;
+    void injectClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
     Delegate* delegate_;

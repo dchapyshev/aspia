@@ -29,13 +29,13 @@ class StatusDialog;
 
 namespace common {
 
-class StatusDialog : public QDialog
+class StatusDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit StatusDialog(QWidget* parent = nullptr);
-    ~StatusDialog() override;
+    ~StatusDialog() final;
 
     void addMessage(const QString& message);
     void addMessageAndActivate(const QString& message);
@@ -43,7 +43,7 @@ public:
 
 protected:
     // QDialog implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private:
     std::unique_ptr<Ui::StatusDialog> ui;

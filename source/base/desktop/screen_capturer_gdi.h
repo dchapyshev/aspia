@@ -28,25 +28,25 @@ namespace base {
 class Differ;
 class SharedMemoryFactory;
 
-class ScreenCapturerGdi : public ScreenCapturer
+class ScreenCapturerGdi final : public ScreenCapturer
 {
 public:
     ScreenCapturerGdi();
-    ~ScreenCapturerGdi() override;
+    ~ScreenCapturerGdi() final;
 
     // ScreenCapturer implementation.
-    int screenCount() override;
-    bool screenList(ScreenList* screens) override;
-    bool selectScreen(ScreenId screen_id) override;
-    ScreenId currentScreen() const override;
-    const Frame* captureFrame(Error* error) override;
-    const MouseCursor* captureCursor() override;
-    Point cursorPosition() override;
-    ScreenType screenType() override;
+    int screenCount() final;
+    bool screenList(ScreenList* screens) final;
+    bool selectScreen(ScreenId screen_id) final;
+    ScreenId currentScreen() const final;
+    const Frame* captureFrame(Error* error) final;
+    const MouseCursor* captureCursor() final;
+    Point cursorPosition() final;
+    ScreenType screenType() final;
 
 protected:
     // ScreenCapturer implementation.
-    void reset() override;
+    void reset() final;
 
 private:
     const Frame* captureImage();

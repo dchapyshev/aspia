@@ -25,15 +25,15 @@
 
 namespace base {
 
-class VideoDecoderVPX : public VideoDecoder
+class VideoDecoderVPX final : public VideoDecoder
 {
 public:
-    ~VideoDecoderVPX() override;
+    ~VideoDecoderVPX() final;
 
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::VideoPacket& packet, Frame* frame) override;
+    bool decode(const proto::VideoPacket& packet, Frame* frame) final;
 
 private:
     explicit VideoDecoderVPX(proto::VideoEncoding encoding);

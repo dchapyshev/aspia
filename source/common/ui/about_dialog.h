@@ -29,13 +29,13 @@ class AboutDialog;
 
 namespace common {
 
-class AboutDialog : public QDialog
+class AboutDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit AboutDialog(const QString& application_name, QWidget* parent = nullptr);
-    ~AboutDialog() override;
+    ~AboutDialog() final;
 
 private slots:
     void onServiceContextMenu(const QPoint& pos);

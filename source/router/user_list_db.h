@@ -27,19 +27,19 @@ namespace router {
 class Database;
 class DatabaseFactory;
 
-class UserListDb : public base::UserListBase
+class UserListDb final : public base::UserListBase
 {
 public:
-    ~UserListDb() override;
+    ~UserListDb() final;
 
     static std::unique_ptr<UserListDb> open(const DatabaseFactory& factory);
 
     // base::UserListBase implementation.
-    void add(const base::User& user) override;
-    base::User find(std::u16string_view username) const override;
-    const base::ByteArray& seedKey() const override;
-    void setSeedKey(const base::ByteArray& seed_key) override;
-    std::vector<base::User> list() const override;
+    void add(const base::User& user) final;
+    base::User find(std::u16string_view username) const final;
+    const base::ByteArray& seedKey() const final;
+    void setSeedKey(const base::ByteArray& seed_key) final;
+    std::vector<base::User> list() const final;
 
 private:
     explicit UserListDb(std::unique_ptr<Database> db);

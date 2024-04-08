@@ -25,13 +25,13 @@
 namespace client {
 
 // The class prepares the task queue to perform the deletion.
-class FileRemoveQueueBuilder : public common::FileTaskProducer
+class FileRemoveQueueBuilder final : public common::FileTaskProducer
 {
 public:
     FileRemoveQueueBuilder(
         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
         common::FileTask::Target target);
-    ~FileRemoveQueueBuilder() override;
+    ~FileRemoveQueueBuilder() final;
 
     using FinishCallback = std::function<void(proto::FileError)>;
 
@@ -42,7 +42,7 @@ public:
 
 protected:
     // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
+    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
 
 private:
     void doPendingTasks();

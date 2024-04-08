@@ -31,7 +31,7 @@ namespace client {
 
 class AddressBarModel;
 
-class AddressBar : public QComboBox
+class AddressBar final : public QComboBox
 {
     Q_OBJECT
 
@@ -46,7 +46,7 @@ public:
     bool hasCurrentPath() const;
 
     // QComboBox implementation.
-    void showPopup() override;
+    void showPopup() final;
 
 signals:
     void sig_pathChanged(const QString& path);

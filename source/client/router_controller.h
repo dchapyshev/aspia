@@ -32,7 +32,7 @@ class ClientAuthenticator;
 
 namespace client {
 
-class RouterController
+class RouterController final
     : public base::TcpChannel::Listener,
       public base::RelayPeer::Delegate
 {
@@ -79,20 +79,20 @@ public:
 
     RouterController(const RouterConfig& router_config,
                      std::shared_ptr<base::TaskRunner> task_runner);
-    ~RouterController() override;
+    ~RouterController() final;
 
     void connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate);
 
 protected:
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
     // base::RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel) override;
-    void onRelayConnectionError() override;
+    void onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel) final;
+    void onRelayConnectionError() final;
 
 private:
     void sendConnectionRequest();

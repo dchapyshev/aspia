@@ -24,11 +24,11 @@
 
 namespace base {
 
-class ClientAuthenticator : public Authenticator
+class ClientAuthenticator final : public Authenticator
 {
 public:
     explicit ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner);
-    ~ClientAuthenticator() override;
+    ~ClientAuthenticator() final;
 
     void setPeerPublicKey(const ByteArray& public_key);
     void setIdentify(proto::Identify identify);
@@ -39,9 +39,9 @@ public:
 
 protected:
     // Authenticator implementation.
-    [[nodiscard]] bool onStarted() override;
-    void onReceived(const ByteArray& buffer) override;
-    void onWritten() override;
+    [[nodiscard]] bool onStarted() final;
+    void onReceived(const ByteArray& buffer) final;
+    void onWritten() final;
 
 private:
     void sendClientHello();

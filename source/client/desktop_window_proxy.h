@@ -32,7 +32,7 @@ namespace client {
 
 class DesktopControlProxy;
 
-class DesktopWindowProxy : public std::enable_shared_from_this<DesktopWindowProxy>
+class DesktopWindowProxy final : public std::enable_shared_from_this<DesktopWindowProxy>
 {
 public:
     DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,

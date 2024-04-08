@@ -32,7 +32,7 @@ namespace client {
 
 namespace {
 
-class Editor : public QLineEdit
+class Editor final : public QLineEdit
 {
 public:
     explicit Editor(QWidget* parent)
@@ -70,7 +70,7 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent* event) override
+    void paintEvent(QPaintEvent* event) final
     {
         QLineEdit::paintEvent(event);
 

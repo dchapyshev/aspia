@@ -44,16 +44,16 @@ private:
     // IMMNotificationClient implementation.
     HRESULT __stdcall OnDefaultDeviceChanged(EDataFlow flow,
                                              ERole role,
-                                             LPCWSTR pwstrDefaultDevice) override;
-    HRESULT __stdcall QueryInterface(REFIID iid, void** object) override;
+                                             LPCWSTR pwstrDefaultDevice) final;
+    HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
 
     // No-ops overrides.
-    HRESULT __stdcall OnDeviceAdded(LPCWSTR pwstrDeviceId) override;
-    HRESULT __stdcall OnDeviceRemoved(LPCWSTR pwstrDeviceId) override;
-    HRESULT __stdcall OnDeviceStateChanged(LPCWSTR pwstrDeviceId, DWORD dwNewState) override;
-    HRESULT __stdcall OnPropertyValueChanged(LPCWSTR pwstrDeviceId, const PROPERTYKEY key) override;
-    ULONG __stdcall AddRef() override;
-    ULONG __stdcall Release() override;
+    HRESULT __stdcall OnDeviceAdded(LPCWSTR pwstrDeviceId) final;
+    HRESULT __stdcall OnDeviceRemoved(LPCWSTR pwstrDeviceId) final;
+    HRESULT __stdcall OnDeviceStateChanged(LPCWSTR pwstrDeviceId, DWORD dwNewState) final;
+    HRESULT __stdcall OnPropertyValueChanged(LPCWSTR pwstrDeviceId, const PROPERTYKEY key) final;
+    ULONG __stdcall AddRef() final;
+    ULONG __stdcall Release() final;
 
     const Microsoft::WRL::ComPtr<IMMDeviceEnumerator> enumerator_;
     bool changed_ = false;

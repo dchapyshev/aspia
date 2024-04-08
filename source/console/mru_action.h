@@ -25,7 +25,7 @@
 
 namespace console {
 
-class MruAction : public QAction
+class MruAction final : public QAction
 {
     Q_OBJECT
 

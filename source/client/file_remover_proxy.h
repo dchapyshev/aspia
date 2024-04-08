@@ -27,7 +27,7 @@ class TaskRunner;
 
 namespace client {
 
-class FileRemoverProxy : public std::enable_shared_from_this<FileRemoverProxy>
+class FileRemoverProxy final : public std::enable_shared_from_this<FileRemoverProxy>
 {
 public:
     FileRemoverProxy(std::shared_ptr<base::TaskRunner> io_task_runner, FileRemover* remover);

@@ -24,21 +24,21 @@
 
 namespace base {
 
-class UserList : public UserListBase
+class UserList final : public UserListBase
 {
 public:
-    ~UserList() override;
+    ~UserList() final;
 
     static std::unique_ptr<UserList> createEmpty();
     std::unique_ptr<UserList> duplicate() const;
     void merge(const UserList& user_list);
 
     // UserListBase implementation.
-    void add(const User& user) override;
-    User find(std::u16string_view username) const override;
-    const ByteArray& seedKey() const override { return seed_key_; }
-    void setSeedKey(const ByteArray& seed_key) override;
-    std::vector<User> list() const override { return list_; }
+    void add(const User& user) final;
+    User find(std::u16string_view username) const final;
+    const ByteArray& seedKey() const final { return seed_key_; }
+    void setSeedKey(const ByteArray& seed_key) final;
+    std::vector<User> list() const final { return list_; }
 
 private:
     UserList();

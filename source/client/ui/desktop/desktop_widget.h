@@ -43,13 +43,13 @@
 
 namespace client {
 
-class DesktopWidget : public QWidget
+class DesktopWidget final : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit DesktopWidget(QWidget* parent);
-    ~DesktopWidget() override;
+    ~DesktopWidget() final;
 
     base::Frame* desktopFrame();
     void setDesktopFrame(std::shared_ptr<base::Frame> frame);
@@ -79,16 +79,16 @@ signals:
 
 protected:
     // QWidget implementation.
-    void paintEvent(QPaintEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
-    void leaveEvent(QEvent *event) override;
-    void focusInEvent(QFocusEvent* event) override;
-    void focusOutEvent(QFocusEvent* event) override;
+    void paintEvent(QPaintEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseReleaseEvent(QMouseEvent* event) final;
+    void mouseDoubleClickEvent(QMouseEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
+    void keyReleaseEvent(QKeyEvent* event) final;
+    void leaveEvent(QEvent *event) final;
+    void focusInEvent(QFocusEvent* event) final;
+    void focusOutEvent(QFocusEvent* event) final;
 
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);

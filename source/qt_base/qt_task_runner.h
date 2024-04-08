@@ -24,19 +24,19 @@
 
 namespace qt_base {
 
-class QtTaskRunner : public base::TaskRunner
+class QtTaskRunner final : public base::TaskRunner
 {
 public:
     QtTaskRunner();
-    ~QtTaskRunner() override;
+    ~QtTaskRunner() final;
 
     // TaskRunner implementation.
-    bool belongsToCurrentThread() const override;
-    void postTask(Callback callback) override;
-    void postDelayedTask(Callback callback, const Milliseconds& delay) override;
-    void postNonNestableTask(Callback callback) override;
-    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) override;
-    void postQuit() override;
+    bool belongsToCurrentThread() const final;
+    void postTask(Callback callback) final;
+    void postDelayedTask(Callback callback, const Milliseconds& delay) final;
+    void postNonNestableTask(Callback callback) final;
+    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) final;
+    void postQuit() final;
 
 private:
     class Impl;

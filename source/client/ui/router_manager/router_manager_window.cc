@@ -44,7 +44,7 @@ namespace client {
 
 namespace {
 
-class ColumnAction : public QAction
+class ColumnAction final : public QAction
 {
 public:
     ColumnAction(const QString& text, int index, QObject* parent)
@@ -61,7 +61,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ColumnAction);
 };
 
-class HostTreeItem : public QTreeWidgetItem
+class HostTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit HostTreeItem(const proto::Session& session)
@@ -83,7 +83,7 @@ public:
         setText(6, QString::fromStdString(session.os_name()));
     }
 
-    ~HostTreeItem() override = default;
+    ~HostTreeItem() final = default;
 
     void updateItem(const proto::Session& updated_session)
     {
@@ -110,7 +110,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const override
+    bool operator<(const QTreeWidgetItem& other) const final
     {
         int column = treeWidget()->sortColumn();
         if (column == 0) // Name
@@ -138,7 +138,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
 };
 
-class RelayTreeItem : public QTreeWidgetItem
+class RelayTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit RelayTreeItem(const proto::Session& session)
@@ -173,7 +173,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override
+    bool operator<(const QTreeWidgetItem &other) const final
     {
         if (treeWidget()->sortColumn() == 1)
         {
@@ -190,7 +190,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);
 };
 
-class PeerConnectionTreeItem : public QTreeWidgetItem
+class PeerConnectionTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit PeerConnectionTreeItem(const proto::PeerConnection& connection)
@@ -213,7 +213,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override
+    bool operator<(const QTreeWidgetItem &other) const final
     {
         int column = treeWidget()->sortColumn();
         if (column == 1)
@@ -250,7 +250,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PeerConnectionTreeItem);
 };
 
-class UserTreeItem : public QTreeWidgetItem
+class UserTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit UserTreeItem(const proto::User& user)
@@ -265,7 +265,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const override
+    bool operator<(const QTreeWidgetItem& other) const final
     {
         int column = treeWidget()->sortColumn();
         if (column == 0)

@@ -26,7 +26,7 @@
 
 namespace base {
 
-class JsonSettings : public Settings
+class JsonSettings final : public Settings
 {
 public:
     enum class Scope { USER, SYSTEM };
@@ -38,7 +38,7 @@ public:
                  std::string_view application_name,
                  std::string_view file_name,
                  Encrypted encrypted = Encrypted::NO);
-    ~JsonSettings() override;
+    ~JsonSettings() final;
 
     bool isWritable() const;
     void sync();

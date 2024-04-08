@@ -27,10 +27,10 @@ namespace base {
 
 class SharedMemoryFactory;
 
-class SharedMemoryFrame : public Frame
+class SharedMemoryFrame final : public Frame
 {
 public:
-    ~SharedMemoryFrame() override;
+    ~SharedMemoryFrame() final;
 
     static std::unique_ptr<Frame> create(
         const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory);

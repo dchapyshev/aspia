@@ -27,7 +27,7 @@ namespace client {
 
 namespace {
 
-class EventItem : public QTreeWidgetItem
+class EventItem final : public QTreeWidgetItem
 {
 public:
     explicit EventItem(int64_t time)
@@ -37,7 +37,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override
+    bool operator<(const QTreeWidgetItem &other) const final
     {
         if (treeWidget()->sortColumn() == 0)
         {

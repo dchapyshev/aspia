@@ -37,7 +37,7 @@ namespace host {
 class NotifierWindow;
 class UserSessionAgentProxy;
 
-class MainWindow
+class MainWindow final
     : public QMainWindow,
       public UserSessionWindow
 {
@@ -45,7 +45,7 @@ class MainWindow
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow() override;
+    ~MainWindow() final;
 
 public slots:
     void connectToService();
@@ -54,18 +54,18 @@ public slots:
 
 protected:
     // QMainWindow implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
     // UserSessionWindow implementation.
-    void onStatusChanged(UserSessionAgent::Status status) override;
-    void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
-    void onCredentialsChanged(const proto::internal::Credentials& credentials) override;
-    void onRouterStateChanged(const proto::internal::RouterState& state) override;
+    void onStatusChanged(UserSessionAgent::Status status) final;
+    void onClientListChanged(const UserSessionAgent::ClientList& clients) final;
+    void onCredentialsChanged(const proto::internal::Credentials& credentials) final;
+    void onRouterStateChanged(const proto::internal::RouterState& state) final;
     void onConnectConfirmationRequest(
-        const proto::internal::ConnectConfirmationRequest& request) override;
+        const proto::internal::ConnectConfirmationRequest& request) final;
     void onVideoRecordingStateChanged(
-        const std::string& computer_name, const std::string& user_name, bool started) override;
-    void onTextChat(const proto::TextChat& text_chat) override;
+        const std::string& computer_name, const std::string& user_name, bool started) final;
+    void onTextChat(const proto::TextChat& text_chat) final;
 
 private slots:
     void realClose();

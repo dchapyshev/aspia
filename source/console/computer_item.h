@@ -28,11 +28,11 @@ namespace console {
 
 class ComputerGroupItem;
 
-class ComputerItem : public QTreeWidgetItem
+class ComputerItem final : public QTreeWidgetItem
 {
 public:
     ComputerItem(proto::address_book::Computer* computer, ComputerGroupItem* parent_group_item);
-    ~ComputerItem() override = default;
+    ~ComputerItem() final = default;
 
     void updateItem();
 
@@ -53,7 +53,7 @@ public:
     ComputerGroupItem* parentComputerGroupItem();
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override;
+    bool operator<(const QTreeWidgetItem &other) const final;
 
 private:
     friend class ComputerGroupItem;

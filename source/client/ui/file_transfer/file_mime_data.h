@@ -27,11 +27,11 @@ namespace client {
 
 class FileListModel;
 
-class FileMimeData : public QMimeData
+class FileMimeData final : public QMimeData
 {
 public:
     FileMimeData() = default;
-    virtual ~FileMimeData() override;
+    virtual ~FileMimeData() final;
 
     static QString createMimeType();
 

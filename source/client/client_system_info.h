@@ -27,24 +27,24 @@ namespace client {
 class SystemInfoControlProxy;
 class SystemInfoWindowProxy;
 
-class ClientSystemInfo
+class ClientSystemInfo final
     : public Client,
       public SystemInfoControl
 {
 public:
     explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientSystemInfo() override;
+    ~ClientSystemInfo() final;
 
     void setSystemInfoWindow(std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy);
 
     // SystemInfoControl implementation.
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
 
 protected:
     // Client implementation.
-    void onSessionStarted() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionStarted() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy_;

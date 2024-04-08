@@ -29,13 +29,13 @@ namespace client {
 class AddressBarModel;
 class FileListModel;
 
-class FileList : public QTreeView
+class FileList final : public QTreeView
 {
     Q_OBJECT
 
 public:
     explicit FileList(QWidget* parent = nullptr);
-    ~FileList() override = default;
+    ~FileList() final = default;
 
     void showDriveList(AddressBarModel* model);
     void showFileList(const proto::FileList& file_list);
@@ -54,8 +54,8 @@ signals:
 
 protected:
     // QTreeView implemenation.
-    void keyPressEvent(QKeyEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) final;
+    void mouseDoubleClickEvent(QMouseEvent* event) final;
 
 private:
     void saveColumnsState();

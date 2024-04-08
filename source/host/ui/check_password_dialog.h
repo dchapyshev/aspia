@@ -23,13 +23,13 @@
 
 namespace host {
 
-class CheckPasswordDialog : public QDialog
+class CheckPasswordDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit CheckPasswordDialog(QWidget* parent = nullptr);
-    ~CheckPasswordDialog() override;
+    ~CheckPasswordDialog() final;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

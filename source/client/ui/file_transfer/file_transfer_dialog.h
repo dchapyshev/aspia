@@ -33,7 +33,7 @@ class QWinTaskbarProgress;
 
 namespace client {
 
-class FileTransferDialog
+class FileTransferDialog final
     : public QDialog,
       public FileTransferWindow
 {
@@ -41,22 +41,22 @@ class FileTransferDialog
 
 public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
-    ~FileTransferDialog() override;
+    ~FileTransferDialog() final;
 
     std::shared_ptr<FileTransferWindowProxy> windowProxy() { return transfer_window_proxy_; }
 
     // FileTransferWindow implementation.
-    void start(std::shared_ptr<FileTransferProxy> transfer_proxy) override;
-    void stop() override;
-    void setCurrentItem(const std::string& source_path, const std::string& target_path) override;
-    void setCurrentProgress(int total, int current) override;
-    void setCurrentSpeed(int64_t speed) override;
-    void errorOccurred(const FileTransfer::Error& error) override;
+    void start(std::shared_ptr<FileTransferProxy> transfer_proxy) final;
+    void stop() final;
+    void setCurrentItem(const std::string& source_path, const std::string& target_path) final;
+    void setCurrentProgress(int total, int current) final;
+    void setCurrentSpeed(int64_t speed) final;
+    void errorOccurred(const FileTransfer::Error& error) final;
 
 protected:
     // QDialog implementation.
-    void keyPressEvent(QKeyEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
 
 private:
     QString errorToMessage(const FileTransfer::Error& error);

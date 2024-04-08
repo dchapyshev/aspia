@@ -26,13 +26,13 @@
 
 namespace console {
 
-class ComputerDialogGeneral : public ComputerDialogTab
+class ComputerDialogGeneral final : public ComputerDialogTab
 {
     Q_OBJECT
 
 public:
     ComputerDialogGeneral(int type, QWidget* parent);
-    ~ComputerDialogGeneral() override = default;
+    ~ComputerDialogGeneral() final = default;
 
     void restoreSettings(const QString& parent_name,
                          const proto::address_book::Computer& computer);

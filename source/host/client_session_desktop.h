@@ -45,7 +45,7 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSessionDesktop
+class ClientSessionDesktop final
     : public ClientSession
 #if defined(OS_WIN)
       , public TaskManager::Delegate
@@ -55,7 +55,7 @@ public:
     ClientSessionDesktop(proto::SessionType session_type,
                          std::unique_ptr<base::TcpChannel> channel,
                          std::shared_ptr<base::TaskRunner> task_runner);
-    ~ClientSessionDesktop() override;
+    ~ClientSessionDesktop() final;
 
     void setDesktopSessionProxy(base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
@@ -71,13 +71,13 @@ public:
 
 protected:
     // ClientSession implementation.
-    void onStarted() override;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onWritten(uint8_t channel_id, size_t pending) override;
+    void onStarted() final;
+    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onWritten(uint8_t channel_id, size_t pending) final;
 
 #if defined(OS_WIN)
     // TaskManager::Delegate implementation.
-    void onTaskManagerMessage(const proto::task_manager::HostToClient& message) override;
+    void onTaskManagerMessage(const proto::task_manager::HostToClient& message) final;
 #endif // defined(OS_WIN)
 
 private:

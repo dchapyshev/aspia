@@ -30,7 +30,7 @@ namespace client {
 
 namespace {
 
-class ProcessTreeItem : public QTreeWidgetItem
+class ProcessTreeItem final : public QTreeWidgetItem
 {
 public:
     ProcessTreeItem(const proto::system_info::Processes::Process& process)
@@ -40,7 +40,7 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override
+    bool operator<(const QTreeWidgetItem &other) const final
     {
         int column = treeWidget()->sortColumn();
         if (column == 1)

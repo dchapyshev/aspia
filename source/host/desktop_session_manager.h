@@ -37,14 +37,14 @@ namespace host {
 class DesktopSessionProcess;
 class DesktopSessionProxy;
 
-class DesktopSessionManager
+class DesktopSessionManager final
     : public base::IpcServer::Delegate,
       public DesktopSession::Delegate
 {
 public:
     DesktopSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                           DesktopSession::Delegate* delegate);
-    ~DesktopSessionManager() override;
+    ~DesktopSessionManager() final;
 
     void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);
@@ -53,19 +53,19 @@ public:
 
 protected:
     // ipc::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) override;
-    void onErrorOccurred() override;
+    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onErrorOccurred() final;
 
     // DesktopSession::Delegate implementation.
-    void onDesktopSessionStarted() override;
-    void onDesktopSessionStopped() override;
-    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor) override;
-    void onScreenCaptureError(proto::VideoErrorCode error_code) override;
-    void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) override;
-    void onScreenListChanged(const proto::ScreenList& list) override;
-    void onScreenTypeChanged(const proto::ScreenType& type) override;
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onDesktopSessionStarted() final;
+    void onDesktopSessionStopped() final;
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor) final;
+    void onScreenCaptureError(proto::VideoErrorCode error_code) final;
+    void onAudioCaptured(const proto::AudioPacket& audio_packet) final;
+    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) final;
+    void onScreenListChanged(const proto::ScreenList& list) final;
+    void onScreenTypeChanged(const proto::ScreenType& type) final;
+    void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };

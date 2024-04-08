@@ -33,7 +33,7 @@ namespace common {
 class FileTaskFactory;
 class FileTaskProducerProxy;
 
-class FileTask : public std::enable_shared_from_this<FileTask>
+class FileTask final : public std::enable_shared_from_this<FileTask>
 {
 public:
     enum class Target

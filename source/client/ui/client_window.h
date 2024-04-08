@@ -30,7 +30,7 @@
 
 namespace client {
 
-class ClientWindow
+class ClientWindow final
     : public QMainWindow,
       public common::UpdateChecker::Delegate
 {
@@ -38,14 +38,14 @@ class ClientWindow
 
 public:
     explicit ClientWindow(QWidget* parent = nullptr);
-    ~ClientWindow() override;
+    ~ClientWindow() final;
 
 protected:
     // QMainWindow implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+    void onUpdateCheckedFinished(const base::ByteArray& result) final;
 
 private slots:
     void onLanguageChanged(QAction* action);

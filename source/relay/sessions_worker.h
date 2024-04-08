@@ -26,7 +26,7 @@ namespace relay {
 
 class SharedPool;
 
-class SessionsWorker
+class SessionsWorker final
     : public base::Thread::Delegate,
       public SessionManager::Delegate
 {
@@ -37,7 +37,7 @@ public:
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval,
                    std::unique_ptr<SharedPool> shared_pool);
-    ~SessionsWorker() override;
+    ~SessionsWorker() final;
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                SessionManager::Delegate* delegate);
@@ -45,13 +45,13 @@ public:
 
 protected:
     // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
+    void onBeforeThreadRunning() final;
+    void onAfterThreadRunning() final;
 
     // SessionManager::Delegate implementation.
-    void onSessionStarted() override;
-    void onSessionStatistics(const proto::RelayStat& relay_stat) override;
-    void onSessionFinished() override;
+    void onSessionStarted() final;
+    void onSessionStatistics(const proto::RelayStat& relay_stat) final;
+    void onSessionFinished() final;
 
 private:
     const std::u16string listen_interface_;

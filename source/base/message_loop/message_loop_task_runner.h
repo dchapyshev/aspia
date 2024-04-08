@@ -28,18 +28,18 @@
 
 namespace base {
 
-class MessageLoopTaskRunner : public TaskRunner
+class MessageLoopTaskRunner final : public TaskRunner
 {
 public:
     static std::shared_ptr<TaskRunner> current();
 
     // TaskRunner implementation.
-    bool belongsToCurrentThread() const override;
-    void postTask(Callback callback) override;
-    void postDelayedTask(Callback callback, const Milliseconds& delay) override;
-    void postNonNestableTask(Callback callback) override;
-    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) override;
-    void postQuit() override;
+    bool belongsToCurrentThread() const final;
+    void postTask(Callback callback) final;
+    void postDelayedTask(Callback callback, const Milliseconds& delay) final;
+    void postNonNestableTask(Callback callback) final;
+    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) final;
+    void postQuit() final;
 
 private:
     friend class MessageLoop;

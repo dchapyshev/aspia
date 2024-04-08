@@ -26,7 +26,7 @@
 
 namespace client {
 
-class FileListModel : public QAbstractItemModel
+class FileListModel final : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -44,23 +44,23 @@ public:
     QModelIndex createFolder();
 
     // QAbstractItemModel implementation.
-    QModelIndex index(int row, int column, const QModelIndex& parent) const override;
-    QModelIndex parent(const QModelIndex& child) const override;
-    int rowCount(const QModelIndex& parent) const override;
-    int columnCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QStringList mimeTypes() const override;
-    QMimeData* mimeData(const QModelIndexList& indexes) const override;
+    QModelIndex index(int row, int column, const QModelIndex& parent) const final;
+    QModelIndex parent(const QModelIndex& child) const final;
+    int rowCount(const QModelIndex& parent) const final;
+    int columnCount(const QModelIndex& parent) const final;
+    QVariant data(const QModelIndex& index, int role) const final;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) final;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const final;
+    QStringList mimeTypes() const final;
+    QMimeData* mimeData(const QModelIndexList& indexes) const final;
     bool canDropMimeData(const QMimeData* data, Qt::DropAction action,
-                         int row, int column, const QModelIndex& parent) const override;
+                         int row, int column, const QModelIndex& parent) const final;
     bool dropMimeData(const QMimeData* data, Qt::DropAction action,
-                      int row, int column, const QModelIndex& parent) override;
-    Qt::DropActions supportedDropActions() const override;
-    Qt::DropActions supportedDragActions() const override;
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
-    void sort(int column, Qt::SortOrder order) override;
+                      int row, int column, const QModelIndex& parent) final;
+    Qt::DropActions supportedDropActions() const final;
+    Qt::DropActions supportedDragActions() const final;
+    Qt::ItemFlags flags(const QModelIndex& index) const final;
+    void sort(int column, Qt::SortOrder order) final;
 
 signals:
     void sig_nameChangeRequest(const QString& old_name, const QString& new_name);

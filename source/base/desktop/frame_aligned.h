@@ -25,10 +25,10 @@
 
 namespace base {
 
-class FrameAligned : public Frame
+class FrameAligned final : public Frame
 {
 public:
-    ~FrameAligned() override;
+    ~FrameAligned() final;
 
     static std::unique_ptr<FrameAligned> create(
         const Size& size, const PixelFormat& format, size_t alignment);

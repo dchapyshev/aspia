@@ -33,7 +33,7 @@ class DesktopConfigDialog;
 
 namespace client {
 
-class DesktopConfigDialog : public QDialog
+class DesktopConfigDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
                         const proto::DesktopConfig& config,
                         uint32_t video_encodings,
                         QWidget* parent = nullptr);
-    ~DesktopConfigDialog() override;
+    ~DesktopConfigDialog() final;
 
     void enableAudioFeature(bool enable);
     void enableClipboardFeature(bool enable);

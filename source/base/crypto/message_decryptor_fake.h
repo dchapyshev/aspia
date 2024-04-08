@@ -24,15 +24,15 @@
 
 namespace base {
 
-class MessageDecryptorFake : public MessageDecryptor
+class MessageDecryptorFake final : public MessageDecryptor
 {
 public:
     MessageDecryptorFake();
-    ~MessageDecryptorFake() override;
+    ~MessageDecryptorFake() final;
 
     // MessageDecryptor implementation.
-    size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const void* in, size_t in_size, void* out) override;
+    size_t decryptedDataSize(size_t in_size) final;
+    bool decrypt(const void* in, size_t in_size, void* out) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(MessageDecryptorFake);

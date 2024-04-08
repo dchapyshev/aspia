@@ -24,11 +24,11 @@
 
 namespace host {
 
-class ClientSessionTextChat : public ClientSession
+class ClientSessionTextChat final : public ClientSession
 {
 public:
     explicit ClientSessionTextChat(std::unique_ptr<base::TcpChannel> channel);
-    ~ClientSessionTextChat() override;
+    ~ClientSessionTextChat() final;
 
     void sendTextChat(const proto::TextChat& text_chat);
     void sendStatus(proto::TextChatStatus::Status status);
@@ -38,9 +38,9 @@ public:
 
 protected:
     // ClientSession implementation.
-    void onStarted() override;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onWritten(uint8_t channel_id, size_t pending) override;
+    void onStarted() final;
+    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     bool has_user_ = false;

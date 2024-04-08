@@ -24,18 +24,18 @@
 
 namespace client {
 
-class SysInfoWidgetPowerOptions : public SysInfoWidget
+class SysInfoWidgetPowerOptions final : public SysInfoWidget
 {
     Q_OBJECT
 
 public:
     explicit SysInfoWidgetPowerOptions(QWidget* parent = nullptr);
-    ~SysInfoWidgetPowerOptions() override;
+    ~SysInfoWidgetPowerOptions() final;
 
     // SysInfo implementation.
-    std::string category() const override;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
-    QTreeWidget* treeWidget() override;
+    std::string category() const final;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
+    QTreeWidget* treeWidget() final;
 
 private slots:
     void onContextMenu(const QPoint& point);

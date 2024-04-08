@@ -25,7 +25,7 @@
 
 namespace console {
 
-class ComputerGroupDialog : public QDialog
+class ComputerGroupDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -36,13 +36,13 @@ public:
                         Mode mode,
                         const QString& parent_name,
                         proto::address_book::ComputerGroup* computer_group);
-    ~ComputerGroupDialog() override;
+    ~ComputerGroupDialog() final;
 
 protected:
     // QDialog implementation.
-    void closeEvent(QCloseEvent* event) override;
-    bool eventFilter(QObject* watched, QEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
+    bool eventFilter(QObject* watched, QEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);

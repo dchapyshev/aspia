@@ -34,7 +34,7 @@ class QHBoxLayout;
 
 namespace client {
 
-class QtTextChatWindow
+class QtTextChatWindow final
     : public SessionWindow,
       public TextChatWindow
 {
@@ -42,21 +42,21 @@ class QtTextChatWindow
 
 public:
     explicit QtTextChatWindow(QWidget* parent = nullptr);
-    ~QtTextChatWindow() override;
+    ~QtTextChatWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() override;
+    std::unique_ptr<Client> createClient() final;
 
     // TextChatWindow implementation.
-    void start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy) override;
-    void onTextChatMessage(const proto::TextChat& text_chat) override;
+    void start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy) final;
+    void onTextChatMessage(const proto::TextChat& text_chat) final;
 
 signals:
     void sig_textChatMessage(const proto::TextChat& text_chat);
 
 protected:
     // SessionWindow implementation.
-    void onInternalReset() override;
+    void onInternalReset() final;
 
 private:
     std::unique_ptr<Ui::TextChatWindow> ui;

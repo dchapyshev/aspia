@@ -27,14 +27,14 @@ namespace base {
 
 class PixelTranslator;
 
-class VideoDecoderZstd : public VideoDecoder
+class VideoDecoderZstd final : public VideoDecoder
 {
 public:
-    ~VideoDecoderZstd() override;
+    ~VideoDecoderZstd() final;
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
-    bool decode(const proto::VideoPacket& packet, Frame* target_frame) override;
+    bool decode(const proto::VideoPacket& packet, Frame* target_frame) final;
 
 private:
     VideoDecoderZstd();

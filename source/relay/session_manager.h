@@ -33,7 +33,7 @@ class TaskRunner;
 
 namespace relay {
 
-class SessionManager
+class SessionManager final
     : public PendingSession::Delegate,
       public Session::Delegate
 {
@@ -54,7 +54,7 @@ public:
                    const std::chrono::minutes& idle_timeout,
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval);
-    ~SessionManager() override;
+    ~SessionManager() final;
 
     void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
     void disconnectSession(uint64_t session_id);
@@ -62,11 +62,11 @@ public:
 protected:
     // PendingSession::Delegate implementation.
     void onPendingSessionReady(
-        PendingSession* session, const proto::PeerToRelay& message) override;
-    void onPendingSessionFailed(PendingSession* session) override;
+        PendingSession* session, const proto::PeerToRelay& message) final;
+    void onPendingSessionFailed(PendingSession* session) final;
 
     // Session::Delegate implementation.
-    void onSessionFinished(Session* session) override;
+    void onSessionFinished(Session* session) final;
 
 private:
     static void doAccept(SessionManager* self);

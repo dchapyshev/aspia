@@ -29,11 +29,11 @@ namespace base {
 
 class UserListBase;
 
-class ServerAuthenticator : public Authenticator
+class ServerAuthenticator final : public Authenticator
 {
 public:
     explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
-    ~ServerAuthenticator() override;
+    ~ServerAuthenticator() final;
 
     enum class AnonymousAccess
     {
@@ -55,9 +55,9 @@ public:
 
 protected:
     // Authenticator implementation.
-    [[nodiscard]] bool onStarted() override;
-    void onReceived(const ByteArray& buffer) override;
-    void onWritten() override;
+    [[nodiscard]] bool onStarted() final;
+    void onReceived(const ByteArray& buffer) final;
+    void onWritten() final;
 
 private:
     void onClientHello(const ByteArray& buffer);

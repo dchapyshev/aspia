@@ -29,19 +29,19 @@ namespace base {
 // A DxgiTexture which directly maps bitmap from IDXGIResource. This class is used when
 // DXGI_OUTDUPL_DESC.DesktopImageInSystemMemory is true. (This usually means the video card shares
 // main memory with CPU, instead of having its own individual memory.)
-class DxgiTextureMapping : public DxgiTexture
+class DxgiTextureMapping final : public DxgiTexture
 {
 public:
     // Creates a DxgiTextureMapping instance. Caller must maintain the lifetime of input
     // |duplication| to make sure it outlives this instance.
     explicit DxgiTextureMapping(IDXGIOutputDuplication* duplication);
-    ~DxgiTextureMapping() override;
+    ~DxgiTextureMapping() final;
 
 protected:
     bool copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                         ID3D11Texture2D* texture) override;
+                         ID3D11Texture2D* texture) final;
 
-    bool doRelease() override;
+    bool doRelease() final;
 
 private:
     IDXGIOutputDuplication* const duplication_;

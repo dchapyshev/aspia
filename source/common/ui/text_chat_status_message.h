@@ -24,17 +24,17 @@
 
 namespace common {
 
-class TextChatStatusMessage : public TextChatMessage
+class TextChatStatusMessage final : public TextChatMessage
 {
     Q_OBJECT
 
 public:
     explicit TextChatStatusMessage(QWidget* parent = nullptr);
-    ~TextChatStatusMessage() override;
+    ~TextChatStatusMessage() final;
 
-    void setMessageText(const QString& text) override;
-    QString messageText() const override;
-    QString messageTime() const override;
+    void setMessageText(const QString& text) final;
+    QString messageText() const final;
+    QString messageTime() const final;
 
 private:
     Ui::TextChatStatusMessage ui;

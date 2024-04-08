@@ -28,11 +28,11 @@
 namespace base {
 
 // An implementation of AudioVolumeFilter for Windows only.
-class AudioVolumeFilterWin : public AudioVolumeFilter
+class AudioVolumeFilterWin final : public AudioVolumeFilter
 {
 public:
     explicit AudioVolumeFilterWin(int silence_threshold);
-    ~AudioVolumeFilterWin() override;
+    ~AudioVolumeFilterWin() final;
 
     // Initializes |audio_volume_|. Returns false if Windows APIs fail.
     bool activateBy(IMMDevice* mm_device);
@@ -40,7 +40,7 @@ public:
 protected:
     // Returns current audio level from |audio_volume_|. If the initialization failed, this
     // function returns 1.
-    float audioLevel() override;
+    float audioLevel() final;
 
 private:
     Microsoft::WRL::ComPtr<IAudioEndpointVolume> audio_volume_;

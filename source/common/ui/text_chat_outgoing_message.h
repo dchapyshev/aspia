@@ -24,20 +24,20 @@
 
 namespace common {
 
-class TextChatOutgoingMessage : public TextChatMessage
+class TextChatOutgoingMessage final : public TextChatMessage
 {
     Q_OBJECT
 
 public:
     explicit TextChatOutgoingMessage(QWidget* parent = nullptr);
-    ~TextChatOutgoingMessage() override;
+    ~TextChatOutgoingMessage() final;
 
-    void setMessageText(const QString& text) override;
-    QString messageText() const override;
-    QString messageTime() const override;
+    void setMessageText(const QString& text) final;
+    QString messageText() const final;
+    QString messageTime() const final;
 
 protected:
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent* event) final;
 
 private:
     Ui::TextChatOutgoingMessage ui;

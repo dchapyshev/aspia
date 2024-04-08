@@ -27,7 +27,7 @@
 
 namespace host {
 
-class FileTransferAgent : public base::IpcChannel::Listener
+class FileTransferAgent final : public base::IpcChannel::Listener
 {
 public:
     explicit FileTransferAgent(std::shared_ptr<base::TaskRunner> task_runner);
@@ -37,9 +37,9 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;

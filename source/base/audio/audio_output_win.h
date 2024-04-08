@@ -33,17 +33,17 @@ namespace base {
 
 class SimpleThread;
 
-class AudioOutputWin
+class AudioOutputWin final
     : public AudioOutput,
       public IAudioSessionEvents
 {
 public:
     explicit AudioOutputWin(const NeedMoreDataCB& need_more_data_cb);
-    ~AudioOutputWin() override;
+    ~AudioOutputWin() final;
 
     // AudioOutput implementation.
-    bool start() override;
-    bool stop() override;
+    bool start() final;
+    bool stop() final;
 
 private:
     void threadRun();
@@ -54,29 +54,29 @@ private:
     void releaseCOMObjects();
 
     // IUnknown (required by IAudioSessionEvents and IMMNotificationClient).
-    ULONG __stdcall AddRef() override;
-    ULONG __stdcall Release() override;
-    HRESULT __stdcall QueryInterface(REFIID iid, void** object) override;
+    ULONG __stdcall AddRef() final;
+    ULONG __stdcall Release() final;
+    HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
 
     // IAudioSessionEvents implementation.
     // These methods are called on separate threads owned by the session manager. More than one
     // thread can be involved depending on the type of callback and audio session.
-    HRESULT __stdcall OnStateChanged(AudioSessionState new_state) override;
+    HRESULT __stdcall OnStateChanged(AudioSessionState new_state) final;
     HRESULT __stdcall OnSessionDisconnected(
-        AudioSessionDisconnectReason disconnect_reason) override;
+        AudioSessionDisconnectReason disconnect_reason) final;
     HRESULT __stdcall OnDisplayNameChanged(LPCWSTR new_display_name,
-                                           LPCGUID event_context) override;
+                                           LPCGUID event_context) final;
     HRESULT __stdcall OnIconPathChanged(LPCWSTR new_icon_path,
-                                        LPCGUID event_context) override;
+                                        LPCGUID event_context) final;
     HRESULT __stdcall OnSimpleVolumeChanged(float new_simple_volume,
                                             BOOL new_mute,
-                                            LPCGUID event_context) override;
+                                            LPCGUID event_context) final;
     HRESULT __stdcall OnChannelVolumeChanged(DWORD channel_count,
                                              float new_channel_volumes[],
                                              DWORD changed_channel,
-                                             LPCGUID event_context) override;
+                                             LPCGUID event_context) final;
     HRESULT __stdcall OnGroupingParamChanged(LPCGUID new_grouping_param,
-                                             LPCGUID event_context) override;
+                                             LPCGUID event_context) final;
 
     bool is_initialized_ = false;
     bool is_active_ = false;

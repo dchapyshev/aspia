@@ -32,14 +32,14 @@ namespace console {
 
 class ComputerItem;
 
-class AddressBookTab
+class AddressBookTab final
     : public QWidget,
       public client::OnlineChecker::Delegate
 {
     Q_OBJECT
 
 public:
-    ~AddressBookTab() override;
+    ~AddressBookTab() final;
 
     static AddressBookTab* createNew(QWidget* parent);
     static AddressBookTab* openFromFile(const QString& file_path, QWidget* parent);
@@ -88,12 +88,12 @@ signals:
 
 protected:
     // ConsoleTab implementation.
-    void showEvent(QShowEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    void showEvent(QShowEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
 
     // client::OnlineChecker::Delegate implementation.
-    void onOnlineCheckerResult(int computer_id, bool online) override;
-    void onOnlineCheckerFinished() override;
+    void onOnlineCheckerResult(int computer_id, bool online) final;
+    void onOnlineCheckerFinished() final;
 
 private slots:
     void onGroupItemClicked(QTreeWidgetItem* item, int column);

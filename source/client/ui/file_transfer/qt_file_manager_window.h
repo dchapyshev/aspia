@@ -37,7 +37,7 @@ class FilePanel;
 class FileRemoveDialog;
 class FileTransferDialog;
 
-class QtFileManagerWindow
+class QtFileManagerWindow final
     : public SessionWindow,
       public FileManagerWindow
 {
@@ -45,22 +45,22 @@ class QtFileManagerWindow
 
 public:
     explicit QtFileManagerWindow(QWidget* parent = nullptr);
-    ~QtFileManagerWindow() override;
+    ~QtFileManagerWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() override;
+    std::unique_ptr<Client> createClient() final;
 
     // FileManagerWindow implementation.
-    void start(std::shared_ptr<FileControlProxy> file_control_proxy) override;
-    void onErrorOccurred(proto::FileError error_code) override;
+    void start(std::shared_ptr<FileControlProxy> file_control_proxy) final;
+    void onErrorOccurred(proto::FileError error_code) final;
     void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
-                     const proto::DriveList& drive_list) override;
+                     const proto::DriveList& drive_list) final;
     void onFileList(common::FileTask::Target target,
                     proto::FileError error_code,
-                    const proto::FileList& file_list) override;
-    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code) override;
-    void onRename(common::FileTask::Target target, proto::FileError error_code) override;
+                    const proto::FileList& file_list) final;
+    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code) final;
+    void onRename(common::FileTask::Target target, proto::FileError error_code) final;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -70,10 +70,10 @@ public slots:
 
 protected:
     // SessionWindow implementation.
-    void onInternalReset() override;
+    void onInternalReset() final;
 
     // QWidget implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private slots:
     void removeItems(FilePanel* sender, const FileRemover::TaskList& items);

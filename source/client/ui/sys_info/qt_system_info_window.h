@@ -36,7 +36,7 @@ namespace client {
 
 class SysInfoWidget;
 
-class QtSystemInfoWindow
+class QtSystemInfoWindow final
     : public SessionWindow,
       public SystemInfoWindow
 {
@@ -45,21 +45,21 @@ class QtSystemInfoWindow
 public:
     explicit QtSystemInfoWindow(std::shared_ptr<SessionState> session_state = nullptr,
                                 QWidget* parent = nullptr);
-    ~QtSystemInfoWindow() override;
+    ~QtSystemInfoWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() override;
+    std::unique_ptr<Client> createClient() final;
 
     // SystemInfoWindow implementation.
-    void start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy) override;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
+    void start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy) final;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
 
 signals:
     void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
 
 protected:
     // SessionWindow implementation.
-    void onInternalReset() override;
+    void onInternalReset() final;
 
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);

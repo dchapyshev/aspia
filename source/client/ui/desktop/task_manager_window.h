@@ -31,13 +31,13 @@ class QStatusBar;
 
 namespace client {
 
-class TaskManagerWindow : public QMainWindow
+class TaskManagerWindow final : public QMainWindow
 {
     Q_OBJECT
 
 public:
     explicit TaskManagerWindow(QWidget* parent = nullptr);
-    ~TaskManagerWindow() override;
+    ~TaskManagerWindow() final;
 
     void readMessage(const proto::task_manager::HostToClient& message);
 
@@ -46,7 +46,7 @@ signals:
 
 protected:
     // QMainWindow implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private slots:
     void onProcessHeaderContextMenu(const QPoint& pos);

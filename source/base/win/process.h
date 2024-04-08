@@ -29,12 +29,12 @@
 
 namespace base::win {
 
-class Process : public ObjectWatcher::Delegate
+class Process final : public ObjectWatcher::Delegate
 {
 public:
     Process(std::shared_ptr<TaskRunner> task_runner, ProcessId process_id);
     Process(std::shared_ptr<TaskRunner> task_runner, HANDLE process, HANDLE thread);
-    ~Process() override;
+    ~Process() final;
 
     using ExitCallback = std::function<void(int exit_code)>;
 
@@ -57,7 +57,7 @@ public:
 
 protected:
     // ObjectWatcher::Delegate implementation.
-    void onObjectSignaled(HANDLE object) override;
+    void onObjectSignaled(HANDLE object) final;
 
 private:
     ObjectWatcher watcher_;

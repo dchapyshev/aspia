@@ -37,7 +37,7 @@ public:
 
     static std::unique_ptr<FrameCGImage> createFromCGImage(ScopedCFTypeRef<CGImageRef> cg_image);
 
-    ~FrameCGImage() override;
+    ~FrameCGImage() final;
 
 private:
     // This constructor expects `cg_image` to hold a non-null CGImageRef.

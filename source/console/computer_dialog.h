@@ -31,7 +31,7 @@ class QAbstractButton;
 
 namespace console {
 
-class ComputerDialog : public QDialog
+class ComputerDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -42,15 +42,15 @@ public:
                    Mode mode,
                    const QString& parent_name,
                    const std::optional<proto::address_book::Computer>& computer = std::nullopt);
-    ~ComputerDialog() override;
+    ~ComputerDialog() final;
 
     const proto::address_book::Computer& computer() const { return computer_; }
 
 protected:
     // QDialog implementation.
-    void closeEvent(QCloseEvent* event) override;
-    bool eventFilter(QObject* watched, QEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
+    bool eventFilter(QObject* watched, QEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
 
 private slots:
     void onTabChanged(QTreeWidgetItem* current);

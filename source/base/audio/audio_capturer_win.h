@@ -39,14 +39,14 @@ class DefaultAudioDeviceChangeDetector;
 // An AudioCapturer implementation for Windows by using Windows Audio Session API, a.k.a. WASAPI.
 // It supports up to 8 channels, but treats all layouts as a most commonly used one. E.g. 3.1 and
 // surround layouts will both be marked as surround layout.
-class AudioCapturerWin : public AudioCapturer
+class AudioCapturerWin final : public AudioCapturer
 {
 public:
     AudioCapturerWin();
-    ~AudioCapturerWin() override;
+    ~AudioCapturerWin() final;
 
     // AudioCapturer interface.
-    bool start(const PacketCapturedCallback& callback) override;
+    bool start(const PacketCapturedCallback& callback) final;
 
 private:
     // Executes deinitialize() and initialize(). If initialize() function call returns false,

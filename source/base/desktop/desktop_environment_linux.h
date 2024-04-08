@@ -23,17 +23,17 @@
 
 namespace base {
 
-class DesktopEnvironmentLinux : public DesktopEnvironment
+class DesktopEnvironmentLinux final : public DesktopEnvironment
 {
 public:
     DesktopEnvironmentLinux();
-    ~DesktopEnvironmentLinux() override;
+    ~DesktopEnvironmentLinux() final;
 
 protected:
-    void disableWallpaper() override;
-    void disableFontSmoothing() override;
-    void disableEffects() override;
-    void revertAll() override;
+    void disableWallpaper() final;
+    void disableFontSmoothing() final;
+    void disableEffects() final;
+    void revertAll() final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentLinux);

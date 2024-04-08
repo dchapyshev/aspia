@@ -26,13 +26,13 @@
 
 namespace client {
 
-class FilePanel : public QWidget
+class FilePanel final : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit FilePanel(QWidget* parent = nullptr);
-    ~FilePanel() override;
+    ~FilePanel() final;
 
     void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
     void onFileList(proto::FileError error_code, const proto::FileList& file_list);
@@ -66,7 +66,7 @@ public slots:
 
 protected:
     // QWidget implementation.
-    void keyPressEvent(QKeyEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) final;
 
 private slots:
     void onPathChanged(const QString& path);

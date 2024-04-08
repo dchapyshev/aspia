@@ -25,11 +25,11 @@
 
 namespace base {
 
-class ScreenCapturerDxgi : public ScreenCapturer
+class ScreenCapturerDxgi final : public ScreenCapturer
 {
 public:
     ScreenCapturerDxgi();
-    ~ScreenCapturerDxgi() override;
+    ~ScreenCapturerDxgi() final;
 
     // Whether the system supports DXGI based capturing.
     bool isSupported();
@@ -42,18 +42,18 @@ public:
     static bool isCurrentSessionSupported();
 
     // ScreenCapturer implementation.
-    int screenCount() override;
-    bool screenList(ScreenList* screens) override;
-    bool selectScreen(ScreenId screen_id) override;
-    ScreenId currentScreen() const override;
-    const Frame* captureFrame(Error* error) override;
-    const MouseCursor* captureCursor() override;
-    Point cursorPosition() override;
-    ScreenType screenType() override;
+    int screenCount() final;
+    bool screenList(ScreenList* screens) final;
+    bool selectScreen(ScreenId screen_id) final;
+    ScreenId currentScreen() const final;
+    const Frame* captureFrame(Error* error) final;
+    const MouseCursor* captureCursor() final;
+    Point cursorPosition() final;
+    ScreenType screenType() final;
 
 protected:
     // ScreenCapturer implementation.
-    void reset() override;
+    void reset() final;
 
 private:
     base::local_shared_ptr<DxgiDuplicatorController> controller_;

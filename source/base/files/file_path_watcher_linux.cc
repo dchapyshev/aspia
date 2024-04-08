@@ -124,7 +124,7 @@ public:
     {
         // Nothing
     }
-    ~InotifyReaderThreadDelegate() override
+    ~InotifyReaderThreadDelegate() final
     {
         stop();
     }
@@ -196,13 +196,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(InotifyReader);
 };
 
-class FilePathWatcherImpl
+class FilePathWatcherImpl final
     : public std::enable_shared_from_this<FilePathWatcherImpl>,
       public FilePathWatcher::PlatformDelegate
 {
 public:
     explicit FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
-    ~FilePathWatcherImpl() override;
+    ~FilePathWatcherImpl() final;
 
     // Called for each event coming from the watch on the original thread. |fired_watch| identifies
     // the watch that fired, |child| indicates what has changed, and is relative to the currently
@@ -219,8 +219,8 @@ public:
 
     bool watch(const std::filesystem::path& path,
                bool recursive,
-               const FilePathWatcher::Callback& callback) override;
-    void cancel() override;
+               const FilePathWatcher::Callback& callback) final;
+    void cancel() final;
 
     // Returns whether the number of inotify watches of this FilePathWatcherImpl would exceed the
     // limit if adding one more.

@@ -27,32 +27,32 @@
 
 namespace host {
 
-class DesktopSessionIpc
+class DesktopSessionIpc final
     : public DesktopSession,
       public base::IpcChannel::Listener
 {
 public:
     DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
-    ~DesktopSessionIpc() override;
+    ~DesktopSessionIpc() final;
 
     // DesktopSession implementation.
-    void start() override;
-    void stop() override;
-    void control(proto::internal::DesktopControl::Action action) override;
-    void configure(const Config& config) override;
-    void selectScreen(const proto::Screen& screen) override;
-    void captureScreen() override;
-    void setScreenCaptureFps(int fps) override;
-    void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectTextEvent(const proto::TextEvent& event) override;
-    void injectMouseEvent(const proto::MouseEvent& event) override;
-    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
+    void start() final;
+    void stop() final;
+    void control(proto::internal::DesktopControl::Action action) final;
+    void configure(const Config& config) final;
+    void selectScreen(const proto::Screen& screen) final;
+    void captureScreen() final;
+    void setScreenCaptureFps(int fps) final;
+    void injectKeyEvent(const proto::KeyEvent& event) final;
+    void injectTextEvent(const proto::TextEvent& event) final;
+    void injectMouseEvent(const proto::MouseEvent& event) final;
+    void injectClipboardEvent(const proto::ClipboardEvent& event) final;
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
 private:
     class SharedBuffer;

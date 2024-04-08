@@ -34,7 +34,7 @@ namespace client {
 class FileRemoveWindow;
 class FileRemoverProxy;
 
-class FileRemoveWindowProxy : public std::enable_shared_from_this<FileRemoveWindowProxy>
+class FileRemoveWindowProxy final : public std::enable_shared_from_this<FileRemoveWindowProxy>
 {
 public:
     FileRemoveWindowProxy(

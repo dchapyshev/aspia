@@ -42,7 +42,7 @@ namespace client {
 class FileControlProxy;
 class FileManagerWindowProxy;
 
-class ClientFileTransfer
+class ClientFileTransfer final
     : public Client,
       public FileControl,
       public common::FileTaskConsumer,
@@ -50,21 +50,21 @@ class ClientFileTransfer
 {
 public:
     explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientFileTransfer() override;
+    ~ClientFileTransfer() final;
 
     void setFileManagerWindow(std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy);
 
     // FileTaskConsumer implementation.
-    void doTask(std::shared_ptr<common::FileTask> task) override;
+    void doTask(std::shared_ptr<common::FileTask> task) final;
 
 protected:
     // Client implementation.
-    void onSessionStarted() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionStarted() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
     // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
+    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
 
 private:
     void doNextRemoteTask();
@@ -72,20 +72,20 @@ private:
     common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
     // FileControl implementation.
-    void driveList(common::FileTask::Target target) override;
-    void fileList(common::FileTask::Target target, const std::string& path) override;
-    void createDirectory(common::FileTask::Target target, const std::string& path) override;
+    void driveList(common::FileTask::Target target) final;
+    void fileList(common::FileTask::Target target, const std::string& path) final;
+    void createDirectory(common::FileTask::Target target, const std::string& path) final;
     void rename(common::FileTask::Target target,
                 const std::string& old_path,
-                const std::string& new_path) override;
+                const std::string& new_path) final;
     void remove(common::FileTask::Target target,
                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                const FileRemover::TaskList& items) override;
+                const FileRemover::TaskList& items) final;
     void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                   FileTransfer::Type transfer_type,
                   const std::string& source_path,
                   const std::string& target_path,
-                  const std::vector<FileTransfer::Item>& items) override;
+                  const std::vector<FileTransfer::Item>& items) final;
 
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;

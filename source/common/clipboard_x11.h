@@ -31,7 +31,7 @@ class XServerClipboard;
 
 namespace common {
 
-class ClipboardX11 : public Clipboard
+class ClipboardX11 final : public Clipboard
 {
 public:
     ClipboardX11();
@@ -39,8 +39,8 @@ public:
 
 protected:
     // Clipboard implementation.
-    void init() override;
-    void setData(const std::string& data) override;
+    void init() final;
+    void setData(const std::string& data) final;
 
 private:
     void pumpXEvents();

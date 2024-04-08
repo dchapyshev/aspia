@@ -26,10 +26,10 @@
 
 namespace base {
 
-class MessageDecryptorOpenssl : public MessageDecryptor
+class MessageDecryptorOpenssl final : public MessageDecryptor
 {
 public:
-    ~MessageDecryptorOpenssl() override;
+    ~MessageDecryptorOpenssl() final;
 
     static std::unique_ptr<MessageDecryptor> createForAes256Gcm(
         const ByteArray& key, const ByteArray& iv);
@@ -38,8 +38,8 @@ public:
         const ByteArray& key, const ByteArray& iv);
 
     // MessageDecryptor implementation.
-    size_t decryptedDataSize(size_t in_size) override;
-    bool decrypt(const void* in, size_t in_size, void* out) override;
+    size_t decryptedDataSize(size_t in_size) final;
+    bool decrypt(const void* in, size_t in_size, void* out) final;
 
 private:
     MessageDecryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv);

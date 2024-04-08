@@ -25,18 +25,18 @@
 
 namespace host {
 
-class InputInjectorWin : public InputInjector
+class InputInjectorWin final : public InputInjector
 {
 public:
     InputInjectorWin();
-    ~InputInjectorWin() override;
+    ~InputInjectorWin() final;
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) override;
-    void setBlockInput(bool enable) override;
-    void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectTextEvent(const proto::TextEvent& event) override;
-    void injectMouseEvent(const proto::MouseEvent& event) override;
+    void setScreenOffset(const base::Point& offset) final;
+    void setBlockInput(bool enable) final;
+    void injectKeyEvent(const proto::KeyEvent& event) final;
+    void injectTextEvent(const proto::TextEvent& event) final;
+    void injectMouseEvent(const proto::MouseEvent& event) final;
 
 private:
     void beforeInput();

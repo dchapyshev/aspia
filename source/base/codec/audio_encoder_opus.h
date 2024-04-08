@@ -30,16 +30,16 @@ namespace base {
 class AudioBus;
 class MultiChannelResampler;
 
-class AudioEncoderOpus : public AudioEncoder
+class AudioEncoderOpus final : public AudioEncoder
 {
 public:
     AudioEncoderOpus();
-    ~AudioEncoderOpus() override;
+    ~AudioEncoderOpus() final;
 
     // AudioEncoder interface.
-    bool encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet) override;
-    int bitrate() override;
-    bool setBitrate(int bitrate) override;
+    bool encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet) final;
+    int bitrate() final;
+    bool setBitrate(int bitrate) final;
 
 private:
     void initEncoder();

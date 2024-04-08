@@ -25,7 +25,7 @@
 
 namespace console {
 
-class AddressBookDialog : public QDialog
+class AddressBookDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -35,13 +35,13 @@ public:
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
                       std::string* key);
-    ~AddressBookDialog() override;
+    ~AddressBookDialog() final;
 
 protected:
     // QDialog implementation.
-    bool eventFilter(QObject* object, QEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) final;
+    void closeEvent(QCloseEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);

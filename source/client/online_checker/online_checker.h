@@ -32,14 +32,14 @@
 
 namespace client {
 
-class OnlineChecker
+class OnlineChecker final
     : public base::Thread::Delegate,
       public OnlineCheckerDirect::Delegate,
       public OnlineCheckerRouter::Delegate
 {
 public:
     explicit OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner);
-    ~OnlineChecker() override;
+    ~OnlineChecker() final;
 
     class Delegate
     {
@@ -64,16 +64,16 @@ public:
 
 protected:
     // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
+    void onBeforeThreadRunning() final;
+    void onAfterThreadRunning() final;
 
     // OnlineCheckerDirect::Delegate implementation.
-    void onDirectCheckerResult(int computer_id, bool online) override;
-    void onDirectCheckerFinished() override;
+    void onDirectCheckerResult(int computer_id, bool online) final;
+    void onDirectCheckerFinished() final;
 
     // OnlineCheckerRouter::Delegate implemenation.
-    void onRouterCheckerResult(int computer_id, bool online) override;
-    void onRouterCheckerFinished() override;
+    void onRouterCheckerResult(int computer_id, bool online) final;
+    void onRouterCheckerFinished() final;
 
 private:
     base::Thread io_thread_;

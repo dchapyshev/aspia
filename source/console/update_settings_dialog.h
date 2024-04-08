@@ -24,13 +24,13 @@
 
 namespace console {
 
-class UpdateSettingsDialog : public QDialog
+class UpdateSettingsDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     UpdateSettingsDialog(QWidget* parent = nullptr);
-    ~UpdateSettingsDialog() override;
+    ~UpdateSettingsDialog() final;
 
 private:
     Ui::UpdateSettingsDialog ui;

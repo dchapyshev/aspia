@@ -32,15 +32,15 @@ namespace base {
 
 class SimpleThread;
 
-class AudioOutputPulse : public AudioOutput
+class AudioOutputPulse final : public AudioOutput
 {
 public:
     explicit AudioOutputPulse(const NeedMoreDataCB& need_more_data_cb);
     ~AudioOutputPulse();
 
     // AudioOutput implementation.
-    bool start() override;
-    bool stop() override;
+    bool start() final;
+    bool stop() final;
 
 private:
     static void paContextStateCallback(pa_context* context, void* self);

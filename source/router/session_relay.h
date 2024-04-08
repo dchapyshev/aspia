@@ -25,11 +25,11 @@
 
 namespace router {
 
-class SessionRelay : public Session
+class SessionRelay final : public Session
 {
 public:
     SessionRelay();
-    ~SessionRelay() override;
+    ~SessionRelay() final;
 
     using PeerData = std::pair<std::string, uint16_t>;
 
@@ -40,9 +40,9 @@ public:
 
 protected:
     // Session implementation.
-    void onSessionReady() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionReady() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);

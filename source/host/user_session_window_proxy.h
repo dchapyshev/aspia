@@ -29,7 +29,7 @@ namespace host {
 
 class UserSessionWindow;
 
-class UserSessionWindowProxy : public std::enable_shared_from_this<UserSessionWindowProxy>
+class UserSessionWindowProxy final : public std::enable_shared_from_this<UserSessionWindowProxy>
 {
 public:
     UserSessionWindowProxy(

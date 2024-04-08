@@ -27,24 +27,24 @@ namespace client {
 class TextChatControlProxy;
 class TextChatWindowProxy;
 
-class ClientTextChat
+class ClientTextChat final
     : public Client,
       public TextChatControl
 {
 public:
     explicit ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientTextChat() override;
+    ~ClientTextChat() final;
 
     void setTextChatWindow(std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy);
 
     // TextChatControl implementation.
-    void onTextChatMessage(const proto::TextChat& text_chat) override;
+    void onTextChatMessage(const proto::TextChat& text_chat) final;
 
 protected:
     // Client implementation.
-    void onSessionStarted() override;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onSessionStarted() final;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     std::shared_ptr<TextChatControlProxy> text_chat_control_proxy_;

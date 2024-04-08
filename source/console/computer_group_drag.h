@@ -25,7 +25,7 @@
 
 namespace console {
 
-class ComputerGroupDrag : public QDrag
+class ComputerGroupDrag final : public QDrag
 {
 public:
     explicit ComputerGroupDrag(QObject* drag_source = nullptr)

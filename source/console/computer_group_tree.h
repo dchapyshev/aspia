@@ -23,13 +23,13 @@
 
 namespace console {
 
-class ComputerGroupTree : public QTreeWidget
+class ComputerGroupTree final : public QTreeWidget
 {
     Q_OBJECT
 
 public:
     ComputerGroupTree(QWidget* parent);
-    ~ComputerGroupTree() override = default;
+    ~ComputerGroupTree() final = default;
 
     void setComputerMimeType(const QString& mime_type);
     bool dragging() const;
@@ -39,13 +39,13 @@ signals:
 
 protected:
     // QTreeWidget implementation.
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void dragEnterEvent(QDragEnterEvent* event) override;
-    void dragLeaveEvent(QDragLeaveEvent* event) override;
-    void dragMoveEvent(QDragMoveEvent* event) override;
-    void dropEvent(QDropEvent* event) override;
-    void startDrag(Qt::DropActions supported_actions) override;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
+    void dragEnterEvent(QDragEnterEvent* event) final;
+    void dragLeaveEvent(QDragLeaveEvent* event) final;
+    void dragMoveEvent(QDragMoveEvent* event) final;
+    void dropEvent(QDropEvent* event) final;
+    void startDrag(Qt::DropActions supported_actions) final;
 
 private:
     bool isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item);

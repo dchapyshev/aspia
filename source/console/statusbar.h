@@ -29,13 +29,13 @@
 
 namespace console {
 
-class StatusBar : public QStatusBar
+class StatusBar final : public QStatusBar
 {
     Q_OBJECT
 
 public:
     explicit StatusBar(QWidget* parent);
-    ~StatusBar() override = default;
+    ~StatusBar() final = default;
 
     void setCurrentComputerGroup(const proto::address_book::ComputerGroup& computer_group);
     void clear();

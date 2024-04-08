@@ -26,7 +26,7 @@
 
 namespace client {
 
-class RouterUserDialog : public QDialog
+class RouterUserDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -34,13 +34,13 @@ public:
     RouterUserDialog(const base::User& user,
                      const std::vector<std::u16string>& users,
                      QWidget* parent);
-    ~RouterUserDialog() override;
+    ~RouterUserDialog() final;
 
     const base::User& user() const;
 
 protected:
     // QDialog implementation.
-    bool eventFilter(QObject* object, QEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) final;
 
 private:
     void onButtonBoxClicked(QAbstractButton* button);

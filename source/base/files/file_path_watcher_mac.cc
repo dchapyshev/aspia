@@ -24,16 +24,16 @@ namespace base {
 
 namespace {
 
-class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate
+class FilePathWatcherImpl final : public FilePathWatcher::PlatformDelegate
 {
 public:
     FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
-    ~FilePathWatcherImpl() override;
+    ~FilePathWatcherImpl() final;
 
     bool watch(const std::filesystem::path& path,
                bool recursive,
-               const FilePathWatcher::Callback& callback) override;
-    void cancel() override;
+               const FilePathWatcher::Callback& callback) final;
+    void cancel() final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);

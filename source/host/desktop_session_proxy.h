@@ -27,7 +27,7 @@ namespace host {
 
 class DesktopSessionManager;
 
-class DesktopSessionProxy : public base::enable_shared_from_this<DesktopSessionProxy>
+class DesktopSessionProxy final : public base::enable_shared_from_this<DesktopSessionProxy>
 {
 public:
     DesktopSessionProxy();

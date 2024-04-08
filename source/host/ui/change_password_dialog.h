@@ -23,7 +23,7 @@
 
 namespace host {
 
-class ChangePasswordDialog : public QDialog
+class ChangePasswordDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -31,7 +31,7 @@ public:
     enum class Mode { CREATE_NEW_PASSWORD, CHANGE_PASSWORD };
 
     explicit ChangePasswordDialog(Mode mode, QWidget* parent = nullptr);
-    ~ChangePasswordDialog() override;
+    ~ChangePasswordDialog() final;
 
     QString oldPassword() const;
     QString newPassword() const;

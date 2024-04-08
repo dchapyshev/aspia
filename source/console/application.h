@@ -24,13 +24,13 @@
 
 namespace console {
 
-class Application : public qt_base::Application
+class Application final : public qt_base::Application
 {
     Q_OBJECT
 
 public:
     Application(int& argc, char* argv[]);
-    virtual ~Application() override;
+    virtual ~Application() final;
 
     static Application* instance();
 

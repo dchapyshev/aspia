@@ -33,18 +33,18 @@ namespace {
 
 const char kActivateMessage[] = "activate";
 
-class EventFilter : public QAbstractNativeEventFilter
+class EventFilter final : public QAbstractNativeEventFilter
 {
 public:
-    ~EventFilter() override = default;
+    ~EventFilter() final = default;
 
     static EventFilter* instance();
 
     // QAbstractNativeEventFilter implementation.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) override;
+    bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) final;
 #else
-    bool nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result) override;
+    bool nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result) final;
 #endif
 
 private:

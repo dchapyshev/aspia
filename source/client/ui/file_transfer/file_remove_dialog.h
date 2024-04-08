@@ -33,7 +33,7 @@ class QWinTaskbarProgress;
 
 namespace client {
 
-class FileRemoveDialog
+class FileRemoveDialog final
     : public QDialog,
       public FileRemoveWindow
 {
@@ -41,21 +41,21 @@ class FileRemoveDialog
 
 public:
     explicit FileRemoveDialog(QWidget* parent);
-    ~FileRemoveDialog() override;
+    ~FileRemoveDialog() final;
 
     std::shared_ptr<FileRemoveWindowProxy> windowProxy() { return remover_window_proxy_; }
 
     // FileRemoveWindow implementation.
-    void start(std::shared_ptr<FileRemoverProxy> remover_proxy) override;
-    void stop() override;
-    void setCurrentProgress(const std::string& name, int percentage) override;
+    void start(std::shared_ptr<FileRemoverProxy> remover_proxy) final;
+    void stop() final;
+    void setCurrentProgress(const std::string& name, int percentage) final;
     void errorOccurred(const std::string& path,
                        proto::FileError error_code,
-                       uint32_t available_actions) override;
+                       uint32_t available_actions) final;
 
 protected:
     // QDialog implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private:
     Ui::FileRemoveDialog ui;

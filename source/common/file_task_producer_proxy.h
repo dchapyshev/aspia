@@ -24,16 +24,16 @@
 
 namespace common {
 
-class FileTaskProducerProxy : public FileTaskProducer
+class FileTaskProducerProxy final : public FileTaskProducer
 {
 public:
     explicit FileTaskProducerProxy(FileTaskProducer* task_producer);
-    ~FileTaskProducerProxy() override;
+    ~FileTaskProducerProxy() final;
 
     void dettach();
 
     // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<FileTask> task) override;
+    void onTaskDone(std::shared_ptr<FileTask> task) final;
 
 private:
     FileTaskProducer* task_producer_;

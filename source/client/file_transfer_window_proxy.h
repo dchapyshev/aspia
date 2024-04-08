@@ -29,7 +29,7 @@ namespace client {
 
 class FileTransferWindow;
 
-class FileTransferWindowProxy : public std::enable_shared_from_this<FileTransferWindowProxy>
+class FileTransferWindowProxy final : public std::enable_shared_from_this<FileTransferWindowProxy>
 {
 public:
     FileTransferWindowProxy(

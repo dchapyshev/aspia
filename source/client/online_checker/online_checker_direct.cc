@@ -34,12 +34,12 @@ const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
 
-class OnlineCheckerDirect::Instance : public base::TcpChannel::Listener
+class OnlineCheckerDirect::Instance final : public base::TcpChannel::Listener
 {
 public:
     Instance(int computer_id, const std::u16string& address, uint16_t port,
              std::shared_ptr<base::TaskRunner> task_runner);
-    ~Instance() override;
+    ~Instance() final;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
 
@@ -48,10 +48,10 @@ public:
 
 protected:
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
 private:
     void onFinished(const base::Location& location, bool online);

@@ -23,17 +23,17 @@
 
 namespace host {
 
-class InputInjectorMac : public InputInjector
+class InputInjectorMac final : public InputInjector
 {
 public:
     InputInjectorMac();
     ~InputInjectorMac();
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) override;
-    void setBlockInput(bool enable) override;
-    void injectKeyEvent(const proto::KeyEvent& event) override;
-    void injectMouseEvent(const proto::MouseEvent& event) override;
+    void setScreenOffset(const base::Point& offset) final;
+    void setBlockInput(bool enable) final;
+    void injectKeyEvent(const proto::KeyEvent& event) final;
+    void injectMouseEvent(const proto::MouseEvent& event) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(InputInjectorMac);

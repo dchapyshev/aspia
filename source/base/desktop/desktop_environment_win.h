@@ -23,19 +23,19 @@
 
 namespace base {
 
-class DesktopEnvironmentWin : public DesktopEnvironment
+class DesktopEnvironmentWin final : public DesktopEnvironment
 {
 public:
     DesktopEnvironmentWin();
-    ~DesktopEnvironmentWin() override;
+    ~DesktopEnvironmentWin() final;
 
     static void updateEnvironment();
 
 protected:
-    void disableWallpaper() override;
-    void disableFontSmoothing() override;
-    void disableEffects() override;
-    void revertAll() override;
+    void disableWallpaper() final;
+    void disableFontSmoothing() final;
+    void disableEffects() final;
+    void revertAll() final;
 
 private:
     bool drop_shadow_changed_ = false;

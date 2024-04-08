@@ -25,7 +25,7 @@
 
 namespace common {
 
-class ClipboardMac : public Clipboard
+class ClipboardMac final : public Clipboard
 {
 public:
     ClipboardMac();
@@ -33,8 +33,8 @@ public:
 
 protected:
     // Clipboard implementation.
-    void init() override;
-    void setData(const std::string& data) override;
+    void init() final;
+    void setData(const std::string& data) final;
 
 private:
     void startTimer();

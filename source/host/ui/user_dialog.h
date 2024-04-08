@@ -25,19 +25,19 @@
 
 namespace host {
 
-class UserDialog : public QDialog
+class UserDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent);
-    ~UserDialog() override;
+    ~UserDialog() final;
 
     base::User user() { return user_; }
 
 protected:
     // QDialog implementation.
-    bool eventFilter(QObject* object, QEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) final;
 
 private slots:
     void onCheckAllButtonPressed();

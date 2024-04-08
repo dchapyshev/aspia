@@ -26,14 +26,14 @@ struct OpusDecoder;
 
 namespace base {
 
-class AudioDecoderOpus : public AudioDecoder
+class AudioDecoderOpus final : public AudioDecoder
 {
 public:
     AudioDecoderOpus();
-    ~AudioDecoderOpus() override;
+    ~AudioDecoderOpus() final;
 
     // AudioDecoder interface.
-    std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet) override;
+    std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet) final;
 
 private:
     void initDecoder();

@@ -24,13 +24,13 @@
 namespace client {
 
 // The class prepares the task queue to perform the downloading/uploading.
-class FileTransferQueueBuilder : public common::FileTaskProducer
+class FileTransferQueueBuilder final : public common::FileTaskProducer
 {
 public:
     FileTransferQueueBuilder(
         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
         common::FileTask::Target target);
-    ~FileTransferQueueBuilder() override;
+    ~FileTransferQueueBuilder() final;
 
     using FinishCallback = std::function<void(proto::FileError)>;
 
@@ -45,7 +45,7 @@ public:
 
 protected:
     // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) override;
+    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
 
 private:
     void addPendingTask(const std::string& source_dir,

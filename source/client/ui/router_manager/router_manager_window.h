@@ -41,7 +41,7 @@ namespace client {
 class RouterProxy;
 class RouterWindowProxy;
 
-class RouterManagerWindow
+class RouterManagerWindow final
     : public QMainWindow,
       public RouterWindow
 {
@@ -49,29 +49,29 @@ class RouterManagerWindow
 
 public:
     explicit RouterManagerWindow(QWidget* parent = nullptr);
-    ~RouterManagerWindow() override;
+    ~RouterManagerWindow() final;
 
     void connectToRouter(const RouterConfig& router_config);
 
     // RouterWindow implementation.
-    void onConnecting() override;
-    void onConnected(const base::Version& peer_version) override;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
-    void onWaitForRouter() override;
-    void onWaitForRouterTimeout() override;
-    void onVersionMismatch(const base::Version& router, const base::Version& client) override;
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
-    void onSessionList(std::shared_ptr<proto::SessionList> session_list) override;
-    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) override;
-    void onUserList(std::shared_ptr<proto::UserList> user_list) override;
-    void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
+    void onConnecting() final;
+    void onConnected(const base::Version& peer_version) final;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) final;
+    void onWaitForRouter() final;
+    void onWaitForRouterTimeout() final;
+    void onVersionMismatch(const base::Version& router, const base::Version& client) final;
+    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) final;
+    void onSessionList(std::shared_ptr<proto::SessionList> session_list) final;
+    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) final;
+    void onUserList(std::shared_ptr<proto::UserList> user_list) final;
+    void onUserResult(std::shared_ptr<proto::UserResult> user_result) final;
 
     static QString delayToString(uint64_t delay);
     static QString sizeToString(int64_t size);
 
 protected:
     // QMainWindow implementation.
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) final;
 
 private slots:
     void onHostsContextMenu(const QPoint& pos);

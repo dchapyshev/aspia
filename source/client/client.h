@@ -80,16 +80,16 @@ protected:
     int speedTx();
 
     // base::TcpChannel::Listener implementation.
-    void onTcpConnected() override;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) override;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
     // RouterController::Delegate implementation.
-    void onRouterConnected(const base::Version& router_version) override;
-    void onHostAwaiting() override;
-    void onHostConnected(std::unique_ptr<base::TcpChannel> channel) override;
-    void onErrorOccurred(const RouterController::Error& error) override;
+    void onRouterConnected(const base::Version& router_version) final;
+    void onHostAwaiting() final;
+    void onHostConnected(std::unique_ptr<base::TcpChannel> channel) final;
+    void onErrorOccurred(const RouterController::Error& error) final;
 
 private:
     void startAuthentication();

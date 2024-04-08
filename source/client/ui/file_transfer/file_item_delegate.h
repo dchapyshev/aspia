@@ -25,7 +25,7 @@
 
 namespace client {
 
-class FileItemDelegate : public QStyledItemDelegate
+class FileItemDelegate final : public QStyledItemDelegate
 {
     Q_OBJECT
 
@@ -35,14 +35,14 @@ public:
     // QStyledItemDelegate implementation.
     QWidget* createEditor(QWidget* parent,
                           const QStyleOptionViewItem& option,
-                          const QModelIndex& index) const override;
-    void setEditorData(QWidget* editor, const QModelIndex& index) const override;
+                          const QModelIndex& index) const final;
+    void setEditorData(QWidget* editor, const QModelIndex& index) const final;
     void setModelData(QWidget* editor,
                       QAbstractItemModel* model,
-                      const QModelIndex& index) const override;
+                      const QModelIndex& index) const final;
     void updateEditorGeometry(QWidget* editor,
                               const QStyleOptionViewItem& option,
-                              const QModelIndex& index) const override;
+                              const QModelIndex& index) const final;
 
 signals:
     void sig_editFinished();

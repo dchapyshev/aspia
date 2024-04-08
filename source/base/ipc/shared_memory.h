@@ -78,10 +78,10 @@ public:
     virtual int id() const = 0;
 };
 
-class SharedMemory : public SharedMemoryBase
+class SharedMemory final : public SharedMemoryBase
 {
 public:
-    virtual ~SharedMemory() override;
+    virtual ~SharedMemory() final;
 
     static std::unique_ptr<SharedMemory> create(
         Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
@@ -89,9 +89,9 @@ public:
         Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
 
     // SharedMemoryBase implementation.
-    void* data() override { return data_; }
-    PlatformHandle handle() const override { return handle_.get(); }
-    int id() const override { return id_; }
+    void* data() final { return data_; }
+    PlatformHandle handle() const final { return handle_.get(); }
+    int id() const final { return id_; }
 
 private:
     SharedMemory(int id,

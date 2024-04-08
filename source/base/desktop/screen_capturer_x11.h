@@ -38,28 +38,28 @@
 
 namespace base {
 
-class ScreenCapturerX11
+class ScreenCapturerX11 final
     : public ScreenCapturer,
       public SharedXDisplay::XEventHandler
 {
 public:
     ScreenCapturerX11();
-    ~ScreenCapturerX11() override;
+    ~ScreenCapturerX11() final;
 
     static std::unique_ptr<ScreenCapturerX11> create();
 
     // ScreenCapturer implementation.
-    int screenCount() override;
-    bool screenList(ScreenList* screens) override;
-    bool selectScreen(ScreenId screen_id) override;
-    ScreenId currentScreen() const override;
-    const Frame* captureFrame(Error* error) override;
-    const MouseCursor* captureCursor() override;
-    Point cursorPosition() override;
+    int screenCount() final;
+    bool screenList(ScreenList* screens) final;
+    bool selectScreen(ScreenId screen_id) final;
+    ScreenId currentScreen() const final;
+    const Frame* captureFrame(Error* error) final;
+    const MouseCursor* captureCursor() final;
+    Point cursorPosition() final;
 
 protected:
     // ScreenCapturer implementation.
-    void reset() override;
+    void reset() final;
 
     bool init();
 
@@ -67,7 +67,7 @@ private:
     Display* display() { return display_->display(); }
 
     // SharedXDisplay::XEventHandler implementation.
-    bool handleXEvent(const XEvent& event) override;
+    bool handleXEvent(const XEvent& event) final;
 
     void initXDamage();
     void initXrandr();

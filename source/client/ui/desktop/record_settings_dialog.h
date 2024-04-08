@@ -27,13 +27,13 @@ class QAbstractButton;
 
 namespace client {
 
-class RecordSettingsDialog : public QDialog
+class RecordSettingsDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit RecordSettingsDialog(QWidget* parent = nullptr);
-    ~RecordSettingsDialog() override;
+    ~RecordSettingsDialog() final;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

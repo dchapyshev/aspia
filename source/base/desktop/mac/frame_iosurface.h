@@ -35,7 +35,7 @@ public:
     // Lock an IOSurfaceRef containing a snapshot of a display. Return NULL if failed to lock.
     static std::unique_ptr<FrameIOSurface> wrap(ScopedCFTypeRef<IOSurfaceRef> io_surface);
 
-    ~FrameIOSurface() override;
+    ~FrameIOSurface() final;
 
 private:
     // This constructor expects `io_surface` to hold a non-null IOSurfaceRef.

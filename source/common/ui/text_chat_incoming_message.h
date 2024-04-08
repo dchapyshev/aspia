@@ -24,20 +24,20 @@
 
 namespace common {
 
-class TextChatIncomingMessage : public TextChatMessage
+class TextChatIncomingMessage final : public TextChatMessage
 {
     Q_OBJECT
 
 public:
     explicit TextChatIncomingMessage(QWidget* parent = nullptr);
-    ~TextChatIncomingMessage() override;
+    ~TextChatIncomingMessage() final;
 
     void setSource(const QString& source);
     QString source() const;
 
-    void setMessageText(const QString& text) override;
-    QString messageText() const override;
-    QString messageTime() const override;
+    void setMessageText(const QString& text) final;
+    QString messageText() const final;
+    QString messageTime() const final;
 
 private:
     Ui::TextChatIncomingMessage ui;

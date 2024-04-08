@@ -35,24 +35,24 @@
 
 namespace base {
 
-class ScreenCapturerMac : public ScreenCapturer
+class ScreenCapturerMac final : public ScreenCapturer
 {
 public:
     ScreenCapturerMac();
-    ~ScreenCapturerMac() override;
+    ~ScreenCapturerMac() final;
 
     // ScreenCapturer implementation.
-    int screenCount() override;
-    bool screenList(ScreenList* screens) override;
-    bool selectScreen(ScreenId screen_id) override;
-    ScreenId currentScreen() const override;
-    const Frame* captureFrame(Error* error) override;
-    const MouseCursor* captureCursor() override;
-    Point cursorPosition() override;
+    int screenCount() final;
+    bool screenList(ScreenList* screens) final;
+    bool selectScreen(ScreenId screen_id) final;
+    ScreenId currentScreen() const final;
+    const Frame* captureFrame(Error* error) final;
+    const MouseCursor* captureCursor() final;
+    Point cursorPosition() final;
 
 protected:
     // ScreenCapturer implementation.
-    void reset() override;
+    void reset() final;
 
 private:
     // Returns false if the selected screen is no longer valid.

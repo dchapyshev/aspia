@@ -33,13 +33,13 @@ namespace host {
 
 class UserSession;
 
-class UserSessionManager
+class UserSessionManager final
     : public base::IpcServer::Delegate,
       public UserSession::Delegate
 {
 public:
     explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner);
-    ~UserSessionManager() override;
+    ~UserSessionManager() final;
 
     class Delegate
     {
@@ -61,14 +61,14 @@ public:
 
 protected:
     // base::IpcServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) override;
-    void onErrorOccurred() override;
+    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onErrorOccurred() final;
 
     // UserSession::Delegate implementation.
-    void onUserSessionHostIdRequest(const std::string& session_name) override;
-    void onUserSessionCredentialsChanged() override;
-    void onUserSessionDettached() override;
-    void onUserSessionFinished() override;
+    void onUserSessionHostIdRequest(const std::string& session_name) final;
+    void onUserSessionCredentialsChanged() final;
+    void onUserSessionDettached() final;
+    void onUserSessionFinished() final;
 
 private:
     void startSessionProcess(const base::Location& location, base::SessionId session_id);

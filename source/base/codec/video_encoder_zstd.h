@@ -30,15 +30,15 @@ namespace base {
 
 class PixelTranslator;
 
-class VideoEncoderZstd : public VideoEncoder
+class VideoEncoderZstd final : public VideoEncoder
 {
 public:
-    ~VideoEncoderZstd() override;
+    ~VideoEncoderZstd() final;
 
     static std::unique_ptr<VideoEncoderZstd> create(
         const PixelFormat& target_format, int compression_ratio);
 
-    bool encode(const Frame* frame, proto::VideoPacket* packet) override;
+    bool encode(const Frame* frame, proto::VideoPacket* packet) final;
 
     bool setCompressRatio(int compression_ratio);
     int compressRatio() const;

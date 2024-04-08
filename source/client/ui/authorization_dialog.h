@@ -26,13 +26,13 @@ class QAbstractButton;
 
 namespace client {
 
-class AuthorizationDialog : public QDialog
+class AuthorizationDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit AuthorizationDialog(QWidget* parent = nullptr);
-    ~AuthorizationDialog() override;
+    ~AuthorizationDialog() final;
 
     void setOneTimePasswordEnabled(bool enable);
 
@@ -44,7 +44,7 @@ public:
 
 protected:
     // QDialog implementation.
-    void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent* event) final;
 
 private slots:
     void onShowPasswordButtonToggled(bool checked);

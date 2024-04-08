@@ -39,7 +39,7 @@ class ScopedTaskRunner;
 
 namespace host {
 
-class UserSession
+class UserSession final
     : public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public UnconfirmedClientSession::Delegate,
@@ -74,7 +74,7 @@ public:
                 base::SessionId session_id,
                 std::unique_ptr<base::IpcChannel> channel,
                 Delegate* delegate);
-    ~UserSession() override;
+    ~UserSession() final;
 
     static const char* typeToString(Type type);
     static const char* stateToString(State state);
@@ -99,31 +99,31 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() override;
-    void onIpcMessageReceived(const base::ByteArray& buffer) override;
-    void onIpcMessageWritten(base::ByteArray&& buffer) override;
+    void onIpcDisconnected() final;
+    void onIpcMessageReceived(const base::ByteArray& buffer) final;
+    void onIpcMessageWritten(base::ByteArray&& buffer) final;
 
     // DesktopSession::Delegate implementation.
-    void onDesktopSessionStarted() override;
-    void onDesktopSessionStopped() override;
-    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) override;
-    void onScreenCaptureError(proto::VideoErrorCode error_code) override;
-    void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) override;
-    void onScreenListChanged(const proto::ScreenList& list) override;
-    void onScreenTypeChanged(const proto::ScreenType& type) override;
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
+    void onDesktopSessionStarted() final;
+    void onDesktopSessionStopped() final;
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) final;
+    void onScreenCaptureError(proto::VideoErrorCode error_code) final;
+    void onAudioCaptured(const proto::AudioPacket& audio_packet) final;
+    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) final;
+    void onScreenListChanged(const proto::ScreenList& list) final;
+    void onScreenTypeChanged(const proto::ScreenType& type) final;
+    void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
     // UnconfirmedClientSession::Delegate implementation.
-    void onUnconfirmedSessionAccept(uint32_t id) override;
-    void onUnconfirmedSessionReject(uint32_t id) override;
+    void onUnconfirmedSessionAccept(uint32_t id) final;
+    void onUnconfirmedSessionReject(uint32_t id) final;
 
     // ClientSession::Delegate implementation.
-    void onClientSessionConfigured() override;
-    void onClientSessionFinished() override;
+    void onClientSessionConfigured() final;
+    void onClientSessionFinished() final;
     void onClientSessionVideoRecording(
-        const std::string& computer_name, const std::string& user_name, bool started) override;
-    void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) override;
+        const std::string& computer_name, const std::string& user_name, bool started) final;
+    void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) final;
 
 private:
     void onSessionDettached(const base::Location& location);

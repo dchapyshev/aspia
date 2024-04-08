@@ -27,18 +27,18 @@ namespace base {
 class AudioCapturer;
 class IpcChannelProxy;
 
-class AudioCapturerWrapper : public Thread::Delegate
+class AudioCapturerWrapper final : public Thread::Delegate
 {
 public:
     explicit AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy);
-    ~AudioCapturerWrapper() override;
+    ~AudioCapturerWrapper() final;
 
     void start();
 
 protected:
     // Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
+    void onBeforeThreadRunning() final;
+    void onAfterThreadRunning() final;
 
 private:
     std::shared_ptr<IpcChannelProxy> channel_proxy_;

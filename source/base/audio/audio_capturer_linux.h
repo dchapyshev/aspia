@@ -25,20 +25,20 @@
 
 namespace base {
 
-class AudioCapturerLinux
+class AudioCapturerLinux final
     : public AudioCapturer,
       public AudioPipeReader::Delegate
 {
 public:
     AudioCapturerLinux();
-    ~AudioCapturerLinux() override;
+    ~AudioCapturerLinux() final;
 
     // AudioCapturer interface.
-    bool start(const PacketCapturedCallback& callback) override;
+    bool start(const PacketCapturedCallback& callback) final;
 
 protected:
     // AudioPipeReader::Delegate implementation.
-    void onDataRead(const std::string& data) override;
+    void onDataRead(const std::string& data) final;
 
 private:
     local_shared_ptr<AudioPipeReader> pipe_reader_;

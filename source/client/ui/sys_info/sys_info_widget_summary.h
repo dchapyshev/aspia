@@ -25,18 +25,18 @@
 
 namespace client {
 
-class SysInfoWidgetSummary : public SysInfoWidget
+class SysInfoWidgetSummary final : public SysInfoWidget
 {
     Q_OBJECT
 
 public:
     explicit SysInfoWidgetSummary(QWidget* parent = nullptr);
-    ~SysInfoWidgetSummary() override;
+    ~SysInfoWidgetSummary() final;
 
     // SysInfo implementation.
-    std::string category() const override;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
-    QTreeWidget* treeWidget() override;
+    std::string category() const final;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
+    QTreeWidget* treeWidget() final;
 
     void setRouterVersion(const base::Version& router_version);
     void setHostVersion(const base::Version& host_version);

@@ -24,16 +24,16 @@
 
 namespace common {
 
-class FileTaskConsumerProxy : public FileTaskConsumer
+class FileTaskConsumerProxy final : public FileTaskConsumer
 {
 public:
     explicit FileTaskConsumerProxy(FileTaskConsumer* task_consumer);
-    ~FileTaskConsumerProxy() override;
+    ~FileTaskConsumerProxy() final;
 
     void dettach();
 
     // FileTaskConsumer implementation.
-    void doTask(std::shared_ptr<FileTask> task) override;
+    void doTask(std::shared_ptr<FileTask> task) final;
 
 private:
     FileTaskConsumer* task_consumer_;
