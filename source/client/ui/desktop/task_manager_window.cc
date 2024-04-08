@@ -641,7 +641,7 @@ void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
     bool enable_start = false;
     bool enable_stop = false;
 
-    if (current_item->startupType() != proto::task_manager::Service::STARTUP_TYPE_DISABLED)
+    if (current_item && current_item->startupType() != proto::task_manager::Service::STARTUP_TYPE_DISABLED)
     {
         proto::task_manager::Service::Status status = current_item->status();
 
