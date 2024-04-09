@@ -9,6 +9,9 @@ on:
     paths:
       - 'source/**'
       - '.github/workflows/sw.yml' # for test purposes
+  schedule:
+    # every day
+    - cron: 0 0 * * *
 
 jobs:
   windows:
@@ -38,7 +41,8 @@ jobs:
         sudo dnf -y install flex bison cmake which gcc clang clang-tools-extra lld git \
             lttng-tools-devel lttng-ust-devel libproxy-devel mesa-libGL-devel mesa-libEGL-devel \
             libXfixes-devel libXtst-devel libXext-devel libXrender-devel libX11-devel pulseaudio-libs-devel \
-            cups-devel wayland-devel libxkbcommon-devel libXdamage-devel libXrandr-devel
+            cups-devel wayland-devel libxkbcommon-devel libXdamage-devel libXrandr-devel libXcursor-devel \
+            xcb-util-keysyms-devel xcb-util-cursor-devel libxkbcommon-x11-devel xcb-util-wm-devel
     - uses: egorpugin/sw-action@master
     - run: ./sw -static build source -compiler gcc
     - name: Upload Binaries
