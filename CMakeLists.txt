@@ -23,7 +23,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 project(aspia)
 
 set(ASPIA_VERSION_MAJOR 2)
-set(ASPIA_VERSION_MINOR 7)
+set(ASPIA_VERSION_MINOR 8)
 set(ASPIA_VERSION_PATCH 0)
 
 # On CI installed dir could be outside of vcpkg root
