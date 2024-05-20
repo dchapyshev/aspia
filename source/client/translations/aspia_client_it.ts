@@ -59,7 +59,7 @@
     <message>
         <location filename="../client_main.cc" line="436"/>
         <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da visualizzare quando connesso</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="440"/>
@@ -208,17 +208,17 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="116"/>
         <source>Other</source>
-        <translation type="unfinished">Altri</translation>
+        <translation>Altri</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="124"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da visualizzare quando connesso:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="134"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire un nome o lasciare il capo vuoto</translation>
     </message>
 </context>
 <context>
@@ -536,174 +536,174 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="126"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished">Blocca barra strumenti</translation>
+        <translation>Blocca barra strumenti</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="138"/>
         <source>Session configuration</source>
-        <translation type="unfinished">Configurazione sessione</translation>
+        <translation>Configurazione sessione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="150"/>
         <source>Automatic window size</source>
-        <translation type="unfinished">Dimensionamento finestra automatico</translation>
+        <translation>Dimensionamento finestra automatico</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="165"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished">Passa a schermo intero o finestra</translation>
+        <translation>Passa a schermo intero o finestra</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="176"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished">Scorrimento automatico</translation>
+        <translation>Scorrimento automatico</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="188"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished">Invia Ctrl+Alt+Delete</translation>
+        <translation>Invia Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="200"/>
         <source>Advanced menu</source>
-        <translation type="unfinished">Menu avanzato</translation>
+        <translation>Menu avanzato</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="205"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="208"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="211"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished">Salva schermata...</translation>
+        <translation>Salva schermata...</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="223"/>
         <source>File transfer</source>
-        <translation type="unfinished">Trasferimento file</translation>
+        <translation>Trasferimento file</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="231"/>
         <source>Scale</source>
-        <translation type="unfinished">Scala</translation>
+        <translation>Scala</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="242"/>
         <source>Send key combinations</source>
-        <translation type="unfinished">Invia combinazioni tasti</translation>
+        <translation>Invia combinazioni tasti</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="251"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="254"/>
         <source>Power control</source>
-        <translation type="unfinished">Spegnimento / Disconnesione</translation>
+        <translation>Spegnimento / Disconnesione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="262"/>
         <source>Shutdown</source>
-        <translation type="unfinished">Spegni</translation>
+        <translation>Spegni</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="267"/>
         <source>Reboot</source>
-        <translation type="unfinished">Riavvia</translation>
+        <translation>Riavvia</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="272"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Disconnetti</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="277"/>
         <source>Lock</source>
-        <translation type="unfinished">Blocca</translation>
+        <translation>Blocca</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="286"/>
         <source>Remote Update</source>
-        <translation type="unfinished">Aggiornamento Remoto</translation>
+        <translation>Aggiornamento Remoto</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="298"/>
         <source>System Information</source>
-        <translation type="unfinished">Informazioni Sistema</translation>
+        <translation>Informazioni Sistema</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="310"/>
         <source>Close</source>
-        <translation type="unfinished">Chiudi</translation>
+        <translation>Chiudi</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="313"/>
         <source>Close session</source>
-        <translation type="unfinished">Chiudi sessione</translation>
+        <translation>Chiudi sessione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="372"/>
         <source>Fit window</source>
-        <translation type="unfinished">Adatta finestra</translation>
+        <translation>Adatta finestra</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="381"/>
         <source>Minimize</source>
-        <translation type="unfinished">Minimizza</translation>
+        <translation>Minimizza</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="384"/>
         <source>Minimize window</source>
-        <translation type="unfinished">Minimizza finestra</translation>
+        <translation>Minimizza finestra</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="389"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="392"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistiche</translation>
+        <translation>Statistiche</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="397"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished">Riavvia (modalità sicura)</translation>
+        <translation>Riavvia (modalità sicura)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="400"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished">Riavvia in modalità sicura</translation>
+        <translation>Riavvia in modalità sicura</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="405"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished">Incolla appunti come digitazione</translation>
+        <translation>Incolla appunti come digitazione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="414"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="417"/>
         <source>Text Chat</source>
-        <translation type="unfinished">Chat Testuale</translation>
+        <translation>Chat Testuale</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="425"/>
         <source>Recording settings...</source>
-        <translation type="unfinished">Impostazioni registrazione...</translation>
+        <translation>Impostazioni registrazione...</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="437"/>
         <source>Start recording</source>
-        <translation type="unfinished">Avvia registrazione</translation>
+        <translation>Avvia registrazione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="446"/>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestione Attività</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="463"/>
         <source>Pause video when minimizing</source>
-        <translation type="unfinished">Metti in pausa il video se minimizzato</translation>
+        <translation>Metti in pausa il video se minimizzato</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.ui" line="474"/>
         <source>Pause audio when minimizing</source>
-        <translation type="unfinished">Metti in pausa l&apos;audio se minimizzato</translation>
+        <translation>Metti in pausa l&apos;audio se minimizzato</translation>
     </message>
 </context>
 <context>
@@ -883,7 +883,7 @@
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="47"/>
         <source>Speed: ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocità: ...</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="57"/>
@@ -1063,7 +1063,7 @@
         <location filename="../ui/router_manager/router_manager_window.ui" line="97"/>
         <location filename="../ui/router_manager/router_manager_window.ui" line="220"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architettura</translation>
+        <translation>Architettura</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.ui" line="269"/>
@@ -2628,17 +2628,17 @@
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="372"/>
         <source>Resolution selection</source>
-        <translation type="unfinished">Selezione risoluzione</translation>
+        <translation>Selezione risoluzione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="434"/>
         <source>Stop recording</source>
-        <translation type="unfinished">Arresta registrazione</translation>
+        <translation>Arresta registrazione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
         <source>Start recording</source>
-        <translation type="unfinished">Avvia registrazione</translation>
+        <translation>Avvia registrazione</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
@@ -2647,12 +2647,12 @@
         <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Conferma</translation>
+        <translation>Conferma</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished">Sei sicuro di voler spegnere il computer remoto ?</translation>
+        <translation>Sei sicuro di voler spegnere il computer remoto ?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
@@ -2661,7 +2661,7 @@
         <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
         <source>Yes</source>
-        <translation type="unfinished">Sì</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
@@ -2670,38 +2670,38 @@
         <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="595"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto ?</translation>
+        <translation>Sei sicuro di voler riavviare il computer remoto ?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
         <source>Wait for host</source>
-        <translation type="unfinished"></translation>
+        <translation>Attesa host</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto in Modalità Sicura ?</translation>
+        <translation>Sei sicuro di voler riavviare il computer remoto in Modalità Sicura ?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished">Sei sicuro di voler chiudere la sessione utente sul computer remoto ?</translation>
+        <translation>Sei sicuro di voler chiudere la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished">Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
+        <translation>Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
         <source>Scale</source>
-        <translation type="unfinished">Scala</translation>
+        <translation>Scala</translation>
     </message>
 </context>
 <context>
@@ -2958,32 +2958,32 @@
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
         <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>TB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>GB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>MB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
         <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>kB/s</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="162"/>
         <source>Speed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocità: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="279"/>
@@ -3250,7 +3250,7 @@
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="575"/>
         <source>Timeout waiting for reconnection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout attesa riconnessione.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="486"/>
@@ -3318,7 +3318,7 @@
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="568"/>
         <source>Router is unavailable. Waiting for reconnection...</source>
-        <translation type="unfinished"></translation>
+        <translation>Router non disponibile. Attesa riconnessione...</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="597"/>
@@ -3338,7 +3338,7 @@
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="609"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>La versione dell&apos;applicazione a cui ti stai connettendo è inferiore a quella minima supportata.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="614"/>
@@ -3524,12 +3524,12 @@
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="483"/>
         <source>Connected to %1:%2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connesso a %1: %2.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="583"/>
         <source>The Router version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>La versione del router è iù recente di quella del Client (%1 &gt; %2). Per cortesia aggiornare l&apos;applicazione.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager/router_manager_window.cc" line="760"/>
@@ -3735,12 +3735,12 @@
     <message>
         <location filename="../ui/desktop/select_screen_action.h" line="50"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished">Monitor %1 (primario)</translation>
+        <translation>Monitor %1 (primario)</translation>
     </message>
     <message>
         <location filename="../ui/desktop/select_screen_action.h" line="52"/>
         <source>Monitor %1</source>
-        <translation type="unfinished">Monitor %1</translation>
+        <translation>Monitor %1</translation>
     </message>
 </context>
 <context>
@@ -3756,72 +3756,72 @@
     <message>
         <location filename="../ui/session_window.cc" line="134"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessione avviata.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="153"/>
         <source>Connecting to router %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al router %1:%2...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="158"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al router...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="171"/>
         <source>Connection to router %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al router %1:%2 stabilita.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="176"/>
         <source>Connection to router established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al router stabilita.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="189"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione ad host %1...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="194"/>
         <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione ad host %1:%2...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="211"/>
         <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione ad host %1 stabilita.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="216"/>
         <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione ad host %1:%2 stabilita.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="236"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Il router non è ancora disponibile. In attesa di riconnessione...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="243"/>
         <source>Timeout waiting for reconnection to router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout durante la riconnessione al router.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="250"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;host non è ancora disponibile.In attesa di riconnessione...</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="257"/>
         <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout durante la riconnessione all&apos;host.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="267"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>La versione dell&apos;host è più recente di quella del Client (%1 &gt; %2). Per cortesia aggiornare l&apos;applicazione.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="288"/>
@@ -3927,7 +3927,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>La versione dell&apos;applicazione a cui ti stai connettendo è inferiore a quella minima supportata.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="450"/>
@@ -3942,7 +3942,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;host con l&apos;ID specificato non è in linea.</translation>
     </message>
     <message>
         <source>No host with the specified ID was found.</source>
@@ -4864,22 +4864,22 @@
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
         <source>Host Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione Host</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
         <source>Client Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione Client</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
         <source>Router Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione Router</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
         <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni Aspia</translation>
     </message>
     <message>
         <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="136"/>

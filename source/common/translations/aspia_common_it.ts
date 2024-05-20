@@ -169,7 +169,7 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="125"/>

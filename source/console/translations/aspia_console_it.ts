@@ -77,17 +77,17 @@
     <message>
         <location filename="../address_book_dialog.ui" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">Altro</translation>
+        <translation>Altro</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="308"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome visualizzato quando connesso:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="318"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire un nome o lasciare il campo vuoto</translation>
     </message>
 </context>
 <context>
@@ -718,22 +718,22 @@
     <message>
         <location filename="../main_window.ui" line="678"/>
         <source>Import Computers/Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa Computers/Gruppi</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="681"/>
         <source>Import computers from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa computers da file</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="693"/>
         <source>Export Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta Gruppo Computers</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="696"/>
         <source>Export computer group to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta gruppod di computers in un file</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="497"/>
@@ -951,9 +951,9 @@
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="476"/>
         <source>Too long display name. The maximum length of the display name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Nome da visualizzare troppo lungo. La dimensione massima del nome da visualizzare è %n caratteri.</numerusform>
+            <numerusform>Nomi da visualizzare troppo lunghi. La dimensione massima del nome da visualizzare è %n caratteri.</numerusform>
         </translation>
     </message>
     <message>
@@ -1433,43 +1433,43 @@
     <message>
         <location filename="../main_window.cc" line="575"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri File</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="577"/>
         <location filename="../main_window.cc" line="654"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="591"/>
         <source>Could not open file for reading.</source>
-        <translation type="unfinished"></translation>
+        <translation>Apertura file in lettura fallita.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="602"/>
         <source>Import file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fali di importazione vuoto.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="652"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva File</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="668"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Apertura file in scrittura fallita.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="681"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Scrittura file fallita.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="689"/>
         <source>Export completed successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione termina correttamente.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="954"/>
@@ -1544,12 +1544,12 @@
     <message>
         <location filename="../main_window.cc" line="614"/>
         <source>Failed to parse JSON document: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Elaborazione del documento JSON fallita: %1.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="627"/>
         <source>Import completed successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importazione completata correttamente.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="1664"/>
