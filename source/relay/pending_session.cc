@@ -42,7 +42,25 @@ PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
       timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)),
       socket_(std::move(socket))
 {
-    address_ = socket_.remote_endpoint().address().to_string();
+    try
+    {
+        std::error_code error_code;
+        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
+        if (error_code)
+        {
+            LOG(LS_ERROR) << "Unable to get endpoint for pending session: "
+                          << base::utf16FromLocal8Bit(error_code.message());
+        }
+        else
+        {
+            address_ = endpoint.address().to_string();
+        }
+    }
+    catch (const std::error_code& error_code)
+    {
+        LOG(LS_ERROR) << "Unable to get address for pending session: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

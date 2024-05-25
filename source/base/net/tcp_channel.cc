@@ -227,12 +227,21 @@ void TcpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 //--------------------------------------------------------------------------------------------------
 std::u16string TcpChannel::peerAddress() const
 {
-    if (!socket_.is_open())
+    if (!socket_.is_open() || !isConnected())
         return std::u16string();
 
     try
     {
-        asio::ip::address address = socket_.remote_endpoint().address();
+        std::error_code error_code;
+        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
+        if (error_code)
+        {
+            LOG(LS_ERROR) << "Unable to get peer address: "
+                          << base::utf16FromLocal8Bit(error_code.message());
+            return std::u16string();
+        }
+
+        asio::ip::address address = endpoint.address();
         if (address.is_v4())
         {
             asio::ip::address_v4 ipv4_address = address.to_v4();

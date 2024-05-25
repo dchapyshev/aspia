@@ -94,6 +94,31 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
     return nullptr;
 }
 
+std::u16string peerAddress(const asio::ip::tcp::socket& socket)
+{
+    try
+    {
+        std::error_code error_code;
+        asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
+        if (error_code)
+        {
+            LOG(LS_ERROR) << "Unable to get endpoint for accepted connection: "
+                          << base::utf16FromLocal8Bit(error_code.message());
+        }
+        else
+        {
+            return base::utf16FromLocal8Bit(endpoint.address().to_string());
+        }
+    }
+    catch (const std::error_code& error_code)
+    {
+        LOG(LS_ERROR) << "Unable to get address for pending session: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+    }
+
+    return std::u16string();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -284,8 +309,7 @@ void SessionManager::doAccept(SessionManager* self)
     {
         if (!error_code)
         {
-            LOG(LS_INFO) << "New accepted connection: " << base::utf16FromLocal8Bit(
-                socket.remote_endpoint().address().to_string());
+            LOG(LS_INFO) << "New accepted connection: " << peerAddress(socket);
 
             // A new peer is connected. Create and start the pending session.
             self->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
