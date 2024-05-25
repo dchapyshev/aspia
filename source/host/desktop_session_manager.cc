@@ -204,18 +204,6 @@ base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy(
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
-#if defined(OS_WIN)
-    std::filesystem::path ref_path = DesktopSessionProcess::filePath();
-    std::filesystem::path path = channel->peerFilePath();
-
-    if (ref_path != path)
-    {
-        LOG(LS_ERROR) << "An attempt was made to connect from an unknown application (sid="
-                      << session_id_ << " ref_path=" << ref_path << " path=" << path << ")";
-        return;
-    }
-#endif // defined(OS_WIN)
-
     LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 
     session_attach_timer_.stop();
