@@ -34,6 +34,7 @@
 #include <mmsystem.h>
 #include <objbase.h>
 #include <Windows.h>
+#include <comdef.h>
 
 namespace {
 
@@ -137,13 +138,14 @@ bool AudioCapturerWin::initialize()
     DCHECK(static_cast<PWAVEFORMATEX>(wave_format_ex_) == nullptr);
     DCHECK(thread_checker_.calledOnValidThread());
 
-    HRESULT hr = S_OK;
+    _com_error hr = S_OK;
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> mm_device_enumerator;
     hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
                           IID_PPV_ARGS(&mm_device_enumerator));
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to create IMMDeviceEnumerator. Error " << hr;
+        LOG(LS_ERROR) << "Failed to create IMMDeviceEnumerator. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
@@ -151,25 +153,28 @@ bool AudioCapturerWin::initialize()
 
     // Get the audio endpoint.
     hr = mm_device_enumerator->GetDefaultAudioEndpoint(eRender, eConsole, mm_device_.GetAddressOf());
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get IMMDevice. Error " << hr;
+        LOG(LS_ERROR) << "Failed to get IMMDevice. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
     // Get an audio client.
     hr = mm_device_->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, &audio_client_);
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get an IAudioClient. Error " << hr;
+        LOG(LS_ERROR) << "Failed to get an IAudioClient. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
     REFERENCE_TIME device_period;
     hr = audio_client_->GetDevicePeriod(&device_period, nullptr);
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetDevicePeriod failed. Error " << hr;
+        LOG(LS_ERROR) << "IAudioClient::GetDevicePeriod failed. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
@@ -181,9 +186,10 @@ bool AudioCapturerWin::initialize()
 
     // Get the wave format.
     hr = audio_client_->GetMixFormat(&wave_format_ex_);
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get WAVEFORMATEX. Error " << hr;
+        LOG(LS_ERROR) << "Failed to get WAVEFORMATEX. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
@@ -247,25 +253,34 @@ bool AudioCapturerWin::initialize()
         0,
         wave_format_ex_,
         nullptr);
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to initialize IAudioClient. Error " << hr;
+        LOG(LS_ERROR) << "Failed to initialize IAudioClient. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
+
+        if (hr.Error() == E_INVALIDARG)
+        {
+            LOG(LS_ERROR) << "Audio capture may be blocked by your antivirus. Try disabling your "
+                             "antivirus or adding the application to the whitelist.";
+        }
         return false;
     }
 
     // Get an IAudioCaptureClient.
     hr = audio_client_->GetService(IID_PPV_ARGS(&audio_capture_client_));
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get an IAudioCaptureClient. Error " << hr;
+        LOG(LS_ERROR) << "Failed to get an IAudioCaptureClient. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
     // Start the IAudioClient.
     hr = audio_client_->Start();
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to start IAudioClient. Error " << hr;
+        LOG(LS_ERROR) << "Failed to start IAudioClient. Error " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error();
         return false;
     }
 
@@ -299,12 +314,12 @@ void AudioCapturerWin::doCapture()
     }
 
     // Fetch all packets from the audio capture endpoint buffer.
-    HRESULT hr = S_OK;
+    _com_error hr = S_OK;
     while (true)
     {
         UINT32 next_packet_size;
-        HRESULT hr = audio_capture_client_->GetNextPacketSize(&next_packet_size);
-        if (FAILED(hr))
+        hr = audio_capture_client_->GetNextPacketSize(&next_packet_size);
+        if (FAILED(hr.Error()))
             break;
 
         if (next_packet_size <= 0)
@@ -314,7 +329,7 @@ void AudioCapturerWin::doCapture()
         UINT32 frames;
         DWORD flags;
         hr = audio_capture_client_->GetBuffer(&data, &frames, &flags, nullptr, nullptr);
-        if (FAILED(hr))
+        if (FAILED(hr.Error()))
             break;
 
         if (volume_filter_.apply(reinterpret_cast<int16_t*>(data), frames))
@@ -336,19 +351,20 @@ void AudioCapturerWin::doCapture()
         }
 
         hr = audio_capture_client_->ReleaseBuffer(frames);
-        if (FAILED(hr))
+        if (FAILED(hr.Error()))
             break;
     }
 
     // There is nothing to capture if the audio endpoint device has been unplugged or disabled.
-    if (hr == AUDCLNT_E_DEVICE_INVALIDATED)
+    if (hr.Error() == AUDCLNT_E_DEVICE_INVALIDATED)
         return;
 
     // Avoid reporting the same error multiple times.
-    if (FAILED(hr) && hr != last_capture_error_)
+    if (FAILED(hr.Error()) && hr.Error() != last_capture_error_)
     {
-        last_capture_error_ = hr;
-        LOG(LS_ERROR) << "Failed to capture an audio packet: 0x" << std::hex << hr << std::dec << ".";
+        last_capture_error_ = hr.Error();
+        LOG(LS_ERROR) << "Failed to capture an audio packet: " << hr.ErrorMessage()
+                      << " with code " << std::hex << hr.Error() << ".";
     }
 }
 
