@@ -465,17 +465,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="70"/>
+        <location filename="../main.cc" line="71"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="73"/>
+        <location filename="../main.cc" line="74"/>
         <source>file</source>
         <translation>arquivo</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="75"/>
         <source>The file to open.</source>
         <translation>Arquivo a ser aberto.</translation>
     </message>
