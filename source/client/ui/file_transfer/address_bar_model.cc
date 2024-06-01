@@ -33,9 +33,7 @@ enum Column
 {
     COLUMN_NAME        = 0,
     COLUMN_TYPE        = 1,
-    COLUMN_TOTAL_SPACE = 2,
-    COLUMN_FREE_SPACE  = 3,
-    COLUMN_COUNT       = 4
+    COLUMN_COUNT       = 2
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -76,8 +74,6 @@ void AddressBarModel::setDriveList(const proto::DriveList& list)
         drive.icon        = common::FilePlatformUtil::driveIcon(item.type());
         drive.path        = normalizePath(QString::fromStdString(item.path()));
         drive.type        = item.type();
-        drive.total_space = item.total_space();
-        drive.free_space  = item.free_space();
 
         switch (item.type())
         {
@@ -90,7 +86,6 @@ void AddressBarModel::setDriveList(const proto::DriveList& list)
                 break;
 
             default:
-                drive.name = QString::fromStdString(item.name());
                 break;
         }
 
@@ -359,12 +354,6 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
 
                 if (index.column() == COLUMN_TYPE)
                     return typeToString(drive.type);
-
-                if (index.column() == COLUMN_TOTAL_SPACE && drive.total_space >= 0)
-                    return sizeToString(drive.total_space);
-
-                if (index.column() == COLUMN_FREE_SPACE && drive.free_space >= 0)
-                    return sizeToString(drive.free_space);
             }
             break;
 
@@ -409,12 +398,6 @@ QVariant AddressBarModel::headerData(int section, Qt::Orientation orientation, i
 
         case COLUMN_TYPE:
             return tr("Type");
-
-        case COLUMN_TOTAL_SPACE:
-            return tr("Total Space");
-
-        case COLUMN_FREE_SPACE:
-            return tr("Free Space");
 
         default:
             return QVariant();

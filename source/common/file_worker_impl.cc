@@ -136,26 +136,11 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
         }
 
         item->set_path(base::utf8FromFilePath(drive_info.path()));
-        item->set_name(drive_info.volumeName());
-
-        if (drive_type == base::win::DriveEnumerator::DriveInfo::Type::FIXED ||
-            drive_type == base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE)
-        {
-            item->set_total_space(static_cast<int64_t>(drive_info.totalSpace()));
-            item->set_free_space(static_cast<int64_t>(drive_info.freeSpace()));
-        }
-        else
-        {
-            item->set_total_space(-1);
-            item->set_free_space(-1);
-        }
     }
 #elif (OS_POSIX)
     proto::DriveList::Item* root_directory = drive_list->add_item();
     root_directory->set_type(proto::DriveList::Item::TYPE_ROOT_DIRECTORY);
     root_directory->set_path("/");
-    root_directory->set_total_space(-1);
-    root_directory->set_free_space(-1);
 #endif
 
     std::filesystem::path desktop_path;
@@ -167,8 +152,6 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
 
         item->set_type(proto::DriveList::Item::TYPE_DESKTOP_FOLDER);
         item->set_path(base::utf8FromFilePath(desktop_path));
-        item->set_total_space(-1);
-        item->set_free_space(-1);
     }
 
     std::filesystem::path home_path;
@@ -180,8 +163,6 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
 
         item->set_type(proto::DriveList::Item::TYPE_HOME_FOLDER);
         item->set_path(base::utf8FromFilePath(home_path));
-        item->set_total_space(-1);
-        item->set_free_space(-1);
     }
 
     if (drive_list->item_size() == 0)

@@ -73,8 +73,6 @@ private:
         QIcon icon;
         QString name;
         QString path;
-        int64_t total_space = 0;
-        int64_t free_space = 0;
     };
 
     QString current_path_ = computerPath();

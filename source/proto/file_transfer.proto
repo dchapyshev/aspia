@@ -41,9 +41,7 @@ message DriveList
 
         Type type         = 1;
         string path       = 2;
-        string name       = 3;
-        int64 total_space = 4;
-        int64 free_space  = 5;
+        // Fields 3-5 deprecated.
     }
 
     repeated Item item = 1;
