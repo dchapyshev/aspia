@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/system_error.h"
-#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
 

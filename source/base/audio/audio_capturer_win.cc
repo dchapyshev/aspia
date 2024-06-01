@@ -26,7 +26,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <cstdlib>
 #include <utility>
 
 #include <avrt.h>
