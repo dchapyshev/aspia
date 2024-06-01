@@ -2447,103 +2447,101 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="81"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="449"/>
         <source>Home Folder</source>
         <translation>Pasta Principal</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
         <translation>Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="288"/>
         <source>Computer</source>
         <translation>Computador</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="408"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="397"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="400"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
-        <translation>Espaço total</translation>
+        <translation type="vanished">Espaço total</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
         <source>Free Space</source>
-        <translation>Espaço livre</translation>
+        <translation type="vanished">Espaço livre</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="434"/>
         <source>Optical Drive</source>
         <translation>Unidade óptica (CD)</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="437"/>
         <source>Removable Drive</source>
         <translation>Unidade Removível</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="440"/>
         <source>Fixed Drive</source>
         <translation>Unidade Fixa</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="443"/>
         <source>Network Drive</source>
         <translation>Unidade de Rede</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="446"/>
         <source>RAM Drive</source>
         <translation>Unidade RAM</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="452"/>
         <source>Desktop Folder</source>
         <translation>Pasta da Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="455"/>
         <source>Root Directory</source>
         <translation>Diretório Raiz</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="458"/>
         <source>Unknown Drive</source>
         <translation>Unidade Desconhecida</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="476"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="481"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="486"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="491"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="496"/>
         <source>B</source>
         <translation>B</translation>
     </message>

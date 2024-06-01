@@ -2479,103 +2479,101 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="81"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="449"/>
         <source>Home Folder</source>
         <translation>主文件夹</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="288"/>
         <source>Computer</source>
         <translation>计算机</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="408"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="397"/>
         <source>Name</source>
         <translation>名字</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="400"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
-        <translation>总空间</translation>
+        <translation type="vanished">总空间</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
         <source>Free Space</source>
-        <translation>空闲空间</translation>
+        <translation type="vanished">空闲空间</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="434"/>
         <source>Optical Drive</source>
         <translation>光驱</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="437"/>
         <source>Removable Drive</source>
         <translation>可移动驱动器</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="440"/>
         <source>Fixed Drive</source>
         <translation>固定驱动器</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="443"/>
         <source>Network Drive</source>
         <translation>网络驱动器</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="446"/>
         <source>RAM Drive</source>
         <translation>内存</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="452"/>
         <source>Desktop Folder</source>
         <translation>桌面文件夹</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="455"/>
         <source>Root Directory</source>
         <translation>根目录</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="458"/>
         <source>Unknown Drive</source>
         <translation>未知驱动器</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="476"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="481"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="486"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="491"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="496"/>
         <source>B</source>
         <translation>B</translation>
     </message>
