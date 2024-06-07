@@ -45,6 +45,7 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectTextEvent(const proto::TextEvent& event);
     void injectMouseEvent(const proto::MouseEvent& event);
+    void injectTouchEvent(const proto::TouchEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
     bool isMouseLocked() const { return is_mouse_locked_; }

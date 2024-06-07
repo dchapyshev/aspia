@@ -34,6 +34,7 @@ public:
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::KeyEvent& event) final;
     void injectMouseEvent(const proto::MouseEvent& event) final;
+    void injectTouchEvent(const proto::TouchEvent& event) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(InputInjectorMac);

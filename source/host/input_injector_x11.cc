@@ -261,6 +261,12 @@ void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void InputInjectorX11::injectTouchEvent(const proto::TouchEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool InputInjectorX11::init()
 {
     display_ = XOpenDisplay(nullptr);

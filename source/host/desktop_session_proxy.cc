@@ -212,6 +212,16 @@ void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionProxy::injectTouchEvent(const proto::TouchEvent &event)
+{
+    if (is_mouse_locked_ || is_paused_)
+        return;
+
+    if (desktop_session_)
+        desktop_session_->injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (is_paused_)

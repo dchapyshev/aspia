@@ -174,6 +174,17 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
             LOG(LS_ERROR) << "Input injector NOT initialized";
         }
     }
+    else if (incoming_message_->has_touch_event())
+    {
+        if (input_injector_)
+        {
+            input_injector_->injectTouchEvent(incoming_message_->touch_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+    }
     else if (incoming_message_->has_text_event())
     {
         if (input_injector_)

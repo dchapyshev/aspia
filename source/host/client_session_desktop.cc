@@ -216,6 +216,18 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
             LOG(LS_ERROR) << "Key event for non-desktop-manage session";
         }
     }
+    else if (incoming_message_->has_touch_event())
+    {
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            desktop_session_proxy_->injectTouchEvent(incoming_message_->touch_event());
+            stat_counter_.addTouchEvent();
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Touch event for non-desktop-manage session";
+        }
+    }
     else if (incoming_message_->has_text_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)

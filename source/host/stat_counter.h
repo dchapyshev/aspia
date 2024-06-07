@@ -39,6 +39,7 @@ public:
     void addKeyboardEvent();
     void addTextEvent();
     void addMouseEvent();
+    void addTouchEvent();
     void addVideoError();
     void addCursorPosition();
 
@@ -56,6 +57,7 @@ private:
     uint64_t keyboard_events_ = 0;
     uint64_t text_events_ = 0;
     uint64_t mouse_events_ = 0;
+    uint64_t touch_events_ = 0;
     uint64_t video_error_count_ = 0;
     uint64_t cursor_positions_ = 0;
 

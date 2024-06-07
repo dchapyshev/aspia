@@ -111,7 +111,8 @@ message ServiceToDesktop
     KeyEvent key_event                    = 5;
     TextEvent text_event                  = 6;
     MouseEvent mouse_event                = 7;
-    ClipboardEvent clipboard_event        = 8;
+    TouchEvent touch_event                = 8;
+    ClipboardEvent clipboard_event        = 9;
 }
 
 message DesktopToService

@@ -226,6 +226,14 @@ void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionIpc::injectTouchEvent(const proto::TouchEvent &event)
+{
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_touch_event()->CopyFrom(event);
+    channel_->send(serializer_.serialize(*outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_->Clear();

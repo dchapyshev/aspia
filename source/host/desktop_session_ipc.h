@@ -46,6 +46,7 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event) final;
     void injectTextEvent(const proto::TextEvent& event) final;
     void injectMouseEvent(const proto::MouseEvent& event) final;
+    void injectTouchEvent(const proto::TouchEvent& event) final;
     void injectClipboardEvent(const proto::ClipboardEvent& event) final;
 
 protected:

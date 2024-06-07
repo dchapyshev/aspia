@@ -153,6 +153,9 @@ if (WIN32)
         win/rdp_client_window.h
         win/sas_injector.cc
         win/sas_injector.h
+        win/touch_injector.cc
+        win/touch_injector.h
+        win/touch_injector_defines.h
         win/updater_launcher.cc
         win/updater_launcher.h)
 endif()

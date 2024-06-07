@@ -84,6 +84,7 @@ public:
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectTextEvent(const proto::TextEvent& event) = 0;
     virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
+    virtual void injectTouchEvent(const proto::TouchEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
     static const char* controlActionToString(proto::internal::DesktopControl::Action action);

@@ -79,6 +79,12 @@ void StatCounter::addMouseEvent()
 }
 
 //--------------------------------------------------------------------------------------------------
+void StatCounter::addTouchEvent()
+{
+    ++touch_events_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void StatCounter::addVideoError()
 {
     ++video_error_count_;
@@ -99,7 +105,7 @@ void StatCounter::onTimeout()
     LOG(LS_INFO) << "Clipboard: in=" << incoming_clipboard_events_
                  << " out=" << outgoing_clipboard_events_;
     LOG(LS_INFO) << "Input: keyboard=" << keyboard_events_ << " mouse=" << mouse_events_
-                 << " text=" << text_events_;
+                 << " touch=" << touch_events_ << " text=" << text_events_;
     LOG(LS_INFO) << "Cursor positions: " << cursor_positions_;
 }
 

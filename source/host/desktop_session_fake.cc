@@ -134,6 +134,11 @@ void DesktopSessionFake::injectMouseEvent(const proto::MouseEvent& /* event */)
     // Nothing
 }
 
+void DesktopSessionFake::injectTouchEvent(const proto::TouchEvent& /* event */)
+{
+    // Nothing
+}
+
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* event */)
 {

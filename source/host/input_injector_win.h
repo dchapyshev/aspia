@@ -21,9 +21,12 @@
 
 #include "host/input_injector.h"
 
+#include <memory>
 #include <set>
 
 namespace host {
+
+class TouchInjector;
 
 class InputInjectorWin final : public InputInjector
 {
@@ -37,6 +40,7 @@ public:
     void injectKeyEvent(const proto::KeyEvent& event) final;
     void injectTextEvent(const proto::TextEvent& event) final;
     void injectMouseEvent(const proto::MouseEvent& event) final;
+    void injectTouchEvent(const proto::TouchEvent& event) final;
 
 private:
     void beforeInput();
@@ -49,6 +53,8 @@ private:
     base::Point screen_offset_;
     base::Point last_mouse_pos_;
     uint32_t last_mouse_mask_ = 0;
+
+    std::unique_ptr<TouchInjector> touch_injector_;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjectorWin);
 };

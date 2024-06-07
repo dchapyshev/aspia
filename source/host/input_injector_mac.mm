@@ -52,4 +52,10 @@ void InputInjectorMac::injectMouseEvent(const proto::MouseEvent& /* event */)
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
+void InputInjectorX11::injectTouchEvent(const proto::TouchEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
 } // namespace host

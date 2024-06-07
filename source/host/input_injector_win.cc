@@ -23,6 +23,7 @@
 #include "base/strings/unicode.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
+#include "host/win/touch_injector.h"
 
 #include <Windows.h>
 
@@ -100,6 +101,7 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorWin::InputInjectorWin()
+    : touch_injector_(std::make_unique<TouchInjector>())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -322,6 +324,12 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
     }
 
     last_mouse_mask_ = mask;
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorWin::injectTouchEvent(const proto::TouchEvent& event)
+{
+    touch_injector_->injectTouchEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
