@@ -22,7 +22,6 @@ include(GNUInstallDirs)
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 if(NOT Qt5LinguistTools_FOUND)
@@ -221,6 +220,7 @@ add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)
 add_subdirectory(console)
+add_subdirectory(drivers)
 add_subdirectory(proto)
 add_subdirectory(qt_base)
 add_subdirectory(relay)

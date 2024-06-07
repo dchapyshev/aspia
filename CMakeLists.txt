@@ -22,6 +22,12 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(aspia)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/source/cmake)
+
+if (WIN32)
+    include(FindWDK)
+endif()
+
 set(ASPIA_VERSION_MAJOR 2)
 set(ASPIA_VERSION_MINOR 8)
 set(ASPIA_VERSION_PATCH 0)
@@ -71,6 +77,7 @@ find_package(zstd CONFIG REQUIRED)
 
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
+    find_package(WDK REQUIRED)
     find_path(WTL_INCLUDE_DIRS "atlapp.h")
 endif()
 
