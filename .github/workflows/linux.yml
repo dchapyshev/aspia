@@ -53,10 +53,10 @@ jobs:
       - name: Dependencies, Build, Tests (Linux/Bash)
         env:
           # This vars used inside CMake
-          VCPKG_DEFAULT_BINARY_CACHE: /opt/vcpkg/bincache-${{ matrix.triplet }}
+          VCPKG_DEFAULT_BINARY_CACHE: /home/shared/vcpkg/bincache-${{ matrix.triplet }}
           VCPKG_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
-          VCPKG_DOWNLOADS: /opt/vcpkg/downloads
+          VCPKG_DOWNLOADS: /home/shared/vcpkg/downloads
         run: |
           export VCPKG_ROOT=$VCPKG_ROOT_PROJECT
           env
