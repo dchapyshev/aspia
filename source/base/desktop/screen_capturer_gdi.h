@@ -49,7 +49,6 @@ protected:
     void reset() final;
 
 private:
-    const Frame* captureImage();
     bool prepareCaptureResources();
 
     typedef HRESULT(STDAPICALLTYPE* DwmEnableCompositionFunc) (UINT uCompositionAction);

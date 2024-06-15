@@ -128,15 +128,81 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 {
     DCHECK(error);
 
-    const Frame* frame = captureImage();
-    if (!frame)
+    queue_.moveToNextFrame();
+    *error = Error::TEMPORARY;
+
+    if (!prepareCaptureResources())
+        return nullptr;
+
+    screen_rect_ = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
+    if (screen_rect_.isEmpty())
     {
-        *error = Error::TEMPORARY;
+        LOG(LS_ERROR) << "Failed to get screen rect";
+        *error = Error::PERMANENT;
         return nullptr;
     }
 
+    if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect_.size())
+    {
+        DCHECK(desktop_dc_);
+        DCHECK(memory_dc_);
+
+        std::unique_ptr<Frame> frame = FrameDib::create(
+            screen_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
+        if (!frame)
+        {
+            LOG(LS_ERROR) << "Failed to create frame buffer";
+            return nullptr;
+        }
+
+        frame->setCapturerType(static_cast<uint32_t>(type()));
+        queue_.replaceCurrentFrame(std::move(frame));
+    }
+
+    Frame* current = queue_.currentFrame();
+    Frame* previous = queue_.previousFrame();
+
+    {
+        win::ScopedSelectObject select_object(
+            memory_dc_, static_cast<FrameDib*>(current)->bitmap());
+
+        if (!BitBlt(memory_dc_,
+                    0, 0,
+                    screen_rect_.width(), screen_rect_.height(),
+                    desktop_dc_,
+                    screen_rect_.left(), screen_rect_.top(),
+                    CAPTUREBLT | SRCCOPY))
+        {
+            static thread_local int count = 0;
+
+            if (count == 0)
+            {
+                LOG(LS_ERROR) << "BitBlt failed";
+            }
+
+            if (++count > 10)
+                count = 0;
+
+            return nullptr;
+        }
+    }
+
+    current->setTopLeft(screen_rect_.topLeft().subtract(desktop_dc_rect_.topLeft()));
+
+    if (!previous || previous->size() != current->size())
+    {
+        differ_ = std::make_unique<Differ>(screen_rect_.size());
+        current->updatedRegion()->addRect(Rect::makeSize(screen_rect_.size()));
+    }
+    else
+    {
+        differ_->calcDirtyRegion(previous->frameData(),
+                                 current->frameData(),
+                                 current->updatedRegion());
+    }
+
     *error = Error::SUCCEEDED;
-    return frame;
+    return current;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,83 +280,6 @@ void ScreenCapturerGdi::reset()
     // Release GDI resources otherwise SetThreadDesktop will fail.
     desktop_dc_.close();
     memory_dc_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-const Frame* ScreenCapturerGdi::captureImage()
-{
-    queue_.moveToNextFrame();
-
-    if (!prepareCaptureResources())
-        return nullptr;
-
-    screen_rect_ = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
-    if (screen_rect_.isEmpty())
-    {
-        LOG(LS_ERROR) << "Failed to get screen rect";
-        return nullptr;
-    }
-
-    if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect_.size())
-    {
-        DCHECK(desktop_dc_);
-        DCHECK(memory_dc_);
-
-        std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
-        if (!frame)
-        {
-            LOG(LS_ERROR) << "Failed to create frame buffer";
-            return nullptr;
-        }
-
-        frame->setCapturerType(static_cast<uint32_t>(type()));
-        queue_.replaceCurrentFrame(std::move(frame));
-    }
-
-    Frame* current = queue_.currentFrame();
-    Frame* previous = queue_.previousFrame();
-
-    {
-        win::ScopedSelectObject select_object(
-            memory_dc_, static_cast<FrameDib*>(current)->bitmap());
-
-        if (!BitBlt(memory_dc_,
-                    0, 0,
-                    screen_rect_.width(), screen_rect_.height(),
-                    desktop_dc_,
-                    screen_rect_.left(), screen_rect_.top(),
-                    CAPTUREBLT | SRCCOPY))
-        {
-            static thread_local int count = 0;
-
-            if (count == 0)
-            {
-                LOG(LS_ERROR) << "BitBlt failed";
-            }
-
-            if (++count > 10)
-                count = 0;
-
-            return nullptr;
-        }
-    }
-
-    current->setTopLeft(screen_rect_.topLeft().subtract(desktop_dc_rect_.topLeft()));
-
-    if (!previous || previous->size() != current->size())
-    {
-        differ_ = std::make_unique<Differ>(screen_rect_.size());
-        current->updatedRegion()->addRect(Rect::makeSize(screen_rect_.size()));
-    }
-    else
-    {
-        differ_->calcDirtyRegion(previous->frameData(),
-                                 current->frameData(),
-                                 current->updatedRegion());
-    }
-
-    return current;
 }
 
 //--------------------------------------------------------------------------------------------------
