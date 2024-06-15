@@ -59,14 +59,14 @@ void convertToPointerTouchInfoImpl(
     // point, rcContact should be set to 0 by 0 rectangle centered at the
     // coordinate.
     pointer_touch_info->rcContact.left =
-        touch_point.x() - touch_point.radius_x();
-    pointer_touch_info->rcContact.top = touch_point.y() - touch_point.radius_y();
+        static_cast<LONG>(touch_point.x() - touch_point.radius_x());
+    pointer_touch_info->rcContact.top = static_cast<LONG>(touch_point.y() - touch_point.radius_y());
     pointer_touch_info->rcContact.right =
-        touch_point.x() + touch_point.radius_x();
+        static_cast<LONG>(touch_point.x() + touch_point.radius_x());
     pointer_touch_info->rcContact.bottom =
-        touch_point.y() + touch_point.radius_y();
+        static_cast<LONG>(touch_point.y() + touch_point.radius_y());
 
-    pointer_touch_info->orientation = touch_point.angle();
+    pointer_touch_info->orientation = static_cast<UINT32>(touch_point.angle());
 
     if (touch_point.pressure() != 0)
     {
@@ -77,16 +77,16 @@ void convertToPointerTouchInfoImpl(
             std::max(kMinimumPressure,
                      std::min(kMaximumPressure, touch_point.pressure()));
 
-        const int kWindowsMaxTouchPressure = 1024;  // Defined in MSDN.
-        const int pressure =
+        const float kWindowsMaxTouchPressure = 1024;  // Defined in MSDN.
+        const float pressure =
             clamped_touch_point_pressure * kWindowsMaxTouchPressure;
-        pointer_touch_info->pressure = pressure;
+        pointer_touch_info->pressure = static_cast<UINT32>(pressure);
     }
 
     pointer_touch_info->pointerInfo.pointerType = PT_TOUCH;
     pointer_touch_info->pointerInfo.pointerId = touch_point.id();
-    pointer_touch_info->pointerInfo.ptPixelLocation.x = touch_point.x();
-    pointer_touch_info->pointerInfo.ptPixelLocation.y = touch_point.y();
+    pointer_touch_info->pointerInfo.ptPixelLocation.x = static_cast<LONG>(touch_point.x());
+    pointer_touch_info->pointerInfo.ptPixelLocation.y = static_cast<LONG>(touch_point.y());
 }
 
 // The caller should set memset(0) the struct and set
@@ -205,7 +205,7 @@ void TouchInjector::addNewTouchPoints(const proto::TouchEvent& event)
         touches_in_contact_[touch_point.id()] = pointer_touch_info;
     }
 
-    if (inject_touch_input_(touches.size(), touches.data()) == 0)
+    if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
         PLOG(LS_ERROR) << "Failed to inject a touch start event";
     }
@@ -230,7 +230,7 @@ void TouchInjector::moveTouchPoints(const proto::TouchEvent& event)
     // Must inject already touching points as move events.
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
-    if (inject_touch_input_(touches.size(), touches.data()) == 0)
+    if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
         PLOG(LS_ERROR) << "Failed to inject a touch move event";
     }
@@ -253,7 +253,7 @@ void TouchInjector::endTouchPoints(const proto::TouchEvent& event)
 
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
-    if (inject_touch_input_(touches.size(), touches.data()) == 0)
+    if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
         PLOG(LS_ERROR) << "Failed to inject a touch end event";
     }
@@ -277,7 +277,7 @@ void TouchInjector::cancelTouchPoints(const proto::TouchEvent& event)
 
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
-    if (inject_touch_input_(touches.size(), touches.data()) == 0)
+    if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
         PLOG(LS_ERROR) << "Failed to inject a touch cancel event";
     }

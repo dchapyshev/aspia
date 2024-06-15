@@ -24,14 +24,14 @@
 typedef DWORD OWN_POINTER_INPUT_TYPE;
 typedef UINT32 OWN_POINTER_FLAGS;
 
-typedef enum OWN_POINTER_FLAGS_ENUM
+typedef enum
 {
     PT_POINTER = 1,
     PT_TOUCH = 2,
     PT_PEN = 3,
     PT_MOUSE = 4,
     PT_TOUCHPAD = 5
-};
+} OWN_POINTER_FLAGS_ENUM;
 
 #define OWN_POINTER_FLAG_NONE               0x00000000 // Default
 #define OWN_POINTER_FLAG_NEW                0x00000001 // New pointer
