@@ -19,7 +19,7 @@ void build(Solution &s) {
     auto &aspia = s.addProject("aspia", "2.8.0");
     aspia += Git("https://github.com/dchapyshev/aspia", "v{v}");
 
-    constexpr auto cppstd = cpp17;
+    constexpr auto cppstd = cpp20;
 
     auto setup_target = [&](auto &t, const String &name, bool add_tests = false, String dir = {}) -> decltype(auto) {
         if (dir.empty())
@@ -115,14 +115,18 @@ void build(Solution &s) {
         base -= "peer/stun_server.cc";
         base -= "peer/stun_peer.cc";
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            base -= "strings/string_util_icu.cc";
             base.Public += "UNICODE"_def;
             base.Public += "WIN32_LEAN_AND_MEAN"_def;
             base.Public += "NOMINMAX"_def;
+        } else {
+            base -= "strings/string_util_win.cc";
         }
         base.Public += protocol;
         base.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
         base.Public += "org.sw.demo.qtproject.qt.base.network" QT_VERSION ""_dep;
         base.Public += "org.sw.demo.qtproject.qt.base.xml" QT_VERSION ""_dep;
+        base.Public += "org.sw.demo.qtproject.qt.labs.vstools.natvis.qt6"_dep;
         base.Public += "org.sw.demo.boost.align"_dep;
         base.Public += "org.sw.demo.imneme.pcg_cpp-master"_dep;
         base.Public += "org.sw.demo.chriskohlhoff.asio"_dep;
@@ -135,6 +139,7 @@ void build(Solution &s) {
         base.Public += "org.sw.demo.xiph.opus"_dep;
         base.Public += "org.sw.demo.sqlite3"_dep;
         base.Public += "org.sw.demo.badger.curl.libcurl"_dep;
+        base.Public += "org.sw.demo.fmt"_dep;
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
             base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
             base +=
@@ -272,8 +277,10 @@ void build(Solution &s) {
     }
 
     //
-    auto &client_core = add_lib("client");
+    auto &client = aspia.addExecutable("client");
+    auto &client_core = client.addStaticLibrary("core");
     {
+        setup_target(client_core, "client");
         client_core += ".*"_rr;
         client_core.Public += common;
         client_core.Public += "org.sw.demo.qtproject.qt.base.printsupport" QT_VERSION ""_dep;
@@ -281,19 +288,19 @@ void build(Solution &s) {
             client_core.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows" QT_VERSION ""_dep;
         else if (client_core.getBuildSettings().TargetOS.Type == OSType::Linux)
             client_core.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.cups" QT_VERSION ""_dep;
-        qt_progs_and_tr(client_core);
+        qt_progs_and_tr(client_core, "client");
     }
 
-    auto setup_exe = [&](auto &t) -> decltype(auto) {
+    auto setup_exe = [&](auto &t, bool console = false) -> decltype(auto) {
         t += cppstd;
-        if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
+        if (t.getBuildSettings().TargetOS.Type == OSType::Windows && !console) {
             if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
                 L->Subsystem = vs::Subsystem::Windows;
             t += "org.sw.demo.qtproject.qt.base.winmain" QT_VERSION ""_dep;
         }
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             t.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
-            t.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.modernwindows" QT_VERSION ""_dep;
         }
         if (t.getBuildSettings().TargetOS.Type == OSType::Linux) {
             t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.platforms.qwayland.generic" QT_VERSION ""_dep;
@@ -307,8 +314,8 @@ void build(Solution &s) {
         }
         return t;
     };
-    auto add_exe = [&](auto &base, const String &name) -> decltype(auto) {
-        return setup_exe(base.addExecutable(name));
+    auto add_exe = [&](auto &base, const String &name, bool console = false) -> decltype(auto) {
+        return setup_exe(base.addExecutable(name), console);
     };
 
     //
@@ -317,7 +324,8 @@ void build(Solution &s) {
     console.Public += client_core, qt_base;
     qt_progs_and_tr(console);
 
-    auto &client = add_exe(aspia, "client_exe");
+    // client
+    setup_exe(client);
     client += "client/client_entry_point.cc";
     client += "client/client.rc";
     client += client_core, qt_base;
@@ -333,13 +341,15 @@ void build(Solution &s) {
         core.Public += common, qt_base;
         core.Public += "org.sw.demo.boost.property_tree"_dep;
         if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            core.Public += "com.Microsoft.VisualStudio.VC.ATLMFC"_dep;
+            core.Public += "org.sw.demo.wtl"_dep;
             core += "DXGI.lib"_slib;
             core += "d3d11.lib"_slib;
         }
         qt_progs_and_tr2(core);
         if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
             core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
-            core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+            core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.modernwindows" QT_VERSION ""_dep;
         }
 
         setup_exe(host);
@@ -347,14 +357,23 @@ void build(Solution &s) {
         host += "host/ui/host.rc";
         host += core;
 
-        auto &service = add_exe(host, "service");
+        auto &service = add_exe(host, "service", true);
         service += "host/service_entry_point.cc";
         service += "host/service.rc";
         service += core;
 
-        auto &desktop_agent = add_exe(aspia, "desktop_agent");
+        auto &desktop_agent = add_exe(host, "desktop_agent");
         desktop_agent += "host/desktop_agent_entry_point.cc";
         desktop_agent += "host/desktop_agent.rc";
         desktop_agent += core;
+
+        auto &file_transfer_agent = add_exe(host, "file_transfer_agent");
+        file_transfer_agent += "host/file_transfer_agent_entry_point.cc";
+        file_transfer_agent += "host/file_transfer_agent.rc";
+        file_transfer_agent += core;
+
+        // integrity
+        // find . -name "*.cc" | xargs grep "aspia_.*\?\.exe\"" {}
+        // core.patch()
     }
 }
