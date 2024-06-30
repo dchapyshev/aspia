@@ -419,7 +419,10 @@ if (WIN32)
         desktop/win/mv2_helper.cc
         desktop/win/mv2_helper.h
         desktop/win/screen_capture_utils.cc
-        desktop/win/screen_capture_utils.h)
+        desktop/win/screen_capture_utils.h
+        desktop/win/swdevice_defines.h
+        desktop/win/virtual_display.cc
+        desktop/win/virtual_display.h)
 
     list(APPEND SOURCE_BASE_DESKTOP_WIN_TESTS
         desktop/win/cursor_unittest.cc
