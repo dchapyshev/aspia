@@ -1,0 +1,63 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2024 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "windows.h"
+
+1 RCDATA
+BEGIN
+    /* Machine dependent parameters */
+    17,     /* Height of vertical thumb */
+    17,     /* Width of horizontal thumb */
+    2,      /* Icon horiz compression factor */
+    2,      /* Icon vert compression factor */
+    1,      /* Cursor horz compression factor */
+    1,      /* Cursor vert compression factor */
+    0,      /* Kanji window height */
+    1,      /* cxBorder (thickness of vertical lines) */
+    1       /* cyBorder (thickness of horizontal lines) */
+END
+
+#define VER_FILETYPE                VFT_DRV
+#define VER_FILESUBTYPE             VFT2_DRV_DISPLAY
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0\0"
+#define VER_FILEDESCRIPTION_STR     "Aspia Mirror Driver"
+#define VER_LEGALCOPYRIGHT_STR      "© 2016 Dmitry Chapyshev"
+#define VER_COMPANYNAME_STR         "Dmitry Chapyshev"
+
+#define VER_PRODUCTNAME_STR         VER_FILEDESCRIPTION_STR
+#define VER_PRODUCTVERSION          VER_FILEVERSION
+#define VER_PRODUCTVERSION_STR      VER_FILEVERSION_STR
+
+#define VER_FILEFLAGSMASK           VS_FFI_FILEFLAGSMASK
+#define VER_FILEFLAGS               0L
+#define VER_FILEOS                  VOS_NT_WINDOWS32
+
+#if defined (_X86_)
+    #define VER_INTERNALNAME_STR        "aspmir.dll"
+    #define VER_ORIGINALFILENAME_STR    "aspmir.dll"
+#elif defined (_AMD64_)
+    #define VER_INTERNALNAME_STR        "aspmir64.dll"
+    #define VER_ORIGINALFILENAME_STR    "aspmir64.dll"
+#else
+    #error Unknown arch
+#endif
+
+#define VER_LANGNEUTRAL
+#include "common.ver"
+
