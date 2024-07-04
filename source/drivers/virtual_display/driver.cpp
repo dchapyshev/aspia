@@ -22,58 +22,30 @@
 
 #include "drivers/virtual_display/driver.h"
 
-#include <vector>
+#include <array>
 
-// If monitor count > ARRAYSIZE(kSampleMonitors), we create edid-less monitors
-static constexpr DWORD kIddMonitorCount = 3;
+static constexpr DWORD kIddMonitorCount = 1;
 
 // Default modes reported for edid-less monitors. The first mode is set as preferred
 static const struct IndirectMonitor::MonitorMode kDefaultModes[] =
 {
+    { 2560, 1440, 60 },
+    { 2048, 1152, 60 },
+    { 1920, 1440, 60 },
+    { 1920, 1200, 60 },
     { 1920, 1080, 60 },
-    { 1600,  900, 60 },
-    { 1024,  768, 75 },
-};
-
-// FOR SAMPLE PURPOSES ONLY, Static info about monitors that will be reported to OS
-static const struct IndirectMonitor kMonitors[] =
-{
-    // Modified EDID from Dell S2719DGF
-    {
-        {
-            0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x10,0xAC,0xE6,0xD0,0x55,0x5A,0x4A,0x30,0x24,0x1D,0x01,
-            0x04,0xA5,0x3C,0x22,0x78,0xFB,0x6C,0xE5,0xA5,0x55,0x50,0xA0,0x23,0x0B,0x50,0x54,0x00,0x02,0x00,
-            0xD1,0xC0,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x58,0xE3,0x00,
-            0xA0,0xA0,0xA0,0x29,0x50,0x30,0x20,0x35,0x00,0x55,0x50,0x21,0x00,0x00,0x1A,0x00,0x00,0x00,0xFF,
-            0x00,0x37,0x4A,0x51,0x58,0x42,0x59,0x32,0x0A,0x20,0x20,0x20,0x20,0x20,0x00,0x00,0x00,0xFC,0x00,
-            0x53,0x32,0x37,0x31,0x39,0x44,0x47,0x46,0x0A,0x20,0x20,0x20,0x20,0x00,0x00,0x00,0xFD,0x00,0x28,
-            0x9B,0xFA,0xFA,0x40,0x01,0x0A,0x20,0x20,0x20,0x20,0x20,0x20,0x00,0x2C
-        },
-        {
-            { 2560, 1440, 144 },
-            { 1920, 1080,  60 },
-            { 1024,  768,  60 },
-        },
-        0
-    },
-    // Modified EDID from Lenovo Y27fA
-    {
-        {
-            0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x30,0xAE,0xBF,0x65,0x01,0x01,0x01,0x01,0x20,0x1A,0x01,
-            0x04,0xA5,0x3C,0x22,0x78,0x3B,0xEE,0xD1,0xA5,0x55,0x48,0x9B,0x26,0x12,0x50,0x54,0x00,0x08,0x00,
-            0xA9,0xC0,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x68,0xD8,0x00,
-            0x18,0xF1,0x70,0x2D,0x80,0x58,0x2C,0x45,0x00,0x53,0x50,0x21,0x00,0x00,0x1E,0x00,0x00,0x00,0x10,
-            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFD,0x00,
-            0x30,0x92,0xB4,0xB4,0x22,0x01,0x0A,0x20,0x20,0x20,0x20,0x20,0x20,0x00,0x00,0x00,0xFC,0x00,0x4C,
-            0x45,0x4E,0x20,0x59,0x32,0x37,0x66,0x41,0x0A,0x20,0x20,0x20,0x00,0x11
-        },
-        {
-            { 3840, 2160,  60 },
-            { 1600,  900,  60 },
-            { 1024,  768,  60 },
-        },
-        0
-    }
+    { 1680, 1050, 60 },
+    { 1600, 1024, 60 },
+    { 1440, 900,  60 },
+    { 1400, 1050, 60 },
+    { 1360, 768,  60 },
+    { 1280, 1024, 60 },
+    { 1280, 960,  60 },
+    { 1280, 800,  60 },
+    { 1280, 768,  60 },
+    { 1280, 720,  60 },
+    { 1024, 768,  60 },
+    { 800,  600,  60 }
 };
 
 extern "C" DRIVER_INITIALIZE DriverEntry;
@@ -249,7 +221,7 @@ void SwapChainProcessor::run()
 
     // Always delete the swap-chain object when swap-chain processing loop terminates in order to kick the system to
     // provide a new swap-chain if necessary.
-    WdfObjectDelete((WDFOBJECT)swap_chain_);
+    WdfObjectDelete(swap_chain_);
     swap_chain_ = nullptr;
 
     AvRevertMmThreadCharacteristics(av_task_handle);
@@ -293,7 +265,7 @@ void SwapChainProcessor::runCore()
                 available_buffer_event_,
                 terminate_event_.Get()
             };
-            DWORD wait_result = WaitForMultipleObjects(ARRAYSIZE(wait_handles), wait_handles, FALSE, 16);
+            DWORD wait_result = WaitForMultipleObjects(std::size(wait_handles), wait_handles, FALSE, 16);
             if (wait_result == WAIT_OBJECT_0 || wait_result == WAIT_TIMEOUT)
             {
                 // We have a new buffer, so try the AcquireBuffer again
@@ -393,9 +365,9 @@ void IndirectDeviceContext::initAdapter()
     adapter_caps.EndPointDiagnostics.TransmissionType = IDDCX_TRANSMISSION_TYPE_WIRED_OTHER;
 
     // Declare your device strings for telemetry (required)
-    adapter_caps.EndPointDiagnostics.pEndPointFriendlyName = L"IddSample Device";
-    adapter_caps.EndPointDiagnostics.pEndPointManufacturerName = L"Microsoft";
-    adapter_caps.EndPointDiagnostics.pEndPointModelName = L"IddSample Model";
+    adapter_caps.EndPointDiagnostics.pEndPointFriendlyName = L"Aspia Virtual Display";
+    adapter_caps.EndPointDiagnostics.pEndPointManufacturerName = L"Dmitry Chapyshev";
+    adapter_caps.EndPointDiagnostics.pEndPointModelName = L"Aspia Virtual Display";
 
     // Declare your hardware and firmware versions (required)
     IDDCX_ENDPOINT_VERSION version;
@@ -418,15 +390,15 @@ void IndirectDeviceContext::initAdapter()
     adapter_init.ObjectAttributes = &attr;
 
     // Start the initialization of the adapter, which will trigger the AdapterFinishInit callback later
-    IDARG_OUT_ADAPTER_INIT adapterInit_out;
-    NTSTATUS status = IddCxAdapterInitAsync(&adapter_init, &adapterInit_out);
+    IDARG_OUT_ADAPTER_INIT adapter_init_out;
+    NTSTATUS status = IddCxAdapterInitAsync(&adapter_init, &adapter_init_out);
     if (NT_SUCCESS(status))
     {
         // Store a reference to the WDF adapter handle
-        adapter_ = adapterInit_out.AdapterObject;
+        adapter_ = adapter_init_out.AdapterObject;
 
         // Store the device context object into the WDF object context
-        auto* context = WdfObjectGet_IndirectDeviceContextWrapper(adapterInit_out.AdapterObject);
+        auto* context = WdfObjectGet_IndirectDeviceContextWrapper(adapter_init_out.AdapterObject);
         context->pContext = this;
     }
 }
@@ -455,16 +427,8 @@ void IndirectDeviceContext::finishInit(UINT connector_index)
 
     monitor_info.MonitorDescription.Size = sizeof(monitor_info.MonitorDescription);
     monitor_info.MonitorDescription.Type = IDDCX_MONITOR_DESCRIPTION_TYPE_EDID;
-    if (connector_index >= ARRAYSIZE(kMonitors))
-    {
-        monitor_info.MonitorDescription.DataSize = 0;
-        monitor_info.MonitorDescription.pData = nullptr;
-    }
-    else
-    {
-        monitor_info.MonitorDescription.DataSize = IndirectMonitor::kEdidBlockSize;
-        monitor_info.MonitorDescription.pData = const_cast<BYTE*>(kMonitors[connector_index].edid_block);
-    }
+    monitor_info.MonitorDescription.DataSize = 0;
+    monitor_info.MonitorDescription.pData = nullptr;
 
     // ==============================
     // TODO: The monitor's container ID should be distinct from "this" device's container ID if the monitor is not
@@ -523,7 +487,7 @@ void IndirectMonitorContext::assignSwapChain(
 {
     processing_thread_.reset();
 
-    auto device = std::make_shared<Direct3DDevice>(render_adapter);
+    std::shared_ptr<Direct3DDevice> device = std::make_shared<Direct3DDevice>(render_adapter);
     if (FAILED(device->init()))
     {
         // It's important to delete the swap-chain if D3D initialization fails, so that the OS knows to generate a new
@@ -660,44 +624,9 @@ NTSTATUS iddParseMonitorDescription(
         // Return success if there was no buffer, since the caller was only asking for a count of modes
         return (in_args->MonitorModeBufferInputCount > 0) ? STATUS_BUFFER_TOO_SMALL : STATUS_SUCCESS;
     }
-    else
-    {
-        // In the sample driver, we have reported some static information about connected monitors
-        // Check which of the reported monitors this call is for by comparing it to the pointer of
-        // our known EDID blocks.
 
-        if (in_args->MonitorDescription.DataSize != IndirectMonitor::kEdidBlockSize)
-            return STATUS_INVALID_PARAMETER;
-
-        DWORD sample_monitor_idx = 0;
-        for(; sample_monitor_idx < ARRAYSIZE(kMonitors); ++sample_monitor_idx)
-        {
-            if (memcmp(in_args->MonitorDescription.pData,
-                       kMonitors[sample_monitor_idx].edid_block,
-                       IndirectMonitor::kEdidBlockSize) == 0)
-            {
-                // Copy the known modes to the output buffer
-                for (DWORD mode_index = 0;
-                     mode_index < IndirectMonitor::kModeListSize;
-                     mode_index++)
-                {
-                    in_args->pMonitorModes[mode_index] = createIddCxMonitorMode(
-                        kMonitors[sample_monitor_idx].mode_list[mode_index].width,
-                        kMonitors[sample_monitor_idx].mode_list[mode_index].height,
-                        kMonitors[sample_monitor_idx].mode_list[mode_index].vsync,
-                        IDDCX_MONITOR_MODE_ORIGIN_MONITORDESCRIPTOR
-                    );
-                }
-
-                // Set the preferred mode as represented in the EDID
-                out_args->PreferredMonitorModeIdx = kMonitors[sample_monitor_idx].preferred_mode_idx;
-                return STATUS_SUCCESS;
-            }
-        }
-
-        // This EDID block does not belong to the monitors we reported earlier
-        return STATUS_INVALID_PARAMETER;
-    }
+    // This EDID block does not belong to the monitors we reported earlier
+    return STATUS_INVALID_PARAMETER;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -715,21 +644,18 @@ NTSTATUS iddMonitorGetDefaultModes(
 
     if (in_args->DefaultMonitorModeBufferInputCount == 0)
     {
-        out_args->DefaultMonitorModeBufferOutputCount = ARRAYSIZE(kDefaultModes);
+        out_args->DefaultMonitorModeBufferOutputCount = std::size(kDefaultModes);
     }
     else
     {
-        for (DWORD mode_index = 0; mode_index < ARRAYSIZE(kDefaultModes); ++mode_index)
+        for (size_t i = 0; i < std::size(kDefaultModes); ++i)
         {
-            in_args->pDefaultMonitorModes[mode_index] = createIddCxMonitorMode(
-                kDefaultModes[mode_index].width,
-                kDefaultModes[mode_index].height,
-                kDefaultModes[mode_index].vsync,
-                IDDCX_MONITOR_MODE_ORIGIN_DRIVER
-            );
+            const IndirectMonitor::MonitorMode& mode = kDefaultModes[i];
+            in_args->pDefaultMonitorModes[i] = createIddCxMonitorMode(
+                mode.width, mode.height, mode.vsync, IDDCX_MONITOR_MODE_ORIGIN_DRIVER);
         }
 
-        out_args->DefaultMonitorModeBufferOutputCount = ARRAYSIZE(kDefaultModes);
+        out_args->DefaultMonitorModeBufferOutputCount = std::size(kDefaultModes);
         out_args->PreferredMonitorModeIdx = 0;
     }
 
@@ -742,22 +668,17 @@ NTSTATUS iddMonitorQueryModes(
     IDDCX_MONITOR /* monitor_object */, const IDARG_IN_QUERYTARGETMODES* in_args,
     IDARG_OUT_QUERYTARGETMODES* out_args)
 {
-    std::vector<IDDCX_TARGET_MODE> target_modes;
+    std::array<IDDCX_TARGET_MODE, std::size(kDefaultModes)> target_modes;
 
     // Create a set of modes supported for frame processing and scan-out. These are typically not based on the
     // monitor's descriptor and instead are based on the static processing capability of the device. The OS will
     // report the available set of modes for a given output as the intersection of monitor modes with target modes.
 
-    target_modes.push_back(createTargetMode(3840, 2160, 60));
-    target_modes.push_back(createTargetMode(2560, 1440, 144));
-    target_modes.push_back(createTargetMode(2560, 1440, 90));
-    target_modes.push_back(createTargetMode(2560, 1440, 60));
-    target_modes.push_back(createTargetMode(1920, 1080, 144));
-    target_modes.push_back(createTargetMode(1920, 1080, 90));
-    target_modes.push_back(createTargetMode(1920, 1080, 60));
-    target_modes.push_back(createTargetMode(1600,  900, 60));
-    target_modes.push_back(createTargetMode(1024,  768, 75));
-    target_modes.push_back(createTargetMode(1024,  768, 60));
+    for (size_t i = 0; i < std::size(kDefaultModes); ++i)
+    {
+        const IndirectMonitor::MonitorMode& mode = kDefaultModes[i];
+        target_modes[i] = createTargetMode(mode.width, mode.height, mode.vsync);
+    }
 
     out_args->TargetModeBufferOutputCount = static_cast<UINT>(target_modes.size());
 
