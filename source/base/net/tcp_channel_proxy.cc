@@ -35,7 +35,7 @@ TcpChannelProxy::TcpChannelProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
+void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer, WriteTask::Priority priority)
 {
     bool schedule_write;
 
@@ -43,7 +43,8 @@ void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
         std::scoped_lock lock(incoming_queue_lock_);
 
         schedule_write = incoming_queue_.empty();
-        incoming_queue_.emplace(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
+        incoming_queue_.emplace(
+            WriteTask::Type::USER_DATA, priority, next_sequence_num_++, channel_id, std::move(buffer));
     }
 
     if (!schedule_write)
@@ -71,7 +72,7 @@ void TcpChannelProxy::scheduleWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannelProxy::reloadWriteQueue(std::queue<WriteTask>* work_queue)
+bool TcpChannelProxy::reloadWriteQueue(WriteQueue* work_queue)
 {
     if (!work_queue->empty())
         return false;

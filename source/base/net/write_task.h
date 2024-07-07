@@ -21,6 +21,9 @@
 
 #include "base/memory/byte_array.h"
 
+#include <queue>
+#include <vector>
+
 namespace base {
 
 class WriteTask
@@ -28,24 +31,59 @@ class WriteTask
 public:
     enum class Type { SERVICE_DATA, USER_DATA };
 
-    WriteTask(Type type, uint8_t channel_id, ByteArray&& data)
+    enum class Priority : int
+    {
+        REAL_TIME = 0,
+        HIGH      = 1,
+        NORMAL    = 2,
+        LOW       = 3,
+        IDLE      = 4
+    };
+
+    WriteTask(Type type, Priority priority, int sequence_num, uint8_t channel_id, ByteArray&& data)
         : type_(type),
+          priority_(priority),
+          sequence_num_(sequence_num),
           channel_id_(channel_id),
           data_(std::move(data))
     {
         // Nothing
     }
 
+    WriteTask(const WriteTask& other) = default;
+    WriteTask& operator=(const WriteTask& other) = default;
+
     Type type() const { return type_; }
+    Priority priority() const { return priority_; }
+    int sequenceNum() const { return sequence_num_; }
     uint8_t channelId() const { return channel_id_; }
     const ByteArray& data() const { return data_; }
     ByteArray& data() { return data_; }
 
 private:
-    const Type type_;
-    const uint8_t channel_id_;
+    Type type_;
+    Priority priority_;
+    int sequence_num_;
+    uint8_t channel_id_;
     ByteArray data_;
 };
+
+struct WriteTaskCompare
+{
+    // Used to support sorting.
+    bool operator()(const WriteTask& first, const WriteTask& second)
+    {
+        if (first.priority() < second.priority())
+            return false;
+
+        if (first.priority() > second.priority())
+            return true;
+
+        return (first.sequenceNum() - second.sequenceNum()) > 0;
+    }
+};
+
+using WriteQueue = std::priority_queue<WriteTask, std::vector<WriteTask>, WriteTaskCompare>;
 
 } // namespace base
 

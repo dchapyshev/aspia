@@ -21,7 +21,7 @@
 
 #include "base/net/tcp_channel.h"
 
-#include <shared_mutex>
+#include <mutex>
 
 namespace base {
 
@@ -30,7 +30,8 @@ class TaskRunner;
 class TcpChannelProxy : public std::enable_shared_from_this<TcpChannelProxy>
 {
 public:
-    void send(uint8_t channel_id, ByteArray&& buffer);
+    void send(uint8_t channel_id, ByteArray&& buffer,
+              WriteTask::Priority priority = WriteTask::Priority::NORMAL);
 
 private:
     friend class TcpChannel;
@@ -40,13 +41,14 @@ private:
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
-    bool reloadWriteQueue(std::queue<WriteTask>* work_queue);
+    bool reloadWriteQueue(WriteQueue* work_queue);
 
     std::shared_ptr<TaskRunner> task_runner_;
 
     TcpChannel* channel_;
 
-    std::queue<WriteTask> incoming_queue_;
+    int next_sequence_num_ = 0;
+    WriteQueue incoming_queue_;
     std::mutex incoming_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpChannelProxy);

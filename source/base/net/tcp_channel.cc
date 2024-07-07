@@ -335,9 +335,9 @@ void TcpChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(uint8_t channel_id, ByteArray&& buffer)
+void TcpChannel::send(uint8_t channel_id, ByteArray&& buffer, WriteTask::Priority priority)
 {
-    addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
+    addWriteTask(WriteTask::Type::USER_DATA, priority, channel_id, std::move(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -626,12 +626,13 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data)
+void TcpChannel::addWriteTask(
+    WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, ByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(type, channel_id, std::move(data));
+    write_queue_.emplace(type, priority, next_sequence_num_++, channel_id, std::move(data));
 
     if (schedule_write)
         doWrite();
@@ -640,7 +641,7 @@ void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArra
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::doWrite()
 {
-    const WriteTask& task = write_queue_.front();
+    const WriteTask& task = write_queue_.top();
     const ByteArray& source_buffer = task.data();
     const uint8_t channel_id = task.channelId();
 
@@ -723,7 +724,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     // Update TX statistics.
     addTxBytes(bytes_transferred);
 
-    const WriteTask& task = write_queue_.front();
+    const WriteTask& task = write_queue_.top();
     WriteTask::Type task_type = task.type();
     uint8_t channel_id = task.channelId();
     ByteArray buffer = std::move(task.data());
@@ -1072,7 +1073,7 @@ void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
     memcpy(buffer.data() + sizeof(uint8_t) + sizeof(header), data, size);
 
     // Add a task to the queue.
-    addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
+    addWriteTask(WriteTask::Type::SERVICE_DATA, WriteTask::Priority::REAL_TIME, 0, std::move(buffer));
 }
 
 } // namespace base
