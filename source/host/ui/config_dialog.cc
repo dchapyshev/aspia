@@ -274,7 +274,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         setConfigChanged(FROM_HERE, true);
     });
 
-    ui.tab_bar->setTabVisible(4, QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier));
+    ui.tab_bar->setTabVisible(4, QApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier));
 
     //---------------------------------------------------------------------------------------------
     // Other
