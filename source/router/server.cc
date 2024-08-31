@@ -276,27 +276,46 @@ bool Server::stopSession(Session::SessionId session_id)
 //--------------------------------------------------------------------------------------------------
 void Server::onHostSessionWithId(SessionHost* session)
 {
+    if (!session)
+    {
+        LOG(LS_ERROR) << "Invalid session pointer";
+        return;
+    }
+
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        if (it->get()->sessionType() == proto::ROUTER_SESSION_HOST)
-        {
-            SessionHost* other_session = reinterpret_cast<SessionHost*>(it->get());
-            if (other_session != session)
-            {
-                for (const auto& host_id : session->hostIdList())
-                {
-                    if (other_session->hasHostId(host_id))
-                    {
-                        LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
+        Session* other_session_ptr = it->get();
 
-                        it = sessions_.erase(it);
-                        continue;
-                    }
-                }
+        if (!other_session_ptr || other_session_ptr->sessionType() != proto::ROUTER_SESSION_HOST)
+        {
+            ++it;
+            continue;
+        }
+
+        SessionHost* other_session = reinterpret_cast<SessionHost*>(other_session_ptr);
+        if (other_session == session)
+        {
+            ++it;
+            continue;
+        }
+
+        bool is_found = false;
+
+        for (const auto& host_id : session->hostIdList())
+        {
+            if (other_session->hasHostId(host_id))
+            {
+                LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
+
+                is_found = true;
+                break;
             }
         }
 
-        ++it;
+        if (is_found)
+            it = sessions_.erase(it);
+        else
+            ++it;
     }
 }
 
