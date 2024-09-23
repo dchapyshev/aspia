@@ -161,7 +161,7 @@ check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT error)
 
 if (IPO_SUPPORTED)
     if (LINUX)
-        message(STATUS IPO/LTO supported but disabled for Linux")
+        message(STATUS "IPO/LTO supported but disabled for Linux")
     else()
         message(STATUS "IPO/LTO supported")
 
