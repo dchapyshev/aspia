@@ -95,16 +95,16 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 //--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
-    LOG(LS_INFO) << "VPX(" << encoding << ") Ctor";
-    codec_.reset(new vpx_codec_ctx_t());
-
     uint32_t thread_count = std::thread::hardware_concurrency();
-    if (thread_count >= 12)
-        thread_count = 8;
-    else if (thread_count >= 8)
+    if (thread_count >= 8)
         thread_count = 4;
-    else
+    else if (thread_count >= 4)
         thread_count = 2;
+    else
+        thread_count = 1;
+
+    LOG(LS_INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
+    codec_.reset(new vpx_codec_ctx_t());
 
     vpx_codec_dec_cfg_t config;
     config.w = 0;
