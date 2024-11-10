@@ -70,7 +70,7 @@
     },
     {
       "name": "ninja-multi-vcpkg-local-win-x86",
-      "description": "Run x86 Native Tools Command Prompt for VS 2019 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
+      "description": "Run x86 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
       "inherits": [
         "ninja-multi-vcpkg-local-base"
       ],
@@ -93,7 +93,7 @@
         "VCPKG_DEFAULT_HOST_TRIPLET": "x86-windows-static",
         "VCPKG_DOWNLOADS": "C:/vcpkg/downloads",
         "VCPKG_DEFAULT_BINARY_CACHE": "C:/vcpkg/bincache-$env{VCPKG_TRIPLET}",
-        "NINJAPATH": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"
+        "NINJAPATH": "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"
       }
     },
     {
