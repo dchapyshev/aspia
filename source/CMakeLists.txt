@@ -160,10 +160,14 @@ endif()
 check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT error)
 
 if (IPO_SUPPORTED)
-    message(STATUS "IPO/LTO supported")
+    if (LINUX)
+        message(STATUS "IPO/LTO supported but disabled for Linux")
+    else()
+        message(STATUS "IPO/LTO supported")
 
-    # Enable link-time code generatation.
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+        # Enable link-time code generatation.
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    endif()
 else()
     message(STATUS "IPO/LTO not supported")
 endif()

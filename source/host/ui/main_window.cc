@@ -264,7 +264,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
         connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
 
-        connect(notifier_, &NotifierWindow::sig_voiceChat, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_voiceChat, this, [this](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setVoiceChat(enable);
@@ -275,7 +275,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             // TODO
         });
 
-        connect(notifier_, &NotifierWindow::sig_lockMouse, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockMouse, this, [this](bool enable)
         {
             if (agent_proxy_)
             {
@@ -287,7 +287,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             }
         });
 
-        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [this](bool enable)
         {
             if (agent_proxy_)
             {
@@ -299,7 +299,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             }
         });
 
-        connect(notifier_, &NotifierWindow::sig_pause, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_pause, this, [this](bool enable)
         {
             if (agent_proxy_)
             {
@@ -633,7 +633,7 @@ void MainWindow::onSettings()
             {
                 QWinEventNotifier* process_watcher = new QWinEventNotifier(this);
 
-                connect(process_watcher, &QWinEventNotifier::activated, this, [=]
+                connect(process_watcher, &QWinEventNotifier::activated, this, [this, process_watcher]
                 {
                     process_watcher->deleteLater();
                     ui.action_settings->setEnabled(true);
