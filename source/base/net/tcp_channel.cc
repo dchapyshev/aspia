@@ -381,6 +381,8 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
 
     if (!enable)
     {
+        LOG(LS_INFO) << "Keep alive disabled";
+
         keep_alive_counter_.clear();
 
         if (keep_alive_timer_)
@@ -391,6 +393,9 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
     }
     else
     {
+        LOG(LS_INFO) << "Keep alive enabled (interval=" << interval.count()
+                     << " timeout=" << timeout.count() << ")";
+
         keep_alive_interval_ = interval;
         keep_alive_timeout_ = timeout;
 
@@ -989,6 +994,7 @@ void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t byt
                 largeNumberIncrement(&keep_alive_counter_);
 
                 // Restart keep alive timer.
+                keep_alive_timer_->cancel();
                 keep_alive_timer_->expires_after(keep_alive_interval_);
                 keep_alive_timer_->async_wait(
                     std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
@@ -1017,6 +1023,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
         LOG(LS_ERROR) << "Keep alive timer error: " << utf16FromLocal8Bit(error_code.message());
 
         // Restarting the timer.
+        keep_alive_timer_->cancel();
         keep_alive_timer_->expires_after(keep_alive_interval_);
         keep_alive_timer_->async_wait(
             std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
@@ -1031,6 +1038,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
 
         // If a response is not received within the specified interval, the connection will be
         // terminated.
+        keep_alive_timer_->cancel();
         keep_alive_timer_->expires_after(keep_alive_timeout_);
         keep_alive_timer_->async_wait(
             std::bind(&Handler::onKeepAliveTimeout, handler_, std::placeholders::_1));
