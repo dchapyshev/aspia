@@ -24,6 +24,7 @@ list(APPEND SOURCE_PROTO
     desktop_internal.proto
     file_transfer.proto
     key_exchange.proto
+    port_forwarding.proto
     host_internal.proto
     relay_peer.proto
     router_admin.proto
