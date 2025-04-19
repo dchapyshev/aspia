@@ -73,6 +73,11 @@
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/session_type.cc" line="46"/>
+        <source>Port Forwarding</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -246,77 +251,87 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="182"/>
-        <source>Display &apos;%1&apos;</source>
+        <location filename="../ui/about_dialog.cc" line="174"/>
+        <source>Logging directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="183"/>
-        <source>Pixel ratio: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/about_dialog.cc" line="184"/>
-        <source>Logical DPI: %1x%2</source>
+        <location filename="../ui/about_dialog.cc" line="176"/>
+        <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="187"/>
-        <source>Physical DPI: %1x%2</source>
+        <source>Display &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="188"/>
+        <source>Pixel ratio: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="189"/>
+        <source>Logical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="192"/>
+        <source>Physical DPI: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="197"/>
         <source>Size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="195"/>
+        <location filename="../ui/about_dialog.cc" line="200"/>
         <source>Available size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="199"/>
+        <location filename="../ui/about_dialog.cc" line="204"/>
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="202"/>
+        <location filename="../ui/about_dialog.cc" line="207"/>
         <source>Depth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="203"/>
+        <location filename="../ui/about_dialog.cc" line="208"/>
         <source>Refresh rate: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="208"/>
+        <location filename="../ui/about_dialog.cc" line="213"/>
         <source>%1 version: %2</source>
         <translation>%1 版本： %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="267"/>
+        <location filename="../ui/about_dialog.cc" line="272"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="275"/>
+        <location filename="../ui/about_dialog.cc" line="280"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="277"/>
+        <location filename="../ui/about_dialog.cc" line="282"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="292"/>
+        <location filename="../ui/about_dialog.cc" line="297"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="293"/>
+        <location filename="../ui/about_dialog.cc" line="298"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

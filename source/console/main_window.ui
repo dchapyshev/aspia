@@ -54,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -107,6 +107,7 @@
     <addaction name="action_file_transfer"/>
     <addaction name="action_text_chat"/>
     <addaction name="action_system_info"/>
+    <addaction name="action_port_forwarding"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -198,6 +199,7 @@
    <addaction name="action_file_transfer"/>
    <addaction name="action_text_chat"/>
    <addaction name="action_system_info"/>
+   <addaction name="action_port_forwarding"/>
    <addaction name="separator"/>
    <addaction name="action_about"/>
    <addaction name="action_exit"/>
@@ -694,6 +696,30 @@
    </property>
    <property name="toolTip">
     <string>Export computer group to file</string>
+   </property>
+  </action>
+  <action name="action_port_forwarding">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
+   </property>
+   <property name="text">
+    <string>Port Forwarding</string>
+   </property>
+  </action>
+  <action name="action_port_forwarding_connect">
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
+   </property>
+   <property name="text">
+    <string>Port Forwarding</string>
+   </property>
+   <property name="toolTip">
+    <string>Port Forwarding</string>
    </property>
   </action>
  </widget>

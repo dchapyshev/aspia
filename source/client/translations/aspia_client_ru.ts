@@ -166,7 +166,7 @@
     </message>
     <message>
         <location filename="../client_main.cc" line="60"/>
-        <location filename="../client_main.cc" line="701"/>
+        <location filename="../client_main.cc" line="705"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -179,7 +179,7 @@
         <translation type="vanished">Введен некорректный тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="702"/>
+        <location filename="../client_main.cc" line="706"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -554,176 +554,182 @@
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="126"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="127"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="138"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="139"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="150"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="151"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="165"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="166"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="176"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="177"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="188"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="189"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="200"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="201"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="205"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="208"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="211"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="206"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="209"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="212"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="223"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="231"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="232"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="242"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="243"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="251"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="254"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="252"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="255"/>
         <source>Power control</source>
         <translation>Управление питанием</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="262"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="263"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="267"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="268"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="272"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="273"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="277"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="278"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="286"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="287"/>
         <source>Remote Update</source>
         <translation>Удаленное обновление</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="298"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="299"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="310"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="311"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="313"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="314"/>
         <source>Close session</source>
         <translation>Закрыть сессию</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="372"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="373"/>
         <source>Fit window</source>
         <translation>По размеру окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="382"/>
         <source>Minimize</source>
         <translation>Свернуть</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="384"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="385"/>
         <source>Minimize window</source>
         <translation>Свернуть окно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="389"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="392"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="390"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="393"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="397"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot (Safe mode)</source>
         <translation>Перезагрузка (безопасный режим)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="400"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="401"/>
         <source>Reboot in safe mode</source>
         <translation>Перезагрузка в безопасном режиме</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="405"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="406"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>Вставить буфер обмена как нажатия клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="414"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="417"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="415"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="418"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="425"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="426"/>
         <source>Recording settings...</source>
         <translation>Параметры записи...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="434"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="437"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="435"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="438"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="446"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="449"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
         <translation>Диспетчер задач</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="463"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="464"/>
         <source>Pause video when minimizing</source>
         <translation>Приостанавливать видео при сворачивании</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="474"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="475"/>
         <source>Pause audio when minimizing</source>
         <translation>Приостанавливать звук при сворачивании</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="487"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="490"/>
+        <source>Port Forwarding</source>
+        <translation>Перенаправление портов</translation>
     </message>
 </context>
 <context>
@@ -949,6 +955,59 @@
     </message>
 </context>
 <context>
+    <name>PortForwardingWindow</name>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="14"/>
+        <source>Port Forwarding</source>
+        <translation>Перенаправление портов</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="20"/>
+        <source>Statistics</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="28"/>
+        <source>Remote host:</source>
+        <translation>Удаленный хост:</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="42"/>
+        <source>Remote port:</source>
+        <translation>Удаленный порт:</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="56"/>
+        <source>Local port:</source>
+        <translation>Локальный порт:</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="70"/>
+        <source>Data received:</source>
+        <translation>Получено данных:</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="116"/>
+        <source>Hide to tray on startup</source>
+        <translation>Прятать в трей при запуске</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="138"/>
+        <source>Hide to tray</source>
+        <translation>Спрятать в трей</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="145"/>
+        <source>Close session</source>
+        <translation>Закрыть сессию</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="84"/>
+        <source>Data sent:</source>
+        <translation>Отправлено данных:</translation>
+    </message>
+</context>
+<context>
     <name>ProcessItem</name>
     <message>
         <source>TB</source>
@@ -1006,6 +1065,121 @@
     <message>
         <source>Could not save image</source>
         <translation type="obsolete">Не удалось сохранить изображение</translation>
+    </message>
+</context>
+<context>
+    <name>QtSystemInfoWindow</name>
+    <message>
+        <source>Summary</source>
+        <translation type="obsolete">Сводка</translation>
+    </message>
+    <message>
+        <source>Hardware</source>
+        <translation type="obsolete">Оборудование</translation>
+    </message>
+    <message>
+        <source>Devices</source>
+        <translation type="obsolete">Устройства</translation>
+    </message>
+    <message>
+        <source>Video Adapters</source>
+        <translation type="obsolete">Видеоадаптеры</translation>
+    </message>
+    <message>
+        <source>Monitors</source>
+        <translation type="obsolete">Мониторы</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Принтеры</translation>
+    </message>
+    <message>
+        <source>Power Options</source>
+        <translation type="obsolete">Параметры питания</translation>
+    </message>
+    <message>
+        <source>Software</source>
+        <translation type="obsolete">Программное обеспечение</translation>
+    </message>
+    <message>
+        <source>Applications</source>
+        <translation type="obsolete">Приложения</translation>
+    </message>
+    <message>
+        <source>Drivers</source>
+        <translation type="obsolete">Драйверы</translation>
+    </message>
+    <message>
+        <source>Services</source>
+        <translation type="obsolete">Службы</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="obsolete">Процессы</translation>
+    </message>
+    <message>
+        <source>Licenses</source>
+        <translation type="obsolete">Лицензии</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="obsolete">Сеть</translation>
+    </message>
+    <message>
+        <source>Network Adapters</source>
+        <translation type="obsolete">Сетевые адаптеры</translation>
+    </message>
+    <message>
+        <source>Routes</source>
+        <translation type="obsolete">Маршруты</translation>
+    </message>
+    <message>
+        <source>Connections</source>
+        <translation type="obsolete">Подключения</translation>
+    </message>
+    <message>
+        <source>Network Shares</source>
+        <translation type="obsolete">Сетевые ресурсы</translation>
+    </message>
+    <message>
+        <source>Open Files</source>
+        <translation type="obsolete">Открытые файлы</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="obsolete">Операционная система</translation>
+    </message>
+    <message>
+        <source>Environment Variables</source>
+        <translation type="obsolete">Переменные окружения</translation>
+    </message>
+    <message>
+        <source>Event Logs</source>
+        <translation type="obsolete">Журнал событий</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="obsolete">Пользователи</translation>
+    </message>
+    <message>
+        <source>User Groups</source>
+        <translation type="obsolete">Группы пользователей</translation>
+    </message>
+    <message>
+        <source>HTML File</source>
+        <translation type="obsolete">HTML-файл</translation>
+    </message>
+    <message>
+        <source>HTML File (*.html)</source>
+        <translation type="obsolete">HTML-файл (*.html)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Failed to save file: %1</source>
+        <translation type="obsolete">Не удалось сохранить файл: %1</translation>
     </message>
 </context>
 <context>
@@ -2894,80 +3068,80 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="378"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="434"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="440"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="445"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="579"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="600"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="631"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="683"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="629"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="583"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="666"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="687"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="630"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="584"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="605"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="667"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="688"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="595"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="601"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="610"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
         <source>Wait for host</source>
         <translation>Ожидание хоста</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="632"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="663"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="684"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="790"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -3339,34 +3513,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="338"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="347"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="333"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="339"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="342"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="348"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1082"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1084"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -4242,88 +4416,93 @@
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="374"/>
+        <location filename="../ui/session_window.cc" line="340"/>
+        <source>Port Forwarding</source>
+        <translation>Перенаправление портов</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="410"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="416"/>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="420"/>
+        <location filename="../ui/session_window.cc" line="462"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="433"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
+        <location filename="../ui/session_window.cc" line="449"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation>Версия приложения, к которому вы подключаетесь, меньше чем минимально поддерживаемая версия.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="450"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="474"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
@@ -4332,22 +4511,22 @@
         <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="494"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>

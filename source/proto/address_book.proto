@@ -22,6 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
 import "desktop.proto";
+import "port_forwarding.proto";
 
 package proto.address_book;
 
@@ -35,15 +36,17 @@ enum EncryptionType
 
 message SessionConfig
 {
-    DesktopConfig desktop_manage = 1;
-    DesktopConfig desktop_view   = 2;
+    DesktopConfig desktop_manage           = 1;
+    DesktopConfig desktop_view             = 2;
+    port_forwarding.Config port_forwarding = 3;
 }
 
 message InheritConfig
 {
-    bool credentials    = 1;
-    bool desktop_manage = 2;
-    bool desktop_view   = 3;
+    bool credentials     = 1;
+    bool desktop_manage  = 2;
+    bool desktop_view    = 3;
+    bool port_forwarding = 4;
 }
 
 message Computer

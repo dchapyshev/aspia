@@ -336,6 +336,10 @@ void SessionWindow::setClientTitle(const Config& config)
             session_name = tr("Text Chat");
             break;
 
+        case proto::SESSION_TYPE_PORT_FORWARDING:
+            session_name = tr("Port Forwarding");
+            break;
+
         default:
             NOTREACHED();
             break;

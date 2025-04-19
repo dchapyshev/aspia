@@ -138,6 +138,12 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
         emit sig_startSession(proto::SESSION_TYPE_TEXT_CHAT);
     });
 
+    connect(ui.action_port_forwarding, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Port forwarding requested";
+        emit sig_startSession(proto::SESSION_TYPE_PORT_FORWARDING);
+    });
+
     bool is_pinned = settings.isToolBarPinned();
 
     ui.action_pin->setChecked(is_pinned);

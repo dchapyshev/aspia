@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "proto/desktop.pb.h"
+#include "proto/port_forwarding.pb.h"
 
 namespace client {
 
@@ -29,9 +30,11 @@ class ConfigFactory
 public:
     static proto::DesktopConfig defaultDesktopManageConfig();
     static proto::DesktopConfig defaultDesktopViewConfig();
+    static proto::port_forwarding::Config defaultPortForwardingConfig();
 
     static void setDefaultDesktopManageConfig(proto::DesktopConfig* config);
     static void setDefaultDesktopViewConfig(proto::DesktopConfig* config);
+    static void setDefaultPortForwardingConfig(proto::port_forwarding::Config* config);
 
     // Corrects invalid values in the configuration if they are.
     static void fixupDesktopConfig(proto::DesktopConfig* config);

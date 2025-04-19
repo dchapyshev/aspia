@@ -21,6 +21,7 @@
     <file alias="minus.png">resources/minus.png</file>
     <file alias="pencil.png">resources/pencil.png</file>
     <file alias="plus.png">resources/plus.png</file>
+    <file alias="port-forwarding.png">resources/port-forwarding.png</file>
     <file alias="folder-stand.png">resources/folder-stand.png</file>
     <file alias="monitor.png">resources/monitor.png</file>
     <file alias="monitor-keyboard.png">resources/monitor-keyboard.png</file>

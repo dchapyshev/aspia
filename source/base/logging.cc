@@ -24,7 +24,6 @@
 #include "base/system_time.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/unicode.h"
-
 #include <fstream>
 #include <iomanip>
 #include <mutex>
@@ -336,6 +335,21 @@ void shutdownLogging()
 
     std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
+}
+
+//--------------------------------------------------------------------------------------------------
+std::filesystem::path loggingDirectory()
+{
+    if (g_log_dir_path.empty())
+        return defaultLogFileDir();
+
+    return g_log_dir_path;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::filesystem::path loggingFile()
+{
+    return g_log_file_path;
 }
 
 //--------------------------------------------------------------------------------------------------

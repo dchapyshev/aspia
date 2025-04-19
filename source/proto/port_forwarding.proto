@@ -20,16 +20,23 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package proto.port_forwarding;
 
-message PortForwardingRequest
+message Config
 {
-    uint32 remote_port        = 1;
-    uint32 connection_timeout = 2;
-    bool compress_data        = 3;
+    string remote_host  = 1;
+    uint32 remote_port  = 2;
+    uint32 local_port   = 3;
+    string command_line = 4;
 }
 
-message PortForwardingResult
+message Request
+{
+    string remote_host = 1;
+    uint32 remote_port = 2;
+}
+
+message Result
 {
     enum ErrorCode
     {
@@ -41,14 +48,25 @@ message PortForwardingResult
     ErrorCode error_code = 1;
 }
 
-message PortForwardingData
+message Start
 {
-    enum Flags
-    {
-        NONE       = 0;
-        COMPRESSED = 1;
-    }
+    uint32 dummy = 1;
+}
 
-    bytes data   = 1;
-    uint32 flags = 2;
+message Data
+{
+    bytes data = 1;
+}
+
+message ClientToHost
+{
+    Request request = 1;
+    Start start     = 2;
+    Data data       = 3;
+}
+
+message HostToClient
+{
+    Result result = 1;
+    Data data     = 2;
 }

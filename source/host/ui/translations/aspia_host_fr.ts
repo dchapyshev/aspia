@@ -302,29 +302,34 @@
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="431"/>
+        <location filename="../main_window.ui" line="432"/>
         <source>Desktop Manage</source>
         <translation>Gestion du bureau</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="442"/>
+        <location filename="../main_window.ui" line="443"/>
         <source>Desktop View</source>
         <translation>Vue du bureau</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="453"/>
+        <location filename="../main_window.ui" line="454"/>
         <source>File Transfer</source>
         <translation>Transfert de fichier</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="464"/>
+        <location filename="../main_window.ui" line="465"/>
         <source>System Information</source>
         <translation>Informations Système</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="475"/>
+        <location filename="../main_window.ui" line="476"/>
         <source>Text Chat</source>
         <translation>Fenêtre de dialogue</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="484"/>
+        <source>Port Forwarding</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="333"/>
@@ -342,27 +347,27 @@
         <translation>Accès</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="377"/>
+        <location filename="../main_window.ui" line="378"/>
         <source>Exit</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="386"/>
+        <location filename="../main_window.ui" line="387"/>
         <source>Online Help...</source>
         <translation>Aide en ligne...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="398"/>
+        <location filename="../main_window.ui" line="399"/>
         <source>About</source>
         <translation>A propos de</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="407"/>
+        <location filename="../main_window.ui" line="408"/>
         <source>Settings...</source>
         <translation>Paramètres...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="412"/>
+        <location filename="../main_window.ui" line="413"/>
         <source>Hide</source>
         <translation>Cacher</translation>
     </message>
@@ -377,7 +382,7 @@
         <translation>Vue</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="420"/>
+        <location filename="../main_window.ui" line="421"/>
         <source>Show icons in menus</source>
         <translation>Afficher les icônes dans les menus</translation>
     </message>
@@ -891,101 +896,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="412"/>
+        <location filename="../main_window.cc" line="413"/>
         <source>Not available</source>
         <translation>Non disponible</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="539"/>
-        <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="540"/>
+        <location filename="../main_window.cc" line="734"/>
+        <location filename="../main_window.cc" line="923"/>
         <source>Aspia Host</source>
         <translation>Hôte Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="192"/>
-        <location filename="../main_window.cc" line="712"/>
+        <location filename="../main_window.cc" line="193"/>
+        <location filename="../main_window.cc" line="713"/>
         <source>Show</source>
         <translation>Montrer</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="717"/>
+        <location filename="../main_window.cc" line="718"/>
         <source>Hide</source>
         <translation>Cacher</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="750"/>
+        <location filename="../main_window.cc" line="751"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="751"/>
+        <location filename="../main_window.cc" line="752"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Si vous quittez Aspia, il ne sera plus possible de se connecter à cet ordinateur jusqu&apos;à ce que vous rallumiez manuellement l&apos;ordinateur ou Aspia. Voulez-vous vraiment quitter l&apos;application ?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="467"/>
+        <location filename="../main_window.cc" line="855"/>
         <source>Router is disabled</source>
         <translation>Le routeur est désactivé</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="859"/>
+        <location filename="../main_window.cc" line="860"/>
         <source>Connecting to a router...</source>
         <translation>Connexion à un routeur...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="864"/>
+        <location filename="../main_window.cc" line="865"/>
         <source>Connected to a router</source>
         <translation>Connecté à un routeur</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="870"/>
         <source>Connection error</source>
         <translation>Erreur de connexion</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="474"/>
+        <location filename="../main_window.cc" line="475"/>
         <source>Connected to a router %1</source>
         <translation>Connecté à un routeur %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="478"/>
+        <location filename="../main_window.cc" line="479"/>
         <source>Failed to connect to router %1</source>
         <translation>Échec de la connexion au routeur %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="471"/>
         <source>Connecting to a router %1...</source>
         <translation>Connexion à un routeur %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="530"/>
+        <location filename="../main_window.cc" line="531"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>L&apos;utilisateur &quot;%1&quot; (%2) a commencé l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="535"/>
+        <location filename="../main_window.cc" line="536"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>L&apos;utilisateur &quot;%1&quot; (%2) a arrêté l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="756"/>
+        <location filename="../main_window.cc" line="757"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="757"/>
+        <location filename="../main_window.cc" line="758"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="923"/>
+        <location filename="../main_window.cc" line="924"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="919"/>
+        <location filename="../main_window.cc" line="920"/>
         <source>IP addresses:</source>
         <translation>Adresses IP:</translation>
     </message>
@@ -993,37 +998,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="251"/>
+        <location filename="../notifier_window.cc" line="255"/>
         <source>Disconnect</source>
         <translation>Déconnexion</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="308"/>
+        <location filename="../notifier_window.cc" line="312"/>
         <source>Unlock mouse</source>
         <translation>Déverrouiller la souris</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="313"/>
+        <location filename="../notifier_window.cc" line="317"/>
         <source>Lock mouse</source>
         <translation>Verrouiller la souris</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="335"/>
+        <location filename="../notifier_window.cc" line="339"/>
         <source>Unlock keyboard</source>
         <translation>Déverrouiller le clavier</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="340"/>
+        <location filename="../notifier_window.cc" line="344"/>
         <source>Lock keyboard</source>
         <translation>Verrouiller le clavier</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="362"/>
+        <location filename="../notifier_window.cc" line="366"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="367"/>
+        <location filename="../notifier_window.cc" line="371"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
@@ -1031,27 +1036,27 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="153"/>
-        <location filename="../user_dialog.cc" line="166"/>
-        <location filename="../user_dialog.cc" line="182"/>
-        <location filename="../user_dialog.cc" line="194"/>
-        <location filename="../user_dialog.cc" line="216"/>
-        <location filename="../user_dialog.cc" line="237"/>
+        <location filename="../user_dialog.cc" line="154"/>
+        <location filename="../user_dialog.cc" line="167"/>
+        <location filename="../user_dialog.cc" line="183"/>
+        <location filename="../user_dialog.cc" line="195"/>
+        <location filename="../user_dialog.cc" line="217"/>
+        <location filename="../user_dialog.cc" line="238"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="167"/>
+        <location filename="../user_dialog.cc" line="168"/>
         <source>The username you entered already exists.</source>
         <translation>Le nom d&apos;utilisateur que vous avez saisi existe déjà.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="183"/>
+        <location filename="../user_dialog.cc" line="184"/>
         <source>The passwords you entered do not match.</source>
         <translation>Les mots de passe que vous avez saisis ne correspondent pas.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="195"/>
+        <location filename="../user_dialog.cc" line="196"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Le mot de passe ne peut être vide et ne doit pas dépasser %n caractères.</numerusform>
@@ -1059,12 +1064,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="206"/>
+        <location filename="../user_dialog.cc" line="207"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe que vous avez saisi ne répond pas aux exigences de sécurité !</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="209"/>
+        <location filename="../user_dialog.cc" line="210"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des minuscules, des majuscules et des chiffres et ne doit pas être inférieur à %n caractères.</numerusform>
@@ -1072,22 +1077,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="213"/>
+        <location filename="../user_dialog.cc" line="214"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous entrer un autre mot de passe ?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="238"/>
+        <location filename="../user_dialog.cc" line="239"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erreur interne inconnue lors de la création ou de la modification d&apos;un utilisateur.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="295"/>
+        <location filename="../user_dialog.cc" line="296"/>
         <source>Double-click to change</source>
         <translation>Double-cliquez pour modifier</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="154"/>
+        <location filename="../user_dialog.cc" line="155"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Le nom d&apos;utilisateur ne peut être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, ., @.</translation>
     </message>
@@ -1097,12 +1102,12 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="220"/>
+        <location filename="../user_dialog.cc" line="221"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="221"/>
+        <location filename="../user_dialog.cc" line="222"/>
         <source>No</source>
         <translation>Non</translation>
     </message>

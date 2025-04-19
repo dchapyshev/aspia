@@ -29,6 +29,7 @@
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
+#include "console/computer_group_dialog_port_forwarding.h"
 #include "console/settings.h"
 
 #include <QAbstractButton>
@@ -52,7 +53,8 @@ enum ItemType
     ITEM_TYPE_PARENT,
     ITEM_TYPE_GENERAL,
     ITEM_TYPE_DESKTOP_MANAGE,
-    ITEM_TYPE_DESKTOP_VIEW
+    ITEM_TYPE_DESKTOP_VIEW,
+    ITEM_TYPE_PORT_FORWARDING
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -234,14 +236,19 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
     desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
-    desktop_manage_item->setText(0, tr("Manage"));
+    desktop_manage_item->setText(0, tr("Desktop Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
     desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
-    desktop_view_item->setText(0, tr("View"));
+    desktop_view_item->setText(0, tr("Desktop View"));
+
+    QTreeWidgetItem* port_forwarding_item = new QTreeWidgetItem(ITEM_TYPE_PORT_FORWARDING);
+    port_forwarding_item->setIcon(0, QIcon(":/img/port-forwarding.png"));
+    port_forwarding_item->setText(0, tr("Port Forwarding"));
 
     sessions_item->addChild(desktop_manage_item);
     sessions_item->addChild(desktop_view_item);
+    sessions_item->addChild(port_forwarding_item);
 
     ComputerGroupDialogParent* parent_tab =
         new ComputerGroupDialogParent(ITEM_TYPE_PARENT, true, ui.widget);
@@ -251,6 +258,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, true, ui.widget);
     ComputerGroupDialogDesktop* desktop_view_tab =
         new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, true, ui.widget);
+    ComputerGroupDialogPortForwarding* port_forwarding_tab =
+        new ComputerGroupDialogPortForwarding(ITEM_TYPE_PORT_FORWARDING, true, ui.widget);
 
     if (!data_->root_group().has_config())
     {
@@ -268,10 +277,12 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         proto::SESSION_TYPE_DESKTOP_MANAGE, data_->root_group().config());
     desktop_view_tab->restoreSettings(
         proto::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
+    port_forwarding_tab->restoreSettings(data_->root_group().config());
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
     tabs_.append(desktop_view_tab);
+    tabs_.append(port_forwarding_tab);
     tabs_.append(parent_tab);
 
     QSize min_size;
@@ -622,6 +633,13 @@ bool AddressBookDialog::saveChanges()
 
             desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
                 data_->mutable_root_group()->mutable_config());
+        }
+        else if (type == ITEM_TYPE_PORT_FORWARDING)
+        {
+            ComputerGroupDialogPortForwarding* port_forwarding_tab =
+                static_cast<ComputerGroupDialogPortForwarding*>(tab);
+
+            port_forwarding_tab->saveSettings(data_->mutable_root_group()->mutable_config());
         }
     }
 

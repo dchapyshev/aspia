@@ -227,6 +227,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         send_connection_list(file_transfer_clients_);
         send_connection_list(system_info_clients_);
         send_connection_list(text_chat_clients_);
+        send_connection_list(port_forwarding_clients_);
 
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
@@ -353,7 +354,7 @@ base::User UserSession::user() const
 size_t UserSession::clientsCount() const
 {
     return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size() +
-           text_chat_clients_.size();
+           text_chat_clients_.size() + port_forwarding_clients_.size();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -364,7 +365,8 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
     bool confirm_required = true;
 
     proto::SessionType session_type = client_session->sessionType();
-    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO ||
+        session_type == proto::SESSION_TYPE_PORT_FORWARDING)
     {
         LOG(LS_INFO) << "Confirmation for system info session NOT required (sid=" << session_id_ << ")";
         confirm_required = false;
@@ -989,6 +991,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
     delete_finished(&system_info_clients_);
     delete_finished(&text_chat_clients_);
+    delete_finished(&port_forwarding_clients_);
 
     if (desktop_clients_.empty())
     {
@@ -1134,9 +1137,11 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     }
 
     proto::SessionType session_type = client_session.sessionType();
-    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO ||
+        session_type == proto::SESSION_TYPE_PORT_FORWARDING)
     {
-        LOG(LS_INFO) << "Notify for system info session NOT required (sid=" << session_id_ << ")";
+        LOG(LS_INFO) << "Notify for " << session_type << " session is NOT required (sid="
+                     << session_id_ << ")";
         return;
     }
 
@@ -1261,6 +1266,7 @@ void UserSession::killClientSession(uint32_t id)
     stop_by_id(&file_transfer_clients_, id);
     stop_by_id(&system_info_clients_, id);
     stop_by_id(&text_chat_clients_, id);
+    stop_by_id(&port_forwarding_clients_, id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1357,6 +1363,13 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         {
             LOG(LS_INFO) << "New text chat session (sid=" << session_id_ << ")";
             text_chat_clients_.emplace_back(std::move(client_session));
+        }
+        break;
+
+        case proto::SESSION_TYPE_PORT_FORWARDING:
+        {
+            LOG(LS_INFO) << "New port forwarding session (sid=" << session_id_ << ")";
+            port_forwarding_clients_.emplace_back(std::move(client_session));
         }
         break;
 

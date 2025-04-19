@@ -85,6 +85,7 @@ private slots:
     void onFileTransferConnect();
     void onSystemInfoConnect();
     void onTextChatConnect();
+    void onPortForwardingConnect();
 
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);

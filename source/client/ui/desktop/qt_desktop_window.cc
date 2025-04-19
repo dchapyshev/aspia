@@ -31,6 +31,7 @@
 #include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/text_chat/qt_text_chat_window.h"
+#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
 #include "client/ui/desktop/statistics_dialog.h"
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
@@ -246,6 +247,11 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
             case proto::SESSION_TYPE_TEXT_CHAT:
                 session_window = new client::QtTextChatWindow();
+                break;
+
+            case proto::SESSION_TYPE_PORT_FORWARDING:
+                LOG(LS_ERROR) << "Fix me! Use real config";
+                session_window = new client::QtPortForwardingWindow(proto::port_forwarding::Config());
                 break;
 
             default:

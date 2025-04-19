@@ -64,6 +64,10 @@ public:
                 setIcon(0, QIcon(":/img/text-chat.png"));
                 break;
 
+            case proto::SESSION_TYPE_PORT_FORWARDING:
+                setIcon(0, QIcon(":/img/port-forwarding.png"));
+                break;
+
             default:
                 LOG(LS_FATAL) << "Unexpected session type: " << client.session_type;
                 return;

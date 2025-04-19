@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>258</width>
-    <height>201</height>
+    <height>221</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -316,7 +316,7 @@ text-decoration: underline;
      <x>0</x>
      <y>0</y>
      <width>258</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">
@@ -362,6 +362,7 @@ text-decoration: underline;
     <addaction name="action_file_transfer"/>
     <addaction name="action_system_info"/>
     <addaction name="action_text_chat"/>
+    <addaction name="action_port_forwarding"/>
    </widget>
    <addaction name="menu_aspia"/>
    <addaction name="menu_view"/>
@@ -473,6 +474,14 @@ text-decoration: underline;
    </property>
    <property name="text">
     <string>Text Chat</string>
+   </property>
+  </action>
+  <action name="action_port_forwarding">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Port Forwarding</string>
    </property>
   </action>
  </widget>

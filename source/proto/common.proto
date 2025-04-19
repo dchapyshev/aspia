@@ -30,15 +30,16 @@ enum HostChannelId
 
 enum SessionType
 {
-    SESSION_TYPE_UNKNOWN        = 0;
-    SESSION_TYPE_DESKTOP_MANAGE = 1;
-    SESSION_TYPE_DESKTOP_VIEW   = 2;
-    SESSION_TYPE_FILE_TRANSFER  = 4;
-    SESSION_TYPE_SYSTEM_INFO    = 8;
-    SESSION_TYPE_TEXT_CHAT      = 16;
+    SESSION_TYPE_UNKNOWN         = 0;
+    SESSION_TYPE_DESKTOP_MANAGE  = 1;
+    SESSION_TYPE_DESKTOP_VIEW    = 2;
+    SESSION_TYPE_FILE_TRANSFER   = 4;
+    SESSION_TYPE_SYSTEM_INFO     = 8;
+    SESSION_TYPE_TEXT_CHAT       = 16;
+    SESSION_TYPE_PORT_FORWARDING = 32;
 
     // When adding or removing session types, you need to recalculate this value.
-    SESSION_TYPE_ALL            = 31;
+    SESSION_TYPE_ALL            = 63;
 }
 
 message Version

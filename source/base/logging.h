@@ -148,6 +148,9 @@ bool initLogging(const LoggingSettings& settings = LoggingSettings());
 //       guarantee that it will stay closed after this call.
 void shutdownLogging();
 
+std::filesystem::path loggingDirectory();
+std::filesystem::path loggingFile();
+
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);
 

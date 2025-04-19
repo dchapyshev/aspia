@@ -24,6 +24,7 @@
 #include "console/computer_dialog_desktop.h"
 #include "console/computer_dialog_general.h"
 #include "console/computer_dialog_parent.h"
+#include "console/computer_dialog_port_forwarding.h"
 #include "console/computer_factory.h"
 
 #include <QAbstractButton>
@@ -38,7 +39,8 @@ enum ItemType
     ITEM_TYPE_PARENT,
     ITEM_TYPE_GENERAL,
     ITEM_TYPE_DESKTOP_MANAGE,
-    ITEM_TYPE_DESKTOP_VIEW
+    ITEM_TYPE_DESKTOP_VIEW,
+    ITEM_TYPE_PORT_FORWARDING
 };
 
 } // namespace
@@ -88,14 +90,19 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
     desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
-    desktop_manage_item->setText(0, tr("Manage"));
+    desktop_manage_item->setText(0, tr("Desktop Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
     desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
-    desktop_view_item->setText(0, tr("View"));
+    desktop_view_item->setText(0, tr("Desktop View"));
+
+    QTreeWidgetItem* port_forwarding_item = new QTreeWidgetItem(ITEM_TYPE_PORT_FORWARDING);
+    port_forwarding_item->setIcon(0, QIcon(":/img/port-forwarding.png"));
+    port_forwarding_item->setText(0, tr("Port Forwarding"));
 
     sessions_item->addChild(desktop_manage_item);
     sessions_item->addChild(desktop_view_item);
+    sessions_item->addChild(port_forwarding_item);
 
     ComputerDialogParent* parent_tab =
         new ComputerDialogParent(ITEM_TYPE_PARENT, ui.widget);
@@ -105,14 +112,18 @@ ComputerDialog::ComputerDialog(QWidget* parent,
         new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
     ComputerDialogDesktop* desktop_view_tab =
         new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+    ComputerDialogPortForwarding* port_forwarding_tab =
+        new ComputerDialogPortForwarding(ITEM_TYPE_PORT_FORWARDING, ui.widget);
 
     general_tab->restoreSettings(parent_name, computer_);
     desktop_manage_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, computer_);
     desktop_view_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_VIEW, computer_);
+    port_forwarding_tab->restoreSettings(computer_);
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
     tabs_.append(desktop_view_tab);
+    tabs_.append(port_forwarding_tab);
     tabs_.append(parent_tab);
 
     QSize min_size;
@@ -245,6 +256,12 @@ bool ComputerDialog::saveChanges()
         {
             ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
             desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW, &computer_);
+        }
+        else if (type == ITEM_TYPE_PORT_FORWARDING)
+        {
+            ComputerDialogPortForwarding* port_forwarding_tab =
+                static_cast<ComputerDialogPortForwarding*>(tab);
+            port_forwarding_tab->saveSettings(&computer_);
         }
     }
 

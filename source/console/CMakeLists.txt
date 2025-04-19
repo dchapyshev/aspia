@@ -39,6 +39,9 @@ list(APPEND SOURCE_CONSOLE
     computer_dialog_parent.cc
     computer_dialog_parent.h
     computer_dialog_parent.ui
+    computer_dialog_port_forwarding.cc
+    computer_dialog_port_forwarding.h
+    computer_dialog_port_forwarding.ui
     computer_dialog_tab.h
     computer_drag.h
     computer_factory.cc
@@ -55,6 +58,9 @@ list(APPEND SOURCE_CONSOLE
     computer_group_dialog_parent.cc
     computer_group_dialog_parent.h
     computer_group_dialog_parent.ui
+    computer_group_dialog_port_forwarding.cc
+    computer_group_dialog_port_forwarding.h
+    computer_group_dialog_port_forwarding.ui
     computer_group_dialog_tab.h
     computer_group_drag.h
     computer_group_item.cc

@@ -29,6 +29,8 @@ list(APPEND SOURCE_CLIENT_CORE
     client_file_transfer.h
     client_main.cc
     client_main.h
+    client_port_forwarding.cc
+    client_port_forwarding.h
     client_proxy.cc
     client_proxy.h
     client_system_info.cc
@@ -70,6 +72,9 @@ list(APPEND SOURCE_CLIENT_CORE
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
+    port_forwarding_window.h
+    port_forwarding_window_proxy.cc
+    port_forwarding_window_proxy.h
     router.cc
     router.h
     router_proxy.cc
@@ -194,6 +199,11 @@ list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
     ui/file_transfer/qt_file_manager_window.h
     ui/file_transfer/qt_file_manager_window.ui)
 
+list(APPEND SOURCE_CLIENT_CORE_UI_PORT_FORWARDING
+    ui/port_forwarding/qt_port_forwarding_window.cc
+    ui/port_forwarding/qt_port_forwarding_window.h
+    ui/port_forwarding/qt_port_forwarding_window.ui)
+
 list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
     ui/router_manager/router_manager_window.cc
     ui/router_manager/router_manager_window.h
@@ -282,6 +292,7 @@ source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
+source_group(ui\\port_forwarding FILES ${SOURCE_CLIENT_CORE_UI_PORT_FORWARDING})
 source_group(ui\\router_manager FILES ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
@@ -293,6 +304,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
     ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
+    ${SOURCE_CLIENT_CORE_UI_PORT_FORWARDING}
     ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
     ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})

@@ -162,7 +162,7 @@
     </message>
     <message>
         <location filename="../client_main.cc" line="60"/>
-        <location filename="../client_main.cc" line="701"/>
+        <location filename="../client_main.cc" line="705"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -171,7 +171,7 @@
         <translation type="vanished">输入了错误的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="702"/>
+        <location filename="../client_main.cc" line="706"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -510,175 +510,181 @@
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="126"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="127"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">锁定工具栏</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="138"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="139"/>
         <source>Session configuration</source>
         <translation type="unfinished">会话配置</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="150"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="151"/>
         <source>Automatic window size</source>
         <translation type="unfinished">自动窗口大小</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="165"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="166"/>
         <source>Switch to full screen mode or back</source>
         <translation type="unfinished">切换到全屏模式或返回</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="176"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="177"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished">自动滚动</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="188"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="189"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation type="unfinished">发送 Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="200"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="201"/>
         <source>Advanced menu</source>
         <translation type="unfinished">高级菜单</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="205"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="208"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="211"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="206"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="209"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="212"/>
         <source>Save screenshot...</source>
         <translation type="unfinished">保存截图...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="223"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
         <translation type="unfinished">文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="231"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="232"/>
         <source>Scale</source>
         <translation type="unfinished">缩放</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="242"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="243"/>
         <source>Send key combinations</source>
         <translation type="unfinished">发送组合键</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="251"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="254"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="252"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="255"/>
         <source>Power control</source>
         <translation type="unfinished">电源控制</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="262"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="263"/>
         <source>Shutdown</source>
         <translation type="unfinished">关机</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="267"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="268"/>
         <source>Reboot</source>
         <translation type="unfinished">重启</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="272"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="273"/>
         <source>Logoff</source>
         <translation type="unfinished">注销</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="277"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="278"/>
         <source>Lock</source>
         <translation type="unfinished">锁定</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="286"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="287"/>
         <source>Remote Update</source>
         <translation type="unfinished">远程升级</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="298"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="299"/>
         <source>System Information</source>
         <translation type="unfinished">系统信息</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="310"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="311"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="313"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="314"/>
         <source>Close session</source>
         <translation type="unfinished">关闭会话</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="372"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="373"/>
         <source>Fit window</source>
         <translation type="unfinished">安装窗口</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="382"/>
         <source>Minimize</source>
         <translation type="unfinished">最小化</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="384"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="385"/>
         <source>Minimize window</source>
         <translation type="unfinished">最小化窗口</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="389"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="392"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="390"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="393"/>
         <source>Statistics</source>
         <translation type="unfinished">统计</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="397"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot (Safe mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="400"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="401"/>
         <source>Reboot in safe mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="405"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="406"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="414"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="417"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="415"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="418"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="425"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="426"/>
         <source>Recording settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="434"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="437"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="435"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="438"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="446"/>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="449"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="463"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="464"/>
         <source>Pause video when minimizing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.ui" line="474"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="475"/>
         <source>Pause audio when minimizing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="487"/>
+        <location filename="../ui/desktop/desktop_toolbar.ui" line="490"/>
+        <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -885,6 +891,59 @@
     </message>
 </context>
 <context>
+    <name>PortForwardingWindow</name>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="14"/>
+        <source>Port Forwarding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="20"/>
+        <source>Statistics</source>
+        <translation type="unfinished">统计</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="28"/>
+        <source>Remote host:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="42"/>
+        <source>Remote port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="56"/>
+        <source>Local port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="70"/>
+        <source>Data received:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="116"/>
+        <source>Hide to tray on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="138"/>
+        <source>Hide to tray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="145"/>
+        <source>Close session</source>
+        <translation type="unfinished">关闭会话</translation>
+    </message>
+    <message>
+        <location filename="../ui/port_forwarding/qt_port_forwarding_window.ui" line="84"/>
+        <source>Data sent:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ProcessItem</name>
     <message>
         <source>TB</source>
@@ -934,6 +993,37 @@
     <message>
         <source>Could not save image</source>
         <translation type="obsolete">无法保存图像</translation>
+    </message>
+</context>
+<context>
+    <name>QtSystemInfoWindow</name>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">打印机</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="obsolete">操作系统</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="obsolete">用户</translation>
+    </message>
+    <message>
+        <source>HTML File</source>
+        <translation type="obsolete">HTML 文件</translation>
+    </message>
+    <message>
+        <source>HTML File (*.html)</source>
+        <translation type="obsolete">HTML 文件 (*.html)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <source>Failed to save file: %1</source>
+        <translation type="obsolete">无法保存文件：%1</translation>
     </message>
 </context>
 <context>
@@ -2762,80 +2852,80 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="378"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="434"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="440"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="445"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="656"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="677"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="579"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="600"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="631"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="683"/>
         <source>Confirmation</source>
         <translation type="unfinished">确认</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="629"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="660"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="681"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="583"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="666"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="687"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="630"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="682"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="584"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="605"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="667"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="688"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="595"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="601"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="635"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="610"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="626"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="632"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="663"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="684"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="784"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="790"/>
         <source>Scale</source>
         <translation type="unfinished">缩放</translation>
     </message>
@@ -3188,34 +3278,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="332"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="341"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="338"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="347"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="333"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="339"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="342"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="348"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1076"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1082"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1078"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1084"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1109"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
@@ -4005,88 +4095,93 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="374"/>
+        <location filename="../ui/session_window.cc" line="340"/>
+        <source>Port Forwarding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Violation of the communication protocol.</source>
         <translation>违反通信协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密错误（消息加密或解密失败）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>网络发生错误（例如，网络电缆被意外地拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>连接被对方拒绝（或超时）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Remote host closed the connection.</source>
         <translation>远程主机已关闭连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Host address was not found.</source>
         <translation>找不到主机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Socket operation timed out.</source>
         <translation>套接字操作超时。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的地址已在使用中，并被设置为独占地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="410"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定的地址的主机不可用。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="416"/>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="420"/>
+        <location filename="../ui/session_window.cc" line="462"/>
         <source>An unknown error occurred.</source>
         <translation>出现未知错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="433"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Authentication successfully completed.</source>
         <translation>身份验证成功。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Network authentication error.</source>
         <translation>网络身份验证错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>违反数据交换协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
+        <location filename="../ui/session_window.cc" line="449"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="450"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Wrong user name or password.</source>
         <translation>错误的用户名或密码。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>用户不允许指定的会话类型。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="474"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4095,22 +4190,22 @@
         <translation type="vanished">找不到具有指定ID的主机。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>没有可用的中继或密钥池为空。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Failed to connect to the relay server.</source>
         <translation>无法连接到中继服务器。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Access is denied.</source>
         <translation>访问被拒绝。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="494"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>

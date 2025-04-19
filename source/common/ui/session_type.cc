@@ -42,6 +42,9 @@ const char* sessionTypeToString(proto::SessionType session_type)
         case proto::SESSION_TYPE_TEXT_CHAT:
             return QT_TRANSLATE_NOOP("SessionType", "Text Chat");
 
+        case proto::SESSION_TYPE_PORT_FORWARDING:
+            return QT_TRANSLATE_NOOP("SessionType", "Port Forwarding");
+
         default:
             return "";
     }

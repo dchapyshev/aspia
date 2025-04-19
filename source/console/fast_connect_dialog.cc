@@ -27,6 +27,7 @@
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/qt_desktop_window.h"
 #include "client/ui/file_transfer/qt_file_manager_window.h"
+#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/text_chat/qt_text_chat_window.h"
 #include "common/desktop_session_constants.h"
@@ -88,6 +89,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
     add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
     add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/port-forwarding.png", proto::SESSION_TYPE_PORT_FORWARDING);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
@@ -202,6 +204,12 @@ void FastConnectDialog::sessionConfigButtonPressed()
 
             if (dialog.exec() == client::DesktopConfigDialog::Accepted)
                 state_.desktop_view_config = dialog.config();
+        }
+        break;
+
+        case proto::SESSION_TYPE_PORT_FORWARDING:
+        {
+            // TODO
         }
         break;
 
@@ -343,6 +351,19 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             session_window = new client::QtTextChatWindow();
             break;
 
+        case proto::SESSION_TYPE_PORT_FORWARDING:
+        {
+            proto::port_forwarding::Config port_forwarding_config;
+
+            if (ui.checkbox_use_session_params->isChecked())
+                port_forwarding_config = default_config_.session_config().port_forwarding();
+            else
+                port_forwarding_config = state_.port_forwarding_config;
+
+            session_window = new client::QtPortForwardingWindow(port_forwarding_config);
+        }
+        break;
+
         default:
             NOTREACHED();
             break;
@@ -374,11 +395,12 @@ void FastConnectDialog::readState()
     int session_type = 0;
     QByteArray desktop_manage_config;
     QByteArray desktop_view_config;
+    QByteArray port_forwarding_config;
     bool creds_from_address_book = false;
     bool session_params_from_address_book = false;
 
     stream >> state_.history >> session_type >> desktop_manage_config >> desktop_view_config
-           >> creds_from_address_book >> session_params_from_address_book;
+        >> creds_from_address_book >> session_params_from_address_book >> port_forwarding_config;
 
     if (session_type != 0)
         state_.session_type = static_cast<proto::SessionType>(session_type);
@@ -405,6 +427,16 @@ void FastConnectDialog::readState()
         state_.desktop_view_config = client::ConfigFactory::defaultDesktopViewConfig();
     }
 
+    if (!port_forwarding_config.isEmpty())
+    {
+        state_.port_forwarding_config.ParseFromArray(
+            port_forwarding_config.data(), port_forwarding_config.size());
+    }
+    else
+    {
+        state_.port_forwarding_config = client::ConfigFactory::defaultPortForwardingConfig();
+    }
+
     ui.checkbox_use_creds->setChecked(creds_from_address_book);
     ui.checkbox_use_session_params->setChecked(session_params_from_address_book);
 }
@@ -420,6 +452,8 @@ void FastConnectDialog::writeState()
             QByteArray::fromStdString(state_.desktop_manage_config.SerializeAsString());
         QByteArray desktop_view_config =
             QByteArray::fromStdString(state_.desktop_view_config.SerializeAsString());
+        QByteArray port_forwarding_config =
+            QByteArray::fromStdString(state_.port_forwarding_config.SerializeAsString());
         bool creds_from_address_book = ui.checkbox_use_creds->isChecked();
         bool session_params_from_address_book = ui.checkbox_use_session_params->isChecked();
 
@@ -427,7 +461,7 @@ void FastConnectDialog::writeState()
         stream.setVersion(QDataStream::Qt_5_12);
 
         stream << state_.history << session_type << desktop_manage_config << desktop_view_config
-               << creds_from_address_book << session_params_from_address_book;
+               << creds_from_address_book << session_params_from_address_book << port_forwarding_config;
     }
 
     Application::instance()->settings().setFastConnectConfig(address_book_guid_, buffer);

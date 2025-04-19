@@ -56,6 +56,7 @@ private:
         proto::SessionType session_type;
         proto::DesktopConfig desktop_manage_config;
         proto::DesktopConfig desktop_view_config;
+        proto::port_forwarding::Config port_forwarding_config;
     };
 
     Ui::FastConnectDialog ui;

@@ -38,5 +38,6 @@
         <file>broom.png</file>
         <file>export.png</file>
         <file>import.png</file>
+        <file>port-forwarding.png</file>
     </qresource>
 </RCC>
