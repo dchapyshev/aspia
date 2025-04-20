@@ -24,10 +24,9 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor_openssl.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/connect.hpp>
@@ -55,7 +54,7 @@ std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 
 //--------------------------------------------------------------------------------------------------
 RelayPeer::RelayPeer()
-    : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
+    : io_context_(AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(io_context_)
 {

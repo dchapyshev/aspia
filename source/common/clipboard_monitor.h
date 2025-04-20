@@ -19,13 +19,13 @@
 #ifndef COMMON_CLIPBOARD_MONITOR_H
 #define COMMON_CLIPBOARD_MONITOR_H
 
-#include "base/threading/thread.h"
+#include "base/threading/asio_thread.h"
 #include "common/clipboard.h"
 
 namespace common {
 
 class ClipboardMonitor final
-    : public base::Thread::Delegate,
+    : public base::AsioThread::Delegate,
       public common::Clipboard::Delegate
 {
 public:
@@ -39,7 +39,7 @@ public:
     void clearClipboard();
 
 protected:
-    // base::Thread::Delegate implementation.
+    // base::AsioThread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
@@ -49,7 +49,7 @@ protected:
 private:
     common::Clipboard::Delegate* delegate_ = nullptr;
 
-    std::unique_ptr<base::Thread> thread_;
+    std::unique_ptr<base::AsioThread> thread_;
     std::shared_ptr<base::TaskRunner> caller_task_runner_;
     std::shared_ptr<base::TaskRunner> self_task_runner_;
     std::unique_ptr<common::Clipboard> clipboard_;

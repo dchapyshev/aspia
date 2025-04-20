@@ -23,14 +23,16 @@
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/net/tcp_channel_proxy.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/asio_thread.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
+
+#include <QThread>
 
 namespace base {
 
@@ -161,8 +163,8 @@ void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel()
-    : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
-      io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
+    : proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+      io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       encryptor_(std::make_unique<MessageEncryptorFake>()),
@@ -174,8 +176,8 @@ TcpChannel::TcpChannel()
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
-    : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
-      io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
+    : proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+      io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket)),
       connected_(true),
       encryptor_(std::make_unique<MessageEncryptorFake>()),

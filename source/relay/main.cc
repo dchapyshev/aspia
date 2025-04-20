@@ -75,7 +75,7 @@ void showHelp()
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-int wmain()
+int main(int argc, char* argv[])
 {
     base::installFailureHandler(L"aspia_relay");
     base::ScopedLogging logging;
@@ -112,7 +112,7 @@ int wmain()
     }
     else
     {
-        relay::Service().exec();
+        relay::Service().exec(argc, argv);
     }
 
     return 0;

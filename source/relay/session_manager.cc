@@ -20,10 +20,9 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 namespace relay {
 
@@ -129,12 +128,12 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval)
     : task_runner_(std::move(task_runner)),
-      acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      acceptor_(base::AsioEventDispatcher::currentIoContext()),
       address_(address),
       port_(port),
       idle_timeout_(idle_timeout),
-      idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      idle_timer_(base::AsioEventDispatcher::currentIoContext()),
+      stat_timer_(base::AsioEventDispatcher::currentIoContext()),
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval)
 {

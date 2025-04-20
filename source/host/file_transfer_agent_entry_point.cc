@@ -16,23 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "build/build_config.h"
 #include "host/file_transfer_agent_main.h"
-
-#if defined(OS_WIN)
-#include <Windows.h>
-
-//--------------------------------------------------------------------------------------------------
-int WINAPI wWinMain(HINSTANCE /* hInstance */,
-                    HINSTANCE /* hPrevInstance */,
-                    LPWSTR /* lpCmdLine */,
-                    int /* nCmdShow */)
-{
-    fileTransferAgentMain(0, nullptr); // On Windows ignores arguments.
-    return 0;
-}
-
-#else
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -40,5 +24,3 @@ int main(int argc, char *argv[])
     fileTransferAgentMain(argc, argv);
     return 0;
 }
-
-#endif

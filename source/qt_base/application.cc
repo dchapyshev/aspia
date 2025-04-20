@@ -21,6 +21,8 @@
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
+#include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/asio_task_runner.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_task_runner.h"
 
@@ -108,7 +110,8 @@ bool isSameApplication(const QLocalSocket* socket)
 
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
-    : QApplication(argc, argv)
+    : QApplication(argc, argv),
+      io_thread_(base::AsioThread::EventDispatcher::ASIO, nullptr)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -141,8 +144,7 @@ Application::Application(int& argc, char* argv[])
     crypto_initializer_ = std::make_unique<base::ScopedCryptoInitializer>();
     CHECK(crypto_initializer_->isSucceeded());
 
-    io_thread_.start(base::MessageLoop::Type::ASIO);
-    io_task_runner_ = io_thread_.taskRunner();
+    io_thread_.start();
 
     locale_loader_ = std::make_unique<LocaleLoader>();
     ui_task_runner_ = std::make_shared<QtTaskRunner>();
@@ -198,7 +200,7 @@ std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
         return nullptr;
     }
 
-    return application->io_task_runner_;
+    return application->io_thread_.taskRunner();
 }
 
 //--------------------------------------------------------------------------------------------------

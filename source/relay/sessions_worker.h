@@ -19,7 +19,7 @@
 #ifndef RELAY_SESSIONS_WORKER_H
 #define RELAY_SESSIONS_WORKER_H
 
-#include "base/threading/thread.h"
+#include "base/threading/asio_thread.h"
 #include "relay/session_manager.h"
 
 namespace relay {
@@ -27,7 +27,7 @@ namespace relay {
 class SharedPool;
 
 class SessionsWorker final
-    : public base::Thread::Delegate,
+    : public base::AsioThread::Delegate,
       public SessionManager::Delegate
 {
 public:
@@ -44,7 +44,7 @@ public:
     void disconnectSession(uint64_t session_id);
 
 protected:
-    // base::Thread::Delegate implementation.
+    // base::AsioThread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
@@ -62,7 +62,7 @@ private:
 
     std::unique_ptr<SharedPool> shared_pool_;
 
-    std::unique_ptr<base::Thread> thread_;
+    std::unique_ptr<base::AsioThread> thread_;
     std::shared_ptr<base::TaskRunner> caller_task_runner_;
     std::shared_ptr<base::TaskRunner> self_task_runner_;
     std::unique_ptr<SessionManager> session_manager_;

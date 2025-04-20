@@ -18,14 +18,8 @@
 
 #include "host/service_main.h"
 
-#include "build/build_config.h"
-
 //--------------------------------------------------------------------------------------------------
-#if defined(OS_WIN)
-int wmain(int argc, wchar_t* argv[])
-#else
 int main(int argc, char* argv[])
-#endif
 {
     return host::hostServiceMain(argc, argv);
 }

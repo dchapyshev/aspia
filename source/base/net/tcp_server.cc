@@ -19,10 +19,9 @@
 #include "base/net/tcp_server.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/ip/address.hpp>
 
@@ -203,7 +202,7 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
 
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer()
-    : impl_(base::make_local_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
+    : impl_(base::make_local_shared<Impl>(AsioEventDispatcher::currentIoContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }

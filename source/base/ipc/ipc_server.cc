@@ -21,9 +21,8 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
@@ -269,7 +268,7 @@ void IpcServer::Listener::onNewConnetion(
 
 //--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer()
-    : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
+    : io_context_(AsioEventDispatcher::currentIoContext())
 {
     LOG(LS_INFO) << "Ctor";
 

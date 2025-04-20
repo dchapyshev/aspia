@@ -19,11 +19,13 @@
 #include "host/file_transfer_agent_main.h"
 
 #include "build/build_config.h"
+#include "base/application.h"
 #include "base/command_line.h"
 #include "base/environment.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
-#include "base/message_loop/message_loop.h"
+#include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/asio_task_runner.h"
 #include "build/version.h"
 #include "host/file_transfer_agent.h"
 
@@ -33,7 +35,7 @@
 #endif // defined(OS_WIN)
 
 //--------------------------------------------------------------------------------------------------
-void fileTransferAgentMain(int argc, const char* const* argv)
+void fileTransferAgentMain(int& argc, char* argv[])
 {
 #if defined(OS_WIN)
     base::installFailureHandler(L"aspia_file_transfer_agent");
@@ -124,14 +126,14 @@ void fileTransferAgentMain(int argc, const char* const* argv)
 
     if (command_line->hasSwitch(u"channel_id"))
     {
-        std::unique_ptr<base::MessageLoop> message_loop =
-            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
+        base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+        base::Application application(argc, argv);
 
         std::unique_ptr<host::FileTransferAgent> file_transfer_agent =
-            std::make_unique<host::FileTransferAgent>(message_loop->taskRunner());
+            std::make_unique<host::FileTransferAgent>(base::Application::taskRunner());
 
         file_transfer_agent->start(command_line->switchValue(u"channel_id"));
-        message_loop->run();
+        application.exec();
     }
     else
     {

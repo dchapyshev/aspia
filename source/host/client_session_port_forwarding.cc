@@ -19,9 +19,8 @@
 #include "host/client_session_port_forwarding.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -119,8 +118,8 @@ void ClientSessionPortForwarding::Handler::onRead(
 //--------------------------------------------------------------------------------------------------
 ClientSessionPortForwarding::ClientSessionPortForwarding(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_PORT_FORWARDING, std::move(channel)),
-      socket_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      resolver_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      socket_(base::AsioEventDispatcher::currentIoContext()),
+      resolver_(base::AsioEventDispatcher::currentIoContext()),
       handler_(base::make_local_shared<Handler>(this)),
       incoming_message_(std::make_unique<proto::port_forwarding::ClientToHost>()),
       outgoing_message_(std::make_unique<proto::port_forwarding::HostToClient>())

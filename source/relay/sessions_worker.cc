@@ -36,7 +36,7 @@ SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval),
       shared_pool_(std::move(shared_pool)),
-      thread_(std::make_unique<base::Thread>())
+      thread_(std::make_unique<base::AsioThread>(base::AsioThread::EventDispatcher::ASIO, this))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(peer_port_ && shared_pool_);
@@ -61,7 +61,7 @@ void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
     DCHECK(caller_task_runner_);
     DCHECK(delegate_);
 
-    thread_->start(base::MessageLoop::Type::ASIO, this);
+    thread_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

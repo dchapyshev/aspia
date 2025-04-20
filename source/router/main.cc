@@ -239,7 +239,7 @@ void showHelp()
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-int wmain()
+int main(int argc, char* argv[])
 {
     base::installFailureHandler(L"aspia_router");
     base::ScopedLogging logging;
@@ -280,7 +280,7 @@ int wmain()
     }
     else
     {
-        router::Service().exec();
+        router::Service().exec(argc, argv);
     }
 
     return 0;

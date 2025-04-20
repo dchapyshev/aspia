@@ -16,62 +16,70 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_capturer_wrapper.h"
+#include "base/threading/asio_thread.h"
 
+#include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/asio_task_runner.h"
+#include "base/application.h"
 #include "base/logging.h"
-#include "base/audio/audio_capturer.h"
-#include "base/ipc/ipc_channel_proxy.h"
+
+#if defined(Q_OS_WIN)
+#include "base/win/scoped_com_initializer.h"
+#endif // defined(Q_OS_WIN)
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy)
-    : channel_proxy_(std::move(channel_proxy)),
-      thread_(std::make_unique<AsioThread>(AsioThread::EventDispatcher::ASIO, this))
+AsioThread::AsioThread(EventDispatcher event_dispatcher, Delegate* delegate, QObject* parent)
+    : QThread(parent),
+      delegate_(delegate)
 {
-    LOG(LS_INFO) << "Ctor";
-    DCHECK(channel_proxy_);
+    if (event_dispatcher == EventDispatcher::ASIO)
+        setEventDispatcher(new AsioEventDispatcher());
 }
 
 //--------------------------------------------------------------------------------------------------
-AudioCapturerWrapper::~AudioCapturerWrapper()
+void AsioThread::stop()
 {
-    LOG(LS_INFO) << "Dtor";
-    thread_->stop();
+    quit();
+    wait();
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioCapturerWrapper::start()
+// static
+std::shared_ptr<TaskRunner> AsioThread::currentTaskRunner()
 {
-    LOG(LS_INFO) << "Starting audio capturer";
-    DCHECK(thread_);
+    AsioThread* thread = dynamic_cast<AsioThread*>(QThread::currentThread());
+    if (thread)
+        return thread->taskRunner();
 
-    thread_->start();
+    std::shared_ptr<TaskRunner> task_runner = Application::taskRunner();
+    CHECK(task_runner);
+
+    return task_runner;
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioCapturerWrapper::onBeforeThreadRunning()
+std::shared_ptr<base::TaskRunner> AsioThread::taskRunner()
 {
-    thread_->setPriority(AsioThread::HighestPriority);
-
-    capturer_ = AudioCapturer::create();
-    if (!capturer_)
-    {
-        LOG(LS_ERROR) << "Unable to create audio capturer";
-        return;
-    }
-
-    capturer_->start([this](std::unique_ptr<proto::AudioPacket> packet)
-    {
-        outgoing_message_.set_allocated_audio_packet(packet.release());
-        channel_proxy_->send(base::serialize(outgoing_message_));
-    });
+    return task_runner_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioCapturerWrapper::onAfterThreadRunning()
+void AsioThread::run()
 {
-    capturer_.reset();
+    task_runner_ = std::make_shared<AsioTaskRunner>();
+
+    win::ScopedCOMInitializer com_initializer;
+    CHECK(com_initializer.isSucceeded());
+
+    if (delegate_)
+        delegate_->onBeforeThreadRunning();
+
+    exec();
+
+    if (delegate_)
+        delegate_->onAfterThreadRunning();
 }
 
 } // namespace base

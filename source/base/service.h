@@ -19,8 +19,10 @@
 #ifndef BASE_SERVICE_H
 #define BASE_SERVICE_H
 
-#include "base/message_loop/message_loop.h"
+#include "base/application.h"
+#include "base/macros_magic.h"
 #include "base/session_id.h"
+#include "base/task_runner.h"
 
 #if defined(OS_WIN)
 #include "base/win/session_status.h"
@@ -38,13 +40,12 @@ class ServiceThread;
 class Service
 {
 public:
-    Service(std::u16string_view name, MessageLoop::Type type);
+    explicit Service(std::u16string_view name);
     virtual ~Service();
 
-    void exec();
+    void exec(int& argc, char* argv[]);
 
     const std::u16string& name() const { return name_; }
-    MessageLoop* messageLoop() const { return message_loop_.get(); }
     std::shared_ptr<TaskRunner> taskRunner() const { return task_runner_; }
 
 protected:
@@ -64,9 +65,8 @@ private:
     static void signalHandler(int sig);
 #endif // defined(OS_POSIX)
 
-    MessageLoop::Type type_;
     std::u16string name_;
-    std::unique_ptr<MessageLoop> message_loop_;
+    std::unique_ptr<Application> application_;
     std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);

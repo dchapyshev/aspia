@@ -211,7 +211,7 @@ std::optional<std::string> currentSessionName()
 
 #if defined(OS_LINUX)
 //--------------------------------------------------------------------------------------------------
-int hostServiceMain(int argc, char* argv[])
+int hostServiceMain(int& argc, char* argv[])
 {
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
@@ -268,7 +268,7 @@ int hostServiceMain(int argc, char* argv[])
     }
     else
     {
-        Service().exec();
+        Service().exec(argc, argv);
     }
 
     return 0;
@@ -277,7 +277,7 @@ int hostServiceMain(int argc, char* argv[])
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-int hostServiceMain(int argc, wchar_t* argv[])
+int hostServiceMain(int& argc, char* argv[])
 {
     (void)argc;
     (void)argv;
@@ -432,7 +432,7 @@ int hostServiceMain(int argc, wchar_t* argv[])
         }
         else
         {
-            Service().exec();
+            Service().exec(argc, argv);
         }
     }
 

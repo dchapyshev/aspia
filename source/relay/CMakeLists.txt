@@ -72,4 +72,15 @@ target_link_libraries(aspia_relay
     aspia_proto
     OpenSSL::Crypto
     ${Protobuf_LITE_LIBRARIES}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${RELAY_PLATFORM_LIBS})
+
+set_property(TARGET aspia_relay PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_relay PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_relay PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_relay
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)

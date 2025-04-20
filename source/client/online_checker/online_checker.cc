@@ -25,7 +25,8 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : ui_task_runner_(std::move(ui_task_runner))
+    : io_thread_(base::AsioThread::EventDispatcher::ASIO, this),
+      ui_task_runner_(std::move(ui_task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -70,7 +71,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
         }
     }
 
-    io_thread_.start(base::MessageLoop::Type::ASIO, this);
+    io_thread_.start();
 }
 
 //--------------------------------------------------------------------------------------------------

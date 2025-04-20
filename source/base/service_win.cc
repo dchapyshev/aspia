@@ -18,10 +18,12 @@
 
 #include "base/service.h"
 
+#include "base/application.h"
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/simple_thread.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
@@ -274,7 +276,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     if (!self)
         return;
 
-    // Start creating the MessageLoop instance.
+    // Start creating the application instance.
     {
         std::scoped_lock lock(self->startup_lock);
         self->startup_state = State::SERVICE_MAIN_CALLED;
@@ -359,9 +361,8 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Service::Service(std::u16string_view name, MessageLoop::Type type)
-    : type_(type),
-      name_(name)
+Service::Service(std::u16string_view name)
+    : name_(name)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -373,7 +374,7 @@ Service::~Service()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::exec()
+void Service::exec(int& argc, char* argv[])
 {
     LOG(LS_INFO) << "Begin";
 
@@ -387,8 +388,10 @@ void Service::exec()
 
     win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    message_loop_ = std::make_unique<MessageLoop>(type_);
-    task_runner_ = message_loop_->taskRunner();
+    QCoreApplication::setEventDispatcher(new AsioEventDispatcher());
+
+    application_ = std::make_unique<Application>(argc, argv);
+    task_runner_ = Application::taskRunner();
 
     std::unique_ptr<ServiceThread> service_thread = std::make_unique<ServiceThread>(this);
 
@@ -414,10 +417,10 @@ void Service::exec()
         service_thread->startup_condition.notify_all();
     }
 
-    message_loop_->run();
+    application_->exec();
 
     service_thread.reset();
-    message_loop_.reset();
+    application_.reset();
 
     LOG(LS_INFO) << "End";
 }

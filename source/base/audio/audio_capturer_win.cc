@@ -20,9 +20,8 @@
 
 #include "base/logging.h"
 #include "base/audio/win/default_audio_device_change_detector.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -63,7 +62,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWin::AudioCapturerWin()
     : sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
-      capture_timer_(MessageLoop::current()->pumpAsio()->ioContext()),
+      capture_timer_(AsioEventDispatcher::currentIoContext()),
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {

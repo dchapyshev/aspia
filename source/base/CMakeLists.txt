@@ -17,6 +17,7 @@
 #
 
 list(APPEND SOURCE_BASE
+    application.h
     applications_reader.h
     base64.cc
     base64.h
@@ -523,26 +524,6 @@ list(APPEND SOURCE_BASE_MEMORY_TESTS
     memory/aligned_memory_unittest.cc
     memory/byte_array_unittest.cc)
 
-list(APPEND SOURCE_BASE_MESSAGE_LOOP
-    message_loop/message_loop.cc
-    message_loop/message_loop.h
-    message_loop/message_loop_task_runner.cc
-    message_loop/message_loop_task_runner.h
-    message_loop/message_pump.h
-    message_loop/message_pump_asio.cc
-    message_loop/message_pump_asio.h
-    message_loop/message_pump_default.cc
-    message_loop/message_pump_default.h
-    message_loop/message_pump_dispatcher.h
-    message_loop/pending_task.cc
-    message_loop/pending_task.h)
-
-if (WIN32)
-    list(APPEND SOURCE_BASE_MESSAGE_LOOP
-        message_loop/message_pump_win.cc
-        message_loop/message_pump_win.h)
-endif()
-
 list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.cc
     net/adapter_enumerator.h
@@ -645,10 +626,14 @@ list(APPEND SOURCE_BASE_STRINGS_TESTS
     strings/string_util_unittest.cc)
 
 list(APPEND SOURCE_BASE_THREADING
+    threading/asio_event_dispatcher.cc
+    threading/asio_event_dispatcher.h
+    threading/asio_task_runner.cc
+    threading/asio_task_runner.h
+    threading/asio_thread.cc
+    threading/asio_thread.h
     threading/simple_thread.cc
     threading/simple_thread.h
-    threading/thread.cc
-    threading/thread.h
     threading/thread_checker.cc
     threading/thread_checker.h)
 
@@ -754,7 +739,6 @@ source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
-source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
 source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_TESTS})
@@ -795,7 +779,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MAC}
     ${SOURCE_BASE_MEMORY}
-    ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
@@ -805,11 +788,21 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
 
+set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_base PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_base
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
+
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt xdg_user_dirs)
 endif()
 
-target_link_libraries(aspia_base PRIVATE aspia_proto ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS})
+target_link_libraries(aspia_base PRIVATE aspia_proto
+    ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 
 if (WIN32)
     set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)

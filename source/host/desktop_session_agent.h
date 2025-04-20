@@ -24,7 +24,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
 #include "base/memory/serializer.h"
-#include "base/threading/thread.h"
+#include "base/threading/asio_thread.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -53,7 +53,7 @@ class DesktopSessionAgent final
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
-      public base::Thread::Delegate,
+      public base::AsioThread::Delegate,
       public common::Clipboard::Delegate
 {
 public:
@@ -102,7 +102,7 @@ private:
     bool is_session_enabled_ = false;
 
 #if defined(OS_WIN)
-    base::Thread ui_thread_;
+    base::AsioThread ui_thread_;
     std::unique_ptr<base::win::MessageWindow> message_window_;
 #endif // defined(OS_WIN)
 

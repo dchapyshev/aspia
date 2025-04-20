@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/scoped_task_runner.h"
-#include "base/threading/thread.h"
+#include "base/threading/asio_thread.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
 
@@ -33,7 +33,7 @@
 namespace client {
 
 class OnlineChecker final
-    : public base::Thread::Delegate,
+    : public base::AsioThread::Delegate,
       public OnlineCheckerDirect::Delegate,
       public OnlineCheckerRouter::Delegate
 {
@@ -63,7 +63,7 @@ public:
                         Delegate* delegate);
 
 protected:
-    // base::Thread::Delegate implementation.
+    // base::AsioThread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
@@ -76,7 +76,7 @@ protected:
     void onRouterCheckerFinished() final;
 
 private:
-    base::Thread io_thread_;
+    base::AsioThread io_thread_;
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     base::ScopedTaskRunner ui_task_runner_;
 

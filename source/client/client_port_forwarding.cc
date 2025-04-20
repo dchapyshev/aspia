@@ -19,9 +19,8 @@
 #include "client/client_port_forwarding.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "client/port_forwarding_window_proxy.h"
 
 #include <asio/ip/address.hpp>
@@ -196,7 +195,7 @@ void ClientPortForwarding::onSessionMessageReceived(
         asio::ip::tcp::endpoint endpoint(asio::ip::address_v6::any(), local_port_);
 
         acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(
-            base::MessageLoop::current()->pumpAsio()->ioContext());
+            base::AsioEventDispatcher::currentIoContext());
 
         std::error_code error_code;
         acceptor_->open(endpoint.protocol(), error_code);

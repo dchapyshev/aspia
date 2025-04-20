@@ -27,6 +27,10 @@
 #include <QAbstractNativeEventFilter>
 #include <QIcon>
 
+#if defined(Q_OS_WIN)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WIN)
+
 namespace host {
 
 namespace {

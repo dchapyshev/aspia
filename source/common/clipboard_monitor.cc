@@ -33,9 +33,19 @@
 
 namespace common {
 
+namespace {
+
+#if defined(Q_OS_WIN)
+const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::EventDispatcher::QT;
+#else
+const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::EventDispatcher::ASIO;
+#endif
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::ClipboardMonitor()
-    : thread_(std::make_unique<base::Thread>())
+    : thread_(std::make_unique<base::AsioThread>(kEventDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -59,19 +69,7 @@ void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runne
     DCHECK(caller_task_runner_);
     DCHECK(delegate_);
 
-    base::MessageLoop::Type message_loop_type;
-
-#if defined(OS_WIN)
-    message_loop_type = base::MessageLoop::Type::WIN;
-#elif defined(OS_LINUX)
-    message_loop_type = base::MessageLoop::Type::ASIO;
-#elif defined(OS_MAC)
-    message_loop_type = base::MessageLoop::Type::DEFAULT;
-#else
-#error Not implemented
-#endif
-
-    thread_->start(message_loop_type, this);
+    thread_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

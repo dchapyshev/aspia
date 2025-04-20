@@ -20,15 +20,10 @@
 #define HOST_SERVICE_MAIN_H
 
 #include "host/host_export.h"
-#include "build/build_config.h"
 
 namespace host {
 
-#if defined(OS_WIN)
-int HOST_EXPORT hostServiceMain(int argc, wchar_t* argv[]);
-#else
-int HOST_EXPORT hostServiceMain(int argc, char* argv[]);
-#endif
+int HOST_EXPORT hostServiceMain(int& argc, char* argv[]);
 
 } // namespace host
 

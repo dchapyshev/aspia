@@ -21,9 +21,9 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel_proxy.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
+#include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/asio_thread.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
@@ -174,8 +174,8 @@ void IpcChannel::Handler::onReadData(const std::error_code& error_code, size_t b
 
 //--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel()
-    : stream_(MessageLoop::current()->pumpAsio()->ioContext()),
-      proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
+    : stream_(AsioEventDispatcher::currentIoContext()),
+      proxy_(new IpcChannelProxy(AsioThread::currentTaskRunner(), this)),
       handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -185,7 +185,7 @@ IpcChannel::IpcChannel()
 IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
-      proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      proxy_(new IpcChannelProxy(AsioThread::currentTaskRunner(), this)),
       is_connected_(true),
       handler_(base::make_local_shared<Handler>(this))
 {

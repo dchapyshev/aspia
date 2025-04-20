@@ -26,7 +26,6 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
-#include "base/threading/thread.h"
 #include "host/system_settings.h"
 
 #if defined(OS_WIN)
@@ -70,6 +69,7 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : io_task_runner_(std::move(task_runner)),
+      ui_thread_(base::AsioThread::EventDispatcher::QT, this),
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       outgoing_message_(std::make_unique<proto::internal::DesktopToService>())
 {
@@ -94,7 +94,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
 
 #if defined(OS_WIN)
-    ui_thread_.start(base::MessageLoop::Type::WIN, this);
+    ui_thread_.start();
 #endif // defined(OS_WIN)
 }
 

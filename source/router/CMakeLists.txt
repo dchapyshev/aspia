@@ -82,4 +82,15 @@ target_link_libraries(aspia_router
     modp_b64
     ${Protobuf_LITE_LIBRARIES}
     unofficial::sqlite3::sqlite3
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${ROUTER_PLATFORM_LIBS})
+
+set_property(TARGET aspia_router PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_router
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
