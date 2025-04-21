@@ -148,11 +148,6 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
-        win/com_imported_mstscax.h
-        win/rdp_client.cc
-        win/rdp_client.h
-        win/rdp_client_window.cc
-        win/rdp_client_window.h
         win/sas_injector.cc
         win/sas_injector.h
         win/touch_injector.cc

@@ -64,14 +64,17 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 //--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
-                                           std::shared_ptr<base::TaskRunner> task_runner)
-    : ClientSession(session_type, std::move(channel)),
-      overflow_detection_timer_(base::WaitableTimer::Type::REPEATED, task_runner),
+                                           std::shared_ptr<base::TaskRunner> task_runner,
+                                           QObject* parent)
+    : ClientSession(session_type, std::move(channel), parent),
       incoming_message_(std::make_unique<proto::ClientToHost>()),
       outgoing_message_(std::make_unique<proto::HostToClient>()),
-      stat_counter_(id(), task_runner)
+      stat_counter_(id())
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&overflow_detection_timer_, &QTimer::timeout,
+            this, &ClientSessionDesktop::onOverflowDetectionTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,8 +102,7 @@ void ClientSessionDesktop::onStarted()
                      << desktop_session_proxy_->screenCaptureFps()
                      << ", max FPS: " << max_fps_ << ")";
 
-        overflow_detection_timer_.start(std::chrono::milliseconds(1000),
-            std::bind(&ClientSessionDesktop::onOverflowDetectionTimer, this));
+        overflow_detection_timer_.start(std::chrono::milliseconds(1000));
     }
     else
     {

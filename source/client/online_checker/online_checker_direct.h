@@ -33,7 +33,7 @@ namespace client {
 class OnlineCheckerDirect
 {
 public:
-    explicit OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_runner);
+    OnlineCheckerDirect();
     ~OnlineCheckerDirect();
 
     class Delegate
@@ -59,7 +59,6 @@ private:
     void onChecked(int computer_id, bool online);
     void onFinished(const base::Location& location);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     ComputerList pending_queue_;
     Delegate* delegate_ = nullptr;
 

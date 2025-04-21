@@ -26,14 +26,18 @@
 #include <memory>
 #include <string>
 
+#include <QObject>
+
 namespace base {
 
 class TcpChannel;
 
-class TcpServer
+class TcpServer final : public QObject
 {
+    Q_OBJECT
+
 public:
-    TcpServer();
+    explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
     class Delegate

@@ -33,8 +33,10 @@ namespace common {
 
 class ClipboardX11 final : public Clipboard
 {
+    Q_OBJECT
+
 public:
-    ClipboardX11();
+    explicit ClipboardX11(QObject* parent = nullptr);
     ~ClipboardX11();
 
 protected:

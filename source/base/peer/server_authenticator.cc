@@ -55,8 +55,8 @@ const char* identifyToString(proto::Identify identify)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner)
-    : Authenticator(std::move(task_runner))
+ServerAuthenticator::ServerAuthenticator(QObject* parent)
+    : Authenticator(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

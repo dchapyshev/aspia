@@ -48,8 +48,10 @@ class ClientFileTransfer final
       public common::FileTaskConsumer,
       public common::FileTaskProducer
 {
+    Q_OBJECT
+
 public:
-    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientFileTransfer() final;
 
     void setFileManagerWindow(std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy);

@@ -78,7 +78,6 @@ find_package(zstd CONFIG REQUIRED)
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
     find_package(WDK REQUIRED)
-    find_path(WTL_INCLUDE_DIRS "atlapp.h")
 endif()
 
 if (UNIX)

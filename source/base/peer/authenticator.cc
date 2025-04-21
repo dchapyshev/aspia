@@ -33,10 +33,16 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Authenticator::Authenticator(std::shared_ptr<TaskRunner> task_runner)
-    : timer_(WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
+Authenticator::Authenticator(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
+
+    timer_.setSingleShot(true);
+    connect(&timer_, &QTimer::timeout, this, [this]()
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -66,8 +72,7 @@ void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback
 
     // If authentication does not complete within the specified time interval, an error will be
     // raised.
-    timer_.start(kTimeout, std::bind(
-        &Authenticator::finish, this, FROM_HERE, ErrorCode::UNKNOWN_ERROR));
+    timer_.start(kTimeout);
 
     channel_->setListener(this);
     if (onStarted())

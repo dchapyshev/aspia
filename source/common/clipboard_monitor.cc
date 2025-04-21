@@ -44,8 +44,9 @@ const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::Eve
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClipboardMonitor::ClipboardMonitor()
-    : thread_(std::make_unique<base::AsioThread>(kEventDispatcher, this))
+ClipboardMonitor::ClipboardMonitor(QObject* parent)
+    : QObject(parent),
+      thread_(std::make_unique<base::AsioThread>(kEventDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -58,64 +59,28 @@ ClipboardMonitor::~ClipboardMonitor()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
-                             common::Clipboard::Delegate* delegate)
+void ClipboardMonitor::start()
 {
     LOG(LS_INFO) << "Starting clipboard monitor";
-
-    caller_task_runner_ = std::move(caller_task_runner);
-    delegate_ = delegate;
-
-    DCHECK(caller_task_runner_);
-    DCHECK(delegate_);
-
     thread_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    if (!self_task_runner_)
-        return;
-
-    if (!self_task_runner_->belongsToCurrentThread())
-    {
-        self_task_runner_->postTask(
-            std::bind(&ClipboardMonitor::injectClipboardEvent, this, event));
-        return;
-    }
-
-    if (clipboard_)
-        clipboard_->injectClipboardEvent(event);
-    else
-        LOG(LS_ERROR) << "No clipboard instance";
+    emit sig_injectClipboardEventPrivate(event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::clearClipboard()
 {
-    if (!self_task_runner_)
-        return;
-
-    if (!self_task_runner_->belongsToCurrentThread())
-    {
-        self_task_runner_->postTask(std::bind(&ClipboardMonitor::clearClipboard, this));
-        return;
-    }
-
-    if (clipboard_)
-        clipboard_->clearClipboard();
-    else
-        LOG(LS_ERROR) << "No clipboard instance";
+    emit sig_clearClipboardPrivate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "Thread starting";
-
-    self_task_runner_ = thread_->taskRunner();
-    DCHECK(self_task_runner_);
 
 #if defined(OS_WIN)
     clipboard_ = std::make_unique<common::ClipboardWin>();
@@ -126,7 +91,20 @@ void ClipboardMonitor::onBeforeThreadRunning()
 #else
 #error Not implemented
 #endif
-    clipboard_->start(this);
+
+    connect(clipboard_.get(), &Clipboard::sig_clipboardEvent,
+            this, &ClipboardMonitor::sig_clipboardEvent,
+            Qt::QueuedConnection);
+
+    connect(this, &ClipboardMonitor::sig_injectClipboardEventPrivate,
+            clipboard_.get(), &Clipboard::injectClipboardEvent,
+            Qt::QueuedConnection);
+
+    connect(this, &ClipboardMonitor::sig_clearClipboardPrivate,
+            clipboard_.get(), &Clipboard::clearClipboard,
+            Qt::QueuedConnection);
+
+    clipboard_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -134,21 +112,6 @@ void ClipboardMonitor::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "Thread stopping";
     clipboard_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClipboardMonitor::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    if (!caller_task_runner_->belongsToCurrentThread())
-    {
-        caller_task_runner_->postTask(std::bind(&ClipboardMonitor::onClipboardEvent, this, event));
-        return;
-    }
-
-    if (delegate_)
-        delegate_->onClipboardEvent(event);
-    else
-        LOG(LS_ERROR) << "Invalid delegate";
 }
 
 } // namespace common

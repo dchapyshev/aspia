@@ -30,8 +30,9 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 ClientSession::ClientSession(
-    proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel)
-    : session_type_(session_type),
+    proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel, QObject* parent)
+    : QObject(parent),
+      session_type_(session_type),
       channel_(std::move(channel))
 {
     DCHECK(channel_);
@@ -44,7 +45,6 @@ ClientSession::ClientSession(
     LOG(LS_INFO) << "Ctor (id=" << id_ << ")";
 }
 
-//--------------------------------------------------------------------------------------------------
 ClientSession::~ClientSession()
 {
     LOG(LS_INFO) << "Dtor (id=" << id_ << ")";
@@ -54,7 +54,8 @@ ClientSession::~ClientSession()
 // static
 std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_type,
                                                      std::unique_ptr<base::TcpChannel> channel,
-                                                     std::shared_ptr<base::TaskRunner> task_runner)
+                                                     std::shared_ptr<base::TaskRunner> task_runner,
+                                                     QObject* parent)
 {
     if (!channel)
     {
@@ -67,23 +68,23 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
             return std::unique_ptr<ClientSessionDesktop>(
-                new ClientSessionDesktop(session_type, std::move(channel), std::move(task_runner)));
+                new ClientSessionDesktop(session_type, std::move(channel), std::move(task_runner), parent));
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return std::unique_ptr<ClientSessionFileTransfer>(
-                new ClientSessionFileTransfer(std::move(channel), std::move(task_runner)));
+                new ClientSessionFileTransfer(std::move(channel), std::move(task_runner), parent));
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
             return std::unique_ptr<ClientSessionSystemInfo>(
-                new ClientSessionSystemInfo(std::move(channel)));
+                new ClientSessionSystemInfo(std::move(channel), parent));
 
         case proto::SESSION_TYPE_TEXT_CHAT:
             return std::unique_ptr<ClientSessionTextChat>(
-                new ClientSessionTextChat(std::move(channel)));
+                new ClientSessionTextChat(std::move(channel), parent));
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
             return std::unique_ptr<ClientSessionPortForwarding>(
-                new ClientSessionPortForwarding(std::move(channel)));
+                new ClientSessionPortForwarding(std::move(channel), parent));
 
         default:
             LOG(LS_ERROR) << "Unknown session type: " << session_type;

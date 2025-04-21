@@ -185,13 +185,20 @@ std::filesystem::path agentFilePath()
 
 //--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
-                                                     std::shared_ptr<base::TaskRunner> task_runner)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel)),
+                                                     std::shared_ptr<base::TaskRunner> task_runner,
+                                                     QObject* parent)
+    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel), parent),
       task_runner_(task_runner),
-      attach_timer_(std::make_unique<base::WaitableTimer>(
-          base::WaitableTimer::Type::SINGLE_SHOT, task_runner))
+      attach_timer_(std::make_unique<QTimer>())
 {
     LOG(LS_INFO) << "Ctor";
+
+    attach_timer_->setSingleShot(true);
+    connect(attach_timer_.get(), &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_ERROR) << "Timeout at the start of the session process";
+        onError(FROM_HERE);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -309,11 +316,7 @@ void ClientSessionFileTransfer::onStarted()
     LOG(LS_INFO) << "Wait for starting agent process";
     has_logged_on_user_ = true;
 
-    attach_timer_->start(std::chrono::seconds(10), [this]()
-    {
-        LOG(LS_ERROR) << "Timeout at the start of the session process";
-        onError(FROM_HERE);
-    });
+    attach_timer_->start(std::chrono::seconds(10));
 }
 
 //--------------------------------------------------------------------------------------------------

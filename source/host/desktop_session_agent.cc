@@ -38,6 +38,8 @@
 #include "host/input_injector_x11.h"
 #endif // defined(OS_LINUX)
 
+#include <QCoreApplication>
+
 namespace host {
 
 namespace {
@@ -67,9 +69,10 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
-    : io_task_runner_(std::move(task_runner)),
+DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
+    : QObject(parent),
       ui_thread_(base::AsioThread::EventDispatcher::QT, this),
+      screen_capture_timer_(new QTimer(this)),
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       outgoing_message_(std::make_unique<proto::internal::DesktopToService>())
 {
@@ -96,6 +99,9 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 #if defined(OS_WIN)
     ui_thread_.start();
 #endif // defined(OS_WIN)
+
+    screen_capture_timer_->setTimerType(Qt::PreciseTimer);
+    connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopSessionAgent::captureBegin);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -133,7 +139,7 @@ void DesktopSessionAgent::onIpcDisconnected()
     setEnabled(false);
 
     LOG(LS_INFO) << "Post quit";
-    io_task_runner_->postQuit();
+    QCoreApplication::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,9 +313,9 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageWritten(base::ByteArray&& buffer)
+void DesktopSessionAgent::onIpcMessageWritten(base::ByteArray&& /* buffer */)
 {
-    serializer_.addBuffer(std::move(buffer));
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,7 +329,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -337,7 +343,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,7 +385,7 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -437,7 +443,7 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
     {
-        channel_->send(serializer_.serialize(*outgoing_message_));
+        channel_->send(base::serialize(*outgoing_message_));
     }
     else
     {
@@ -466,7 +472,7 @@ void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error
             return;
     }
 
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -478,7 +484,7 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -513,7 +519,7 @@ void DesktopSessionAgent::onScreenTypeChanged(
             break;
     }
 
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -551,7 +557,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(serializer_.serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -579,7 +585,9 @@ void DesktopSessionAgent::setEnabled(bool enable)
         // A window is created to monitor the clipboard. We cannot create windows in the current
         // thread. Create a separate thread.
         clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
-        clipboard_monitor_->start(io_task_runner_, this);
+        connect(clipboard_monitor_.get(), &common::ClipboardMonitor::sig_clipboardEvent,
+                this, &DesktopSessionAgent::onClipboardEvent);
+        clipboard_monitor_->start();
 
         // Create a shared memory factory.
         // We will receive notifications of all creations and destruction of shared memory.
@@ -597,7 +605,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         LOG(LS_INFO) << "Session successfully enabled";
 
-        io_task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+        screen_capture_timer_->start(std::chrono::milliseconds(0));
     }
     else
     {
@@ -639,6 +647,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
             lock_at_disconnect_ = false;
         }
 
+        screen_capture_timer_->stop();
         LOG(LS_INFO) << "Session successfully disabled";
     }
 }
@@ -670,16 +679,12 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
     if (update_interval == std::chrono::milliseconds::zero())
     {
         // Capture immediately.
-        io_task_runner_->postTask(
-            std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+        screen_capture_timer_->start(std::chrono::milliseconds(0));
     }
     else
     {
         capture_scheduler_->setUpdateInterval(update_interval);
-
-        io_task_runner_->postDelayedTask(
-            std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
-            capture_scheduler_->nextCaptureDelay());
+        screen_capture_timer_->start(capture_scheduler_->nextCaptureDelay());
     }
 }
 

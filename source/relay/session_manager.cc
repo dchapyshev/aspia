@@ -312,7 +312,7 @@ void SessionManager::doAccept(SessionManager* self)
 
             // A new peer is connected. Create and start the pending session.
             self->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
-                self->task_runner_, std::move(socket), self));
+                std::move(socket), self));
             self->pending_sessions_.back()->start();
         }
         else

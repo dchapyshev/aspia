@@ -116,8 +116,9 @@ void ClientSessionPortForwarding::Handler::onRead(
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionPortForwarding::ClientSessionPortForwarding(std::unique_ptr<base::TcpChannel> channel)
-    : ClientSession(proto::SESSION_TYPE_PORT_FORWARDING, std::move(channel)),
+ClientSessionPortForwarding::ClientSessionPortForwarding(
+    std::unique_ptr<base::TcpChannel> channel, QObject* parent)
+    : ClientSession(proto::SESSION_TYPE_PORT_FORWARDING, std::move(channel), parent),
       socket_(base::AsioEventDispatcher::currentIoContext()),
       resolver_(base::AsioEventDispatcher::currentIoContext()),
       handler_(base::make_local_shared<Handler>(this)),

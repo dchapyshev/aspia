@@ -73,9 +73,7 @@ list(APPEND SOURCE_BASE
     version.cc
     version.h
     waitable_event.cc
-    waitable_event.h
-    waitable_timer.cc
-    waitable_timer.h)
+    waitable_event.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE

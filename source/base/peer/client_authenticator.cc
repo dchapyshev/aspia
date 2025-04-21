@@ -72,8 +72,8 @@ bool verifyNg(std::string_view N, std::string_view g)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientAuthenticator::ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner)
-    : Authenticator(std::move(task_runner))
+ClientAuthenticator::ClientAuthenticator(QObject* parent)
+    : Authenticator(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

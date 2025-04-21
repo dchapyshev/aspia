@@ -44,13 +44,22 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionManager::DesktopSessionManager(
-    std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
-    : task_runner_(task_runner),
+    std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate, QObject* parent)
+    : QObject(parent),
+      task_runner_(task_runner),
       session_proxy_(base::make_local_shared<DesktopSessionProxy>()),
-      session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
+
+    session_attach_timer_.setSingleShot(true);
+
+    connect(&session_attach_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_ERROR) << "Session attach timeout (session_id=" << session_id_
+                      << " timeout=" << kSessionAttachTimeout.count() << "min)";
+        onErrorOccurred();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,14 +87,7 @@ void DesktopSessionManager::attachSession(
     session_id_ = session_id;
 
     if (state_ == State::STOPPED)
-    {
-        session_attach_timer_.start(kSessionAttachTimeout, [this]()
-        {
-            LOG(LS_ERROR) << "Session attach timeout (session_id=" << session_id_
-                          << " timeout=" << kSessionAttachTimeout.count() << "min)";
-            onErrorOccurred();
-        });
-    }
+        session_attach_timer_.start(kSessionAttachTimeout);
 
     setState(FROM_HERE, State::STARTING);
 
@@ -183,12 +185,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     if (state_ == State::STOPPING)
         return;
 
-    session_attach_timer_.start(kSessionAttachTimeout, [this]()
-    {
-        LOG(LS_ERROR) << "Timeout while waiting for session (sid=" << session_id_
-                      << " timeout=" << kSessionAttachTimeout.count() << "min)";
-        onErrorOccurred();
-    });
+    session_attach_timer_.start(kSessionAttachTimeout);
 
     // The real session process has ended. We create a temporary fake session.
     session_ = std::make_unique<DesktopSessionFake>(task_runner_, this);

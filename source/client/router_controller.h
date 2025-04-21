@@ -19,12 +19,13 @@
 #ifndef CLIENT_ROUTER_CONTROLLER_H
 #define CLIENT_ROUTER_CONTROLLER_H
 
-#include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "client/router_config.h"
+
+#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -33,9 +34,12 @@ class ClientAuthenticator;
 namespace client {
 
 class RouterController final
-    : public base::TcpChannel::Listener,
+    : public QObject,
+      public base::TcpChannel::Listener,
       public base::RelayPeer::Delegate
 {
+    Q_OBJECT
+
 public:
     enum class ErrorType
     {
@@ -77,8 +81,7 @@ public:
         virtual void onErrorOccurred(const Error& error) = 0;
     };
 
-    RouterController(const RouterConfig& router_config,
-                     std::shared_ptr<base::TaskRunner> task_runner);
+    explicit RouterController(const RouterConfig& router_config, QObject* parent = nullptr);
     ~RouterController() final;
 
     void connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate);
@@ -98,10 +101,9 @@ private:
     void sendConnectionRequest();
     void waitForHost();
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    std::unique_ptr<base::WaitableTimer> status_request_timer_;
+    std::unique_ptr<QTimer> status_request_timer_;
     std::unique_ptr<base::RelayPeer> relay_peer_;
     RouterConfig router_config_;
 

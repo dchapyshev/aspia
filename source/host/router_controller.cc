@@ -34,12 +34,15 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(task_runner),
-      peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
-      reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner)
+RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
+    : QObject(parent),
+      task_runner_(task_runner),
+      peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    reconnect_timer_.setSingleShot(true);
+    connect(&reconnect_timer_, &QTimer::timeout, this, &RouterController::connectToRouter);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,7 +131,7 @@ void RouterController::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_info_.public_key);
@@ -307,7 +310,7 @@ void RouterController::connectToRouter()
 void RouterController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-    reconnect_timer_.start(kReconnectTimeout, std::bind(&RouterController::connectToRouter, this));
+    reconnect_timer_.start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------

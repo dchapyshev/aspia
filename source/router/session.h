@@ -24,6 +24,8 @@
 #include "base/memory/local_memory.h"
 #include "proto/router_common.pb.h"
 
+#include <QObject>
+
 namespace router {
 
 class Database;
@@ -31,10 +33,14 @@ class DatabaseFactory;
 class Server;
 class SharedKeyPool;
 
-class Session : public base::TcpChannel::Listener
+class Session
+    : public QObject,
+      public base::TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    explicit Session(proto::RouterSession session_type);
+    explicit Session(proto::RouterSession session_type, QObject* parent = nullptr);
     virtual ~Session() override;
 
     using SessionId = int64_t;

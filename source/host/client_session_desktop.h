@@ -23,7 +23,6 @@
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/memory/local_memory.h"
-#include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 #include "host/stat_counter.h"
@@ -31,6 +30,8 @@
 #if defined(OS_WIN)
 #include "host/task_manager.h"
 #endif // defined(OS_WIN)
+
+#include <QTimer>
 
 namespace base {
 class AudioEncoder;
@@ -51,10 +52,13 @@ class ClientSessionDesktop final
       , public TaskManager::Delegate
 #endif // defined(OS_WIN)
 {
+    Q_OBJECT
+
 public:
     ClientSessionDesktop(proto::SessionType session_type,
                          std::unique_ptr<base::TcpChannel> channel,
-                         std::shared_ptr<base::TaskRunner> task_runner);
+                         std::shared_ptr<base::TaskRunner> task_runner,
+                         QObject* parent);
     ~ClientSessionDesktop() final;
 
     void setDesktopSessionProxy(base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy);
@@ -108,7 +112,7 @@ private:
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 
-    base::WaitableTimer overflow_detection_timer_;
+    QTimer overflow_detection_timer_;
     size_t write_overflow_count_ = 0;
     size_t write_normal_count_ = 1;
     size_t last_pending_count_ = 0;

@@ -19,7 +19,6 @@
 #include "host/unconfirmed_client_session.h"
 
 #include "base/logging.h"
-#include "base/waitable_timer.h"
 #include "host/client_session.h"
 
 namespace host {
@@ -32,12 +31,12 @@ const std::chrono::seconds kRejectInterval { 60 };
 
 //--------------------------------------------------------------------------------------------------
 UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                                                   std::shared_ptr<base::TaskRunner> task_runner,
-                                                   Delegate* delegate)
-    : delegate_(delegate),
+                                                   Delegate* delegate,
+                                                   QObject* parent)
+    : QObject(parent),
+      delegate_(delegate),
       client_session_(std::move(client_session)),
-      timer_(std::make_unique<base::WaitableTimer>(
-          base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)))
+      timer_(std::make_unique<QTimer>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -45,6 +44,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession
     DCHECK(client_session_);
 
     id_ = client_session_->id();
+    timer_->setSingleShot(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,19 +63,23 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
         // An interval set to 0 means that automatic confirmation is disabled. We start a timer that
         // counts down until the connection is automatically rejected. If the user does not approve
         // the connection within this time, then it will be automatically rejected.
-        timer_->start(kRejectInterval, [this]()
+        connect(timer_.get(), &QTimer::timeout, this, [this]()
         {
             delegate_->onUnconfirmedSessionReject(id());
         });
+
+        timer_->start(kRejectInterval);
     }
     else
     {
         // If the user does not approve the connection within the specified time, then it will be
         // automatically accepted.
-        timer_->start(timeout, [this]()
+        connect(timer_.get(), &QTimer::timeout, this, [this]()
         {
             delegate_->onUnconfirmedSessionAccept(id());
         });
+
+        timer_->start(timeout);
     }
 }
 

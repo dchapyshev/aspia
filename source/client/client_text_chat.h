@@ -31,8 +31,10 @@ class ClientTextChat final
     : public Client,
       public TextChatControl
 {
+    Q_OBJECT
+
 public:
-    explicit ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientTextChat() final;
 
     void setTextChatWindow(std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy);

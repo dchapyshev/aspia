@@ -36,8 +36,9 @@ Session::SessionId createSessionId()
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::Session(proto::RouterSession session_type)
-    : session_type_(session_type),
+Session::Session(proto::RouterSession session_type, QObject* parent)
+    : QObject(parent),
+      session_type_(session_type),
       session_id_(createSessionId())
 {
     // Nothing

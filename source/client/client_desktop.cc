@@ -115,8 +115,8 @@ const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : Client(io_task_runner),
+ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
+    : Client(io_task_runner, parent),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
       incoming_message_(std::make_unique<proto::HostToClient>()),
       outgoing_message_(std::make_unique<proto::ClientToHost>())
@@ -150,7 +150,9 @@ void ClientDesktop::onSessionStarted()
     desktop_window_proxy_->showWindow(desktop_control_proxy_);
 
     clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
-    clipboard_monitor_->start(ioTaskRunner(), this);
+    connect(clipboard_monitor_.get(), &common::ClipboardMonitor::sig_clipboardEvent,
+            this, &ClientDesktop::onClipboardEvent);
+    clipboard_monitor_->start();
 
     audio_player_ = base::AudioPlayer::create();
 }
@@ -358,9 +360,9 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
             std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
         webm_video_encoder_ = std::make_unique<base::WebmVideoEncoder>();
 
-        webm_video_encode_timer_ = std::make_unique<base::WaitableTimer>(
-            base::WaitableTimer::Type::REPEATED, ioTaskRunner());
-        webm_video_encode_timer_->start(std::chrono::milliseconds(60), [this]()
+        webm_video_encode_timer_ = std::make_unique<QTimer>();
+
+        connect(webm_video_encode_timer_.get(), &QTimer::timeout, this, [this]()
         {
             if (!webm_video_encoder_ || !webm_file_writer_ || !desktop_frame_)
                 return;
@@ -370,6 +372,8 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
             if (webm_video_encoder_->encode(*desktop_frame_, &packet))
                 webm_file_writer_->addVideoPacket(packet);
         });
+
+        webm_video_encode_timer_->start(std::chrono::milliseconds(60));
     }
     else
     {

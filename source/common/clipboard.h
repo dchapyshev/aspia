@@ -21,28 +21,25 @@
 
 #include "proto/desktop.pb.h"
 
-#include <memory>
+#include <QObject>
 
 namespace common {
 
-class Clipboard
+class Clipboard : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit Clipboard(QObject* parent);
     virtual ~Clipboard() = default;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
-    };
-
-    void start(Delegate* delegate);
-
-    // Receiving the incoming clipboard.
+public slots:
+    void start();
     void injectClipboardEvent(const proto::ClipboardEvent& event);
     void clearClipboard();
+
+signals:
+    void sig_clipboardEvent(const proto::ClipboardEvent& event);
 
 protected:
     virtual void init() = 0;
@@ -50,7 +47,6 @@ protected:
     void onData(const std::string& data);
 
 private:
-    Delegate* delegate_ = nullptr;
     std::string last_data_;
 };
 

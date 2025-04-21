@@ -97,17 +97,25 @@ int64_t calculateSpeed(int64_t last_speed, const FileTransfer::Milliseconds& dur
 FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                            std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                            std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                           Type type)
-    : type_(type),
+                           Type type,
+                           QObject* parent)
+    : QObject(parent),
+      type_(type),
       io_task_runner_(io_task_runner),
       transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
       transfer_window_proxy_(std::move(transfer_window_proxy)),
       task_consumer_proxy_(std::move(task_consumer_proxy)),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
-      cancel_timer_(base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner),
-      speed_update_timer_(base::WaitableTimer::Type::REPEATED, io_task_runner)
+      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&speed_update_timer_, &QTimer::timeout, this, &FileTransfer::doUpdateSpeed);
+
+    cancel_timer_.setSingleShot(true);
+    connect(&cancel_timer_, &QTimer::timeout, this, [this]()
+    {
+        onFinished(FROM_HERE);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,7 +162,7 @@ void FileTransfer::start(const std::string& source_path,
     queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
         task_consumer_proxy_, task_factory_source_->target());
 
-    speed_update_timer_.start(Milliseconds(1000), std::bind(&FileTransfer::doUpdateSpeed, this));
+    speed_update_timer_.start(Milliseconds(1000));
 
     // Start building a list of objects for transfer.
     queue_builder_->start(source_path, target_path, items, [this](proto::FileError error_code)
@@ -195,10 +203,7 @@ void FileTransfer::stop()
     else
     {
         is_canceled_ = true;
-        cancel_timer_.start(std::chrono::seconds(5), [this]()
-        {
-            onFinished(FROM_HERE);
-        });
+        cancel_timer_.start(std::chrono::seconds(5));
     }
 }
 

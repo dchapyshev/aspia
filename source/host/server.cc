@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/waitable_timer.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
@@ -45,8 +44,9 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+Server::Server(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
+    : QObject(parent),
+      task_runner_(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
@@ -88,15 +88,15 @@ void Server::start()
         LOG(LS_ERROR) << "Configuration file does not exist";
     }
 
-    update_timer_ = std::make_unique<base::WaitableTimer>(
-        base::WaitableTimer::Type::REPEATED, task_runner_);
-    update_timer_->start(std::chrono::minutes(5), std::bind(&Server::checkForUpdates, this));
+    update_timer_ = std::make_unique<QTimer>();
+    connect(update_timer_.get(), &QTimer::timeout, this, &Server::checkForUpdates);
+    update_timer_->start(std::chrono::minutes(5));
 
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_file, false,
         std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
-    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);

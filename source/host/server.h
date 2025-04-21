@@ -28,24 +28,28 @@
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
 
+#include <QTimer>
+
 namespace base {
 class FilePathWatcher;
 class TaskRunner;
-class WaitableTimer;
 } // namespace base
 
 namespace host {
 
 class Server final
-    : public base::TcpServer::Delegate,
+    : public QObject,
+      public base::TcpServer::Delegate,
       public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate,
       public common::UpdateChecker::Delegate,
       public common::HttpFileDownloader::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit Server(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
     ~Server() final;
 
     void start();
@@ -88,7 +92,7 @@ private:
     void checkForUpdates();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::WaitableTimer> update_timer_;
+    std::unique_ptr<QTimer> update_timer_;
 
     std::unique_ptr<base::FilePathWatcher> settings_watcher_;
     SystemSettings settings_;

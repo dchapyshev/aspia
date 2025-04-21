@@ -23,11 +23,12 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-StatCounter::StatCounter(uint32_t client_session_id, std::shared_ptr<base::TaskRunner> task_runner)
-    : client_session_id_(client_session_id),
-    timer_(base::WaitableTimer::Type::REPEATED, std::move(task_runner))
+StatCounter::StatCounter(uint32_t client_session_id, QObject* parent)
+    : QObject(parent),
+      client_session_id_(client_session_id)
 {
-    timer_.start(std::chrono::seconds(30), std::bind(&StatCounter::onTimeout, this));
+    connect(&timer_, &QTimer::timeout, this, &StatCounter::onTimeout);
+    timer_.start(std::chrono::seconds(30));
 }
 
 //--------------------------------------------------------------------------------------------------

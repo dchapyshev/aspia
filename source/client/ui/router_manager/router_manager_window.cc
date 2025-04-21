@@ -454,8 +454,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     peer_address_ = QString::fromStdU16String(router_config.address);
     peer_port_ = router_config.port;
 
-    std::unique_ptr<Router> router = std::make_unique<Router>(
-        window_proxy_, qt_base::Application::ioTaskRunner());
+    std::unique_ptr<Router> router = std::make_unique<Router>(window_proxy_);
 
     router->setUserName(router_config.username);
     router->setPassword(router_config.password);

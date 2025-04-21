@@ -30,8 +30,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : Client(io_task_runner),
+ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
+    : Client(io_task_runner, parent),
       task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
       local_worker_(std::make_unique<common::FileWorker>(io_task_runner)),

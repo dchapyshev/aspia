@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.pb.h"
 
@@ -33,19 +32,19 @@ const std::chrono::seconds kTimeout { 30 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config,
-                                         std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(task_runner),
-      timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
+OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config, QObject* parent)
+    : QObject(parent),
       router_config_(router_config)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 
-    timer_.start(kTimeout, [this]()
+    timer_.setSingleShot(true);
+    connect(&timer_, &QTimer::timeout, this, [this]()
     {
         onFinished(FROM_HERE);
     });
+
+    timer_.start(kTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,7 +83,7 @@ void OnlineCheckerRouter::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
@@ -121,7 +120,7 @@ void OnlineCheckerRouter::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
     });
 }
 
@@ -202,11 +201,11 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
     if (channel_)
     {
         channel_->setListener(nullptr);
-        task_runner_->deleteSoon(std::move(channel_));
+        channel_.release()->deleteLater();
     }
 
     if (authenticator_)
-        task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
 
     for (const auto& computer : computers_)
         delegate_->onRouterCheckerResult(computer.computer_id, false);

@@ -31,7 +31,6 @@ class AudioPlayer;
 class CursorDecoder;
 class Frame;
 class VideoDecoder;
-class WaitableTimer;
 class WebmFileWriter;
 class WebmVideoEncoder;
 } // namespace base
@@ -45,11 +44,12 @@ class DesktopWindowProxy;
 
 class ClientDesktop final
     : public Client,
-      public DesktopControl,
-      public common::Clipboard::Delegate
+      public DesktopControl
 {
+    Q_OBJECT
+
 public:
-    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientDesktop() final;
 
     void setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy);
@@ -76,8 +76,8 @@ protected:
     void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
-    // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) final;
+private slots:
+    void onClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     void readCapabilities(const proto::DesktopCapabilities& capabilities);
@@ -109,7 +109,7 @@ private:
 
     InputEventFilter input_event_filter_;
 
-    std::unique_ptr<base::WaitableTimer> webm_video_encode_timer_;
+    std::unique_ptr<QTimer> webm_video_encode_timer_;
     std::unique_ptr<base::WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<base::WebmFileWriter> webm_file_writer_;
 

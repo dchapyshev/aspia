@@ -42,14 +42,11 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service start...";
 
-    std::shared_ptr<base::TaskRunner> task_runner = taskRunner();
-    DCHECK(task_runner);
-
-    server_ = std::make_unique<Server>(task_runner); 
+    server_ = std::make_unique<Server>();
     if (!server_->start())
     {
         LOG(LS_ERROR) << "Unable to start server. Service not started";
-        task_runner->postQuit();
+        QCoreApplication::quit();
         return;
     }
 

@@ -19,11 +19,12 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
-#include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "client/router_config.h"
 
 #include <deque>
+
+#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -33,11 +34,14 @@ class TaskRunner;
 
 namespace client {
 
-class OnlineCheckerRouter final : public base::TcpChannel::Listener
+class OnlineCheckerRouter final
+    : public QObject,
+      public base::TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    OnlineCheckerRouter(const RouterConfig& router_config,
-                        std::shared_ptr<base::TaskRunner> task_runner);
+    explicit OnlineCheckerRouter(const RouterConfig& router_config, QObject* parent = nullptr);
     ~OnlineCheckerRouter() final;
 
     class Delegate
@@ -69,10 +73,9 @@ private:
     void checkNextComputer();
     void onFinished(const base::Location& location);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    base::WaitableTimer timer_;
+    QTimer timer_;
     RouterConfig router_config_;
 
     ComputerList computers_;

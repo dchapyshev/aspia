@@ -26,8 +26,10 @@ namespace host {
 
 class ClientSessionSystemInfo final : public ClientSession
 {
+    Q_OBJECT
+
 public:
-    explicit ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel);
+    ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
     ~ClientSessionSystemInfo() final;
 
 protected:

@@ -27,8 +27,10 @@ namespace common {
 
 class ClipboardMac final : public Clipboard
 {
+    Q_OBJECT
+
 public:
-    ClipboardMac();
+    explicit ClipboardMac(QObject* parent = nullptr);
     ~ClipboardMac();
 
 protected:

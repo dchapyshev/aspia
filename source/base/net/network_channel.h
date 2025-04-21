@@ -23,10 +23,14 @@
 
 #include <chrono>
 
+#include <QObject>
+
 namespace base {
 
-class NetworkChannel
+class NetworkChannel : public QObject
 {
+    Q_OBJECT
+
 public:
     static const uint32_t kMaxMessageSize;
 
@@ -71,6 +75,11 @@ public:
         ADDRESS_NOT_AVAILABLE
     };
 
+    explicit NetworkChannel(QObject* parent)
+        : QObject(parent)
+    {
+        // Nothing
+    }
     virtual ~NetworkChannel() = default;
 
     int64_t totalRx() const { return total_rx_; }

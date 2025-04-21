@@ -66,17 +66,38 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
                          std::unique_ptr<base::IpcChannel> channel,
-                         Delegate* delegate)
-    : task_runner_(task_runner),
+                         Delegate* delegate,
+                         QObject* parent)
+    : QObject(parent),
+      task_runner_(task_runner),
       scoped_task_runner_(std::make_unique<base::ScopedTaskRunner>(task_runner)),
       channel_(std::move(channel)),
-      ui_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
-      desktop_dettach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id),
-      password_expire_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
     type_ = UserSession::Type::CONSOLE;
+
+    ui_attach_timer_.setSingleShot(true);
+    connect(&ui_attach_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Session attach timeout (sid=" << session_id_ << ")";
+        setState(FROM_HERE, State::FINISHED);
+        delegate_->onUserSessionFinished();
+    });
+
+    desktop_dettach_timer_.setSingleShot(true);
+    connect(&desktop_dettach_timer_, &QTimer::timeout, this, [this]()
+    {
+        if (desktop_session_)
+            desktop_session_->dettachSession(FROM_HERE);
+    });
+
+    password_expire_timer_.setSingleShot(true);
+    connect(&password_expire_timer_, &QTimer::timeout, this, [this]()
+    {
+        updateCredentials(FROM_HERE);
+        sendCredentials(FROM_HERE);
+    });
 
 #if defined(OS_WIN)
     base::SessionId console_session_id = base::activeConsoleSessionId();
@@ -406,7 +427,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             request->set_timeout(static_cast<uint32_t>(auto_confirmation_interval_.count()));
 
             std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
-                std::make_unique<UnconfirmedClientSession>(std::move(client_session), task_runner_, this);
+                std::make_unique<UnconfirmedClientSession>(std::move(client_session), this);
 
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
             pending_clients_.emplace_back(std::move(unconfirmed_client_session));
@@ -414,7 +435,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             if (channel_)
             {
                 LOG(LS_INFO) << "Sending connect request to UI process (sid=" << session_id_ << ")";
-                channel_->send(serializer_.serialize(outgoing_message_));
+                channel_->send(base::serialize(outgoing_message_));
             }
             else
             {
@@ -612,13 +633,7 @@ void UserSession::onSettingsChanged()
 void UserSession::onIpcDisconnected()
 {
     LOG(LS_INFO) << "Ipc channel disconnected (sid=" << session_id_ << ")";
-
-    desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
-    {
-        if (desktop_session_)
-            desktop_session_->dettachSession(FROM_HERE);
-    });
-
+    desktop_dettach_timer_.start(std::chrono::seconds(5));
     onSessionDettached(FROM_HERE);
 }
 
@@ -796,7 +811,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcMessageWritten(base::ByteArray&& buffer)
 {
-    serializer_.addBuffer(std::move(buffer));
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1024,7 +1039,7 @@ void UserSession::onClientSessionVideoRecording(
     video_recording_state->set_user_name(user_name);
     video_recording_state->set_started(started);
 
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1048,7 +1063,7 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 
 }
 
@@ -1115,13 +1130,7 @@ void UserSession::onSessionDettached(const base::Location& location)
             LOG(LS_INFO) << "Attach timer is active (sid=" << session_id_ << ")";
         }
 
-        ui_attach_timer_.start(std::chrono::seconds(60), [this]()
-        {
-            LOG(LS_INFO) << "Session attach timeout (sid=" << session_id_ << ")";
-
-            setState(FROM_HERE, State::FINISHED);
-            delegate_->onUserSessionFinished();
-        });
+        ui_attach_timer_.start(std::chrono::seconds(60));
     }
 
     LOG(LS_INFO) << "Session dettached (sid=" << session_id_ << ")";
@@ -1156,7 +1165,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1173,7 +1182,7 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_id(session_id);
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1193,17 +1202,9 @@ void UserSession::updateCredentials(const base::Location& location)
         one_time_password_ = generator.result();
 
         if (password_expire_interval_ > std::chrono::milliseconds(0))
-        {
-            password_expire_timer_.start(password_expire_interval_, [this]()
-            {
-                updateCredentials(FROM_HERE);
-                sendCredentials(FROM_HERE);
-            });
-        }
+            password_expire_timer_.start(password_expire_interval_);
         else
-        {
             password_expire_timer_.stop();
-        }
     }
     else
     {
@@ -1241,7 +1242,7 @@ void UserSession::sendCredentials(const base::Location& location)
     credentials->set_host_id(host_id_);
     credentials->set_password(one_time_password_);
 
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1287,7 +1288,7 @@ void UserSession::sendRouterState(const base::Location& location)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1477,7 +1478,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
         return;
     }
 
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1524,7 +1525,7 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
         return;
     }
 
-    channel_->send(serializer_.serialize(outgoing_message_));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,19 +19,24 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
-#include "base/waitable_timer.h"
 #include "base/version.h"
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
+
+#include <QTimer>
 
 namespace base {
 
 class Location;
 
-class Authenticator : public TcpChannel::Listener
+class Authenticator
+    : public QObject,
+      public TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    explicit Authenticator(std::shared_ptr<TaskRunner> task_runner);
+    explicit Authenticator(QObject* parent);
     virtual ~Authenticator() override;
 
     enum class State
@@ -108,7 +113,7 @@ protected:
     std::string user_name_;
 
 private:
-    WaitableTimer timer_;
+    QTimer timer_;
     std::unique_ptr<TcpChannel> channel_;
     Callback callback_;
     State state_ = State::STOPPED;

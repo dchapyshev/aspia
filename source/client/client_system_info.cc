@@ -26,8 +26,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientSystemInfo::ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : Client(io_task_runner),
+ClientSystemInfo::ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
+    : Client(io_task_runner, parent),
       system_info_control_proxy_(std::make_shared<SystemInfoControlProxy>(io_task_runner, this))
 {
     LOG(LS_INFO) << "Ctor";

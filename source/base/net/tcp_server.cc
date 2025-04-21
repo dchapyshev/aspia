@@ -190,7 +190,7 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
         accept_error_count_ = 0;
 
         std::unique_ptr<TcpChannel> channel =
-            std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket)));
+            std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket), nullptr));
 
         // Connection accepted.
         delegate_->onNewConnection(std::move(channel));
@@ -201,8 +201,9 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpServer::TcpServer()
-    : impl_(base::make_local_shared<Impl>(AsioEventDispatcher::currentIoContext()))
+TcpServer::TcpServer(QObject* parent)
+    : QObject(parent),
+      impl_(base::make_local_shared<Impl>(AsioEventDispatcher::currentIoContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }

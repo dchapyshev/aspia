@@ -26,9 +26,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
-               std::shared_ptr<base::TaskRunner> io_task_runner)
-    : io_task_runner_(io_task_runner),
+Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent)
+    : QObject(parent),
       window_proxy_(std::move(window_proxy))
 {
     LOG(LS_INFO) << "Ctor";
@@ -227,7 +226,7 @@ void Router::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
     authenticator_->setUserName(router_username_);
@@ -275,7 +274,7 @@ void Router::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        io_task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
     });
 }
 
@@ -292,9 +291,10 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 
         if (!timeout_timer_)
         {
-            timeout_timer_ = std::make_unique<base::WaitableTimer>(
-                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
-            timeout_timer_->start(std::chrono::minutes(5), [this]()
+            timeout_timer_ = std::make_unique<QTimer>();
+            timeout_timer_->setSingleShot(true);
+
+            connect(timeout_timer_.get(), &QTimer::timeout, this, [this]()
             {
                 LOG(LS_INFO) << "Reconnect timeout";
                 window_proxy_->onWaitForRouterTimeout();
@@ -309,24 +309,28 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                     channel_.reset();
                 }
             });
+
+            timeout_timer_->start(std::chrono::minutes(5));
         }
 
         // Delete old channel.
         if (channel_)
         {
             channel_->setListener(nullptr);
-            io_task_runner_->deleteSoon(std::move(channel_));
+            channel_.release()->deleteLater();
         }
 
         window_proxy_->onWaitForRouter();
 
-        reconnect_timer_ = std::make_unique<base::WaitableTimer>(
-            base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
-        reconnect_timer_->start(std::chrono::seconds(5), [this]()
+        reconnect_timer_ = std::make_unique<QTimer>();
+
+        connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
         {
             LOG(LS_INFO) << "Reconnecting to router";
             connectToRouter(router_address_, router_port_);
         });
+
+        reconnect_timer_->start(std::chrono::seconds(5));
     }
 }
 

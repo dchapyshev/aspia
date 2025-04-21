@@ -26,6 +26,8 @@
 #include "proto/desktop_extensions.pb.h"
 #include "proto/text_chat.pb.h"
 
+#include <QObject>
+
 namespace base {
 class TcpChannelProxy;
 class TaskRunner;
@@ -35,8 +37,12 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSession : public base::TcpChannel::Listener
+class ClientSession
+    : public QObject,
+      public base::TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
     virtual ~ClientSession() override;
 
@@ -61,7 +67,8 @@ public:
 
     static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
                                                  std::unique_ptr<base::TcpChannel> channel,
-                                                 std::shared_ptr<base::TaskRunner> task_runner);
+                                                 std::shared_ptr<base::TaskRunner> task_runner,
+                                                 QObject* parent = nullptr);
 
     void start(Delegate* delegate);
     void stop();
@@ -89,7 +96,9 @@ public:
     base::HostId hostId() const { return channel_->hostId(); }
 
 protected:
-    ClientSession(proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel);
+    ClientSession(proto::SessionType session_type,
+                  std::unique_ptr<base::TcpChannel> channel,
+                  QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).

@@ -202,11 +202,9 @@ void desktopAgentMain(int& argc, char* argv[])
     {
         base::Application::setEventDispatcher(new base::AsioEventDispatcher());
         base::Application application(argc, argv);
+        host::DesktopSessionAgent desktop_agent;
 
-        std::shared_ptr<host::DesktopSessionAgent> desktop_agent =
-            std::make_shared<host::DesktopSessionAgent>(base::Application::taskRunner());
-
-        desktop_agent->start(command_line->switchValue(u"channel_id"));
+        desktop_agent.start(command_line->switchValue(u"channel_id"));
         application.exec();
     }
     else

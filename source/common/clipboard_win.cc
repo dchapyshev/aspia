@@ -28,7 +28,8 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-ClipboardWin::ClipboardWin()
+ClipboardWin::ClipboardWin(QObject* parent)
+    : Clipboard(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

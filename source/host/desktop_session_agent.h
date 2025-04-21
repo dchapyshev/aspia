@@ -23,10 +23,12 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "base/memory/serializer.h"
 #include "base/threading/asio_thread.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
+
+#include <QPointer>
+#include <QTimer>
 
 namespace base {
 
@@ -49,15 +51,16 @@ namespace host {
 class InputInjector;
 
 class DesktopSessionAgent final
-    : public std::enable_shared_from_this<DesktopSessionAgent>,
+    : public QObject,
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
-      public base::AsioThread::Delegate,
-      public common::Clipboard::Delegate
+      public base::AsioThread::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit DesktopSessionAgent(QObject* parent = nullptr);
     ~DesktopSessionAgent() final;
 
     void start(std::u16string_view channel_id);
@@ -85,8 +88,8 @@ protected:
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
-    // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) final;
+private slots:
+    void onClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     void setEnabled(bool enable);
@@ -96,8 +99,6 @@ private:
 #if defined(OS_WIN)
     bool onWindowsMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
 #endif // defined(OS_WIN)
-
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
 
     bool is_session_enabled_ = false;
 
@@ -115,11 +116,12 @@ private:
     std::unique_ptr<base::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
 
+    QPointer<QTimer> screen_capture_timer_ = nullptr;
+
     base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
-    base::Serializer serializer_;
     std::unique_ptr<proto::internal::ServiceToDesktop> incoming_message_;
     std::unique_ptr<proto::internal::DesktopToService> outgoing_message_;
 

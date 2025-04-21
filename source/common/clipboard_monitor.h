@@ -25,33 +25,32 @@
 namespace common {
 
 class ClipboardMonitor final
-    : public base::AsioThread::Delegate,
-      public common::Clipboard::Delegate
+    : public QObject,
+      public base::AsioThread::Delegate
 {
+    Q_OBJECT
+
 public:
-    ClipboardMonitor();
+    explicit ClipboardMonitor(QObject* parent = nullptr);
     ~ClipboardMonitor() final;
 
-    void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
-               common::Clipboard::Delegate* delegate);
+    void start();
 
     void injectClipboardEvent(const proto::ClipboardEvent& event);
     void clearClipboard();
+
+signals:
+    void sig_clipboardEvent(const proto::ClipboardEvent& event);
+    void sig_injectClipboardEventPrivate(const proto::ClipboardEvent& event);
+    void sig_clearClipboardPrivate();
 
 protected:
     // base::AsioThread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
-    // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) final;
-
 private:
-    common::Clipboard::Delegate* delegate_ = nullptr;
-
     std::unique_ptr<base::AsioThread> thread_;
-    std::shared_ptr<base::TaskRunner> caller_task_runner_;
-    std::shared_ptr<base::TaskRunner> self_task_runner_;
     std::unique_ptr<common::Clipboard> clipboard_;
 
     DISALLOW_COPY_AND_ASSIGN(ClipboardMonitor);

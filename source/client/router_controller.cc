@@ -26,13 +26,11 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-RouterController::RouterController(const RouterConfig& router_config,
-                                   std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
+RouterController::RouterController(const RouterConfig& router_config, QObject* parent)
+    : QObject(parent),
       router_config_(router_config)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,7 +65,7 @@ void RouterController::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
@@ -124,7 +122,7 @@ void RouterController::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
     });
 }
 
@@ -292,15 +290,10 @@ void RouterController::waitForHost()
 {
     LOG(LS_INFO) << "Wait for host";
 
-    status_request_timer_ = std::make_unique<base::WaitableTimer>(
-        base::WaitableTimer::Type::SINGLE_SHOT, task_runner_);
+    status_request_timer_ = std::make_unique<QTimer>();
+    status_request_timer_->setSingleShot(true);
 
-    if (delegate_)
-        delegate_->onHostAwaiting();
-    else
-        LOG(LS_ERROR) << "Invalid delegate";
-
-    status_request_timer_->start(std::chrono::milliseconds(5000), [this]()
+    connect(status_request_timer_.get(), &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
 
@@ -308,6 +301,13 @@ void RouterController::waitForHost()
         message.mutable_check_host_status()->set_host_id(host_id_);
         channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
     });
+
+    if (delegate_)
+        delegate_->onHostAwaiting();
+    else
+        LOG(LS_ERROR) << "Invalid delegate";
+
+    status_request_timer_->start(std::chrono::milliseconds(5000));
 }
 
 } // namespace client

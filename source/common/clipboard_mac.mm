@@ -27,8 +27,9 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-ClipboardMac::ClipboardMac()
-    : timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner())
+ClipboardMac::ClipboardMac(QObject* parent)
+    : Clipboard(parent),
+      timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner())
 {
     // Nothing
 }

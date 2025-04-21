@@ -29,8 +29,9 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : io_task_runner_(std::move(io_task_runner))
+Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
+    : QObject(parent),
+      io_task_runner_(std::move(io_task_runner))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
@@ -86,7 +87,7 @@ void Client::start()
         }
 
         router_controller_ =
-            std::make_unique<RouterController>(*config.router_config, io_task_runner_);
+            std::make_unique<RouterController>(*config.router_config);
 
         bool reconnecting = session_state_->isReconnecting();
         if (!reconnecting)
@@ -171,7 +172,7 @@ void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite
         return;
     }
 
-    channel_->send(channel_id, serializer_.serialize(message));
+    channel_->send(channel_id, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,9 +245,10 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 
         if (!timeout_timer_)
         {
-            timeout_timer_ = std::make_unique<base::WaitableTimer>(
-                base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
-            timeout_timer_->start(std::chrono::minutes(5), [this]()
+            timeout_timer_ = std::make_unique<QTimer>();
+            timeout_timer_->setSingleShot(true);
+
+            connect(timeout_timer_.get(), &QTimer::timeout, this, [this]()
             {
                 LOG(LS_INFO) << "Reconnect timeout";
 
@@ -271,6 +273,8 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                     router_controller_.reset();
                 }
             });
+
+            timeout_timer_->start(std::chrono::minutes(5));
         }
 
         // Delete old channel.
@@ -316,8 +320,6 @@ void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buf
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending)
 {
-    serializer_.addBuffer(std::move(buffer));
-
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
         onSessionMessageWritten(channel_id, pending);
@@ -396,7 +398,7 @@ void Client::startAuthentication()
     channel_->setNoDelay(true);
     channel_->setKeepAlive(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(session_state_->hostUserName());
@@ -459,29 +461,33 @@ void Client::startAuthentication()
 //--------------------------------------------------------------------------------------------------
 void Client::delayedReconnectToRouter()
 {
-    reconnect_timer_ = std::make_unique<base::WaitableTimer>(
-        base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+    reconnect_timer_ = std::make_unique<QTimer>();
+    reconnect_timer_->setSingleShot(true);
 
-    reconnect_timer_->start(std::chrono::seconds(5), [this]()
+    connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Reconnecting to router";
         state_ = State::CREATED;
         start();
     });
+
+    reconnect_timer_->start(std::chrono::seconds(5));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::delayedReconnectToHost()
 {
-    reconnect_timer_ = std::make_unique<base::WaitableTimer>(
-        base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner_);
+    reconnect_timer_ = std::make_unique<QTimer>();
+    reconnect_timer_->setSingleShot(true);
 
-    reconnect_timer_->start(std::chrono::seconds(5), [this]()
+    connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Reconnecting to host";
         state_ = State::CREATED;
         start();
     });
+
+    reconnect_timer_->start(std::chrono::seconds(5));
 }
 
 } // namespace client

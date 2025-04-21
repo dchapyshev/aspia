@@ -31,8 +31,10 @@ class ClientSystemInfo final
     : public Client,
       public SystemInfoControl
 {
+    Q_OBJECT
+
 public:
-    explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientSystemInfo() final;
 
     void setSystemInfoWindow(std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy);

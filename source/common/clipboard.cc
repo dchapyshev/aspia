@@ -104,10 +104,15 @@ bool decompress(const std::string& in, std::string* out)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-void Clipboard::start(Delegate* delegate)
+Clipboard::Clipboard(QObject* parent)
+    : QObject(parent)
 {
-    delegate_ = delegate;
-    DCHECK(delegate_);
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void Clipboard::start()
+{
     init();
 }
 
@@ -166,8 +171,7 @@ void Clipboard::onData(const std::string& data)
         event.set_data(data);
     }
 
-    if (delegate_)
-        delegate_->onClipboardEvent(event);
+    emit sig_clipboardEvent(event);
 }
 
 } // namespace common

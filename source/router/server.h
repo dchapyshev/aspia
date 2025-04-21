@@ -19,6 +19,7 @@
 #ifndef ROUTER_SERVER_H
 #define ROUTER_SERVER_H
 
+#include "base/task_runner.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
@@ -40,7 +41,7 @@ class Server final
       public Session::Delegate
 {
 public:
-    explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
+    Server();
     ~Server() final;
 
     bool start();
@@ -67,7 +68,6 @@ protected:
                            proto::RouterSession session_type) final;
 
 private:
-    std::shared_ptr<base::TaskRunner> task_runner_;
     base::local_shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::TcpServer> server_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;

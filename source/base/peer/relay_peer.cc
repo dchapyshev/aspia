@@ -183,7 +183,7 @@ void RelayPeer::onConnected()
             if (delegate_)
             {
                 std::unique_ptr<TcpChannel> channel =
-                    std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_)));
+                    std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_), nullptr));
                 channel->setHostId(connection_offer_.host_data().host_id());
 
                 delegate_->onRelayConnectionReady(std::move(channel));

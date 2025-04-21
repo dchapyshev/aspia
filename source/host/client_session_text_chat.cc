@@ -26,8 +26,9 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionTextChat::ClientSessionTextChat(std::unique_ptr<base::TcpChannel> channel)
-    : ClientSession(proto::SESSION_TYPE_TEXT_CHAT, std::move(channel))
+ClientSessionTextChat::ClientSessionTextChat(
+    std::unique_ptr<base::TcpChannel> channel, QObject* parent)
+    : ClientSession(proto::SESSION_TYPE_TEXT_CHAT, std::move(channel), parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

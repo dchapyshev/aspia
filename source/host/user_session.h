@@ -21,9 +21,7 @@
 
 #include "build/build_config.h"
 #include "base/session_id.h"
-#include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/memory/serializer.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
 #include "base/win/session_status.h"
@@ -33,6 +31,8 @@
 #include "host/unconfirmed_client_session.h"
 #include "proto/host_internal.pb.h"
 
+#include <QTimer>
+
 namespace base {
 class ScopedTaskRunner;
 } // namespace base
@@ -40,11 +40,14 @@ class ScopedTaskRunner;
 namespace host {
 
 class UserSession final
-    : public base::IpcChannel::Listener,
+    : public QObject,
+      public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public UnconfirmedClientSession::Delegate,
       public ClientSession::Delegate
 {
+    Q_OBJECT
+
 public:
     enum class Type
     {
@@ -73,7 +76,8 @@ public:
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                 base::SessionId session_id,
                 std::unique_ptr<base::IpcChannel> channel,
-                Delegate* delegate);
+                Delegate* delegate,
+                QObject* parent = nullptr);
     ~UserSession() final;
 
     static const char* typeToString(Type type);
@@ -147,8 +151,8 @@ private:
 
     Type type_;
     State state_ = State::DETTACHED;
-    base::WaitableTimer ui_attach_timer_;
-    base::WaitableTimer desktop_dettach_timer_;
+    QTimer ui_attach_timer_;
+    QTimer desktop_dettach_timer_;
 
     base::SessionId session_id_;
     proto::internal::RouterState router_state_;
@@ -158,7 +162,7 @@ private:
     uint32_t password_characters_ = 0;
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
-    base::WaitableTimer password_expire_timer_;
+    QTimer password_expire_timer_;
     std::string one_time_password_;
     uint32_t one_time_sessions_ = 0;
 
@@ -183,7 +187,6 @@ private:
 
     Delegate* delegate_ = nullptr;
 
-    base::Serializer serializer_;
     proto::internal::UiToService incoming_message_;
     proto::internal::ServiceToUi outgoing_message_;
 

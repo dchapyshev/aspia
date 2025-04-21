@@ -26,8 +26,10 @@ namespace base {
 
 class ClientAuthenticator final : public Authenticator
 {
+    Q_OBJECT
+
 public:
-    explicit ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner);
+    explicit ClientAuthenticator(QObject* parent = nullptr);
     ~ClientAuthenticator() final;
 
     void setPeerPublicKey(const ByteArray& public_key);

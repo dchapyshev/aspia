@@ -19,13 +19,14 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
-#include "base/waitable_timer.h"
 #include "base/version.h"
-#include "base/memory/serializer.h"
 #include "client/client_config.h"
 #include "client/client_session_state.h"
 #include "client/router_controller.h"
 #include "base/net/tcp_channel.h"
+
+#include <QObject>
+#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -38,11 +39,14 @@ class StatusWindow;
 class StatusWindowProxy;
 
 class Client
-    : public RouterController::Delegate,
+    : public QObject,
+      public RouterController::Delegate,
       public base::TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
+    Client(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent);
     virtual ~Client() override;
 
     // Starts a session.
@@ -97,8 +101,8 @@ private:
     void delayedReconnectToHost();
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<base::WaitableTimer> timeout_timer_;
-    std::unique_ptr<base::WaitableTimer> reconnect_timer_;
+    std::unique_ptr<QTimer> timeout_timer_;
+    std::unique_ptr<QTimer> reconnect_timer_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
@@ -110,7 +114,6 @@ private:
     State state_ = State::CREATED;
 
     bool is_connected_to_router_ = false;
-    base::Serializer serializer_;
 };
 
 } // namespace client

@@ -19,12 +19,14 @@
 #ifndef RELAY_PENDING_SESSION_H
 #define RELAY_PENDING_SESSION_H
 
-#include "base/waitable_timer.h"
+#include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
 #include "base/peer/host_id.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
+
+#include <QTimer>
 
 namespace base {
 class Location;
@@ -33,8 +35,10 @@ class TaskRunner;
 
 namespace relay {
 
-class PendingSession
+class PendingSession final : public QObject
 {
+    Q_OBJECT
+
 public:
     class Delegate
     {
@@ -52,9 +56,9 @@ public:
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
-    PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
-                   asio::ip::tcp::socket&& socket,
-                   Delegate* delegate);
+    PendingSession(asio::ip::tcp::socket&& socket,
+                   Delegate* delegate,
+                   QObject* parent = nullptr);
     ~PendingSession();
 
     // Starts a session. This starts the timer. If the peer does not send authentication data or if
@@ -87,7 +91,7 @@ private:
 
     std::string address_;
     TimePoint start_time_;
-    base::WaitableTimer timer_;
+    QTimer timer_;
     asio::ip::tcp::socket socket_;
 
     uint32_t buffer_size_ = 0;

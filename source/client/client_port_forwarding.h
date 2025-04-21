@@ -19,22 +19,24 @@
 #ifndef CLIENT_CLIENT_PORT_FORWARDING_H
 #define CLIENT_CLIENT_PORT_FORWARDING_H
 
-#include "base/waitable_timer.h"
 #include "base/memory/local_memory.h"
 #include "client/client.h"
 #include "proto/port_forwarding.pb.h"
 
 #include <queue>
 
+#include <QTimer>
+
 namespace client {
 
 class PortForwardingWindowProxy;
 
-class ClientPortForwarding final
-    : public Client
+class ClientPortForwarding final : public Client
 {
+    Q_OBJECT
+
 public:
-    explicit ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientPortForwarding() final;
 
     void setPortForwardingWindow(
@@ -92,7 +94,7 @@ private:
     static const int kBufferSize = 8192;
     std::array<char, kBufferSize> read_buffer_;
 
-    base::WaitableTimer statistics_timer_;
+    QTimer statistics_timer_;
     uint64_t rx_bytes_ = 0;
     uint64_t tx_bytes_ = 0;
 };

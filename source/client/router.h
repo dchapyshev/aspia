@@ -20,24 +20,23 @@
 #define CLIENT_ROUTER_H
 
 #include "base/macros_magic.h"
-#include "base/waitable_timer.h"
 #include "base/peer/client_authenticator.h"
-#include "base/peer/host_id.h"
 #include "proto/router_admin.pb.h"
 
-namespace base {
-class TaskRunner;
-} // namespace base
+#include <QTimer>
 
 namespace client {
 
 class RouterWindowProxy;
 
-class Router final : public base::TcpChannel::Listener
+class Router final
+    : public QObject,
+      public base::TcpChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    Router(std::shared_ptr<RouterWindowProxy> window_proxy,
-           std::shared_ptr<base::TaskRunner> io_task_runner);
+    explicit Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent = nullptr);
     ~Router() final;
 
     void setUserName(std::u16string_view username);
@@ -65,9 +64,8 @@ protected:
     void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
 
 private:
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<base::WaitableTimer> timeout_timer_;
-    std::unique_ptr<base::WaitableTimer> reconnect_timer_;
+    std::unique_ptr<QTimer> timeout_timer_;
+    std::unique_ptr<QTimer> reconnect_timer_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;

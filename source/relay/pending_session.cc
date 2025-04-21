@@ -35,13 +35,17 @@ constexpr uint32_t kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
-                               asio::ip::tcp::socket&& socket,
-                               Delegate* delegate)
-    : delegate_(delegate),
-      timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)),
+PendingSession::PendingSession(asio::ip::tcp::socket&& socket, Delegate* delegate, QObject* parent)
+    : QObject(parent),
+      delegate_(delegate),
       socket_(std::move(socket))
 {
+    timer_.setSingleShot(true);
+    connect(&timer_, &QTimer::timeout, this, [this]()
+    {
+        onErrorOccurred(FROM_HERE, std::error_code());
+    });
+
     try
     {
         std::error_code error_code;
@@ -86,8 +90,7 @@ void PendingSession::start()
                       << base::utf16FromLocal8Bit(error_code.message());
     }
 
-    timer_.start(kTimeout, std::bind(
-        &PendingSession::onErrorOccurred, this, FROM_HERE, std::error_code()));
+    timer_.start(kTimeout);
     PendingSession::doReadMessage(this);
 }
 

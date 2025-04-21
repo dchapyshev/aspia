@@ -20,7 +20,6 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 
 #include "base/macros_magic.h"
-#include "base/waitable_timer.h"
 #include "base/threading/thread_checker.h"
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"

@@ -162,8 +162,9 @@ void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel()
-    : proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+TcpChannel::TcpChannel(QObject* parent)
+    : NetworkChannel(parent),
+      proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -175,8 +176,9 @@ TcpChannel::TcpChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
-    : proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
+    : NetworkChannel(parent),
+      proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket)),
       connected_(true),

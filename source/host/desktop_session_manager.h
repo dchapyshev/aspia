@@ -20,16 +20,18 @@
 #define HOST_DESKTOP_SESSION_MANAGER_H
 
 #include "base/session_id.h"
-#include "base/waitable_timer.h"
 #include "base/ipc/ipc_server.h"
 #include "base/memory/local_memory.h"
 #include "host/desktop_session.h"
 #include "proto/desktop_internal.pb.h"
 
+#include <QTimer>
+
 namespace base {
 class Frame;
 class Location;
 class SharedMemory;
+class TaskRunner;
 } // namespace base
 
 namespace host {
@@ -38,12 +40,16 @@ class DesktopSessionProcess;
 class DesktopSessionProxy;
 
 class DesktopSessionManager final
-    : public base::IpcServer::Delegate,
+    : public QObject,
+      public base::IpcServer::Delegate,
       public DesktopSession::Delegate
 {
+    Q_OBJECT
+
 public:
     DesktopSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                          DesktopSession::Delegate* delegate);
+                          DesktopSession::Delegate* delegate,
+                          QObject* parent = nullptr);
     ~DesktopSessionManager() final;
 
     void attachSession(const base::Location& location, base::SessionId session_id);
@@ -76,7 +82,7 @@ private:
     std::unique_ptr<base::IpcServer> server_;
     std::unique_ptr<DesktopSession> session_;
     base::local_shared_ptr<DesktopSessionProxy> session_proxy_;
-    base::WaitableTimer session_attach_timer_;
+    QTimer session_attach_timer_;
 
     State state_ = State::STOPPED;
     DesktopSession::Delegate* delegate_;

@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/location.h"
 #include "base/task_runner.h"
-#include "base/waitable_timer.h"
+#include "base/memory/byte_array.h"
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.pb.h"
@@ -36,8 +36,10 @@ namespace host {
 
 class ClientSessionPortForwarding final : public ClientSession
 {
+    Q_OBJECT
+
 public:
-    explicit ClientSessionPortForwarding(std::unique_ptr<base::TcpChannel> channel);
+    ClientSessionPortForwarding(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
     ~ClientSessionPortForwarding() final;
 
 protected:

@@ -23,8 +23,10 @@
 
 namespace base {
 
-class ServerAuthenticatorManager
+class ServerAuthenticatorManager final : public QObject
 {
+    Q_OBJECT
+
 public:
     struct SessionInfo
     {
@@ -55,7 +57,7 @@ public:
         virtual void onNewSession(SessionInfo&& session_info) = 0;
     };
 
-    ServerAuthenticatorManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
+    explicit ServerAuthenticatorManager(Delegate* delegate, QObject* parent = nullptr);
     ~ServerAuthenticatorManager();
 
     void setUserList(std::unique_ptr<UserListBase> user_list);
@@ -73,7 +75,6 @@ public:
 private:
     void onComplete();
 
-    std::shared_ptr<TaskRunner> task_runner_;
     base::local_shared_ptr<UserListBase> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 

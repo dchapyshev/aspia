@@ -27,7 +27,8 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-ClipboardX11::ClipboardX11()
+ClipboardX11::ClipboardX11(QObject* parent)
+    : Clipboard(parent)
 {
     // Nothing
 }

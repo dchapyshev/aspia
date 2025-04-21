@@ -21,9 +21,10 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
+
+#include <QTimer>
 
 namespace client {
 
@@ -34,11 +35,12 @@ const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
 
-class OnlineCheckerDirect::Instance final : public base::TcpChannel::Listener
+class OnlineCheckerDirect::Instance final
+    : public QObject,
+      public base::TcpChannel::Listener
 {
 public:
-    Instance(int computer_id, const std::u16string& address, uint16_t port,
-             std::shared_ptr<base::TaskRunner> task_runner);
+    Instance(int computer_id, const std::u16string& address, uint16_t port);
     ~Instance() final;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
@@ -62,24 +64,26 @@ private:
 
     FinishCallback finish_callback_;
     std::unique_ptr<base::TcpChannel> channel_;
-    base::WaitableTimer timer_;
+    QTimer timer_;
     bool finished_ = false;
 };
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const std::u16string& address, uint16_t port,
-    std::shared_ptr<base::TaskRunner> task_runner)
+    int computer_id, const std::u16string& address, uint16_t port)
     : computer_id_(computer_id),
       address_(address),
-      port_(port),
-      timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
+      port_(port)
 {
-    timer_.start(kTimeout, [this]()
+    timer_.setSingleShot(true);
+
+    connect(&timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Timeout for computer: " << computer_id_;
         onFinished(FROM_HERE, false);
     });
+
+    timer_.start(kTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -193,11 +197,9 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
 }
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+OnlineCheckerDirect::OnlineCheckerDirect()
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -234,7 +236,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
             port = DEFAULT_HOST_TCP_PORT;
 
         std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-            computer.computer_id, computer.address, port, task_runner_);
+            computer.computer_id, computer.address, port);
 
         LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
                      << computer.address << " port: " << port << ")";
@@ -268,7 +270,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     {
         const Computer& computer = pending_queue_.front();
         std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-            computer.computer_id, computer.address, computer.port, task_runner_);
+            computer.computer_id, computer.address, computer.port);
 
         LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
                      << computer.address << " port: " << computer.port << ")";
@@ -284,7 +286,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
         {
             if (it->get()->computerId() == computer_id)
             {
-                task_runner_->deleteSoon(std::move(*it));
+                it->release()->deleteLater();
                 work_queue_.erase(it);
                 break;
             }

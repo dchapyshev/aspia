@@ -88,7 +88,7 @@ void OnlineChecker::onBeforeThreadRunning()
         {
             LOG(LS_INFO) << "Computers for ROUTER checking: " << router_computers_.size();
 
-            router_checker_ = std::make_unique<OnlineCheckerRouter>(*router_config_, io_task_runner_);
+            router_checker_ = std::make_unique<OnlineCheckerRouter>(*router_config_);
             router_checker_->start(router_computers_, this);
         }
         else
@@ -107,7 +107,7 @@ void OnlineChecker::onBeforeThreadRunning()
     {
         LOG(LS_INFO) << "Computers for DIRECT checking: " << direct_computers_.size();
 
-        direct_checker_ = std::make_unique<OnlineCheckerDirect>(io_task_runner_);
+        direct_checker_ = std::make_unique<OnlineCheckerDirect>();
         direct_checker_->start(direct_computers_, this);
     }
     else

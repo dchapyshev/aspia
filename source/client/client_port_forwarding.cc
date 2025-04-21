@@ -87,14 +87,25 @@ void ClientPortForwarding::Handler::onRead(
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientPortForwarding::ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : Client(io_task_runner),
+ClientPortForwarding::ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
+    : Client(io_task_runner, parent),
       incoming_message_(std::make_unique<proto::port_forwarding::HostToClient>()),
       outgoing_message_(std::make_unique<proto::port_forwarding::ClientToHost>()),
-      handler_(base::make_local_shared<Handler>(this)),
-      statistics_timer_(base::WaitableTimer::Type::REPEATED, io_task_runner)
+      handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&statistics_timer_, &QTimer::timeout, this, [this]()
+    {
+        if (!port_forwarding_window_proxy_)
+            return;
+
+        PortForwardingWindow::Statistics statistics;
+        statistics.rx_bytes = rx_bytes_;
+        statistics.tx_bytes = tx_bytes_;
+
+        port_forwarding_window_proxy_->setStatistics(statistics);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,18 +139,7 @@ void ClientPortForwarding::onSessionStarted()
 {
     LOG(LS_INFO) << "Port forwarding session started";
 
-    statistics_timer_.start(std::chrono::seconds(1), [this]()
-    {
-        if (port_forwarding_window_proxy_)
-        {
-            PortForwardingWindow::Statistics statistics;
-            statistics.rx_bytes = rx_bytes_;
-            statistics.tx_bytes = tx_bytes_;
-
-            port_forwarding_window_proxy_->setStatistics(statistics);
-        }
-    });
-
+    statistics_timer_.start(std::chrono::seconds(1));
     sendPortForwardingRequest();
 
     if (port_forwarding_window_proxy_)

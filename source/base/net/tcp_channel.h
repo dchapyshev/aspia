@@ -39,9 +39,11 @@ class TcpServer;
 
 class TcpChannel final : public NetworkChannel
 {
+    Q_OBJECT
+
 public:
     // Constructor available for client.
-    TcpChannel();
+    explicit TcpChannel(QObject* parent = nullptr);
     ~TcpChannel() final;
 
     class Listener
@@ -115,7 +117,7 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    explicit TcpChannel(asio::ip::tcp::socket&& socket);
+    TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent);
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.

@@ -58,14 +58,17 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(task_runner),
-      reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
+Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
+    : QObject(parent),
+      task_runner_(task_runner),
       shared_pool_(std::make_unique<SharedPool>(this)),
       incoming_message_(std::make_unique<proto::RouterToRelay>()),
       outgoing_message_(std::make_unique<proto::RelayToRouter>())
 {
     LOG(LS_INFO) << "Ctor";
+
+    reconnect_timer_.setSingleShot(true);
+    connect(&reconnect_timer_, &QTimer::timeout, this, &Controller::connectToRouter);
 
     Settings settings;
 
@@ -172,7 +175,7 @@ void Controller::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
+    authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_public_key_);
@@ -334,7 +337,7 @@ void Controller::connectToRouter()
 void Controller::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-    reconnect_timer_.start(kReconnectTimeout, std::bind(&Controller::connectToRouter, this));
+    reconnect_timer_.start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------

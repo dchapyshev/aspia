@@ -24,17 +24,16 @@
 #include <chrono>
 #include <memory>
 
-namespace base {
-class TaskRunner;
-class WaitableTimer;
-} // namespace base
+#include <QTimer>
 
 namespace host {
 
 class ClientSession;
 
-class UnconfirmedClientSession
+class UnconfirmedClientSession final : public QObject
 {
+    Q_OBJECT
+
 public:
     class Delegate
     {
@@ -46,8 +45,8 @@ public:
     };
 
     UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                             std::shared_ptr<base::TaskRunner> task_runner,
-                             Delegate* delegate);
+                             Delegate* delegate,
+                             QObject* parent = nullptr);
     ~UnconfirmedClientSession();
 
     void setTimeout(const std::chrono::milliseconds& timeout);
@@ -58,7 +57,7 @@ public:
 private:
     Delegate* delegate_;
     std::unique_ptr<ClientSession> client_session_;
-    std::unique_ptr<base::WaitableTimer> timer_;
+    std::unique_ptr<QTimer> timer_;
     uint32_t id_;
 
     DISALLOW_COPY_AND_ASSIGN(UnconfirmedClientSession);

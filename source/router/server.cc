@@ -64,12 +64,10 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
-      database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
+Server::Server()
+    : database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +179,7 @@ bool Server::start()
     user_list->setSeedKey(seed_key);
 
     authenticator_manager_ =
-        std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
+        std::make_unique<base::ServerAuthenticatorManager>(this);
     authenticator_manager_->setPrivateKey(private_key);
     authenticator_manager_->setUserList(std::move(user_list));
     authenticator_manager_->setAnonymousAccess(
@@ -464,7 +462,7 @@ void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSessi
         if (it->get()->sessionId() == session_id)
         {
             // Session will be destroyed after completion of the current call.
-            task_runner_->deleteSoon(std::move(*it));
+            it->release()->deleteLater();
 
             // Delete a session from the list.
             sessions_.erase(it);

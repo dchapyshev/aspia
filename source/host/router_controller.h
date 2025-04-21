@@ -19,13 +19,14 @@
 #ifndef HOST_ROUTER_CONTROLLER_H
 #define HOST_ROUTER_CONTROLLER_H
 
-#include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer_manager.h"
 #include "proto/host_internal.pb.h"
 
 #include <queue>
+
+#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -34,11 +35,14 @@ class ClientAuthenticator;
 namespace host {
 
 class RouterController final
-    : public base::TcpChannel::Listener,
+    : public QObject,
+      public base::TcpChannel::Listener,
       public base::RelayPeerManager::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
     ~RouterController() final;
 
     struct RouterInfo
@@ -89,7 +93,7 @@ private:
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<base::RelayPeerManager> peer_manager_;
-    base::WaitableTimer reconnect_timer_;
+    QTimer reconnect_timer_;
     RouterInfo router_info_;
 
     std::queue<std::string> pending_id_requests_;

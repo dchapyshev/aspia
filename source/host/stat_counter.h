@@ -20,16 +20,19 @@
 #define HOST_STAT_COUNTER_H
 
 #include "base/macros_magic.h"
-#include "base/waitable_timer.h"
 
 #include <cstdint>
 
+#include <QTimer>
+
 namespace host {
 
-class StatCounter
+class StatCounter final : public QObject
 {
+    Q_OBJECT
+
 public:
-    StatCounter(uint32_t client_session_id, std::shared_ptr<base::TaskRunner> task_runner);
+    explicit StatCounter(uint32_t client_session_id, QObject* parent = nullptr);
     ~StatCounter();
 
     void addVideoPacket();
@@ -43,12 +46,13 @@ public:
     void addVideoError();
     void addCursorPosition();
 
-private:
+private slots:
     void onTimeout();
 
+private:
     const uint32_t client_session_id_;
 
-    base::WaitableTimer timer_;
+    QTimer timer_;
 
     uint64_t video_packets_ = 0;
     uint64_t audio_packets_ = 0;

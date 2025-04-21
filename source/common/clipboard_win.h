@@ -32,8 +32,10 @@ namespace common {
 
 class ClipboardWin final : public Clipboard
 {
+    Q_OBJECT
+
 public:
-    ClipboardWin();
+    explicit ClipboardWin(QObject* parent = nullptr);
     ~ClipboardWin() final;
 
 protected:

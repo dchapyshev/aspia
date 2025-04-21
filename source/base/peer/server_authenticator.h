@@ -31,8 +31,10 @@ class UserListBase;
 
 class ServerAuthenticator final : public Authenticator
 {
+    Q_OBJECT
+
 public:
-    explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
+    explicit ServerAuthenticator(QObject* parent = nullptr);
     ~ServerAuthenticator() final;
 
     enum class AnonymousAccess

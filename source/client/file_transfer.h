@@ -20,13 +20,14 @@
 #define CLIENT_FILE_TRANSFER_H
 
 #include "base/location.h"
-#include "base/waitable_timer.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
 #include "proto/file_transfer.pb.h"
 
 #include <deque>
 #include <map>
+
+#include <QTimer>
 
 namespace base {
 class TaskRunner;
@@ -44,8 +45,12 @@ class FileTransferProxy;
 class FileTransferQueueBuilder;
 class FileTransferWindowProxy;
 
-class FileTransfer final : public common::FileTaskProducer
+class FileTransfer final
+    : public QObject,
+      public common::FileTaskProducer
 {
+    Q_OBJECT
+
 public:
     enum class Type
     {
@@ -163,7 +168,8 @@ public:
     FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                  std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                  std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                 Type type);
+                 Type type,
+                 QObject* parent = nullptr);
     ~FileTransfer() final;
 
     void start(const std::string& source_path,
@@ -199,7 +205,7 @@ private:
     std::unique_ptr<common::FileTaskFactory> task_factory_source_;
     std::unique_ptr<common::FileTaskFactory> task_factory_target_;
 
-    base::WaitableTimer cancel_timer_;
+    QTimer cancel_timer_;
 
     // The map contains available actions for the error and the current action.
     std::map<Error::Type, Error::Action> actions_;
@@ -217,7 +223,7 @@ private:
 
     bool is_canceled_ = false;
 
-    base::WaitableTimer speed_update_timer_;
+    QTimer speed_update_timer_;
     TimePoint begin_time_;
     int64_t bytes_per_time_ = 0;
     int64_t speed_ = 0;

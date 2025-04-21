@@ -19,19 +19,17 @@
 #include "base/peer/server_authenticator_manager.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/peer/user_list_base.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ServerAuthenticatorManager::ServerAuthenticatorManager(
-    std::shared_ptr<TaskRunner> task_runner, Delegate* delegate)
-    : task_runner_(std::move(task_runner)),
+ServerAuthenticatorManager::ServerAuthenticatorManager(Delegate* delegate, QObject* parent)
+    : QObject(parent),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_ && delegate_);
+    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -66,8 +64,7 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
 {
     DCHECK(channel);
 
-    std::unique_ptr<ServerAuthenticator> authenticator =
-        std::make_unique<ServerAuthenticator>(task_runner_);
+    std::unique_ptr<ServerAuthenticator> authenticator = std::make_unique<ServerAuthenticator>();
     authenticator->setUserList(user_list_);
 
     if (!private_key_.empty())
@@ -122,7 +119,7 @@ void ServerAuthenticatorManager::onComplete()
                 }
 
                 // Authenticator not needed anymore.
-                task_runner_->deleteSoon(std::move(*it));
+                it->release()->deleteLater();
                 it = pending_.erase(it);
             }
             break;

@@ -19,12 +19,13 @@
 #ifndef RELAY_CONTROLLER_H
 #define RELAY_CONTROLLER_H
 
-#include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "build/build_config.h"
 #include "proto/router_relay.pb.h"
 #include "relay/sessions_worker.h"
 #include "relay/shared_pool.h"
+
+#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -33,12 +34,15 @@ class ClientAuthenticator;
 namespace relay {
 
 class Controller final
-    : public base::TcpChannel::Listener,
+    : public QObject,
+      public base::TcpChannel::Listener,
       public SessionManager::Delegate,
       public SharedPool::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
     ~Controller() final;
 
     bool start();
@@ -78,7 +82,7 @@ private:
     std::chrono::seconds statistics_interval_;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    base::WaitableTimer reconnect_timer_;
+    QTimer reconnect_timer_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
