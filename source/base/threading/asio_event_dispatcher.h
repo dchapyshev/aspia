@@ -22,13 +22,11 @@
 #include "base/macros_magic.h"
 
 #include <QAbstractEventDispatcher>
-#include <QPointer>
 
 #include <asio/io_context.hpp>
 #include <asio/high_resolution_timer.hpp>
 
 #include <atomic>
-#include <queue>
 #include <unordered_map>
 
 namespace base {
@@ -92,8 +90,6 @@ private:
         TimePoint start_time;
         TimePoint expire_time;
     };
-
-    using PendingTimer = std::pair<QPointer<QObject>, QTimerEvent*>;
 
 #if defined(Q_OS_WIN)
     struct EventData

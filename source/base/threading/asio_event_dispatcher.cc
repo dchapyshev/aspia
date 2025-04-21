@@ -19,6 +19,8 @@
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/logging.h"
 
+#include <asio/post.hpp>
+
 #include <QCoreApplication>
 #include <QThread>
 
@@ -48,12 +50,11 @@ AsioEventDispatcher::~AsioEventDispatcher()
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
-    interrupted_ = false;
+    interrupted_.store(false, std::memory_order_relaxed);
 
-    emit awake();
     QCoreApplication::sendPostedEvents();
 
-    if (interrupted_)
+    if (interrupted_.load(std::memory_order_relaxed))
         return false;
 
     size_t total_count = 0;
@@ -63,6 +64,7 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         emit aboutToBlock();
         io_context_.restart();
         total_count += io_context_.run_one();
+        emit awake();
     }
 
     while (true)
@@ -237,13 +239,13 @@ void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
-    io_context_.stop();
+    asio::post(io_context_, []{});
 }
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::interrupt()
 {
-    interrupted_ = true;
+    interrupted_.store(true, std::memory_order_relaxed);
     wakeUp();
 }
 
@@ -306,7 +308,7 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::onTimerEvent(const std::error_code& error_code, int id)
 {
-    if (error_code || interrupted_)
+    if (error_code || interrupted_.load(std::memory_order_relaxed))
         return;
 
     auto it = timers_.find(id);
