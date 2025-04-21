@@ -41,7 +41,7 @@ PrinterEnumerator::PrinterEnumerator()
 
     info_buffer_.resize(bytes_needed);
 
-    if (!EnumPrintersW(flags, nullptr, 2, info_buffer_.data(), bytes_needed,
+    if (!EnumPrintersW(flags, nullptr, 2, reinterpret_cast<LPBYTE>(info_buffer_.data()), bytes_needed,
                        &bytes_needed, &count))
     {
         PLOG(LS_ERROR) << "EnumPrintersW failed";

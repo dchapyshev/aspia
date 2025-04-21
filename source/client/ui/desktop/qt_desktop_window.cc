@@ -582,8 +582,8 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
     int hotspot_x = mouse_cursor->hotSpotX();
     int hotspot_y = mouse_cursor->hotSpotY();
 
-    QImage image(mouse_cursor->constImage().data(), width, height, mouse_cursor->stride(),
-                 QImage::Format::Format_ARGB32);
+    QImage image(reinterpret_cast<const uchar*>(mouse_cursor->constImage().data()), width, height,
+                 mouse_cursor->stride(), QImage::Format::Format_ARGB32);
 
     if (local_dpi != remote_dpi)
     {

@@ -26,12 +26,13 @@ namespace base {
 void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_decryptor,
                 MessageEncryptor* host_encryptor, MessageDecryptor* host_decryptor)
 {
-    ByteArray message_for_host = fromHex(
+    QByteArray message_for_host = QByteArray::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd8aa65bc95ca1d9f21ced474a45e9c6e7344184d6d715");
 
-    ByteArray encrypted_msg_for_host;
+    QByteArray encrypted_msg_for_host;
 
-    encrypted_msg_for_host.resize(client_encryptor->encryptedDataSize(message_for_host.size()));
+    encrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+        client_encryptor->encryptedDataSize(message_for_host.size())));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
     bool ret = client_encryptor->encrypt(message_for_host.data(),
@@ -39,10 +40,10 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
                                          encrypted_msg_for_host.data());
     ASSERT_TRUE(ret);
 
-    ByteArray decrypted_msg_for_host;
+    QByteArray decrypted_msg_for_host;
 
-    decrypted_msg_for_host.resize(
-        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size()));
+    decrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size())));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 
     ret = host_decryptor->decrypt(encrypted_msg_for_host.data(),
@@ -51,13 +52,13 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
     ASSERT_TRUE(ret);
     ASSERT_EQ(decrypted_msg_for_host, message_for_host);
 
-    ByteArray message_for_client = fromHex(
+    QByteArray message_for_client = QByteArray::fromHex(
         "1a600348762c4ec6f0353c868fec5e4db96ea78be88af74b4cfbb9da19687ab9fbf90f4d7ef4b6c993b9cd784cce46d100d17b88817d");
 
-    ByteArray encrypted_msg_for_client;
+    QByteArray encrypted_msg_for_client;
 
-    encrypted_msg_for_client.resize(
-        host_encryptor->encryptedDataSize(message_for_client.size()));
+    encrypted_msg_for_client.resize(static_cast<QByteArray::size_type>(
+        host_encryptor->encryptedDataSize(message_for_client.size())));
     ASSERT_EQ(encrypted_msg_for_client.size(), message_for_client.size() + 16);
 
     ret = host_encryptor->encrypt(message_for_client.data(),
@@ -65,10 +66,10 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
                                   encrypted_msg_for_client.data());
     ASSERT_TRUE(ret);
 
-    ByteArray decrypted_msg_for_client;
+    QByteArray decrypted_msg_for_client;
 
     decrypted_msg_for_client.resize(
-        client_decryptor->decryptedDataSize(encrypted_msg_for_client.size()));
+        static_cast<QByteArray::size_type>(client_decryptor->decryptedDataSize(encrypted_msg_for_client.size())));
     ASSERT_EQ(decrypted_msg_for_client.size(), encrypted_msg_for_client.size() - 16);
 
     ret = client_decryptor->decrypt(encrypted_msg_for_client.data(),
@@ -80,13 +81,13 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
 
 void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decryptor)
 {
-    ByteArray message_for_host = fromHex(
+    QByteArray message_for_host = QByteArray::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd");
 
-    ByteArray encrypted_msg_for_host;
+    QByteArray encrypted_msg_for_host;
 
-    encrypted_msg_for_host.resize(
-        client_encryptor->encryptedDataSize(message_for_host.size()));
+    encrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+        client_encryptor->encryptedDataSize(message_for_host.size())));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
     bool ret = client_encryptor->encrypt(message_for_host.data(),
@@ -94,10 +95,10 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
                                          encrypted_msg_for_host.data());
     ASSERT_TRUE(ret);
 
-    ByteArray decrypted_msg_for_host;
+    QByteArray decrypted_msg_for_host;
 
-    decrypted_msg_for_host.resize(
-        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size()));
+    decrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+        host_decryptor->decryptedDataSize(encrypted_msg_for_host.size())));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 
     ret = host_decryptor->decrypt(encrypted_msg_for_host.data(),
@@ -108,10 +109,10 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
 
 TEST(CryptorAes256GcmTest, TestVector)
 {
-    const ByteArray key =
-        fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray encrypt_iv = fromHex("ee7eb0e6fb24d445597f3e6f");
-    const ByteArray decrypt_iv = fromHex("924988304848184805f07167");
+    const QByteArray key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray encrypt_iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
+    const QByteArray decrypt_iv = QByteArray::fromHex("924988304848184805f07167");
 
     EXPECT_EQ(key.size(), 32);
     EXPECT_EQ(encrypt_iv.size(), 12);
@@ -142,11 +143,11 @@ TEST(CryptorAes256GcmTest, TestVector)
 
 TEST(CryptorAes256GcmTest, WrongKey)
 {
-    const ByteArray client_key =
-        fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray host_key =
-        fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray iv = fromHex("ee7eb0e6fb24d445597f3e6f");
+    const QByteArray client_key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray host_key =
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
     EXPECT_EQ(iv.size(), 12);
@@ -164,10 +165,10 @@ TEST(CryptorAes256GcmTest, WrongKey)
 
 TEST(CryptorChaCha20Poly1305Test, TestVector)
 {
-    const ByteArray key =
-        fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray encrypt_iv = fromHex("ee7eb0e6fb24d445597f3e6f");
-    const ByteArray decrypt_iv = fromHex("924988304848184805f07167");
+    const QByteArray key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray encrypt_iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
+    const QByteArray decrypt_iv = QByteArray::fromHex("924988304848184805f07167");
 
     EXPECT_EQ(key.size(), 32);
     EXPECT_EQ(encrypt_iv.size(), 12);
@@ -198,11 +199,11 @@ TEST(CryptorChaCha20Poly1305Test, TestVector)
 
 TEST(CryptorChaCha20Poly1305Test, WrongKey)
 {
-    const ByteArray client_key =
-        fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray host_key =
-        fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const ByteArray iv = fromHex("ee7eb0e6fb24d445597f3e6f");
+    const QByteArray client_key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray host_key =
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
     EXPECT_EQ(iv.size(), 12);

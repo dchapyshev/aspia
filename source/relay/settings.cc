@@ -53,7 +53,7 @@ void Settings::reset()
 {
     setRouterAddress(u"127.0.0.1");
     setRouterPort(DEFAULT_ROUTER_TCP_PORT);
-    setRouterPublicKey(base::ByteArray());
+    setRouterPublicKey(QByteArray());
     setPeerAddress(std::u16string());
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(std::chrono::minutes(5));
@@ -93,15 +93,15 @@ uint16_t Settings::routerPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterPublicKey(const base::ByteArray& public_key)
+void Settings::setRouterPublicKey(const QByteArray& public_key)
 {
-    impl_.set<base::ByteArray>("RouterPublicKey", public_key);
+    impl_.set<QByteArray>("RouterPublicKey", public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray Settings::routerPublicKey() const
+QByteArray Settings::routerPublicKey() const
 {
-    return impl_.get<base::ByteArray>("RouterPublicKey");
+    return impl_.get<QByteArray>("RouterPublicKey");
 }
 
 //--------------------------------------------------------------------------------------------------

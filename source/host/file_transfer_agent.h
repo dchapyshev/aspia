@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/memory/serializer.h"
 #include "common/file_worker_impl.h"
 
 namespace host {
@@ -38,15 +37,14 @@ public:
 protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() final;
-    void onIpcMessageReceived(const base::ByteArray& buffer) final;
-    void onIpcMessageWritten(base::ByteArray&& buffer) final;
+    void onIpcMessageReceived(const QByteArray& buffer) final;
+    void onIpcMessageWritten() final;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
     std::unique_ptr<common::FileWorkerImpl> worker_;
 
-    base::Serializer serializer_;
     proto::FileRequest request_;
     proto::FileReply reply_;
 

@@ -143,7 +143,7 @@ User User::create(std::u16string_view name, std::u16string_view password)
     BigNum v = SrpMath::calc_v(name, password, s, N, g);
 
     user.verifier = v.toByteArray();
-    if (user.verifier.empty())
+    if (user.verifier.isEmpty())
     {
         LOG(LS_ERROR) << "Empty verifier";
         return User();
@@ -155,7 +155,7 @@ User User::create(std::u16string_view name, std::u16string_view password)
 //--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
-    return !name.empty() && !salt.empty() && !group.empty() && !verifier.empty();
+    return !name.empty() && !salt.isEmpty() && !group.empty() && !verifier.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,8 +167,8 @@ User User::parseFrom(const proto::User& serialized_user)
     user.entry_id = serialized_user.entry_id();
     user.name     = utf16FromUtf8(serialized_user.name());
     user.group    = serialized_user.group();
-    user.salt     = fromStdString(serialized_user.salt());
-    user.verifier = fromStdString(serialized_user.verifier());
+    user.salt     = QByteArray::fromStdString(serialized_user.salt());
+    user.verifier = QByteArray::fromStdString(serialized_user.verifier());
     user.sessions = serialized_user.sessions();
     user.flags    = serialized_user.flags();
 
@@ -183,8 +183,8 @@ proto::User User::serialize() const
     user.set_entry_id(entry_id);
     user.set_name(utf8FromUtf16(name));
     user.set_group(group);
-    user.set_salt(toStdString(salt));
-    user.set_verifier(toStdString(verifier));
+    user.set_salt(salt.toStdString());
+    user.set_verifier(verifier.toStdString());
     user.set_sessions(sessions);
     user.set_flags(flags);
 

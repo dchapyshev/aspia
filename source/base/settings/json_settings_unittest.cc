@@ -38,7 +38,7 @@ bool removeFile(const std::filesystem::path& file_path)
 
 TEST(JsonSettingsTest, SettingsTest)
 {
-    static const base::ByteArray kSeedKey = base::fromHex("0FB4A836124156ABFF4E1212");
+    static const QByteArray kSeedKey = QByteArray::fromHex("0FB4A836124156ABFF4E1212");
 
     struct TestUser
     {
@@ -56,7 +56,7 @@ TEST(JsonSettingsTest, SettingsTest)
         std::make_unique<JsonSettings>(JsonSettings::Scope::USER, "test", "temp.json");
 
     settings->set<uint32_t>("TcpPort", 8050);
-    settings->set<base::ByteArray>("SeedKey", kSeedKey);
+    settings->set<QByteArray>("SeedKey", kSeedKey);
 
     base::Settings::Array test_array;
 
@@ -65,7 +65,7 @@ TEST(JsonSettingsTest, SettingsTest)
         base::Settings item;
 
         item.set<std::string>("Name", kUserList[i].name);
-        item.set<base::ByteArray>("Salt", base::fromHex(kUserList[i].salt));
+        item.set<QByteArray>("Salt", QByteArray::fromHex(kUserList[i].salt));
         item.set<uint32_t>("Flags", kUserList[i].flags);
 
         test_array.emplace_back(std::move(item));
@@ -74,14 +74,14 @@ TEST(JsonSettingsTest, SettingsTest)
     settings->setArray("Users", test_array);
 
     EXPECT_EQ(settings->get<uint32_t>("TcpPort", 0), 8050);
-    EXPECT_EQ(settings->get<base::ByteArray>("SeedKey", base::ByteArray()), kSeedKey);
+    EXPECT_EQ(settings->get<QByteArray>("SeedKey", QByteArray()), kSeedKey);
 
     test_array = settings->getArray("Users");
 
     for (size_t i = 0; i < std::size(kUserList); ++i)
     {
         EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
-        EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
+        EXPECT_EQ(test_array[i].get<QByteArray>("Salt", QByteArray()), QByteArray::fromHex(kUserList[i].salt));
         EXPECT_EQ(test_array[i].get<uint32_t>("Flags", -1), kUserList[i].flags);
     }
 
@@ -91,7 +91,7 @@ TEST(JsonSettingsTest, SettingsTest)
     settings = std::make_unique<JsonSettings>(JsonSettings::Scope::USER, "test", "temp.json");
 
     EXPECT_EQ(settings->get<uint32_t>("TcpPort", 0), 8050);
-    EXPECT_EQ(settings->get<base::ByteArray>("SeedKey", base::ByteArray()), kSeedKey);
+    EXPECT_EQ(settings->get<QByteArray>("SeedKey", QByteArray()), kSeedKey);
 
     test_array = settings->getArray("Users");
     EXPECT_FALSE(test_array.empty());
@@ -101,7 +101,7 @@ TEST(JsonSettingsTest, SettingsTest)
         for (size_t i = 0; i < std::size(kUserList); ++i)
         {
             EXPECT_EQ(test_array[i].get<std::string>("Name", std::string()), kUserList[i].name);
-            EXPECT_EQ(test_array[i].get<base::ByteArray>("Salt", base::ByteArray()), base::fromHex(kUserList[i].salt));
+            EXPECT_EQ(test_array[i].get<QByteArray>("Salt", QByteArray()), QByteArray::fromHex(kUserList[i].salt));
             EXPECT_EQ(test_array[i].get<uint32_t>("Flags", -1), kUserList[i].flags);
         }
     }

@@ -32,12 +32,12 @@ const std::chrono::minutes kIdleTimerInterval { 1 };
 
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
+QByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
 {
-    if (key.first.empty() || key.second.empty())
+    if (key.first.isEmpty() || key.second.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid session key";
-        return base::ByteArray();
+        return QByteArray();
     }
 
     std::unique_ptr<base::MessageDecryptor> decryptor =
@@ -45,23 +45,23 @@ base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPoo
     if (!decryptor)
     {
         LOG(LS_ERROR) << "Decryptor not created";
-        return base::ByteArray();
+        return QByteArray();
     }
 
     const std::string& source = message.data();
     if (source.empty())
     {
         LOG(LS_ERROR) << "Empty 'data' field";
-        return base::ByteArray();
+        return QByteArray();
     }
 
-    base::ByteArray target;
-    target.resize(decryptor->decryptedDataSize(source.size()));
+    QByteArray target;
+    target.resize(static_cast<QByteArray::size_type>(decryptor->decryptedDataSize(source.size())));
 
     if (!decryptor->decrypt(source.data(), source.size(), target.data()))
     {
         LOG(LS_ERROR) << "Failed to decrypt shared secret";
-        return base::ByteArray();
+        return QByteArray();
     }
 
     return target;
@@ -239,8 +239,8 @@ void SessionManager::onPendingSessionReady(
     if (key.has_value())
     {
         // Decrypt the identifiers of peers.
-        base::ByteArray secret = decryptSecret(message, *key);
-        if (!secret.empty())
+        QByteArray secret = decryptSecret(message, *key);
+        if (!secret.isEmpty())
         {
             // Save the identifiers of peers and the identifier of their shared key.
             session->setIdentify(message.key_id(), secret);

@@ -30,7 +30,7 @@ class TaskRunner;
 class TcpChannelProxy : public std::enable_shared_from_this<TcpChannelProxy>
 {
 public:
-    void send(uint8_t channel_id, ByteArray&& buffer,
+    void send(uint8_t channel_id, QByteArray&& buffer,
               WriteTask::Priority priority = WriteTask::Priority::NORMAL);
 
 private:

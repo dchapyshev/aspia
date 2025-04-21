@@ -24,8 +24,8 @@ namespace base {
 
 TEST(LargeNumberIncrementTest, Test)
 {
-    ByteArray number1 = fromHex("0000000000000000");
-    ByteArray result1 = fromHex("0000000000989680");
+    QByteArray number1 = QByteArray::fromHex("0000000000000000");
+    QByteArray result1 = QByteArray::fromHex("0000000000989680");
 
     for (size_t i = 0; i < 10000000; ++i)
     {
@@ -34,8 +34,8 @@ TEST(LargeNumberIncrementTest, Test)
 
     EXPECT_EQ(number1, result1);
 
-    ByteArray number2 = fromHex("FFFFFFFFFFFFFFFA");
-    ByteArray result2 = fromHex("0000000000000004");
+    QByteArray number2 = QByteArray::fromHex("FFFFFFFFFFFFFFFA");
+    QByteArray result2 = QByteArray::fromHex("0000000000000004");
 
     for (size_t i = 0; i < 10; ++i)
     {

@@ -21,7 +21,6 @@
 #include "base/environment.h"
 #include "base/logging.h"
 #include "base/version.h"
-#include "base/memory/byte_array.h"
 #include "base/net/curl_util.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
@@ -49,7 +48,7 @@ public:
         delegate_ = nullptr;
     }
 
-    void onFinished(const base::ByteArray& response)
+    void onFinished(const QByteArray& response)
     {
         if (!owner_task_runner_->belongsToCurrentThread())
         {
@@ -111,10 +110,10 @@ void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, D
 }
 
 //--------------------------------------------------------------------------------------------------
-static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArray* buffer)
+static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* buffer)
 {
     size_t append_size = size * nmemb;
-    base::append(buffer, ptr, append_size);
+    buffer->append(reinterpret_cast<char*>(ptr), static_cast<QByteArray::size_type>(append_size));
     return append_size;
 }
 
@@ -214,7 +213,7 @@ void UpdateChecker::run()
         verify_peer = 0;
     }
 
-    base::ByteArray response;
+    QByteArray response;
 
     curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, verify_peer);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, writeDataFunc);
@@ -254,7 +253,7 @@ void UpdateChecker::run()
 
     if (!thread_.isStopping())
     {
-        LOG(LS_INFO) << "Checking is finished: " << base::toStdString(response);
+        LOG(LS_INFO) << "Checking is finished: " << response.toStdString();
         if (runner_)
             runner_->onFinished(response);
     }

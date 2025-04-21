@@ -62,7 +62,7 @@ public:
 
     void setUserList(std::unique_ptr<UserListBase> user_list);
 
-    void setPrivateKey(const ByteArray& private_key);
+    void setPrivateKey(const QByteArray& private_key);
 
     void setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types);
@@ -78,7 +78,7 @@ private:
     base::local_shared_ptr<UserListBase> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
-    ByteArray private_key_;
+    QByteArray private_key_;
 
     ServerAuthenticator::AnonymousAccess anonymous_access_ =
         ServerAuthenticator::AnonymousAccess::DISABLE;

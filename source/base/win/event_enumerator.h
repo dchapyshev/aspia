@@ -19,12 +19,13 @@
 #ifndef BASE_WIN_EVENT_ENUMERATOR_H
 #define BASE_WIN_EVENT_ENUMERATOR_H
 
-#include "base/memory/byte_array.h"
 #include "base/win/scoped_object.h"
 
 #include <cstdint>
 #include <memory>
 #include <string>
+
+#include <QByteArray>
 
 namespace base::win {
 
@@ -56,7 +57,7 @@ private:
     int end_record_ = 0;
 
     mutable int current_pos_ = 0;
-    mutable ByteArray record_buffer_;
+    mutable QByteArray record_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(EventEnumerator);
 };

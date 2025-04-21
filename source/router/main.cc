@@ -43,7 +43,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
+bool generateKeys(QByteArray* private_key, QByteArray* public_key)
 {
     base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!key_pair.isValid())
@@ -55,7 +55,7 @@ bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
     *private_key = key_pair.privateKey();
     *public_key = key_pair.publicKey();
 
-    if (private_key->empty() || public_key->empty())
+    if (private_key->isEmpty() || public_key->isEmpty())
     {
         std::cout << "Empty keys generated";
         return false;
@@ -67,14 +67,14 @@ bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
 //--------------------------------------------------------------------------------------------------
 void generateAndPrintKeys()
 {
-    base::ByteArray private_key;
-    base::ByteArray public_key;
+    QByteArray private_key;
+    QByteArray public_key;
 
     if (!generateKeys(&private_key, &public_key))
         return;
 
-    std::cout << "Private key: " << base::toHex(private_key) << std::endl;
-    std::cout << "Public key: " << base::toHex(public_key) << std::endl;
+    std::cout << "Private key: " << private_key.toHex().toStdString() << std::endl;
+    std::cout << "Public key: " << public_key.toHex().toStdString() << std::endl;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,23 +183,23 @@ void createConfig()
     std::cout << "User was successfully added to the database." << std::endl;
     std::cout << "Generating encryption keys..." << std::endl;
 
-    base::ByteArray private_key;
-    base::ByteArray public_key;
+    QByteArray private_key;
+    QByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
         return;
 
     std::cout << "Private and public keys have been successfully generated." << std::endl;
     std::cout << "Writing a public key to a file..." << std::endl;
 
-    if (!base::writeFile(public_key_file, base::toHex(public_key)))
+    if (!base::writeFile(public_key_file, public_key.toHex()))
     {
         std::cout << "Failed to write public key to file: " << public_key_file << std::endl;
         return;
     }
 
     std::cout << "Generate seed key...";
-    base::ByteArray seed_key = base::Random::byteArray(64);
-    if (seed_key.empty())
+    QByteArray seed_key = base::Random::byteArray(64);
+    if (seed_key.isEmpty())
     {
         std::cout << "Unable to generate seed key";
     }

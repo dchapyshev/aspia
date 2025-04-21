@@ -21,7 +21,6 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
-#include "base/memory/serializer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/desktop_extensions.pb.h"
 #include "proto/text_chat.pb.h"
@@ -103,18 +102,18 @@ protected:
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
     virtual void onStarted() = 0;
-    virtual void onReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
     virtual void onWritten(uint8_t channel_id, size_t pending) = 0;
 
     std::shared_ptr<base::TcpChannelProxy> channelProxy();
-    void sendMessage(uint8_t channel_id, base::ByteArray&& buffer);
+    void sendMessage(uint8_t channel_id, QByteArray&& buffer);
     void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
 
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     size_t pendingMessages() const;
 
@@ -131,7 +130,6 @@ private:
     std::string display_name_;
 
     std::unique_ptr<base::TcpChannel> channel_;
-    base::Serializer serializer_;
 };
 
 } // namespace host

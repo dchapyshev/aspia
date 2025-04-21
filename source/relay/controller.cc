@@ -19,6 +19,7 @@
 #include "relay/controller.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
@@ -79,7 +80,7 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* p
 
     LOG(LS_INFO) << "Router address: " << router_address_;
     LOG(LS_INFO) << "Router port: " << router_port_;
-    LOG(LS_INFO) << "Router public key: " << base::toHex(router_public_key_);
+    LOG(LS_INFO) << "Router public key: " << router_public_key_.toHex().toStdString();
 
     // Peers settings.
     listen_interface_ = settings.listenInterface();
@@ -122,7 +123,7 @@ bool Controller::start()
         return false;
     }
 
-    if (router_public_key_.empty())
+    if (router_public_key_.isEmpty())
     {
         LOG(LS_ERROR) << "Empty router public key";
         return false;
@@ -230,7 +231,7 @@ void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -272,8 +273,7 @@ void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::Byte
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void Controller::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -365,8 +365,8 @@ void Controller::sendKeyPool(uint32_t key_count)
 
         key->set_type(proto::RelayKey::TYPE_X25519);
         key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
-        key->set_public_key(base::toStdString(session_key.publicKey()));
-        key->set_iv(base::toStdString(session_key.iv()));
+        key->set_public_key(session_key.publicKey().toStdString());
+        key->set_iv(session_key.iv().toStdString());
 
         // Add the key to the pool.
         key->set_key_id(shared_pool_->addKey(std::move(session_key)));

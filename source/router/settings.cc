@@ -54,7 +54,7 @@ std::filesystem::path Settings::filePath()
 void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
-    setPrivateKey(base::ByteArray());
+    setPrivateKey(QByteArray());
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
     setAdminWhiteList(WhiteList());
@@ -92,15 +92,15 @@ uint16_t Settings::port() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPrivateKey(const base::ByteArray& private_key)
+void Settings::setPrivateKey(const QByteArray& private_key)
 {
-    impl_.set<std::string>("PrivateKey", base::toHex(private_key));
+    impl_.set<std::string>("PrivateKey", private_key.toHex().toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray Settings::privateKey() const
+QByteArray Settings::privateKey() const
 {
-    return base::fromHex(impl_.get<std::string>("PrivateKey"));
+    return QByteArray::fromHex(QByteArray::fromStdString(impl_.get<std::string>("PrivateKey")));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,15 +152,15 @@ Settings::WhiteList Settings::relayWhiteList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setSeedKey(const base::ByteArray &seed_key)
+void Settings::setSeedKey(const QByteArray &seed_key)
 {
-    impl_.set<std::string>("SeedKey", base::toHex(seed_key));
+    impl_.set<std::string>("SeedKey", seed_key.toHex().toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray Settings::seedKey() const
+QByteArray Settings::seedKey() const
 {
-    return base::fromHex(impl_.get<std::string>("SeedKey"));
+    return QByteArray::fromHex(QByteArray::fromStdString(impl_.get<std::string>("SeedKey")));
 }
 
 //--------------------------------------------------------------------------------------------------

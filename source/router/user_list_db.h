@@ -37,15 +37,15 @@ public:
     // base::UserListBase implementation.
     void add(const base::User& user) final;
     base::User find(std::u16string_view username) const final;
-    const base::ByteArray& seedKey() const final;
-    void setSeedKey(const base::ByteArray& seed_key) final;
+    const QByteArray& seedKey() const final;
+    void setSeedKey(const QByteArray& seed_key) final;
     std::vector<base::User> list() const final;
 
 private:
     explicit UserListDb(std::unique_ptr<Database> db);
 
     std::unique_ptr<Database> db_;
-    base::ByteArray seed_key_;
+    QByteArray seed_key_;
 
     DISALLOW_COPY_AND_ASSIGN(UserListDb);
 };

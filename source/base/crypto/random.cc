@@ -31,7 +31,7 @@ template <class ContainerT>
 ContainerT generateBuffer(size_t size)
 {
     ContainerT random_buffer;
-    random_buffer.resize(size);
+    random_buffer.resize(static_cast<ContainerT::size_type>(size));
 
     bool result = Random::fillBuffer(random_buffer.data(), random_buffer.size());
     CHECK(result);
@@ -65,9 +65,9 @@ bool Random::fillBuffer(void* buffer, size_t size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray Random::byteArray(size_t size)
+QByteArray Random::byteArray(size_t size)
 {
-    return generateBuffer<ByteArray>(size);
+    return generateBuffer<QByteArray>(size);
 }
 
 //--------------------------------------------------------------------------------------------------

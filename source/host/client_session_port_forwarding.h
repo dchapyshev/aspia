@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/location.h"
 #include "base/task_runner.h"
-#include "base/memory/byte_array.h"
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.pb.h"
@@ -45,7 +44,7 @@ public:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onWritten(uint8_t channel_id, size_t pending) final;
 
 private:

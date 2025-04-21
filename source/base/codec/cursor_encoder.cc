@@ -82,8 +82,8 @@ bool CursorEncoder::compressCursor(
         return false;
     }
 
-    const ByteArray& image = mouse_cursor.constImage();
-    if (image.empty())
+    const QByteArray& image = mouse_cursor.constImage();
+    if (image.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid cursor image buffer";
         return false;
@@ -98,7 +98,7 @@ bool CursorEncoder::compressCursor(
     }
 
     const size_t input_size = image.size();
-    const uint8_t* input_data = image.data();
+    const uint8_t* input_data = reinterpret_cast<const uint8_t*>(image.data());
 
     const size_t output_size = ZSTD_compressBound(input_size);
     uint8_t* output_data = outputBuffer(cursor_shape, output_size);
@@ -144,7 +144,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* 
     }
 
     // Calculate the hash of the cursor to search in the cache.
-    uint32_t hash = libyuv::HashDjb2(mouse_cursor.constImage().data(),
+    uint32_t hash = libyuv::HashDjb2(reinterpret_cast<const uint8_t*>(mouse_cursor.constImage().data()),
                                      mouse_cursor.constImage().size(),
                                      kHashingSeed);
 

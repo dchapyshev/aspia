@@ -20,13 +20,13 @@
 #define RELAY_PENDING_SESSION_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 #include "base/peer/host_id.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
 
 #include <QTimer>
+#include <QByteArray>
 
 namespace base {
 class Location;
@@ -70,7 +70,7 @@ public:
     void stop();
 
     // Sets session credentials.
-    void setIdentify(uint32_t key_id, const base::ByteArray& secret);
+    void setIdentify(uint32_t key_id, const QByteArray& secret);
 
     // Returns true if the other session is a pair and false otherwise.
     bool isPeerFor(const PendingSession& other) const;
@@ -95,9 +95,9 @@ private:
     asio::ip::tcp::socket socket_;
 
     uint32_t buffer_size_ = 0;
-    base::ByteArray buffer_;
+    QByteArray buffer_;
 
-    base::ByteArray secret_;
+    QByteArray secret_;
     uint32_t key_id_ = static_cast<uint32_t>(-1);
 
     DISALLOW_COPY_AND_ASSIGN(PendingSession);

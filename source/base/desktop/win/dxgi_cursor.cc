@@ -40,7 +40,7 @@ DxgiCursor::~DxgiCursor() = default;
 //--------------------------------------------------------------------------------------------------
 MouseCursor* DxgiCursor::mouseCursor()
 {
-    if (pointer_shape_.empty())
+    if (pointer_shape_.isEmpty())
         return nullptr;
 
     if (!pointer_shape_info_.Width || !pointer_shape_info_.Height)
@@ -49,7 +49,7 @@ MouseCursor* DxgiCursor::mouseCursor()
     int width = static_cast<int>(pointer_shape_info_.Width);
     int height = static_cast<int>(pointer_shape_info_.Height);
     int pitch = static_cast<int>(pointer_shape_info_.Pitch);
-    ByteArray image;
+    QByteArray image;
 
     if (pointer_shape_info_.Type == DXGI_OUTDUPL_POINTER_SHAPE_TYPE_MONOCHROME)
     {
@@ -60,8 +60,8 @@ MouseCursor* DxgiCursor::mouseCursor()
 
         image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
 
-        uint8_t* mask_and = pointer_shape_.data();
-        uint8_t* mask_xor = pointer_shape_.data() + (pitch * height);
+        uint8_t* mask_and = reinterpret_cast<uint8_t*>(pointer_shape_.data());
+        uint8_t* mask_xor = reinterpret_cast<uint8_t*>(pointer_shape_.data()) + (pitch * height);
         int width_bytes = ((width + 15) / 16) * 2;
 
         auto check_bit = [](uint8_t byte, int index)
@@ -153,7 +153,7 @@ DXGI_OUTDUPL_POINTER_SHAPE_INFO* DxgiCursor::pointerShapeInfo()
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray* DxgiCursor::pointerShapeBuffer()
+QByteArray* DxgiCursor::pointerShapeBuffer()
 {
     return &pointer_shape_;
 }

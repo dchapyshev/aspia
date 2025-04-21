@@ -19,6 +19,7 @@
 #include "host/desktop_session_agent.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/capture_scheduler.h"
@@ -143,7 +144,7 @@ void DesktopSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
+void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -313,7 +314,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageWritten(base::ByteArray&& /* buffer */)
+void DesktopSessionAgent::onIpcMessageWritten()
 {
     // Nothing
 }
@@ -438,7 +439,7 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpotY());
         serialized_mouse_cursor->set_dpi_x(mouse_cursor->constDpi().x());
         serialized_mouse_cursor->set_dpi_y(mouse_cursor->constDpi().y());
-        serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
+        serialized_mouse_cursor->set_data(mouse_cursor->constImage().toStdString());
     }
 
     if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())

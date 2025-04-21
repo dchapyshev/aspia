@@ -20,7 +20,8 @@
 #define COMMON_UPDATE_INFO_H
 
 #include "base/version.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace common {
 
@@ -32,7 +33,7 @@ public:
     UpdateInfo& operator=(const UpdateInfo& other) = default;
     ~UpdateInfo() = default;
 
-    static UpdateInfo fromXml(const base::ByteArray& buffer);
+    static UpdateInfo fromXml(const QByteArray& buffer);
 
     bool isValid() const { return valid_; }
     const base::Version& version() const { return version_; }

@@ -21,13 +21,13 @@
 
 #include "base/macros_magic.h"
 #include "base/peer/host_id.h"
-#include "base/memory/byte_array.h"
 #include "proto/router_common.pb.h"
 #include "proto/router_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
-
 #include <optional>
+
+#include <QByteArray>
 
 namespace base {
 
@@ -57,14 +57,14 @@ private:
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    static ByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
+    static QByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
 
     Delegate* delegate_ = nullptr;
     proto::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
     uint32_t message_size_ = 0;
-    ByteArray message_;
+    QByteArray message_;
 
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;

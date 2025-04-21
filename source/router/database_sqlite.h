@@ -43,8 +43,8 @@ public:
     bool modifyUser(const base::User& user) final;
     bool removeUser(int64_t entry_id) final;
     base::User findUser(std::u16string_view username) final;
-    ErrorCode hostId(const base::ByteArray& key_hash, base::HostId* host_id) const final;
-    bool addHost(const base::ByteArray& key_hash) final;
+    ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const final;
+    bool addHost(const QByteArray& key_hash) final;
 
 private:
     explicit DatabaseSqlite(sqlite3* db);

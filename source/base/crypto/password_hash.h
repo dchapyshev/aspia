@@ -20,7 +20,8 @@
 #define BASE_CRYPTO_PASSWORD_HASH_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -33,7 +34,7 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static ByteArray hash(Type type, std::string_view password, const ByteArray& salt);
+    static QByteArray hash(Type type, std::string_view password, const QByteArray& salt);
     static std::string hash(Type type, std::string_view password, std::string_view salt);
 
 private:

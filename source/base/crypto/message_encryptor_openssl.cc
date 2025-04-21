@@ -34,7 +34,7 @@ const int kTagSize = 16; // 128 bits, 16 bytes.
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv)
+MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
     : ctx_(std::move(ctx)),
       iv_(iv)
 {
@@ -48,7 +48,7 @@ MessageEncryptorOpenssl::~MessageEncryptorOpenssl() = default;
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
-    const ByteArray& key, const ByteArray& iv)
+    const QByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -70,7 +70,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly1305(
-    const ByteArray& key, const ByteArray& iv)
+    const QByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -98,7 +98,8 @@ size_t MessageEncryptorOpenssl::encryptedDataSize(size_t in_size)
 //--------------------------------------------------------------------------------------------------
 bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 {
-    if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
+    if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
+        reinterpret_cast<const uint8_t*>(iv_.data())) != 1)
     {
         LOG(LS_ERROR) << "EVP_EncryptInit_ex failed";
         return false;

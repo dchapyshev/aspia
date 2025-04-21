@@ -25,7 +25,6 @@
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_cursor.h"
 #include "base/desktop/win/dxgi_texture.h"
-#include "base/memory/byte_array.h"
 #include "base/win/desktop.h"
 
 #include <dxgi.h>

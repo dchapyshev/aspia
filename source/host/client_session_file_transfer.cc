@@ -320,7 +320,7 @@ void ClientSessionFileTransfer::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
@@ -333,7 +333,7 @@ void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base:
 
     if (ipc_channel_)
     {
-        ipc_channel_->send(base::ByteArray(buffer));
+        ipc_channel_->send(QByteArray(buffer));
     }
     else
     {
@@ -379,13 +379,13 @@ void ClientSessionFileTransfer::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageReceived(const base::ByteArray& buffer)
+void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 {
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::ByteArray(buffer));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, QByteArray(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageWritten(base::ByteArray&& /* buffer */)
+void ClientSessionFileTransfer::onIpcMessageWritten()
 {
     // Nothing
 }

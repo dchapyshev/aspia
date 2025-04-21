@@ -19,7 +19,7 @@
 #include "client/router_controller.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
+#include "base/serialization.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.pb.h"
 
@@ -146,7 +146,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     Error error;
     error.type = ErrorType::ROUTER;
@@ -240,8 +240,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

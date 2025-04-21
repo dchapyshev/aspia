@@ -20,10 +20,11 @@
 #define BASE_WIN_PRINTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 
 #include <memory>
 #include <string>
+
+#include <QByteArray>
 
 struct _PRINTER_INFO_2W;
 
@@ -56,7 +57,7 @@ public:
     int jobsCount() const;
 
 private:
-    ByteArray info_buffer_;
+    QByteArray info_buffer_;
     std::wstring default_printer_;
 
     _PRINTER_INFO_2W* info_ = nullptr;

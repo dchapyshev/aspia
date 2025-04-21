@@ -45,8 +45,10 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
     if (!size)
         return true;
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
     if (size >= buffer->max_size())
         return false;
+#endif
 
     buffer->resize(size);
 
@@ -74,7 +76,7 @@ bool writeFile(const std::filesystem::path& filename, const void* data, size_t s
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeFile(const std::filesystem::path& filename, const ByteArray& buffer)
+bool writeFile(const std::filesystem::path& filename, const QByteArray& buffer)
 {
     return writeFile(filename, buffer.data(), buffer.size());
 }
@@ -86,9 +88,9 @@ bool writeFile(const std::filesystem::path& filename, std::string_view buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool readFile(const std::filesystem::path& filename, ByteArray* buffer)
+bool readFile(const std::filesystem::path& filename, QByteArray* buffer)
 {
-    return readFileT<ByteArray>(filename, buffer);
+    return readFileT<QByteArray>(filename, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

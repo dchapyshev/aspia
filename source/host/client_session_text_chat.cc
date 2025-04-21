@@ -19,6 +19,7 @@
 #include "host/client_session_text_chat.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/strings/unicode.h"
 #include "proto/text_chat.pb.h"
@@ -79,7 +80,7 @@ void ClientSessionTextChat::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::TextChat text_chat;
 

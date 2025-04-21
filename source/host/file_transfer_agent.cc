@@ -19,6 +19,7 @@
 #include "host/file_transfer_agent.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 
 namespace host {
 
@@ -61,7 +62,7 @@ void FileTransferAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferAgent::onIpcMessageReceived(const base::ByteArray& buffer)
+void FileTransferAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     request_.Clear();
     reply_.Clear();
@@ -73,13 +74,13 @@ void FileTransferAgent::onIpcMessageReceived(const base::ByteArray& buffer)
     }
 
     worker_->doRequest(request_, &reply_);
-    channel_->send(serializer_.serialize(reply_));
+    channel_->send(base::serialize(reply_));
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferAgent::onIpcMessageWritten(base::ByteArray&& buffer)
+void FileTransferAgent::onIpcMessageWritten()
 {
-    serializer_.addBuffer(std::move(buffer));
+    // Nothing
 }
 
 } // namespace host

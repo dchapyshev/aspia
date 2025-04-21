@@ -24,9 +24,9 @@ namespace base {
 
 TEST(BigNumTest, Conversions)
 {
-    std::string hex = "00DF8CB233BD5EDF263CA842B91BC2B61AAEB92313B41CCBDEEB659EDDEAA53591D47EC559"
+    QByteArray hex = "00DF8CB233BD5EDF263CA842B91BC2B61AAEB92313B41CCBDEEB659EDDEAA53591D47EC559"
                       "E44F3B3A1202FFEA56EDCB11BD5D37824ACBB71E4316F3D5F63955";
-    base::ByteArray salt = base::fromHex(hex);
+    QByteArray salt = QByteArray::fromHex(hex);
 
     EXPECT_EQ(salt.size(), 64);
 

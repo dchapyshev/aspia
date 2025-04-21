@@ -35,16 +35,16 @@ public:
 
     bool isValid() const;
 
-    base::ByteArray privateKey() const;
-    base::ByteArray publicKey() const;
-    base::ByteArray sessionKey(std::string_view peer_public_key) const;
-    base::ByteArray iv() const;
+    QByteArray privateKey() const;
+    QByteArray publicKey() const;
+    QByteArray sessionKey(const std::string& peer_public_key) const;
+    QByteArray iv() const;
 
 private:
-    SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv);
+    SessionKey(base::KeyPair&& key_pair, QByteArray&& iv);
 
     base::KeyPair key_pair_;
-    base::ByteArray iv_;
+    QByteArray iv_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionKey);
 };

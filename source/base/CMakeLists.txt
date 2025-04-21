@@ -54,6 +54,7 @@ list(APPEND SOURCE_BASE
     scoped_logging.h
     scoped_task_runner.cc
     scoped_task_runner.h
+    serialization.h
     service.h
     session_id.cc
     session_id.h
@@ -501,10 +502,6 @@ endif()
 list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.cc
     memory/aligned_memory.h
-    memory/byte_array.cc
-    memory/byte_array.h
-    memory/serializer.cc
-    memory/serializer.h
     memory/local_memory.h
     memory/typed_buffer.h
     memory/local_memory_impl/bad_local_weak_ptr.h
@@ -519,8 +516,7 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/local_memory_impl/sp_counted_impl.h)
 
 list(APPEND SOURCE_BASE_MEMORY_TESTS
-    memory/aligned_memory_unittest.cc
-    memory/byte_array_unittest.cc)
+    memory/aligned_memory_unittest.cc)
 
 list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.cc
@@ -829,6 +825,16 @@ target_link_libraries(aspia_base_tests PRIVATE
     aspia_proto
     GTest::gtest
     ${BASE_TESTS_PLATFORM_LIBS}
-    ${THIRD_PARTY_LIBS})
+    ${THIRD_PARTY_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS})
+set_property(TARGET aspia_base_tests PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_base_tests PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_base_tests PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_base_tests
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

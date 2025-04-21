@@ -19,6 +19,7 @@
 #include "console/address_book_tab.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/data_cryptor_chacha20_poly1305.h"
 #include "base/crypto/data_cryptor_fake.h"
 #include "base/crypto/password_hash.h"
@@ -1240,7 +1241,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    base::ByteArray buffer = base::serialize(file_);
+    QByteArray buffer = base::serialize(file_);
 
     int64_t bytes_written = file.write(
         reinterpret_cast<const char*>(buffer.data()), static_cast<qint64>(buffer.size()));

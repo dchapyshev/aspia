@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 #include "base/crypto/openssl_util.h"
-#include "base/memory/byte_array.h"
 
 namespace base {
 
@@ -36,12 +35,12 @@ public:
     enum class Type { X25519 };
 
     static KeyPair create(Type type);
-    static KeyPair fromPrivateKey(const ByteArray& private_key);
+    static KeyPair fromPrivateKey(const QByteArray& private_key);
 
     bool isValid() const;
-    ByteArray privateKey() const;
-    ByteArray publicKey() const;
-    ByteArray sessionKey(const ByteArray& peer_public_key) const;
+    QByteArray privateKey() const;
+    QByteArray publicKey() const;
+    QByteArray sessionKey(const QByteArray& peer_public_key) const;
 
 private:
     explicit KeyPair(EVP_PKEY_ptr&& pkey) noexcept;

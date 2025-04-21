@@ -52,12 +52,13 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
         return BigNum();
 
     const size_t xy_size = static_cast<size_t>(N_bytes) + static_cast<size_t>(N_bytes);
-    ByteArray xy(xy_size);
+    QByteArray xy;
+    xy.resize(static_cast<QByteArray::size_type>(xy_size));
 
-    if (BN_bn2binpad(x, xy.data(), N_bytes) < 0)
+    if (BN_bn2binpad(x, reinterpret_cast<uint8_t*>(xy.data()), N_bytes) < 0)
         return BigNum();
 
-    if (BN_bn2binpad(y, xy.data() + N_bytes, N_bytes) < 0)
+    if (BN_bn2binpad(y, reinterpret_cast<uint8_t*>(xy.data()) + N_bytes, N_bytes) < 0)
         return BigNum();
 
     return BigNum::fromByteArray(
@@ -174,28 +175,28 @@ BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_vi
         return BigNum();
     }
 
-    return calc_x(s, I, fromStdString(utf8FromUtf16(p)));
+    return calc_x(s, I, QByteArray::fromStdString(utf8FromUtf16(p)));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const ByteArray& p)
+BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const QByteArray& p)
 {
-    if (!s.isValid() || I.empty() || p.empty())
+    if (!s.isValid() || I.empty() || p.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.empty()
-                      << " p=" << p.empty() << ")";
+                      << " p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
     GenericHash hash(GenericHash::BLAKE2b512);
 
     hash.addData(utf8FromUtf16(toLower(I)));
-    hash.addData(":");
+    hash.addData(std::string_view(":"));
     hash.addData(p);
 
-    ByteArray temp = hash.result();
-    ByteArray salt = s.toByteArray();
+    QByteArray temp = hash.result();
+    QByteArray salt = s.toByteArray();
 
     hash.reset();
 
@@ -439,12 +440,12 @@ BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNu
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_v(std::u16string_view I, const ByteArray& p, const BigNum& s,
+BigNum SrpMath::calc_v(std::u16string_view I, const QByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.empty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.empty()
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.isEmpty()
                       << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
         return BigNum();
     }

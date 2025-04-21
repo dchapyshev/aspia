@@ -19,6 +19,7 @@
 #include "router/session_client.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "base/strings/unicode.h"
 #include "proto/relay_peer.pb.h"
@@ -48,7 +49,7 @@ void SessionClient::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
     if (!base::parse(buffer, message.get()))

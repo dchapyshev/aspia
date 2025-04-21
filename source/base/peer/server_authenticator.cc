@@ -22,6 +22,7 @@
 #include "base/cpuid_util.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
@@ -75,7 +76,7 @@ void ServerAuthenticator::setUserList(base::local_shared_ptr<UserListBase> user_
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
+bool ServerAuthenticator::setPrivateKey(const QByteArray& private_key)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
@@ -84,7 +85,7 @@ bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
         return false;
     }
 
-    if (private_key.empty())
+    if (private_key.isEmpty())
     {
         LOG(LS_ERROR) << "An empty private key is not valid";
         return false;
@@ -98,7 +99,7 @@ bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
     }
 
     encrypt_iv_ = Random::byteArray(kIvSize);
-    if (encrypt_iv_.empty())
+    if (encrypt_iv_.isEmpty())
     {
         LOG(LS_ERROR) << "An empty IV is not valid";
         return false;
@@ -186,7 +187,7 @@ bool ServerAuthenticator::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::onReceived(const ByteArray& buffer)
+void ServerAuthenticator::onReceived(const QByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -221,7 +222,7 @@ void ServerAuthenticator::onWritten()
         {
             LOG(LS_INFO) << "Sended: ServerHello";
 
-            if (!session_key_.empty())
+            if (!session_key_.isEmpty())
             {
                 if (!onSessionKeyChanged())
                     return;
@@ -270,7 +271,7 @@ void ServerAuthenticator::onWritten()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::onClientHello(const ByteArray& buffer)
+void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientHello";
 
@@ -358,33 +359,33 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
 
     if (key_pair_.isValid())
     {
-        ByteArray peer_public_key = fromStdString(client_hello->public_key());
-        decrypt_iv_ = fromStdString(client_hello->iv());
+        QByteArray peer_public_key = QByteArray::fromStdString(client_hello->public_key());
+        decrypt_iv_ = QByteArray::fromStdString(client_hello->iv());
 
-        if (peer_public_key.empty() != decrypt_iv_.empty())
+        if (peer_public_key.isEmpty() != decrypt_iv_.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
-        if (!peer_public_key.empty() && !decrypt_iv_.empty())
+        if (!peer_public_key.isEmpty() && !decrypt_iv_.isEmpty())
         {
-            ByteArray temp = key_pair_.sessionKey(peer_public_key);
-            if (temp.empty())
+            QByteArray temp = key_pair_.sessionKey(peer_public_key);
+            if (temp.isEmpty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                 return;
             }
 
             session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-            if (session_key_.empty())
+            if (session_key_.isEmpty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                 return;
             }
 
-            DCHECK(!encrypt_iv_.empty());
-            server_hello->set_iv(toStdString(encrypt_iv_));
+            DCHECK(!encrypt_iv_.isEmpty());
+            server_hello->set_iv(encrypt_iv_.toStdString());
         }
     }
 
@@ -423,7 +424,7 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::onIdentify(const ByteArray& buffer)
+void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: Identify";
 
@@ -446,7 +447,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
     do
     {
         std::u16string user_name_utf16 = base::utf16FromUtf8(user_name_);
-        ByteArray seed_key;
+        QByteArray seed_key;
         User user;
 
         if (user_list_)
@@ -459,7 +460,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
             LOG(LS_INFO) << "UserList is nullptr";
         }
 
-        if (seed_key.empty())
+        if (seed_key.isEmpty())
         {
             LOG(LS_INFO) << "Empty seed key. Using random 64 bytes";
             seed_key = base::Random::byteArray(64);
@@ -526,14 +527,14 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
     server_key_exchange->set_generator(g_.toStdString());
     server_key_exchange->set_salt(s_.toStdString());
     server_key_exchange->set_b(B_.toStdString());
-    server_key_exchange->set_iv(toStdString(encrypt_iv_));
+    server_key_exchange->set_iv(encrypt_iv_.toStdString());
 
     LOG(LS_INFO) << "Sending: ServerKeyExchange";
     sendMessage(*server_key_exchange);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
+void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientKeyExchange";
 
@@ -546,16 +547,16 @@ void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
     }
 
     A_ = BigNum::fromStdString(client_key_exchange->a());
-    decrypt_iv_ = fromStdString(client_key_exchange->iv());
+    decrypt_iv_ = QByteArray::fromStdString(client_key_exchange->iv());
 
-    if (!A_.isValid() || decrypt_iv_.empty())
+    if (!A_.isValid() || decrypt_iv_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    ByteArray srp_key = createSrpKey();
-    if (srp_key.empty())
+    QByteArray srp_key = createSrpKey();
+    if (srp_key.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
@@ -569,7 +570,7 @@ void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
         {
             GenericHash hash(GenericHash::BLAKE2s256);
 
-            if (!session_key_.empty())
+            if (!session_key_.isEmpty())
                 hash.addData(session_key_);
             hash.addData(srp_key);
 
@@ -625,7 +626,7 @@ void ServerAuthenticator::doSessionChallenge()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
+void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
@@ -694,12 +695,12 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray ServerAuthenticator::createSrpKey()
+QByteArray ServerAuthenticator::createSrpKey()
 {
     if (!SrpMath::verify_A_mod_N(A_, N_))
     {
         LOG(LS_ERROR) << "SrpMath::verify_A_mod_N failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);

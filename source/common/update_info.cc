@@ -27,9 +27,9 @@ namespace common {
 
 //--------------------------------------------------------------------------------------------------
 // static
-UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
+UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 {
-    if (buffer.empty())
+    if (buffer.isEmpty())
     {
         LOG(LS_INFO) << "Empty XML buffer";
         return UpdateInfo();
@@ -39,8 +39,7 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
 
     try
     {
-        xml.parse<rapidxml::parse_default>(
-            reinterpret_cast<char*>(const_cast<uint8_t*>(buffer.data())));
+        xml.parse<rapidxml::parse_default>(const_cast<char*>(buffer.data()));
     }
     catch (const rapidxml::parse_error& error)
     {

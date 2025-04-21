@@ -19,6 +19,7 @@
 #include "host/client_session.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel_proxy.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
@@ -166,7 +167,7 @@ std::shared_ptr<base::TcpChannelProxy> ClientSession::channelProxy()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
+void ClientSession::sendMessage(uint8_t channel_id, QByteArray&& buffer)
 {
     channel_->send(channel_id, std::move(buffer));
 }
@@ -174,7 +175,7 @@ void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
 {
-    channel_->send(channel_id, serializer_.serialize(message));
+    channel_->send(channel_id, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,7 +195,7 @@ void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void ClientSession::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -211,10 +212,8 @@ void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending)
+void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
-    serializer_.addBuffer(std::move(buffer));
-
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
         onWritten(channel_id, pending);

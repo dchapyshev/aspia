@@ -193,7 +193,7 @@ void WebmVideoEncoder::createImage()
     memset(image_buffer_.data(), 128, image_buffer_.size());
 
     // Fill in the information.
-    image_->planes[0] = image_buffer_.data();
+    image_->planes[0] = reinterpret_cast<uint8_t*>(image_buffer_.data());
     image_->planes[1] = image_->planes[0] + y_stride * y_rows;
     image_->planes[2] = image_->planes[1] + uv_stride * uv_rows;
 

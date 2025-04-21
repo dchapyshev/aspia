@@ -78,19 +78,19 @@ std::string BigNum::toStdString() const
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray BigNum::toByteArray() const
+QByteArray BigNum::toByteArray() const
 {
     if (!isValid())
-        return ByteArray();
+        return QByteArray();
 
     int length = BN_num_bytes(num_.get());
     if (length <= 0)
-        return ByteArray();
+        return QByteArray();
 
-    ByteArray result;
+    QByteArray result;
     result.resize(static_cast<std::string::size_type>(length));
 
-    BN_bn2bin(num_.get(), result.data());
+    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
     return result;
 }
 
@@ -110,9 +110,9 @@ BigNum BigNum::fromStdString(std::string_view string)
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum BigNum::fromByteArray(const ByteArray& array)
+BigNum BigNum::fromByteArray(const QByteArray& array)
 {
-    return BigNum(array.data(), array.size());
+    return BigNum(reinterpret_cast<const uint8_t*>(array.data()), array.size());
 }
 
 //--------------------------------------------------------------------------------------------------

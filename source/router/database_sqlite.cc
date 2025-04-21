@@ -71,7 +71,7 @@ bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeBlob(sqlite3_stmt* statement, const base::ByteArray& blob, int column)
+bool writeBlob(sqlite3_stmt* statement, const QByteArray& blob, int column)
 {
     int error_code = sqlite3_bind_blob(statement,
                                        column,
@@ -132,7 +132,7 @@ std::optional<T> readInteger(sqlite3_stmt* statement, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<base::ByteArray> readBlob(sqlite3_stmt* statement, int column)
+std::optional<QByteArray> readBlob(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_BLOB)
@@ -156,7 +156,7 @@ std::optional<base::ByteArray> readBlob(sqlite3_stmt* statement, int column)
         return std::nullopt;
     }
 
-    return base::fromData(blob, static_cast<size_t>(blob_size));
+    return QByteArray::fromRawData(reinterpret_cast<const char*>(blob), static_cast<size_t>(blob_size));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,14 +221,14 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    std::optional<base::ByteArray> salt = readBlob(statement, 3);
+    std::optional<QByteArray> salt = readBlob(statement, 3);
     if (!salt.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'salt'";
         return std::nullopt;
     }
 
-    std::optional<base::ByteArray> verifier = readBlob(statement, 4);
+    std::optional<QByteArray> verifier = readBlob(statement, 4);
     if (!verifier.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'verifier'";
@@ -638,9 +638,9 @@ base::User DatabaseSqlite::findUser(std::u16string_view username)
 
 //--------------------------------------------------------------------------------------------------
 Database::ErrorCode DatabaseSqlite::hostId(
-    const base::ByteArray& key_hash, base::HostId* host_id) const
+    const QByteArray& key_hash, base::HostId* host_id) const
 {
-    if (key_hash.empty())
+    if (key_hash.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid key hash";
         return ErrorCode::UNKNOWN;
@@ -702,9 +702,9 @@ Database::ErrorCode DatabaseSqlite::hostId(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
+bool DatabaseSqlite::addHost(const QByteArray& keyHash)
 {
-    if (keyHash.empty())
+    if (keyHash.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid parameters";
         return false;

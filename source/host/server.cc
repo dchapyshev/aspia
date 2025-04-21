@@ -271,9 +271,9 @@ void Server::onUserListChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onUpdateCheckedFinished(const base::ByteArray& result)
+void Server::onUpdateCheckedFinished(const QByteArray& result)
 {
-    if (result.empty())
+    if (result.isEmpty())
     {
         LOG(LS_ERROR) << "Error while retrieving update information";
     }
@@ -326,7 +326,9 @@ void Server::onFileDownloaderCompleted()
     }
     else
     {
-        file_path.append("aspia_host_" + base::toHex(base::Random::byteArray(16)) + ".msi");
+        QByteArray file_path_utf8 = "aspia_host_" + base::Random::byteArray(16).toHex() + ".msi";
+
+        file_path.append(file_path_utf8.toStdString());
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
@@ -535,7 +537,7 @@ void Server::reloadUserList()
     // Add a list of one-time users to the list of regular users.
     user_list->merge(*user_session_manager_->userList());
 
-    if (user_list->seedKey().empty())
+    if (user_list->seedKey().isEmpty())
     {
         LOG(LS_ERROR) << "Empty seed key for user list";
     }

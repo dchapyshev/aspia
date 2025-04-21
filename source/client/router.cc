@@ -19,6 +19,7 @@
 #include "client/router.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "client/router_window_proxy.h"
 #include "proto/router_common.pb.h"
@@ -335,7 +336,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void Router::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::RouterToAdmin message;
 
@@ -381,8 +382,7 @@ void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArra
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void Router::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Not used.
 }

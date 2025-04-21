@@ -26,7 +26,7 @@ namespace relay {
 //--------------------------------------------------------------------------------------------------
 SessionKey::SessionKey() = default;
 
-SessionKey::SessionKey(base::KeyPair&& key_pair, base::ByteArray&& iv)
+SessionKey::SessionKey(base::KeyPair&& key_pair, QByteArray&& iv)
     : key_pair_(std::move(key_pair)),
       iv_(std::move(iv))
 {
@@ -64,8 +64,8 @@ SessionKey SessionKey::create()
     if (!key_pair.isValid())
         return SessionKey();
 
-    base::ByteArray iv = base::Random::byteArray(12);
-    if (iv.empty())
+    QByteArray iv = base::Random::byteArray(12);
+    if (iv.isEmpty())
         return SessionKey();
 
     return SessionKey(std::move(key_pair), std::move(iv));
@@ -74,33 +74,33 @@ SessionKey SessionKey::create()
 //--------------------------------------------------------------------------------------------------
 bool SessionKey::isValid() const
 {
-    return key_pair_.isValid() && !iv_.empty();
+    return key_pair_.isValid() && !iv_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SessionKey::privateKey() const
+QByteArray SessionKey::privateKey() const
 {
     return key_pair_.privateKey();
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SessionKey::publicKey() const
+QByteArray SessionKey::publicKey() const
 {
     return key_pair_.publicKey();
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SessionKey::sessionKey(std::string_view peer_public_key) const
+QByteArray SessionKey::sessionKey(const std::string& peer_public_key) const
 {
-    base::ByteArray temp = key_pair_.sessionKey(base::fromStdString(peer_public_key));
-    if (temp.empty())
-        return base::ByteArray();
+    QByteArray temp = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
+    if (temp.isEmpty())
+        return QByteArray();
 
     return base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SessionKey::iv() const
+QByteArray SessionKey::iv() const
 {
     return iv_;
 }

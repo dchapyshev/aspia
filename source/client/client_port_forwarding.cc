@@ -19,6 +19,7 @@
 #include "client/client_port_forwarding.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "client/port_forwarding_window_proxy.h"
@@ -147,8 +148,7 @@ void ClientPortForwarding::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientPortForwarding::onSessionMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientPortForwarding::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_->Clear();
 

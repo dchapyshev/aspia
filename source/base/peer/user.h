@@ -19,8 +19,9 @@
 #ifndef BASE_PEER_USER_H
 #define BASE_PEER_USER_H
 
-#include "base/memory/byte_array.h"
 #include "proto/router_admin.pb.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -58,8 +59,8 @@ public:
     int64_t entry_id = 0;
     std::u16string name;
     std::string group;
-    ByteArray salt;
-    ByteArray verifier;
+    QByteArray salt;
+    QByteArray verifier;
     uint32_t sessions = 0;
     uint32_t flags = 0;
 };

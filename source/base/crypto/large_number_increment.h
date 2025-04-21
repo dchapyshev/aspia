@@ -19,12 +19,13 @@
 #ifndef BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H
 #define BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H
 
-#include "base/memory/byte_array.h"
+#include <QByteArray>
+#include <cstdint>
 
 namespace base {
 
 void largeNumberIncrement(uint8_t* buffer, size_t buffer_size);
-void largeNumberIncrement(ByteArray* buffer);
+void largeNumberIncrement(QByteArray* buffer);
 
 } // namespace base
 

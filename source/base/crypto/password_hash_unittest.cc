@@ -26,9 +26,9 @@ TEST(PasswordHashTest, Scrypt)
 {
     struct TestData
     {
-        std::string_view password;
-        std::string_view salt;
-        std::string_view expected;
+        std::string password;
+        std::string salt;
+        std::string expected;
     } const kTestTable[] =
     {
         {
@@ -50,12 +50,12 @@ TEST(PasswordHashTest, Scrypt)
     {
         for (size_t i = 0; i < std::size(kTestTable); ++i)
         {
-            ByteArray result = PasswordHash::hash(
+            QByteArray result = PasswordHash::hash(
                 PasswordHash::Type::SCRYPT,
                 kTestTable[i].password,
-                fromHex(kTestTable[i].salt));
+                QByteArray::fromHex(QByteArray::fromStdString(kTestTable[i].salt)));
 
-            ByteArray expected = fromHex(kTestTable[i].expected);
+            QByteArray expected = QByteArray::fromHex(QByteArray::fromStdString(kTestTable[i].expected));
 
             EXPECT_EQ(expected.size(), 32);
             EXPECT_EQ(result.size(), 32);

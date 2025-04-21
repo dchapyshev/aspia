@@ -21,13 +21,14 @@
 
 #include "build/build_config.h"
 #include "base/files/file_path.h"
-#include "base/memory/byte_array.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
 #include <filesystem>
 #include <optional>
+
+#include <QByteArray>
 
 namespace base {
 
@@ -85,17 +86,17 @@ struct ConverterImpl<std::wstring>
 #endif // defined(OS_WIN)
 
 template <>
-struct ConverterImpl<ByteArray>
+struct ConverterImpl<QByteArray>
 {
-    static bool fromString(std::string_view str, ByteArray* value)
+    static bool fromString(std::string_view str, QByteArray* value)
     {
-        *value = fromHex(str);
+        *value = QByteArray::fromHex(str.data());
         return true;
     }
 
-    static std::string toString(const ByteArray& value)
+    static std::string toString(const QByteArray& value)
     {
-        return toHex(value);
+        return value.toHex().toStdString();
     }
 };
 

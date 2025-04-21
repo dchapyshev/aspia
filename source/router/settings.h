@@ -40,8 +40,8 @@ public:
     void setPort(uint16_t port);
     uint16_t port() const;
 
-    void setPrivateKey(const base::ByteArray& private_key);
-    base::ByteArray privateKey() const;
+    void setPrivateKey(const QByteArray& private_key);
+    QByteArray privateKey() const;
 
     using WhiteList = std::vector<std::u16string>;
 
@@ -57,8 +57,8 @@ public:
     void setRelayWhiteList(const WhiteList& list);
     WhiteList relayWhiteList() const;
 
-    void setSeedKey(const base::ByteArray& seed_key);
-    base::ByteArray seedKey() const;
+    void setSeedKey(const QByteArray& seed_key);
+    QByteArray seedKey() const;
 
 private:
     void setWhiteList(std::string_view key, const WhiteList& value);

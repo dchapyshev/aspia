@@ -20,7 +20,8 @@
 #define BASE_CRYPTO_GENERIC_HASH_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 struct evp_md_ctx_st;
 struct evp_md_st;
@@ -44,15 +45,15 @@ public:
     GenericHash(Type type);
     ~GenericHash();
 
-    static ByteArray hash(Type type, const void* data, size_t size);
-    static ByteArray hash(Type type, std::string_view data);
-    static ByteArray hash(Type type, const ByteArray& data);
+    static QByteArray hash(Type type, const void* data, size_t size);
+    static QByteArray hash(Type type, std::string_view data);
+    static QByteArray hash(Type type, const QByteArray& data);
 
     void addData(const void* data, size_t size);
     void addData(std::string_view data);
-    void addData(const ByteArray& data);
+    void addData(const QByteArray& data);
 
-    ByteArray result() const;
+    QByteArray result() const;
 
     void reset();
 

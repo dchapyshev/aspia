@@ -19,7 +19,7 @@
 #ifndef BASE_NET_WRITE_TASK_H
 #define BASE_NET_WRITE_TASK_H
 
-#include "base/memory/byte_array.h"
+#include <QByteArray>
 
 #include <queue>
 #include <vector>
@@ -40,7 +40,7 @@ public:
         IDLE      = 4
     };
 
-    WriteTask(Type type, Priority priority, int sequence_num, uint8_t channel_id, ByteArray&& data)
+    WriteTask(Type type, Priority priority, int sequence_num, uint8_t channel_id, QByteArray&& data)
         : type_(type),
           priority_(priority),
           sequence_num_(sequence_num),
@@ -57,15 +57,15 @@ public:
     Priority priority() const { return priority_; }
     int sequenceNum() const { return sequence_num_; }
     uint8_t channelId() const { return channel_id_; }
-    const ByteArray& data() const { return data_; }
-    ByteArray& data() { return data_; }
+    const QByteArray& data() const { return data_; }
+    QByteArray& data() { return data_; }
 
 private:
     Type type_;
     Priority priority_;
     int sequence_num_;
     uint8_t channel_id_;
-    ByteArray data_;
+    QByteArray data_;
 };
 
 struct WriteTaskCompare

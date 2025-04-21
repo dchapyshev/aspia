@@ -20,7 +20,8 @@
 #define BASE_CODEC_ZSTD_COMPRESS_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -32,10 +33,10 @@ public:
     static const int kDefCompressLevel = 8;
 
     static std::string compress(const std::string& source, int compress_level = kDefCompressLevel);
-    static ByteArray compress(const ByteArray& source, int compress_level = kDefCompressLevel);
+    static QByteArray compress(const QByteArray& source, int compress_level = kDefCompressLevel);
 
     static std::string decompress(const std::string& source);
-    static ByteArray decompress(const ByteArray& source);
+    static QByteArray decompress(const QByteArray& source);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ZstdCompress);

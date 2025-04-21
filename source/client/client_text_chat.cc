@@ -19,6 +19,7 @@
 #include "client/client_text_chat.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "client/text_chat_control_proxy.h"
 #include "client/text_chat_window_proxy.h"
 #include "proto/text_chat.pb.h"
@@ -62,8 +63,7 @@ void ClientTextChat::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientTextChat::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::TextChat text_chat;
     if (!base::parse(buffer, &text_chat))

@@ -22,7 +22,8 @@
 #include "base/macros_magic.h"
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/openssl_util.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -32,20 +33,20 @@ public:
     ~MessageEncryptorOpenssl() final;
 
     static std::unique_ptr<MessageEncryptor> createForAes256Gcm(
-        const ByteArray& key, const ByteArray& iv);
+        const QByteArray& key, const QByteArray& iv);
 
     static std::unique_ptr<MessageEncryptor> createForChaCha20Poly1305(
-        const ByteArray& key, const ByteArray& iv);
+        const QByteArray& key, const QByteArray& iv);
 
     // MessageEncryptor implementation.
     size_t encryptedDataSize(size_t in_size) final;
     bool encrypt(const void* in, size_t in_size, void* out) final;
 
 private:
-    MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv);
+    MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
 
     EVP_CIPHER_CTX_ptr ctx_;
-    ByteArray iv_;
+    QByteArray iv_;
 
     DISALLOW_COPY_AND_ASSIGN(MessageEncryptorOpenssl);
 };

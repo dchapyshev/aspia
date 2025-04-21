@@ -20,7 +20,8 @@
 #define BASE_CRYPTO_RANDOM_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -32,7 +33,7 @@ public:
     static bool fillBuffer(void* buffer, size_t size);
 
     // Generates a random buffer of size |size|.
-    static ByteArray byteArray(size_t size);
+    static QByteArray byteArray(size_t size);
     static std::string string(size_t size);
 
     // Generates a random number.

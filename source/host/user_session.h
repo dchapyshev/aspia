@@ -104,8 +104,8 @@ public:
 protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() final;
-    void onIpcMessageReceived(const base::ByteArray& buffer) final;
-    void onIpcMessageWritten(base::ByteArray&& buffer) final;
+    void onIpcMessageReceived(const QByteArray& buffer) final;
+    void onIpcMessageWritten() final;
 
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() final;

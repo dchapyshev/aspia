@@ -26,7 +26,7 @@ namespace base {
 UserList::UserList() = default;
 
 //--------------------------------------------------------------------------------------------------
-UserList::UserList(const std::vector<User>& list, const ByteArray& seed_key)
+UserList::UserList(const std::vector<User>& list, const QByteArray& seed_key)
     : seed_key_(seed_key),
       list_(list)
 {
@@ -78,7 +78,7 @@ User UserList::find(std::u16string_view username) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserList::setSeedKey(const ByteArray& seed_key)
+void UserList::setSeedKey(const QByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }

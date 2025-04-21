@@ -45,11 +45,11 @@ public:
     void setVisible(bool visible);
 
     DXGI_OUTDUPL_POINTER_SHAPE_INFO* pointerShapeInfo();
-    ByteArray* pointerShapeBuffer();
+    QByteArray* pointerShapeBuffer();
 
 private:
     DXGI_OUTDUPL_POINTER_SHAPE_INFO pointer_shape_info_;
-    ByteArray pointer_shape_;
+    QByteArray pointer_shape_;
     Point pointer_position_;
     Point native_pointer_position_;
     bool is_visible_ = false;

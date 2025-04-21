@@ -19,42 +19,29 @@
 #ifndef BASE_MEMORY_BYTE_ARRAY_H
 #define BASE_MEMORY_BYTE_ARRAY_H
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
+#include <QByteArray>
 #include <google/protobuf/message_lite.h>
 
 namespace base {
 
-using ByteArray = std::vector<uint8_t>;
+static inline QByteArray serialize(const google::protobuf::MessageLite& message)
+{
+    const size_t size = message.ByteSizeLong();
+    if (!size)
+        return QByteArray();
 
-ByteArray fromData(const void* data, size_t size);
+    QByteArray buffer;
+    buffer.resize(static_cast<QByteArray::size_type>(size));
 
-ByteArray fromStdString(std::string_view in);
-std::string toStdString(const ByteArray& in);
-
-ByteArray fromHex(std::string_view in);
-std::string toHex(const ByteArray& in);
-
-void append(ByteArray* in, const void* data, size_t size);
-
-base::ByteArray serialize(const google::protobuf::MessageLite& message);
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    return buffer;
+}
 
 template <class T>
-bool parse(const base::ByteArray& buffer, T* message)
+bool parse(const QByteArray& buffer, T* message)
 {
     return message->ParseFromArray(buffer.data(), static_cast<int>(buffer.size()));
 }
-
-int compare(const base::ByteArray& first, const base::ByteArray& second);
-
-inline bool equals(const base::ByteArray& first, const base::ByteArray& second)
-{
-    return compare(first, second) == 0;
-}
-
-std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 
 } // namespace base
 

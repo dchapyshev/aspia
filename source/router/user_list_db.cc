@@ -61,13 +61,13 @@ base::User UserListDb::find(std::u16string_view username) const
 }
 
 //--------------------------------------------------------------------------------------------------
-const base::ByteArray& UserListDb::seedKey() const
+const QByteArray& UserListDb::seedKey() const
 {
     return seed_key_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserListDb::setSeedKey(const base::ByteArray& seed_key)
+void UserListDb::setSeedKey(const QByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }

@@ -48,7 +48,7 @@ void memZero(std::u16string* str)
 }
 
 //--------------------------------------------------------------------------------------------------
-void memZero(ByteArray* str)
+void memZero(QByteArray* str)
 {
     if (!str)
         return;

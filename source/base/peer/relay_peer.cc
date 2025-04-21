@@ -25,6 +25,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/net/tcp_channel.h"
+#include "base/serialization.h"
 #include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.pb.h"
@@ -127,7 +128,7 @@ void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
 //--------------------------------------------------------------------------------------------------
 void RelayPeer::onConnected()
 {
-    if (message_.empty())
+    if (message_.isEmpty())
     {
         onErrorOccurred(FROM_HERE, std::error_code());
         return;
@@ -216,60 +217,60 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
+QByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
 {
     if (key.type() != proto::RelayKey::TYPE_X25519)
     {
         LOG(LS_ERROR) << "Unsupported key type: " << key.type();
-        return ByteArray();
+        return QByteArray();
     }
 
     if (key.encryption() != proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
     {
         LOG(LS_ERROR) << "Unsupported encryption type: " << key.encryption();
-        return ByteArray();
+        return QByteArray();
     }
 
     if (key.public_key().empty())
     {
         LOG(LS_ERROR) << "Empty public key";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (key.iv().empty())
     {
         LOG(LS_ERROR) << "Empty IV";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (secret.empty())
     {
         LOG(LS_ERROR) << "Empty secret";
-        return ByteArray();
+        return QByteArray();
     }
 
     KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
     if (!key_pair.isValid())
     {
         LOG(LS_ERROR) << "KeyPair::create failed";
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray temp = key_pair.sessionKey(fromStdString(key.public_key()));
-    if (temp.empty())
+    QByteArray temp = key_pair.sessionKey(QByteArray::fromStdString(key.public_key()));
+    if (temp.isEmpty())
     {
         LOG(LS_ERROR) << "Failed to create session key";
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray session_key = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
+    QByteArray session_key = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 
     std::unique_ptr<MessageEncryptor> encryptor =
-        MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, fromStdString(key.iv()));
+        MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
         LOG(LS_ERROR) << "createForChaCha20Poly1305 failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     std::string encrypted_secret;
@@ -277,13 +278,13 @@ ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std
     if (!encryptor->encrypt(secret.data(), secret.size(), encrypted_secret.data()))
     {
         LOG(LS_ERROR) << "encrypt failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     proto::PeerToRelay message;
 
     message.set_key_id(key.key_id());
-    message.set_public_key(base::toStdString(key_pair.publicKey()));
+    message.set_public_key(key_pair.publicKey().toStdString());
     message.set_data(std::move(encrypted_secret));
 
     return serialize(message);

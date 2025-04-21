@@ -44,18 +44,18 @@ SystemSettings::~SystemSettings() = default;
 //--------------------------------------------------------------------------------------------------
 // static
 bool SystemSettings::createPasswordHash(
-    std::string_view password, base::ByteArray* hash, base::ByteArray* salt)
+    std::string_view password, QByteArray* hash, QByteArray* salt)
 {
     if (password.empty() || !hash || !salt)
         return false;
 
-    base::ByteArray salt_temp = base::Random::byteArray(kPasswordHashSaltSize);
-    if (salt_temp.empty())
+    QByteArray salt_temp = base::Random::byteArray(kPasswordHashSaltSize);
+    if (salt_temp.isEmpty())
         return false;
 
-    base::ByteArray hash_temp =
+    QByteArray hash_temp =
         base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, salt_temp);
-    if (hash_temp.empty())
+    if (hash_temp.isEmpty())
         return false;
 
     *salt = std::move(salt_temp);
@@ -72,18 +72,18 @@ bool SystemSettings::isValidPassword(std::string_view password)
 
     SystemSettings settings;
 
-    base::ByteArray password_hash_salt = settings.passwordHashSalt();
-    base::ByteArray password_hash = settings.passwordHash();
+    QByteArray password_hash_salt = settings.passwordHashSalt();
+    QByteArray password_hash = settings.passwordHash();
 
-    if (password_hash_salt.empty() || password_hash.empty())
+    if (password_hash_salt.isEmpty() || password_hash.isEmpty())
         return false;
 
-    base::ByteArray verifiable_password_hash =
+    QByteArray verifiable_password_hash =
         base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, password_hash_salt);
-    if (verifiable_password_hash.empty())
+    if (verifiable_password_hash.isEmpty())
         return false;
 
-    return base::equals(verifiable_password_hash, password_hash);
+    return verifiable_password_hash == password_hash;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,15 +159,15 @@ void SystemSettings::setRouterPort(uint16_t port)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SystemSettings::routerPublicKey() const
+QByteArray SystemSettings::routerPublicKey() const
 {
-    return settings_.get<base::ByteArray>("RouterPublicKey");
+    return settings_.get<QByteArray>("RouterPublicKey");
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterPublicKey(const base::ByteArray& key)
+void SystemSettings::setRouterPublicKey(const QByteArray& key)
 {
-    settings_.set<base::ByteArray>("RouterPublicKey", key);
+    settings_.set<QByteArray>("RouterPublicKey", key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,16 +181,16 @@ std::unique_ptr<base::UserList> SystemSettings::userList() const
 
         user.name     = item.get<std::u16string>("Name");
         user.group    = item.get<std::string>("Group");
-        user.salt     = item.get<base::ByteArray>("Salt");
-        user.verifier = item.get<base::ByteArray>("Verifier");
+        user.salt     = item.get<QByteArray>("Salt");
+        user.verifier = item.get<QByteArray>("Verifier");
         user.sessions = item.get<uint32_t>("Sessions");
         user.flags    = item.get<uint32_t>("Flags");
 
         users->add(user);
     }
 
-    base::ByteArray seed_key = settings_.get<base::ByteArray>("SeedKey");
-    if (seed_key.empty())
+    QByteArray seed_key = settings_.get<QByteArray>("SeedKey");
+    if (seed_key.isEmpty())
         seed_key = base::Random::byteArray(64);
 
     users->setSeedKey(seed_key);
@@ -218,8 +218,8 @@ void SystemSettings::setUserList(const base::UserList& users)
         users_array.emplace_back(std::move(item));
     }
 
-    base::ByteArray seed_key = users.seedKey();
-    if (seed_key.empty())
+    QByteArray seed_key = users.seedKey();
+    if (seed_key.isEmpty())
         seed_key = base::Random::byteArray(64);
 
     settings_.setArray("Users", users_array);
@@ -263,25 +263,25 @@ void SystemSettings::setPasswordProtection(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SystemSettings::passwordHash() const
+QByteArray SystemSettings::passwordHash() const
 {
-    return settings_.get<base::ByteArray>("PasswordHash");
+    return settings_.get<QByteArray>("PasswordHash");
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setPasswordHash(const base::ByteArray& hash)
+void SystemSettings::setPasswordHash(const QByteArray& hash)
 {
     settings_.set("PasswordHash", hash);
 }
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray SystemSettings::passwordHashSalt() const
+QByteArray SystemSettings::passwordHashSalt() const
 {
-    return settings_.get<base::ByteArray>("PasswordHashSalt");
+    return settings_.get<QByteArray>("PasswordHashSalt");
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setPasswordHashSalt(const base::ByteArray& salt)
+void SystemSettings::setPasswordHashSalt(const QByteArray& salt)
 {
     settings_.set("PasswordHashSalt", salt);
 }

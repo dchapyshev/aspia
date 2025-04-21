@@ -42,8 +42,8 @@ public:
     void setRouterPort(uint16_t port);
     uint16_t routerPort() const;
 
-    void setRouterPublicKey(const base::ByteArray& public_key);
-    base::ByteArray routerPublicKey() const;
+    void setRouterPublicKey(const QByteArray& public_key);
+    QByteArray routerPublicKey() const;
 
     void setListenInterface(const std::u16string& interface);
     std::u16string listenInterface() const;

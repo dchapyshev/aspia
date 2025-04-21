@@ -29,7 +29,7 @@ namespace relay {
 
 //--------------------------------------------------------------------------------------------------
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
-                 const base::ByteArray& secret)
+                 const QByteArray& secret)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
     static uint64_t session_id = 0;

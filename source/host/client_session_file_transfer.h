@@ -47,7 +47,7 @@ public:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onWritten(uint8_t channel_id, size_t pending) final;
 
     // base::IpcServer::Delegate implementation.
@@ -56,8 +56,8 @@ protected:
 
     // base::IpcChannel::Listener implemenation.
     void onIpcDisconnected() final;
-    void onIpcMessageReceived(const base::ByteArray& buffer) final;
-    void onIpcMessageWritten(base::ByteArray&& buffer) final;
+    void onIpcMessageReceived(const QByteArray& buffer) final;
+    void onIpcMessageWritten() final;
 
 private:
     void onError(const base::Location& location);
@@ -66,7 +66,7 @@ private:
     std::unique_ptr<QTimer> attach_timer_;
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;
-    std::vector<base::ByteArray> pending_messages_;
+    std::vector<QByteArray> pending_messages_;
     bool has_logged_on_user_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);

@@ -68,8 +68,8 @@ public:
 protected:
     // base::IpcChannel::Listener implementation.
     void onIpcDisconnected() final;
-    void onIpcMessageReceived(const base::ByteArray& buffer) final;
-    void onIpcMessageWritten(base::ByteArray&& buffer) final;
+    void onIpcMessageReceived(const QByteArray& buffer) final;
+    void onIpcMessageWritten() final;
 
     // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) final;

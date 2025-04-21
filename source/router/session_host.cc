@@ -19,6 +19,7 @@
 #include "router/session_host.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/stl_util.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
@@ -67,7 +68,7 @@ void SessionHost::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
     if (!base::parse(buffer, message.get()))
@@ -108,7 +109,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 
     std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
     proto::HostIdResponse* host_id_response = message->mutable_host_id_response();
-    base::ByteArray key_hash;
+    QByteArray key_hash;
 
     if (host_id_request.type() == proto::HostIdRequest::NEW_ID)
     {

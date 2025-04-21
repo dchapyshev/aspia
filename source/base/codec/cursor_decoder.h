@@ -21,9 +21,11 @@
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 #include <optional>
+#include <vector>
 
 namespace proto {
 class CursorShape;
@@ -45,7 +47,7 @@ public:
     int takenCursorsFromCache() const;
 
 private:
-    ByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
+    QByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
 
     std::vector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;

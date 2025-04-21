@@ -61,9 +61,9 @@ OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray PasswordHash::hash(Type type, std::string_view password, const ByteArray& salt)
+QByteArray PasswordHash::hash(Type type, std::string_view password, const QByteArray& salt)
 {
-    return hashT<const ByteArray, ByteArray>(type, password, salt);
+    return hashT<const QByteArray, QByteArray>(type, password, salt);
 }
 
 //--------------------------------------------------------------------------------------------------

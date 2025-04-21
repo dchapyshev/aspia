@@ -73,7 +73,7 @@ void DownloadDialog::onFileDownloaderError(int error_code)
 void DownloadDialog::onFileDownloaderCompleted()
 {
     LOG(LS_INFO) << "File downloaded";
-    const base::ByteArray& buffer = downloader_->data();
+    const QByteArray& buffer = downloader_->data();
 
     file_.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
     file_.flush();

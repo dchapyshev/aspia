@@ -32,7 +32,7 @@ public:
     explicit ClientAuthenticator(QObject* parent = nullptr);
     ~ClientAuthenticator() final;
 
-    void setPeerPublicKey(const ByteArray& public_key);
+    void setPeerPublicKey(const QByteArray& public_key);
     void setIdentify(proto::Identify identify);
     void setUserName(std::u16string_view username);
     void setPassword(std::u16string_view password);
@@ -42,16 +42,16 @@ public:
 protected:
     // Authenticator implementation.
     [[nodiscard]] bool onStarted() final;
-    void onReceived(const ByteArray& buffer) final;
+    void onReceived(const QByteArray& buffer) final;
     void onWritten() final;
 
 private:
     void sendClientHello();
-    [[nodiscard]] bool readServerHello(const ByteArray& buffer);
+    [[nodiscard]] bool readServerHello(const QByteArray& buffer);
     void sendIdentify();
-    [[nodiscard]] bool readServerKeyExchange(const ByteArray& buffer);
+    [[nodiscard]] bool readServerKeyExchange(const QByteArray& buffer);
     void sendClientKeyExchange();
-    [[nodiscard]] bool readSessionChallenge(const ByteArray& buffer);
+    [[nodiscard]] bool readSessionChallenge(const QByteArray& buffer);
     void sendSessionResponse();
 
     enum class InternalState
@@ -67,7 +67,7 @@ private:
 
     InternalState internal_state_ = InternalState::SEND_CLIENT_HELLO;
 
-    ByteArray peer_public_key_;
+    QByteArray peer_public_key_;
     std::u16string username_;
     std::u16string password_;
     std::u16string display_name_;

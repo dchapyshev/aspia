@@ -173,8 +173,9 @@ void IpcChannel::Handler::onReadData(const std::error_code& error_code, size_t b
 }
 
 //--------------------------------------------------------------------------------------------------
-IpcChannel::IpcChannel()
-    : stream_(AsioEventDispatcher::currentIoContext()),
+IpcChannel::IpcChannel(QObject* parent)
+    : QObject(parent),
+      stream_(AsioEventDispatcher::currentIoContext()),
       proxy_(new IpcChannelProxy(AsioThread::currentTaskRunner(), this)),
       handler_(base::make_local_shared<Handler>(this))
 {
@@ -182,8 +183,9 @@ IpcChannel::IpcChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
-    : channel_name_(channel_name),
+IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream, QObject* parent)
+    : QObject(parent),
+      channel_name_(channel_name),
       stream_(std::move(stream)),
       proxy_(new IpcChannelProxy(AsioThread::currentTaskRunner(), this)),
       is_connected_(true),
@@ -363,7 +365,7 @@ void IpcChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(ByteArray&& buffer)
+void IpcChannel::send(QByteArray&& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -481,7 +483,7 @@ void IpcChannel::doWriteData()
 {
     DCHECK(!write_queue_.empty());
 
-    const ByteArray& buffer = write_queue_.front();
+    const QByteArray& buffer = write_queue_.front();
 
     // Send the buffer to the recipient.
     asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
@@ -503,12 +505,10 @@ void IpcChannel::onWriteData(const std::error_code& error_code, size_t bytes_tra
     DCHECK_EQ(bytes_transferred, write_size_);
     DCHECK(!write_queue_.empty());
 
-    ByteArray buffer = std::move(write_queue_.front());
-
     // Delete the sent message from the queue.
     write_queue_.pop();
 
-    onMessageWritten(std::move(buffer));
+    onMessageWritten();
 
     // If the queue is not empty, then we send the following message.
     if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
@@ -551,7 +551,7 @@ void IpcChannel::onReadSize(const std::error_code& error_code, size_t bytes_tran
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadData()
 {
-    if (read_buffer_.capacity() < read_size_)
+    if (read_buffer_.capacity() < static_cast<QByteArray::size_type>(read_size_))
     {
         read_buffer_.clear();
         read_buffer_.reserve(read_size_);
@@ -606,11 +606,11 @@ void IpcChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::onMessageWritten(ByteArray&& buffer)
+void IpcChannel::onMessageWritten()
 {
     if (listener_)
     {
-        listener_->onIpcMessageWritten(std::move(buffer));
+        listener_->onIpcMessageWritten();
     }
     else
     {

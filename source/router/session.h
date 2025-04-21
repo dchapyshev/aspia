@@ -83,14 +83,14 @@ protected:
     std::unique_ptr<Database> openDatabase() const;
 
     virtual void onSessionReady() = 0;
-    virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }

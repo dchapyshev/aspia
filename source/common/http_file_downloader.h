@@ -21,8 +21,9 @@
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
-#include "base/memory/byte_array.h"
 #include "base/threading/simple_thread.h"
+
+#include <QByteArray>
 
 namespace common {
 
@@ -45,7 +46,7 @@ public:
     void start(std::u16string_view url,
                std::shared_ptr<base::TaskRunner> owner_task_runner,
                Delegate* delegate);
-    const base::ByteArray& data() const { return data_; }
+    const QByteArray& data() const { return data_; }
 
 private:
     void run();
@@ -60,7 +61,7 @@ private:
     std::shared_ptr<Runner> runner_;
 
     std::u16string url_;
-    base::ByteArray data_;
+    QByteArray data_;
 
     DISALLOW_COPY_AND_ASSIGN(HttpFileDownloader);
 };

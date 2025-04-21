@@ -20,7 +20,8 @@
 #define BASE_DESKTOP_MOUSE_CURSOR_H
 
 #include "base/desktop/geometry.h"
-#include "base/memory/byte_array.h"
+
+#include <QByteArray>
 
 namespace base {
 
@@ -32,7 +33,7 @@ public:
     static const int kDefaultDpiX = 96;
     static const int kDefaultDpiY = 96;
 
-    MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot,
+    MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot,
                 const Point& dpi = Point(kDefaultDpiX, kDefaultDpiY));
 
     MouseCursor(MouseCursor&& other) noexcept;
@@ -54,15 +55,15 @@ public:
     const Point& constDpi() const { return dpi_; }
     Point& dpi() { return dpi_; }
 
-    const ByteArray& constImage() const { return image_; }
-    ByteArray& image() { return image_; }
+    const QByteArray& constImage() const { return image_; }
+    QByteArray& image() { return image_; }
 
     int stride() const;
 
     bool equals(const MouseCursor& other);
 
 private:
-    ByteArray image_;
+    QByteArray image_;
     Size size_;
     Point hotspot_;
     Point dpi_;

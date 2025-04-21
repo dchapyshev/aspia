@@ -30,12 +30,12 @@ namespace base::win {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-void resizeBuffer(ByteArray* buffer, size_t size)
+void resizeBuffer(QByteArray* buffer, size_t size)
 {
-    if (buffer->capacity() < size)
-        buffer->reserve(size);
+    if (buffer->capacity() < static_cast<QByteArray::size_type>(size))
+        buffer->reserve(static_cast<QByteArray::size_type>(size));
 
-    buffer->resize(size);
+    buffer->resize(static_cast<QByteArray::size_type>(size));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* fi
 }
 
 //--------------------------------------------------------------------------------------------------
-bool eventLogRecord(HANDLE event_log, DWORD record_offset, ByteArray* record_buffer)
+bool eventLogRecord(HANDLE event_log, DWORD record_offset, QByteArray* record_buffer)
 {
     resizeBuffer(record_buffer, sizeof(EVENTLOGRECORD));
 

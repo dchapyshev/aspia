@@ -21,7 +21,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
+MouseCursor::MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
     : image_(std::move(image)),
       size_(size),
       hotspot_(hotspot),
@@ -66,7 +66,7 @@ bool MouseCursor::equals(const MouseCursor& other)
     return size_.equals(other.size_) &&
            hotspot_.equals(other.hotspot_) &&
            dpi_.equals(other.dpi_) &&
-           base::equals(image_, other.image_);
+           image_ == other.image_;
 }
 
 } // namespace base

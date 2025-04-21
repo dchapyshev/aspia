@@ -35,7 +35,7 @@ TcpChannelProxy::TcpChannelProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer, WriteTask::Priority priority)
+void TcpChannelProxy::send(uint8_t channel_id, QByteArray&& buffer, WriteTask::Priority priority)
 {
     bool schedule_write;
 

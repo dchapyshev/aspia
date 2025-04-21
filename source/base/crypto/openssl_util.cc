@@ -95,7 +95,7 @@ int cipherMode(CipherMode mode)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArray& key, int iv_size)
+EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArray& key, int iv_size)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
@@ -123,8 +123,8 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArra
         return nullptr;
     }
 
-    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, key.data(), nullptr,
-                          cipherMode(mode)) != 1)
+    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const uint8_t*>(key.data()),
+                          nullptr, cipherMode(mode)) != 1)
     {
         LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;

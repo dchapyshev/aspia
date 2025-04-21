@@ -77,7 +77,7 @@ GenericHash::~GenericHash()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray GenericHash::hash(Type type, const void* data, size_t size)
+QByteArray GenericHash::hash(Type type, const void* data, size_t size)
 {
     GenericHash generic_hash(type);
     generic_hash.addData(data, size);
@@ -86,14 +86,14 @@ ByteArray GenericHash::hash(Type type, const void* data, size_t size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray GenericHash::hash(Type type, std::string_view data)
+QByteArray GenericHash::hash(Type type, std::string_view data)
 {
     return hash(type, data.data(), data.size());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray GenericHash::hash(Type type, const ByteArray& data)
+QByteArray GenericHash::hash(Type type, const QByteArray& data)
 {
     return hash(type, data.data(), data.size());
 }
@@ -113,13 +113,13 @@ void GenericHash::addData(std::string_view data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void GenericHash::addData(const ByteArray& data)
+void GenericHash::addData(const QByteArray& data)
 {
     addData(data.data(), data.size());
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray GenericHash::result() const
+QByteArray GenericHash::result() const
 {
     DCHECK(ctxt_);
     DCHECK(md_);
@@ -127,10 +127,10 @@ ByteArray GenericHash::result() const
     int len = EVP_MD_size(md_);
     CHECK_GT(len, 0);
 
-    ByteArray result;
-    result.resize(static_cast<ByteArray::size_type>(len));
+    QByteArray result;
+    result.resize(static_cast<QByteArray::size_type>(len));
 
-    int ret = EVP_DigestFinal(ctxt_, result.data(), nullptr);
+    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(result.data()), nullptr);
     CHECK_EQ(ret, 1);
 
     return result;

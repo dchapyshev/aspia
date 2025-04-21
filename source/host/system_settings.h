@@ -37,7 +37,7 @@ public:
     ~SystemSettings();
 
     static bool createPasswordHash(
-        std::string_view password, base::ByteArray* hash, base::ByteArray* salt);
+        std::string_view password, QByteArray* hash, QByteArray* salt);
     static bool isValidPassword(std::string_view password);
 
     const std::filesystem::path& filePath() const;
@@ -57,8 +57,8 @@ public:
     uint16_t routerPort() const;
     void setRouterPort(uint16_t port);
 
-    base::ByteArray routerPublicKey() const;
-    void setRouterPublicKey(const base::ByteArray& key);
+    QByteArray routerPublicKey() const;
+    void setRouterPublicKey(const QByteArray& key);
 
     std::unique_ptr<base::UserList> userList() const;
     void setUserList(const base::UserList& user_list);
@@ -72,11 +72,11 @@ public:
     bool passwordProtection() const;
     void setPasswordProtection(bool enable);
 
-    base::ByteArray passwordHash() const;
-    void setPasswordHash(const base::ByteArray& hash);
+    QByteArray passwordHash() const;
+    void setPasswordHash(const QByteArray& hash);
 
-    base::ByteArray passwordHashSalt() const;
-    void setPasswordHashSalt(const base::ByteArray& salt);
+    QByteArray passwordHashSalt() const;
+    void setPasswordHashSalt(const QByteArray& salt);
 
     bool oneTimePassword() const;
     void setOneTimePassword(bool enable);

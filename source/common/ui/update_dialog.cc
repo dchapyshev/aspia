@@ -117,9 +117,9 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
+void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 {
-    if (result.empty())
+    if (result.isEmpty())
     {
         LOG(LS_ERROR) << "Error while retrieving update information";
 

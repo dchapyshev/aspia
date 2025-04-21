@@ -19,10 +19,9 @@
 #ifndef BASE_NET_NETWORK_CHANNEL_H
 #define BASE_NET_NETWORK_CHANNEL_H
 
-#include "base/memory/byte_array.h"
-
 #include <chrono>
 
+#include <QByteArray>
 #include <QObject>
 
 namespace base {
@@ -95,7 +94,7 @@ protected:
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 
-    static void resizeBuffer(ByteArray* buffer, size_t new_size);
+    static void resizeBuffer(QByteArray* buffer, size_t new_size);
 
 private:
     int64_t total_tx_ = 0;

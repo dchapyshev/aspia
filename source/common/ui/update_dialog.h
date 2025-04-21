@@ -50,7 +50,7 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) final;
+    void onUpdateCheckedFinished(const QByteArray& result) final;
 
 private slots:
     void onUpdateNow();

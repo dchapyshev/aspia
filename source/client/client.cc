@@ -19,6 +19,7 @@
 #include "client/client.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "client/status_window_proxy.h"
 
@@ -301,7 +302,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void Client::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -318,7 +319,7 @@ void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buf
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending)
+void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {

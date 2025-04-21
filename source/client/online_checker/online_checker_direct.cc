@@ -20,7 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/task_runner.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
@@ -52,8 +52,8 @@ protected:
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     void onFinished(const base::Location& location, bool online);
@@ -144,8 +144,7 @@ void OnlineCheckerDirect::Instance::onTcpDisconnected(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void OnlineCheckerDirect::Instance::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::ServerHello message;
 
@@ -173,8 +172,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void OnlineCheckerDirect::Instance::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

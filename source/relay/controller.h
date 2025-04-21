@@ -51,8 +51,8 @@ protected:
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     // SessionManager::Delegate implementation.
     void onSessionStarted() final;
@@ -70,7 +70,7 @@ private:
     // Router settings.
     std::u16string router_address_;
     uint16_t router_port_ = 0;
-    base::ByteArray router_public_key_;
+    QByteArray router_public_key_;
 
     // Peers settings.
     std::u16string listen_interface_;

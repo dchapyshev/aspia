@@ -21,7 +21,6 @@
 
 #include "base/process_handle.h"
 #include "base/session_id.h"
-#include "base/memory/byte_array.h"
 #include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
@@ -34,16 +33,19 @@
 #include <filesystem>
 #include <queue>
 
+#include <QByteArray>
+#include <QObject>
+
 namespace base {
 
 class IpcChannelProxy;
 class IpcServer;
 class Location;
 
-class IpcChannel
+class IpcChannel final : public QObject
 {
 public:
-    IpcChannel();
+    explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
 
     class Listener
@@ -52,8 +54,8 @@ public:
         virtual ~Listener() = default;
 
         virtual void onIpcDisconnected() = 0;
-        virtual void onIpcMessageReceived(const ByteArray& buffer) = 0;
-        virtual void onIpcMessageWritten(ByteArray&& buffer) = 0;
+        virtual void onIpcMessageReceived(const QByteArray& buffer) = 0;
+        virtual void onIpcMessageWritten() = 0;
     };
 
     std::shared_ptr<IpcChannelProxy> channelProxy();
@@ -73,7 +75,7 @@ public:
     void pause();
     void resume();
 
-    void send(ByteArray&& buffer);
+    void send(QByteArray&& buffer);
 
     ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
@@ -89,7 +91,7 @@ private:
     using Stream = asio::local::stream_protocol::socket;
 #endif
 
-    IpcChannel(std::u16string_view channel_name, Stream&& stream);
+    IpcChannel(std::u16string_view channel_name, Stream&& stream, QObject* parent);
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
@@ -103,7 +105,7 @@ private:
     void onReadData(const std::error_code& error_code, size_t bytes_transferred);
 
     void onMessageReceived();
-    void onMessageWritten(ByteArray&& buffer);
+    void onMessageWritten();
 
     std::u16string channel_name_;
     Stream stream_;
@@ -114,11 +116,11 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    std::queue<ByteArray> write_queue_;
+    std::queue<QByteArray> write_queue_;
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;
-    ByteArray read_buffer_;
+    QByteArray read_buffer_;
 
     ProcessId peer_process_id_ = kNullProcessId;
     SessionId peer_session_id_ = kInvalidSessionId;

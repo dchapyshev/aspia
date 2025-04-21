@@ -20,11 +20,12 @@
 #define BASE_NET_ADAPTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 #include "build/build_config.h"
 
 #include <memory>
 #include <string>
+
+#include <QByteArray>
 
 #if defined(OS_WIN)
 struct _IP_ADAPTER_ADDRESSES_LH;
@@ -109,7 +110,7 @@ public:
 
 private:
 #if defined(OS_WIN)
-    ByteArray adapters_buffer_;
+    QByteArray adapters_buffer_;
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
 #endif
 

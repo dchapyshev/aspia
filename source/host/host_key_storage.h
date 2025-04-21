@@ -31,8 +31,8 @@ public:
     HostKeyStorage();
     ~HostKeyStorage();
 
-    base::ByteArray key(std::string_view session_name) const;
-    void setKey(std::string_view session_name, const base::ByteArray& key);
+    QByteArray key(std::string_view session_name) const;
+    void setKey(std::string_view session_name, const QByteArray& key);
     base::HostId lastHostId(std::string_view session_name) const;
     void setLastHostId(std::string_view session_name, base::HostId host_id);
 

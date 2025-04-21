@@ -26,48 +26,48 @@ TEST(KeyPair, SessionKey)
 {
     KeyPair side1 = KeyPair::create(KeyPair::Type::X25519);
     EXPECT_TRUE(side1.isValid());
-    EXPECT_NE(compare(side1.privateKey(), side1.publicKey()), 0);
+    EXPECT_TRUE(side1.privateKey() != side1.publicKey());
 
     KeyPair side2 = KeyPair::create(KeyPair::Type::X25519);
     EXPECT_TRUE(side2.isValid());
-    EXPECT_NE(compare(side2.privateKey(), side2.publicKey()), 0);
+    EXPECT_TRUE(side2.privateKey() != side2.publicKey());
 
-    EXPECT_NE(compare(side1.privateKey(), side2.privateKey()), 0);
-    EXPECT_NE(compare(side1.publicKey(), side2.publicKey()), 0);
+    EXPECT_TRUE(side1.privateKey() != side2.privateKey());
+    EXPECT_TRUE(side1.publicKey() != side2.publicKey());
 
-    ByteArray session_key1 = side1.sessionKey(side2.publicKey());
-    EXPECT_FALSE(session_key1.empty());
+    QByteArray session_key1 = side1.sessionKey(side2.publicKey());
+    EXPECT_FALSE(session_key1.isEmpty());
 
-    ByteArray session_key2 = side2.sessionKey(side1.publicKey());
-    EXPECT_FALSE(session_key2.empty());
+    QByteArray session_key2 = side2.sessionKey(side1.publicKey());
+    EXPECT_FALSE(session_key2.isEmpty());
 
-    EXPECT_EQ(compare(session_key1, session_key2), 0);
+    EXPECT_TRUE(session_key1 == session_key2);
 }
 
 TEST(KeyPair, Convert)
 {
     KeyPair pair1 = KeyPair::create(KeyPair::Type::X25519);
     EXPECT_TRUE(pair1.isValid());
-    EXPECT_NE(compare(pair1.privateKey(), pair1.publicKey()), 0);
+    EXPECT_TRUE(pair1.privateKey() != pair1.publicKey());
 
-    ByteArray private_key1 = pair1.privateKey();
-    EXPECT_FALSE(private_key1.empty());
+    QByteArray private_key1 = pair1.privateKey();
+    EXPECT_FALSE(private_key1.isEmpty());
 
-    ByteArray public_key1 = pair1.publicKey();
-    EXPECT_FALSE(public_key1.empty());
+    QByteArray public_key1 = pair1.publicKey();
+    EXPECT_FALSE(public_key1.isEmpty());
 
     KeyPair pair2 = KeyPair::fromPrivateKey(private_key1);
     EXPECT_TRUE(pair2.isValid());
-    EXPECT_NE(compare(pair2.privateKey(), pair2.publicKey()), 0);
+    EXPECT_TRUE(pair2.privateKey() != pair2.publicKey());
 
-    ByteArray private_key2 = pair2.privateKey();
-    EXPECT_FALSE(private_key2.empty());
+    QByteArray private_key2 = pair2.privateKey();
+    EXPECT_FALSE(private_key2.isEmpty());
 
-    ByteArray public_key2 = pair2.publicKey();
-    EXPECT_FALSE(public_key2.empty());
+    QByteArray public_key2 = pair2.publicKey();
+    EXPECT_FALSE(public_key2.isEmpty());
 
-    EXPECT_EQ(compare(private_key1, private_key2), 0);
-    EXPECT_EQ(compare(public_key1, public_key2), 0);
+    EXPECT_TRUE(private_key1 == private_key2);
+    EXPECT_TRUE(public_key1 == public_key2);
 }
 
 TEST(KeyPair, Multiple)
@@ -75,18 +75,18 @@ TEST(KeyPair, Multiple)
     KeyPair pair = KeyPair::create(KeyPair::Type::X25519);
     EXPECT_TRUE(pair.isValid());
 
-    ByteArray private_key = pair.privateKey();
-    EXPECT_FALSE(private_key.empty());
+    QByteArray private_key = pair.privateKey();
+    EXPECT_FALSE(private_key.isEmpty());
 
-    ByteArray public_key = pair.publicKey();
-    EXPECT_FALSE(public_key.empty());
+    QByteArray public_key = pair.publicKey();
+    EXPECT_FALSE(public_key.isEmpty());
 
-    EXPECT_NE(compare(pair.privateKey(), pair.publicKey()), 0);
+    EXPECT_TRUE(pair.privateKey() != pair.publicKey());
 
     for (int i = 0; i < 100; ++i)
     {
-        EXPECT_EQ(compare(private_key, pair.privateKey()), 0);
-        EXPECT_EQ(compare(public_key, pair.publicKey()), 0);
+        EXPECT_TRUE(private_key == pair.privateKey());
+        EXPECT_TRUE(public_key == pair.publicKey());
     }
 }
 

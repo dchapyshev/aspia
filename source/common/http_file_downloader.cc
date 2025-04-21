@@ -246,7 +246,7 @@ size_t HttpFileDownloader::writeDataCallback(
         }
 
         result = size * nmemb;
-        base::append(&self->data_, ptr, result);
+        self->data_.append(reinterpret_cast<char*>(ptr), static_cast<QByteArray::size_type>(result));
     }
 
     return result;

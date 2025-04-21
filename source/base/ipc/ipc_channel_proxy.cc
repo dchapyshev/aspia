@@ -39,7 +39,7 @@ IpcChannelProxy::~IpcChannelProxy()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannelProxy::send(ByteArray&& buffer)
+void IpcChannelProxy::send(QByteArray&& buffer)
 {
     bool schedule_write;
 
@@ -76,7 +76,7 @@ void IpcChannelProxy::scheduleWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
+bool IpcChannelProxy::reloadWriteQueue(std::queue<QByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;

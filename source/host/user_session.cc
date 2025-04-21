@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "base/scoped_task_runner.h"
 #include "base/crypto/password_generator.h"
@@ -638,7 +639,7 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
+void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -809,7 +810,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageWritten(base::ByteArray&& buffer)
+void UserSession::onIpcMessageWritten()
 {
     // Nothing
 }

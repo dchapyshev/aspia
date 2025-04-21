@@ -19,6 +19,7 @@
 #include "host/router_controller.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
 #include "base/strings/unicode.h"
@@ -81,14 +82,14 @@ void RouterController::hostIdRequest(const std::string& session_name)
     }
 
     HostKeyStorage host_key_storage;
-    base::ByteArray host_key = host_key_storage.key(session_name);
+    QByteArray host_key = host_key_storage.key(session_name);
 
     pending_id_requests_.emplace(session_name);
 
     proto::PeerToRouter message;
     proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
 
-    if (host_key.empty())
+    if (host_key.isEmpty())
     {
         LOG(LS_INFO) << "Host key is empty. Request for a new ID";
         host_id_request->set_type(proto::HostIdRequest::NEW_ID);
@@ -97,7 +98,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
     {
         LOG(LS_INFO) << "Host key is present. Request for an existing ID";
         host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
-        host_id_request->set_key(base::toStdString(host_key));
+        host_id_request->set_key(host_key.toStdString());
     }
 
     // Send host ID request.
@@ -182,7 +183,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::RouterToPeer in_message;
     if (!base::parse(buffer, &in_message))
@@ -235,8 +236,8 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
         const std::string& session_name = pending_id_requests_.front();
         HostKeyStorage host_key_storage;
 
-        base::ByteArray host_key = base::fromStdString(host_id_response.key());
-        if (!host_key.empty())
+        QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
+        if (!host_key.isEmpty())
         {
             LOG(LS_INFO) << "New host key received";
             host_key_storage.setKey(session_name, host_key);
@@ -273,8 +274,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

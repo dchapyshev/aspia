@@ -36,7 +36,7 @@ public:
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
     void setKeyExpired(uint32_t key_id);
-    std::optional<Key> key(uint32_t key_id, std::string_view peer_public_key) const;
+    std::optional<Key> key(uint32_t key_id, const std::string& peer_public_key) const;
     void clear();
 
 private:
@@ -112,7 +112,7 @@ void SharedPool::Pool::setKeyExpired(uint32_t key_id)
 
 //--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::Pool::key(
-    uint32_t key_id, std::string_view peer_public_key) const
+    uint32_t key_id, const std::string& peer_public_key) const
 {
     std::scoped_lock lock(pool_lock_);
 
@@ -182,7 +182,7 @@ void SharedPool::setKeyExpired(uint32_t key_id)
 
 //--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::key(
-    uint32_t key_id, std::string_view peer_public_key) const
+    uint32_t key_id, const std::string& peer_public_key) const
 {
     return pool_->key(key_id, peer_public_key);
 }

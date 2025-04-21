@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.pb.h"
 
@@ -133,8 +134,7 @@ void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode erro
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void OnlineCheckerRouter::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     if (!delegate_)
         return;
@@ -164,8 +164,7 @@ void OnlineCheckerRouter::onTcpMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageWritten(
-    uint8_t /* channel_id */, base::ByteArray&& /* buffer */, size_t /* pending */)
+void OnlineCheckerRouter::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

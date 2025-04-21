@@ -339,7 +339,7 @@ void TcpChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(uint8_t channel_id, ByteArray&& buffer, WriteTask::Priority priority)
+void TcpChannel::send(uint8_t channel_id, QByteArray&& buffer, WriteTask::Priority priority)
 {
     addWriteTask(WriteTask::Type::USER_DATA, priority, channel_id, std::move(buffer));
 }
@@ -584,16 +584,16 @@ void TcpChannel::onConnected(const std::error_code &error_code, const asio::ip::
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageWritten(uint8_t channel_id, ByteArray&& buffer)
+void TcpChannel::onMessageWritten(uint8_t channel_id)
 {
     if (listener_)
-        listener_->onTcpMessageWritten(channel_id, std::move(buffer), write_queue_.size());
+        listener_->onTcpMessageWritten(channel_id, write_queue_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageReceived()
 {
-    uint8_t* read_data = read_buffer_.data();
+    char* read_data = read_buffer_.data();
     size_t read_size = read_buffer_.size();
 
     UserDataHeader header;
@@ -636,7 +636,7 @@ void TcpChannel::onMessageReceived()
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::addWriteTask(
-    WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, ByteArray&& data)
+    WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, QByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
 
@@ -651,10 +651,10 @@ void TcpChannel::addWriteTask(
 void TcpChannel::doWrite()
 {
     const WriteTask& task = write_queue_.top();
-    const ByteArray& source_buffer = task.data();
+    const QByteArray& source_buffer = task.data();
     const uint8_t channel_id = task.channelId();
 
-    if (source_buffer.empty())
+    if (source_buffer.isEmpty())
     {
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
@@ -681,7 +681,7 @@ void TcpChannel::doWrite()
         // Copy the size of the message to the buffer.
         memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
 
-        uint8_t* write_buffer = write_buffer_.data() + variable_size.size();
+        char* write_buffer = write_buffer_.data() + variable_size.size();
         if (is_channel_id_supported_)
         {
             UserDataHeader header;
@@ -736,7 +736,6 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     const WriteTask& task = write_queue_.top();
     WriteTask::Type task_type = task.type();
     uint8_t channel_id = task.channelId();
-    ByteArray buffer = std::move(task.data());
 
     // Delete the sent message from the queue.
     write_queue_.pop();
@@ -745,7 +744,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     bool schedule_write = !write_queue_.empty() || proxy_->reloadWriteQueue(&write_queue_);
 
     if (task_type == WriteTask::Type::USER_DATA)
-        onMessageWritten(channel_id, std::move(buffer));
+        onMessageWritten(channel_id);
 
     if (schedule_write)
         doWrite();
@@ -992,7 +991,7 @@ void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t byt
             // The user can disable keep alive. Restart the timer only if keep alive is enabled.
             if (keep_alive_timer_)
             {
-                DCHECK(!keep_alive_counter_.empty());
+                DCHECK(!keep_alive_counter_.isEmpty());
 
                 // Increase the counter of sent packets.
                 largeNumberIncrement(&keep_alive_counter_);
@@ -1074,7 +1073,7 @@ void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
     header.flags  = flags;
     header.length = static_cast<uint32_t>(size);
 
-    ByteArray buffer;
+    QByteArray buffer;
     buffer.resize(sizeof(uint8_t) + sizeof(header) + size);
 
     // The first byte set to 0 indicates that this is a service message.

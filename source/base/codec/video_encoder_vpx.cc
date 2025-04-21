@@ -80,7 +80,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 //--------------------------------------------------------------------------------------------------
 void createImage(const Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
-                 ByteArray* out_image_buffer)
+                 QByteArray* out_image_buffer)
 {
     std::unique_ptr<vpx_image_t> image = std::make_unique<vpx_image_t>();
 
@@ -107,7 +107,7 @@ void createImage(const Size& size,
     const int y_rows = ((image->h - 1) & ~(kMacroBlockSize - 1)) + kMacroBlockSize;
     const int uv_rows = y_rows >> image->y_chroma_shift;
 
-    ByteArray image_buffer;
+    QByteArray image_buffer;
 
     // Allocate a YUV buffer large enough for the aligned data & padding.
     image_buffer.resize(static_cast<size_t>(y_stride * y_rows + (2 * uv_stride) * uv_rows));
@@ -116,7 +116,7 @@ void createImage(const Size& size,
     memset(image_buffer.data(), 128, image_buffer.size());
 
     // Fill in the information.
-    image->planes[0] = image_buffer.data();
+    image->planes[0] = reinterpret_cast<uint8_t*>(image_buffer.data());
     image->planes[1] = image->planes[0] + y_stride * y_rows;
     image->planes[2] = image->planes[1] + uv_stride * uv_rows;
 
@@ -352,7 +352,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
         (size.height() + kMacroBlockSize - 1) / kMacroBlockSize);
 
     active_map_buffer_.resize(active_map_.cols * active_map_.rows);
-    active_map_.active_map = active_map_buffer_.data();
+    active_map_.active_map = reinterpret_cast<uint8_t*>(active_map_buffer_.data());
 
     clearActiveMap();
 }

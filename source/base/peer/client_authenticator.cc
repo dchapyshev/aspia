@@ -21,6 +21,7 @@
 #include "base/cpuid_util.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
@@ -85,7 +86,7 @@ ClientAuthenticator::~ClientAuthenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setPeerPublicKey(const ByteArray& public_key)
+void ClientAuthenticator::setPeerPublicKey(const QByteArray& public_key)
 {
     peer_public_key_ = public_key;
 }
@@ -129,7 +130,7 @@ bool ClientAuthenticator::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::onReceived(const ByteArray& buffer)
+void ClientAuthenticator::onReceived(const QByteArray& buffer)
 {
     switch (internal_state_)
     {
@@ -225,7 +226,7 @@ void ClientAuthenticator::onWritten()
 void ClientAuthenticator::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.
-    if (identify_ == proto::IDENTIFY_ANONYMOUS && peer_public_key_.empty())
+    if (identify_ == proto::IDENTIFY_ANONYMOUS && peer_public_key_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
@@ -243,10 +244,10 @@ void ClientAuthenticator::sendClientHello()
     client_hello->set_encryption(encryption);
     client_hello->set_identify(identify_);
 
-    if (!peer_public_key_.empty())
+    if (!peer_public_key_.isEmpty())
     {
         encrypt_iv_ = Random::byteArray(kIvSize);
-        if (encrypt_iv_.empty())
+        if (encrypt_iv_.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
@@ -259,29 +260,29 @@ void ClientAuthenticator::sendClientHello()
             return;
         }
 
-        ByteArray temp = key_pair.sessionKey(peer_public_key_);
-        if (temp.empty())
+        QByteArray temp = key_pair.sessionKey(peer_public_key_);
+        if (temp.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
         session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-        if (session_key_.empty())
+        if (session_key_.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        ByteArray public_key = key_pair.publicKey();
-        if (public_key.empty())
+        QByteArray public_key = key_pair.publicKey();
+        if (public_key.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        client_hello->set_public_key(toStdString(public_key));
-        client_hello->set_iv(toStdString(encrypt_iv_));
+        client_hello->set_public_key(public_key.toStdString());
+        client_hello->set_iv(encrypt_iv_.toStdString());
     }
 
     proto::Version* version = client_hello->mutable_version();
@@ -295,7 +296,7 @@ void ClientAuthenticator::sendClientHello()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
+bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerHello";
 
@@ -347,15 +348,15 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
             return false;
     }
 
-    decrypt_iv_ = fromStdString(server_hello->iv());
+    decrypt_iv_ = QByteArray::fromStdString(server_hello->iv());
 
-    if (session_key_.empty() != decrypt_iv_.empty())
+    if (session_key_.isEmpty() != decrypt_iv_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (!session_key_.empty() && !onSessionKeyChanged())
+    if (!session_key_.isEmpty() && !onSessionKeyChanged())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return false;
@@ -375,7 +376,7 @@ void ClientAuthenticator::sendIdentify()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
+bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerKeyExchange";
 
@@ -406,7 +407,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     g_ = BigNum::fromStdString(server_key_exchange->generator());
     s_ = BigNum::fromStdString(server_key_exchange->salt());
     B_ = BigNum::fromStdString(server_key_exchange->b());
-    decrypt_iv_ = fromStdString(server_key_exchange->iv());
+    decrypt_iv_ = QByteArray::fromStdString(server_key_exchange->iv());
 
     a_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
     A_ = SrpMath::calc_A(a_, N_, g_);
@@ -430,7 +431,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
     GenericHash hash(GenericHash::BLAKE2s256);
 
-    if (!session_key_.empty())
+    if (!session_key_.isEmpty())
         hash.addData(session_key_);
     hash.addData(key.toByteArray());
 
@@ -444,14 +445,14 @@ void ClientAuthenticator::sendClientKeyExchange()
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
         std::make_unique<proto::SrpClientKeyExchange>();
     client_key_exchange->set_a(A_.toStdString());
-    client_key_exchange->set_iv(toStdString(encrypt_iv_));
+    client_key_exchange->set_iv(encrypt_iv_.toStdString());
 
     LOG(LS_INFO) << "Sending: ClientKeyExchange";
     sendMessage(*client_key_exchange);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
+bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionChallenge";
 

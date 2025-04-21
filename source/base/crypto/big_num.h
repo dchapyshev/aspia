@@ -21,9 +21,10 @@
 
 #include "base/macros_magic.h"
 #include "base/crypto/openssl_util.h"
-#include "base/memory/byte_array.h"
 
 #include <memory>
+
+#include <QByteArray>
 
 namespace base {
 
@@ -46,11 +47,11 @@ public:
     const bignum_st* get() const { return num_.get(); }
 
     std::string toStdString() const;
-    ByteArray toByteArray() const;
+    QByteArray toByteArray() const;
 
     static BigNum create();
     static BigNum fromStdString(std::string_view string);
-    static BigNum fromByteArray(const ByteArray& array);
+    static BigNum fromByteArray(const QByteArray& array);
 
     operator bignum_st*() const { return num_.get(); }
 

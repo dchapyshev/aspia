@@ -109,7 +109,7 @@ void PendingSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PendingSession::setIdentify(uint32_t key_id, const base::ByteArray& secret)
+void PendingSession::setIdentify(uint32_t key_id, const QByteArray& secret)
 {
     secret_ = secret;
     key_id_ = key_id;
@@ -121,10 +121,10 @@ bool PendingSession::isPeerFor(const PendingSession& other) const
     if (&other == this)
         return false;
 
-    if (secret_.empty() || other.secret_.empty())
+    if (secret_.isEmpty() || other.secret_.isEmpty())
         return false;
 
-    return key_id_ == other.key_id_ && base::equals(secret_, other.secret_);
+    return key_id_ == other.key_id_ && secret_ == other.secret_;
 }
 
 //--------------------------------------------------------------------------------------------------

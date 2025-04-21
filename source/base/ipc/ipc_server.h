@@ -27,15 +27,19 @@
 
 #include <array>
 
+#include <QObject>
+
 namespace base {
 
 class IpcChannel;
 class Location;
 
-class IpcServer
+class IpcServer final : public QObject
 {
+    Q_OBJECT
+
 public:
-    IpcServer();
+    explicit IpcServer(QObject* parent = nullptr);
     ~IpcServer();
 
     static std::u16string createUniqueId();

@@ -46,7 +46,7 @@ void ServerAuthenticatorManager::setUserList(std::unique_ptr<UserListBase> user_
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticatorManager::setPrivateKey(const ByteArray& private_key)
+void ServerAuthenticatorManager::setPrivateKey(const QByteArray& private_key)
 {
     private_key_ = private_key;
 }
@@ -67,7 +67,7 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
     std::unique_ptr<ServerAuthenticator> authenticator = std::make_unique<ServerAuthenticator>();
     authenticator->setUserList(user_list_);
 
-    if (!private_key_.empty())
+    if (!private_key_.isEmpty())
     {
         if (!authenticator->setPrivateKey(private_key_))
         {

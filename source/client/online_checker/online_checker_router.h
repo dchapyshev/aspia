@@ -66,8 +66,8 @@ protected:
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
     void checkNextComputer();

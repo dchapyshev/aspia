@@ -73,7 +73,7 @@ public:
 protected:
     // Client implementation.
     void onSessionStarted() final;
-    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private slots:

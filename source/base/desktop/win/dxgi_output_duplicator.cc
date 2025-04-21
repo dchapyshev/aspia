@@ -248,7 +248,7 @@ bool DxgiOutputDuplicator::duplicate(
     if (frame_info.PointerShapeBufferSize != 0)
     {
         DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
-        ByteArray* buffer = cursor->pointerShapeBuffer();
+        QByteArray* buffer = cursor->pointerShapeBuffer();
 
         if (buffer->capacity() < frame_info.PointerShapeBufferSize)
             buffer->reserve(frame_info.PointerShapeBufferSize);

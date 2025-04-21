@@ -65,10 +65,10 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void largeNumberIncrement(ByteArray* buffer)
+void largeNumberIncrement(QByteArray* buffer)
 {
     DCHECK(buffer);
-    largeNumberIncrement(buffer->data(), buffer->size());
+    largeNumberIncrement(reinterpret_cast<uint8_t*>(buffer->data()), buffer->size());
 }
 
 } // namespace base

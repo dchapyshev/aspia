@@ -137,7 +137,7 @@ void NetworkChannel::addRxBytes(size_t bytes_count)
 
 //--------------------------------------------------------------------------------------------------
 // static
-void NetworkChannel::resizeBuffer(ByteArray* buffer, size_t new_size)
+void NetworkChannel::resizeBuffer(QByteArray* buffer, size_t new_size)
 {
     // If the reserved buffer size is less, then increase it.
     if (buffer->capacity() < new_size)

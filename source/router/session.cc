@@ -19,6 +19,7 @@
 #include "router/session.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
 #include "router/database.h"
@@ -181,7 +182,7 @@ void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void Session::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {
@@ -194,7 +195,7 @@ void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& bu
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& /* buffer */, size_t pending)
+void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {

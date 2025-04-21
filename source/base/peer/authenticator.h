@@ -83,11 +83,11 @@ public:
 
 protected:
     [[nodiscard]] virtual bool onStarted() = 0;
-    virtual void onReceived(const ByteArray& buffer) = 0;
+    virtual void onReceived(const QByteArray& buffer) = 0;
     virtual void onWritten() = 0;
 
     void sendMessage(const google::protobuf::MessageLite& message);
-    void sendMessage(base::ByteArray&& data);
+    void sendMessage(QByteArray&& data);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::Version& version);
     void setPeerOsName(const std::string& name);
@@ -98,16 +98,16 @@ protected:
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     [[nodiscard]] bool onSessionKeyChanged();
 
     proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
     proto::Identify identify_ = proto::IDENTIFY_SRP;
-    ByteArray session_key_;
-    ByteArray encrypt_iv_;
-    ByteArray decrypt_iv_;
+    QByteArray session_key_;
+    QByteArray encrypt_iv_;
+    QByteArray decrypt_iv_;
 
     uint32_t session_type_ = 0; // Selected session type.
     std::string user_name_;

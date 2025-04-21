@@ -74,7 +74,7 @@ protected:
     void onUserListChanged() final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) final;
+    void onUpdateCheckedFinished(const QByteArray& result) final;
 
     // common::HttpFileDownloader::Delegate implementation.
     void onFileDownloaderError(int error_code) final;

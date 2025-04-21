@@ -172,7 +172,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     }
 
     uint32_t* mask_plane = mask_data.data();
-    ByteArray image;
+    QByteArray image;
     bool has_alpha = false;
 
     if (is_color)

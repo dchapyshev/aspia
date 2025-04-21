@@ -45,24 +45,24 @@ CursorDecoder::~CursorDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const
+QByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const
 {
     const std::string& data = cursor_shape.data();
 
     if (data.empty())
     {
         LOG(LS_ERROR) << "No cursor data";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (cursor_shape.width() <= 0 || cursor_shape.height() <= 0)
     {
         LOG(LS_ERROR) << "Invalid cursor size: "
                       << cursor_shape.width() << "x" << cursor_shape.height();
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray image;
+    QByteArray image;
     image.resize(static_cast<size_t>(cursor_shape.width()) *
                  static_cast<size_t>(cursor_shape.height()) *
                  sizeof(uint32_t));
@@ -72,11 +72,11 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
     {
         LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret)
                       << " (" << ret << ")";
-        return ByteArray();
+        return QByteArray();
     }
 
     ZSTD_inBuffer input = { data.data(), data.size(), 0 };
-    ZSTD_outBuffer output = { image.data(), image.size(), 0 };
+    ZSTD_outBuffer output = { image.data(), static_cast<size_t>(image.size()), 0 };
 
     while (input.pos < input.size)
     {
@@ -85,7 +85,7 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
         {
             LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret)
                           << " (" << ret << ")";
-            return ByteArray();
+            return QByteArray();
         }
     }
 
@@ -123,8 +123,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
             return nullptr;
         }
 
-        ByteArray image = decompressCursor(cursor_shape);
-        if (image.empty())
+        QByteArray image = decompressCursor(cursor_shape);
+        if (image.isEmpty())
         {
             LOG(LS_ERROR) << "decompressCursor failed";
             return nullptr;

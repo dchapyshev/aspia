@@ -84,16 +84,16 @@ KeyPair KeyPair::create(Type type)
 
 //--------------------------------------------------------------------------------------------------
 // static
-KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
+KeyPair KeyPair::fromPrivateKey(const QByteArray& private_key)
 {
-    if (private_key.empty())
+    if (private_key.isEmpty())
     {
         LOG(LS_ERROR) << "Empty private key";
         return KeyPair();
     }
 
-    return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(
-        EVP_PKEY_X25519, nullptr, private_key.data(), private_key.size())));
+    return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(EVP_PKEY_X25519, nullptr,
+        reinterpret_cast<const uint8_t*>(private_key.data()), private_key.size())));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,109 +103,111 @@ bool KeyPair::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray KeyPair::privateKey() const
+QByteArray KeyPair::privateKey() const
 {
     size_t private_key_length = 0;
 
     if (EVP_PKEY_get_raw_private_key(pkey_.get(), nullptr, &private_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_private_key failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (!private_key_length)
     {
         LOG(LS_ERROR) << "Invalid private key size";
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray private_key;
-    private_key.resize(private_key_length);
+    QByteArray private_key;
+    private_key.resize(static_cast<QByteArray::size_type>(private_key_length));
 
-    if (EVP_PKEY_get_raw_private_key(pkey_.get(), private_key.data(), &private_key_length) != 1)
+    if (EVP_PKEY_get_raw_private_key(pkey_.get(), reinterpret_cast<uint8_t*>(private_key.data()),
+        &private_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_private_key failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (private_key.size() != private_key_length)
     {
         LOG(LS_ERROR) << "Invalid private key size";
-        return ByteArray();
+        return QByteArray();
     }
 
     return private_key;
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray KeyPair::publicKey() const
+QByteArray KeyPair::publicKey() const
 {
     size_t public_key_length = 0;
 
     if (EVP_PKEY_get_raw_public_key(pkey_.get(), nullptr, &public_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_public_key failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (!public_key_length)
     {
         LOG(LS_ERROR) << "Invalid public key size";
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray public_key;
-    public_key.resize(public_key_length);
+    QByteArray public_key;
+    public_key.resize(static_cast<QByteArray::size_type>(public_key_length));
 
-    if (EVP_PKEY_get_raw_public_key(pkey_.get(), public_key.data(), &public_key_length) != 1)
+    if (EVP_PKEY_get_raw_public_key(pkey_.get(), reinterpret_cast<uint8_t*>(public_key.data()),
+        &public_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_public_key failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (public_key.size() != public_key_length)
     {
         LOG(LS_ERROR) << "Invalid public key size";
-        return ByteArray();
+        return QByteArray();
     }
 
     return public_key;
 }
 
 //--------------------------------------------------------------------------------------------------
-ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
+QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
 {
-    if (peer_public_key.empty())
+    if (peer_public_key.isEmpty())
     {
         LOG(LS_ERROR) << "Empty peer public key";
-        return ByteArray();
+        return QByteArray();
     }
 
-    EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(
-        EVP_PKEY_X25519, nullptr, peer_public_key.data(), peer_public_key.size()));
+    EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(EVP_PKEY_X25519, nullptr,
+        reinterpret_cast<const uint8_t*>(peer_public_key.data()), peer_public_key.size()));
     if (!public_key)
     {
         LOG(LS_ERROR) << "EVP_PKEY_new_raw_public_key failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     EVP_PKEY_CTX_ptr ctx(EVP_PKEY_CTX_new(pkey_.get(), nullptr));
     if (!ctx)
     {
         LOG(LS_ERROR) << "EVP_PKEY_CTX_new failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (EVP_PKEY_derive_init(ctx.get()) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_derive_init failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (EVP_PKEY_derive_set_peer(ctx.get(), public_key.get()) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_derive_set_pee failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     size_t session_key_length = 0;
@@ -213,28 +215,29 @@ ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
     if (EVP_PKEY_derive(ctx.get(), nullptr, &session_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_derive failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (!session_key_length)
     {
         LOG(LS_ERROR) << "Invalid session key size";
-        return ByteArray();
+        return QByteArray();
     }
 
-    ByteArray session_key;
-    session_key.resize(session_key_length);
+    QByteArray session_key;
+    session_key.resize(static_cast<QByteArray::size_type>(session_key_length));
 
-    if (EVP_PKEY_derive(ctx.get(), session_key.data(), &session_key_length) != 1)
+    if (EVP_PKEY_derive(ctx.get(), reinterpret_cast<uint8_t*>(session_key.data()),
+        &session_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_derive failed";
-        return ByteArray();
+        return QByteArray();
     }
 
     if (session_key.size() != session_key_length)
     {
         LOG(LS_ERROR) << "Invalid session key size";
-        return ByteArray();
+        return QByteArray();
     }
 
     return session_key;

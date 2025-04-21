@@ -22,11 +22,12 @@
 #include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/desktop/geometry.h"
-#include "base/memory/byte_array.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
+
+#include <QByteArray>
 
 namespace proto {
 class VideoPacket;
@@ -52,7 +53,7 @@ private:
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;
-    ByteArray image_buffer_;
+    QByteArray image_buffer_;
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;

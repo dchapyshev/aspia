@@ -496,8 +496,8 @@ void ConfigDialog::onPassProtectClicked()
         ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this);
         if (dialog.exec() == ChangePasswordDialog::Accepted)
         {
-            base::ByteArray hash;
-            base::ByteArray salt;
+            QByteArray hash;
+            QByteArray salt;
 
             if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
             {
@@ -519,8 +519,8 @@ void ConfigDialog::onPassProtectClicked()
         if (dialog.exec() == CheckPasswordDialog::Accepted)
         {
             settings.setPasswordProtection(false);
-            settings.setPasswordHash(base::ByteArray());
-            settings.setPasswordHashSalt(base::ByteArray());
+            settings.setPasswordHash(QByteArray());
+            settings.setPasswordHashSalt(QByteArray());
         }
     }
 
@@ -533,8 +533,8 @@ void ConfigDialog::onChangePassClicked()
     ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this);
     if (dialog.exec() == ChangePasswordDialog::Accepted)
     {
-        base::ByteArray hash;
-        base::ByteArray salt;
+        QByteArray hash;
+        QByteArray salt;
 
         if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
         {
@@ -672,8 +672,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            base::ByteArray router_public_key =
-                base::fromHex(ui.edit_router_public_key->toPlainText().toStdString());
+            QByteArray router_public_key =
+                QByteArray::fromHex(ui.edit_router_public_key->toPlainText().toUtf8());
             if (router_public_key.size() != 32)
             {
                 QMessageBox::warning(this,
@@ -827,7 +827,7 @@ void ConfigDialog::reloadAll()
     ui.checkbox_enable_router->setChecked(is_router_enabled);
     ui.edit_router_address->setText(QString::fromStdU16String(router_address.toString()));
     ui.edit_router_public_key->setPlainText(
-        QString::fromStdString(base::toHex(settings.routerPublicKey())));
+        QString::fromUtf8(settings.routerPublicKey().toHex()));
 
     ui.label_router_address->setEnabled(is_router_enabled);
     ui.edit_router_address->setEnabled(is_router_enabled);

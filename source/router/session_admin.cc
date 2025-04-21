@@ -19,6 +19,7 @@
 #include "router/session_admin.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/peer/user.h"
 #include "router/database.h"
 #include "router/server.h"
@@ -46,7 +47,7 @@ void SessionAdmin::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::AdminToRouter> message = std::make_unique<proto::AdminToRouter>();
 

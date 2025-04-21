@@ -35,7 +35,7 @@ public:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onWritten(uint8_t channel_id, size_t pending) final;
 
 private:

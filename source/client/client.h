@@ -71,7 +71,7 @@ protected:
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;
-    virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
     // Sends outgoing message.
@@ -86,8 +86,8 @@ protected:
     // base::TcpChannel::Listener implementation.
     void onTcpConnected() final;
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, base::ByteArray&& buffer, size_t pending) final;
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     // RouterController::Delegate implementation.
     void onRouterConnected(const base::Version& router_version) final;

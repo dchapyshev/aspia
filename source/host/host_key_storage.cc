@@ -19,7 +19,6 @@
 #include "host/host_key_storage.h"
 
 #include "base/crypto/generic_hash.h"
-#include "base/strings/strcat.h"
 
 namespace host {
 
@@ -28,17 +27,17 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 std::string sessionKey(std::string_view session_name)
 {
-    base::ByteArray session_hash =
-        base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name);
-    return base::strCat({ "session/", base::toHex(session_hash) });
+    QByteArray key("session/");
+    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name).toHex());
+    return key.toStdString();
 }
 
 //--------------------------------------------------------------------------------------------------
 std::string sessionKeyForHostId(std::string_view session_name)
 {
-    base::ByteArray session_hash =
-        base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name);
-    return base::strCat({ "session_host_id/", base::toHex(session_hash) });
+    QByteArray key("session_host_id/");
+    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name).toHex());
+    return key.toStdString();
 }
 
 } // namespace
@@ -54,21 +53,21 @@ HostKeyStorage::HostKeyStorage()
 HostKeyStorage::~HostKeyStorage() = default;
 
 //--------------------------------------------------------------------------------------------------
-base::ByteArray HostKeyStorage::key(std::string_view session_name) const
+QByteArray HostKeyStorage::key(std::string_view session_name) const
 {
     if (session_name.empty())
-        return impl_.get<base::ByteArray>("console");
+        return impl_.get<QByteArray>("console");
 
-    return impl_.get<base::ByteArray>(sessionKey(session_name));
+    return impl_.get<QByteArray>(sessionKey(session_name));
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostKeyStorage::setKey(std::string_view session_name, const base::ByteArray& key)
+void HostKeyStorage::setKey(std::string_view session_name, const QByteArray& key)
 {
     if (session_name.empty())
-        impl_.set<base::ByteArray>("console", key);
+        impl_.set<QByteArray>("console", key);
     else
-        impl_.set<base::ByteArray>(sessionKey(session_name), key);
+        impl_.set<QByteArray>(sessionKey(session_name), key);
 
     impl_.flush();
 }

@@ -19,7 +19,6 @@
 #ifndef BASE_NET_TCP_CHANNEL_H
 #define BASE_NET_TCP_CHANNEL_H
 
-#include "base/memory/byte_array.h"
 #include "base/memory/local_memory.h"
 #include "base/net/network_channel.h"
 #include "base/net/variable_size.h"
@@ -53,8 +52,8 @@ public:
 
         virtual void onTcpConnected() = 0;
         virtual void onTcpDisconnected(ErrorCode error_code) = 0;
-        virtual void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) = 0;
-        virtual void onTcpMessageWritten(uint8_t channel_id, ByteArray&& buffer, size_t pending) = 0;
+        virtual void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
+        virtual void onTcpMessageWritten(uint8_t channel_id, size_t pending) = 0;
     };
 
     std::shared_ptr<TcpChannelProxy> channelProxy();
@@ -91,7 +90,7 @@ public:
     void resume();
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
-    void send(uint8_t channel_id, ByteArray&& buffer, WriteTask::Priority priority = WriteTask::Priority::NORMAL);
+    void send(uint8_t channel_id, QByteArray&& buffer, WriteTask::Priority priority = WriteTask::Priority::NORMAL);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -169,10 +168,10 @@ private:
                     const asio::ip::tcp::resolver::results_type& endpoints);
     void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
 
-    void onMessageWritten(uint8_t channel_id, ByteArray&& buffer);
+    void onMessageWritten(uint8_t channel_id);
     void onMessageReceived();
 
-    void addWriteTask(WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, ByteArray&& data);
+    void addWriteTask(WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, QByteArray&& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
@@ -201,7 +200,7 @@ private:
     std::unique_ptr<asio::high_resolution_timer> keep_alive_timer_;
     Seconds keep_alive_interval_;
     Seconds keep_alive_timeout_;
-    ByteArray keep_alive_counter_;
+    QByteArray keep_alive_counter_;
     TimePoint keep_alive_timestamp_;
 
     Listener* listener_ = nullptr;
@@ -214,12 +213,12 @@ private:
     int next_sequence_num_ = 0;
     WriteQueue write_queue_;
     VariableSizeWriter variable_size_writer_;
-    ByteArray write_buffer_;
+    QByteArray write_buffer_;
 
     ReadState state_ = ReadState::IDLE;
     VariableSizeReader variable_size_reader_;
-    ByteArray read_buffer_;
-    ByteArray decrypt_buffer_;
+    QByteArray read_buffer_;
+    QByteArray decrypt_buffer_;
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;

@@ -19,6 +19,7 @@
 #include "base/audio/audio_capturer_wrapper.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/audio/audio_capturer.h"
 #include "base/ipc/ipc_channel_proxy.h"
 

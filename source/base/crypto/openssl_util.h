@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_OPENSSL_UTIL_H
 #define BASE_CRYPTO_OPENSSL_UTIL_H
 
-#include "base/memory/byte_array.h"
+#include <QByteArray>
 
 #include <memory>
 
@@ -74,7 +74,7 @@ enum class CipherMode
     DECRYPT
 };
 
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArray& key, int iv_size);
+EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArray& key, int iv_size);
 
 } // namespace base
 

@@ -143,7 +143,7 @@ std::string ZstdCompress::compress(const std::string& source, int compress_level
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray ZstdCompress::compress(const ByteArray& source, int compress_level)
+QByteArray ZstdCompress::compress(const QByteArray& source, int compress_level)
 {
     return compressT(source, compress_level);
 }
@@ -157,7 +157,7 @@ std::string ZstdCompress::decompress(const std::string& source)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ByteArray ZstdCompress::decompress(const ByteArray& source)
+QByteArray ZstdCompress::decompress(const QByteArray& source)
 {
     return decompressT(source);
 }

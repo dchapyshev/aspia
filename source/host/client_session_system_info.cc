@@ -19,6 +19,7 @@
 #include "host/client_session_system_info.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 
 #if defined(OS_WIN)
 #include "host/system_info.h"
@@ -47,7 +48,7 @@ void ClientSessionSystemInfo::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
 #if defined(OS_WIN)
     proto::system_info::SystemInfoRequest request;

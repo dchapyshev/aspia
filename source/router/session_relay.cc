@@ -19,6 +19,7 @@
 #include "router/session_relay.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "router/shared_key_pool.h"
 
 namespace router {
@@ -62,7 +63,7 @@ void SessionRelay::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_->Clear();
 

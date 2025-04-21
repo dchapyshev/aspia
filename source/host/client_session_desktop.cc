@@ -21,6 +21,7 @@
 #include "base/environment.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/serialization.h"
 #include "base/codec/audio_encoder_opus.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
@@ -167,7 +168,7 @@ void ClientSessionDesktop::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_->Clear();
 

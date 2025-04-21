@@ -20,12 +20,12 @@
 #define CLIENT_UI_CLIENT_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 #include "client/client_config.h"
 #include "common/update_checker.h"
 #include "proto/desktop.pb.h"
 #include "ui_client_window.h"
 
+#include <QByteArray>
 #include <QMainWindow>
 
 namespace client {
@@ -45,7 +45,7 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
     // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const base::ByteArray& result) final;
+    void onUpdateCheckedFinished(const QByteArray& result) final;
 
 private slots:
     void onLanguageChanged(QAction* action);

@@ -1104,111 +1104,111 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="216"/>
+        <location filename="../address_book_tab.cc" line="217"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Apertura rubirca &quot;%1&quot; fallita.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="224"/>
+        <location filename="../address_book_tab.cc" line="225"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Lettura rubrica &quot;%1&quot; fallita.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="234"/>
+        <location filename="../address_book_tab.cc" line="235"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>La rubrica &quot;%1&quot; è danneggiata oppure in un formato sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="281"/>
+        <location filename="../address_book_tab.cc" line="282"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Decifratura della rubrica utilizzando la password specificata fallita.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="288"/>
+        <location filename="../address_book_tab.cc" line="289"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>La rubrica è danneggiata oppure in un formato sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="273"/>
+        <location filename="../address_book_tab.cc" line="274"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>La rubrica è cifrata utilizzando un algoritmo di cifratura non supportato.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="684"/>
+        <location filename="../address_book_tab.cc" line="685"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Sei sicuro di voler eliminare il gruppo di computer &quot;%1&quot; e tutti gli elementi figlio?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="688"/>
-        <location filename="../address_book_tab.cc" line="726"/>
+        <location filename="../address_book_tab.cc" line="689"/>
+        <location filename="../address_book_tab.cc" line="727"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="692"/>
-        <location filename="../address_book_tab.cc" line="730"/>
+        <location filename="../address_book_tab.cc" line="693"/>
+        <location filename="../address_book_tab.cc" line="731"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="693"/>
-        <location filename="../address_book_tab.cc" line="731"/>
+        <location filename="../address_book_tab.cc" line="694"/>
+        <location filename="../address_book_tab.cc" line="732"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="722"/>
+        <location filename="../address_book_tab.cc" line="723"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Sei sicuro di voler eliminare il computer &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1075"/>
+        <location filename="../address_book_tab.cc" line="1076"/>
         <source>Online</source>
         <translation>Collegato</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1080"/>
+        <location filename="../address_book_tab.cc" line="1081"/>
         <source>Offline</source>
         <translation>Scollegato</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1222"/>
+        <location filename="../address_book_tab.cc" line="1223"/>
         <source>Save Address Book</source>
         <translation>Salva Rubrica</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1224"/>
+        <location filename="../address_book_tab.cc" line="1225"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Rubrica Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1239"/>
+        <location filename="../address_book_tab.cc" line="1240"/>
         <source>Unable to create or open address book file.</source>
         <translation>Creazione o apertura rubrica fallita.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1253"/>
+        <location filename="../address_book_tab.cc" line="1254"/>
         <source>Unable to write address book file.</source>
         <translation>Salvataggio rubrica fallito.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1284"/>
+        <location filename="../address_book_tab.cc" line="1285"/>
         <source>Root Group</source>
         <translation>Gruppo Radice</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1296"/>
-        <location filename="../address_book_tab.cc" line="1311"/>
+        <location filename="../address_book_tab.cc" line="1297"/>
+        <location filename="../address_book_tab.cc" line="1312"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1298"/>
+        <location filename="../address_book_tab.cc" line="1299"/>
         <source>Could not open address book</source>
         <translation>Apertura rubrica fallita</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1313"/>
+        <location filename="../address_book_tab.cc" line="1314"/>
         <source>Failed to save address book</source>
         <translation>Salvataggio rubrica fallito</translation>
     </message>

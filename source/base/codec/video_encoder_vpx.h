@@ -23,11 +23,12 @@
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/region.h"
-#include "base/memory/byte_array.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
+
+#include <QByteArray>
 
 namespace base {
 
@@ -59,12 +60,12 @@ private:
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;
 
-    ByteArray active_map_buffer_;
+    QByteArray active_map_buffer_;
     vpx_active_map_t active_map_;
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;
-    ByteArray image_buffer_;
+    QByteArray image_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };

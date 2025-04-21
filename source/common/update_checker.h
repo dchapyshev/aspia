@@ -21,8 +21,9 @@
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
-#include "base/memory/byte_array.h"
 #include "base/threading/simple_thread.h"
+
+#include <QByteArray>
 
 namespace common {
 
@@ -33,7 +34,7 @@ public:
     {
     public:
         virtual ~Delegate() = default;
-        virtual void onUpdateCheckedFinished(const base::ByteArray& result) = 0;
+        virtual void onUpdateCheckedFinished(const QByteArray& result) = 0;
     };
 
     UpdateChecker();

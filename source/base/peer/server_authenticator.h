@@ -47,7 +47,7 @@ public:
     void setUserList(base::local_shared_ptr<UserListBase> user_list);
 
     // Sets the private key.
-    [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
+    [[nodiscard]] bool setPrivateKey(const QByteArray& private_key);
 
     // Enables or disables anonymous access.
     // |session_types] allowed session types for anonymous access.
@@ -58,16 +58,16 @@ public:
 protected:
     // Authenticator implementation.
     [[nodiscard]] bool onStarted() final;
-    void onReceived(const ByteArray& buffer) final;
+    void onReceived(const QByteArray& buffer) final;
     void onWritten() final;
 
 private:
-    void onClientHello(const ByteArray& buffer);
-    void onIdentify(const ByteArray& buffer);
-    void onClientKeyExchange(const ByteArray& buffer);
+    void onClientHello(const QByteArray& buffer);
+    void onIdentify(const QByteArray& buffer);
+    void onClientKeyExchange(const QByteArray& buffer);
     void doSessionChallenge();
-    void onSessionResponse(const ByteArray& buffer);
-    [[nodiscard]] ByteArray createSrpKey();
+    void onSessionResponse(const QByteArray& buffer);
+    [[nodiscard]] QByteArray createSrpKey();
 
     base::local_shared_ptr<UserListBase> user_list_;
 

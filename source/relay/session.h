@@ -20,10 +20,11 @@
 #define RELAY_SESSION_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 #include "base/peer/host_id.h"
 
 #include <asio/ip/tcp.hpp>
+
+#include <QByteArray>
 
 namespace base {
 class Location;
@@ -35,7 +36,7 @@ class Session
 {
 public:
     Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
-            const base::ByteArray& secret);
+            const QByteArray& secret);
     ~Session();
 
     using Clock = std::chrono::high_resolution_clock;

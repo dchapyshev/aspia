@@ -94,8 +94,8 @@ bool Server::start()
 
     Settings settings;
 
-    base::ByteArray private_key = settings.privateKey();
-    if (private_key.empty())
+    QByteArray private_key = settings.privateKey();
+    if (private_key.isEmpty())
     {
         LOG(LS_INFO) << "The private key is not specified in the configuration file";
         return false;
@@ -167,8 +167,8 @@ bool Server::start()
             LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
     }
 
-    base::ByteArray seed_key = settings.seedKey();
-    if (seed_key.empty())
+    QByteArray seed_key = settings.seedKey();
+    if (seed_key.isEmpty())
     {
         LOG(LS_INFO) << "Empty seed key. New key generated";
         seed_key = base::Random::byteArray(64);

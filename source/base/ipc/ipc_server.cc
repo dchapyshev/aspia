@@ -235,7 +235,7 @@ void IpcServer::Listener::onNewConnetion(
     }
 
     std::unique_ptr<IpcChannel> channel =
-        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(*handle_)));
+        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(*handle_), nullptr));
 
     server_->onNewConnection(index_, std::move(channel));
 }
@@ -267,8 +267,9 @@ void IpcServer::Listener::onNewConnetion(
 #endif // defined(OS_POSIX)
 
 //--------------------------------------------------------------------------------------------------
-IpcServer::IpcServer()
-    : io_context_(AsioEventDispatcher::currentIoContext())
+IpcServer::IpcServer(QObject* parent)
+    : QObject(parent),
+      io_context_(AsioEventDispatcher::currentIoContext())
 {
     LOG(LS_INFO) << "Ctor";
 

@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
 
@@ -147,7 +148,7 @@ void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::sendMessage(base::ByteArray&& data)
+void Authenticator::sendMessage(QByteArray&& data)
 {
     DCHECK(channel_);
     channel_->send(kChannelIdAuthenticator, std::move(data));
@@ -225,7 +226,7 @@ void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArray& buffer)
+void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     if (state() != State::PENDING)
         return;
@@ -234,8 +235,7 @@ void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageWritten(
-    uint8_t /* channel_id */, ByteArray&& /* buffer */, size_t /* pending */)
+void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     if (state() != State::PENDING)
         return;

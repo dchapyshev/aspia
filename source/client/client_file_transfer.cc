@@ -76,8 +76,7 @@ void ClientFileTransfer::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
 

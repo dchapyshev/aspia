@@ -20,11 +20,11 @@
 #define HOST_PROCESS_MONITOR_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
 
 #include <cstdint>
 #include <string>
 #include <map>
+#include <vector>
 
 namespace host {
 
@@ -71,7 +71,7 @@ private:
     void* ntdll_library_ = nullptr;
     void* nt_query_system_info_func_ = nullptr;
 
-    base::ByteArray snapshot_;
+    std::vector<uint8_t> snapshot_;
     ProcessMap table_;
 
     static const uint32_t kMaxCpuCount = 64;

@@ -19,6 +19,7 @@
 #include "client/client_system_info.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "client/system_info_control_proxy.h"
 #include "client/system_info_window_proxy.h"
 #include "proto/system_info.pb.h"
@@ -63,8 +64,7 @@ void ClientSystemInfo::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionMessageReceived(
-    uint8_t /* channel_id */, const base::ByteArray& buffer)
+void ClientSystemInfo::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
     proto::system_info::SystemInfo system_info;
 

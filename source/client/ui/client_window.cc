@@ -158,9 +158,9 @@ void ClientWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
+void ClientWindow::onUpdateCheckedFinished(const QByteArray& result)
 {
-    if (result.empty())
+    if (result.isEmpty())
     {
         LOG(LS_ERROR) << "Error while retrieving update information";
     }
