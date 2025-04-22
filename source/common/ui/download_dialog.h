@@ -36,7 +36,7 @@ class DownloadDialog final
     Q_OBJECT
 
 public:
-    DownloadDialog(std::u16string_view url, QFile& file, QWidget* parent = nullptr);
+    DownloadDialog(const QString& url, QFile& file, QWidget* parent = nullptr);
     ~DownloadDialog() final;
 
 protected:

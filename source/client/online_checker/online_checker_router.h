@@ -29,7 +29,6 @@
 namespace base {
 class ClientAuthenticator;
 class Location;
-class TaskRunner;
 } // namespace base
 
 namespace client {

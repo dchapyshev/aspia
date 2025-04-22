@@ -96,7 +96,7 @@ void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_con
     text_chat_control_proxy_ = std::move(text_chat_control_proxy);
     DCHECK(text_chat_control_proxy_);
 
-    ui->text_chat_widget->setDisplayName(base::utf8FromUtf16(sessionState()->displayName()));
+    ui->text_chat_widget->setDisplayName(sessionState()->displayName());
 
     show();
     activateWindow();

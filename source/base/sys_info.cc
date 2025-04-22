@@ -30,7 +30,7 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::processorName()
+QString SysInfo::processorName()
 {
 #if defined(ARCH_CPU_X86_FAMILY)
     CpuidUtil cpuidUtil;
@@ -38,7 +38,7 @@ std::u16string SysInfo::processorName()
 
     uint32_t max_leaf = cpuidUtil.eax();
     if (max_leaf < 0x80000002)
-        return std::u16string();
+        return QString();
 
     max_leaf = std::min(max_leaf, 0x80000004);
 
@@ -60,31 +60,26 @@ std::u16string SysInfo::processorName()
         memcpy(&buffer[offset + 12], &edx, sizeof(edx));
     }
 
-    std::u16string result = utf16FromAscii(buffer);
+    QString result = QString::fromLatin1(buffer);
 
-    removeChars(&result, u"(TM)");
-    removeChars(&result, u"(tm)");
-    removeChars(&result, u"(R)");
-    removeChars(&result, u"CPU");
-    removeChars(&result, u"Quad-Core Processor");
-    removeChars(&result, u"Six-Core Processor");
-    removeChars(&result, u"Eight-Core Processor");
+    result.remove("(TM)");
+    result.remove("(tm)");
+    result.remove("(R)");
+    result.remove("CPU");
+    result.remove("Quad-Core Processor");
+    result.remove("Six-Core Processor");
+    result.remove("Eight-Core Processor");
 
-    std::u16string_view at(u"@");
-    auto sub = find_end(result.begin(), result.end(), at.begin(), at.end());
-    if (sub != result.end())
-        result.erase(sub - 1, result.end());
-
-    return collapseWhitespace(result, true);
+    return result.trimmed();
 #else
     NOTIMPLEMENTED();
-    return std::u16string();
+    return QString();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::processorVendor()
+QString SysInfo::processorVendor()
 {
 #if defined(ARCH_CPU_X86_FAMILY)
     CpuidUtil cpuidUtil;
@@ -101,45 +96,45 @@ std::u16string SysInfo::processorVendor()
     memcpy(&buffer[4], &edx, sizeof(edx));
     memcpy(&buffer[8], &ecx, sizeof(ecx));
 
-    std::u16string vendor = collapseWhitespace(utf16FromAscii(buffer), true);
+    QString vendor = QString::fromLatin1(buffer).trimmed();
 
-    if (vendor == u"GenuineIntel")
-        return u"Intel Corporation";
-    else if (vendor == u"AuthenticAMD" || vendor == u"AMDisbetter!")
-        return u"Advanced Micro Devices, Inc.";
+    if (vendor == "GenuineIntel")
+        return "Intel Corporation";
+    else if (vendor == "AuthenticAMD" || vendor == "AMDisbetter!")
+        return "Advanced Micro Devices, Inc.";
     else if (vendor == u"CentaurHauls")
-        return u"Centaur";
-    else if (vendor == u"CyrixInstead")
-        return u"Cyrix";
-    else if (vendor == u"TransmetaCPU" || vendor == u"GenuineTMx86")
-        return u"Transmeta";
-    else if (vendor == u"Geode by NSC")
-        return u"National Semiconductor";
+        return "Centaur";
+    else if (vendor == "CyrixInstead")
+        return "Cyrix";
+    else if (vendor == "TransmetaCPU" || vendor == "GenuineTMx86")
+        return "Transmeta";
+    else if (vendor == "Geode by NSC")
+        return "National Semiconductor";
     else if (vendor == u"NexGenDriven")
-        return u"NexGen";
-    else if (vendor == u"RiseRiseRise")
-        return u"Rise";
-    else if (vendor == u"SiS SiS SiS")
-        return u"SiS";
-    else if (vendor == u"UMC UMC UMC")
-        return u"UMC";
-    else if (vendor == u"VIA VIA VIA")
-        return u"VIA";
-    else if (vendor == u"Vortex86 SoC")
-        return u"Vortex";
-    else if (vendor == u"KVMKVMKVMKVM")
-        return u"KVM";
-    else if (vendor == u"Microsoft Hv")
-        return u"Microsoft Hyper-V or Windows Virtual PC";
+        return "NexGen";
+    else if (vendor == "RiseRiseRise")
+        return "Rise";
+    else if (vendor == "SiS SiS SiS")
+        return "SiS";
+    else if (vendor == "UMC UMC UMC")
+        return "UMC";
+    else if (vendor == "VIA VIA VIA")
+        return "VIA";
+    else if (vendor == "Vortex86 SoC")
+        return "Vortex";
+    else if (vendor == "KVMKVMKVMKVM")
+        return "KVM";
+    else if (vendor == "Microsoft Hv")
+        return "Microsoft Hyper-V or Windows Virtual PC";
     else if (vendor == u"VMwareVMware")
-        return u"VMware";
+        return "VMware";
     else if (vendor == u"XenVMMXenVMM")
-        return u"Xen HVM";
+        return "Xen HVM";
     else
         return vendor;
 #else
     NOTIMPLEMENTED();
-    return std::u16string();
+    return QString();
 #endif
 }
 

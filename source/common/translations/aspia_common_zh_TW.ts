@@ -196,6 +196,53 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">取消檢查更新。請稍候。</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">未知</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">擷取更新訊息時發生錯誤。</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">沒有可用的更新。</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">將下載更新。下載完成後，應用程式將自動關閉。</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">所有已連線的工作階段將被終止。在更新完成之前，您無法建立連線。</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">所有尚未儲存的資料將會遺失。</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">是否繼續？</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">確認</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">安裝更新時發生錯誤：%1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>
@@ -561,16 +608,6 @@
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="205"/>
-        <source>Warning</source>
-        <translation>警告</translation>
-    </message>
-    <message>
-        <location filename="../ui/update_dialog.cc" line="206"/>
-        <source>An error occurred while installing the update: %1</source>
-        <translation>安裝更新時發生錯誤：%1</translation>
-    </message>
-    <message>
         <location filename="../ui/update_dialog.cc" line="193"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
@@ -579,6 +616,16 @@
         <location filename="../ui/update_dialog.cc" line="194"/>
         <source>No</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="205"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="206"/>
+        <source>An error occurred while installing the update: %1</source>
+        <translation>安裝更新時發生錯誤：%1</translation>
     </message>
 </context>
 </TS>

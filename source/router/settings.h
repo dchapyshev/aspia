@@ -21,6 +21,8 @@
 
 #include "base/settings/json_settings.h"
 
+#include <QStringList>
+
 namespace router {
 
 class Settings
@@ -34,8 +36,8 @@ public:
     void reset();
     void flush();
 
-    void setListenInterface(const std::u16string& interface);
-    std::u16string listenInterface() const;
+    void setListenInterface(const QString& interface);
+    QString listenInterface() const;
 
     void setPort(uint16_t port);
     uint16_t port() const;
@@ -43,7 +45,7 @@ public:
     void setPrivateKey(const QByteArray& private_key);
     QByteArray privateKey() const;
 
-    using WhiteList = std::vector<std::u16string>;
+    using WhiteList = QStringList;
 
     void setClientWhiteList(const WhiteList& list);
     WhiteList clientWhiteList() const;

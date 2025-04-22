@@ -19,9 +19,7 @@
 #include "console/computer_group_dialog_general.h"
 
 #include "base/logging.h"
-#include "base/net/address.h"
 #include "base/peer/user.h"
-#include "base/strings/unicode.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -51,7 +49,7 @@ ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_gr
         connect(ui.groupbox_inherit_creds, &QGroupBox::toggled, this, [this](bool checked)
         {
             QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
-            for (const auto& widget : widgets)
+            for (const auto& widget : std::as_const(widgets))
             {
                 widget->setEnabled(!checked);
             }
@@ -82,7 +80,7 @@ void ComputerGroupDialogGeneral::restoreSettings(
         QTimer::singleShot(0, this, [this, inherit_creds]()
         {
             QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
-            for (const auto& widget : widgets)
+            for (const auto& widget : std::as_const(widgets))
             {
                 widget->setEnabled(!inherit_creds);
             }
@@ -93,10 +91,10 @@ void ComputerGroupDialogGeneral::restoreSettings(
 //--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroupConfig* group_config)
 {
-    std::u16string username = ui.edit_username->text().toStdU16String();
-    std::u16string password = ui.edit_password->text().toStdU16String();
+    QString username = ui.edit_username->text();
+    QString password = ui.edit_password->text();
 
-    if (!username.empty() && !base::User::isValidUserName(username))
+    if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
         LOG(LS_INFO) << "Invalid user name: " << username;
         showError(tr("The user name can not be empty and can contain only"
@@ -106,8 +104,8 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
         return false;
     }
 
-    group_config->set_username(base::utf8FromUtf16(username));
-    group_config->set_password(base::utf8FromUtf16(password));
+    group_config->set_username(username.toStdString());
+    group_config->set_password(password.toStdString());
 
     if (!isRootGroup())
     {

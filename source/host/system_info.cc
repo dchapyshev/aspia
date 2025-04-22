@@ -42,7 +42,6 @@
 #include "base/win/user_enumerator.h"
 #include "base/win/user_group_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
-#include "base/strings/unicode.h"
 #include "common/system_info_constants.h"
 #include "host/process_monitor.h"
 
@@ -669,9 +668,9 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 void fillComputer(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
-    computer->set_name(base::utf8FromUtf16(base::SysInfo::computerName()));
-    computer->set_domain(base::utf8FromUtf16(base::SysInfo::computerDomain()));
-    computer->set_workgroup(base::utf8FromUtf16(base::SysInfo::computerWorkgroup()));
+    computer->set_name(base::SysInfo::computerName().toStdString());
+    computer->set_domain(base::SysInfo::computerDomain().toStdString());
+    computer->set_workgroup(base::SysInfo::computerWorkgroup().toStdString());
     computer->set_uptime(base::SysInfo::uptime());
 }
 
@@ -679,10 +678,10 @@ void fillComputer(proto::system_info::SystemInfo* system_info)
 void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::OperatingSystem* operating_system = system_info->mutable_operating_system();
-    operating_system->set_name(base::utf8FromUtf16(base::SysInfo::operatingSystemName()));
-    operating_system->set_version(base::utf8FromUtf16(base::SysInfo::operatingSystemVersion()));
-    operating_system->set_arch(base::utf8FromUtf16(base::SysInfo::operatingSystemArchitecture()));
-    operating_system->set_key(base::utf8FromUtf16(base::SysInfo::operatingSystemKey()));
+    operating_system->set_name(base::SysInfo::operatingSystemName().toStdString());
+    operating_system->set_version(base::SysInfo::operatingSystemVersion().toStdString());
+    operating_system->set_arch(base::SysInfo::operatingSystemArchitecture().toStdString());
+    operating_system->set_key(base::SysInfo::operatingSystemKey().toStdString());
     operating_system->set_install_date(base::SysInfo::operatingSystemInstallDate());
 }
 
@@ -690,8 +689,8 @@ void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 void fillProcessor(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Processor* processor = system_info->mutable_processor();
-    processor->set_vendor(base::utf8FromUtf16(base::SysInfo::processorVendor()));
-    processor->set_model(base::utf8FromUtf16(base::SysInfo::processorName()));
+    processor->set_vendor(base::SysInfo::processorVendor().toStdString());
+    processor->set_model(base::SysInfo::processorName().toStdString());
     processor->set_packages(static_cast<uint32_t>(base::SysInfo::processorPackages()));
     processor->set_cores(static_cast<uint32_t>(base::SysInfo::processorCores()));
     processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));

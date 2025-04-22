@@ -18,23 +18,20 @@
 
 #include "base/peer/host_id.h"
 
-#include "base/strings/string_number_conversions.h"
-
-#include <cctype>
-
 namespace base {
 
-namespace {
+const HostId kInvalidHostId = 0;
+
+static_assert(sizeof(HostId) == 8);
 
 //--------------------------------------------------------------------------------------------------
-template <class T>
-bool isHostIdT(T str)
+bool isHostId(const QString& str)
 {
     bool result = true;
 
-    for (size_t i = 0; i < str.size(); ++i)
+    for (QString::size_type i = 0; i < str.size(); ++i)
     {
-        if (!std::isdigit(static_cast<uint8_t>(str[i])))
+        if (!str.at(i).isDigit())
         {
             result = false;
             break;
@@ -45,65 +42,26 @@ bool isHostIdT(T str)
 }
 
 //--------------------------------------------------------------------------------------------------
-template <class T>
-HostId stringToHostIdT(T str)
+HostId stringToHostId(const QString& str)
 {
-    if (str.empty())
+    if (str.isEmpty())
         return kInvalidHostId;
 
-    HostId host_id;
-    if (!stringToULong64(str, &host_id))
+    bool ok = false;
+    HostId host_id = str.toULongLong(&ok);
+    if (!ok)
         return kInvalidHostId;
 
     return host_id;
 }
 
-} // namespace
-
-const HostId kInvalidHostId = 0;
-
-static_assert(sizeof(HostId) == 8);
-
 //--------------------------------------------------------------------------------------------------
-bool isHostId(std::u16string_view str)
-{
-    return isHostIdT(str);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool isHostId(std::string_view str)
-{
-    return isHostIdT(str);
-}
-
-//--------------------------------------------------------------------------------------------------
-HostId stringToHostId(std::u16string_view str)
-{
-    return stringToHostIdT(str);
-}
-
-//--------------------------------------------------------------------------------------------------
-HostId stringToHostId(std::string_view str)
-{
-    return stringToHostIdT(str);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string hostIdToString16(HostId host_id)
+QString hostIdToString(HostId host_id)
 {
     if (host_id == kInvalidHostId)
-        return std::u16string();
+        return QString();
 
-    return numberToString16(host_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string hostIdToString(HostId host_id)
-{
-    if (host_id == kInvalidHostId)
-        return std::string();
-
-    return numberToString(host_id);
+    return QString::number(host_id);
 }
 
 } // namespace base

@@ -30,8 +30,8 @@ public:
     HostIpcStorage();
     ~HostIpcStorage();
 
-    std::u16string channelIdForUI() const;
-    void setChannelIdForUI(const std::u16string& channel_id);
+    QString channelIdForUI() const;
+    void setChannelIdForUI(const QString& channel_id);
 
 private:
     base::JsonSettings impl_;

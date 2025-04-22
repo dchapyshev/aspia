@@ -19,7 +19,6 @@
 #ifndef ROUTER_SERVER_H
 #define ROUTER_SERVER_H
 
-#include "base/task_runner.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
@@ -74,10 +73,10 @@ private:
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
-    std::vector<std::u16string> client_white_list_;
-    std::vector<std::u16string> host_white_list_;
-    std::vector<std::u16string> admin_white_list_;
-    std::vector<std::u16string> relay_white_list_;
+    QStringList client_white_list_;
+    QStringList host_white_list_;
+    QStringList admin_white_list_;
+    QStringList relay_white_list_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

@@ -63,7 +63,7 @@ public:
     explicit DesktopSessionAgent(QObject* parent = nullptr);
     ~DesktopSessionAgent() final;
 
-    void start(std::u16string_view channel_id);
+    void start(const QString& channel_id);
 
 protected:
     // base::IpcChannel::Listener implementation.

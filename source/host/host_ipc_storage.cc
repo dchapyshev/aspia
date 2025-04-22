@@ -31,15 +31,15 @@ HostIpcStorage::HostIpcStorage()
 HostIpcStorage::~HostIpcStorage() = default;
 
 //--------------------------------------------------------------------------------------------------
-std::u16string HostIpcStorage::channelIdForUI() const
+QString HostIpcStorage::channelIdForUI() const
 {
-    return impl_.get<std::u16string>("ui_channel_id");
+    return impl_.get<QString>("ui_channel_id");
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostIpcStorage::setChannelIdForUI(const std::u16string& channel_id)
+void HostIpcStorage::setChannelIdForUI(const QString& channel_id)
 {
-    impl_.set<std::u16string>("ui_channel_id", channel_id);
+    impl_.set<QString>("ui_channel_id", channel_id);
     impl_.flush();
 }
 

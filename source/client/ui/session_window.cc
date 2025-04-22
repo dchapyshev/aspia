@@ -66,15 +66,15 @@ bool SessionWindow::connectToHost(Config config)
     // Set the window title.
     setClientTitle(config);
 
-    if (config.username.empty() || config.password.empty())
+    if (config.username.isEmpty() || config.password.isEmpty())
     {
         LOG(LS_INFO) << "Empty user name or password";
 
         AuthorizationDialog auth_dialog(this);
 
         auth_dialog.setOneTimePasswordEnabled(config.router_config.has_value());
-        auth_dialog.setUserName(QString::fromStdU16String(config.username));
-        auth_dialog.setPassword(QString::fromStdU16String(config.password));
+        auth_dialog.setUserName(config.username);
+        auth_dialog.setPassword(config.password);
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
@@ -82,13 +82,13 @@ bool SessionWindow::connectToHost(Config config)
             return false;
         }
 
-        config.username = auth_dialog.userName().toStdU16String();
-        config.password = auth_dialog.password().toStdU16String();
+        config.username = auth_dialog.userName();
+        config.password = auth_dialog.password();
     }
 
     // When connecting with a one-time password, the username must be in the following format:
     // #host_id.
-    if (config.username.empty())
+    if (config.username.isEmpty())
     {
         LOG(LS_INFO) << "User name is empty. Connection by ID";
         config.username = u"#" + config.address_or_id;
@@ -150,8 +150,7 @@ void SessionWindow::onRouterConnecting()
     if (router.has_value())
     {
         status_dialog_->addMessageAndActivate(
-            tr("Connecting to router %1:%2...")
-               .arg(QString::fromStdU16String(router->address)).arg(router->port));
+            tr("Connecting to router %1:%2...").arg(router->address).arg(router->port));
     }
     else
     {
@@ -168,8 +167,7 @@ void SessionWindow::onRouterConnected()
     if (router.has_value())
     {
         status_dialog_->addMessageAndActivate(
-            tr("Connection to router %1:%2 established.")
-               .arg(QString::fromStdU16String(router->address)).arg(router->port));
+            tr("Connection to router %1:%2 established.").arg(router->address).arg(router->port));
     }
     else
     {
@@ -186,13 +184,12 @@ void SessionWindow::onHostConnecting()
 
     if (session_state_->isConnectionByHostId())
     {
-        message = tr("Connecting to host %1...")
-                      .arg(QString::fromStdU16String(session_state_->hostAddress()));
+        message = tr("Connecting to host %1...").arg(session_state_->hostAddress());
     }
     else
     {
         message = tr("Connecting to host %1:%2...")
-                      .arg(QString::fromStdU16String(session_state_->hostAddress()))
+                      .arg(session_state_->hostAddress())
                       .arg(session_state_->hostPort());
     }
 
@@ -208,13 +205,12 @@ void SessionWindow::onHostConnected()
 
     if (session_state_->isConnectionByHostId())
     {
-        message = tr("Connection to host %1 established.")
-                      .arg(QString::fromStdU16String(session_state_->hostAddress()));
+        message = tr("Connection to host %1 established.").arg(session_state_->hostAddress());
     }
     else
     {
         message = tr("Connection to host %1:%2 established.")
-                      .arg(QString::fromStdU16String(session_state_->hostAddress()))
+                      .arg(session_state_->hostAddress())
                       .arg(session_state_->hostPort());
     }
 
@@ -345,11 +341,11 @@ void SessionWindow::setClientTitle(const Config& config)
             break;
     }
 
-    QString computer_name = QString::fromStdU16String(config.computer_name);
+    QString computer_name = config.computer_name;
     if (computer_name.isEmpty())
     {
         if (config.router_config.has_value())
-            computer_name = QString::fromStdU16String(config.address_or_id);
+            computer_name = config.address_or_id;
         else
             computer_name = QString("%1:%2").arg(config.address_or_id).arg(config.port);
     }

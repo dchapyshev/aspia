@@ -21,11 +21,11 @@
 
 #include <deque>
 #include <memory>
-#include <string>
+
+#include <QString>
 
 namespace base {
 class Location;
-class TaskRunner;
 } // namespace base
 
 namespace client {
@@ -48,7 +48,7 @@ public:
     struct Computer
     {
         int computer_id = -1;
-        std::u16string address;
+        QString address;
         uint16_t port = 0;
     };
     using ComputerList = std::deque<Computer>;

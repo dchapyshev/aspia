@@ -1104,111 +1104,111 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="217"/>
+        <location filename="../address_book_tab.cc" line="216"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Impossible d ouvrir le fichier du carnet d&apos;adresses &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="225"/>
+        <location filename="../address_book_tab.cc" line="224"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Impossible de lire le fichier du carnet d adresses &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="235"/>
+        <location filename="../address_book_tab.cc" line="234"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>Le fichier du carnet d adresses &quot;%1&quot; est corrompu ou a un format inconnu.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="282"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Impossible de décrypter le carnet d adresses avec le mot de passe spécifié.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="289"/>
+        <location filename="../address_book_tab.cc" line="288"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Le fichier du carnet d&apos;adresses est corrompu ou de format inconnu.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="274"/>
+        <location filename="../address_book_tab.cc" line="273"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Le fichier du carnet d adresses est crypté avec un type de cryptage non pris en charge.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="685"/>
+        <location filename="../address_book_tab.cc" line="684"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Êtes-vous sûr de vouloir supprimer le groupe d ordinateurs &quot;%1&quot; et tous les éléments enfants?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="689"/>
-        <location filename="../address_book_tab.cc" line="727"/>
+        <location filename="../address_book_tab.cc" line="688"/>
+        <location filename="../address_book_tab.cc" line="726"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="693"/>
-        <location filename="../address_book_tab.cc" line="731"/>
+        <location filename="../address_book_tab.cc" line="692"/>
+        <location filename="../address_book_tab.cc" line="730"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="694"/>
-        <location filename="../address_book_tab.cc" line="732"/>
+        <location filename="../address_book_tab.cc" line="693"/>
+        <location filename="../address_book_tab.cc" line="731"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="723"/>
+        <location filename="../address_book_tab.cc" line="722"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Êtes-vous sûr de vouloir supprimer l ordinateur &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1076"/>
+        <location filename="../address_book_tab.cc" line="1075"/>
         <source>Online</source>
         <translation>En ligne</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1081"/>
+        <location filename="../address_book_tab.cc" line="1080"/>
         <source>Offline</source>
         <translation>Hors ligne</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1223"/>
+        <location filename="../address_book_tab.cc" line="1222"/>
         <source>Save Address Book</source>
         <translation>Sauvegarder le carnet d adresses</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1225"/>
+        <location filename="../address_book_tab.cc" line="1224"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Carnet d adresses Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1240"/>
+        <location filename="../address_book_tab.cc" line="1239"/>
         <source>Unable to create or open address book file.</source>
         <translation>Impossible de créer ou d ouvrir un fichier de carnet d adresses.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1254"/>
+        <location filename="../address_book_tab.cc" line="1253"/>
         <source>Unable to write address book file.</source>
         <translation>Impossible d écrire le fichier du carnet d adresses.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1285"/>
+        <location filename="../address_book_tab.cc" line="1284"/>
         <source>Root Group</source>
         <translation>Groupe racine</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1297"/>
-        <location filename="../address_book_tab.cc" line="1312"/>
+        <location filename="../address_book_tab.cc" line="1296"/>
+        <location filename="../address_book_tab.cc" line="1311"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1299"/>
+        <location filename="../address_book_tab.cc" line="1298"/>
         <source>Could not open address book</source>
         <translation>Impossible d ouvrir le carnet d adresses</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1314"/>
+        <location filename="../address_book_tab.cc" line="1313"/>
         <source>Failed to save address book</source>
         <translation>Échec de l enregistrement du carnet d adresses</translation>
     </message>
@@ -1457,22 +1457,22 @@
 <context>
     <name>console::ComputerGroupDialogGeneral</name>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="44"/>
+        <location filename="../computer_group_dialog_general.cc" line="42"/>
         <source>Credentials</source>
         <translation>Références</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="49"/>
+        <location filename="../computer_group_dialog_general.cc" line="47"/>
         <source>Inherit from parent</source>
         <translation>Hérite du parent</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="102"/>
+        <location filename="../computer_group_dialog_general.cc" line="100"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Le nom de l utilisateur ne peut pas être vide et ne peut contenir que des caractères alphabétiques, des chiffres et des caractères _, -, .</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="142"/>
+        <location filename="../computer_group_dialog_general.cc" line="140"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -1524,166 +1524,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="210"/>
-        <location filename="../main_window.cc" line="599"/>
-        <location filename="../main_window.cc" line="610"/>
-        <location filename="../main_window.cc" line="622"/>
-        <location filename="../main_window.cc" line="676"/>
-        <location filename="../main_window.cc" line="689"/>
-        <location filename="../main_window.cc" line="1705"/>
+        <location filename="../main_window.cc" line="209"/>
+        <location filename="../main_window.cc" line="598"/>
+        <location filename="../main_window.cc" line="609"/>
+        <location filename="../main_window.cc" line="621"/>
+        <location filename="../main_window.cc" line="675"/>
+        <location filename="../main_window.cc" line="688"/>
+        <location filename="../main_window.cc" line="1702"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="211"/>
+        <location filename="../main_window.cc" line="210"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Le fichier de carnet d&apos;adresses épinglé &quot;%1&quot; n&apos;a pas été trouvé.&lt;br/&gt;Ce fichier sera désépinglé.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="291"/>
-        <location filename="../main_window.cc" line="635"/>
-        <location filename="../main_window.cc" line="697"/>
+        <location filename="../main_window.cc" line="290"/>
+        <location filename="../main_window.cc" line="634"/>
+        <location filename="../main_window.cc" line="696"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="292"/>
+        <location filename="../main_window.cc" line="291"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Le carnet d&apos;adresses &quot;%1&quot; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="324"/>
+        <location filename="../main_window.cc" line="323"/>
         <source>Open Address Book</source>
         <translation>Ouvrir un carnet d&apos;adresses</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="326"/>
+        <location filename="../main_window.cc" line="325"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Carnet d&apos;adresses Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="584"/>
+        <location filename="../main_window.cc" line="583"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="586"/>
-        <location filename="../main_window.cc" line="663"/>
+        <location filename="../main_window.cc" line="585"/>
+        <location filename="../main_window.cc" line="662"/>
         <source>JSON files (*.json)</source>
         <translation>Fichier JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="600"/>
+        <location filename="../main_window.cc" line="599"/>
         <source>Could not open file for reading.</source>
         <translation>Impossible d&apos;ouvrir le fichier en lecture.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="611"/>
+        <location filename="../main_window.cc" line="610"/>
         <source>Import file is empty.</source>
         <translation>Le fichier d&apos;importation est vide.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="661"/>
+        <location filename="../main_window.cc" line="660"/>
         <source>Save File</source>
         <translation>Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="677"/>
+        <location filename="../main_window.cc" line="676"/>
         <source>Could not open file for writing.</source>
         <translation>Impossible d&apos;ouvrir le fichier en écriture.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="690"/>
+        <location filename="../main_window.cc" line="689"/>
         <source>Unable to write file.</source>
         <translation>Impossible d&apos;écrire dans le fichier.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="698"/>
+        <location filename="../main_window.cc" line="697"/>
         <source>Export completed successfully.</source>
         <translation>L&apos;exportation s est déroulée avec succès.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="989"/>
-        <location filename="../main_window.cc" line="1340"/>
-        <location filename="../main_window.cc" line="1425"/>
+        <location filename="../main_window.cc" line="986"/>
+        <location filename="../main_window.cc" line="1337"/>
+        <location filename="../main_window.cc" line="1422"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="990"/>
-        <location filename="../main_window.cc" line="1426"/>
+        <location filename="../main_window.cc" line="987"/>
+        <location filename="../main_window.cc" line="1423"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Le carnet d&apos;adresses &quot;%1&quot; a été modifié. Sauvegarder les modifications ?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="994"/>
-        <location filename="../main_window.cc" line="1344"/>
-        <location filename="../main_window.cc" line="1430"/>
+        <location filename="../main_window.cc" line="991"/>
+        <location filename="../main_window.cc" line="1341"/>
+        <location filename="../main_window.cc" line="1427"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="995"/>
-        <location filename="../main_window.cc" line="1345"/>
-        <location filename="../main_window.cc" line="1431"/>
+        <location filename="../main_window.cc" line="992"/>
+        <location filename="../main_window.cc" line="1342"/>
+        <location filename="../main_window.cc" line="1428"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="996"/>
-        <location filename="../main_window.cc" line="1432"/>
+        <location filename="../main_window.cc" line="993"/>
+        <location filename="../main_window.cc" line="1429"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1234"/>
+        <location filename="../main_window.cc" line="1231"/>
         <source>Close other tabs</source>
         <translation>Fermer les autres onglets</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1241"/>
+        <location filename="../main_window.cc" line="1238"/>
         <source>Close tab</source>
         <translation>Fermer les onglets</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1242"/>
-        <location filename="../main_window.cc" line="1247"/>
+        <location filename="../main_window.cc" line="1239"/>
+        <location filename="../main_window.cc" line="1244"/>
         <source>Pin tab</source>
         <translation>Epingler l onglet</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1341"/>
+        <location filename="../main_window.cc" line="1338"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>La liste des carnets d&apos;adresses récemment ouverts sera effacée. Continuer?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1378"/>
+        <location filename="../main_window.cc" line="1375"/>
         <source>Hide</source>
         <translation>Cacher</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1393"/>
+        <location filename="../main_window.cc" line="1390"/>
         <source>Show</source>
         <translation>Montrer</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="743"/>
-        <location filename="../main_window.cc" line="1569"/>
+        <location filename="../main_window.cc" line="740"/>
+        <location filename="../main_window.cc" line="1566"/>
         <source>Aspia Console</source>
         <translation>Console Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="623"/>
+        <location filename="../main_window.cc" line="622"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation>Échec de l analyse du document JSON: %1.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="636"/>
+        <location filename="../main_window.cc" line="635"/>
         <source>Import completed successfully.</source>
         <translation>L&apos;importation a été effectuée avec succès.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1706"/>
+        <location filename="../main_window.cc" line="1703"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>La connexion par ID est spécifiée dans les propriétés de l&apos;ordinateur, mais le routeur n&apos;est pas configuré. Vérifiez les paramètres du routeur dans les propriétés du carnet d&apos;adresses.</translation>
     </message>

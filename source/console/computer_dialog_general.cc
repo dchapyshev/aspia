@@ -146,10 +146,10 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    std::u16string username = ui.edit_username->text().toStdU16String();
-    std::u16string password = ui.edit_password->text().toStdU16String();
+    QString username = ui.edit_username->text();
+    QString password = ui.edit_password->text();
 
-    if (!username.empty() && !base::User::isValidUserName(username))
+    if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
         LOG(LS_ERROR) << "Invalid user name: " << username;
         showError(tr("The user name can not be empty and can contain only"
@@ -193,8 +193,8 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
 
     computer->mutable_inherit()->set_credentials(ui.groupbox_inherit_creds->isChecked());
     computer->set_name(name.toStdString());
-    computer->set_username(base::utf8FromUtf16(username));
-    computer->set_password(base::utf8FromUtf16(password));
+    computer->set_username(username.toStdString());
+    computer->set_password(password.toStdString());
     computer->set_comment(comment.toStdString());
     return true;
 }

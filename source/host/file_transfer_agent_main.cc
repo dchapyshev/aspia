@@ -25,7 +25,6 @@
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/asio_task_runner.h"
 #include "build/version.h"
 #include "host/file_transfer_agent.h"
 
@@ -132,7 +131,7 @@ void fileTransferAgentMain(int& argc, char* argv[])
         std::unique_ptr<host::FileTransferAgent> file_transfer_agent =
             std::make_unique<host::FileTransferAgent>(base::Application::taskRunner());
 
-        file_transfer_agent->start(command_line->switchValue(u"channel_id"));
+        file_transfer_agent->start(QString::fromStdU16String(command_line->switchValue(u"channel_id")));
         application.exec();
     }
     else

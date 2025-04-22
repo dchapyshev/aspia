@@ -24,6 +24,7 @@
 #include "base/threading/simple_thread.h"
 
 #include <QByteArray>
+#include <QString>
 
 namespace common {
 
@@ -40,8 +41,8 @@ public:
     UpdateChecker();
     ~UpdateChecker();
 
-    void setUpdateServer(std::u16string_view update_server);
-    void setPackageName(std::u16string_view package_name);
+    void setUpdateServer(const QString& update_server);
+    void setPackageName(const QString& package_name);
 
     void start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate);
 
@@ -51,8 +52,8 @@ private:
     class Runner;
     std::shared_ptr<Runner> runner_;
     base::SimpleThread thread_;
-    std::u16string update_server_;
-    std::u16string package_name_;
+    QString update_server_;
+    QString package_name_;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
 };

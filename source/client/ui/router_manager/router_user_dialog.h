@@ -31,9 +31,7 @@ class RouterUserDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterUserDialog(const base::User& user,
-                     const std::vector<std::u16string>& users,
-                     QWidget* parent);
+    RouterUserDialog(const base::User& user, const QStringList& users, QWidget* parent);
     ~RouterUserDialog() final;
 
     const base::User& user() const;
@@ -50,7 +48,7 @@ private:
     Ui::RouterUserDialog ui;
 
     base::User user_;
-    std::vector<std::u16string> users_;
+    QStringList users_;
     bool account_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(RouterUserDialog);

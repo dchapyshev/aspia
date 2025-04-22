@@ -63,18 +63,18 @@ public:
 
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
-    void setOsName(const std::string& os_name);
-    const std::string& osName() const { return os_name_; }
-    void setComputerName(const std::string& computer_name);
-    const std::string& computerName() const { return computer_name_; }
-    void setArchitecture(const std::string& architecture);
-    const std::string& architecture() const { return architecture_; }
-    void setUserName(const std::string& username);
-    const std::string& userName() const { return username_; }
+    void setOsName(const QString& os_name);
+    const QString& osName() const { return os_name_; }
+    void setComputerName(const QString& computer_name);
+    const QString& computerName() const { return computer_name_; }
+    void setArchitecture(const QString& architecture);
+    const QString& architecture() const { return architecture_; }
+    void setUserName(const QString& username);
+    const QString& userName() const { return username_; }
 
     proto::RouterSession sessionType() const { return session_type_; }
     SessionId sessionId() const { return session_id_; }
-    const std::string& address() const { return address_; }
+    const QString& address() const { return address_; }
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
 
@@ -108,12 +108,12 @@ private:
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_ = nullptr;
 
-    std::string address_;
-    std::string username_;
+    QString address_;
+    QString username_;
     base::Version version_;
-    std::string os_name_;
-    std::string computer_name_;
-    std::string architecture_;
+    QString os_name_;
+    QString computer_name_;
+    QString architecture_;
 
     Delegate* delegate_ = nullptr;
 };

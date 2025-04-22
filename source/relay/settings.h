@@ -36,8 +36,8 @@ public:
     void reset();
     void flush();
 
-    void setRouterAddress(const std::u16string& address);
-    std::u16string routerAddress() const;
+    void setRouterAddress(const QString& address);
+    QString routerAddress() const;
 
     void setRouterPort(uint16_t port);
     uint16_t routerPort() const;
@@ -45,11 +45,11 @@ public:
     void setRouterPublicKey(const QByteArray& public_key);
     QByteArray routerPublicKey() const;
 
-    void setListenInterface(const std::u16string& interface);
-    std::u16string listenInterface() const;
+    void setListenInterface(const QString& interface);
+    QString listenInterface() const;
 
-    void setPeerAddress(const std::u16string& address);
-    std::u16string peerAddress() const;
+    void setPeerAddress(const QString& address);
+    QString peerAddress() const;
 
     void setPeerPort(uint16_t port);
     uint16_t peerPort() const;

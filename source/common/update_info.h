@@ -22,6 +22,7 @@
 #include "base/version.h"
 
 #include <QByteArray>
+#include <QString>
 
 namespace common {
 
@@ -37,14 +38,14 @@ public:
 
     bool isValid() const { return valid_; }
     const base::Version& version() const { return version_; }
-    const std::u16string& description() const { return description_; }
-    const std::u16string& url() const { return url_; }
+    const QString& description() const { return description_; }
+    const QString& url() const { return url_; }
 
 private:
     bool valid_ = false;
     base::Version version_;
-    std::u16string description_;
-    std::u16string url_;
+    QString description_;
+    QString url_;
 };
 
 } // namespace common

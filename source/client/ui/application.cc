@@ -45,7 +45,7 @@ Application::Application(int& argc, char* argv[])
     if (!hasLocale(settings.locale()))
     {
         LOG(LS_INFO) << "Set default locale";
-        settings.setLocale(QString::fromStdU16String(DEFAULT_LOCALE));
+        settings.setLocale(DEFAULT_LOCALE);
     }
 
     setLocale(settings.locale());

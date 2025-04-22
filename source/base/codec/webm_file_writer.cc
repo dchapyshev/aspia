@@ -30,7 +30,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string_view name)
+WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, const QString& name)
     : path_(path),
       name_(name)
 {
@@ -184,7 +184,7 @@ bool WebmFileWriter::init()
     SystemTime time = SystemTime::now();
     std::ostringstream file_name;
 
-    file_name << base::utf8FromUtf16(name_.c_str()) << '-'
+    file_name << name_.toUtf8().data() << '-'
               << std::setfill('0')
               << std::setw(4) << time.year()
               << std::setw(2) << time.month()

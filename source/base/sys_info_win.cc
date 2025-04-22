@@ -75,7 +75,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
+QString digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
     constexpr int kKeyMapSize = 24;
@@ -85,7 +85,7 @@ std::u16string digitalProductIdToString(uint8_t* product_id, size_t product_id_s
     constexpr int kGroupLength = 5;
 
     if (product_id_size < kStartIndex + kDecodeLength)
-        return std::u16string();
+        return QString();
 
     // The keys starting with Windows 8 / Office 2013 can contain the symbol N.
     int containsN = (product_id[kStartIndex + 14] >> 3) & 1;
@@ -123,14 +123,14 @@ std::u16string digitalProductIdToString(uint8_t* product_id, size_t product_id_s
         key.insert(i, 1, u'-');
     }
 
-    return key;
+    return QString::fromStdU16String(key);
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 //static
-std::u16string SysInfo::operatingSystemName()
+QString SysInfo::operatingSystemName()
 {
     base::win::OSInfo* os_info = base::win::OSInfo::instance();
 
@@ -141,19 +141,19 @@ std::u16string SysInfo::operatingSystemName()
         switch (os_info->versionType())
         {
             case base::win::SUITE_HOME:
-                return u"Windows 11 Home";
+                return "Windows 11 Home";
             case base::win::SUITE_PROFESSIONAL:
-                return u"Windows 11 Pro";
+                return "Windows 11 Pro";
             case base::win::SUITE_SERVER:
-                return u"Windows 11 Server";
+                return "Windows 11 Server";
             case base::win::SUITE_ENTERPRISE:
-                return u"Windows 11 Enterprise";
+                return "Windows 11 Enterprise";
             case base::win::SUITE_EDUCATION:
-                return u"Windows 11 Education";
+                return "Windows 11 Education";
             case base::win::SUITE_EDUCATION_PRO:
-                return u"Windows 11 Education Pro";
+                return "Windows 11 Education Pro";
             default:
-                return u"Windows 11";
+                return "Windows 11";
         }
     }
 
@@ -172,7 +172,7 @@ std::u16string SysInfo::operatingSystemName()
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to open registry key: " << SystemError::toString(status);
-        return std::u16string();
+        return QString();
     }
 
     std::wstring value;
@@ -181,57 +181,57 @@ std::u16string SysInfo::operatingSystemName()
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to read registry key: " << SystemError::toString(status);
-        return std::u16string();
+        return QString();
     }
 
-    return utf16FromWide(value);
+    return QString::fromStdWString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::operatingSystemVersion()
+QString SysInfo::operatingSystemVersion()
 {
-    return win::OSInfo::instance()->kernel32BaseVersion().toString();
+    return QString::fromStdU16String(win::OSInfo::instance()->kernel32BaseVersion().toString());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::operatingSystemArchitecture()
+QString SysInfo::operatingSystemArchitecture()
 {
     switch (win::OSInfo::instance()->architecture())
     {
         case win::OSInfo::X64_ARCHITECTURE:
-            return u"AMD64";
+            return "AMD64";
 
         case win::OSInfo::X86_ARCHITECTURE:
-            return u"X86";
+            return "X86";
 
         case win::OSInfo::IA64_ARCHITECTURE:
-            return u"IA64";
+            return "IA64";
 
         case win::OSInfo::ARM_ARCHITECTURE:
-            return u"ARM";
+            return "ARM";
 
         default:
-            return std::u16string();
+            return QString();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::operatingSystemDir()
+QString SysInfo::operatingSystemDir()
 {
     std::filesystem::path dir;
 
     if (!BasePaths::windowsDir(&dir))
-        return std::u16string();
+        return QString();
 
-    return dir.u16string();
+    return QString::fromStdU16String(dir.u16string());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::operatingSystemKey()
+QString SysInfo::operatingSystemKey()
 {
     win::RegistryKey key;
 
@@ -247,7 +247,7 @@ std::u16string SysInfo::operatingSystemKey()
                            L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access | KEY_READ);
     if (status != ERROR_SUCCESS)
-        return std::u16string();
+        return QString();
 
     DWORD product_id_size = 0;
 
@@ -256,7 +256,7 @@ std::u16string SysInfo::operatingSystemKey()
     {
         status = key.readValue(L"DPID", nullptr, &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return std::u16string();
+            return QString();
     }
 
     std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
@@ -266,7 +266,7 @@ std::u16string SysInfo::operatingSystemKey()
     {
         status = key.readValue(L"DPID", product_id.get(), &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return std::u16string();
+            return QString();
     }
 
     return digitalProductIdToString(product_id.get(), product_id_size);
@@ -324,7 +324,7 @@ uint64_t SysInfo::uptime()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::computerName()
+QString SysInfo::computerName()
 {
     wchar_t buffer[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD buffer_size = ARRAYSIZE(buffer);
@@ -332,15 +332,15 @@ std::u16string SysInfo::computerName()
     if (!GetComputerNameW(buffer, &buffer_size))
     {
         PLOG(LS_ERROR) << "GetComputerNameW failed";
-        return std::u16string();
+        return QString();
     }
 
-    return utf16FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::computerDomain()
+QString SysInfo::computerDomain()
 {
     DWORD buffer_size = 0;
 
@@ -348,7 +348,7 @@ std::u16string SysInfo::computerDomain()
         GetLastError() != ERROR_MORE_DATA)
     {
         LOG(LS_ERROR) << "Unexpected return value";
-        return std::u16string();
+        return QString();
     }
 
     std::unique_ptr<wchar_t[]> buffer = std::make_unique<wchar_t[]>(buffer_size);
@@ -356,15 +356,15 @@ std::u16string SysInfo::computerDomain()
     if (!GetComputerNameExW(ComputerNameDnsDomain, buffer.get(), &buffer_size))
     {
         PLOG(LS_ERROR) << "GetComputerNameExW failed";
-        return std::u16string();
+        return QString();
     }
 
-    return utf16FromWide(buffer.get());
+    return QString::fromWCharArray(buffer.get());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string SysInfo::computerWorkgroup()
+QString SysInfo::computerWorkgroup()
 {
     NETSETUP_JOIN_STATUS buffer_type = NetSetupWorkgroupName;
     wchar_t* buffer = nullptr;
@@ -373,13 +373,13 @@ std::u16string SysInfo::computerWorkgroup()
     if (ret != NERR_Success)
     {
         LOG(LS_ERROR) << "NetGetJoinInformation failed: " << ret;
-        return std::u16string();
+        return QString();
     }
 
     if (!buffer)
-        return std::u16string();
+        return QString();
 
-    std::u16string result = utf16FromWide(buffer);
+    QString result = QString::fromWCharArray(buffer);
     NetApiBufferFree(buffer);
     return result;
 }

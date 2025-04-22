@@ -451,7 +451,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     LOG(LS_INFO) << "Connecting to router (address=" << peer_address_.toStdString()
                  << " port=" << peer_port_ << ")";
 
-    peer_address_ = QString::fromStdU16String(router_config.address);
+    peer_address_ = router_config.address;
     peer_port_ = router_config.port;
 
     std::unique_ptr<Router> router = std::make_unique<Router>(window_proxy_);
@@ -1362,10 +1362,10 @@ void RouterManagerWindow::addUser()
     LOG(LS_INFO) << "[ACTION] Add user";
 
     QTreeWidget* tree_users = ui->tree_users;
-    std::vector<std::u16string> users;
+    QStringList users;
 
     for (int i = 0; i < tree_users->topLevelItemCount(); ++i)
-        users.emplace_back(static_cast<UserTreeItem*>(tree_users->topLevelItem(i))->user.name);
+        users.append(static_cast<UserTreeItem*>(tree_users->topLevelItem(i))->user.name);
 
     RouterUserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
@@ -1401,13 +1401,13 @@ void RouterManagerWindow::modifyUser()
         return;
     }
 
-    std::vector<std::u16string> users;
+    QStringList users;
 
     for (int i = 0; i < tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* current_item = static_cast<UserTreeItem*>(tree_users->topLevelItem(i));
         if (current_item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
-            users.emplace_back(current_item->user.name);
+            users.append(current_item->user.name);
     }
 
     RouterUserDialog dialog(tree_item->user, users, this);

@@ -33,12 +33,12 @@ struct Config
 
     std::optional<RouterConfig> router_config;
 
-    std::u16string computer_name;
-    std::u16string display_name;
-    std::u16string address_or_id;
+    QString computer_name;
+    QString display_name;
+    QString address_or_id;
     uint16_t port;
-    std::u16string username;
-    std::u16string password;
+    QString username;
+    QString password;
     proto::SessionType session_type;
 };
 

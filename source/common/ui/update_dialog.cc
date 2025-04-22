@@ -47,8 +47,8 @@ QString makeUrl(const QUrl& url)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UpdateDialog::UpdateDialog(std::u16string_view update_server,
-                           std::u16string_view package_name,
+UpdateDialog::UpdateDialog(const QString& update_server,
+                           const QString& package_name,
                            QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>())
@@ -76,8 +76,8 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     initialize();
 
     ui->label_available->setText(QString::fromStdU16String(update_info_.version().toString(3)));
-    ui->label_url->setText(makeUrl(QString::fromStdU16String(update_info_.url())));
-    ui->edit_description->setText(QString::fromStdU16String(update_info_.description()));
+    ui->label_url->setText(makeUrl(update_info_.url()));
+    ui->edit_description->setText(update_info_.description());
     ui->button_update->setEnabled(true);
 }
 
@@ -147,8 +147,8 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
                 LOG(LS_INFO) << "New version available: " << update_version.toString();
 
                 ui->label_available->setText(QString::fromStdU16String(update_version.toString(3)));
-                ui->edit_description->setText(QString::fromStdU16String(update_info_.description()));
-                ui->label_url->setText(makeUrl(QString::fromStdU16String(update_info_.url())));
+                ui->edit_description->setText(update_info_.description());
+                ui->label_url->setText(makeUrl(update_info_.url()));
 
 #if defined(OS_WIN)
                 ui->button_update->setEnabled(true);

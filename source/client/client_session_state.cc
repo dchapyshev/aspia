@@ -57,19 +57,19 @@ proto::SessionType SessionState::sessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::u16string& SessionState::computerName() const
+const QString& SessionState::computerName() const
 {
     return config_.computer_name;
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::u16string& SessionState::displayName() const
+const QString& SessionState::displayName() const
 {
     return config_.display_name;
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::u16string& SessionState::hostAddress() const
+const QString& SessionState::hostAddress() const
 {
     return config_.address_or_id;
 }
@@ -81,13 +81,13 @@ uint16_t SessionState::hostPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::u16string& SessionState::hostUserName() const
+const QString& SessionState::hostUserName() const
 {
     return config_.username;
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::u16string& SessionState::hostPassword() const
+const QString& SessionState::hostPassword() const
 {
     return config_.password;
 }

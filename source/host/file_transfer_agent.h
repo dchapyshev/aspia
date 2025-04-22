@@ -32,7 +32,7 @@ public:
     explicit FileTransferAgent(std::shared_ptr<base::TaskRunner> task_runner);
     ~FileTransferAgent();
 
-    void start(std::u16string_view channel_id);
+    void start(const QString& channel_id);
 
 protected:
     // base::IpcChannel::Listener implementation.

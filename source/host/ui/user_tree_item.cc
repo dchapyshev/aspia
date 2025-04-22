@@ -42,7 +42,7 @@ void UserTreeItem::updateData()
     else
         setIcon(0, QIcon(":/img/user-disabled.png"));
 
-    setText(0, QString::fromStdU16String(user_.name));
+    setText(0, user_.name);
 }
 
 } // namespace host

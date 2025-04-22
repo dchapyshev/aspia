@@ -24,7 +24,7 @@
 namespace relay {
 
 //--------------------------------------------------------------------------------------------------
-SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
+SessionsWorker::SessionsWorker(const QString& listen_interface,
                                uint16_t peer_port,
                                const std::chrono::minutes& peer_idle_timeout,
                                bool statistics_enabled,
@@ -86,11 +86,11 @@ void SessionsWorker::onBeforeThreadRunning()
 
     asio::ip::address listen_address;
 
-    if (!listen_interface_.empty())
+    if (!listen_interface_.isEmpty())
     {
         std::error_code error_code;
         listen_address = asio::ip::make_address(
-            base::local8BitFromUtf16(listen_interface_), error_code);
+            listen_interface_.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
             LOG(LS_ERROR) << "Unable to get listen address: "
@@ -104,7 +104,7 @@ void SessionsWorker::onBeforeThreadRunning()
     }
 
     LOG(LS_INFO) << "Listen interface: "
-                 << (listen_interface_.empty() ? u"ANY" : listen_interface_) << ":" << peer_port_;
+                 << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
 
     session_manager_ = std::make_unique<SessionManager>(
         self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,

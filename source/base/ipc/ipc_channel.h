@@ -65,7 +65,7 @@ public:
     void setListener(Listener* listener);
 
     [[nodiscard]]
-    bool connect(std::u16string_view channel_id);
+    bool connect(const QString& channel_id);
 
     void disconnect();
 
@@ -91,8 +91,8 @@ private:
     using Stream = asio::local::stream_protocol::socket;
 #endif
 
-    IpcChannel(std::u16string_view channel_name, Stream&& stream, QObject* parent);
-    static std::u16string channelName(std::u16string_view channel_id);
+    IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent);
+    static QString channelName(const QString& channel_id);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void doWriteSize();
@@ -107,7 +107,7 @@ private:
     void onMessageReceived();
     void onMessageWritten();
 
-    std::u16string channel_name_;
+    QString channel_name_;
     Stream stream_;
 
     std::shared_ptr<IpcChannelProxy> proxy_;

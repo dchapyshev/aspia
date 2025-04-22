@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/net/ip_util.h"
-#include "base/strings/strcat.h"
-#include "base/strings/string_split.h"
 
 namespace router {
 
@@ -68,15 +66,15 @@ void Settings::flush()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setListenInterface(const std::u16string& interface)
+void Settings::setListenInterface(const QString& interface)
 {
-    impl_.set<std::u16string>("ListenInterface", interface);
+    impl_.set<QString>("ListenInterface", interface);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Settings::listenInterface() const
+QString Settings::listenInterface() const
 {
-    return impl_.get<std::u16string>("ListenInterface", std::u16string());
+    return impl_.get<QString>("ListenInterface", QString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,13 +164,13 @@ QByteArray Settings::seedKey() const
 //--------------------------------------------------------------------------------------------------
 void Settings::setWhiteList(std::string_view key, const WhiteList& value)
 {
-    std::u16string result;
+    QString result;
 
     for (const auto& entry : value)
     {
         if (base::isValidIpV4Address(entry) || base::isValidIpV6Address(entry))
         {
-            base::strAppend(&result, { entry, u";" });
+            result += entry + ';';
         }
         else
         {
@@ -180,17 +178,13 @@ void Settings::setWhiteList(std::string_view key, const WhiteList& value)
         }
     }
 
-    impl_.set<std::u16string>(key, result);
+    impl_.set<QString>(key, result);
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::whiteList(std::string_view key) const
 {
-    WhiteList result =
-        base::splitString(impl_.get<std::u16string>(key),
-                          u";",
-                          base::TRIM_WHITESPACE,
-                          base::SPLIT_WANT_NONEMPTY);
+    WhiteList result = impl_.get<QString>(key).split(';', Qt::SkipEmptyParts);
 
     auto it = result.begin();
     while (it != result.end())

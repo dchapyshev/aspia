@@ -286,7 +286,7 @@ proto::address_book::ComputerGroupConfig readComputerGroupConfig(
     QString username = json_computer_group_config["username"].toString();
     QString password = json_computer_group_config["password"].toString();
 
-    if (!username.isEmpty() && !base::User::isValidUserName(username.toStdU16String()))
+    if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
         LOG(LS_ERROR) << "Invalid user name: " << username.toStdString();
         username.clear();
@@ -335,7 +335,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     }
 
     QString username = json_computer["username"].toString();
-    if (!username.isEmpty() && !base::User::isValidUserName(username.toStdU16String()))
+    if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
         LOG(LS_ERROR) << "Invalid 'username': " << username.toStdString();
         return;

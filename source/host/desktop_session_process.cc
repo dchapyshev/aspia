@@ -20,11 +20,7 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "base/files/base_paths.h"
-#include "base/strings/string_util.h"
-#include "base/strings/string_split.h"
-#include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_impersonator.h"
@@ -251,12 +247,12 @@ DesktopSessionProcess::~DesktopSessionProcess()
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
-    base::SessionId session_id, std::u16string_view channel_id)
+    base::SessionId session_id, const QString& channel_id)
 {
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
-                      << session_id << " channel_id=" << channel_id.data() << ")";
+                      << session_id << " channel_id=" << channel_id << ")";
         return nullptr;
     }
 
@@ -264,18 +260,18 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session ("
-                      << "session_id=" << session_id << " channel_id=" << channel_id.data() << ")";
+                      << "session_id=" << session_id << " channel_id=" << channel_id << ")";
         return nullptr;
     }
 
     base::CommandLine command_line(filePath());
-    command_line.appendSwitch(u"channel_id", channel_id);
+    command_line.appendSwitch(u"channel_id", channel_id.toStdU16String());
 
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
         LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << " channel_id="
-                      << channel_id.data() << ")";
+                      << channel_id << ")";
         return nullptr;
     }
 
@@ -285,7 +281,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
         LOG(LS_ERROR) << "startProcessWithToken failed (session_id=" << session_id << " channel_id="
-                      << channel_id.data() << ")";
+                      << channel_id << ")";
         return nullptr;
     }
 

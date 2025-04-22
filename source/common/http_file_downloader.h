@@ -24,6 +24,7 @@
 #include "base/threading/simple_thread.h"
 
 #include <QByteArray>
+#include <QString>
 
 namespace common {
 
@@ -43,7 +44,7 @@ public:
         virtual void onFileDownloaderProgress(int percentage) = 0;
     };
 
-    void start(std::u16string_view url,
+    void start(const QString& url,
                std::shared_ptr<base::TaskRunner> owner_task_runner,
                Delegate* delegate);
     const QByteArray& data() const { return data_; }
@@ -60,7 +61,7 @@ private:
     class Runner;
     std::shared_ptr<Runner> runner_;
 
-    std::u16string url_;
+    QString url_;
     QByteArray data_;
 
     DISALLOW_COPY_AND_ASSIGN(HttpFileDownloader);

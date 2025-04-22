@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "client/router_window_proxy.h"
 #include "proto/router_common.pb.h"
 
@@ -41,13 +40,13 @@ Router::~Router()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::setUserName(std::u16string_view username)
+void Router::setUserName(const QString& username)
 {
     router_username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::setPassword(std::u16string_view password)
+void Router::setPassword(const QString& password)
 {
     router_password_ = password;
 }
@@ -65,7 +64,7 @@ bool Router::isAutoReconnect() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::connectToRouter(std::u16string_view address, uint16_t port)
+void Router::connectToRouter(const QString& address, uint16_t port)
 {
     router_address_ = address;
     router_port_ = port;

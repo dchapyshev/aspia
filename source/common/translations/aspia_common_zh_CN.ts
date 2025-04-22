@@ -170,6 +170,53 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">取消检查更新。请稍候。</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">未知</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">检索更新信息时出错。</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">没有可用的更新。</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">将下载更新。下载完成后，应用程序将自动关闭。</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">将终止所有会话。更新完成后才能建立连接。</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">所有未保存的数据都将丢失。</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">继续吗？</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">确认</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">安装更新时出错：%1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>

@@ -229,10 +229,10 @@ void TcpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string TcpChannel::peerAddress() const
+QString TcpChannel::peerAddress() const
 {
     if (!socket_.is_open() || !isConnected())
-        return std::u16string();
+        return QString();
 
     try
     {
@@ -242,14 +242,14 @@ std::u16string TcpChannel::peerAddress() const
         {
             LOG(LS_ERROR) << "Unable to get peer address: "
                           << base::utf16FromLocal8Bit(error_code.message());
-            return std::u16string();
+            return QString();
         }
 
         asio::ip::address address = endpoint.address();
         if (address.is_v4())
         {
             asio::ip::address_v4 ipv4_address = address.to_v4();
-            return utf16FromLocal8Bit(ipv4_address.to_string());
+            return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
         }
         else
         {
@@ -258,11 +258,11 @@ std::u16string TcpChannel::peerAddress() const
             {
                 asio::ip::address_v4 ipv4_address =
                     asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
-                return utf16FromLocal8Bit(ipv4_address.to_string());
+                return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
             }
             else
             {
-                return utf16FromLocal8Bit(ipv6_address.to_string());
+                return QString::fromLocal8Bit(ipv6_address.to_string().c_str());
             }
         }
     }
@@ -270,17 +270,17 @@ std::u16string TcpChannel::peerAddress() const
     {
         LOG(LS_ERROR) << "Unable to get peer address: "
                       << base::utf16FromLocal8Bit(error_code.message());
-        return std::u16string();
+        return QString();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connect(std::u16string_view address, uint16_t port)
+void TcpChannel::connect(const QString& address, uint16_t port)
 {
     if (connected_ || !resolver_)
         return;
 
-    std::string host = local8BitFromUtf16(address);
+    std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
     LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
@@ -913,7 +913,7 @@ void TcpChannel::doReadServiceData(size_t length)
     DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
     DCHECK_GT(length, 0u);
 
-    read_buffer_.resize(read_buffer_.size() + length);
+    read_buffer_.resize(read_buffer_.size() + static_cast<QByteArray::size_type>(length));
 
     // Now we read the data after the header.
     state_ = ReadState::READ_SERVICE_DATA;
@@ -1074,7 +1074,7 @@ void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
     header.length = static_cast<uint32_t>(size);
 
     QByteArray buffer;
-    buffer.resize(sizeof(uint8_t) + sizeof(header) + size);
+    buffer.resize(static_cast<QByteArray::size_type>(sizeof(uint8_t) + sizeof(header) + size));
 
     // The first byte set to 0 indicates that this is a service message.
     buffer[0] = 0;

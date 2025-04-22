@@ -196,6 +196,53 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">Cancelando a verificação de atualizações. Por favor, aguarde.</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Desconhecido</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">Erro ao obter informações de atualização.</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">Nenhuma atualização disponível.</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">A atualização será transferida. Depois que o download for concluído, o aplicativo será fechado automaticamente.</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">Todas as sessões conectadas serão encerradas. Você não poderá estabelecer uma conexão até que a atualização seja concluída.</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">Todos os dados não salvos serão perdidos.</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">Continuar?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Confirmação</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Atenção</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">Ocorreu um erro ao instalar a atualização:%1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>

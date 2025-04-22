@@ -39,13 +39,13 @@ public:
     explicit Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent = nullptr);
     ~Router() final;
 
-    void setUserName(std::u16string_view username);
-    void setPassword(std::u16string_view password);
+    void setUserName(const QString& username);
+    void setPassword(const QString& password);
 
     void setAutoReconnect(bool enable);
     bool isAutoReconnect() const;
 
-    void connectToRouter(std::u16string_view address, uint16_t port);
+    void connectToRouter(const QString& address, uint16_t port);
 
     void refreshSessionList();
     void stopSession(int64_t session_id);
@@ -70,10 +70,10 @@ private:
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;
 
-    std::u16string router_address_;
+    QString router_address_;
     uint16_t router_port_ = 0;
-    std::u16string router_username_;
-    std::u16string router_password_;
+    QString router_username_;
+    QString router_password_;
 
     bool auto_reconnect_ = true;
     bool reconnect_in_progress_ = false;

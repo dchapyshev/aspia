@@ -28,7 +28,6 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
-#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -98,13 +97,13 @@ void ClientAuthenticator::setIdentify(proto::Identify identify)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setUserName(std::u16string_view username)
+void ClientAuthenticator::setUserName(const QString& username)
 {
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setPassword(std::u16string_view password)
+void ClientAuthenticator::setPassword(const QString& password)
 {
     password_ = password;
 }
@@ -116,7 +115,7 @@ void ClientAuthenticator::setSessionType(uint32_t session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setDisplayName(std::u16string_view display_name)
+void ClientAuthenticator::setDisplayName(const QString& display_name)
 {
     display_name_ = display_name;
 }
@@ -369,7 +368,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 void ClientAuthenticator::sendIdentify()
 {
     std::unique_ptr<proto::SrpIdentify> identify = std::make_unique<proto::SrpIdentify>();
-    identify->set_username(utf8FromUtf16(username_));
+    identify->set_username(username_.toStdString());
 
     LOG(LS_INFO) << "Sending: Identify";
     sendMessage(*identify);
@@ -496,10 +495,10 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
-    setPeerOsName(challenge->os_name());
-    setPeerComputerName(challenge->computer_name());
-    setPeerArch(challenge->arch());
-    setPeerDisplayName(challenge->display_name());
+    setPeerOsName(QString::fromStdString(challenge->os_name()));
+    setPeerComputerName(QString::fromStdString(challenge->computer_name()));
+    setPeerArch(QString::fromStdString(challenge->arch()));
+    setPeerDisplayName(QString::fromStdString(challenge->display_name()));
 
     LOG(LS_INFO) << "Server (version=" << peerVersion() << " name=" << challenge->computer_name()
                  << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
@@ -521,10 +520,10 @@ void ClientAuthenticator::sendSessionResponse()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    response->set_os_name(utf8FromUtf16(SysInfo::operatingSystemName()));
-    response->set_computer_name(utf8FromUtf16(SysInfo::computerName()));
+    response->set_os_name(SysInfo::operatingSystemName().toStdString());
+    response->set_computer_name(SysInfo::computerName().toStdString());
     response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
-    response->set_display_name(utf8FromUtf16(display_name_));
+    response->set_display_name(display_name_.toStdString());
 
 #if defined(ARCH_CPU_X86)
     response->set_arch("x86");

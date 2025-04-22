@@ -43,10 +43,9 @@ SystemSettings::~SystemSettings() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SystemSettings::createPasswordHash(
-    std::string_view password, QByteArray* hash, QByteArray* salt)
+bool SystemSettings::createPasswordHash(const QString& password, QByteArray* hash, QByteArray* salt)
 {
-    if (password.empty() || !hash || !salt)
+    if (password.isEmpty() || !hash || !salt)
         return false;
 
     QByteArray salt_temp = base::Random::byteArray(kPasswordHashSaltSize);
@@ -65,9 +64,9 @@ bool SystemSettings::createPasswordHash(
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SystemSettings::isValidPassword(std::string_view password)
+bool SystemSettings::isValidPassword(const QString& password)
 {
-    if (password.empty())
+    if (password.isEmpty())
         return false;
 
     SystemSettings settings;
@@ -135,15 +134,15 @@ void SystemSettings::setRouterEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string SystemSettings::routerAddress() const
+QString SystemSettings::routerAddress() const
 {
-    return settings_.get<std::u16string>("RouterAddress");
+    return settings_.get<QString>("RouterAddress");
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterAddress(const std::u16string& address)
+void SystemSettings::setRouterAddress(const QString& address)
 {
-    settings_.set<std::u16string>("RouterAddress", address);
+    settings_.set<QString>("RouterAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,7 +178,7 @@ std::unique_ptr<base::UserList> SystemSettings::userList() const
     {
         base::User user;
 
-        user.name     = item.get<std::u16string>("Name");
+        user.name     = item.get<QString>("Name");
         user.group    = item.get<std::string>("Group");
         user.salt     = item.get<QByteArray>("Salt");
         user.verifier = item.get<QByteArray>("Verifier");
@@ -227,13 +226,13 @@ void SystemSettings::setUserList(const base::UserList& users)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string SystemSettings::updateServer() const
+QString SystemSettings::updateServer() const
 {
-    return settings_.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER);
+    return settings_.get<QString>("UpdateServer", QString(DEFAULT_UPDATE_SERVER));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setUpdateServer(const std::u16string& server)
+void SystemSettings::setUpdateServer(const QString& server)
 {
     settings_.set("UpdateServer", server);
 }

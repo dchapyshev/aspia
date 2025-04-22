@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/peer/user.h"
-#include "base/strings/string_util.h"
 
 #include <QAbstractButton>
 #include <QPushButton>
@@ -29,9 +28,7 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-RouterUserDialog::RouterUserDialog(const base::User& user,
-                                   const std::vector<std::u16string>& users,
-                                   QWidget* parent)
+RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& users, QWidget* parent)
     : QDialog(parent),
       user_(user),
       users_(users)
@@ -46,7 +43,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
     if (user_.isValid())
     {
         ui.checkbox_disable->setChecked(!(user_.flags & base::User::ENABLED));
-        ui.edit_username->setText(QString::fromStdU16String(user_.name));
+        ui.edit_username->setText(user_.name);
 
         setAccountChanged(false);
     }
@@ -135,7 +132,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (account_changed_)
     {
-        std::u16string username = ui.edit_username->text().toStdU16String();
+        QString username = ui.edit_username->text();
 
         if (!base::User::isValidUserName(username))
         {
@@ -151,9 +148,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        for (size_t i = 0; i < users_.size(); ++i)
+        for (QStringList::size_type i = 0; i < users_.size(); ++i)
         {
-            if (base::compareCaseInsensitive(username, users_[i]) == 0)
+            if (username.compare(users_.at(i), Qt::CaseInsensitive) == 0)
             {
                 LOG(LS_ERROR) << "User name already exists: " << username;
                 QMessageBox::warning(this,
@@ -180,7 +177,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        std::u16string password = ui.edit_password->text().toStdU16String();
+        QString password = ui.edit_password->text();
 
         if (!base::User::isValidPassword(password))
         {

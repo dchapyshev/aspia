@@ -232,7 +232,7 @@ void Settings::setCheckUpdates(bool check)
 //--------------------------------------------------------------------------------------------------
 QString Settings::updateServer() const
 {
-    return settings_.value(kUpdateServerParam, QString::fromStdU16String(DEFAULT_UPDATE_SERVER)).toString().toLower();
+    return settings_.value(kUpdateServerParam, DEFAULT_UPDATE_SERVER).toString().toLower();
 }
 
 //--------------------------------------------------------------------------------------------------

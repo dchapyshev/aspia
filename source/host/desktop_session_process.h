@@ -29,7 +29,8 @@
 
 #include <filesystem>
 #include <memory>
-#include <string_view>
+
+#include <QString>
 
 namespace ipc {
 class Channel;
@@ -43,7 +44,7 @@ public:
     ~DesktopSessionProcess();
 
     static std::unique_ptr<DesktopSessionProcess> create(
-        base::SessionId session_id, std::u16string_view channel_id);
+        base::SessionId session_id, const QString& channel_id);
     static std::filesystem::path filePath();
 
     void kill();

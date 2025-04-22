@@ -170,6 +170,53 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">Annuleer update controle. Een ogenblik geduld aub.</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Onbekend</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">Er is een probleem opgetreden bij het downloaden van de update informatie.</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">Geen updates beschikbaar.</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">De update wordt gedownload. Nadat de download voltooid is zal de applicatie automatisch sluiten.</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">Alle verbonden sessies worden afgesloten. Er kan geen verbinding gemaakt worden tot de update voltooid is.</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">Alle onopgeslagen data zal verloren gaan.</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">Doorgaan?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Bevestiging</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Waarschuwing</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">Er is een probleem opgetreden bij het installeren van de update: %1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>

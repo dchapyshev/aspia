@@ -180,7 +180,7 @@ bool UserSessionManager::start(Delegate* delegate)
 
     ipc_server_ = std::make_unique<base::IpcServer>();
 
-    std::u16string ipc_channel_for_ui = base::IpcServer::createUniqueId();
+    QString ipc_channel_for_ui = base::IpcServer::createUniqueId();
     HostIpcStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
 
@@ -318,14 +318,14 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onHostIdChanged(const std::string& session_name, base::HostId host_id)
+void UserSessionManager::onHostIdChanged(const QString& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
 
     // Send an event of each session.
     for (const auto& session : sessions_)
     {
-        std::optional<std::string> name = session->sessionName();
+        std::optional<QString> name = session->sessionName();
         if (name.has_value() && name == session_name)
         {
             LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
@@ -357,15 +357,15 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 
     base::SessionId session_id = base::kInvalidSessionId;
 
-    std::string username = client_session->userName();
-    if (username.starts_with("#"))
+    QString username = client_session->userName();
+    if (username.startsWith('#'))
     {
         LOG(LS_INFO) << "Connection with one-time password";
 
-        username.erase(username.begin());
+        username.remove('#');
 
-        base::HostId host_id = base::kInvalidHostId;
-        if (!base::stringToULong64(username, &host_id))
+        base::HostId host_id = base::stringToHostId(username);
+        if (host_id == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Failed to convert host id: " << username;
             return;
@@ -522,7 +522,7 @@ void UserSessionManager::onErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionHostIdRequest(const std::string& session_name)
+void UserSessionManager::onUserSessionHostIdRequest(const QString& session_name)
 {
     LOG(LS_INFO) << "User session host id request for session name: " << session_name;
     delegate_->onHostIdRequest(session_name);

@@ -4143,37 +4143,37 @@
 <context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="44"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="41"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="144"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="160"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="174"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="189"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="212"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="241"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="141"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="157"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="171"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="186"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="238"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="145"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="142"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="161"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="158"/>
         <source>The username you entered already exists.</source>
         <translation>Имя пользователя, которое вы ввели уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="175"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="172"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="190"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="187"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -4182,12 +4182,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="199"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="205"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -4196,37 +4196,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="206"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="216"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="213"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="214"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="242"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="239"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="292"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="289"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="317"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="314"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="321"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="318"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
@@ -4313,52 +4313,52 @@
         <translation>Подключение к маршрутизатору %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="158"/>
+        <location filename="../ui/session_window.cc" line="157"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="171"/>
+        <location filename="../ui/session_window.cc" line="170"/>
         <source>Connection to router %1:%2 established.</source>
         <translation>Подключение к маршрутизатору %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="176"/>
+        <location filename="../ui/session_window.cc" line="174"/>
         <source>Connection to router established.</source>
         <translation>Подключение к маршрутизатору установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="189"/>
+        <location filename="../ui/session_window.cc" line="187"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="194"/>
+        <location filename="../ui/session_window.cc" line="191"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Подключение к хосту %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="211"/>
+        <location filename="../ui/session_window.cc" line="208"/>
         <source>Connection to host %1 established.</source>
         <translation>Подключение к хосту %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="216"/>
+        <location filename="../ui/session_window.cc" line="212"/>
         <source>Connection to host %1:%2 established.</source>
         <translation>Подключение к хосту %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="236"/>
+        <location filename="../ui/session_window.cc" line="232"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation>Маршрутизатор недоступен. Ожидание переподключения...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="243"/>
+        <location filename="../ui/session_window.cc" line="239"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к маршрутизатору.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="250"/>
+        <location filename="../ui/session_window.cc" line="246"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступен. Ожидание переподключения...</translation>
     </message>
@@ -4371,138 +4371,138 @@
         <translation type="vanished">Превышено время ожидания при попытке повторного подключения.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="257"/>
+        <location filename="../ui/session_window.cc" line="253"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="267"/>
+        <location filename="../ui/session_window.cc" line="263"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Хоста новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="288"/>
+        <location filename="../ui/session_window.cc" line="284"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Сетевая ошибка при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="295"/>
+        <location filename="../ui/session_window.cc" line="291"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Ошибка аутентификации при подключении к маршрутизатору: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="336"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="340"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>Port Forwarding</source>
         <translation>Перенаправление портов</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="374"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="410"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="420"/>
-        <location filename="../ui/session_window.cc" line="462"/>
+        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="433"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="449"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation>Версия приложения, к которому вы подключаетесь, меньше чем минимально поддерживаемая версия.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
@@ -4511,22 +4511,22 @@
         <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="494"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>

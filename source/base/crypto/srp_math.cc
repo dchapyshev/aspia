@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>
@@ -166,33 +164,33 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 //--------------------------------------------------------------------------------------------------
 // static
 // x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
-BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, std::u16string_view p)
+BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
 {
-    if (!s.isValid() || I.empty() || p.empty())
+    if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.empty()
-                      << " p=" << p.empty() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.isEmpty()
+                      << " p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
-    return calc_x(s, I, QByteArray::fromStdString(utf8FromUtf16(p)));
+    return calc_x(s, I, p.toUtf8());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_x(const BigNum& s, std::u16string_view I, const QByteArray& p)
+BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QByteArray& p)
 {
-    if (!s.isValid() || I.empty() || p.isEmpty())
+    if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.empty()
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.isEmpty()
                       << " p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
     GenericHash hash(GenericHash::BLAKE2b512);
 
-    hash.addData(utf8FromUtf16(toLower(I)));
-    hash.addData(std::string_view(":"));
+    hash.addData(I.toLower().toUtf8());
+    hash.addData(QByteArray(":"));
     hash.addData(p);
 
     QByteArray temp = hash.result();
@@ -408,12 +406,12 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNum& s,
+BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.empty() || p.empty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.empty()
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << " p=" << p.isEmpty()
                       << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
         return BigNum();
     }
@@ -440,12 +438,12 @@ BigNum SrpMath::calc_v(std::u16string_view I, std::u16string_view p, const BigNu
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_v(std::u16string_view I, const QByteArray& p, const BigNum& s,
+BigNum SrpMath::calc_v(const QString& I, const QByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
-    if (I.empty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
+    if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.empty() << " p=" << p.isEmpty()
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << " p=" << p.isEmpty()
                       << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
         return BigNum();
     }

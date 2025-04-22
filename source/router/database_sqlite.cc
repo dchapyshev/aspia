@@ -188,13 +188,13 @@ std::optional<std::string> readText(sqlite3_stmt* statement, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
+std::optional<QString> readText16(sqlite3_stmt* statement, int column)
 {
     std::optional<std::string> str = readText(statement, column);
     if (!str.has_value())
         return std::nullopt;
 
-    return base::utf16FromUtf8(*str);
+    return QString::fromStdString(*str);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    std::optional<std::u16string> name = readText16(statement, 1);
+    std::optional<QString> name = readText16(statement, 1);
     if (!name.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'name'";
@@ -452,7 +452,7 @@ bool DatabaseSqlite::addUser(const base::User& user)
         return false;
     }
 
-    std::string username = base::utf8FromUtf16(user.name);
+    std::string username = user.name.toStdString();
     bool result = false;
 
     do
@@ -517,7 +517,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
         return false;
     }
 
-    std::string username = base::utf8FromUtf16(user.name);
+    std::string username = user.name.toStdString();
     bool result = false;
 
     do
@@ -600,7 +600,7 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::User DatabaseSqlite::findUser(std::u16string_view username)
+base::User DatabaseSqlite::findUser(const QString& username)
 {
     const char kQuery[] = "SELECT * FROM users WHERE name=?";
 
@@ -617,7 +617,7 @@ base::User DatabaseSqlite::findUser(std::u16string_view username)
         return base::User::kInvalidUser;
     }
 
-    std::string username_utf8 = base::utf8FromUtf16(username);
+    std::string username_utf8 = username.toStdString();
     std::optional<base::User> user;
 
     do

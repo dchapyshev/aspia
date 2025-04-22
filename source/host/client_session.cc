@@ -125,31 +125,31 @@ void ClientSession::setClientVersion(const base::Version& version)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setUserName(std::string_view username)
+void ClientSession::setUserName(const QString& username)
 {
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setComputerName(std::string_view computer_name)
+void ClientSession::setComputerName(const QString& computer_name)
 {
     computer_name_ = computer_name;
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::string& ClientSession::computerName() const
+const QString& ClientSession::computerName() const
 {
     return computer_name_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setDisplayName(std::string_view display_name)
+void ClientSession::setDisplayName(const QString& display_name)
 {
     display_name_ = display_name;
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::string& ClientSession::displayName() const
+const QString& ClientSession::displayName() const
 {
     return display_name_;
 }

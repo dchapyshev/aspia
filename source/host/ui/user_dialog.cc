@@ -43,7 +43,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     if (user.isValid())
     {
         ui.checkbox_disable_user->setChecked(!(user.flags & base::User::ENABLED));
-        ui.edit_username->setText(QString::fromStdU16String(user.name));
+        ui.edit_username->setText(user.name);
 
         setAccountChanged(false);
     }
@@ -144,8 +144,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (account_changed_)
         {
-            std::u16string username = ui.edit_username->text().toStdU16String();
-            std::u16string password = ui.edit_password->text().toStdU16String();
+            QString username = ui.edit_username->text();
+            QString password = ui.edit_password->text();
 
             if (!base::User::isValidUserName(username))
             {

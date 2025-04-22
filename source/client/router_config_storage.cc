@@ -52,10 +52,10 @@ RouterConfig RouterConfigStorage::routerConfig() const
 {
     RouterConfig config;
 
-    config.address = storage_.get<std::u16string>("address");
+    config.address = storage_.get<QString>("address");
     config.port = storage_.get<uint16_t>("port");
-    config.username = storage_.get<std::u16string>("username");
-    config.password = storage_.get<std::u16string>("password");
+    config.username = storage_.get<QString>("username");
+    config.password = storage_.get<QString>("password");
 
     return config;
 }

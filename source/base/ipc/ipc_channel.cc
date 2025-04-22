@@ -47,7 +47,7 @@ const char16_t kLocalSocketPrefix[] = u"/tmp/aspia_";
 
 #if defined(OS_WIN)
 
-const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
+const char kPipeNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
 //--------------------------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ IpcChannel::IpcChannel(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream, QObject* parent)
+IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent)
     : QObject(parent),
       channel_name_(channel_name),
       stream_(std::move(stream)),
@@ -227,11 +227,11 @@ void IpcChannel::setListener(Listener* listener)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannel::connect(std::u16string_view channel_id)
+bool IpcChannel::connect(const QString& channel_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    if (channel_id.empty())
+    if (channel_id.isEmpty())
     {
         LOG(LS_ERROR) << "Empty channel id";
         return false;
@@ -246,7 +246,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
     while (true)
     {
-        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name_.utf16()),
                                  GENERIC_WRITE | GENERIC_READ,
                                  0,
                                  nullptr,
@@ -266,7 +266,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
             return false;
         }
 
-        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
+        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.utf16()),
                             kConnectTimeout))
         {
             PLOG(LS_ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
@@ -407,10 +407,10 @@ std::filesystem::path IpcChannel::peerFilePath() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string IpcChannel::channelName(std::u16string_view channel_id)
+QString IpcChannel::channelName(const QString& channel_id)
 {
 #if defined(OS_WIN)
-    std::u16string name(kPipeNamePrefix);
+    QString name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
 #else // defined(OS_WIN)

@@ -25,10 +25,7 @@
 #include "base/scoped_task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
-#include "base/strings/strcat.h"
-#include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 #include "host/desktop_session_proxy.h"
@@ -265,7 +262,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::string> UserSession::sessionName() const
+std::optional<QString> UserSession::sessionName() const
 {
     LOG(LS_INFO) << "Session name request (sid=" << session_id_
                  << " type=" << typeToString(type_)
@@ -275,7 +272,7 @@ std::optional<std::string> UserSession::sessionName() const
     if (type_ == Type::CONSOLE)
     {
         LOG(LS_INFO) << "Session name for console session is empty string";
-        return std::string();
+        return QString();
     }
 
     DCHECK_EQ(type_, Type::RDP);
@@ -287,10 +284,10 @@ std::optional<std::string> UserSession::sessionName() const
         return std::nullopt;
     }
 
-    std::u16string user_name = base::toLower(current_session_info.userName16());
-    std::u16string domain = base::toLower(current_session_info.domain16());
+    QString user_name = QString::fromStdU16String(current_session_info.userName16()).toLower();
+    QString domain = QString::fromStdU16String(current_session_info.domain16()).toLower();
 
-    if (user_name.empty())
+    if (user_name.isEmpty())
     {
         LOG(LS_INFO) << "User is not logged in yet (sid=" << session_id_ << ")";
         return std::nullopt;
@@ -336,8 +333,7 @@ std::optional<std::string> UserSession::sessionName() const
     // The session name contains the username and domain to reliably distinguish between local and
     // domain users. It also contains the user number found above. This way, users will receive the
     // same ID based on the time they were connected to the server.
-    std::string session_name = base::strCat({ base::utf8FromUtf16(user_name), "@",
-        base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
+    QString session_name = user_name + "@" + domain + "@" + QString::number(user_number);
 
     LOG(LS_INFO) << "Session name for RDP session: " << session_name << " (sid=" << session_id_ << ")";
     return std::move(session_name);
@@ -355,14 +351,14 @@ base::User UserSession::user() const
         return base::User();
     }
 
-    if (one_time_password_.empty())
+    if (one_time_password_.isEmpty())
     {
         LOG(LS_INFO) << "No password for user (sid=" << session_id_ << " host_id=" << host_id_ << ")";
         return base::User();
     }
 
-    std::u16string username = u'#' + base::numberToString16(host_id_);
-    base::User user = base::User::create(username, base::utf16FromAscii(one_time_password_));
+    QString username = QLatin1Char('#') + base::hostIdToString(host_id_);
+    base::User user = base::User::create(username, one_time_password_);
 
     user.sessions = one_time_sessions_;
     user.flags = base::User::ENABLED;
@@ -423,8 +419,8 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 
             request->set_id(client_session->id());
             request->set_session_type(client_session->sessionType());
-            request->set_computer_name(client_session->computerName());
-            request->set_user_name(client_session->userName());
+            request->set_computer_name(client_session->computerName().toStdString());
+            request->set_user_name(client_session->userName().toStdString());
             request->set_timeout(static_cast<uint32_t>(auto_confirmation_interval_.count()));
 
             std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
@@ -1024,7 +1020,7 @@ void UserSession::onClientSessionFinished()
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionVideoRecording(
-    const std::string& computer_name, const std::string& user_name, bool started)
+    const QString& computer_name, const QString& user_name, bool started)
 {
     if (!channel_)
     {
@@ -1036,8 +1032,8 @@ void UserSession::onClientSessionVideoRecording(
 
     proto::internal::VideoRecordingState* video_recording_state =
         outgoing_message_.mutable_video_recording_state();
-    video_recording_state->set_computer_name(computer_name);
-    video_recording_state->set_user_name(user_name);
+    video_recording_state->set_computer_name(computer_name.toStdString());
+    video_recording_state->set_user_name(user_name.toStdString());
     video_recording_state->set_started(started);
 
     channel_->send(base::serialize(outgoing_message_));
@@ -1093,8 +1089,8 @@ void UserSession::onSessionDettached(const base::Location& location)
     // Stop one-time desktop clients.
     for (const auto& client : desktop_clients_)
     {
-        const std::string& user_name = client->userName();
-        if (user_name.starts_with("#"))
+        const QString& user_name = client->userName();
+        if (user_name.startsWith("#"))
         {
             LOG(LS_INFO) << "Stop one-time desktop client (id=" << client->id()
                          << " user_name=" << user_name << " sid=" << session_id_ << ")";
@@ -1161,8 +1157,8 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     outgoing_message_.Clear();
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
-    event->set_computer_name(client_session.computerName());
-    event->set_display_name(client_session.displayName());
+    event->set_computer_name(client_session.computerName().toStdString());
+    event->set_display_name(client_session.displayName().toStdString());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
@@ -1241,7 +1237,7 @@ void UserSession::sendCredentials(const base::Location& location)
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
     credentials->set_host_id(host_id_);
-    credentials->set_password(one_time_password_);
+    credentials->set_password(one_time_password_.toStdString());
 
     channel_->send(base::serialize(outgoing_message_));
 }
@@ -1304,7 +1300,7 @@ void UserSession::sendHostIdRequest(const base::Location& location)
         return;
     }
 
-    std::optional<std::string> session_name = sessionName();
+    std::optional<QString> session_name = sessionName();
     if (session_name.has_value())
     {
         LOG(LS_INFO) << "Session name: " << *session_name << " (sid=" << session_id_ << ")";
@@ -1453,11 +1449,11 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
                  outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
 
-            std::string display_name = text_chat_client->displayName();
-            if (display_name.empty())
+            QString display_name = text_chat_client->displayName();
+            if (display_name.isEmpty())
                 display_name = text_chat_client->computerName();
 
-            text_chat_status->set_source(display_name);
+            text_chat_status->set_source(display_name.toStdString());
 
             break;
         }
@@ -1500,11 +1496,11 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
                 outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
 
-            std::string display_name = text_chat_session->displayName();
-            if (display_name.empty())
+            QString display_name = text_chat_session->displayName();
+            if (display_name.isEmpty())
                 display_name = text_chat_session->computerName();
 
-            text_chat_status->set_source(display_name);
+            text_chat_status->set_source(display_name.toStdString());
 
             break;
         }

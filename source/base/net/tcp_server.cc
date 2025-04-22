@@ -33,10 +33,10 @@ public:
     explicit Impl(asio::io_context& io_context);
     ~Impl();
 
-    void start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate);
+    void start(const QString& listen_interface, uint16_t port, Delegate* delegate);
     void stop();
 
-    std::u16string listenInterface() const;
+    QString listenInterface() const;
     uint16_t port() const;
 
 private:
@@ -47,7 +47,7 @@ private:
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     Delegate* delegate_ = nullptr;
 
-    std::u16string listen_interface_;
+    QString listen_interface_;
     uint16_t port_ = 0;
 
     int accept_error_count_ = 0;
@@ -70,7 +70,7 @@ TcpServer::Impl::~Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::Impl::start(const QString& listen_interface, uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
     listen_interface_ = listen_interface;
@@ -79,15 +79,15 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
     DCHECK(delegate_);
 
     LOG(LS_INFO) << "Listen interface: "
-                 << (listen_interface_.empty() ? u"ANY" : listen_interface_) << ":" << port;
+                 << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << port;
 
     asio::ip::address listen_address;
     asio::error_code error_code;
 
-    if (!listen_interface_.empty())
+    if (!listen_interface_.isEmpty())
     {
         listen_address = asio::ip::make_address(
-            base::local8BitFromUtf16(listen_interface), error_code);
+            listen_interface.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
             LOG(LS_ERROR) << "Invalid listen address: " << listen_interface_
@@ -146,7 +146,7 @@ void TcpServer::Impl::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string TcpServer::Impl::listenInterface() const
+QString TcpServer::Impl::listenInterface() const
 {
     return listen_interface_;
 }
@@ -216,7 +216,7 @@ TcpServer::~TcpServer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::start(const QString& listen_interface, uint16_t port, Delegate* delegate)
 {
     impl_->start(listen_interface, port, delegate);
 }
@@ -228,7 +228,7 @@ void TcpServer::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string TcpServer::listenInterface() const
+QString TcpServer::listenInterface() const
 {
     return impl_->listenInterface();
 }
@@ -241,13 +241,13 @@ uint16_t TcpServer::port() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool TcpServer::isValidListenInterface(std::u16string_view interface)
+bool TcpServer::isValidListenInterface(const QString& interface)
 {
-    if (interface.empty())
+    if (interface.isEmpty())
         return true;
 
     asio::error_code error_code;
-    asio::ip::make_address(base::local8BitFromUtf16(interface), error_code);
+    asio::ip::make_address(interface.toLocal8Bit().toStdString(), error_code);
     if (error_code)
     {
         LOG(LS_ERROR) << "Invalid interface address: "

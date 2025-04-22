@@ -70,7 +70,7 @@ Application::Application(int& argc, char* argv[])
     if (!hasLocale(settings_.locale()))
     {
         LOG(LS_INFO) << "Set default locale";
-        settings_.setLocale(QString::fromStdU16String(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
     }
 
     setLocale(settings_.locale());

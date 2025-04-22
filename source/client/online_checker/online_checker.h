@@ -53,7 +53,7 @@ public:
     struct Computer
     {
         int computer_id = -1;
-        std::u16string address_or_id;
+        QString address_or_id;
         uint16_t port = 0;
     };
     using ComputerList = std::vector<Computer>;

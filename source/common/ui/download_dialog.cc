@@ -29,7 +29,7 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-DownloadDialog::DownloadDialog(std::u16string_view url, QFile& file, QWidget* parent)
+DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     : QDialog(parent),
       downloader_(std::make_unique<HttpFileDownloader>()),
       file_(file)

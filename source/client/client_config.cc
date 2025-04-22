@@ -18,7 +18,6 @@
 
 #include "client/client_config.h"
 
-#include "base/crypto/secure_memory.h"
 #include "build/build_config.h"
 
 namespace client {
@@ -32,9 +31,6 @@ Config::Config()
 }
 
 //--------------------------------------------------------------------------------------------------
-Config::~Config()
-{
-    base::memZero(&password);
-}
+Config::~Config() = default;
 
 } // namespace client

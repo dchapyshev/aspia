@@ -549,16 +549,16 @@ int clientMain(int argc, char* argv[])
         std::optional<proto::DesktopConfig> desktop_config;
         client::Config config;
 
-        config.address_or_id = parser.value(address_option).toStdU16String();
+        config.address_or_id = parser.value(address_option);
         config.port = parser.value(port_option).toUShort();
-        config.username = parser.value(username_option).toStdU16String();
-        config.password = parser.value(password_option).toStdU16String();
+        config.username = parser.value(username_option);
+        config.password = parser.value(password_option);
 
         if (parser.isSet(display_name_option))
-            config.display_name = parser.value(display_name_option).toStdU16String();
+            config.display_name = parser.value(display_name_option);
 
         if (parser.isSet(name_option))
-            config.computer_name = parser.value(name_option).toStdU16String();
+            config.computer_name = parser.value(name_option);
 
         QString session_type = parser.value(session_type_option);
 
@@ -690,10 +690,10 @@ int clientMain(int argc, char* argv[])
             {
                 LOG(LS_INFO) << "Router address option specified";
 
-                router_config.address = parser.value(router_address_option).toStdU16String();
+                router_config.address = parser.value(router_address_option);
                 router_config.port = parser.value(router_port_option).toUShort();
-                router_config.username = parser.value(router_username_option).toStdU16String();
-                router_config.password = parser.value(router_password_option).toStdU16String();
+                router_config.username = parser.value(router_username_option);
+                router_config.password = parser.value(router_password_option);
             }
             else
             {

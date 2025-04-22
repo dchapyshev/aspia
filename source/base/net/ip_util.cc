@@ -18,7 +18,6 @@
 
 #include "base/net/ip_util.h"
 
-#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
@@ -34,10 +33,10 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool ipv4FromString(std::u16string_view str, uint32_t* ip)
+bool ipv4FromString(const QString& str, uint32_t* ip)
 {
     struct sockaddr_in sa;
-    if (inet_pton(AF_INET, base::local8BitFromUtf16(str).c_str(), &(sa.sin_addr)) != 1)
+    if (inet_pton(AF_INET, str.toLocal8Bit().data(), &(sa.sin_addr)) != 1)
         return false;
 
 #if defined(OS_WIN)
@@ -53,21 +52,21 @@ bool ipv4FromString(std::u16string_view str, uint32_t* ip)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-bool isValidIpV4Address(std::u16string_view address)
+bool isValidIpV4Address(const QString& address)
 {
     struct sockaddr_in sa;
-    return inet_pton(AF_INET, base::local8BitFromUtf16(address).c_str(), &(sa.sin_addr)) != 0;
+    return inet_pton(AF_INET, address.toLocal8Bit().data(), &(sa.sin_addr)) != 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isValidIpV6Address(std::u16string_view address)
+bool isValidIpV6Address(const QString& address)
 {
     struct sockaddr_in6 sa;
-    return inet_pton(AF_INET6, base::local8BitFromUtf16(address).c_str(), &(sa.sin6_addr)) != 0;
+    return inet_pton(AF_INET6, address.toLocal8Bit().data(), &(sa.sin6_addr)) != 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isIpInRange(std::u16string_view ip, std::u16string_view network, std::u16string_view mask)
+bool isIpInRange(const QString& ip, const QString& network, const QString& mask)
 {
     uint32_t ip_addr = 0;
     if (!ipv4FromString(ip, &ip_addr))

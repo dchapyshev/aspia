@@ -51,7 +51,7 @@ QString currentTime()
 TextChatWidget::TextChatWidget(QWidget* parent)
     : QWidget(parent),
       ui(std::make_unique<Ui::TextChatWidget>()),
-      display_name_(QHostInfo::localHostName().toStdString()),
+      display_name_(QHostInfo::localHostName()),
       status_clear_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -152,12 +152,12 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
         status_clear_timer_->start(std::chrono::seconds(1));
 }
 
-void TextChatWidget::setDisplayName(const std::string& display_name)
+void TextChatWidget::setDisplayName(const QString& display_name)
 {
     display_name_ = display_name;
 
-    if (display_name_.empty())
-        display_name_ = QHostInfo::localHostName().toStdString();
+    if (display_name_.isEmpty())
+        display_name_ = QHostInfo::localHostName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -261,7 +261,7 @@ void TextChatWidget::onSendMessage()
 
     proto::TextChatMessage text_chat_message;
     text_chat_message.set_timestamp(timestamp);
-    text_chat_message.set_source(display_name_);
+    text_chat_message.set_source(display_name_.toStdString());
     text_chat_message.set_text(message.toStdString());
 
     emit sig_sendMessage(text_chat_message);
@@ -272,7 +272,7 @@ void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
 {
     proto::TextChatStatus text_chat_status;
     text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
-    text_chat_status.set_source(display_name_);
+    text_chat_status.set_source(display_name_.toStdString());
     text_chat_status.set_status(status);
 
     emit sig_sendStatus(text_chat_status);

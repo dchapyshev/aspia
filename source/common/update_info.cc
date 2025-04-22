@@ -90,8 +90,8 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
                     return UpdateInfo();
                 }
 
-                update_info.description_ = base::utf16FromUtf8(
-                    std::string_view(node->value(), node->value_size()));
+                update_info.description_ = QString::fromUtf8(
+                    node->value(), static_cast<QString::size_type>(node->value_size()));
             }
             else if (name == "url")
             {
@@ -105,8 +105,8 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
                     return UpdateInfo();
                 }
 
-                update_info.url_ = base::utf16FromUtf8(
-                    std::string_view(node->value(), node->value_size()));
+                update_info.url_ = QString::fromUtf8(
+                    node->value(), static_cast<QString::size_type>(node->value_size()));
             }
         }
     }

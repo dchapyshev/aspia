@@ -40,7 +40,7 @@ class OnlineCheckerDirect::Instance final
       public base::TcpChannel::Listener
 {
 public:
-    Instance(int computer_id, const std::u16string& address, uint16_t port);
+    Instance(int computer_id, const QString& address, uint16_t port);
     ~Instance() final;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
@@ -59,7 +59,7 @@ private:
     void onFinished(const base::Location& location, bool online);
 
     const int computer_id_;
-    const std::u16string address_;
+    const QString address_;
     const uint16_t port_;
 
     FinishCallback finish_callback_;
@@ -70,7 +70,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const std::u16string& address, uint16_t port)
+    int computer_id, const QString& address, uint16_t port)
     : computer_id_(computer_id),
       address_(address),
       port_(port)

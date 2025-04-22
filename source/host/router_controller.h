@@ -47,7 +47,7 @@ public:
 
     struct RouterInfo
     {
-        std::u16string address;
+        QString address;
         uint16_t port = 0;
         QByteArray public_key;
     };
@@ -58,16 +58,16 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onRouterStateChanged(const proto::internal::RouterState& router_state) = 0;
-        virtual void onHostIdAssigned(const std::string& username, base::HostId host_id) = 0;
+        virtual void onHostIdAssigned(const QString& username, base::HostId host_id) = 0;
         virtual void onClientConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
 
-    void hostIdRequest(const std::string& session_name);
+    void hostIdRequest(const QString& session_name);
     void resetHostId(base::HostId host_id);
 
-    const std::u16string& address() const { return router_info_.address; }
+    const QString& address() const { return router_info_.address; }
     uint16_t port() const { return router_info_.port; }
     const QByteArray& publicKey() const { return router_info_.public_key; }
 
@@ -96,7 +96,7 @@ private:
     QTimer reconnect_timer_;
     RouterInfo router_info_;
 
-    std::queue<std::string> pending_id_requests_;
+    std::queue<QString> pending_id_requests_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 
 #include <cstdint>
-#include <string>
+#include <QString>
 
 namespace base {
 
@@ -40,19 +40,19 @@ public:
     };
 
     static const uint32_t kDefaultCharacters;
-    static const size_t kDefaultLength;
+    static const QString::size_type kDefaultLength;
 
     void setCharacters(uint32_t value);
     uint32_t characters() const { return characters_; }
 
-    void setLength(size_t value);
-    size_t length() const { return length_; }
+    void setLength(QString::size_type value);
+    QString::size_type length() const { return length_; }
 
-    std::string result() const;
+    QString result() const;
 
 private:
     uint32_t characters_ = kDefaultCharacters;
-    size_t length_ = kDefaultLength;
+    QString::size_type length_ = kDefaultLength;
 
     DISALLOW_COPY_AND_ASSIGN(PasswordGenerator);
 };

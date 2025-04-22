@@ -45,13 +45,13 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     RouterConfig config = config_storage.routerConfig();
 
     base::Address address(DEFAULT_ROUTER_TCP_PORT);
-    address.setHost(config.address);
+    address.setHost(config.address.toStdU16String());
     address.setPort(config.port);
 
     ui.checkbox_enable_router->setChecked(true);
     ui.edit_address->setText(QString::fromStdU16String(address.toString()));
-    ui.edit_username->setText(QString::fromStdU16String(config.username));
-    ui.edit_password->setText(QString::fromStdU16String(config.password));
+    ui.edit_username->setText(config.username);
+    ui.edit_password->setText(config.password);
 
     ClientSettings settings;
     ui.edit_display_name->setText(settings.displayName());
@@ -135,12 +135,12 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        std::u16string username = ui.edit_username->text().toStdU16String();
-        std::u16string password = ui.edit_password->text().toStdU16String();
+        QString username = ui.edit_username->text();
+        QString password = ui.edit_password->text();
 
         if (!base::User::isValidUserName(username))
         {
-            if (!enable_router && username.empty())
+            if (!enable_router && username.isEmpty())
             {
                 LOG(LS_INFO) << "Router disabled and username is empty";
             }
@@ -157,7 +157,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidPassword(password))
         {
-            if (!enable_router && password.empty())
+            if (!enable_router && password.isEmpty())
             {
                 LOG(LS_INFO) << "Router disabled and password is empty";
             }
@@ -172,7 +172,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         RouterConfig config;
-        config.address = address.host();
+        config.address = QString::fromStdU16String(address.host());
         config.port = address.port();
         config.username = std::move(username);
         config.password = std::move(password);

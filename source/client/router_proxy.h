@@ -24,7 +24,8 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
+
+#include <QString>
 
 namespace base {
 class TaskRunner;
@@ -44,7 +45,7 @@ public:
     RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Router> router);
     ~RouterProxy();
 
-    void connectToRouter(const std::u16string& address, uint16_t port);
+    void connectToRouter(const QString& address, uint16_t port);
     void disconnectFromRouter();
     void refreshSessionList();
     void stopSession(int64_t session_id);

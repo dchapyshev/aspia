@@ -108,7 +108,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         ui.edit_update_server->setEnabled(checked);
 
         if (!checked)
-            ui.edit_update_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
+            ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
     });
 
     connect(ui.edit_update_server, &QLineEdit::textEdited,
@@ -116,7 +116,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        common::UpdateDialog(SystemSettings().updateServer(), u"host", this).exec();
+        common::UpdateDialog(SystemSettings().updateServer(), "host", this).exec();
     });
 
     //---------------------------------------------------------------------------------------------
@@ -499,7 +499,7 @@ void ConfigDialog::onPassProtectClicked()
             QByteArray hash;
             QByteArray salt;
 
-            if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
+            if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -536,7 +536,7 @@ void ConfigDialog::onChangePassClicked()
         QByteArray hash;
         QByteArray salt;
 
-        if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
+        if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -685,7 +685,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            settings.setRouterAddress(router_address.host());
+            settings.setRouterAddress(QString::fromStdU16String(router_address.host()));
             settings.setRouterPort(router_address.port());
             settings.setRouterPublicKey(router_public_key);
         }
@@ -706,7 +706,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUserList(*user_list);
         settings.setAutoUpdateEnabled(ui.checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui.combobox_update_check_freq->currentData().toInt());
-        settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
+        settings.setUpdateServer(ui.edit_update_server->text());
         settings.setPreferredVideoCapturer(ui.combo_video_capturer->currentData().toUInt());
 
         settings.setOneTimePassword(ui.checkbox_onetime_password->isChecked());
@@ -821,7 +821,7 @@ void ConfigDialog::reloadAll()
     bool is_router_enabled = settings.isRouterEnabled();
 
     base::Address router_address(DEFAULT_ROUTER_TCP_PORT);
-    router_address.setHost(settings.routerAddress());
+    router_address.setHost(settings.routerAddress().toStdU16String());
     router_address.setPort(settings.routerPort());
 
     ui.checkbox_enable_router->setChecked(is_router_enabled);
@@ -844,7 +844,7 @@ void ConfigDialog::reloadAll()
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
-    ui.edit_update_server->setText(QString::fromStdU16String(settings.updateServer()));
+    ui.edit_update_server->setText(settings.updateServer());
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
 

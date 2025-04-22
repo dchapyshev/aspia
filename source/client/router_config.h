@@ -20,8 +20,9 @@
 #define CLIENT_ROUTER_CONFIG_H
 
 #include <cstdint>
-#include <string>
 #include <vector>
+
+#include <QString>
 
 namespace client {
 
@@ -38,10 +39,10 @@ struct RouterConfig
 
     bool isValid() const;
 
-    std::u16string address;
+    QString address;
     uint16_t port;
-    std::u16string username;
-    std::u16string password;
+    QString username;
+    QString password;
 };
 
 using RouterConfigList = std::vector<RouterConfig>;

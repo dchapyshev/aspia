@@ -20,12 +20,11 @@
 
 #include <algorithm>
 #include <random>
-#include <vector>
 
 namespace base {
 
 const uint32_t PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
-const size_t PasswordGenerator::kDefaultLength = 8;
+const QString::size_type PasswordGenerator::kDefaultLength = 8;
 
 //--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setCharacters(uint32_t value)
@@ -35,14 +34,14 @@ void PasswordGenerator::setCharacters(uint32_t value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PasswordGenerator::setLength(size_t value)
+void PasswordGenerator::setLength(QString::size_type value)
 {
     if (value)
         length_ = value;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PasswordGenerator::result() const
+QString PasswordGenerator::result() const
 {
     constexpr std::string_view lower_case = "abcdefghijklmnopqrstuvwxyz";
     constexpr std::string_view upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -78,10 +77,10 @@ std::string PasswordGenerator::result() const
 
     std::uniform_int_distribution<> uniform_distance(0, static_cast<int>(table.size() - 1));
 
-    std::string result;
+    QString result;
     result.resize(length_);
 
-    for (size_t i = 0; i < length_; ++i)
+    for (QString::size_type i = 0; i < length_; ++i)
         result[i] = table[static_cast<size_t>(uniform_distance(engine))];
 
     return result;

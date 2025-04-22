@@ -22,7 +22,6 @@
 #include "base/serialization.h"
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
-#include "base/strings/unicode.h"
 #include "host/host_key_storage.h"
 #include "proto/router_peer.pb.h"
 
@@ -71,7 +70,7 @@ void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::hostIdRequest(const std::string& session_name)
+void RouterController::hostIdRequest(const QString& session_name)
 {
     LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
 
@@ -233,7 +232,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
             return;
         }
 
-        const std::string& session_name = pending_id_requests_.front();
+        const QString& session_name = pending_id_requests_.front();
         HostKeyStorage host_key_storage;
 
         QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
@@ -327,7 +326,7 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
     proto::internal::RouterState router_state;
     router_state.set_state(state);
 
-    router_state.set_host_name(base::utf8FromUtf16(router_info_.address));
+    router_state.set_host_name(router_info_.address.toStdString());
     router_state.set_host_port(router_info_.port);
 
     delegate_->onRouterStateChanged(router_state);

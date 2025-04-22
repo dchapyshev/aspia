@@ -18,8 +18,6 @@
 
 #include "base/peer/user_list.h"
 
-#include "base/strings/string_util.h"
-
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
@@ -64,13 +62,13 @@ void UserList::merge(const UserList& user_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-User UserList::find(std::u16string_view username) const
+User UserList::find(const QString& username) const
 {
     const User* user = &User::kInvalidUser;
 
     for (const auto& item : list_)
     {
-        if (compareCaseInsensitive(username, item.name) == 0)
+        if (username.compare(item.name, Qt::CaseInsensitive) == 0)
             user = &item;
     }
 

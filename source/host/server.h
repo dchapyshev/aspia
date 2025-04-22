@@ -62,14 +62,14 @@ protected:
 
     // RouterController::Delegate implementation.
     void onRouterStateChanged(const proto::internal::RouterState& router_state) final;
-    void onHostIdAssigned(const std::string& session_name, base::HostId host_id) final;
+    void onHostIdAssigned(const QString& session_name, base::HostId host_id) final;
     void onClientConnected(std::unique_ptr<base::TcpChannel> channel) final;
 
     // base::AuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
 
     // UserSessionManager::Delegate implementation.
-    void onHostIdRequest(const std::string& session_name) final;
+    void onHostIdRequest(const QString& session_name) final;
     void onResetHostId(base::HostId host_id) final;
     void onUserListChanged() final;
 

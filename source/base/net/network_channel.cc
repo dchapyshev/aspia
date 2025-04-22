@@ -140,14 +140,14 @@ void NetworkChannel::addRxBytes(size_t bytes_count)
 void NetworkChannel::resizeBuffer(QByteArray* buffer, size_t new_size)
 {
     // If the reserved buffer size is less, then increase it.
-    if (buffer->capacity() < new_size)
+    if (buffer->capacity() < static_cast<QByteArray::size_type>(new_size))
     {
         buffer->clear();
-        buffer->reserve(new_size);
+        buffer->reserve(static_cast<QByteArray::size_type>(new_size));
     }
 
     // Change the size of the buffer.
-    buffer->resize(new_size);
+    buffer->resize(static_cast<QByteArray::size_type>(new_size));
 }
 
 } // namespace base

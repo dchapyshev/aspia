@@ -276,13 +276,13 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        client_config.address_or_id = address.host();
+        client_config.address_or_id = QString::fromStdU16String(address.host());
         client_config.port = address.port();
     }
     else
     {
         LOG(LS_INFO) << "Relay connection selected";
-        client_config.address_or_id = current_address.toStdU16String();
+        client_config.address_or_id = current_address;
     }
 
     client_config.session_type = static_cast<proto::SessionType>(
@@ -290,8 +290,8 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (ui.checkbox_use_creds->isChecked())
     {
-        client_config.username = base::utf16FromUtf8(default_config_.username());
-        client_config.password = base::utf16FromUtf8(default_config_.password());
+        client_config.username = QString::fromStdString(default_config_.username());
+        client_config.password = QString::fromStdString(default_config_.password());
     }
 
     client_config.router_config = router_config_;

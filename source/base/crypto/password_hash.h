@@ -34,8 +34,8 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static QByteArray hash(Type type, std::string_view password, const QByteArray& salt);
-    static std::string hash(Type type, std::string_view password, std::string_view salt);
+    static QByteArray hash(Type type, const QString& password, const QByteArray& salt);
+    static std::string hash(Type type, const QString& password, std::string_view salt);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(PasswordHash);

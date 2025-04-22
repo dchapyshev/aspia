@@ -54,7 +54,7 @@ T compressT(const T& source, int compress_level)
     const size_t output_size = ZSTD_compressBound(input_size);
 
     T target;
-    target.resize(output_size + sizeof(uint32_t));
+    target.resize(static_cast<T::size_type>(output_size + sizeof(uint32_t)));
 
     source_data_size = EndianUtil::toBig(source_data_size);
     memcpy(target.data(), &source_data_size, sizeof(uint32_t));
@@ -116,7 +116,7 @@ T decompressT(const T& source)
     }
 
     ZSTD_inBuffer input = { source.data() + sizeof(uint32_t), source.size() - sizeof(uint32_t), 0 };
-    ZSTD_outBuffer output = { target.data(), target.size(), 0 };
+    ZSTD_outBuffer output = { target.data(), static_cast<size_t>(target.size()), 0 };
 
     while (input.pos < input.size)
     {

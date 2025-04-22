@@ -289,7 +289,8 @@ Address Address::fromString(std::u16string_view str, uint16_t default_port)
 
     if (parse(begin, end, &parts))
     {
-        if (isValidIpV4Address(parts.host) || isValidIpV6Address(parts.host) ||
+        if (isValidIpV4Address(QString::fromStdU16String(parts.host)) ||
+            isValidIpV6Address(QString::fromStdU16String(parts.host)) ||
             isValidHostName(parts.host))
         {
             uint16_t port;
@@ -310,7 +311,7 @@ std::u16string Address::toString() const
     if (!isValidPort(port_))
         return std::u16string();
 
-    if (isValidIpV6Address(host_))
+    if (isValidIpV6Address(QString::fromStdU16String(host_)))
     {
         if (port_ == default_port_)
         {
@@ -323,7 +324,7 @@ std::u16string Address::toString() const
     }
     else
     {
-        if (!isValidIpV4Address(host_) && !isValidHostName(host_))
+        if (!isValidIpV4Address(QString::fromStdU16String(host_)) && !isValidHostName(host_))
             return std::u16string();
 
         if (port_ == default_port_)
@@ -363,8 +364,10 @@ bool Address::isValid() const
     if (!isValidPort(port_))
         return false;
 
-    if (!isValidIpV4Address(host_) &&
-        !isValidIpV6Address(host_) &&
+    QString host = QString::fromStdU16String(host_);
+
+    if (!isValidIpV4Address(host) &&
+        !isValidIpV6Address(host) &&
         !isValidHostName(host_))
     {
         return false;

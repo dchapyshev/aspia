@@ -30,7 +30,7 @@ public:
     Impl(std::shared_ptr<base::TaskRunner> io_task_runner, std::unique_ptr<Router> router);
     ~Impl();
 
-    void connectToRouter(const std::u16string& address, uint16_t port);
+    void connectToRouter(const QString& address, uint16_t port);
     void disconnectFromRouter();
     void refreshSessionList();
     void stopSession(int64_t session_id);
@@ -65,7 +65,7 @@ RouterProxy::Impl::~Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterProxy::Impl::connectToRouter(const std::u16string& address, uint16_t port)
+void RouterProxy::Impl::connectToRouter(const QString& address, uint16_t port)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -203,7 +203,7 @@ RouterProxy::~RouterProxy()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterProxy::connectToRouter(const std::u16string& address, uint16_t port)
+void RouterProxy::connectToRouter(const QString& address, uint16_t port)
 {
     impl_->connectToRouter(address, port);
 }

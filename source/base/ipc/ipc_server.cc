@@ -60,7 +60,7 @@ public:
 
     void dettach() { server_ = nullptr; }
 
-    bool listen(asio::io_context& io_context, std::u16string_view channel_name);
+    bool listen(asio::io_context& io_context, const QString& channel_name);
 
 #if defined(OS_WIN)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
@@ -96,7 +96,7 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
 IpcServer::Listener::~Listener() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
+bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_name)
 {
 #if defined(OS_WIN)
     std::wstring user_sid;
@@ -127,7 +127,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     security_attributes.bInheritHandle = FALSE;
 
     win::ScopedHandle handle(
-        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.data()),
+        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.utf16()),
                          FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
                          PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,
                          PIPE_UNLIMITED_INSTANCES,
@@ -287,7 +287,7 @@ IpcServer::~IpcServer()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::u16string IpcServer::createUniqueId()
+QString IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
 
@@ -309,18 +309,18 @@ std::u16string IpcServer::createUniqueId()
     uint32_t random_number = distance(engine);
     uint32_t channel_id = last_channel_id++;
 
-    return utf16FromAscii(fmt::format("{}.{}.{}", process_id, channel_id, random_number));
+    return QString("%1.%2.%3").arg(process_id).arg(channel_id).arg(random_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
+bool IpcServer::start(const QString& channel_id, Delegate* delegate)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
 
-    LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id.data() << ")";
+    LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
 
-    if (channel_id.empty())
+    if (channel_id.isEmpty())
     {
         LOG(LS_ERROR) << "Empty channel id";
         return false;

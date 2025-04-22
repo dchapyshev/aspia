@@ -3845,37 +3845,37 @@
 <context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="44"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="41"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="144"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="160"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="174"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="189"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="212"/>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="241"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="141"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="157"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="171"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="186"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="238"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="145"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="142"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>O usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="161"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="158"/>
         <source>The username you entered already exists.</source>
         <translation>O usuário que você digitou já existe.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="175"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="172"/>
         <source>The passwords you entered do not match.</source>
         <translation>As senhas inseridas não são iguais.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="190"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="187"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>A senha não pode estar em branco e não deve exceder %n caracteres.</numerusform>
@@ -3883,12 +3883,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="199"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A senha que você digitou não atende aos requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="205"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de%n caracteres.</numerusform>
@@ -3896,37 +3896,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="206"/>
         <source>Do you want to enter a different password?</source>
         <translation>Você desejar inserir uma senha diferente?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="216"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="213"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="214"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="242"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="239"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erro interno desconhecido ao criar ou editar usuário.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="292"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="289"/>
         <source>Double-click to change</source>
         <translation>Clique duas vezes para alterar</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="317"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="314"/>
         <source>Administrator</source>
         <translation>Administrador</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager/router_user_dialog.cc" line="321"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="318"/>
         <source>Client</source>
         <translation>Cliente</translation>
     </message>
@@ -3970,188 +3970,188 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="158"/>
+        <location filename="../ui/session_window.cc" line="157"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="171"/>
+        <location filename="../ui/session_window.cc" line="170"/>
         <source>Connection to router %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="176"/>
+        <location filename="../ui/session_window.cc" line="174"/>
         <source>Connection to router established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="189"/>
+        <location filename="../ui/session_window.cc" line="187"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="194"/>
+        <location filename="../ui/session_window.cc" line="191"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="211"/>
+        <location filename="../ui/session_window.cc" line="208"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="216"/>
+        <location filename="../ui/session_window.cc" line="212"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="236"/>
+        <location filename="../ui/session_window.cc" line="232"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="243"/>
+        <location filename="../ui/session_window.cc" line="239"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="250"/>
+        <location filename="../ui/session_window.cc" line="246"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="257"/>
+        <location filename="../ui/session_window.cc" line="253"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="267"/>
+        <location filename="../ui/session_window.cc" line="263"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="288"/>
+        <location filename="../ui/session_window.cc" line="284"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Erro de rede ao conectar ao roteador:%1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="295"/>
+        <location filename="../ui/session_window.cc" line="291"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Erro de autenticação ao conectar ao roteador:%1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Desktop Manage</source>
         <translation>Controlar área de trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Desktop View</source>
         <translation>Visualizar da área de trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>File Transfer</source>
         <translation>Transferência de arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="336"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="340"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="374"/>
         <source>Violation of the communication protocol.</source>
         <translation>Violação do protocolo de comunicação.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="378"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Erro de criptografia (falha na criptografia ou descriptografia da mensagem).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="382"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Ocorreu um erro com a rede (por exemplo, o cabo de rede foi desconectado acidentalmente).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="386"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>A conexão foi recusada pelo host (ou expirou).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="390"/>
         <source>Remote host closed the connection.</source>
         <translation>O host remoto fechou a conexão.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="394"/>
         <source>Host address was not found.</source>
         <translation>O endereço do host não foi encontrado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="398"/>
         <source>Socket operation timed out.</source>
         <translation>A operação atingiu o tempo limite.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="402"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>O endereço especificado já está em uso e foi definido como exclusivo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="410"/>
+        <location filename="../ui/session_window.cc" line="406"/>
         <source>Address specified does not belong to the host.</source>
         <translation>O endereço especificado não pertence ao host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="420"/>
-        <location filename="../ui/session_window.cc" line="462"/>
+        <location filename="../ui/session_window.cc" line="416"/>
+        <location filename="../ui/session_window.cc" line="458"/>
         <source>An unknown error occurred.</source>
         <translation>Ocorreu um erro desconhecido.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="433"/>
         <source>Authentication successfully completed.</source>
         <translation>Autenticação concluída com sucesso.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="437"/>
         <source>Network authentication error.</source>
         <translation>Erro de autenticação de rede.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
+        <location filename="../ui/session_window.cc" line="441"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Violação do protocolo de troca de dados.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="449"/>
+        <location filename="../ui/session_window.cc" line="445"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="450"/>
         <source>Wrong user name or password.</source>
         <translation>Usuário ou senha incorretos.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="454"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>O tipo de sessão especificado não é permitido para o usuário.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="474"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4160,22 +4160,22 @@
         <translation type="vanished">Nenhum host com o ID especificado foi encontrado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="478"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Não há relés disponíveis ou o pool de chaves está vazio.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="482"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Falha ao conectar ao servidor de retransmissão.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="486"/>
         <source>Access is denied.</source>
         <translation>Acesso negado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="494"/>
+        <location filename="../ui/session_window.cc" line="490"/>
         <source>Unknown error.</source>
         <translation>Erro desconhecido.</translation>
     </message>

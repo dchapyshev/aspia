@@ -67,7 +67,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onUserSessionHostIdRequest(const std::string& session_name) = 0;
+        virtual void onUserSessionHostIdRequest(const QString& session_name) = 0;
         virtual void onUserSessionCredentialsChanged() = 0;
         virtual void onUserSessionDettached() = 0;
         virtual void onUserSessionFinished() = 0;
@@ -90,7 +90,7 @@ public:
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
     base::HostId hostId() const { return host_id_; }
-    std::optional<std::string> sessionName() const;
+    std::optional<QString> sessionName() const;
     base::User user() const;
     size_t clientsCount() const;
     bool isConnectedToUi() const { return channel_ != nullptr; }
@@ -126,7 +126,7 @@ protected:
     void onClientSessionConfigured() final;
     void onClientSessionFinished() final;
     void onClientSessionVideoRecording(
-        const std::string& computer_name, const std::string& user_name, bool started) final;
+        const QString& computer_name, const QString& user_name, bool started) final;
     void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) final;
 
 private:
@@ -163,7 +163,7 @@ private:
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
     QTimer password_expire_timer_;
-    std::string one_time_password_;
+    QString one_time_password_;
     uint32_t one_time_sessions_ = 0;
 
     bool connection_confirmation_ = false;

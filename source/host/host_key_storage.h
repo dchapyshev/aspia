@@ -31,10 +31,10 @@ public:
     HostKeyStorage();
     ~HostKeyStorage();
 
-    QByteArray key(std::string_view session_name) const;
-    void setKey(std::string_view session_name, const QByteArray& key);
-    base::HostId lastHostId(std::string_view session_name) const;
-    void setLastHostId(std::string_view session_name, base::HostId host_id);
+    QByteArray key(const QString& session_name) const;
+    void setKey(const QString& session_name, const QByteArray& key);
+    base::HostId lastHostId(const QString& session_name) const;
+    void setLastHostId(const QString& session_name, base::HostId host_id);
 
 private:
     base::JsonSettings impl_;

@@ -18,7 +18,6 @@
 
 #include "client/router_config.h"
 
-#include "base/crypto/secure_memory.h"
 #include "build/build_config.h"
 
 namespace client {
@@ -31,15 +30,12 @@ RouterConfig::RouterConfig()
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterConfig::~RouterConfig()
-{
-    base::memZero(&password);
-}
+RouterConfig::~RouterConfig() = default;
 
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
-    return !address.empty() && port && !username.empty() && !password.empty();
+    return !address.isEmpty() && port && !username.isEmpty() && !password.isEmpty();
 }
 
 } // namespace client

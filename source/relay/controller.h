@@ -68,13 +68,13 @@ private:
     void sendKeyPool(uint32_t key_count);
 
     // Router settings.
-    std::u16string router_address_;
+    QString router_address_;
     uint16_t router_port_ = 0;
     QByteArray router_public_key_;
 
     // Peers settings.
-    std::u16string listen_interface_;
-    std::u16string peer_address_;
+    QString listen_interface_;
+    QString peer_address_;
     uint16_t peer_port_ = 0;
     std::chrono::minutes peer_idle_timeout_;
     uint32_t max_peer_count_ = 0;

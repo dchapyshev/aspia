@@ -21,7 +21,6 @@
 #include "base/environment.h"
 #include "base/logging.h"
 #include "base/net/curl_util.h"
-#include "base/strings/unicode.h"
 
 namespace common {
 
@@ -115,7 +114,7 @@ HttpFileDownloader::~HttpFileDownloader()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HttpFileDownloader::start(std::u16string_view url,
+void HttpFileDownloader::start(const QString& url,
                                std::shared_ptr<base::TaskRunner> owner_task_runner,
                                Delegate* delegate)
 {
@@ -158,9 +157,9 @@ void HttpFileDownloader::run()
 
     base::ScopedCURL curl;
 
-    std::string url = base::local8BitFromUtf16(url_);
+    QByteArray url = url_.toUtf8();
 
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);

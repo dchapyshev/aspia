@@ -435,8 +435,8 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    user_name_ = std::move(*identify->mutable_username());
-    if (user_name_.empty())
+    user_name_ = QString::fromStdString(identify->username());
+    if (user_name_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
@@ -446,13 +446,12 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
     do
     {
-        std::u16string user_name_utf16 = base::utf16FromUtf8(user_name_);
         QByteArray seed_key;
         User user;
 
         if (user_list_)
         {
-            user = user_list_->find(user_name_utf16);
+            user = user_list_->find(user_name_);
             seed_key = user_list_->seedKey();
         }
         else
@@ -499,12 +498,12 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
         GenericHash hash(GenericHash::BLAKE2b512);
         hash.addData(seed_key);
-        hash.addData(user_name_);
+        hash.addData(user_name_.toUtf8());
 
         N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
         g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
         s_ = BigNum::fromByteArray(hash.result());
-        v_ = SrpMath::calc_v(user_name_utf16, seed_key, s_, N_, g_);
+        v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
     }
     while (false);
 
@@ -605,8 +604,8 @@ void ServerAuthenticator::doSessionChallenge()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    session_challenge->set_os_name(utf8FromUtf16(SysInfo::operatingSystemName()));
-    session_challenge->set_computer_name(utf8FromUtf16(SysInfo::computerName()));
+    session_challenge->set_os_name(SysInfo::operatingSystemName().toStdString());
+    session_challenge->set_computer_name(SysInfo::computerName().toStdString());
     session_challenge->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
 
 #if defined(ARCH_CPU_X86)
@@ -665,10 +664,10 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
         }
     }
 
-    setPeerOsName(response->os_name());
-    setPeerComputerName(response->computer_name());
-    setPeerArch(response->arch());
-    setPeerDisplayName(response->display_name());
+    setPeerOsName(QString::fromStdString(response->os_name()));
+    setPeerComputerName(QString::fromStdString(response->computer_name()));
+    setPeerArch(QString::fromStdString(response->arch()));
+    setPeerDisplayName(QString::fromStdString(response->display_name()));
 
     LOG(LS_INFO) << "Client (session_type=" << response->session_type()
                  << " version=" << peerVersion() << " name=" << response->computer_name()

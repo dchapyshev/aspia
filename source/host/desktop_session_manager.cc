@@ -131,7 +131,7 @@ void DesktopSessionManager::attachSession(
                  << " locked=" << session_info.isUserLocked() << ")";
 #endif // defined(OS_WIN)
 
-    std::u16string channel_id = base::IpcServer::createUniqueId();
+    QString channel_id = base::IpcServer::createUniqueId();
 
     LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 

@@ -36,9 +36,8 @@ public:
     SystemSettings();
     ~SystemSettings();
 
-    static bool createPasswordHash(
-        std::string_view password, QByteArray* hash, QByteArray* salt);
-    static bool isValidPassword(std::string_view password);
+    static bool createPasswordHash(const QString& password, QByteArray* hash, QByteArray* salt);
+    static bool isValidPassword(const QString& password);
 
     const std::filesystem::path& filePath() const;
     bool isWritable() const;
@@ -51,8 +50,8 @@ public:
     bool isRouterEnabled() const;
     void setRouterEnabled(bool enable);
 
-    std::u16string routerAddress() const;
-    void setRouterAddress(const std::u16string& address);
+    QString routerAddress() const;
+    void setRouterAddress(const QString& address);
 
     uint16_t routerPort() const;
     void setRouterPort(uint16_t port);
@@ -63,8 +62,8 @@ public:
     std::unique_ptr<base::UserList> userList() const;
     void setUserList(const base::UserList& user_list);
 
-    std::u16string updateServer() const;
-    void setUpdateServer(const std::u16string& server);
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
 
     uint32_t preferredVideoCapturer() const;
     void setPreferredVideoCapturer(uint32_t type);

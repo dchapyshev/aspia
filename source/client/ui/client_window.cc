@@ -130,8 +130,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     {
         update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        update_checker_->setUpdateServer(settings.updateServer().toStdU16String());
-        update_checker_->setPackageName(u"client");
+        update_checker_->setUpdateServer(settings.updateServer());
+        update_checker_->setPackageName("client");
 
         LOG(LS_INFO) << "Start update checker";
         update_checker_->start(Application::uiTaskRunner(), this);
@@ -332,7 +332,7 @@ void ClientWindow::connectToHost()
             return;
         }
 
-        config.address_or_id = address.host();
+        config.address_or_id = QString::fromStdU16String(address.host());
         config.port = address.port();
     }
     else
@@ -350,7 +350,7 @@ void ClientWindow::connectToHost()
             return;
         }
 
-        config.address_or_id = current_address.toStdU16String();
+        config.address_or_id = current_address;
     }
 
     int current_index = combo_address->findText(current_address);
@@ -372,7 +372,7 @@ void ClientWindow::connectToHost()
 
     config.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
-    config.display_name = settings.displayName().toStdU16String();
+    config.display_name = settings.displayName();
 
     SessionWindow* session_window = nullptr;
 
@@ -423,8 +423,7 @@ void ClientWindow::onCheckUpdates()
     LOG(LS_INFO) << "[ACTION] Check updates";
 #if defined(OS_WIN)
     ClientSettings settings;
-    common::UpdateDialog(settings.updateServer().toStdU16String(),
-                         u"client", this).exec();
+    common::UpdateDialog(settings.updateServer(), "client", this).exec();
 #endif
 }
 

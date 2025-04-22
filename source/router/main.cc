@@ -159,8 +159,8 @@ void createConfig()
 
     std::cout << "Creating a user..." << std::endl;
 
-    const char16_t kUserName[] = u"admin";
-    const char16_t kPassword[] = u"admin";
+    const char kUserName[] = "admin";
+    const char kPassword[] = "admin";
 
     base::User user = base::User::create(kUserName, kPassword);
     if (!user.isValid())
@@ -214,8 +214,8 @@ void createConfig()
 
     std::cout << "Configuration successfully created. Don't forget to change your password!"
               << std::endl;
-    std::cout << "User name: " << base::local8BitFromUtf16(kUserName) << std::endl;
-    std::cout << "Password: " << base::local8BitFromUtf16(kPassword) << std::endl;
+    std::cout << "User name: " << kUserName << std::endl;
+    std::cout << "Password: " << kPassword << std::endl;
     std::cout << "Public key file: " << public_key_file << std::endl;
 }
 

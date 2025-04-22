@@ -24,7 +24,6 @@
 #include "base/crypto/data_cryptor_fake.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
-#include "base/strings/unicode.h"
 #include "client/online_checker/online_checker.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
@@ -256,7 +255,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
             key = base::PasswordHash::hash(
                 base::PasswordHash::SCRYPT,
-                dialog.password().toStdString(),
+                dialog.password(),
                 address_book_file.hashing_salt());
 
             cryptor = std::make_unique<base::DataCryptorChaCha20Poly1305>(key);
@@ -318,9 +317,9 @@ ComputerItem* AddressBookTab::currentComputer() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AddressBookTab::displayName() const
+QString AddressBookTab::displayName() const
 {
-    return data_.display_name();
+    return QString::fromStdString(data_.display_name());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -417,10 +416,10 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
     const proto::address_book::Router& router = data_.router();
     client::RouterConfig router_config;
 
-    router_config.address  = base::utf16FromUtf8(router.address());
+    router_config.address  = QString::fromStdString(router.address());
     router_config.port     = static_cast<uint16_t>(router.port());
-    router_config.username = base::utf16FromUtf8(router.username());
-    router_config.password = base::utf16FromUtf8(router.password());
+    router_config.username = QString::fromStdString(router.username());
+    router_config.password = QString::fromStdString(router.password());
 
     return std::move(router_config);
 }
@@ -775,7 +774,7 @@ void AddressBookTab::startOnlineChecker()
 
         client::OnlineChecker::Computer computer_to_check;
         computer_to_check.computer_id = computer_item->computerId();
-        computer_to_check.address_or_id = base::utf16FromUtf8(computer->address());
+        computer_to_check.address_or_id = QString::fromStdString(computer->address());
         computer_to_check.port = computer->port();
 
         computers.emplace_back(std::move(computer_to_check));

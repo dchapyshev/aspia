@@ -36,7 +36,7 @@ public:
 
     // base::UserListBase implementation.
     void add(const base::User& user) final;
-    base::User find(std::u16string_view username) const final;
+    base::User find(const QString& username) const final;
     const QByteArray& seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
     std::vector<base::User> list() const final;

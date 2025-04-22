@@ -40,11 +40,11 @@ public:
 
         std::unique_ptr<TcpChannel> channel;
         Version version;
-        std::string os_name;
-        std::string computer_name;
-        std::string display_name;
-        std::string architecture;
-        std::string user_name;
+        QString os_name;
+        QString computer_name;
+        QString display_name;
+        QString architecture;
+        QString user_name;
         uint32_t session_type = 0;
     };
 

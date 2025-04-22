@@ -34,10 +34,10 @@ public:
 
     void setPeerPublicKey(const QByteArray& public_key);
     void setIdentify(proto::Identify identify);
-    void setUserName(std::u16string_view username);
-    void setPassword(std::u16string_view password);
+    void setUserName(const QString& username);
+    void setPassword(const QString& password);
     void setSessionType(uint32_t session_type);
-    void setDisplayName(std::u16string_view display_name);
+    void setDisplayName(const QString& display_name);
 
 protected:
     // Authenticator implementation.
@@ -68,9 +68,9 @@ private:
     InternalState internal_state_ = InternalState::SEND_CLIENT_HELLO;
 
     QByteArray peer_public_key_;
-    std::u16string username_;
-    std::u16string password_;
-    std::u16string display_name_;
+    QString username_;
+    QString password_;
+    QString display_name_;
 
     BigNum N_;
     BigNum g_;

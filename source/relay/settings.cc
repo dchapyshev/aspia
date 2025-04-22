@@ -18,7 +18,6 @@
 
 #include "relay/settings.h"
 
-#include "base/files/base_paths.h"
 #include "build/build_config.h"
 
 namespace relay {
@@ -51,10 +50,10 @@ std::filesystem::path Settings::filePath()
 //--------------------------------------------------------------------------------------------------
 void Settings::reset()
 {
-    setRouterAddress(u"127.0.0.1");
+    setRouterAddress("127.0.0.1");
     setRouterPort(DEFAULT_ROUTER_TCP_PORT);
     setRouterPublicKey(QByteArray());
-    setPeerAddress(std::u16string());
+    setPeerAddress(QString());
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(std::chrono::minutes(5));
     setMaxPeerCount(100);
@@ -69,15 +68,15 @@ void Settings::flush()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterAddress(const std::u16string& address)
+void Settings::setRouterAddress(const QString& address)
 {
-    impl_.set<std::u16string>("RouterAddress", address);
+    impl_.set<QString>("RouterAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Settings::routerAddress() const
+QString Settings::routerAddress() const
 {
-    return impl_.get<std::u16string>("RouterAddress");
+    return impl_.get<QString>("RouterAddress");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,27 +104,27 @@ QByteArray Settings::routerPublicKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setListenInterface(const std::u16string& interface)
+void Settings::setListenInterface(const QString& interface)
 {
-    impl_.set<std::u16string>("ListenInterface", interface);
+    impl_.set<QString>("ListenInterface", interface);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Settings::listenInterface() const
+QString Settings::listenInterface() const
 {
-    return impl_.get<std::u16string>("ListenInterface", std::u16string());
+    return impl_.get<QString>("ListenInterface", QString());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPeerAddress(const std::u16string& address)
+void Settings::setPeerAddress(const QString& address)
 {
-    impl_.set<std::u16string>("PeerAddress", address);
+    impl_.set<QString>("PeerAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Settings::peerAddress() const
+QString Settings::peerAddress() const
 {
-    return impl_.get<std::u16string>("PeerAddress");
+    return impl_.get<QString>("PeerAddress");
 }
 
 //--------------------------------------------------------------------------------------------------

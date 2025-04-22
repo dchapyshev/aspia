@@ -21,12 +21,8 @@
 #include "build/build_config.h"
 #include "base/command_line.h"
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/files/base_paths.h"
-#include "base/strings/string_util.h"
-#include "base/strings/string_split.h"
-#include "base/strings/unicode.h"
 #include "proto/file_transfer.pb.h"
 
 #if defined(OS_WIN)
@@ -210,7 +206,7 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onStarted()
 {
-    std::u16string channel_id = base::IpcServer::createUniqueId();
+    QString channel_id = base::IpcServer::createUniqueId();
 
     LOG(LS_INFO) << "Starting ipc channel for file transfer";
 
@@ -226,7 +222,7 @@ void ClientSessionFileTransfer::onStarted()
 
 #if defined(OS_WIN)
     base::CommandLine command_line(agentFilePath());
-    command_line.appendSwitch(u"channel_id", channel_id);
+    command_line.appendSwitch(u"channel_id", channel_id.toStdU16String());
 
     base::win::ScopedHandle session_token;
     if (!createLoggedOnUserToken(sessionId(), &session_token))

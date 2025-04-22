@@ -46,7 +46,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onHostIdRequest(const std::string& session_name) = 0;
+        virtual void onHostIdRequest(const QString& session_name) = 0;
         virtual void onResetHostId(base::HostId host_id) = 0;
         virtual void onUserListChanged() = 0;
     };
@@ -54,7 +54,7 @@ public:
     bool start(Delegate* delegate);
     void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
-    void onHostIdChanged(const std::string& session_name, base::HostId host_id);
+    void onHostIdChanged(const QString& session_name, base::HostId host_id);
     void onSettingsChanged();
     void onClientSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
@@ -65,7 +65,7 @@ protected:
     void onErrorOccurred() final;
 
     // UserSession::Delegate implementation.
-    void onUserSessionHostIdRequest(const std::string& session_name) final;
+    void onUserSessionHostIdRequest(const QString& session_name) final;
     void onUserSessionCredentialsChanged() final;
     void onUserSessionDettached() final;
     void onUserSessionFinished() final;

@@ -170,6 +170,53 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Невідомо</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">Виникла помилка під час отримання інформації про оновлення.</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">Немає доступних оновлень.</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">Оновлення буде завантажено. Після завершення завантаження програму буде закрито автоматично.</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">Всі підключені сесії буде завершено. Ви не зможете встановити з&apos;єднання до завершення оновлення.</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">Всі не збережені дані буде втрачено.</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">Продовжити?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Попередження</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">Виникла помилка під час встановлення оновлення: %1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>

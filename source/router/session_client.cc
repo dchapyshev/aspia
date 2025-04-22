@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
-#include "base/strings/unicode.h"
 #include "proto/relay_peer.pb.h"
 #include "router/server.h"
 #include "router/session_host.h"
@@ -135,9 +134,9 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 
                     proto::PeerToRelay::Secret secret;
                     secret.set_random_data(base::Random::string(16));
-                    secret.set_client_address(address());
-                    secret.set_client_user_name(userName());
-                    secret.set_host_address(host->address());
+                    secret.set_client_address(address().toStdString());
+                    secret.set_client_user_name(userName().toStdString());
+                    secret.set_host_address(host->address().toStdString());
                     secret.set_host_id(request.host_id());
 
                     offer_credentials->set_secret(secret.SerializeAsString());

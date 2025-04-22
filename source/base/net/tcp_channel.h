@@ -69,10 +69,10 @@ public:
     void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
 
     // Gets the address of the remote host as a string.
-    std::u16string peerAddress() const;
+    QString peerAddress() const;
 
     // Connects to a host at the specified address and port.
-    void connect(std::u16string_view address, uint16_t port);
+    void connect(const QString& address, uint16_t port);
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const;

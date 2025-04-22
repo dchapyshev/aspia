@@ -48,13 +48,13 @@ public:
         virtual void onNewConnection(std::unique_ptr<TcpChannel> channel) = 0;
     };
 
-    void start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate);
+    void start(const QString& listen_interface, uint16_t port, Delegate* delegate);
     void stop();
 
-    std::u16string listenInterface() const;
+    QString listenInterface() const;
     uint16_t port() const;
 
-    static bool isValidListenInterface(std::u16string_view interface);
+    static bool isValidListenInterface(const QString& interface);
 
 private:
     class Impl;

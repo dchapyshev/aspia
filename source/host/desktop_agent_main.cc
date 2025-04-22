@@ -25,7 +25,6 @@
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/asio_task_runner.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 
@@ -204,7 +203,7 @@ void desktopAgentMain(int& argc, char* argv[])
         base::Application application(argc, argv);
         host::DesktopSessionAgent desktop_agent;
 
-        desktop_agent.start(command_line->switchValue(u"channel_id"));
+        desktop_agent.start(QString::fromStdU16String(command_line->switchValue(u"channel_id")));
         application.exec();
     }
     else

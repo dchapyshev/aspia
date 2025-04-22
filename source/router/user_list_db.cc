@@ -55,7 +55,7 @@ void UserListDb::add(const base::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::User UserListDb::find(std::u16string_view username) const
+base::User UserListDb::find(const QString& username) const
 {
     return db_->findUser(username);
 }

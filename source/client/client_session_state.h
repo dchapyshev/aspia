@@ -38,12 +38,12 @@ public:
     bool isConnectionByHostId() const;
 
     proto::SessionType sessionType() const;
-    const std::u16string& computerName() const;
-    const std::u16string& displayName() const;
-    const std::u16string& hostAddress() const;
+    const QString& computerName() const;
+    const QString& displayName() const;
+    const QString& hostAddress() const;
     uint16_t hostPort() const;
-    const std::u16string& hostUserName() const;
-    const std::u16string& hostPassword() const;
+    const QString& hostUserName() const;
+    const QString& hostPassword() const;
 
     void setRouterVersion(const base::Version& router_version);
     base::Version routerVersion() const;

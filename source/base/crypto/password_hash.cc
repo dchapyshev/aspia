@@ -28,7 +28,7 @@ namespace {
 
 //--------------------------------------------------------------------------------------------------
 template <typename InputT, typename OutputT>
-OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
+OutputT hashT(PasswordHash::Type type, const QString& password, InputT salt)
 {
     DCHECK_EQ(type, PasswordHash::Type::SCRYPT);
 
@@ -48,7 +48,9 @@ OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
     OutputT result;
     result.resize(PasswordHash::kBytesSize);
 
-    int ret = EVP_PBE_scrypt(password.data(), password.size(),
+    QByteArray password_utf8 = password.toUtf8();
+
+    int ret = EVP_PBE_scrypt(password_utf8.data(), password_utf8.size(),
                              reinterpret_cast<const uint8_t*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<uint8_t*>(result.data()), result.size());
@@ -61,14 +63,14 @@ OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QByteArray PasswordHash::hash(Type type, std::string_view password, const QByteArray& salt)
+QByteArray PasswordHash::hash(Type type, const QString& password, const QByteArray& salt)
 {
     return hashT<const QByteArray, QByteArray>(type, password, salt);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string PasswordHash::hash(Type type, std::string_view password, std::string_view salt)
+std::string PasswordHash::hash(Type type, const QString& password, std::string_view salt)
 {
     return hashT<std::string_view, std::string>(type, password, salt);
 }

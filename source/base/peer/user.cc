@@ -34,9 +34,9 @@ const size_t kSaltSize = 64; // In bytes.
 const char kDefaultGroup[] = "4096";
 
 //--------------------------------------------------------------------------------------------------
-bool isValidUserNameChar(char16_t username_char)
+bool isValidUserNameChar(QChar username_char)
 {
-    if (std::iswalnum(username_char))
+    if (username_char.isLetterOrNumber())
         return true;
 
     if (username_char == '.' ||
@@ -57,14 +57,14 @@ const User User::kInvalidUser;
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool User::isValidUserName(std::u16string_view username)
+bool User::isValidUserName(const QString& username)
 {
-    size_t length = username.length();
+    QString::size_type length = username.length();
 
     if (!length || length > kMaxUserNameLength)
         return false;
 
-    for (size_t i = 0; i < length; ++i)
+    for (QString::size_type i = 0; i < length; ++i)
     {
         if (!isValidUserNameChar(username[i]))
             return false;
@@ -75,9 +75,9 @@ bool User::isValidUserName(std::u16string_view username)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool User::isValidPassword(std::u16string_view password)
+bool User::isValidPassword(const QString& password)
 {
-    size_t length = password.length();
+    QString::size_type length = password.length();
 
     if (length < kMinPasswordLength || length > kMaxPasswordLength)
         return false;
@@ -87,9 +87,9 @@ bool User::isValidPassword(std::u16string_view password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool User::isSafePassword(std::u16string_view password)
+bool User::isSafePassword(const QString& password)
 {
-    size_t length = password.length();
+    QString::size_type length = password.length();
 
     if (length < kSafePasswordLength)
         return false;
@@ -98,17 +98,17 @@ bool User::isSafePassword(std::u16string_view password)
     bool has_lower = false;
     bool has_digit = false;
 
-    for (size_t i = 0; i < length; ++i)
+    for (QString::size_type i = 0; i < length; ++i)
     {
-        char16_t character = password[i];
+        QChar character = password.at(i);
 
-        if (std::iswupper(character))
+        if (character.isUpper())
             has_upper = true;
 
-        if (std::iswlower(character))
+        if (character.isLower())
             has_lower = true;
 
-        if (std::iswdigit(character))
+        if (character.isDigit())
             has_digit = true;
     }
 
@@ -117,9 +117,9 @@ bool User::isSafePassword(std::u16string_view password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-User User::create(std::u16string_view name, std::u16string_view password)
+User User::create(const QString& name, const QString& password)
 {
-    if (name.empty() || password.empty())
+    if (name.isEmpty() || password.isEmpty())
     {
         LOG(LS_ERROR) << "Empty user name or password";
         return User();
@@ -155,7 +155,7 @@ User User::create(std::u16string_view name, std::u16string_view password)
 //--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
-    return !name.empty() && !salt.isEmpty() && !group.empty() && !verifier.isEmpty();
+    return !name.isEmpty() && !salt.isEmpty() && !group.empty() && !verifier.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ User User::parseFrom(const proto::User& serialized_user)
     User user;
 
     user.entry_id = serialized_user.entry_id();
-    user.name     = utf16FromUtf8(serialized_user.name());
+    user.name     = QString::fromStdString(serialized_user.name());
     user.group    = serialized_user.group();
     user.salt     = QByteArray::fromStdString(serialized_user.salt());
     user.verifier = QByteArray::fromStdString(serialized_user.verifier());
@@ -181,7 +181,7 @@ proto::User User::serialize() const
     proto::User user;
 
     user.set_entry_id(entry_id);
-    user.set_name(utf8FromUtf16(name));
+    user.set_name(name.toStdString());
     user.set_group(group);
     user.set_salt(salt.toStdString());
     user.set_verifier(verifier.toStdString());

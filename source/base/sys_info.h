@@ -22,28 +22,29 @@
 #include "base/macros_magic.h"
 
 #include <cstdint>
-#include <string>
+
+#include <QString>
 
 namespace base {
 
 class SysInfo
 {
 public:
-    static std::u16string operatingSystemName();
-    static std::u16string operatingSystemVersion();
-    static std::u16string operatingSystemArchitecture();
-    static std::u16string operatingSystemDir();
-    static std::u16string operatingSystemKey();
+    static QString operatingSystemName();
+    static QString operatingSystemVersion();
+    static QString operatingSystemArchitecture();
+    static QString operatingSystemDir();
+    static QString operatingSystemKey();
     static int64_t operatingSystemInstallDate();
 
     static uint64_t uptime();
 
-    static std::u16string computerName();
-    static std::u16string computerDomain();
-    static std::u16string computerWorkgroup();
+    static QString computerName();
+    static QString computerDomain();
+    static QString computerWorkgroup();
 
-    static std::u16string processorName();
-    static std::u16string processorVendor();
+    static QString processorName();
+    static QString processorVendor();
     static int processorPackages();
     static int processorCores();
     static int processorThreads();

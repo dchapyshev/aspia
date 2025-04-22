@@ -22,6 +22,7 @@
 #include "proto/router_admin.pb.h"
 
 #include <QByteArray>
+#include <QString>
 
 namespace base {
 
@@ -44,11 +45,11 @@ public:
     static const size_t kMaxPasswordLength = 64;
     static const size_t kSafePasswordLength = 8;
 
-    static bool isValidUserName(std::u16string_view username);
-    static bool isValidPassword(std::u16string_view password);
-    static bool isSafePassword(std::u16string_view password);
+    static bool isValidUserName(const QString& username);
+    static bool isValidPassword(const QString& password);
+    static bool isSafePassword(const QString& password);
 
-    static User create(std::u16string_view name, std::u16string_view password);
+    static User create(const QString& name, const QString& password);
     bool isValid() const;
 
     static User parseFrom(const proto::User& serialized_user);
@@ -57,7 +58,7 @@ public:
     static const User kInvalidUser;
 
     int64_t entry_id = 0;
-    std::u16string name;
+    QString name;
     std::string group;
     QByteArray salt;
     QByteArray verifier;

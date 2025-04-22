@@ -25,18 +25,18 @@ namespace host {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::string sessionKey(std::string_view session_name)
+std::string sessionKey(const QString& session_name)
 {
     QByteArray key("session/");
-    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name).toHex());
+    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name.toUtf8()).toHex());
     return key.toStdString();
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string sessionKeyForHostId(std::string_view session_name)
+std::string sessionKeyForHostId(const QString& session_name)
 {
     QByteArray key("session_host_id/");
-    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name).toHex());
+    key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name.toUtf8()).toHex());
     return key.toStdString();
 }
 
@@ -53,18 +53,18 @@ HostKeyStorage::HostKeyStorage()
 HostKeyStorage::~HostKeyStorage() = default;
 
 //--------------------------------------------------------------------------------------------------
-QByteArray HostKeyStorage::key(std::string_view session_name) const
+QByteArray HostKeyStorage::key(const QString& session_name) const
 {
-    if (session_name.empty())
+    if (session_name.isEmpty())
         return impl_.get<QByteArray>("console");
 
     return impl_.get<QByteArray>(sessionKey(session_name));
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostKeyStorage::setKey(std::string_view session_name, const QByteArray& key)
+void HostKeyStorage::setKey(const QString& session_name, const QByteArray& key)
 {
-    if (session_name.empty())
+    if (session_name.isEmpty())
         impl_.set<QByteArray>("console", key);
     else
         impl_.set<QByteArray>(sessionKey(session_name), key);
@@ -73,18 +73,18 @@ void HostKeyStorage::setKey(std::string_view session_name, const QByteArray& key
 }
 
 //--------------------------------------------------------------------------------------------------
-base::HostId HostKeyStorage::lastHostId(std::string_view session_name) const
+base::HostId HostKeyStorage::lastHostId(const QString& session_name) const
 {
-    if (session_name.empty())
+    if (session_name.isEmpty())
         return impl_.get<base::HostId>("console_host_id");
 
     return impl_.get<base::HostId>(sessionKeyForHostId(session_name));
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostKeyStorage::setLastHostId(std::string_view session_name, base::HostId host_id)
+void HostKeyStorage::setLastHostId(const QString& session_name, base::HostId host_id)
 {
-    if (session_name.empty())
+    if (session_name.isEmpty())
         impl_.set<base::HostId>("console_host_id", host_id);
     else
         impl_.set<base::HostId>(sessionKeyForHostId(session_name), host_id);

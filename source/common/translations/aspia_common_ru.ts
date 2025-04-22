@@ -192,6 +192,61 @@
     </message>
 </context>
 <context>
+    <name>common</name>
+    <message>
+        <source>Cancel checking for updates. Please wait.</source>
+        <translation type="obsolete">Отмена проверки обновлений. Пожалуйста, подождите.</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Неизвестно</translation>
+    </message>
+    <message>
+        <source>Error retrieving update information.</source>
+        <translation type="obsolete">Ошибка при получении информации об обновлении.</translation>
+    </message>
+    <message>
+        <source>No updates available.</source>
+        <translation type="obsolete">Нет доступных обновлений.</translation>
+    </message>
+    <message>
+        <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
+        <translation type="obsolete">Обновление будет загружено. После завершения скачивания обновления, приложение будет автоматически закрыто.</translation>
+    </message>
+    <message>
+        <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
+        <translation type="obsolete">Все подключенные сессии будут завершены. Вы не сможете установить подключение до завершения обновления.</translation>
+    </message>
+    <message>
+        <source>All unsaved data will be lost.</source>
+        <translation type="obsolete">Все несохраненные данные будут потеряны.</translation>
+    </message>
+    <message>
+        <source>Continue?</source>
+        <translation type="obsolete">Продолжить?</translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Подтверждение</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="obsolete">Да</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">Нет</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
+    </message>
+    <message>
+        <source>An error occurred while installing the update: %1</source>
+        <translation type="obsolete">Произошла ошибка при установке обновления: %1</translation>
+    </message>
+</context>
+<context>
     <name>common::AboutDialog</name>
     <message>
         <source>Version: %1</source>

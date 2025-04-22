@@ -42,7 +42,7 @@ public:
     explicit IpcServer(QObject* parent = nullptr);
     ~IpcServer();
 
-    static std::u16string createUniqueId();
+    static QString createUniqueId();
 
     class Delegate
     {
@@ -53,7 +53,7 @@ public:
         virtual void onErrorOccurred() = 0;
     };
 
-    bool start(std::u16string_view channel_id, Delegate* delegate);
+    bool start(const QString& channel_id, Delegate* delegate);
     void stop();
 
 private:
@@ -64,7 +64,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     asio::io_context& io_context_;
-    std::u16string channel_name_;
+    QString channel_name_;
 
 #if defined(OS_WIN)
     static const size_t kListenersCount = 8;

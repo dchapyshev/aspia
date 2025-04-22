@@ -48,7 +48,7 @@ public:
     QString addressBookGuid() const;
     const QString& filePath() const { return file_path_; }
     ComputerItem* currentComputer() const;
-    std::string displayName() const;
+    QString displayName() const;
     proto::address_book::ComputerGroup* currentComputerGroup() const;
     proto::address_book::ComputerGroup* rootComputerGroup();
     void setChanged(bool changed);

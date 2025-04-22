@@ -64,7 +64,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
         QString password = ui.edit_pass->text();
 
-        if (!SystemSettings::isValidPassword(password.toStdString()))
+        if (!SystemSettings::isValidPassword(password))
         {
             LOG(LS_INFO) << "Invalid password entered";
 

@@ -50,7 +50,7 @@ UserSessionAgent::~UserSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::start()
 {
-    std::u16string channel_id = HostIpcStorage().channelIdForUI();
+    QString channel_id = HostIpcStorage().channelIdForUI();
     LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
     ipc_channel_ = std::make_unique<base::IpcChannel>();

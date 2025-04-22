@@ -556,7 +556,7 @@ bool AddressBookDialog::saveChanges()
 
                 // Now generate a key for encryption/decryption.
                 *key_ = base::PasswordHash::hash(
-                    base::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
+                    base::PasswordHash::SCRYPT, password, file_->hashing_salt());
             }
         }
         break;
@@ -578,8 +578,8 @@ bool AddressBookDialog::saveChanges()
             return false;
         }
 
-        std::u16string username = ui.edit_router_username->text().toStdU16String();
-        std::u16string password = ui.edit_router_password->text().toStdU16String();
+        QString username = ui.edit_router_username->text();
+        QString password = ui.edit_router_password->text();
 
         if (!base::User::isValidUserName(username))
         {
@@ -601,8 +601,8 @@ bool AddressBookDialog::saveChanges()
         proto::address_book::Router* router = data_->mutable_router();
         router->set_address(base::utf8FromUtf16(address.host()));
         router->set_port(address.port());
-        router->set_username(base::utf8FromUtf16(username));
-        router->set_password(base::utf8FromUtf16(password));
+        router->set_username(username.toStdString());
+        router->set_password(password.toStdString());
     }
 
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)

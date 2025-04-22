@@ -42,7 +42,7 @@ public:
     bool addUser(const base::User& user) final;
     bool modifyUser(const base::User& user) final;
     bool removeUser(int64_t entry_id) final;
-    base::User findUser(std::u16string_view username) final;
+    base::User findUser(const QString& username) final;
     ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const final;
     bool addHost(const QByteArray& key_hash) final;
 

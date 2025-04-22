@@ -133,7 +133,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (!SystemSettings::isValidPassword(old_password.toStdString()))
+            if (!SystemSettings::isValidPassword(old_password))
             {
                 LOG(LS_ERROR) << "Incorrect password entered";
                 QMessageBox::warning(this,

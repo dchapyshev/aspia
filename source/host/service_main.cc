@@ -23,7 +23,6 @@
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
-#include "base/strings/strcat.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/host_key_storage.h"
@@ -139,7 +138,7 @@ void removeService()
 #endif // defined(OS_WIN)
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::string> currentSessionName()
+std::optional<QString> currentSessionName()
 {
 #if defined(OS_WIN)
     DWORD process_session_id = 0;
@@ -148,16 +147,16 @@ std::optional<std::string> currentSessionName()
 
     DWORD console_session_id = WTSGetActiveConsoleSessionId();
     if (console_session_id == process_session_id)
-        return std::string();
+        return QString();
 
     base::win::SessionInfo current_session_info(process_session_id);
     if (!current_session_info.isValid())
         return std::nullopt;
 
-    std::u16string user_name = base::toLower(current_session_info.userName16());
-    std::u16string domain = base::toLower(current_session_info.domain16());
+    QString user_name = QString::fromStdU16String(current_session_info.userName16()).toLower();
+    QString domain = QString::fromStdU16String(current_session_info.domain16()).toLower();
 
-    if (user_name.empty())
+    if (user_name.isEmpty())
         return std::nullopt;
 
     using TimeInfo = std::pair<base::SessionId, int64_t>;
@@ -200,10 +199,7 @@ std::optional<std::string> currentSessionName()
     // The session name contains the username and domain to reliably distinguish between local and
     // domain users. It also contains the user number found above. This way, users will receive the
     // same ID based on the time they were connected to the server.
-    std::string session_name = base::strCat({ base::utf8FromUtf16(user_name), "@",
-        base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
-
-    return std::move(session_name);
+    return user_name + "@" + domain + "@" + QString::number(user_number);
 #else
     return std::nullopt;
 #endif
@@ -395,7 +391,7 @@ int hostServiceMain(int& argc, char* argv[])
         }
         else if (command_line->hasSwitch(u"host-id"))
         {
-            std::optional<std::string> session_name = currentSessionName();
+            std::optional<QString> session_name = currentSessionName();
             if (!session_name.has_value())
                 return 0;
 

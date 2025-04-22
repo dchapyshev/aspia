@@ -18,7 +18,6 @@
 
 #include "console/main_window.h"
 
-#include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "client/ui/desktop/qt_desktop_window.h"
 #include "client/ui/file_transfer/qt_file_manager_window.h"
@@ -236,8 +235,8 @@ MainWindow::MainWindow(const QString& file_path)
     {
         update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        update_checker_->setUpdateServer(settings.updateServer().toStdU16String());
-        update_checker_->setPackageName(u"console");
+        update_checker_->setUpdateServer(settings.updateServer());
+        update_checker_->setPackageName("console");
 
         update_checker_->start(Application::uiTaskRunner(), this);
     }
@@ -730,9 +729,7 @@ void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
     LOG(LS_INFO) << "[ACTION] Check for updates";
-    common::UpdateDialog(Application::instance()->settings().updateServer().toStdU16String(),
-                         u"console",
-                         this).exec();
+    common::UpdateDialog(Application::instance()->settings().updateServer(),"console", this).exec();
 #endif
 }
 
@@ -1684,7 +1681,7 @@ bool MainWindow::hasUnpinnedTabs() const
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::connectToComputer(const proto::address_book::Computer& computer,
-                                   const std::string& display_name,
+                                   const QString& display_name,
                                    const std::optional<client::RouterConfig>& router_config)
 {
     QString address = QString::fromStdString(computer.address());
@@ -1712,13 +1709,13 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
     client::Config config;
     config.router_config = router_config;
-    config.computer_name = base::utf16FromUtf8(computer.name());
-    config.address_or_id = base::utf16FromUtf8(computer.address());
+    config.computer_name = QString::fromStdString(computer.name());
+    config.address_or_id = QString::fromStdString(computer.address());
     config.port          = static_cast<uint16_t>(computer.port());
-    config.username      = base::utf16FromUtf8(computer.username());
-    config.password      = base::utf16FromUtf8(computer.password());
+    config.username      = QString::fromStdString(computer.username());
+    config.password      = QString::fromStdString(computer.password());
     config.session_type  = computer.session_type();
-    config.display_name  = base::utf16FromUtf8(display_name);
+    config.display_name  = display_name;
 
     client::SessionWindow* session_window = nullptr;
 

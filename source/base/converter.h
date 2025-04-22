@@ -29,6 +29,7 @@
 #include <optional>
 
 #include <QByteArray>
+#include <QString>
 
 namespace base {
 
@@ -97,6 +98,21 @@ struct ConverterImpl<QByteArray>
     static std::string toString(const QByteArray& value)
     {
         return value.toHex().toStdString();
+    }
+};
+
+template <>
+struct ConverterImpl<QString>
+{
+    static bool fromString(std::string_view str, QString* value)
+    {
+        *value = QString::fromUtf8(str.data(), static_cast<QString::size_type>(str.size()));
+        return true;
+    }
+
+    static std::string toString(const QString& value)
+    {
+        return value.toStdString();
     }
 };
 

@@ -111,7 +111,7 @@ bool Controller::start()
 {
     LOG(LS_INFO) << "Starting controller";
 
-    if (router_address_.empty())
+    if (router_address_.isEmpty())
     {
         LOG(LS_ERROR) << "Empty router address";
         return false;
@@ -135,7 +135,7 @@ bool Controller::start()
         return false;
     }
 
-    if (peer_address_.empty())
+    if (peer_address_.isEmpty())
     {
         LOG(LS_ERROR) << "Empty peer address";
         return false;
@@ -347,7 +347,7 @@ void Controller::sendKeyPool(uint32_t key_count)
 
     proto::RelayKeyPool* relay_key_pool = outgoing_message_->mutable_key_pool();
 
-    relay_key_pool->set_peer_host(base::utf8FromUtf16(peer_address_));
+    relay_key_pool->set_peer_host(peer_address_.toStdString());
     relay_key_pool->set_peer_port(peer_port_);
 
     // Add the requested number of keys to the pool.

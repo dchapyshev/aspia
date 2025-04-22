@@ -58,7 +58,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
         ui.edit_server->setEnabled(checked);
 
         if (!checked)
-            ui.edit_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
+            ui.edit_server->setText(DEFAULT_UPDATE_SERVER);
     });
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)

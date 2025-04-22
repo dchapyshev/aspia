@@ -40,7 +40,7 @@ public:
     virtual bool addUser(const base::User& user) = 0;
     virtual bool modifyUser(const base::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;
-    virtual base::User findUser(std::u16string_view username) = 0;
+    virtual base::User findUser(const QString& username) = 0;
     virtual ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const = 0;
     virtual bool addHost(const QByteArray& key_hash) = 0;
 };

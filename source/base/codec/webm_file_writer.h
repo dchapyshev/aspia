@@ -29,6 +29,8 @@
 #include <memory>
 #include <optional>
 
+#include <QString>
+
 namespace base {
 
 class WebmFileMuxer;
@@ -36,7 +38,7 @@ class WebmFileMuxer;
 class WebmFileWriter
 {
 public:
-    WebmFileWriter(const std::filesystem::path& path, std::u16string_view name);
+    WebmFileWriter(const std::filesystem::path& path, const QString& name);
     ~WebmFileWriter();
 
     void addVideoPacket(const proto::VideoPacket& packet);
@@ -47,7 +49,7 @@ private:
     void close();
 
     std::filesystem::path path_;
-    std::u16string name_;
+    QString name_;
     int file_counter_ = 0;
     FILE* file_ = nullptr;
 

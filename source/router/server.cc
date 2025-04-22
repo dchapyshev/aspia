@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/stl_util.h"
-#include "base/task_runner.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
@@ -101,7 +100,7 @@ bool Server::start()
         return false;
     }
 
-    std::u16string listen_interface = settings.listenInterface();
+    QString listen_interface = settings.listenInterface();
     if (!base::TcpServer::isValidListenInterface(listen_interface))
     {
         LOG(LS_ERROR) << "Invalid listen interface address";
@@ -124,7 +123,7 @@ bool Server::start()
     {
         LOG(LS_INFO) << "Client white list is not empty. Allowed clients:";
 
-        for (size_t i = 0; i < client_white_list_.size(); ++i)
+        for (int i = 0; i < client_white_list_.size(); ++i)
             LOG(LS_INFO) << "#" << (i + 1) << ": " << client_white_list_[i];
     }
 
@@ -137,7 +136,7 @@ bool Server::start()
     {
         LOG(LS_INFO) << "Host white list is not empty. Allowed hosts:";
 
-        for (size_t i = 0; i < host_white_list_.size(); ++i)
+        for (int i = 0; i < host_white_list_.size(); ++i)
             LOG(LS_INFO) << "#" << (i + 1) << ": " << host_white_list_[i];
     }
 
@@ -150,7 +149,7 @@ bool Server::start()
     {
         LOG(LS_INFO) << "Admin white list is not empty. Allowed admins:";
 
-        for (size_t i = 0; i < admin_white_list_.size(); ++i)
+        for (int i = 0; i < admin_white_list_.size(); ++i)
             LOG(LS_INFO) << "#" << (i + 1) << ": " << admin_white_list_[i];
     }
 
@@ -163,7 +162,7 @@ bool Server::start()
     {
         LOG(LS_INFO) << "Relay white list is not empty. Allowed relays:";
 
-        for (size_t i = 0; i < relay_white_list_.size(); ++i)
+        for (int i = 0; i < relay_white_list_.size(); ++i)
             LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
     }
 
@@ -207,11 +206,11 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
         item->set_session_id(session->sessionId());
         item->set_session_type(session->sessionType());
         item->set_timepoint(static_cast<uint64_t>(session->startTime()));
-        item->set_ip_address(session->address());
+        item->set_ip_address(session->address().toStdString());
         item->mutable_version()->CopyFrom(session->version().toProto());
-        item->set_os_name(session->osName());
-        item->set_computer_name(session->computerName());
-        item->set_architecture(session->architecture());
+        item->set_os_name(session->osName().toStdString());
+        item->set_computer_name(session->computerName().toStdString());
+        item->set_architecture(session->architecture().toStdString());
 
         switch (session->sessionType())
         {
@@ -374,7 +373,7 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 //--------------------------------------------------------------------------------------------------
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
-    std::u16string address = session_info.channel->peerAddress();
+    QString address = session_info.channel->peerAddress();
     proto::RouterSession session_type =
         static_cast<proto::RouterSession>(session_info.session_type);
 

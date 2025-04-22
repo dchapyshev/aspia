@@ -28,6 +28,9 @@
 #include <type_traits>
 #include <utility>
 
+#include <QString>
+#include <QStringList>
+
 // Instructions
 // ------------
 //
@@ -578,6 +581,9 @@ std::ostream& operator<<(std::ostream& out, const std::u8string& ustr);
 
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr);
 std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
+
+std::ostream& operator<<(std::ostream& out, const QString& qstr);
+std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist);
 
 } // namespace std
 

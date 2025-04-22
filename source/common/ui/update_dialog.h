@@ -38,8 +38,8 @@ class UpdateDialog final
     Q_OBJECT
 
 public:
-    UpdateDialog(std::u16string_view update_server,
-                 std::u16string_view package_name,
+    UpdateDialog(const QString& update_server,
+                 const QString& package_name,
                  QWidget* parent = nullptr);
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
     ~UpdateDialog() final;

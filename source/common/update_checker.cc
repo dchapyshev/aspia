@@ -90,13 +90,13 @@ UpdateChecker::~UpdateChecker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setUpdateServer(std::u16string_view update_server)
+void UpdateChecker::setUpdateServer(const QString& update_server)
 {
     update_server_ = update_server;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateChecker::setPackageName(std::u16string_view package_name)
+void UpdateChecker::setPackageName(const QString& package_name)
 {
     package_name_ = package_name;
 }
@@ -176,11 +176,11 @@ void UpdateChecker::run()
 
     const base::Version& version = base::Version::kCurrentShortVersion;
 
-    std::u16string unicode_url(update_server_);
-    unicode_url += u"/update.php?";
-    unicode_url += u"package=" + package_name_;
-    unicode_url += u'&';
-    unicode_url += u"version=" + version.toString(3);
+    QString unicode_url(update_server_);
+    unicode_url += "/update.php?";
+    unicode_url += "package=" + package_name_;
+    unicode_url += '&';
+    unicode_url += "version=" + QString::fromStdU16String(version.toString(3));
 
     if (!os.empty())
     {
@@ -194,12 +194,12 @@ void UpdateChecker::run()
         unicode_url += u"arch=" + arch;
     }
 
-    std::string url = base::local8BitFromUtf16(unicode_url);
+    QByteArray url = unicode_url.toLocal8Bit();
 
-    LOG(LS_INFO) << "Start checking for updates. Url: " << url;
+    LOG(LS_INFO) << "Start checking for updates. Url: " << unicode_url;
 
     base::ScopedCURL curl;
-    curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);

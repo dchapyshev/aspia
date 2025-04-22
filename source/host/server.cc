@@ -26,7 +26,6 @@
 #include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
-#include "host/win/updater_launcher.h"
 
 #if defined(OS_WIN)
 #include "base/files/file_util.h"
@@ -105,7 +104,7 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start(u"", settings_.tcpPort(), this);
+    server_->start("", settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
     {
@@ -178,7 +177,7 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
+void Server::onHostIdAssigned(const QString& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
     user_session_manager_->onHostIdChanged(session_name, host_id);
@@ -238,7 +237,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onHostIdRequest(const std::string& session_name)
+void Server::onHostIdRequest(const QString& session_name)
 {
     if (!router_controller_)
     {
@@ -618,7 +617,7 @@ void Server::checkForUpdates()
     update_checker_ = std::make_unique<common::UpdateChecker>();
 
     update_checker_->setUpdateServer(settings_.updateServer());
-    update_checker_->setPackageName(u"host");
+    update_checker_->setPackageName("host");
 
     update_checker_->start(task_runner_, this);
 #endif // defined(OS_WIN)

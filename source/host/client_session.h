@@ -53,7 +53,7 @@ public:
         virtual void onClientSessionConfigured() = 0;
         virtual void onClientSessionFinished() = 0;
         virtual void onClientSessionVideoRecording(
-            const std::string& computer_name, const std::string& user_name, bool started) = 0;
+            const QString& computer_name, const QString& user_name, bool started) = 0;
         virtual void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) = 0;
     };
 
@@ -78,14 +78,14 @@ public:
     void setClientVersion(const base::Version& version);
     const base::Version& clientVersion() const { return version_; }
 
-    void setUserName(std::string_view username);
-    const std::string& userName() const { return username_; }
+    void setUserName(const QString& username);
+    const QString& userName() const { return username_; }
 
-    void setComputerName(std::string_view computer_name);
-    const std::string& computerName() const;
+    void setComputerName(const QString& computer_name);
+    const QString& computerName() const;
 
-    void setDisplayName(std::string_view display_name);
-    const std::string& displayName() const;
+    void setDisplayName(const QString& display_name);
+    const QString& displayName() const;
 
     proto::SessionType sessionType() const { return session_type_; }
 
@@ -125,9 +125,9 @@ private:
     uint32_t id_;
     proto::SessionType session_type_;
     base::Version version_;
-    std::string username_;
-    std::string computer_name_;
-    std::string display_name_;
+    QString username_;
+    QString computer_name_;
+    QString display_name_;
 
     std::unique_ptr<base::TcpChannel> channel_;
 };
