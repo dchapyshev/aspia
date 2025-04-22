@@ -35,9 +35,7 @@ class AddressBookTab;
 class ComputerItem;
 class Client;
 
-class MainWindow final
-    : public QMainWindow,
-      public common::UpdateChecker::Delegate
+class MainWindow final : public QMainWindow
 {
     Q_OBJECT
 
@@ -54,10 +52,8 @@ protected:
     void changeEvent(QEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 
-    // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const QByteArray& result) final;
-
 private slots:
+    void onUpdateCheckedFinished(const QByteArray& result);
     void onNew();
     void onOpen();
     void onSave();

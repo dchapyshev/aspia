@@ -42,9 +42,7 @@ class Server final
       public base::TcpServer::Delegate,
       public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
-      public UserSessionManager::Delegate,
-      public common::UpdateChecker::Delegate,
-      public common::HttpFileDownloader::Delegate
+      public UserSessionManager::Delegate
 {
     Q_OBJECT
 
@@ -73,13 +71,12 @@ protected:
     void onResetHostId(base::HostId host_id) final;
     void onUserListChanged() final;
 
-    // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const QByteArray& result) final;
+private slots:
+    void onUpdateCheckedFinished(const QByteArray& result);
 
-    // common::HttpFileDownloader::Delegate implementation.
-    void onFileDownloaderError(int error_code) final;
-    void onFileDownloaderCompleted() final;
-    void onFileDownloaderProgress(int percentage) final;
+    void onFileDownloaderError(int error_code);
+    void onFileDownloaderCompleted();
+    void onFileDownloaderProgress(int percentage);
 
 private:
     void startAuthentication(std::unique_ptr<base::TcpChannel> channel);

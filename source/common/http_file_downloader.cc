@@ -24,78 +24,9 @@
 
 namespace common {
 
-class HttpFileDownloader::Runner : public std::enable_shared_from_this<Runner>
-{
-public:
-    Runner(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
-        : owner_task_runner_(std::move(owner_task_runner)),
-          delegate_(delegate)
-    {
-        DCHECK(owner_task_runner_);
-        DCHECK(delegate_);
-    }
-
-    ~Runner()
-    {
-        dettach();
-    }
-
-    void dettach()
-    {
-        delegate_ = nullptr;
-    }
-
-    void onError(int error_code)
-    {
-        if (!owner_task_runner_->belongsToCurrentThread())
-        {
-            owner_task_runner_->postTask(std::bind(&Runner::onError, shared_from_this(), error_code));
-            return;
-        }
-
-        if (delegate_)
-        {
-            delegate_->onFileDownloaderError(error_code);
-            delegate_ = nullptr;
-        }
-    }
-
-    void onCompleted()
-    {
-        if (!owner_task_runner_->belongsToCurrentThread())
-        {
-            owner_task_runner_->postTask(std::bind(&Runner::onCompleted, shared_from_this()));
-            return;
-        }
-
-        if (delegate_)
-        {
-            delegate_->onFileDownloaderCompleted();
-            delegate_ = nullptr;
-        }
-    }
-
-    void onProgress(int percentage)
-    {
-        if (!owner_task_runner_->belongsToCurrentThread())
-        {
-            owner_task_runner_->postTask(std::bind(&Runner::onProgress, shared_from_this(), percentage));
-            return;
-        }
-
-        if (delegate_)
-            delegate_->onFileDownloaderProgress(percentage);
-    }
-
-private:
-    std::shared_ptr<base::TaskRunner> owner_task_runner_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Runner);
-};
-
 //--------------------------------------------------------------------------------------------------
-HttpFileDownloader::HttpFileDownloader()
+HttpFileDownloader::HttpFileDownloader(QObject* parent)
+    : QThread(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -104,24 +35,20 @@ HttpFileDownloader::HttpFileDownloader()
 HttpFileDownloader::~HttpFileDownloader()
 {
     LOG(LS_INFO) << "Dtor";
-
-    if (runner_)
-    {
-        runner_->dettach();
-        runner_.reset();
-    }
-    thread_.stop();
+    interrupted_.store(true, std::memory_order_relaxed);
+    wait();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HttpFileDownloader::start(const QString& url,
-                               std::shared_ptr<base::TaskRunner> owner_task_runner,
-                               Delegate* delegate)
+void HttpFileDownloader::setUrl(const QString& url)
 {
-    LOG(LS_INFO) << "Starting http file downloader";
     url_ = url;
-    runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
-    thread_.start(std::bind(&HttpFileDownloader::run, this));
+}
+
+//--------------------------------------------------------------------------------------------------
+const QByteArray& HttpFileDownloader::data() const
+{
+    return data_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,7 +80,8 @@ static int debugFunc(
 //--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
-    LOG(LS_INFO) << "run BEGIN";
+    LOG(LS_INFO) << "Starting http file downloader:" << url_;
+    interrupted_.store(false, std::memory_order_relaxed);
 
     base::ScopedCURL curl;
 
@@ -201,7 +129,7 @@ void HttpFileDownloader::run()
             break;
         }
 
-        if (thread_.isStopping())
+        if (interrupted_.load(std::memory_order_relaxed))
         {
             LOG(LS_INFO) << "Downloading canceled";
             break;
@@ -211,18 +139,16 @@ void HttpFileDownloader::run()
 
     curl_multi_remove_handle(multi_curl.get(), curl.get());
 
-    if (!thread_.isStopping())
+    if (!interrupted_.load(std::memory_order_relaxed))
     {
         if (error_code != CURLM_OK)
         {
-            if (runner_)
-                runner_->onError(error_code);
+            emit sig_downloadError(error_code);
         }
         else
         {
             LOG(LS_INFO) << "Download is finished: " << data_.size() << " bytes";
-            if (runner_)
-                runner_->onCompleted();
+            emit sig_downloadCompleted();
         }
     }
 
@@ -238,7 +164,7 @@ size_t HttpFileDownloader::writeDataCallback(
 
     if (self)
     {
-        if (self->thread_.isStopping())
+        if (self->interrupted_.load(std::memory_order_relaxed))
         {
             LOG(LS_INFO) << "Interrupted by user";
             return 0;
@@ -256,14 +182,13 @@ size_t HttpFileDownloader::writeDataCallback(
 int HttpFileDownloader::progressCallback(
     HttpFileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)
 {
-    if (self && !self->thread_.isStopping())
+    if (self && !self->interrupted_.load(std::memory_order_relaxed))
     {
         int percentage = 0;
         if (dltotal > 0)
             percentage = static_cast<int>((dlnow * 100) / dltotal);
 
-        if (self->runner_)
-            self->runner_->onProgress(percentage);
+        emit self->sig_downloadProgress(percentage);
     }
 
     return 0;

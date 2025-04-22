@@ -31,9 +31,7 @@ class UpdateDialog;
 
 namespace common {
 
-class UpdateDialog final
-    : public QDialog,
-      public common::UpdateChecker::Delegate
+class UpdateDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -49,11 +47,9 @@ protected:
     void keyPressEvent(QKeyEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 
-    // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const QByteArray& result) final;
-
 private slots:
     void onUpdateNow();
+    void onUpdateCheckedFinished(const QByteArray& result);
 
 private:
     void initialize();

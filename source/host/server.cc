@@ -293,7 +293,16 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
                 LOG(LS_INFO) << "New version available: " << update_version.toString();
 
                 update_downloader_ = std::make_unique<common::HttpFileDownloader>();
-                update_downloader_->start(update_info.url(), task_runner_, this);
+
+                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadError,
+                        this, &Server::onFileDownloaderError);
+                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadCompleted,
+                        this, &Server::onFileDownloaderCompleted);
+                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadProgress,
+                        this, &Server::onFileDownloaderProgress);
+
+                update_downloader_->setUrl(update_info.url());
+                update_downloader_->start();
             }
             else
             {
@@ -302,14 +311,14 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
         }
     }
 
-    task_runner_->deleteSoon(std::move(update_checker_));
+    update_checker_.release()->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
     LOG(LS_ERROR) << "Unable to download update: " << error_code;
-    task_runner_->deleteSoon(std::move(update_downloader_));
+    update_downloader_.release()->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,7 +371,7 @@ void Server::onFileDownloaderCompleted()
     }
 #endif // defined(OS_WIN)
 
-    task_runner_->deleteSoon(std::move(update_downloader_));
+    update_downloader_.release()->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -619,7 +628,10 @@ void Server::checkForUpdates()
     update_checker_->setUpdateServer(settings_.updateServer());
     update_checker_->setPackageName("host");
 
-    update_checker_->start(task_runner_, this);
+    connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
+            this, &Server::onUpdateCheckedFinished);
+
+    update_checker_->start();
 #endif // defined(OS_WIN)
 }
 

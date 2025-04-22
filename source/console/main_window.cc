@@ -238,7 +238,10 @@ MainWindow::MainWindow(const QString& file_path)
         update_checker_->setUpdateServer(settings.updateServer());
         update_checker_->setPackageName("console");
 
-        update_checker_->start(Application::uiTaskRunner(), this);
+        connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
+                this, &MainWindow::onUpdateCheckedFinished);
+
+        update_checker_->start();
     }
 #else
     ui.action_check_updates->setVisible(false);

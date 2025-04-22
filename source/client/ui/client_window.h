@@ -30,9 +30,7 @@
 
 namespace client {
 
-class ClientWindow final
-    : public QMainWindow,
-      public common::UpdateChecker::Delegate
+class ClientWindow final : public QMainWindow
 {
     Q_OBJECT
 
@@ -44,10 +42,8 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
 
-    // common::UpdateChecker::Delegate implementation.
-    void onUpdateCheckedFinished(const QByteArray& result) final;
-
 private slots:
+    void onUpdateCheckedFinished(const QByteArray& result);
     void onLanguageChanged(QAction* action);
     void onSettings();
     void onHelp();

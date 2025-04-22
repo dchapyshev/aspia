@@ -20,40 +20,33 @@
 #define COMMON_UPDATE_CHECKER_H
 
 #include "base/macros_magic.h"
-#include "base/task_runner.h"
-#include "base/threading/simple_thread.h"
 
 #include <QByteArray>
-#include <QString>
+#include <QThread>
 
 namespace common {
 
-class UpdateChecker
+class UpdateChecker final : public QThread
 {
-public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void onUpdateCheckedFinished(const QByteArray& result) = 0;
-    };
+    Q_OBJECT
 
-    UpdateChecker();
+public:
+    explicit UpdateChecker(QObject* parent = nullptr);
     ~UpdateChecker();
 
     void setUpdateServer(const QString& update_server);
     void setPackageName(const QString& package_name);
 
-    void start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate);
+signals:
+    void sig_checkedFinished(const QByteArray& result);
+
+protected:
+    void run() final;
 
 private:
-    void run();
-
-    class Runner;
-    std::shared_ptr<Runner> runner_;
-    base::SimpleThread thread_;
     QString update_server_;
     QString package_name_;
+    std::atomic_bool interrupted_;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
 };

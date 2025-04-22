@@ -19,7 +19,6 @@
 #include "common/ui/download_dialog.h"
 
 #include "base/logging.h"
-#include "qt_base/application.h"
 
 #include <QAbstractButton>
 #include <QFile>
@@ -48,7 +47,15 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
         close();
     });
 
-    downloader_->start(url, qt_base::Application::uiTaskRunner(), this);
+    connect(downloader_.get(), &HttpFileDownloader::sig_downloadError,
+            this, &DownloadDialog::onFileDownloaderError);
+    connect(downloader_.get(), &HttpFileDownloader::sig_downloadCompleted,
+            this, &DownloadDialog::onFileDownloaderCompleted);
+    connect(downloader_.get(), &HttpFileDownloader::sig_downloadProgress,
+            this, &DownloadDialog::onFileDownloaderProgress);
+
+    downloader_->setUrl(url);
+    downloader_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

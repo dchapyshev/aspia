@@ -29,9 +29,7 @@
 
 namespace common {
 
-class DownloadDialog final
-    : public QDialog,
-      public HttpFileDownloader::Delegate
+class DownloadDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -39,11 +37,10 @@ public:
     DownloadDialog(const QString& url, QFile& file, QWidget* parent = nullptr);
     ~DownloadDialog() final;
 
-protected:
-    // HttpFileDownloader::Delegate implementation.
-    void onFileDownloaderError(int error_code) final;
-    void onFileDownloaderCompleted() final;
-    void onFileDownloaderProgress(int percentage) final;
+private slots:
+    void onFileDownloaderError(int error_code);
+    void onFileDownloaderCompleted();
+    void onFileDownloaderProgress(int percentage);
 
 private:
     Ui::DownloadDialog ui;

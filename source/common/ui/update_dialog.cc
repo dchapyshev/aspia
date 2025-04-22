@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "common/ui/download_dialog.h"
-#include "qt_base/application.h"
 #include "ui_update_dialog.h"
 
 #if defined(OS_WIN)
@@ -63,7 +62,10 @@ UpdateDialog::UpdateDialog(const QString& update_server,
     checker_->setUpdateServer(update_server);
     checker_->setPackageName(package_name);
 
-    checker_->start(qt_base::Application::uiTaskRunner(), this);
+    connect(checker_.get(), &UpdateChecker::sig_checkedFinished,
+            this, &UpdateDialog::onUpdateCheckedFinished);
+
+    checker_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -114,6 +116,93 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     }
 
     QDialog::closeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::onUpdateNow()
+{
+    LOG(LS_INFO) << "[ACTION] Update now";
+
+#if defined(OS_WIN)
+    QString message1 = tr("An update will be downloaded. After the download is complete, the "
+                          "application will automatically close.");
+    QString message2 = tr("All connected sessions will be terminated. You cannot establish a "
+                          "connection until the update is complete.");
+    QString message3 = tr("All unsaved data will be lost.");
+    QString question = tr("Continue?");
+
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
+                                .arg(message1, message2, message3, question),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::Yes)
+    {
+        LOG(LS_INFO) << "[ACTION] Update confirmed by user";
+
+        QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
+        if (!file.open())
+        {
+            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("An error occurred while installing the update: %1")
+                                     .arg(file.errorString()),
+                                 QMessageBox::Ok);
+        }
+        else
+        {
+            int result = DownloadDialog(update_info_.url(), file, this).exec();
+
+            if (result == DownloadDialog::Accepted)
+                file.setAutoRemove(false);
+
+            file.close();
+
+            // If the download is successfully completed, then run the installer.
+            if (result == DownloadDialog::Accepted)
+            {
+                QString file_name(file.fileName());
+                file_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
+
+                std::u16string arguments;
+
+                // Normal install.
+                arguments += u"/i ";
+
+                // MSI package file.
+                arguments += file_name.toStdU16String();
+
+                // Basic UI with no modal dialog boxes.
+                arguments += u" /qb-!";
+
+                if (base::win::createProcess(u"msiexec",
+                                             arguments,
+                                             base::win::ProcessExecuteMode::ELEVATE))
+                {
+                    LOG(LS_INFO) << "msiexec is started";
+                    // If the process is successfully launched, then the application is terminated.
+                    QCoreApplication::quit();
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "Unable to start msiexec process";
+
+                    // If the update fails, delete the temporary file.
+                    QString file_name = file.fileName();
+                    if (!QFile::remove(file_name))
+                    {
+                        LOG(LS_ERROR) << "Unable to remove file: " << file_name.toStdString();
+                    }
+                }
+            }
+        }
+    }
+#endif // defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,93 +258,6 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
         LOG(LS_INFO) << "Destroy update checker";
         checker_.reset();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void UpdateDialog::onUpdateNow()
-{
-    LOG(LS_INFO) << "[ACTION] Update now";
-
-#if defined(OS_WIN)
-    QString message1 = tr("An update will be downloaded. After the download is complete, the "
-                          "application will automatically close.");
-    QString message2 = tr("All connected sessions will be terminated. You cannot establish a "
-                          "connection until the update is complete.");
-    QString message3 = tr("All unsaved data will be lost.");
-    QString question = tr("Continue?");
-
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                                .arg(message1, message2, message3, question),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
-
-    if (message_box.exec() == QMessageBox::Yes)
-    {
-        LOG(LS_INFO) << "[ACTION] Update confirmed by user";
-
-        QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
-        if (!file.open())
-        {
-            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("An error occurred while installing the update: %1")
-                                 .arg(file.errorString()),
-                                 QMessageBox::Ok);
-        }
-        else
-        {
-            int result = DownloadDialog(update_info_.url(), file, this).exec();
-
-            if (result == DownloadDialog::Accepted)
-                file.setAutoRemove(false);
-
-            file.close();
-
-            // If the download is successfully completed, then run the installer.
-            if (result == DownloadDialog::Accepted)
-            {
-                QString file_name(file.fileName());
-                file_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
-
-                std::u16string arguments;
-
-                // Normal install.
-                arguments += u"/i ";
-
-                // MSI package file.
-                arguments += file_name.toStdU16String();
-
-                // Basic UI with no modal dialog boxes.
-                arguments += u" /qb-!";
-
-                if (base::win::createProcess(u"msiexec",
-                                              arguments,
-                                              base::win::ProcessExecuteMode::ELEVATE))
-                {
-                    LOG(LS_INFO) << "msiexec is started";
-                    // If the process is successfully launched, then the application is terminated.
-                    QCoreApplication::quit();
-                }
-                else
-                {
-                    LOG(LS_ERROR) << "Unable to start msiexec process";
-
-                    // If the update fails, delete the temporary file.
-                    QString file_name = file.fileName();
-                    if (!QFile::remove(file_name))
-                    {
-                        LOG(LS_ERROR) << "Unable to remove file: " << file_name.toStdString();
-                    }
-                }
-            }
-        }
-    }
-#endif // defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------

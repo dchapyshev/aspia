@@ -133,8 +133,11 @@ ClientWindow::ClientWindow(QWidget* parent)
         update_checker_->setUpdateServer(settings.updateServer());
         update_checker_->setPackageName("client");
 
+        connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
+                this, &ClientWindow::onUpdateCheckedFinished);
+
         LOG(LS_INFO) << "Start update checker";
-        update_checker_->start(Application::uiTaskRunner(), this);
+        update_checker_->start();
     }
 #else
     ui.action_check_for_updates->setVisible(false);

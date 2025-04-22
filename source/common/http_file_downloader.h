@@ -20,47 +20,38 @@
 #define COMMON_HTTP_FILE_DOWNLOADER_H
 
 #include "base/macros_magic.h"
-#include "base/task_runner.h"
-#include "base/threading/simple_thread.h"
 
 #include <QByteArray>
-#include <QString>
+#include <QThread>
 
 namespace common {
 
-class HttpFileDownloader
+class HttpFileDownloader final : public QThread
 {
+    Q_OBJECT
+
 public:
-    HttpFileDownloader();
+    explicit HttpFileDownloader(QObject* parent = nullptr);
     ~HttpFileDownloader();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    void setUrl(const QString& url);
+    const QByteArray& data() const;
 
-        virtual void onFileDownloaderError(int error_code) = 0;
-        virtual void onFileDownloaderCompleted() = 0;
-        virtual void onFileDownloaderProgress(int percentage) = 0;
-    };
+signals:
+    void sig_downloadError(int error_code);
+    void sig_downloadCompleted();
+    void sig_downloadProgress(int percentage);
 
-    void start(const QString& url,
-               std::shared_ptr<base::TaskRunner> owner_task_runner,
-               Delegate* delegate);
-    const QByteArray& data() const { return data_; }
+protected:
+    // QThread implementation.
+    void run() final;
 
 private:
-    void run();
-
     static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self);
     static int progressCallback(
         HttpFileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
 
-    base::SimpleThread thread_;
-
-    class Runner;
-    std::shared_ptr<Runner> runner_;
-
+    std::atomic_bool interrupted_;
     QString url_;
     QByteArray data_;
 

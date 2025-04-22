@@ -22,56 +22,13 @@
 #include "base/logging.h"
 #include "base/version.h"
 #include "base/net/curl_util.h"
-#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 namespace common {
 
-class UpdateChecker::Runner : public std::enable_shared_from_this<Runner>
-{
-public:
-    Runner(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
-        : owner_task_runner_(std::move(owner_task_runner)),
-          delegate_(delegate)
-    {
-        DCHECK(owner_task_runner_);
-        DCHECK(delegate_);
-    }
-
-    ~Runner()
-    {
-        dettach();
-    }
-
-    void dettach()
-    {
-        delegate_ = nullptr;
-    }
-
-    void onFinished(const QByteArray& response)
-    {
-        if (!owner_task_runner_->belongsToCurrentThread())
-        {
-            owner_task_runner_->postTask(std::bind(&Runner::onFinished, shared_from_this(), response));
-            return;
-        }
-
-        if (delegate_)
-        {
-            delegate_->onUpdateCheckedFinished(response);
-            delegate_ = nullptr;
-        }
-    }
-
-private:
-    std::shared_ptr<base::TaskRunner> owner_task_runner_;
-    Delegate* delegate_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Runner);
-};
-
 //--------------------------------------------------------------------------------------------------
-UpdateChecker::UpdateChecker()
+UpdateChecker::UpdateChecker(QObject* parent)
+    : QThread(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -81,12 +38,8 @@ UpdateChecker::~UpdateChecker()
 {
     LOG(LS_INFO) << "Dtor";
 
-    if (runner_)
-    {
-        runner_->dettach();
-        runner_.reset();
-    }
-    thread_.stop();
+    interrupted_.store(true, std::memory_order_relaxed);
+    wait();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,14 +52,6 @@ void UpdateChecker::setUpdateServer(const QString& update_server)
 void UpdateChecker::setPackageName(const QString& package_name)
 {
     package_name_ = package_name;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
-{
-    LOG(LS_INFO) << "Starting update checker";
-    runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
-    thread_.start(std::bind(&UpdateChecker::run, this));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,29 +92,28 @@ static int debugFunc(
 void UpdateChecker::run()
 {
     LOG(LS_INFO) << "run BEGIN";
+    interrupted_.store(false, std::memory_order_relaxed);
 
-    std::u16string os;
-
+    QString os;
 #if defined(OS_WIN)
-    os = u"windows";
+    os = "windows";
 #elif defined(OS_LINUX)
-    os = u"linux";
+    os = "linux";
 #elif defined(OS_MAC)
-    os = u"macosx";
+    os = "macosx";
 #else
 #error Unknown OS
 #endif
 
-    std::u16string arch;
-
+    QString arch;
 #if defined(ARCH_CPU_X86_64)
-    arch = u"x86_64";
+    arch = "x86_64";
 #elif defined(ARCH_CPU_X86)
-    arch = u"x86";
+    arch = "x86";
 #elif defined(ARCH_CPU_ARMEL)
-    arch = u"arm";
+    arch = "arm";
 #elif defined(ARCH_CPU_ARM64)
-    arch = u"arm64";
+    arch = "arm64";
 #else
 #error Unknown architecture
 #endif
@@ -182,16 +126,16 @@ void UpdateChecker::run()
     unicode_url += '&';
     unicode_url += "version=" + QString::fromStdU16String(version.toString(3));
 
-    if (!os.empty())
+    if (!os.isEmpty())
     {
-        unicode_url += u'&';
-        unicode_url += u"os=" + os;
+        unicode_url += '&';
+        unicode_url += "os=" + os;
     }
 
-    if (!arch.empty())
+    if (!arch.isEmpty())
     {
-        unicode_url += u'&';
-        unicode_url += u"arch=" + arch;
+        unicode_url += '&';
+        unicode_url += "arch=" + arch;
     }
 
     QByteArray url = unicode_url.toLocal8Bit();
@@ -240,7 +184,7 @@ void UpdateChecker::run()
             break;
         }
 
-        if (thread_.isStopping())
+        if (interrupted_.load(std::memory_order_relaxed))
         {
             LOG(LS_INFO) << "Update check canceled";
             response.clear();
@@ -251,11 +195,10 @@ void UpdateChecker::run()
 
     curl_multi_remove_handle(multi_curl.get(), curl.get());
 
-    if (!thread_.isStopping())
+    if (!interrupted_.load(std::memory_order_relaxed))
     {
         LOG(LS_INFO) << "Checking is finished: " << response.toStdString();
-        if (runner_)
-            runner_->onFinished(response);
+        emit sig_checkedFinished(response);
     }
 
     LOG(LS_INFO) << "run END";
