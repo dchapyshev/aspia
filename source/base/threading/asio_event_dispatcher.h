@@ -70,19 +70,7 @@ private:
 
     struct TimerData
     {
-        TimerData(int id, int interval, Qt::TimerType type, QObject* object,
-              TimePoint start_time, TimePoint expire_time)
-            : id(id),
-              interval(interval),
-              type(type),
-              object(object),
-              start_time(start_time),
-              expire_time(expire_time)
-        {
-            // Nothing
-        }
-
-        int id;
+        int timer_id;
         int interval;
         Qt::TimerType type;
         QObject* object;
@@ -103,15 +91,21 @@ private:
     std::list<EventData> events_;
 #endif // defined(Q_OS_WIN)
 
-    TimePoint calculateNextRunTime();
     void asyncWaitForNextTimer();
-    void onTimerEvent(const std::error_code& error_code, int id);
+
+    struct FastHash
+    {
+        size_t operator()(int timer_id) const noexcept
+        {
+            return static_cast<size_t>(timer_id);
+        }
+    };
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-    std::unordered_map<int, TimerData> timers_;
-    asio::high_resolution_timer timer_;
+    std::unordered_map<int, TimerData, FastHash> timers_;
+    asio::high_resolution_timer high_resolution_timer_;
 
     DISALLOW_COPY_AND_ASSIGN(AsioEventDispatcher);
 };

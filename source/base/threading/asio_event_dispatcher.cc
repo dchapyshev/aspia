@@ -30,13 +30,23 @@
 
 namespace base {
 
+namespace {
+
+const size_t kReservedSizeForTimersMap = 100;
+const float kLoadFactorForTimersMap = 0.5;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_)),
-      timer_(io_context_)
+      high_resolution_timer_(io_context_)
 {
     LOG(LS_INFO) << "Ctor";
+
+    timers_.reserve(kReservedSizeForTimersMap);
+    timers_.max_load_factor(kLoadFactorForTimersMap);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -107,8 +117,8 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier 
 void AsioEventDispatcher::registerTimer(
     int id, int interval, Qt::TimerType type, QObject* object)
 {
-    TimePoint start_time = Clock::now();
-    TimePoint expire_time = start_time + Milliseconds(interval);
+    const TimePoint start_time = Clock::now();
+    const TimePoint expire_time = start_time + Milliseconds(interval);
 
     timers_.emplace(
         std::make_pair(id, TimerData(id, interval, type, object, start_time, expire_time)));
@@ -161,7 +171,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
     for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
     {
         if (it->second.object == object)
-            list.append({ it->second.id, it->second.interval, it->second.type });
+            list.append({ it->second.timer_id, it->second.interval, it->second.type });
     }
 
     return list;
@@ -233,8 +243,8 @@ void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
-    // Send an empty lambda so that call run_one inside method processEvents completes.
-    asio::post(io_context_, []{});
+    // To stop run_one inside method processEvents completes.
+    io_context_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,34 +306,32 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
         return lhs.second.expire_time < rhs.second.expire_time;
     });
 
+    const int next_timer_id = next_expire_timer->second.timer_id;
+
     // Start waiting for the timer.
-    timer_.expires_at(next_expire_timer->second.expire_time);
-    timer_.async_wait(std::bind(
-        &AsioEventDispatcher::onTimerEvent, this, std::placeholders::_1, next_expire_timer->second.id));
-}
+    high_resolution_timer_.expires_at(next_expire_timer->second.expire_time);
+    high_resolution_timer_.async_wait([this, next_timer_id](const std::error_code& error_code)
+    {
+        if (error_code || interrupted_.load(std::memory_order_relaxed))
+            return;
 
-//--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::onTimerEvent(const std::error_code& error_code, int id)
-{
-    if (error_code || interrupted_.load(std::memory_order_relaxed))
-        return;
+        auto it = timers_.find(next_timer_id);
+        if (it == timers_.end())
+            return;
 
-    auto it = timers_.find(id);
-    if (it == timers_.end())
-        return;
+        QCoreApplication::sendEvent(it->second.object, new QTimerEvent(next_timer_id));
 
-    QCoreApplication::sendEvent(it->second.object, new QTimerEvent(id));
+        // When calling method sendEvent the timer may have been deleted, so we look for it again.
+        it = timers_.find(next_timer_id);
+        if (it == timers_.end())
+            return;
 
-    // When calling method sendEvent the timer may have been deleted, so we look for it again.
-    it = timers_.find(id);
-    if (it == timers_.end())
-        return;
+        TimerData& timer = it->second;
+        timer.start_time = Clock::now();
+        timer.expire_time = timer.start_time + Milliseconds(timer.interval);
 
-    TimerData& timer = it->second;
-    timer.start_time = Clock::now();
-    timer.expire_time = timer.start_time + Milliseconds(timer.interval);
-
-    asyncWaitForNextTimer();
+        asyncWaitForNextTimer();
+    });
 }
 
 } // namespace base
