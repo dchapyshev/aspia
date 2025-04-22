@@ -54,6 +54,7 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
     QCoreApplication::sendPostedEvents();
 
+    // When calling method sendPostedEvents, the state of variable may change, so we check it.
     if (interrupted_.load(std::memory_order_relaxed))
         return false;
 
@@ -106,8 +107,6 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier 
 void AsioEventDispatcher::registerTimer(
     int id, int interval, Qt::TimerType type, QObject* object)
 {
-    DCHECK(object);
-
     TimePoint start_time = Clock::now();
     TimePoint expire_time = start_time + Milliseconds(interval);
 
@@ -132,8 +131,6 @@ bool AsioEventDispatcher::unregisterTimer(int id)
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
-    DCHECK(object);
-
     auto it = timers_.begin();
     bool removed = false;
 
@@ -157,14 +154,11 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers(
-    QObject* object) const
+QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers(QObject* object) const
 {
-    DCHECK(object);
-
     QList<TimerInfo> list;
 
-    for (auto it = timers_.cbegin(); it != timers_.cend(); ++it)
+    for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
     {
         if (it->second.object == object)
             list.append({ it->second.id, it->second.interval, it->second.type });
@@ -239,6 +233,7 @@ void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
+    // Send an empty lambda so that call run_one inside method processEvents completes.
     asio::post(io_context_, []{});
 }
 
@@ -294,12 +289,14 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
     if (timers_.empty())
         return;
 
+    // Find the timer that should be completed before all others.
     auto next_expire_timer = std::min_element(timers_.begin(), timers_.end(),
         [](const auto& lhs, const auto& rhs)
     {
         return lhs.second.expire_time < rhs.second.expire_time;
     });
 
+    // Start waiting for the timer.
     timer_.expires_at(next_expire_timer->second.expire_time);
     timer_.async_wait(std::bind(
         &AsioEventDispatcher::onTimerEvent, this, std::placeholders::_1, next_expire_timer->second.id));
@@ -317,6 +314,7 @@ void AsioEventDispatcher::onTimerEvent(const std::error_code& error_code, int id
 
     QCoreApplication::sendEvent(it->second.object, new QTimerEvent(id));
 
+    // When calling method sendEvent the timer may have been deleted, so we look for it again.
     it = timers_.find(id);
     if (it == timers_.end())
         return;
