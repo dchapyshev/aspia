@@ -22,7 +22,7 @@
 #include <deque>
 #include <memory>
 
-#include <QString>
+#include <QObject>
 
 namespace base {
 class Location;
@@ -30,20 +30,13 @@ class Location;
 
 namespace client {
 
-class OnlineCheckerDirect
+class OnlineCheckerDirect final : public QObject
 {
+    Q_OBJECT
+
 public:
-    OnlineCheckerDirect();
+    explicit OnlineCheckerDirect(QObject* parent = nullptr);
     ~OnlineCheckerDirect();
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onDirectCheckerResult(int computer_id, bool online) = 0;
-        virtual void onDirectCheckerFinished() = 0;
-    };
 
     struct Computer
     {
@@ -53,14 +46,17 @@ public:
     };
     using ComputerList = std::deque<Computer>;
 
-    void start(const ComputerList& computers, Delegate* delegate);
+    void start(const ComputerList& computers);
+
+signals:
+    void sig_checkerResult(int computer_id, bool online);
+    void sig_checkerFinished();
 
 private:
     void onChecked(int computer_id, bool online);
     void onFinished(const base::Location& location);
 
     ComputerList pending_queue_;
-    Delegate* delegate_ = nullptr;
 
     class Instance;
     std::deque<std::unique_ptr<Instance>> work_queue_;

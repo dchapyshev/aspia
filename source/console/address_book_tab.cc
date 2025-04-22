@@ -788,8 +788,14 @@ void AddressBookTab::startOnlineChecker()
 
     emit sig_updateStateForComputers(true);
 
-    online_checker_ = std::make_unique<client::OnlineChecker>(qt_base::Application::uiTaskRunner());
-    online_checker_->checkComputers(routerConfig(), computers, this);
+    online_checker_ = std::make_unique<client::OnlineChecker>();
+
+    connect(online_checker_.get(), &client::OnlineChecker::sig_checkerResult,
+            this, &AddressBookTab::onOnlineCheckerResult);
+    connect(online_checker_.get(), &client::OnlineChecker::sig_checkerFinished,
+            this, &AddressBookTab::onOnlineCheckerFinished);
+
+    online_checker_->checkComputers(routerConfig(), computers);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -32,9 +32,7 @@ namespace console {
 
 class ComputerItem;
 
-class AddressBookTab final
-    : public QWidget,
-      public client::OnlineChecker::Delegate
+class AddressBookTab final : public QWidget
 {
     Q_OBJECT
 
@@ -91,11 +89,9 @@ protected:
     void showEvent(QShowEvent* event) final;
     void keyPressEvent(QKeyEvent* event) final;
 
-    // client::OnlineChecker::Delegate implementation.
-    void onOnlineCheckerResult(int computer_id, bool online) final;
-    void onOnlineCheckerFinished() final;
-
 private slots:
+    void onOnlineCheckerResult(int computer_id, bool online);
+    void onOnlineCheckerFinished();
     void onGroupItemClicked(QTreeWidgetItem* item, int column);
     void onGroupContextMenu(const QPoint& point);
     void onGroupItemCollapsed(QTreeWidgetItem* item);

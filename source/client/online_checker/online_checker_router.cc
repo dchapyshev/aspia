@@ -52,15 +52,12 @@ OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config, QObj
 OnlineCheckerRouter::~OnlineCheckerRouter()
 {
     LOG(LS_INFO) << "Dtor";
-    delegate_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegate)
+void OnlineCheckerRouter::start(const ComputerList& computers)
 {
     computers_ = computers;
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     if (computers_.empty())
     {
@@ -136,9 +133,6 @@ void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode erro
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
-    if (!delegate_)
-        return;
-
     proto::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
@@ -157,7 +151,7 @@ void OnlineCheckerRouter::onTcpMessageReceived(uint8_t /* channel_id */, const Q
     bool online = message.host_status().status() == proto::HostStatus::STATUS_ONLINE;
     const Computer& computer = computers_.front();
 
-    delegate_->onRouterCheckerResult(computer.computer_id, online);
+    emit sig_checkerResult(computer.computer_id, online);
 
     computers_.pop_front();
     checkNextComputer();
@@ -192,9 +186,6 @@ void OnlineCheckerRouter::checkNextComputer()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
-    if (!delegate_)
-        return;
-
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
 
     if (channel_)
@@ -207,10 +198,9 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
         authenticator_.release()->deleteLater();
 
     for (const auto& computer : computers_)
-        delegate_->onRouterCheckerResult(computer.computer_id, false);
+        emit sig_checkerResult(computer.computer_id, false);
 
-    delegate_->onRouterCheckerFinished();
-    delegate_ = nullptr;
+    emit sig_checkerFinished();
 }
 
 } // namespace client

@@ -24,9 +24,9 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : io_thread_(base::Thread::AsioDispatcher, this),
-      ui_task_runner_(std::move(ui_task_runner))
+OnlineChecker::OnlineChecker(QObject* parent)
+    : QObject(parent),
+      io_thread_(base::Thread::AsioDispatcher, this)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -41,14 +41,11 @@ OnlineChecker::~OnlineChecker()
 
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
-                                   const ComputerList& computers,
-                                   Delegate* delegate)
+                                   const ComputerList& computers)
 {
     LOG(LS_INFO) << "Start online checker (total computers: " << computers.size() << ")";
 
     router_config_ = router_config;
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     for (const auto& computer : computers)
     {
@@ -79,9 +76,6 @@ void OnlineChecker::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "Starting new I/O thread";
 
-    io_task_runner_ = io_thread_.taskRunner();
-    DCHECK(io_task_runner_);
-
     if (router_config_.has_value())
     {
         if (!router_computers_.empty())
@@ -89,7 +83,15 @@ void OnlineChecker::onBeforeThreadRunning()
             LOG(LS_INFO) << "Computers for ROUTER checking: " << router_computers_.size();
 
             router_checker_ = std::make_unique<OnlineCheckerRouter>(*router_config_);
-            router_checker_->start(router_computers_, this);
+
+            connect(router_checker_.get(), &OnlineCheckerRouter::sig_checkerResult,
+                    this, &OnlineChecker::onRouterCheckerResult,
+                    Qt::DirectConnection);
+            connect(router_checker_.get(), &OnlineCheckerRouter::sig_checkerFinished,
+                    this, &OnlineChecker::onRouterCheckerFinished,
+                    Qt::DirectConnection);
+
+            router_checker_->start(router_computers_);
         }
         else
         {
@@ -108,7 +110,15 @@ void OnlineChecker::onBeforeThreadRunning()
         LOG(LS_INFO) << "Computers for DIRECT checking: " << direct_computers_.size();
 
         direct_checker_ = std::make_unique<OnlineCheckerDirect>();
-        direct_checker_->start(direct_computers_, this);
+
+        connect(direct_checker_.get(), &OnlineCheckerDirect::sig_checkerResult,
+                this, &OnlineChecker::onDirectCheckerResult,
+                Qt::DirectConnection);
+        connect(direct_checker_.get(), &OnlineCheckerDirect::sig_checkerFinished,
+                this, &OnlineChecker::onDirectCheckerFinished,
+                Qt::DirectConnection);
+
+        direct_checker_->start(direct_computers_);
     }
     else
     {
@@ -122,7 +132,6 @@ void OnlineChecker::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "I/O thread stopping...";
 
-    delegate_ = nullptr;
     direct_checker_.reset();
     router_checker_.reset();
 
@@ -132,18 +141,7 @@ void OnlineChecker::onAfterThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 {
-    ui_task_runner_.postTask([=]()
-    {
-        LOG(LS_INFO) << "Computer '" << computer_id << "' checked: " << online;
-
-        if (!delegate_)
-        {
-            LOG(LS_ERROR) << "Invalid delegate";
-            return;
-        }
-
-        delegate_->onOnlineCheckerResult(computer_id, online);
-    });
+    emit sig_checkerResult(computer_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,35 +153,13 @@ void OnlineChecker::onDirectCheckerFinished()
                  << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
-    {
-        ui_task_runner_.postTask([this]()
-        {
-            if (!delegate_)
-            {
-                LOG(LS_ERROR) << "Invalid delegate";
-                return;
-            }
-
-            delegate_->onOnlineCheckerFinished();
-        });
-    }
+        emit sig_checkerFinished();
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 {
-    ui_task_runner_.postTask([=]()
-    {
-        LOG(LS_INFO) << "Computer '" << computer_id << "' checked: " << online;
-
-        if (!delegate_)
-        {
-            LOG(LS_ERROR) << "Invalid delegate";
-            return;
-        }
-
-        delegate_->onOnlineCheckerResult(computer_id, online);
-    });
+    emit sig_checkerResult(computer_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,18 +171,7 @@ void OnlineChecker::onRouterCheckerFinished()
                  << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
-    {
-        ui_task_runner_.postTask([this]()
-        {
-            if (!delegate_)
-            {
-                LOG(LS_ERROR) << "Invalid delegate";
-                return;
-            }
-
-            delegate_->onOnlineCheckerFinished();
-        });
-    }
+        emit sig_checkerFinished();
 }
 
 } // namespace client

@@ -20,35 +20,26 @@
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
 
 #include "base/macros_magic.h"
-#include "base/scoped_task_runner.h"
 #include "base/threading/thread.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
 
 #include <optional>
-#include <mutex>
-#include <string>
 #include <vector>
+
+#include <QObject>
 
 namespace client {
 
 class OnlineChecker final
-    : public base::Thread::Delegate,
-      public OnlineCheckerDirect::Delegate,
-      public OnlineCheckerRouter::Delegate
+    : public QObject,
+      public base::Thread::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner);
+    explicit OnlineChecker(QObject* parent = nullptr);
     ~OnlineChecker() final;
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onOnlineCheckerResult(int computer_id, bool online) = 0;
-        virtual void onOnlineCheckerFinished() = 0;
-    };
 
     struct Computer
     {
@@ -59,26 +50,26 @@ public:
     using ComputerList = std::vector<Computer>;
 
     void checkComputers(const std::optional<RouterConfig>& router_config,
-                        const ComputerList& computers,
-                        Delegate* delegate);
+                        const ComputerList& computers);
+
+signals:
+    void sig_checkerResult(int computer_id, bool online);
+    void sig_checkerFinished();
 
 protected:
-    // base::AsioThread::Delegate implementation.
+    // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
-    // OnlineCheckerDirect::Delegate implementation.
-    void onDirectCheckerResult(int computer_id, bool online) final;
-    void onDirectCheckerFinished() final;
+private slots:
+    void onDirectCheckerResult(int computer_id, bool online);
+    void onDirectCheckerFinished();
 
-    // OnlineCheckerRouter::Delegate implemenation.
-    void onRouterCheckerResult(int computer_id, bool online) final;
-    void onRouterCheckerFinished() final;
+    void onRouterCheckerResult(int computer_id, bool online);
+    void onRouterCheckerFinished();
 
 private:
     base::Thread io_thread_;
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    base::ScopedTaskRunner ui_task_runner_;
 
     std::unique_ptr<OnlineCheckerDirect> direct_checker_;
     std::unique_ptr<OnlineCheckerRouter> router_checker_;
@@ -86,7 +77,6 @@ private:
     std::optional<RouterConfig> router_config_;
     OnlineCheckerRouter::ComputerList router_computers_;
     OnlineCheckerDirect::ComputerList direct_computers_;
-    Delegate* delegate_ = nullptr;
 
     bool direct_finished_ = false;
     bool router_finished_ = false;

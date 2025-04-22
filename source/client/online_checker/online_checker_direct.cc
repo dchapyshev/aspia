@@ -195,7 +195,8 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
 }
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::OnlineCheckerDirect()
+OnlineCheckerDirect::OnlineCheckerDirect(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -205,17 +206,14 @@ OnlineCheckerDirect::~OnlineCheckerDirect()
 {
     LOG(LS_INFO) << "Dtor";
 
-    delegate_ = nullptr;
     pending_queue_.clear();
     work_queue_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegate)
+void OnlineCheckerDirect::start(const ComputerList& computers)
 {
     pending_queue_ = computers;
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     if (pending_queue_.empty())
     {
@@ -254,15 +252,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 {
-    if (delegate_)
-    {
-        delegate_->onDirectCheckerResult(computer_id, online);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-        return;
-    }
+    emit sig_checkerResult(computer_id, online);
 
     if (!pending_queue_.empty())
     {
@@ -303,14 +293,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
-    if (delegate_)
-    {
-        delegate_->onDirectCheckerFinished();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-    }
+    emit sig_checkerFinished();
 }
 
 } // namespace client

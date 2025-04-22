@@ -43,15 +43,6 @@ public:
     explicit OnlineCheckerRouter(const RouterConfig& router_config, QObject* parent = nullptr);
     ~OnlineCheckerRouter() final;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onRouterCheckerResult(int computer_id, bool online) = 0;
-        virtual void onRouterCheckerFinished() = 0;
-    };
-
     struct Computer
     {
         int computer_id = -1;
@@ -59,7 +50,11 @@ public:
     };
     using ComputerList = std::deque<Computer>;
 
-    void start(const ComputerList& computers, Delegate* delegate);
+    void start(const ComputerList& computers);
+
+signals:
+    void sig_checkerResult(int computer_id, bool online);
+    void sig_checkerFinished();
 
 protected:
     // base::TcpChannel::Listener implementation.
@@ -78,7 +73,6 @@ private:
     RouterConfig router_config_;
 
     ComputerList computers_;
-    Delegate* delegate_ = nullptr;
 };
 
 } // namespace client
