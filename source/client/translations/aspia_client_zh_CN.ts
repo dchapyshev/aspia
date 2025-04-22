@@ -2743,23 +2743,23 @@
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="228"/>
+        <location filename="../ui/client_window.cc" line="231"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="328"/>
-        <location filename="../ui/client_window.cc" line="346"/>
+        <location filename="../ui/client_window.cc" line="331"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="329"/>
+        <location filename="../ui/client_window.cc" line="332"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="347"/>
+        <location filename="../ui/client_window.cc" line="350"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>

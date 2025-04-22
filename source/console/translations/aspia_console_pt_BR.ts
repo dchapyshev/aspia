@@ -1567,12 +1567,12 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="209"/>
-        <location filename="../main_window.cc" line="598"/>
-        <location filename="../main_window.cc" line="609"/>
-        <location filename="../main_window.cc" line="621"/>
-        <location filename="../main_window.cc" line="675"/>
-        <location filename="../main_window.cc" line="688"/>
-        <location filename="../main_window.cc" line="1702"/>
+        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="612"/>
+        <location filename="../main_window.cc" line="624"/>
+        <location filename="../main_window.cc" line="678"/>
+        <location filename="../main_window.cc" line="691"/>
+        <location filename="../main_window.cc" line="1705"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -1582,150 +1582,150 @@
         <translation>O arquivo da lista de endereços fixada &quot;%1&quot; não foi encontrado. &lt;br/&gt; Este arquivo será desafixado.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="290"/>
-        <location filename="../main_window.cc" line="634"/>
-        <location filename="../main_window.cc" line="696"/>
+        <location filename="../main_window.cc" line="293"/>
+        <location filename="../main_window.cc" line="637"/>
+        <location filename="../main_window.cc" line="699"/>
         <source>Information</source>
         <translation>Informação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="291"/>
+        <location filename="../main_window.cc" line="294"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>O catálogo de endereços &quot;%1&quot; já está aberto.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="323"/>
+        <location filename="../main_window.cc" line="326"/>
         <source>Open Address Book</source>
         <translation>Abrir Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="325"/>
+        <location filename="../main_window.cc" line="328"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Catálogo de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="583"/>
+        <location filename="../main_window.cc" line="586"/>
         <source>Open File</source>
         <translation>Abrir arquivo</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="585"/>
-        <location filename="../main_window.cc" line="662"/>
+        <location filename="../main_window.cc" line="588"/>
+        <location filename="../main_window.cc" line="665"/>
         <source>JSON files (*.json)</source>
         <translation>Arquivos JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="599"/>
+        <location filename="../main_window.cc" line="602"/>
         <source>Could not open file for reading.</source>
         <translation>Não foi possível abrir o arquivo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="610"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>Import file is empty.</source>
         <translation>O arquivo importado está vazio.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="660"/>
+        <location filename="../main_window.cc" line="663"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="676"/>
+        <location filename="../main_window.cc" line="679"/>
         <source>Could not open file for writing.</source>
         <translation>Não foi possível salvar no arquivo selecionado.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="689"/>
+        <location filename="../main_window.cc" line="692"/>
         <source>Unable to write file.</source>
         <translation>Não foi possível gravar no arquivo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="697"/>
+        <location filename="../main_window.cc" line="700"/>
         <source>Export completed successfully.</source>
         <translation>Exportação concluída com sucesso.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="986"/>
-        <location filename="../main_window.cc" line="1337"/>
-        <location filename="../main_window.cc" line="1422"/>
+        <location filename="../main_window.cc" line="989"/>
+        <location filename="../main_window.cc" line="1340"/>
+        <location filename="../main_window.cc" line="1425"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="987"/>
-        <location filename="../main_window.cc" line="1423"/>
+        <location filename="../main_window.cc" line="990"/>
+        <location filename="../main_window.cc" line="1426"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="991"/>
-        <location filename="../main_window.cc" line="1341"/>
-        <location filename="../main_window.cc" line="1427"/>
+        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="1344"/>
+        <location filename="../main_window.cc" line="1430"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="992"/>
-        <location filename="../main_window.cc" line="1342"/>
-        <location filename="../main_window.cc" line="1428"/>
+        <location filename="../main_window.cc" line="995"/>
+        <location filename="../main_window.cc" line="1345"/>
+        <location filename="../main_window.cc" line="1431"/>
         <source>No</source>
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="993"/>
-        <location filename="../main_window.cc" line="1429"/>
+        <location filename="../main_window.cc" line="996"/>
+        <location filename="../main_window.cc" line="1432"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1231"/>
+        <location filename="../main_window.cc" line="1234"/>
         <source>Close other tabs</source>
         <translation>Fechar outras abas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1238"/>
+        <location filename="../main_window.cc" line="1241"/>
         <source>Close tab</source>
         <translation>Fechar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1239"/>
-        <location filename="../main_window.cc" line="1244"/>
+        <location filename="../main_window.cc" line="1242"/>
+        <location filename="../main_window.cc" line="1247"/>
         <source>Pin tab</source>
         <translation>Fixar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1338"/>
+        <location filename="../main_window.cc" line="1341"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1375"/>
+        <location filename="../main_window.cc" line="1378"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1390"/>
+        <location filename="../main_window.cc" line="1393"/>
         <source>Show</source>
         <translation>Exibir</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="740"/>
-        <location filename="../main_window.cc" line="1566"/>
+        <location filename="../main_window.cc" line="743"/>
+        <location filename="../main_window.cc" line="1569"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="622"/>
+        <location filename="../main_window.cc" line="625"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation>Falha ao analisar o documento JSON: %1.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="635"/>
+        <location filename="../main_window.cc" line="638"/>
         <source>Import completed successfully.</source>
         <translation>Importação concluída com sucesso.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1703"/>
+        <location filename="../main_window.cc" line="1706"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

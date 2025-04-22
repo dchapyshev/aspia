@@ -2495,23 +2495,23 @@
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="228"/>
+        <location filename="../ui/client_window.cc" line="231"/>
         <source>Aspia Client</source>
         <translation>Client Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="328"/>
-        <location filename="../ui/client_window.cc" line="346"/>
+        <location filename="../ui/client_window.cc" line="331"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="329"/>
+        <location filename="../ui/client_window.cc" line="332"/>
         <source>An invalid computer address was entered.</source>
         <translation>Une adresse informatique non valide a été saisie.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="347"/>
+        <location filename="../ui/client_window.cc" line="350"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>ID de l hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>

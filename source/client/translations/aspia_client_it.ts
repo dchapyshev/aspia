@@ -2669,23 +2669,23 @@
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="228"/>
+        <location filename="../ui/client_window.cc" line="231"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="328"/>
-        <location filename="../ui/client_window.cc" line="346"/>
+        <location filename="../ui/client_window.cc" line="331"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="329"/>
+        <location filename="../ui/client_window.cc" line="332"/>
         <source>An invalid computer address was entered.</source>
         <translation>E&apos; stato inserito un indirizzo del router non valido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="347"/>
+        <location filename="../ui/client_window.cc" line="350"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>E&apos; stato inserito l&apos;ID di un host, ma non esiste un router configurato.E&apos; necessario configurare il router prima di connetersi.</translation>
     </message>
