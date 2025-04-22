@@ -26,19 +26,34 @@ namespace base {
 
 namespace {
 
-bool hasLower(const std::string& str)
+bool hasLower(const QString& str)
 {
-    return std::any_of(str.begin(), str.end(), islower);
+    for (int i = 0; i < str.size(); ++i)
+    {
+        if (str.at(i).isLower())
+            return true;
+    }
+    return false;
 }
 
-bool hasUpper(const std::string& str)
+bool hasUpper(const QString& str)
 {
-    return std::any_of(str.begin(), str.end(), isupper);
+    for (int i = 0; i < str.size(); ++i)
+    {
+        if (str.at(i).isUpper())
+            return true;
+    }
+    return false;
 }
 
-bool hasDigit(const std::string& str)
+bool hasDigit(const QString& str)
 {
-    return std::any_of(str.begin(), str.end(), isdigit);
+    for (int i = 0; i < str.size(); ++i)
+    {
+        if (str.at(i).isDigit())
+            return true;
+    }
+    return false;
 }
 
 } // namespace
@@ -56,8 +71,8 @@ TEST(password_generator_test, default_params)
     EXPECT_EQ(gen.length(), PasswordGenerator::kDefaultLength);
     EXPECT_EQ(gen.characters(), PasswordGenerator::kDefaultCharacters);
 
-    std::string res1 = gen.result();
-    std::string res2 = gen.result();
+    QString res1 = gen.result();
+    QString res2 = gen.result();
 
     EXPECT_EQ(res1.length(), PasswordGenerator::kDefaultLength);
     EXPECT_EQ(res2.length(), PasswordGenerator::kDefaultLength);
@@ -74,7 +89,7 @@ TEST(password_generator_test, only_lower_case)
 
     for (int i = 0; i < 10; ++i)
     {
-        std::string res = gen.result();
+        QString res = gen.result();
 
         EXPECT_EQ(res.length(), 5);
         EXPECT_TRUE(hasLower(res));
@@ -92,7 +107,7 @@ TEST(password_generator_test, only_upper_case)
 
     for (int i = 0; i < 10; ++i)
     {
-        std::string res = gen.result();
+        QString res = gen.result();
 
         EXPECT_EQ(res.length(), 5);
         EXPECT_TRUE(hasUpper(res));
@@ -110,7 +125,7 @@ TEST(password_generator_test, only_digits)
 
     for (int i = 0; i < 10; ++i)
     {
-        std::string res = gen.result();
+        QString res = gen.result();
 
         EXPECT_EQ(res.length(), 5);
         EXPECT_TRUE(hasDigit(res));
@@ -128,7 +143,7 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        std::string res = gen1.result();
+        QString res = gen1.result();
         EXPECT_EQ(res.length(), 5);
     }
 
@@ -137,7 +152,7 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        std::string res = gen2.result();
+        QString res = gen2.result();
         EXPECT_EQ(res.length(), 10);
     }
 
@@ -146,7 +161,7 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        std::string res = gen3.result();
+        QString res = gen3.result();
         EXPECT_EQ(res.length(), 15);
     }
 }

@@ -19,6 +19,7 @@
 #include "base/crypto/password_hash.h"
 
 #include <gtest/gtest.h>
+#include <QString>
 
 namespace base {
 
@@ -26,7 +27,7 @@ TEST(PasswordHashTest, Scrypt)
 {
     struct TestData
     {
-        std::string password;
+        QString password;
         std::string salt;
         std::string expected;
     } const kTestTable[] =
