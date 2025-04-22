@@ -235,7 +235,8 @@ void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
         if (event.notifier == notifier)
         {
             UnregisterWait(event.wait_handle);
-            it = events_.erase(it);
+            events_.erase(it);
+            break;
         }
         else
         {
