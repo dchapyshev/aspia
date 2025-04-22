@@ -79,7 +79,7 @@ private:
         TimePoint expire_time;
     };
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
     struct EventData
     {
         QWinEventNotifier* notifier;
@@ -88,23 +88,15 @@ private:
 
     static void CALLBACK eventCallback(PVOID parameter, BOOLEAN timer_or_wait_fired);
 
-    std::list<EventData> events_;
-#endif // defined(Q_OS_WIN)
+    std::vector<EventData> events_;
+#endif // defined(Q_OS_WINDOWS)
 
     void asyncWaitForNextTimer();
-
-    struct FastHash
-    {
-        size_t operator()(int timer_id) const noexcept
-        {
-            return static_cast<size_t>(timer_id);
-        }
-    };
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-    std::unordered_map<int, TimerData, FastHash> timers_;
+    std::unordered_map<int, TimerData> timers_;
     asio::high_resolution_timer high_resolution_timer_;
 
     DISALLOW_COPY_AND_ASSIGN(AsioEventDispatcher);

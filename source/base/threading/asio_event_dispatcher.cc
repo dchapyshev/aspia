@@ -32,8 +32,12 @@ namespace base {
 
 namespace {
 
-const size_t kReservedSizeForTimersMap = 100;
+const size_t kReservedSizeForTimersMap = 50;
 const float kLoadFactorForTimersMap = 0.5;
+
+#if defined(Q_OS_WINDOWS)
+const size_t kReservedSizeForEvents = 20;
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -47,6 +51,10 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 
     timers_.reserve(kReservedSizeForTimersMap);
     timers_.max_load_factor(kLoadFactorForTimersMap);
+
+#if defined(Q_OS_WINDOWS)
+    events_.reserve(kReservedSizeForEvents);
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,7 +199,7 @@ int AsioEventDispatcher::remainingTime(int id)
 }
 
 //--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
 {
     HANDLE handle = notifier->handle();
@@ -212,10 +220,10 @@ bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
     events_.emplace_back(notifier, wait_handle);
     return true;
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
 {
     auto it = events_.begin();
@@ -234,13 +242,13 @@ void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
         }
     }
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
     // To stop run_one inside method processEvents completes.
-    io_context_.stop();
+    asio::post(io_context_, []{});
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,7 +331,7 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
             return;
 
         TimerData& timer = it->second;
-        timer.start_time = Clock::now();
+        timer.start_time = timer.expire_time;
         timer.expire_time = timer.start_time + Milliseconds(timer.interval);
 
         asyncWaitForNextTimer();
