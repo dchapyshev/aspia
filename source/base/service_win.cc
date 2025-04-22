@@ -24,11 +24,12 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/simple_thread.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 
 #include <sddl.h>
+
+#include <QThread>
 
 namespace base {
 
@@ -82,7 +83,7 @@ std::string serviceStateToString(DWORD state)
     }
 }
 
-class ServiceThread
+class ServiceThread final : public QThread
 {
 public:
     ServiceThread(Service* service);
@@ -90,7 +91,6 @@ public:
 
     using EventCallback = std::function<void()>;
 
-    void start();
     void setStatus(DWORD status);
     void doEvent(EventCallback callback, bool quit = false);
 
@@ -115,15 +115,14 @@ public:
     bool event_processed = false;
 
 protected:
-    // SimpleThread implementation.
-    void run();
+    // QThread implementation.
+    void run() final;
 
 private:
     static void WINAPI serviceMain(DWORD argc, LPWSTR* argv);
     static DWORD WINAPI serviceControlHandler(
         DWORD control_code, DWORD event_type, LPVOID event_data, LPVOID context);
 
-    SimpleThread thread_;
     Service* service_;
     std::shared_ptr<TaskRunner> task_runner_;
 
@@ -162,16 +161,11 @@ ServiceThread::~ServiceThread()
 
     setStatus(SERVICE_STOPPED);
 
-    thread_.stop();
+    terminate();
+    wait();
 
     DCHECK(self);
     self = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-void ServiceThread::start()
-{
-    thread_.start(std::bind(&ServiceThread::run, this));
 }
 
 //--------------------------------------------------------------------------------------------------
