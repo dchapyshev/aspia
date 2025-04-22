@@ -24,9 +24,9 @@
 #include <QCoreApplication>
 #include <QThread>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <QWinEventNotifier>
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
