@@ -194,8 +194,6 @@ int AsioEventDispatcher::remainingTime(int id)
 #if defined(Q_OS_WIN)
 bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
 {
-    DCHECK(notifier);
-
     HANDLE handle = notifier->handle();
     if (!handle || handle == INVALID_HANDLE_VALUE)
     {
@@ -220,8 +218,6 @@ bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
 #if defined(Q_OS_WIN)
 void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
 {
-    DCHECK(notifier);
-
     auto it = events_.begin();
     while (it != events_.end())
     {
