@@ -188,11 +188,11 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int id)
 {
-    auto it = timers_.find(id);
-    if (it == timers_.end())
+    const auto& it = timers_.find(id);
+    if (it == timers_.cend())
         return -1;
 
-    uint64_t elapsed = std::chrono::duration_cast<Milliseconds>(
+    const uint64_t elapsed = std::chrono::duration_cast<Milliseconds>(
         Clock::now() - it->second.start_time).count();
 
     return it->second.interval - static_cast<int>(elapsed);
