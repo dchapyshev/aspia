@@ -1161,43 +1161,43 @@
         <translation>您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1222"/>
+        <location filename="../address_book_tab.cc" line="1228"/>
         <source>Save Address Book</source>
         <translation>儲存通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1224"/>
+        <location filename="../address_book_tab.cc" line="1230"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1239"/>
+        <location filename="../address_book_tab.cc" line="1245"/>
         <source>Unable to create or open address book file.</source>
         <translation>無法建立或開啟通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1253"/>
+        <location filename="../address_book_tab.cc" line="1259"/>
         <source>Unable to write address book file.</source>
         <translation>無法寫入通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1284"/>
+        <location filename="../address_book_tab.cc" line="1290"/>
         <source>Root Group</source>
         <translation>根群組</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1296"/>
-        <location filename="../address_book_tab.cc" line="1311"/>
+        <location filename="../address_book_tab.cc" line="1302"/>
+        <location filename="../address_book_tab.cc" line="1317"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1298"/>
+        <location filename="../address_book_tab.cc" line="1304"/>
         <source>Could not open address book</source>
         <translation>無法開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1313"/>
+        <location filename="../address_book_tab.cc" line="1319"/>
         <source>Failed to save address book</source>
         <translation>儲存通訊錄失敗</translation>
     </message>
@@ -1214,12 +1214,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1075"/>
+        <location filename="../address_book_tab.cc" line="1081"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1080"/>
+        <location filename="../address_book_tab.cc" line="1086"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>

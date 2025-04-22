@@ -1145,53 +1145,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1075"/>
+        <location filename="../address_book_tab.cc" line="1081"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1080"/>
+        <location filename="../address_book_tab.cc" line="1086"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1222"/>
+        <location filename="../address_book_tab.cc" line="1228"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1224"/>
+        <location filename="../address_book_tab.cc" line="1230"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1239"/>
+        <location filename="../address_book_tab.cc" line="1245"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1253"/>
+        <location filename="../address_book_tab.cc" line="1259"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1284"/>
+        <location filename="../address_book_tab.cc" line="1290"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1296"/>
-        <location filename="../address_book_tab.cc" line="1311"/>
+        <location filename="../address_book_tab.cc" line="1302"/>
+        <location filename="../address_book_tab.cc" line="1317"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1298"/>
+        <location filename="../address_book_tab.cc" line="1304"/>
         <source>Could not open address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1313"/>
+        <location filename="../address_book_tab.cc" line="1319"/>
         <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
