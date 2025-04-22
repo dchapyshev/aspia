@@ -19,14 +19,14 @@
 #ifndef COMMON_CLIPBOARD_MONITOR_H
 #define COMMON_CLIPBOARD_MONITOR_H
 
-#include "base/threading/asio_thread.h"
+#include "base/threading/thread.h"
 #include "common/clipboard.h"
 
 namespace common {
 
 class ClipboardMonitor final
     : public QObject,
-      public base::AsioThread::Delegate
+      public base::Thread::Delegate
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ protected:
     void onAfterThreadRunning() final;
 
 private:
-    std::unique_ptr<base::AsioThread> thread_;
+    std::unique_ptr<base::Thread> thread_;
     std::unique_ptr<common::Clipboard> clipboard_;
 
     DISALLOW_COPY_AND_ASSIGN(ClipboardMonitor);

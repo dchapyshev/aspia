@@ -624,10 +624,10 @@ list(APPEND SOURCE_BASE_THREADING
     threading/asio_event_dispatcher.h
     threading/asio_task_runner.cc
     threading/asio_task_runner.h
-    threading/asio_thread.cc
-    threading/asio_thread.h
     threading/simple_thread.cc
     threading/simple_thread.h
+    threading/thread.cc
+    threading/thread.h
     threading/thread_checker.cc
     threading/thread_checker.h)
 

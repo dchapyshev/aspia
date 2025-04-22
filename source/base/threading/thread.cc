@@ -16,30 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/threading/asio_thread.h"
+#include "base/threading/thread.h"
 
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/asio_task_runner.h"
 #include "base/application.h"
 #include "base/logging.h"
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_com_initializer.h"
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-AsioThread::AsioThread(EventDispatcher event_dispatcher, Delegate* delegate, QObject* parent)
+Thread::Thread(EventDispatcher dispatcher, Delegate* delegate, QObject* parent)
     : QThread(parent),
       delegate_(delegate)
 {
-    if (event_dispatcher == EventDispatcher::ASIO)
+    if (dispatcher == AsioDispatcher)
         setEventDispatcher(new AsioEventDispatcher());
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioThread::stop()
+void Thread::stop()
 {
     quit();
     wait();
@@ -47,9 +47,9 @@ void AsioThread::stop()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::shared_ptr<TaskRunner> AsioThread::currentTaskRunner()
+std::shared_ptr<TaskRunner> Thread::currentTaskRunner()
 {
-    AsioThread* thread = dynamic_cast<AsioThread*>(QThread::currentThread());
+    Thread* thread = dynamic_cast<Thread*>(QThread::currentThread());
     if (thread)
         return thread->taskRunner();
 
@@ -60,18 +60,20 @@ std::shared_ptr<TaskRunner> AsioThread::currentTaskRunner()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<base::TaskRunner> AsioThread::taskRunner()
+std::shared_ptr<base::TaskRunner> Thread::taskRunner()
 {
     return task_runner_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioThread::run()
+void Thread::run()
 {
     task_runner_ = std::make_shared<AsioTaskRunner>();
 
+#if defined(Q_OS_WINDOWS)
     win::ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.isSucceeded());
+#endif // defined(Q_OS_WINDOWS)
 
     if (delegate_)
         delegate_->onBeforeThreadRunning();

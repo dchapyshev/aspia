@@ -36,7 +36,7 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval),
       shared_pool_(std::move(shared_pool)),
-      thread_(std::make_unique<base::AsioThread>(base::AsioThread::EventDispatcher::ASIO, this))
+      thread_(std::make_unique<base::Thread>(base::Thread::AsioDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(peer_port_ && shared_pool_);

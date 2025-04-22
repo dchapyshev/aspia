@@ -36,9 +36,9 @@ namespace common {
 namespace {
 
 #if defined(Q_OS_WIN)
-const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::EventDispatcher::QT;
+const base::Thread::EventDispatcher kEventDispatcher = base::Thread::QtDispatcher;
 #else
-const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::EventDispatcher::ASIO;
+const base::Thread::EventDispatcher kEventDispatcher = base::Thread::AsioDispatcher;
 #endif
 
 } // namespace
@@ -46,7 +46,7 @@ const base::AsioThread::EventDispatcher kEventDispatcher = base::AsioThread::Eve
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::ClipboardMonitor(QObject* parent)
     : QObject(parent),
-      thread_(std::make_unique<base::AsioThread>(kEventDispatcher, this))
+      thread_(std::make_unique<base::Thread>(kEventDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
 }

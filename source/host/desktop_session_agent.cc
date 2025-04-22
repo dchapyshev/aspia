@@ -72,7 +72,7 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     : QObject(parent),
-      ui_thread_(base::AsioThread::EventDispatcher::QT, this),
+      ui_thread_(base::Thread::QtDispatcher, this),
       screen_capture_timer_(new QTimer(this)),
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       outgoing_message_(std::make_unique<proto::internal::DesktopToService>())

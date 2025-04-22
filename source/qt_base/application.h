@@ -19,7 +19,7 @@
 #ifndef QT_BASE_APPLICATION_H
 #define QT_BASE_APPLICATION_H
 
-#include "base/threading/asio_thread.h"
+#include "base/threading/thread.h"
 #include "qt_base/locale_loader.h"
 
 #include <QApplication>
@@ -71,7 +71,7 @@ private:
     QLockFile* lock_file_ = nullptr;
     QLocalServer* server_ = nullptr;
 
-    base::AsioThread io_thread_;
+    base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<LocaleLoader> locale_loader_;
     std::shared_ptr<base::TaskRunner> ui_task_runner_;

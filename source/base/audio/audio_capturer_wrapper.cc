@@ -28,7 +28,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy)
     : channel_proxy_(std::move(channel_proxy)),
-      thread_(std::make_unique<AsioThread>(AsioThread::EventDispatcher::ASIO, this))
+      thread_(std::make_unique<Thread>(Thread::AsioDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(channel_proxy_);
@@ -53,7 +53,7 @@ void AudioCapturerWrapper::start()
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::onBeforeThreadRunning()
 {
-    thread_->setPriority(AsioThread::HighestPriority);
+    thread_->setPriority(Thread::HighestPriority);
 
     capturer_ = AudioCapturer::create();
     if (!capturer_)

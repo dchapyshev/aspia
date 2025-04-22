@@ -111,7 +111,7 @@ bool isSameApplication(const QLocalSocket* socket)
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv),
-      io_thread_(base::AsioThread::EventDispatcher::ASIO, nullptr)
+      io_thread_(base::Thread::AsioDispatcher, nullptr)
 {
     LOG(LS_INFO) << "Ctor";
 

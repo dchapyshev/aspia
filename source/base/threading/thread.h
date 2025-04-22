@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREADING_ASIO_THREAD_H
-#define BASE_THREADING_ASIO_THREAD_H
+#ifndef BASE_THREADING_THREAD_H
+#define BASE_THREADING_THREAD_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -26,10 +26,10 @@
 
 namespace base {
 
-class AsioThread final : public QThread
+class Thread final : public QThread
 {
 public:
-    enum class EventDispatcher { ASIO, QT };
+    enum EventDispatcher { AsioDispatcher, QtDispatcher };
 
     class Delegate
     {
@@ -49,7 +49,7 @@ public:
         }
     };
 
-    AsioThread(EventDispatcher event_dispatcher, Delegate* delegate, QObject* parent = nullptr);
+    Thread(EventDispatcher dispatcher, Delegate* delegate, QObject* parent = nullptr);
 
     void stop();
 
@@ -64,9 +64,9 @@ private:
     std::shared_ptr<TaskRunner> task_runner_;
     Delegate* delegate_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(AsioThread);
+    DISALLOW_COPY_AND_ASSIGN(Thread);
 };
 
 } // namespace base
 
-#endif // BASE_THREADING_ASIO_THREAD_H
+#endif // BASE_THREADING_THREAD_H

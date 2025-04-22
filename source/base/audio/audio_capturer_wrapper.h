@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
-#include "base/threading/asio_thread.h"
+#include "base/threading/thread.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
@@ -27,7 +27,7 @@ namespace base {
 class AudioCapturer;
 class IpcChannelProxy;
 
-class AudioCapturerWrapper final : public AsioThread::Delegate
+class AudioCapturerWrapper final : public Thread::Delegate
 {
 public:
     explicit AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy);
@@ -42,7 +42,7 @@ protected:
 
 private:
     std::shared_ptr<IpcChannelProxy> channel_proxy_;
-    std::unique_ptr<AsioThread> thread_;
+    std::unique_ptr<Thread> thread_;
     std::unique_ptr<AudioCapturer> capturer_;
     proto::internal::DesktopToService outgoing_message_;
 

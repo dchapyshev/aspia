@@ -25,7 +25,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
-    : io_thread_(base::AsioThread::EventDispatcher::ASIO, this),
+    : io_thread_(base::Thread::AsioDispatcher, this),
       ui_task_runner_(std::move(ui_task_runner))
 {
     LOG(LS_INFO) << "Ctor";

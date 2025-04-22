@@ -26,7 +26,7 @@
 #include "base/net/tcp_channel_proxy.h"
 #include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/asio_thread.h"
+#include "base/threading/thread.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -164,7 +164,7 @@ void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(QObject* parent)
     : NetworkChannel(parent),
-      proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+      proxy_(new TcpChannelProxy(base::Thread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -178,7 +178,7 @@ TcpChannel::TcpChannel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
     : NetworkChannel(parent),
-      proxy_(new TcpChannelProxy(base::AsioThread::currentTaskRunner(), this)),
+      proxy_(new TcpChannelProxy(base::Thread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket)),
       connected_(true),
