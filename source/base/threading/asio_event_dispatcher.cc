@@ -165,9 +165,10 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         }
     }
 
-    if (removed)
-        asyncWaitForNextTimer();
+    if (!removed)
+        return false;
 
+    asyncWaitForNextTimer();
     return true;
 }
 
@@ -283,7 +284,7 @@ asio::io_context& AsioEventDispatcher::ioContext()
 
 //--------------------------------------------------------------------------------------------------
 // static
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wait_fired */)
 {
     QWinEventNotifier* notifier = reinterpret_cast<QWinEventNotifier*>(parameter);
@@ -295,7 +296,7 @@ void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wai
 
     emit notifier->activated(notifier->handle(), {});
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitForNextTimer()
