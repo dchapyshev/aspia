@@ -19,18 +19,17 @@
 #include "base/peer/relay_peer_manager.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/net/tcp_channel.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-RelayPeerManager::RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate)
-    : task_runner_(std::move(task_runner)),
+RelayPeerManager::RelayPeerManager(Delegate* delegate, QObject* parent)
+    : QObject(parent),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_ && delegate_);
+    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -76,7 +75,7 @@ void RelayPeerManager::cleanup()
     {
         if (it->get()->isFinished())
         {
-            task_runner_->deleteSoon(std::move(*it));
+            it->release()->deleteLater();
             it = pending_.erase(it);
         }
         else

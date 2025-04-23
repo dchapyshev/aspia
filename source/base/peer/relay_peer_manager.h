@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+#include <QObject>
+
 namespace proto {
 class RelayCredentials;
 } // namespace proto
@@ -34,8 +36,12 @@ namespace base {
 class TcpChannel;
 class TaskRunner;
 
-class RelayPeerManager final : public RelayPeer::Delegate
+class RelayPeerManager final
+    : public QObject,
+      public RelayPeer::Delegate
 {
+    Q_OBJECT
+
 public:
     class Delegate
     {
@@ -45,7 +51,7 @@ public:
         virtual void onNewPeerConnected(std::unique_ptr<TcpChannel> channel) = 0;
     };
 
-    RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
+    explicit RelayPeerManager(Delegate* delegate, QObject* parent = nullptr);
     ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
@@ -58,9 +64,7 @@ protected:
 private:
     void cleanup();
 
-    std::shared_ptr<TaskRunner> task_runner_;
     Delegate* delegate_;
-
     std::vector<std::unique_ptr<RelayPeer>> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);

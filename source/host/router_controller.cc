@@ -34,10 +34,9 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
+RouterController::RouterController(QObject* parent)
     : QObject(parent),
-      task_runner_(task_runner),
-      peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this))
+      peer_manager_(std::make_unique<base::RelayPeerManager>(this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -167,7 +166,7 @@ void RouterController::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
     });
 }
 

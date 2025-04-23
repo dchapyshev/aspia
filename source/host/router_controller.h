@@ -42,7 +42,7 @@ class RouterController final
     Q_OBJECT
 
 public:
-    explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
+    explicit RouterController(QObject* parent = nullptr);
     ~RouterController() final;
 
     struct RouterInfo
@@ -89,7 +89,6 @@ private:
 
     Delegate* delegate_ = nullptr;
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<base::RelayPeerManager> peer_manager_;

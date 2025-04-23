@@ -25,19 +25,21 @@
 #include "proto/router_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
-#include <optional>
 
 #include <QByteArray>
+#include <QObject>
 
 namespace base {
 
 class TcpChannel;
 class Location;
 
-class RelayPeer
+class RelayPeer final : public QObject
 {
+    Q_OBJECT
+
 public:
-    RelayPeer();
+    explicit RelayPeer(QObject* parent = nullptr);
     ~RelayPeer();
 
     class Delegate

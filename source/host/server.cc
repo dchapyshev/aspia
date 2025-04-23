@@ -568,7 +568,7 @@ void Server::connectToRouter()
     router_info.public_key = settings_.routerPublicKey();
 
     // Connect to the router.
-    router_controller_ = std::make_unique<RouterController>(task_runner_);
+    router_controller_ = std::make_unique<RouterController>();
     router_controller_->start(router_info, this);
 }
 

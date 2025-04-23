@@ -50,7 +50,7 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
         return false;
 #endif
 
-    buffer->resize(size);
+    buffer->resize(static_cast<Container::size_type>(size));
 
     stream.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
     return !stream.fail();

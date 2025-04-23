@@ -54,8 +54,9 @@ std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RelayPeer::RelayPeer()
-    : io_context_(AsioEventDispatcher::currentIoContext()),
+RelayPeer::RelayPeer(QObject* parent)
+    : QObject(parent),
+      io_context_(AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(io_context_)
 {
