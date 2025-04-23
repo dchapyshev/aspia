@@ -27,8 +27,12 @@ namespace host {
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent final : public base::IpcChannel::Listener
+class UserSessionAgent final
+    : public QObject,
+      public base::IpcChannel::Listener
 {
+    Q_OBJECT
+
 public:
     enum class Status
     {
@@ -56,7 +60,8 @@ public:
 
     using ClientList = std::vector<Client>;
 
-    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
+    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
+                              QObject* parent = nullptr);
     ~UserSessionAgent() final;
 
     void start();

@@ -19,14 +19,13 @@
 #include "host/desktop_session_fake.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionFake::DesktopSessionFake(
-    std::shared_ptr<base::TaskRunner> /* task_runner */, Delegate* delegate)
-    : delegate_(delegate)
+DesktopSessionFake::DesktopSessionFake(Delegate* delegate, QObject* parent)
+    : DesktopSession(parent),
+      delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(delegate_);

@@ -55,7 +55,6 @@ ClientSession::~ClientSession()
 // static
 std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_type,
                                                      std::unique_ptr<base::TcpChannel> channel,
-                                                     std::shared_ptr<base::TaskRunner> task_runner,
                                                      QObject* parent)
 {
     if (!channel)
@@ -69,11 +68,11 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
             return std::unique_ptr<ClientSessionDesktop>(
-                new ClientSessionDesktop(session_type, std::move(channel), std::move(task_runner), parent));
+                new ClientSessionDesktop(session_type, std::move(channel), parent));
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return std::unique_ptr<ClientSessionFileTransfer>(
-                new ClientSessionFileTransfer(std::move(channel), std::move(task_runner), parent));
+                new ClientSessionFileTransfer(std::move(channel), parent));
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
             return std::unique_ptr<ClientSessionSystemInfo>(

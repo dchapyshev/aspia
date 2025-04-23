@@ -65,7 +65,6 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 //--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
-                                           std::shared_ptr<base::TaskRunner> task_runner,
                                            QObject* parent)
     : ClientSession(session_type, std::move(channel), parent),
       incoming_message_(std::make_unique<proto::ClientToHost>()),

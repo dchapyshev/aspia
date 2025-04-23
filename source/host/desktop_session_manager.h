@@ -47,9 +47,7 @@ class DesktopSessionManager final
     Q_OBJECT
 
 public:
-    DesktopSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                          DesktopSession::Delegate* delegate,
-                          QObject* parent = nullptr);
+    explicit DesktopSessionManager(DesktopSession::Delegate* delegate, QObject* parent = nullptr);
     ~DesktopSessionManager() final;
 
     void attachSession(const base::Location& location, base::SessionId session_id);
@@ -78,7 +76,6 @@ private:
     void setState(const base::Location& location, State state);
     static const char* stateToString(State state);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcServer> server_;
     std::unique_ptr<DesktopSession> session_;
     base::local_shared_ptr<DesktopSessionProxy> session_proxy_;

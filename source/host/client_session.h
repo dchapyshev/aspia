@@ -66,7 +66,6 @@ public:
 
     static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
                                                  std::unique_ptr<base::TcpChannel> channel,
-                                                 std::shared_ptr<base::TaskRunner> task_runner,
                                                  QObject* parent = nullptr);
 
     void start(Delegate* delegate);

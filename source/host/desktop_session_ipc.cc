@@ -72,8 +72,10 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
-                                     Delegate* delegate)
-    : channel_(std::move(channel)),
+                                     Delegate* delegate,
+                                     QObject* parent)
+    : DesktopSession(parent),
+      channel_(std::move(channel)),
       delegate_(delegate),
       outgoing_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       incoming_message_(std::make_unique<proto::internal::DesktopToService>())

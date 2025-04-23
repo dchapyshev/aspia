@@ -129,7 +129,7 @@ void fileTransferAgentMain(int& argc, char* argv[])
         base::Application application(argc, argv);
 
         std::unique_ptr<host::FileTransferAgent> file_transfer_agent =
-            std::make_unique<host::FileTransferAgent>(base::Application::taskRunner());
+            std::make_unique<host::FileTransferAgent>();
 
         file_transfer_agent->start(QString::fromStdU16String(command_line->switchValue(u"channel_id")));
         application.exec();

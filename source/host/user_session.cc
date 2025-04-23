@@ -186,7 +186,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
     router_state_ = router_state;
 
-    desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
+    desktop_session_ = std::make_unique<DesktopSessionManager>(this);
     desktop_session_proxy_ = desktop_session_->sessionProxy();
     desktop_session_->attachSession(FROM_HERE, session_id_);
 

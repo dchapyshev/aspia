@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/desktop/frame.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session_fake.h"
@@ -43,10 +42,8 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionManager::DesktopSessionManager(
-    std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate, QObject* parent)
+DesktopSessionManager::DesktopSessionManager(DesktopSession::Delegate* delegate, QObject* parent)
     : QObject(parent),
-      task_runner_(task_runner),
       session_proxy_(base::make_local_shared<DesktopSessionProxy>()),
       delegate_(delegate)
 {
@@ -178,7 +175,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 
     session_attach_timer_.stop();
     session_proxy_->stopAndDettach();
-    task_runner_->deleteSoon(std::move(session_));
+    session_.release()->deleteLater();
 
     LOG(LS_INFO) << "Session process is detached (sid=" << session_id_ << ")";
 
@@ -188,7 +185,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_attach_timer_.start(kSessionAttachTimeout);
 
     // The real session process has ended. We create a temporary fake session.
-    session_ = std::make_unique<DesktopSessionFake>(task_runner_, this);
+    session_ = std::make_unique<DesktopSessionFake>(this);
     session_proxy_->attachAndStart(session_.get());
 }
 
@@ -209,7 +206,7 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
     {
         LOG(LS_INFO) << "IPC server already exists. Stop it (sid=" << session_id_ << ")";
         server_->stop();
-        task_runner_->deleteSoon(std::move(server_));
+        server_.release()->deleteLater();
     }
 
     session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);

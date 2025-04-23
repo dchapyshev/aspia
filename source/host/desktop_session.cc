@@ -20,6 +20,12 @@
 
 namespace host {
 
+DesktopSession::DesktopSession(QObject* parent)
+    : QObject(parent)
+{
+    // Nothing
+}
+
 //--------------------------------------------------------------------------------------------------
 // static
 const char* DesktopSession::controlActionToString(proto::internal::DesktopControl::Action action)

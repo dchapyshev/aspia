@@ -21,6 +21,8 @@
 
 #include "proto/desktop_internal.pb.h"
 
+#include <QObject>
+
 namespace base {
 class Frame;
 class MouseCursor;
@@ -28,9 +30,12 @@ class MouseCursor;
 
 namespace host {
 
-class DesktopSession
+class DesktopSession : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit DesktopSession(QObject* parent);
     virtual ~DesktopSession() = default;
 
     class Delegate

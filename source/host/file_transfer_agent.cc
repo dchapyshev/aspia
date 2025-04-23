@@ -21,15 +21,16 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 
+#include <QCoreApplication>
+
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-FileTransferAgent::FileTransferAgent(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
+FileTransferAgent::FileTransferAgent(QObject* parent)
+    : QObject(parent),
       worker_(std::make_unique<common::FileWorkerImpl>())
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +59,7 @@ void FileTransferAgent::start(const QString& channel_id)
 void FileTransferAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
-    task_runner_->postQuit();
+    QCoreApplication::quit();
 }
 
 //--------------------------------------------------------------------------------------------------

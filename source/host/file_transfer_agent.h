@@ -20,16 +20,19 @@
 #define HOST_FILE_TRANSFER_AGENT_H
 
 #include "base/macros_magic.h"
-#include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/file_worker_impl.h"
 
 namespace host {
 
-class FileTransferAgent final : public base::IpcChannel::Listener
+class FileTransferAgent final
+    : public QObject,
+      public base::IpcChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    explicit FileTransferAgent(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit FileTransferAgent(QObject* parent = nullptr);
     ~FileTransferAgent();
 
     void start(const QString& channel_id);
@@ -41,7 +44,6 @@ protected:
     void onIpcMessageWritten() final;
 
 private:
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
     std::unique_ptr<common::FileWorkerImpl> worker_;
 

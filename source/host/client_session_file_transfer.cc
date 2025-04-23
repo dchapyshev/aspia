@@ -21,7 +21,6 @@
 #include "build/build_config.h"
 #include "base/command_line.h"
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/files/base_paths.h"
 #include "proto/file_transfer.pb.h"
 
@@ -181,10 +180,8 @@ std::filesystem::path agentFilePath()
 
 //--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
-                                                     std::shared_ptr<base::TaskRunner> task_runner,
                                                      QObject* parent)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel), parent),
-      task_runner_(task_runner),
       attach_timer_(std::make_unique<QTimer>())
 {
     LOG(LS_INFO) << "Ctor";
@@ -349,7 +346,7 @@ void ClientSessionFileTransfer::onNewConnection(std::unique_ptr<base::IpcChannel
 {
     LOG(LS_INFO) << "IPC channel for file transfer session is connected";
 
-    task_runner_->deleteSoon(std::move(ipc_server_));
+    ipc_server_.release()->deleteLater();
     attach_timer_->stop();
 
     ipc_channel_ = std::move(channel);

@@ -30,8 +30,12 @@ class DesktopSessionIpc final
     : public DesktopSession,
       public base::IpcChannel::Listener
 {
+    Q_OBJECT
+
 public:
-    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
+    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
+                      Delegate* delegate,
+                      QObject* parent = nullptr);
     ~DesktopSessionIpc() final;
 
     // DesktopSession implementation.

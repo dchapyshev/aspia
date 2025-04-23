@@ -39,9 +39,7 @@ class ClientSessionFileTransfer final
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
-                              std::shared_ptr<base::TaskRunner> task_runner,
-                              QObject* parent);
+    ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
     ~ClientSessionFileTransfer() final;
 
 protected:
@@ -62,7 +60,6 @@ protected:
 private:
     void onError(const base::Location& location);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<QTimer> attach_timer_;
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;

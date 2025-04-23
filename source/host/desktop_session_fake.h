@@ -22,16 +22,14 @@
 #include "base/macros_magic.h"
 #include "host/desktop_session.h"
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace host {
 
 class DesktopSessionFake final : public DesktopSession
 {
+    Q_OBJECT
+
 public:
-    DesktopSessionFake(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
+    explicit DesktopSessionFake(Delegate* delegate, QObject* parent = nullptr);
     ~DesktopSessionFake() final;
 
     // DesktopSession implementation.
