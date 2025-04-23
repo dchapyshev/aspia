@@ -24,7 +24,7 @@
 #include <QAbstractEventDispatcher>
 
 #include <asio/io_context.hpp>
-#include <asio/high_resolution_timer.hpp>
+#include <asio/steady_timer.hpp>
 
 #include <atomic>
 #include <unordered_map>
@@ -64,7 +64,7 @@ public:
     asio::io_context& ioContext();
 
 private:
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = Clock::time_point;
     using Milliseconds = std::chrono::milliseconds;
 
@@ -97,7 +97,7 @@ private:
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
     std::unordered_map<int, TimerData> timers_;
-    asio::high_resolution_timer high_resolution_timer_;
+    asio::steady_timer timer_;
 
     DISALLOW_COPY_AND_ASSIGN(AsioEventDispatcher);
 };

@@ -45,7 +45,7 @@ const size_t kReservedSizeForEvents = 20;
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_)),
-      high_resolution_timer_(io_context_)
+      timer_(io_context_)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -315,8 +315,8 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
     const int next_timer_id = next_expire_timer->second.timer_id;
 
     // Start waiting for the timer.
-    high_resolution_timer_.expires_at(next_expire_timer->second.expire_time);
-    high_resolution_timer_.async_wait([this, next_timer_id](const std::error_code& error_code)
+    timer_.expires_at(next_expire_timer->second.expire_time);
+    timer_.async_wait([this, next_timer_id](const std::error_code& error_code)
     {
         if (error_code || interrupted_.load(std::memory_order_relaxed))
             return;
