@@ -3240,34 +3240,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="338"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="347"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="419"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="428"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="339"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="420"/>
         <source>There are no supported video encodings.</source>
         <translation>沒有支援的視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="348"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="429"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1082"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1144"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1084"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1146"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>

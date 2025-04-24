@@ -3250,34 +3250,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="338"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="347"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="419"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="428"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="339"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="420"/>
         <source>There are no supported video encodings.</source>
         <translation>Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="348"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="429"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1082"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1144"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1084"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1146"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1115"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
