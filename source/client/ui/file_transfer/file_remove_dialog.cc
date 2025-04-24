@@ -99,6 +99,9 @@ void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
 //--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::stop()
 {
+    if (stopped_)
+        return;
+
     stopped_ = true;
     close();
 }

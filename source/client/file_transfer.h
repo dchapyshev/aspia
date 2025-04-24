@@ -160,8 +160,7 @@ public:
     };
 
     using TaskList = std::deque<Task>;
-    using FinishCallback = std::function<void()>;
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
@@ -174,11 +173,13 @@ public:
 
     void start(const std::string& source_path,
                const std::string& target_path,
-               const std::vector<Item>& items,
-               const FinishCallback& finish_callback);
+               const std::vector<Item>& items);
     void stop();
 
     void setAction(Error::Type error_type, Error::Action action);
+
+signals:
+    void sig_finished();
 
 protected:
     // common::FileTaskProducer implementation.
@@ -211,8 +212,6 @@ private:
     std::map<Error::Type, Error::Action> actions_;
     std::unique_ptr<FileTransferQueueBuilder> queue_builder_;
     TaskList tasks_;
-
-    FinishCallback finish_callback_;
 
     int64_t total_size_ = 0;
     int64_t total_transfered_size_ = 0;

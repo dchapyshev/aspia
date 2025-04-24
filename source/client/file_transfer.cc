@@ -129,11 +129,9 @@ FileTransfer::~FileTransfer()
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::start(const std::string& source_path,
                          const std::string& target_path,
-                         const std::vector<Item>& items,
-                         const FinishCallback& finish_callback)
+                         const std::vector<Item>& items)
 {
     LOG(LS_INFO) << "File transfer start";
-    finish_callback_ = finish_callback;
 
     std::unique_ptr<common::FileTaskFactory> task_factory_local =
         std::make_unique<common::FileTaskFactory>(
@@ -504,16 +502,9 @@ void FileTransfer::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "File transfer finished (from: " << location.toString() << ")";
 
-    FinishCallback callback;
-    callback.swap(finish_callback_);
-
     speed_update_timer_.stop();
-
-    if (callback)
-    {
-        transfer_window_proxy_->stop();
-        callback();
-    }
+    emit sig_finished();
+    transfer_window_proxy_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

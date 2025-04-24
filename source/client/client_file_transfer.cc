@@ -232,10 +232,12 @@ void ClientFileTransfer::remove(common::FileTask::Target target,
     remover_ = std::make_unique<FileRemover>(
         local_worker_->taskRunner(), remove_window_proxy, task_consumer_proxy_, target);
 
-    remover_->start(items, [this]()
+    connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
     {
-        remover_.reset();
+        remover_.release()->deleteLater();
     });
+
+    remover_->start(items);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -250,10 +252,12 @@ void ClientFileTransfer::transfer(std::shared_ptr<FileTransferWindowProxy> trans
     transfer_ = std::make_unique<FileTransfer>(
         local_worker_->taskRunner(), transfer_window_proxy, task_consumer_proxy_, transfer_type);
 
-    transfer_->start(source_path, target_path, items, [this]()
+    connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
     {
-        transfer_.reset();
+        transfer_.release()->deleteLater();
     });
+
+    transfer_->start(source_path, target_path, items);
 }
 
 } // namespace client

@@ -57,11 +57,9 @@ FileRemover::~FileRemover()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemover::start(const TaskList& items, const FinishCallback& callback)
+void FileRemover::start(const TaskList& items)
 {
     LOG(LS_INFO) << "Start file remover";
-
-    finish_callback_ = callback;
 
     // Asynchronously start UI.
     remove_window_proxy_->start(remover_proxy_);
@@ -207,14 +205,8 @@ void FileRemover::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "File remover finished (from: " << location.toString() << ")";
 
-    FinishCallback callback;
-    callback.swap(finish_callback_);
-
-    if (callback)
-    {
-        remove_window_proxy_->stop();
-        callback();
-    }
+    emit sig_finished();
+    remove_window_proxy_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

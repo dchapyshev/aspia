@@ -90,11 +90,13 @@ public:
 
 
     using TaskList = std::deque<Task>;
-    using FinishCallback = std::function<void()>;
 
-    void start(const TaskList& items, const FinishCallback& callback);
+    void start(const TaskList& items);
     void stop();
     void setAction(Action action);
+
+signals:
+    void sig_finished();
 
 protected:
     // common::FileTaskProducer implementation.
@@ -114,7 +116,6 @@ private:
     std::unique_ptr<FileRemoveQueueBuilder> queue_builder_;
 
     TaskList tasks_;
-    FinishCallback finish_callback_;
 
     Action failure_action_ = ACTION_ASK;
     size_t tasks_count_ = 0;
