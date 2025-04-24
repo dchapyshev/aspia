@@ -23,6 +23,8 @@
 #include "qt_base/application.h"
 #include "ui_qt_port_forwarding_window.h"
 
+Q_DECLARE_METATYPE(client::ClientPortForwarding::Statistics)
+
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
@@ -30,8 +32,6 @@ QtPortForwardingWindow::QtPortForwardingWindow(
     const proto::port_forwarding::Config& session_config, QWidget* parent)
     : SessionWindow(nullptr, parent),
       ui(std::make_unique<Ui::PortForwardingWindow>()),
-      port_forwarding_window_proxy_(
-          std::make_shared<PortForwardingWindowProxy>(qt_base::Application::uiTaskRunner(), this)),
       session_config_(session_config)
 {
     LOG(LS_INFO) << "Ctor";
@@ -42,7 +42,6 @@ QtPortForwardingWindow::QtPortForwardingWindow(
 QtPortForwardingWindow::~QtPortForwardingWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    port_forwarding_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +52,13 @@ std::unique_ptr<Client> QtPortForwardingWindow::createClient()
     std::unique_ptr<ClientPortForwarding> client = std::make_unique<ClientPortForwarding>(
         qt_base::Application::ioTaskRunner());
 
-    client->setPortForwardingWindow(port_forwarding_window_proxy_);
+    connect(client.get(), &ClientPortForwarding::sig_start,
+            this, &QtPortForwardingWindow::start,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientPortForwarding::sig_statistics,
+            this, &QtPortForwardingWindow::setStatistics,
+            Qt::QueuedConnection);
+
     client->setPortForwardingConfig(session_config_);
 
     ui->label_remote_host_value->setText(QString::fromStdString(session_config_.remote_host()));
@@ -72,7 +77,7 @@ void QtPortForwardingWindow::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::setStatistics(const Statistics& statistics)
+void QtPortForwardingWindow::setStatistics(const ClientPortForwarding::Statistics& statistics)
 {
     ui->labelReceivedValue->setText(QString::number(statistics.rx_bytes));
     ui->labelSentValue->setText(QString::number(statistics.tx_bytes));

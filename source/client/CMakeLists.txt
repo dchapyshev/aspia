@@ -72,9 +72,6 @@ list(APPEND SOURCE_CLIENT_CORE
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
-    port_forwarding_window.h
-    port_forwarding_window_proxy.cc
-    port_forwarding_window_proxy.h
     router.cc
     router.h
     router_proxy.cc

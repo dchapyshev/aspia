@@ -20,7 +20,7 @@
 #define CLIENT_UI_PORT_FORWARDING_QT_PORT_FORWARDING_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "client/port_forwarding_window_proxy.h"
+#include "client/client_port_forwarding.h"
 #include "client/ui/session_window.h"
 #include "proto/port_forwarding.pb.h"
 
@@ -30,9 +30,7 @@ class PortForwardingWindow;
 
 namespace client {
 
-class QtPortForwardingWindow final
-    : public SessionWindow,
-      public PortForwardingWindow
+class QtPortForwardingWindow final : public SessionWindow
 {
     Q_OBJECT
 
@@ -44,9 +42,9 @@ public:
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() final;
 
-    // PortForwardingWindow implementation.
-    void start() final;
-    void setStatistics(const Statistics& statistics) final;
+public slots:
+    void start();
+    void setStatistics(const client::ClientPortForwarding::Statistics& statistics);
 
 protected:
     // SessionWindow implementation.
@@ -54,7 +52,6 @@ protected:
 
 private:
     std::unique_ptr<Ui::PortForwardingWindow> ui;
-    std::shared_ptr<PortForwardingWindowProxy> port_forwarding_window_proxy_;
     proto::port_forwarding::Config session_config_;
 
     DISALLOW_COPY_AND_ASSIGN(QtPortForwardingWindow);

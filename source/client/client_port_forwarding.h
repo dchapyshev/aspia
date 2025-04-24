@@ -29,8 +29,6 @@
 
 namespace client {
 
-class PortForwardingWindowProxy;
-
 class ClientPortForwarding final : public Client
 {
     Q_OBJECT
@@ -39,9 +37,17 @@ public:
     explicit ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientPortForwarding() final;
 
-    void setPortForwardingWindow(
-        std::shared_ptr<PortForwardingWindowProxy> port_forwarding_window_proxy);
+    struct Statistics
+    {
+        uint64_t rx_bytes = 0;
+        uint64_t tx_bytes = 0;
+    };
+
     void setPortForwardingConfig(const proto::port_forwarding::Config& config);
+
+signals:
+    void sig_start();
+    void sig_statistics(const client::ClientPortForwarding::Statistics& statistics);
 
 protected:
     // Client implementation.
@@ -69,8 +75,6 @@ private:
         ACCEPTING = 1,
         CONNECTED = 2
     };
-
-    std::shared_ptr<PortForwardingWindowProxy> port_forwarding_window_proxy_;
 
     State state_ = State::DISCONNECED;
     bool is_started_ = false;

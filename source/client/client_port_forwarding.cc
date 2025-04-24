@@ -22,7 +22,6 @@
 #include "base/serialization.h"
 #include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "client/port_forwarding_window_proxy.h"
 
 #include <asio/ip/address.hpp>
 #include <asio/read.hpp>
@@ -98,14 +97,11 @@ ClientPortForwarding::ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_
 
     connect(&statistics_timer_, &QTimer::timeout, this, [this]()
     {
-        if (!port_forwarding_window_proxy_)
-            return;
-
-        PortForwardingWindow::Statistics statistics;
+        Statistics statistics;
         statistics.rx_bytes = rx_bytes_;
         statistics.tx_bytes = tx_bytes_;
 
-        port_forwarding_window_proxy_->setStatistics(statistics);
+        emit sig_statistics(statistics);
     });
 }
 
@@ -113,13 +109,6 @@ ClientPortForwarding::ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_
 ClientPortForwarding::~ClientPortForwarding()
 {
     LOG(LS_INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientPortForwarding::setPortForwardingWindow(
-    std::shared_ptr<PortForwardingWindowProxy> port_forwarding_window_proxy)
-{
-    port_forwarding_window_proxy_ = std::move(port_forwarding_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,8 +132,7 @@ void ClientPortForwarding::onSessionStarted()
     statistics_timer_.start(std::chrono::seconds(1));
     sendPortForwardingRequest();
 
-    if (port_forwarding_window_proxy_)
-        port_forwarding_window_proxy_->start();
+    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------
