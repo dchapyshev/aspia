@@ -20,7 +20,6 @@
 #define CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "client/text_chat_window_proxy.h"
 #include "client/ui/session_window.h"
 #include "proto/text_chat.pb.h"
 
@@ -34,9 +33,7 @@ class QHBoxLayout;
 
 namespace client {
 
-class QtTextChatWindow final
-    : public SessionWindow,
-      public TextChatWindow
+class QtTextChatWindow final : public SessionWindow
 {
     Q_OBJECT
 
@@ -47,9 +44,9 @@ public:
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() final;
 
-    // TextChatWindow implementation.
-    void start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy) final;
-    void onTextChatMessage(const proto::TextChat& text_chat) final;
+public slots:
+    void start();
+    void onTextChatMessage(const proto::TextChat& text_chat);
 
 signals:
     void sig_textChatMessage(const proto::TextChat& text_chat);
@@ -60,9 +57,6 @@ protected:
 
 private:
     std::unique_ptr<Ui::TextChatWindow> ui;
-
-    std::shared_ptr<TextChatControlProxy> text_chat_control_proxy_;
-    std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(QtTextChatWindow);
 };

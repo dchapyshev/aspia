@@ -19,20 +19,18 @@
 #include "client/ui/text_chat/qt_text_chat_window.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "client/client_text_chat.h"
-#include "client/text_chat_control_proxy.h"
 #include "qt_base/application.h"
 #include "ui_qt_text_chat_window.h"
+
+Q_DECLARE_METATYPE(proto::TextChat)
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 QtTextChatWindow::QtTextChatWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::TextChatWindow>()),
-      text_chat_window_proxy_(
-          std::make_shared<TextChatWindowProxy>(qt_base::Application::uiTaskRunner(), this))
+      ui(std::make_unique<Ui::TextChatWindow>())
 {
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
@@ -40,31 +38,17 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendMessage,
             this, [this](const proto::TextChatMessage& message)
     {
-        if (text_chat_control_proxy_)
-        {
-            proto::TextChat text_chat;
-            text_chat.mutable_chat_message()->CopyFrom(message);
-            text_chat_control_proxy_->onTextChatMessage(text_chat);
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Invalid text chat proxy";
-        }
+        proto::TextChat text_chat;
+        text_chat.mutable_chat_message()->CopyFrom(message);
+        emit sig_textChatMessage(text_chat);
     });
 
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendStatus,
             this, [this](const proto::TextChatStatus& status)
     {
-        if (text_chat_control_proxy_)
-        {
-            proto::TextChat text_chat;
-            text_chat.mutable_chat_status()->CopyFrom(status);
-            text_chat_control_proxy_->onTextChatMessage(text_chat);
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Invalid text chat proxy";
-        }
+        proto::TextChat text_chat;
+        text_chat.mutable_chat_status()->CopyFrom(status);
+        emit sig_textChatMessage(text_chat);
     });
 }
 
@@ -72,7 +56,6 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
 QtTextChatWindow::~QtTextChatWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    text_chat_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,18 +66,23 @@ std::unique_ptr<Client> QtTextChatWindow::createClient()
     std::unique_ptr<ClientTextChat> client = std::make_unique<ClientTextChat>(
         qt_base::Application::ioTaskRunner());
 
-    client->setTextChatWindow(text_chat_window_proxy_);
+    connect(this, &QtTextChatWindow::sig_textChatMessage,
+            client.get(), &ClientTextChat::onTextChatMessage,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientTextChat::sig_start,
+            this, &QtTextChatWindow::start,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientTextChat::sig_textChatMessage,
+            this, &QtTextChatWindow::onTextChatMessage,
+            Qt::QueuedConnection);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy)
+void QtTextChatWindow::start()
 {
     LOG(LS_INFO) << "Show window";
-
-    text_chat_control_proxy_ = std::move(text_chat_control_proxy);
-    DCHECK(text_chat_control_proxy_);
 
     ui->text_chat_widget->setDisplayName(sessionState()->displayName());
 

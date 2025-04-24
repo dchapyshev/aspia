@@ -20,16 +20,12 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "client/text_chat_control_proxy.h"
-#include "client/text_chat_window_proxy.h"
-#include "proto/text_chat.pb.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ClientTextChat::ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent),
-      text_chat_control_proxy_(std::make_shared<TextChatControlProxy>(io_task_runner, this))
+    : Client(io_task_runner, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -38,15 +34,6 @@ ClientTextChat::ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner,
 ClientTextChat::~ClientTextChat()
 {
     LOG(LS_INFO) << "Dtor";
-    text_chat_control_proxy_->dettach();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientTextChat::setTextChatWindow(
-    std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy)
-{
-    LOG(LS_INFO) << "Text chat window installed";
-    text_chat_window_proxy_ = std::move(text_chat_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,7 +46,7 @@ void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
 void ClientTextChat::onSessionStarted()
 {
     LOG(LS_INFO) << "Text chat session started";
-    text_chat_window_proxy_->start(text_chat_control_proxy_);
+    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,7 +59,7 @@ void ClientTextChat::onSessionMessageReceived(uint8_t /* channel_id */, const QB
         return;
     }
 
-    text_chat_window_proxy_->onTextChatMessage(text_chat);
+    emit sig_textChatMessage(text_chat);
 }
 
 //--------------------------------------------------------------------------------------------------

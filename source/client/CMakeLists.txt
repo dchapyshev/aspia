@@ -89,13 +89,7 @@ list(APPEND SOURCE_CLIENT_CORE
     status_window_proxy.cc
     status_window_proxy.h
     client_session_state.cc
-    client_session_state.h
-    text_chat_control.h
-    text_chat_control_proxy.cc
-    text_chat_control_proxy.h
-    text_chat_window.h
-    text_chat_window_proxy.cc
-    text_chat_window_proxy.h)
+    client_session_state.h)
 
 list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)

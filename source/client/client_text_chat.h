@@ -20,16 +20,11 @@
 #define CLIENT_CLIENT_TEXT_CHAT_H
 
 #include "client/client.h"
-#include "client/text_chat_control.h"
+#include "proto/text_chat.pb.h"
 
 namespace client {
 
-class TextChatControlProxy;
-class TextChatWindowProxy;
-
-class ClientTextChat final
-    : public Client,
-      public TextChatControl
+class ClientTextChat final : public Client
 {
     Q_OBJECT
 
@@ -37,10 +32,12 @@ public:
     explicit ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientTextChat() final;
 
-    void setTextChatWindow(std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy);
+public slots:
+    void onTextChatMessage(const proto::TextChat& text_chat);
 
-    // TextChatControl implementation.
-    void onTextChatMessage(const proto::TextChat& text_chat) final;
+signals:
+    void sig_start();
+    void sig_textChatMessage(const proto::TextChat& text_chat);
 
 protected:
     // Client implementation.
@@ -49,9 +46,6 @@ protected:
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
-    std::shared_ptr<TextChatControlProxy> text_chat_control_proxy_;
-    std::shared_ptr<TextChatWindowProxy> text_chat_window_proxy_;
-
     DISALLOW_COPY_AND_ASSIGN(ClientTextChat);
 };
 
