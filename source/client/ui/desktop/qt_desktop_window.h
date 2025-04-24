@@ -19,9 +19,8 @@
 #ifndef CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
 #define CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
 
-#include "base/version.h"
+#include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
-#include "client/desktop_window.h"
 #include "client/ui/session_window.h"
 #include "client/ui/desktop/desktop_widget.h"
 
@@ -38,14 +37,11 @@ namespace client {
 
 class DesktopConfigDialog;
 class DesktopToolBar;
-class DesktopWindowProxy;
 class QtSystemInfoWindow;
 class StatisticsDialog;
 class TaskManagerWindow;
 
-class QtDesktopWindow final
-    : public SessionWindow,
-      public DesktopWindow
+class QtDesktopWindow final : public SessionWindow
 {
     Q_OBJECT
 
@@ -58,24 +54,36 @@ public:
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() final;
 
-    // DesktopWindow implementation.
-    void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy) final;
-    void configRequired() final;
-    void setCapabilities(const proto::DesktopCapabilities& capabilities) final;
-    void setScreenList(const proto::ScreenList& screen_list) final;
-    void setScreenType(const proto::ScreenType& screen_type) final;
-    void setCursorPosition(const proto::CursorPosition& cursor_position) final;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
-    void setTaskManager(const proto::task_manager::HostToClient& message) final;
-    void setMetrics(const DesktopWindow::Metrics& metrics) final;
-    std::unique_ptr<FrameFactory> frameFactory() final;
-    void setFrameError(proto::VideoErrorCode error_code) final;
-    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) final;
-    void drawFrame() final;
-    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) final;
+public slots:
+    void showWindow();
+    void configRequired();
+    void setCapabilities(const proto::DesktopCapabilities& capabilities);
+    void setScreenList(const proto::ScreenList& screen_list);
+    void setScreenType(const proto::ScreenType& screen_type);
+    void setCursorPosition(const proto::CursorPosition& cursor_position);
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
+    void setTaskManager(const proto::task_manager::HostToClient& message);
+    void setMetrics(const client::ClientDesktop::Metrics& metrics);
+    void setFrameError(proto::VideoErrorCode error_code);
+    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
+    void drawFrame();
+    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
-private slots:
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
+signals:
+    void sig_desktopConfigChanged(const proto::DesktopConfig& config);
+    void sig_screenSelected(const proto::Screen& screen);
+    void sig_preferredSizeChanged(int width, int height);
+    void sig_videoPaused(bool enable);
+    void sig_audioPaused(bool enable);
+    void sig_videoRecording(bool enable, const std::filesystem::path& file_path);
+    void sig_keyEvent(const proto::KeyEvent& event);
+    void sig_textEvent(const proto::TextEvent& event);
+    void sig_mouseEvent(const proto::MouseEvent& event);
+    void sig_powerControl(proto::PowerControl::Action action);
+    void sig_remoteUpdate();
+    void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
+    void sig_taskManager(const proto::task_manager::ClientToHost& message);
+    void sig_metricsRequested();
 
 protected:
     // SessionWindow implementation.
@@ -92,7 +100,6 @@ protected:
 
 private slots:
     void onMouseEvent(const proto::MouseEvent& event);
-    void onKeyEvent(const proto::KeyEvent& event);
     void changeSettings();
     void onConfigChanged(const proto::DesktopConfig& config);
     void autosizeWindow();
@@ -107,8 +114,6 @@ private:
     const proto::SessionType session_type_;
     proto::DesktopConfig desktop_config_;
 
-    std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
-    std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     uint32_t video_encodings_ = 0;
 
     QHBoxLayout* layout_ = nullptr;

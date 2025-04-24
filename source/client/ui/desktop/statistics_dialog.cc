@@ -47,7 +47,7 @@ StatisticsDialog::~StatisticsDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
+void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {

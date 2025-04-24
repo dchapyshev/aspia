@@ -39,12 +39,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_text_chat.h
     config_factory.cc
     config_factory.h
-    desktop_control.h
-    desktop_control_proxy.cc
-    desktop_control_proxy.h
-    desktop_window.h
-    desktop_window_proxy.cc
-    desktop_window_proxy.h
     file_control.h
     file_control_proxy.cc
     file_control_proxy.h
@@ -69,7 +63,6 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer_window.h
     file_transfer_window_proxy.cc
     file_transfer_window_proxy.h
-    frame_factory.h
     input_event_filter.cc
     input_event_filter.h
     router.cc
@@ -133,8 +126,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/desktop_widget.h
     ui/desktop/desktop_settings.cc
     ui/desktop/desktop_settings.h
-    ui/desktop/frame_factory_qimage.cc
-    ui/desktop/frame_factory_qimage.h
     ui/desktop/frame_qimage.cc
     ui/desktop/frame_qimage.h
     ui/desktop/qt_desktop_window.cc

@@ -22,11 +22,8 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/strings/string_split.h"
 #include "client/client_desktop.h"
-#include "client/desktop_control_proxy.h"
-#include "client/desktop_window_proxy.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_toolbar.h"
-#include "client/ui/desktop/frame_factory_qimage.h"
 #include "client/ui/desktop/frame_qimage.h"
 #include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
@@ -57,6 +54,27 @@
 #include <QTimer>
 #include <QWindow>
 
+Q_DECLARE_METATYPE(proto::system_info::SystemInfoRequest)
+Q_DECLARE_METATYPE(proto::system_info::SystemInfo)
+Q_DECLARE_METATYPE(proto::DesktopCapabilities)
+Q_DECLARE_METATYPE(proto::DesktopConfig)
+Q_DECLARE_METATYPE(proto::ScreenType)
+Q_DECLARE_METATYPE(proto::ScreenList)
+Q_DECLARE_METATYPE(proto::Screen)
+Q_DECLARE_METATYPE(proto::CursorPosition)
+Q_DECLARE_METATYPE(proto::VideoErrorCode)
+Q_DECLARE_METATYPE(proto::KeyEvent)
+Q_DECLARE_METATYPE(proto::TextEvent)
+Q_DECLARE_METATYPE(proto::MouseEvent)
+Q_DECLARE_METATYPE(proto::PowerControl::Action)
+Q_DECLARE_METATYPE(proto::task_manager::ClientToHost)
+Q_DECLARE_METATYPE(proto::task_manager::HostToClient)
+Q_DECLARE_METATYPE(base::Size)
+Q_DECLARE_METATYPE(client::ClientDesktop::Metrics)
+Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
+Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)
+Q_DECLARE_METATYPE(std::filesystem::path)
+
 namespace client {
 
 namespace {
@@ -81,9 +99,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  QWidget* parent)
     : SessionWindow(nullptr, parent),
       session_type_(session_type),
-      desktop_config_(desktop_config),
-      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this))
+      desktop_config_(desktop_config)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -142,10 +158,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         enable_audio_pause_ = enable;
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_screenSelected, this, [this](const proto::Screen& screen)
-    {
-        desktop_control_proxy_->setCurrentScreen(screen);
-    });
+    connect(toolbar_, &DesktopToolBar::sig_screenSelected,
+            this, &QtDesktopWindow::sig_screenSelected);
 
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
             this, [this](proto::PowerControl::Action action, bool wait)
@@ -161,13 +175,11 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                 break;
         }
 
-        desktop_control_proxy_->onPowerControl(action);
+        emit sig_powerControl(action);
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_startRemoteUpdate, this, [this]()
-    {
-        desktop_control_proxy_->onRemoteUpdate();
-    });
+    connect(toolbar_, &DesktopToolBar::sig_startRemoteUpdate,
+            this, &QtDesktopWindow::sig_remoteUpdate);
 
     connect(toolbar_, &DesktopToolBar::sig_startSystemInfo, this, [this]()
     {
@@ -177,10 +189,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
             connect(system_info_, &QtSystemInfoWindow::sig_systemInfoRequired,
-                    this, [this](const proto::system_info::SystemInfoRequest& request)
-            {
-                desktop_control_proxy_->onSystemInfoRequest(request);
-            });
+                    this, &QtDesktopWindow::sig_systemInfoRequested);
         }
 
         system_info_->start();
@@ -194,21 +203,14 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             task_manager_->setAttribute(Qt::WA_DeleteOnClose);
 
             connect(task_manager_, &TaskManagerWindow::sig_sendMessage,
-                    this, [this](const proto::task_manager::ClientToHost& message)
-            {
-                desktop_control_proxy_->onTaskManager(message);
-            });
+                    this, &QtDesktopWindow::sig_taskManager);
         }
 
         task_manager_->show();
         task_manager_->activateWindow();
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, [this]()
-    {
-        desktop_control_proxy_->onMetricsRequest();
-    });
-
+    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, &QtDesktopWindow::sig_metricsRequested);
     connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
     connect(toolbar_, &DesktopToolBar::sig_switchToFullscreen, this, [this](bool fullscreen)
     {
@@ -283,11 +285,11 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             file_path = settings.recordingPath().toStdU16String();
         }
 
-        desktop_control_proxy_->setVideoRecording(enable, file_path);
+        emit sig_videoRecording(enable, file_path);
     });
 
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
-    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::onKeyEvent);
+    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::sig_keyEvent);
 
     desktop_->setFocus();
 }
@@ -296,7 +298,6 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 QtDesktopWindow::~QtDesktopWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    desktop_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,18 +308,98 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
     std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(
         qt_base::Application::ioTaskRunner());
 
+    connect(client.get(), &ClientDesktop::sig_showWindow,
+            this, &QtDesktopWindow::showWindow,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_configRequired,
+            this, &QtDesktopWindow::configRequired,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_capabilities,
+            this, &QtDesktopWindow::setCapabilities,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_screenListChanged,
+            this, &QtDesktopWindow::setScreenList,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_screenTypeChanged,
+            this, &QtDesktopWindow::setScreenType,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_cursorPositionChanged,
+            this, &QtDesktopWindow::setCursorPosition,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_systemInfo,
+            this, &QtDesktopWindow::setSystemInfo,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_taskManager,
+            this, &QtDesktopWindow::setTaskManager,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_metrics,
+            this, &QtDesktopWindow::setMetrics,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_frameError,
+            this, &QtDesktopWindow::setFrameError,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_frameChanged,
+            this, &QtDesktopWindow::setFrame,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_drawFrame,
+            this, &QtDesktopWindow::drawFrame,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientDesktop::sig_mouseCursorChanged,
+            this, &QtDesktopWindow::setMouseCursor,
+            Qt::QueuedConnection);
+
+    connect(this, &QtDesktopWindow::sig_desktopConfigChanged,
+            client.get(), &ClientDesktop::setDesktopConfig,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_screenSelected,
+            client.get(), &ClientDesktop::setCurrentScreen,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_preferredSizeChanged,
+            client.get(), &ClientDesktop::setPreferredSize,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_videoPaused,
+            client.get(), &ClientDesktop::setVideoPause,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_audioPaused,
+            client.get(), &ClientDesktop::setAudioPause,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_videoRecording,
+            client.get(), &ClientDesktop::setVideoRecording,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_keyEvent,
+            client.get(), &ClientDesktop::onKeyEvent,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_textEvent,
+            client.get(), &ClientDesktop::onTextEvent,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_mouseEvent,
+            client.get(), &ClientDesktop::onMouseEvent,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_powerControl,
+            client.get(), &ClientDesktop::onPowerControl,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_remoteUpdate,
+            client.get(), &ClientDesktop::onRemoteUpdate,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_systemInfoRequested,
+            client.get(), &ClientDesktop::onSystemInfoRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_taskManager,
+            client.get(), &ClientDesktop::onTaskManager,
+            Qt::QueuedConnection);
+    connect(this, &QtDesktopWindow::sig_metricsRequested,
+            client.get(), &ClientDesktop::onMetricsRequest,
+            Qt::QueuedConnection);
+
     client->setDesktopConfig(desktop_config_);
-    client->setDesktopWindow(desktop_window_proxy_);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy)
+void QtDesktopWindow::showWindow()
 {
     LOG(LS_INFO) << "Show window";
-
-    desktop_control_proxy_ = std::move(desktop_control_proxy);
 
     showNormal();
     activateWindow();
@@ -491,7 +572,7 @@ void QtDesktopWindow::setTaskManager(const proto::task_manager::HostToClient& me
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
+void QtDesktopWindow::setMetrics(const client::ClientDesktop::Metrics& metrics)
 {
     if (!statistics_dialog_)
     {
@@ -500,22 +581,14 @@ void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired, this, [this]()
-        {
-            desktop_control_proxy_->onMetricsRequest();
-        });
+        connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
+                this, &QtDesktopWindow::sig_metricsRequested);
 
         statistics_dialog_->show();
         statistics_dialog_->activateWindow();
     }
 
     statistics_dialog_->setMetrics(metrics);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
-{
-    return std::make_unique<FrameFactoryQImage>();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -608,12 +681,6 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
         desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
                                  QPoint(hotspot_x, hotspot_y));
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
-{
-    desktop_control_proxy_->onSystemInfoRequest(request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -712,13 +779,13 @@ void QtDesktopWindow::changeEvent(QEvent* event)
         {
             if (enable_video_pause_)
             {
-                desktop_control_proxy_->setVideoPause(true);
+                emit sig_videoPaused(true);
                 video_pause_last_ = true;
             }
 
             if (enable_audio_pause_)
             {
-                desktop_control_proxy_->setAudioPause(true);
+                emit sig_audioPaused(true);
                 audio_pause_last_ = true;
             }
 
@@ -730,7 +797,7 @@ void QtDesktopWindow::changeEvent(QEvent* event)
             {
                 if (video_pause_last_)
                 {
-                    desktop_control_proxy_->setVideoPause(false);
+                    emit sig_videoPaused(false);
                     video_pause_last_ = false;
                 }
             }
@@ -739,7 +806,7 @@ void QtDesktopWindow::changeEvent(QEvent* event)
             {
                 if (audio_pause_last_)
                 {
-                    desktop_control_proxy_->setAudioPause(false);
+                    emit sig_audioPaused(false);
                     audio_pause_last_ = false;
                 }
             }
@@ -979,7 +1046,7 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
         out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale));
 
-        desktop_control_proxy_->onMouseEvent(out_event);
+        emit sig_mouseEvent(out_event);
     }
 
     // In MacOS event Leave does not always come to the widget when the mouse leaves its area.
@@ -988,12 +1055,6 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         if (!toolbar_->rect().contains(pos))
             QApplication::postEvent(toolbar_, new QEvent(QEvent::Leave));
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
-{
-    desktop_control_proxy_->onKeyEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1028,7 +1089,8 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
     LOG(LS_INFO) << "Desktop config changed";
 
     desktop_config_ = desktop_config;
-    desktop_control_proxy_->setDesktopConfig(desktop_config);
+
+    emit sig_desktopConfigChanged(desktop_config);
 
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
@@ -1165,7 +1227,7 @@ void QtDesktopWindow::onResizeTimer()
 
     LOG(LS_INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
 
-    desktop_control_proxy_->setPreferredSize(desktop_size.width(), desktop_size.height());
+    emit sig_preferredSizeChanged(desktop_size.width(), desktop_size.height());
     resize_timer_->stop();
 }
 
@@ -1213,7 +1275,7 @@ void QtDesktopWindow::onPasteKeystrokes()
         proto::TextEvent event;
         event.set_text(text.toStdString());
 
-        desktop_control_proxy_->onTextEvent(event);
+        emit sig_textEvent(event);
     }
     else
     {

@@ -20,10 +20,17 @@
 #define CLIENT_CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
+#include "base/desktop/geometry.h"
+#include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
-#include "client/desktop_control.h"
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
+#include "proto/desktop.pb.h"
+#include "proto/desktop_extensions.pb.h"
+#include "proto/system_info.pb.h"
+#include "proto/task_manager.pb.h"
+
+#include <filesystem>
 
 namespace base {
 class AudioDecoder;
@@ -38,13 +45,8 @@ class WebmVideoEncoder;
 namespace client {
 
 class AudioRenderer;
-class DesktopControlProxy;
-class DesktopWindow;
-class DesktopWindowProxy;
 
-class ClientDesktop final
-    : public Client,
-      public DesktopControl
+class ClientDesktop final : public Client
 {
     Q_OBJECT
 
@@ -52,23 +54,69 @@ public:
     explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientDesktop() final;
 
-    void setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy);
+    struct Metrics
+    {
+        std::chrono::seconds duration;
+        int64_t total_rx = 0;
+        int64_t total_tx = 0;
+        int speed_rx = 0;
+        int speed_tx = 0;
+        int64_t video_packet_count = 0;
+        int64_t video_pause_count = 0;
+        int64_t video_resume_count = 0;
+        size_t min_video_packet = 0;
+        size_t max_video_packet = 0;
+        size_t avg_video_packet = 0;
+        int64_t audio_packet_count = 0;
+        int64_t audio_pause_count = 0;
+        int64_t audio_resume_count = 0;
+        size_t min_audio_packet = 0;
+        size_t max_audio_packet = 0;
+        size_t avg_audio_packet = 0;
+        uint32_t video_capturer_type = 0;
+        int fps = 0;
+        int send_mouse = 0;
+        int drop_mouse = 0;
+        int send_key = 0;
+        int send_text = 0;
+        int read_clipboard = 0;
+        int send_clipboard = 0;
+        int cursor_shape_count = 0;
+        int cursor_pos_count = 0;
+        int cursor_cached = 0;
+        int cursor_taken_from_cache = 0;
+    };
 
-    // DesktopControl implementation.
-    void setDesktopConfig(const proto::DesktopConfig& config) final;
-    void setCurrentScreen(const proto::Screen& screen) final;
-    void setPreferredSize(int width, int height) final;
-    void setVideoPause(bool enable) final;
-    void setAudioPause(bool enable) final;
-    void setVideoRecording(bool enable, const std::filesystem::path& file_path) final;
-    void onKeyEvent(const proto::KeyEvent& event) final;
-    void onTextEvent(const proto::TextEvent& event) final;
-    void onMouseEvent(const proto::MouseEvent& event) final;
-    void onPowerControl(proto::PowerControl::Action action) final;
-    void onRemoteUpdate() final;
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
-    void onTaskManager(const proto::task_manager::ClientToHost& message) final;
-    void onMetricsRequest() final;
+public slots:
+    void setDesktopConfig(const proto::DesktopConfig& config);
+    void setCurrentScreen(const proto::Screen& screen);
+    void setPreferredSize(int width, int height);
+    void setVideoPause(bool enable);
+    void setAudioPause(bool enable);
+    void setVideoRecording(bool enable, const std::filesystem::path& file_path);
+    void onKeyEvent(const proto::KeyEvent& event);
+    void onTextEvent(const proto::TextEvent& event);
+    void onMouseEvent(const proto::MouseEvent& event);
+    void onPowerControl(proto::PowerControl::Action action);
+    void onRemoteUpdate();
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
+    void onTaskManager(const proto::task_manager::ClientToHost& message);
+    void onMetricsRequest();
+
+signals:
+    void sig_showWindow();
+    void sig_configRequired();
+    void sig_capabilities(const proto::DesktopCapabilities& capabilities);
+    void sig_screenListChanged(const proto::ScreenList& screen_list);
+    void sig_screenTypeChanged(const proto::ScreenType& screen_type);
+    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
+    void sig_taskManager(const proto::task_manager::HostToClient& message);
+    void sig_metrics(const client::ClientDesktop::Metrics& metrics);
+    void sig_frameError(proto::VideoErrorCode error_code);
+    void sig_frameChanged(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
+    void sig_drawFrame();
+    void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
 protected:
     // Client implementation.
@@ -90,8 +138,6 @@ private:
 
     bool started_ = false;
 
-    std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
-    std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 

@@ -21,17 +21,15 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/task_runner.h"
+#include "base/codec/audio_decoder.h"
 #include "base/audio/audio_player.h"
-#include "base/codec/audio_decoder_opus.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
 #include "base/desktop/mouse_cursor.h"
-#include "client/desktop_control_proxy.h"
-#include "client/desktop_window.h"
-#include "client/desktop_window_proxy.h"
 #include "client/config_factory.h"
+#include "client/ui/desktop/frame_qimage.h"
 #include "common/desktop_session_constants.h"
 
 namespace client {
@@ -118,7 +116,6 @@ const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
     : Client(io_task_runner, parent),
-      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
       incoming_message_(std::make_unique<proto::HostToClient>()),
       outgoing_message_(std::make_unique<proto::ClientToHost>())
 {
@@ -129,14 +126,6 @@ ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, Q
 ClientDesktop::~ClientDesktop()
 {
     LOG(LS_INFO) << "Dtor";
-    desktop_control_proxy_->dettach();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy)
-{
-    LOG(LS_INFO) << "Desktop window installed";
-    desktop_window_proxy_ = std::move(desktop_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,7 +137,7 @@ void ClientDesktop::onSessionStarted()
     started_ = true;
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
-    desktop_window_proxy_->showWindow(desktop_control_proxy_);
+    emit sig_showWindow();
 
     clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
     connect(clipboard_monitor_.get(), &common::ClipboardMonitor::sig_clipboardEvent,
@@ -508,7 +497,7 @@ void ClientDesktop::onMetricsRequest()
     std::chrono::seconds session_duration =
         std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
 
-    DesktopWindow::Metrics metrics;
+    Metrics metrics;
     metrics.duration = session_duration;
     metrics.total_rx = totalRx();
     metrics.total_tx = totalTx();
@@ -550,7 +539,7 @@ void ClientDesktop::onMetricsRequest()
         metrics.cursor_taken_from_cache = cursor_decoder_->takenCursorsFromCache();
     }
 
-    desktop_window_proxy_->setMetrics(metrics);
+    emit sig_metrics(metrics);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -560,7 +549,7 @@ void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilit
 
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
-    desktop_window_proxy_->setCapabilities(capabilities);
+    emit sig_capabilities(capabilities);
 
     // If current video encoding not supported.
     if (!(capabilities.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
@@ -568,7 +557,7 @@ void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilit
         LOG(LS_ERROR) << "Current video encoding not supported";
 
         // We tell the window about the need to change the encoding.
-        desktop_window_proxy_->configRequired();
+        emit sig_configRequired();
     }
     else
     {
@@ -584,7 +573,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     if (error_code != proto::VIDEO_ERROR_CODE_OK)
     {
         LOG(LS_ERROR) << "Video error detected: " << videoErrorCodeToString(error_code);
-        desktop_window_proxy_->setFrameError(error_code);
+        emit sig_frameError(error_code);
         return;
     }
 
@@ -639,8 +628,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         LOG(LS_INFO) << "New screen size: " << screen_size.width() << "x" << screen_size.height();
         LOG(LS_INFO) << "New video capturer: " << video_capturer_type_;
 
-        desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);
-        desktop_window_proxy_->setFrame(screen_size, desktop_frame_);
+        desktop_frame_ = FrameQImage::create(video_size);
+        emit sig_frameChanged(screen_size, desktop_frame_);
     }
 
     if (!desktop_frame_)
@@ -664,7 +653,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     min_video_packet_ = std::min(min_video_packet_, packet_size);
     max_video_packet_ = std::max(max_video_packet_, packet_size);
 
-    desktop_window_proxy_->drawFrame();
+    emit sig_drawFrame();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -733,7 +722,7 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
     if (!mouse_cursor)
         return;
 
-    desktop_window_proxy_->setMouseCursor(mouse_cursor);
+    emit sig_mouseCursorChanged(std::move(mouse_cursor));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -747,7 +736,7 @@ void ClientDesktop::readCursorPosition(const proto::CursorPosition& cursor_posit
 
     ++cursor_pos_count_;
 
-    desktop_window_proxy_->setCursorPosition(cursor_position);
+    emit sig_cursorPositionChanged(cursor_position);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -779,7 +768,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
             return;
         }
 
-        desktop_window_proxy_->setTaskManager(message);
+        emit sig_taskManager(message);
     }
     else if (extension.name() == common::kSelectScreenExtension)
     {
@@ -809,7 +798,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
                          << " res=" << resolution.width() << "x" << resolution.height();
         }
 
-        desktop_window_proxy_->setScreenList(screen_list);
+        emit sig_screenListChanged(screen_list);
     }
     else if (extension.name() == common::kScreenTypeExtension)
     {
@@ -824,7 +813,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
         LOG(LS_INFO) << "Screen type received (type=" << screen_type.type()
                      << " name=" << screen_type.name() << ")";
 
-        desktop_window_proxy_->setScreenType(screen_type);
+        emit sig_screenTypeChanged(screen_type);
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
@@ -836,7 +825,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
             return;
         }
 
-        desktop_window_proxy_->setSystemInfo(system_info);
+        emit sig_systemInfo(system_info);
     }
     else
     {

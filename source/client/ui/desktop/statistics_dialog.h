@@ -20,7 +20,7 @@
 #define CLIENT_UI_DESKTOP_STATISTICS_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "client/desktop_window.h"
+#include "client/client_desktop.h"
 #include "ui_statistics_dialog.h"
 
 #include <QTime>
@@ -35,7 +35,7 @@ public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
     ~StatisticsDialog() final;
 
-    void setMetrics(const DesktopWindow::Metrics& metrics);
+    void setMetrics(const ClientDesktop::Metrics& metrics);
 
 signals:
     void sig_metricsRequired();
