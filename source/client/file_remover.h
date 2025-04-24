@@ -27,6 +27,8 @@
 #include <deque>
 #include <string>
 
+#include <QObject>
+
 namespace base {
 class TaskRunner;
 } // namespace base
@@ -43,13 +45,18 @@ class FileRemoveQueueBuilder;
 class FileRemoveWindowProxy;
 class FileRemoverProxy;
 
-class FileRemover final : public common::FileTaskProducer
+class FileRemover final
+    : public QObject,
+      public common::FileTaskProducer
 {
+    Q_OBJECT
+
 public:
     FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                 std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                common::FileTask::Target target);
+                common::FileTask::Target target,
+                QObject* parent = nullptr);
     ~FileRemover() final;
 
     enum Action

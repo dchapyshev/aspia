@@ -28,8 +28,10 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::FileTransferQueueBuilder(
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-    common::FileTask::Target target)
-    : task_consumer_proxy_(std::move(task_consumer_proxy)),
+    common::FileTask::Target target,
+    QObject* parent)
+    : QObject(parent),
+      task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     LOG(LS_INFO) << "Ctor";

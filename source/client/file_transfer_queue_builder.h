@@ -24,12 +24,17 @@
 namespace client {
 
 // The class prepares the task queue to perform the downloading/uploading.
-class FileTransferQueueBuilder final : public common::FileTaskProducer
+class FileTransferQueueBuilder final
+    : public QObject,
+      public common::FileTaskProducer
 {
+    Q_OBJECT
+
 public:
     FileTransferQueueBuilder(
         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-        common::FileTask::Target target);
+        common::FileTask::Target target,
+        QObject* parent = nullptr);
     ~FileTransferQueueBuilder() final;
 
     using FinishCallback = std::function<void(proto::FileError)>;

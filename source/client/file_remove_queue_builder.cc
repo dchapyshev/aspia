@@ -19,7 +19,6 @@
 #include "client/file_remove_queue_builder.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
 #include "common/file_task_factory.h"
 #include "common/file_task_consumer_proxy.h"
 #include "common/file_task_producer_proxy.h"
@@ -29,8 +28,10 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-    common::FileTask::Target target)
-    : task_consumer_proxy_(std::move(task_consumer_proxy)),
+    common::FileTask::Target target,
+    QObject* parent)
+    : QObject(parent),
+      task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     LOG(LS_INFO) << "Ctor";

@@ -32,8 +32,10 @@ namespace client {
 FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                          std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                         common::FileTask::Target target)
-    : remover_proxy_(std::make_shared<FileRemoverProxy>(std::move(io_task_runner), this)),
+                         common::FileTask::Target target,
+                         QObject* parent)
+    : QObject(parent),
+      remover_proxy_(std::make_shared<FileRemoverProxy>(std::move(io_task_runner), this)),
       remove_window_proxy_(std::move(remove_window_proxy)),
       task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
