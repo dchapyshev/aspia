@@ -37,16 +37,16 @@ public:
         QObject* parent = nullptr);
     ~FileTransferQueueBuilder() final;
 
-    using FinishCallback = std::function<void(proto::FileError)>;
-
     // Starts building of the task queue.
     void start(const std::string& source_path,
                const std::string& target_path,
-               const std::vector<FileTransfer::Item>& items,
-               const FinishCallback& callback);
+               const std::vector<FileTransfer::Item>& items);
 
     FileTransfer::TaskList takeQueue();
     int64_t totalSize() const;
+
+signals:
+    void sig_finished(proto::FileError error_code);
 
 protected:
     // FileTaskProducer implementation.
@@ -64,8 +64,6 @@ private:
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
     std::unique_ptr<common::FileTaskFactory> task_factory_;
-
-    FinishCallback callback_;
 
     FileTransfer::TaskList pending_tasks_;
     FileTransfer::TaskList tasks_;

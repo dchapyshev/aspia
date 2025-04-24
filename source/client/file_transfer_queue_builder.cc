@@ -50,13 +50,9 @@ FileTransferQueueBuilder::~FileTransferQueueBuilder()
 //--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::start(const std::string& source_path,
                                      const std::string& target_path,
-                                     const std::vector<FileTransfer::Item>& items,
-                                     const FinishCallback& callback)
+                                     const std::vector<FileTransfer::Item>& items)
 {
     LOG(LS_INFO) << "Start file transfer queue builder";
-
-    callback_ = callback;
-    DCHECK(callback_);
 
     for (const auto& item : items)
         addPendingTask(source_path, target_path, item.name, item.is_directory, item.size);
@@ -144,7 +140,7 @@ void FileTransferQueueBuilder::doPendingTasks()
         }
     }
 
-    callback_(proto::FILE_ERROR_SUCCESS);
+    emit sig_finished(proto::FILE_ERROR_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,7 +152,7 @@ void FileTransferQueueBuilder::onAborted(proto::FileError error_code)
     tasks_.clear();
     total_size_ = 0;
 
-    callback_(error_code);
+    emit sig_finished(error_code);
 }
 
 } // namespace client

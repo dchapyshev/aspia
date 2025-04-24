@@ -69,8 +69,8 @@ void FileRemover::start(const TaskList& items, const FinishCallback& callback)
     queue_builder_ = std::make_unique<FileRemoveQueueBuilder>(
         task_consumer_proxy_, task_factory_->target());
 
-    // Start building a list of objects for deletion.
-    queue_builder_->start(items, [this](proto::FileError error_code)
+    connect(queue_builder_.get(), &FileRemoveQueueBuilder::sig_finished,
+            this, [this](proto::FileError error_code)
     {
         if (error_code == proto::FILE_ERROR_SUCCESS)
         {
@@ -84,8 +84,11 @@ void FileRemover::start(const TaskList& items, const FinishCallback& callback)
             remove_window_proxy_->errorOccurred(std::string(), error_code, ACTION_ABORT);
         }
 
-        queue_builder_.reset();
+        queue_builder_.release()->deleteLater();
     });
+
+    // Start building a list of objects for deletion.
+    queue_builder_->start(items);
 }
 
 //--------------------------------------------------------------------------------------------------

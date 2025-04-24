@@ -38,12 +38,13 @@ public:
         QObject* parent = nullptr);
     ~FileRemoveQueueBuilder() final;
 
-    using FinishCallback = std::function<void(proto::FileError)>;
-
     // Starts building of the task queue.
-    void start(const FileRemover::TaskList& items, const FinishCallback& callback);
+    void start(const FileRemover::TaskList& items);
 
     FileRemover::TaskList takeQueue();
+
+signals:
+    void sig_finished(proto::FileError error_code);
 
 protected:
     // FileTaskProducer implementation.
@@ -56,8 +57,6 @@ private:
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
     std::unique_ptr<common::FileTaskFactory> task_factory_;
-
-    FinishCallback callback_;
 
     FileRemover::TaskList pending_tasks_;
     FileRemover::TaskList tasks_;

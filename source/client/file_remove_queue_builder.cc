@@ -48,16 +48,10 @@ FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveQueueBuilder::start(
-    const FileRemover::TaskList& items, const FinishCallback& callback)
+void FileRemoveQueueBuilder::start(const FileRemover::TaskList& items)
 {
     LOG(LS_INFO) << "Start remove queue builder";
-
     pending_tasks_ = items;
-    callback_ = callback;
-
-    DCHECK(callback_);
-
     doPendingTasks();
 }
 
@@ -113,7 +107,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
         }
     }
 
-    callback_(proto::FILE_ERROR_SUCCESS);
+    emit sig_finished(proto::FILE_ERROR_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,7 +118,7 @@ void FileRemoveQueueBuilder::onAborted(proto::FileError error_code)
     pending_tasks_.clear();
     tasks_.clear();
 
-    callback_(error_code);
+    emit sig_finished(error_code);
 }
 
 } // namespace client

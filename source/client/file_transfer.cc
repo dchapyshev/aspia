@@ -162,10 +162,8 @@ void FileTransfer::start(const std::string& source_path,
     queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
         task_consumer_proxy_, task_factory_source_->target());
 
-    speed_update_timer_.start(Milliseconds(1000));
-
-    // Start building a list of objects for transfer.
-    queue_builder_->start(source_path, target_path, items, [this](proto::FileError error_code)
+    connect(queue_builder_.get(), &FileTransferQueueBuilder::sig_finished,
+            this, [this](proto::FileError error_code)
     {
         if (error_code == proto::FILE_ERROR_SUCCESS)
         {
@@ -186,8 +184,13 @@ void FileTransfer::start(const std::string& source_path,
             onError(Error::Type::QUEUE, proto::FILE_ERROR_UNKNOWN);
         }
 
-        queue_builder_.reset();
+        queue_builder_.release()->deleteLater();
     });
+
+    speed_update_timer_.start(Milliseconds(1000));
+
+    // Start building a list of objects for transfer.
+    queue_builder_->start(source_path, target_path, items);
 }
 
 //--------------------------------------------------------------------------------------------------
