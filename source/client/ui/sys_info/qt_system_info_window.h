@@ -20,7 +20,6 @@
 #define CLIENT_UI_SYS_INFO_QT_SYSTEM_INFO_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "client/system_info_window_proxy.h"
 #include "client/ui/session_window.h"
 #include "proto/system_info.pb.h"
 
@@ -36,9 +35,7 @@ namespace client {
 
 class SysInfoWidget;
 
-class QtSystemInfoWindow final
-    : public SessionWindow,
-      public SystemInfoWindow
+class QtSystemInfoWindow final : public SessionWindow
 {
     Q_OBJECT
 
@@ -50,9 +47,9 @@ public:
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() final;
 
-    // SystemInfoWindow implementation.
-    void start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy) final;
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
+public slots:
+    void start();
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
 
 signals:
     void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
@@ -70,9 +67,6 @@ private:
     QHBoxLayout* layout_ = nullptr;
     QList<SysInfoWidget*> sys_info_widgets_;
     int current_widget_ = 0;
-
-    std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy_;
-    std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(QtSystemInfoWindow);
 };

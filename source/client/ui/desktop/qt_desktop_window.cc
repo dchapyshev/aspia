@@ -183,7 +183,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             });
         }
 
-        system_info_->start(nullptr);
+        system_info_->start();
     });
 
     connect(toolbar_, &DesktopToolBar::sig_startTaskManager, this, [this]()

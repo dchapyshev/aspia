@@ -20,16 +20,11 @@
 #define CLIENT_CLIENT_SYSTEM_INFO_H
 
 #include "client/client.h"
-#include "client/system_info_control.h"
+#include "proto/system_info.pb.h"
 
 namespace client {
 
-class SystemInfoControlProxy;
-class SystemInfoWindowProxy;
-
-class ClientSystemInfo final
-    : public Client,
-      public SystemInfoControl
+class ClientSystemInfo final : public Client
 {
     Q_OBJECT
 
@@ -37,10 +32,12 @@ public:
     explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientSystemInfo() final;
 
-    void setSystemInfoWindow(std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy);
+public slots:
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
-    // SystemInfoControl implementation.
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
+signals:
+    void sig_start();
+    void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
 
 protected:
     // Client implementation.
@@ -49,9 +46,6 @@ protected:
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
 private:
-    std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy_;
-    std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy_;
-
     DISALLOW_COPY_AND_ASSIGN(ClientSystemInfo);
 };
 

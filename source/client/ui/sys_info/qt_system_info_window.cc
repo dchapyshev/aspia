@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "client/client_system_info.h"
-#include "client/system_info_control_proxy.h"
 #include "client/ui/sys_info/sys_info_widget_applications.h"
 #include "client/ui/sys_info/sys_info_widget_connections.h"
 #include "client/ui/sys_info/sys_info_widget_devices.h"
@@ -53,6 +52,9 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
+
+Q_DECLARE_METATYPE(proto::system_info::SystemInfoRequest)
+Q_DECLARE_METATYPE(proto::system_info::SystemInfo)
 
 namespace client {
 
@@ -90,9 +92,7 @@ private:
 //--------------------------------------------------------------------------------------------------
 QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
     : SessionWindow(session_state, parent),
-      ui(std::make_unique<Ui::SystemInfoWindow>()),
-      system_info_window_proxy_(
-          std::make_shared<SystemInfoWindowProxy>(qt_base::Application::uiTaskRunner(), this))
+      ui(std::make_unique<Ui::SystemInfoWindow>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -130,13 +130,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_sta
             sys_info_widgets_[i]->hide();
 
         connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest,
-                this, [this](const proto::system_info::SystemInfoRequest& request)
-        {
-            if (system_info_control_proxy_)
-                system_info_control_proxy_->onSystemInfoRequest(request);
-
-            emit sig_systemInfoRequired(request);
-        });
+                this, &QtSystemInfoWindow::sig_systemInfoRequired);
     }
 
     CategoryItem* summary_category = new CategoryItem(
@@ -378,7 +372,6 @@ QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_sta
 QtSystemInfoWindow::~QtSystemInfoWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    system_info_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,17 +382,23 @@ std::unique_ptr<Client> QtSystemInfoWindow::createClient()
     std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>(
         qt_base::Application::ioTaskRunner());
 
-    client->setSystemInfoWindow(system_info_window_proxy_);
+    connect(this, &QtSystemInfoWindow::sig_systemInfoRequired,
+            client.get(), &ClientSystemInfo::onSystemInfoRequest,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientSystemInfo::sig_start,
+            this, &QtSystemInfoWindow::start,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientSystemInfo::sig_systemInfo,
+            this, &QtSystemInfoWindow::setSystemInfo,
+            Qt::QueuedConnection);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy)
+void QtSystemInfoWindow::start()
 {
     LOG(LS_INFO) << "Show window";
-
-    system_info_control_proxy_ = std::move(system_info_control_proxy);
 
     for (int i = 0; i < sys_info_widgets_.size(); ++i)
     {
@@ -499,10 +498,6 @@ void QtSystemInfoWindow::onRefresh()
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
         proto::system_info::SystemInfoRequest request = sys_info_widgets_[i]->request();
-
-        if (system_info_control_proxy_)
-            system_info_control_proxy_->onSystemInfoRequest(request);
-
         emit sig_systemInfoRequired(request);
     }
 }

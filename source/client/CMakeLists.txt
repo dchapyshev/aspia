@@ -93,12 +93,6 @@ list(APPEND SOURCE_CLIENT_CORE
     status_window_proxy.h
     client_session_state.cc
     client_session_state.h
-    system_info_control.h
-    system_info_control_proxy.cc
-    system_info_control_proxy.h
-    system_info_window.h
-    system_info_window_proxy.cc
-    system_info_window_proxy.h
     text_chat_control.h
     text_chat_control_proxy.cc
     text_chat_control_proxy.h

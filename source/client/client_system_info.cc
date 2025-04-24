@@ -20,16 +20,13 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "client/system_info_control_proxy.h"
-#include "client/system_info_window_proxy.h"
 #include "proto/system_info.pb.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ClientSystemInfo::ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent),
-      system_info_control_proxy_(std::make_shared<SystemInfoControlProxy>(io_task_runner, this))
+    : Client(io_task_runner, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -38,15 +35,6 @@ ClientSystemInfo::ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_run
 ClientSystemInfo::~ClientSystemInfo()
 {
     LOG(LS_INFO) << "Dtor";
-    system_info_control_proxy_->dettach();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::setSystemInfoWindow(
-    std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy)
-{
-    LOG(LS_INFO) << "System info window installed";
-    system_info_window_proxy_ = std::move(system_info_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,8 +47,7 @@ void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoR
 void ClientSystemInfo::onSessionStarted()
 {
     LOG(LS_INFO) << "System info session started";
-
-    system_info_window_proxy_->start(system_info_control_proxy_);
+    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,7 +61,7 @@ void ClientSystemInfo::onSessionMessageReceived(uint8_t /* channel_id */, const 
         return;
     }
 
-    system_info_window_proxy_->setSystemInfo(system_info);
+    emit sig_systemInfo(system_info);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -22,7 +22,6 @@
 #include "base/version.h"
 #include "client/client_desktop.h"
 #include "client/desktop_window.h"
-#include "client/system_info_control.h"
 #include "client/ui/session_window.h"
 #include "client/ui/desktop/desktop_widget.h"
 
@@ -46,8 +45,7 @@ class TaskManagerWindow;
 
 class QtDesktopWindow final
     : public SessionWindow,
-      public DesktopWindow,
-      public SystemInfoControl
+      public DesktopWindow
 {
     Q_OBJECT
 
@@ -76,8 +74,8 @@ public:
     void drawFrame() final;
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) final;
 
-    // SystemInfoControl implementation.
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) final;
+private slots:
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
 protected:
     // SessionWindow implementation.
