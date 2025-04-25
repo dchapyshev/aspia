@@ -70,7 +70,7 @@ private:
 
     struct TimerData
     {
-        int interval;
+        Milliseconds interval;
         Qt::TimerType type;
         QObject* object;
         TimePoint start_time;
@@ -89,7 +89,7 @@ private:
     std::vector<EventData> events_;
 #endif // defined(Q_OS_WINDOWS)
 
-    void asyncWaitForNextTimer();
+    void scheduleNextTimer();
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;

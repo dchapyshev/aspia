@@ -126,12 +126,12 @@ void AsioEventDispatcher::registerTimer(
     int timer_id, int interval, Qt::TimerType type, QObject* object)
 {
     const TimePoint start_time = Clock::now();
-    const TimePoint expire_time = start_time + Milliseconds(interval);
+    const TimePoint end_time = start_time + Milliseconds(interval);
 
-    timers_.emplace(
-        std::make_pair(timer_id, TimerData(interval, type, object, start_time, expire_time)));
+    timers_.emplace(std::make_pair(
+        timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time)));
 
-    asyncWaitForNextTimer();
+    scheduleNextTimer();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
         return false;
 
     timers_.erase(it);
-    asyncWaitForNextTimer();
+    scheduleNextTimer();
     return true;
 }
 
@@ -168,7 +168,7 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
     if (!removed)
         return false;
 
-    asyncWaitForNextTimer();
+    scheduleNextTimer();
     return true;
 }
 
@@ -179,8 +179,9 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 
     for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
     {
-        if (it->second.object == object)
-            list.append({ it->first, it->second.interval, it->second.type });
+        const TimerData& timer = it->second;
+        if (timer.object == object)
+            list.append({ it->first, static_cast<int>(timer.interval.count()), timer.type });
     }
 
     return list;
@@ -193,10 +194,11 @@ int AsioEventDispatcher::remainingTime(int timer_id)
     if (it == timers_.cend())
         return -1;
 
-    const uint64_t elapsed = std::chrono::duration_cast<Milliseconds>(
-        Clock::now() - it->second.start_time).count();
+    const TimerData& timer = it->second;
+    const Milliseconds elapsed = std::chrono::duration_cast<Milliseconds>(
+        Clock::now() - timer.start_time);
 
-    return it->second.interval - static_cast<int>(elapsed);
+    return static_cast<int>((timer.interval - elapsed).count());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,13 +302,13 @@ void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wai
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitForNextTimer()
+void AsioEventDispatcher::scheduleNextTimer()
 {
     if (timers_.empty())
         return;
 
     // Find the timer that should be completed before all others.
-    auto next_expire_timer = std::min_element(timers_.begin(), timers_.end(),
+    const auto& next_expire_timer = std::min_element(timers_.begin(), timers_.end(),
         [](const auto& lhs, const auto& rhs)
     {
         return lhs.second.end_time < rhs.second.end_time;
@@ -334,9 +336,9 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
 
         TimerData& timer = it->second;
         timer.start_time = timer.end_time;
-        timer.end_time += Milliseconds(timer.interval);
+        timer.end_time += timer.interval;
 
-        asyncWaitForNextTimer();
+        scheduleNextTimer();
     });
 }
 
