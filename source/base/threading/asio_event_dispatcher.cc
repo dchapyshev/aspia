@@ -334,7 +334,7 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
 
         TimerData& timer = it->second;
         timer.start_time = timer.end_time;
-        timer.end_time = timer.start_time + Milliseconds(timer.interval);
+        timer.end_time += Milliseconds(timer.interval);
 
         asyncWaitForNextTimer();
     });
