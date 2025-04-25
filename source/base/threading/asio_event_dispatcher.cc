@@ -36,7 +36,7 @@ const size_t kReservedSizeForTimersMap = 50;
 const float kLoadFactorForTimersMap = 0.5;
 
 #if defined(Q_OS_WINDOWS)
-const size_t kReservedSizeForEvents = 20;
+const size_t kReservedSizeForEvents = 30;
 #endif // defined(Q_OS_WINDOWS)
 
 } // namespace
