@@ -123,21 +123,21 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier 
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::registerTimer(
-    int id, int interval, Qt::TimerType type, QObject* object)
+    int timer_id, int interval, Qt::TimerType type, QObject* object)
 {
     const TimePoint start_time = Clock::now();
     const TimePoint expire_time = start_time + Milliseconds(interval);
 
     timers_.emplace(
-        std::make_pair(id, TimerData(id, interval, type, object, start_time, expire_time)));
+        std::make_pair(timer_id, TimerData(interval, type, object, start_time, expire_time)));
 
     asyncWaitForNextTimer();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AsioEventDispatcher::unregisterTimer(int id)
+bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
-    auto it = timers_.find(id);
+    auto it = timers_.find(timer_id);
     if (it == timers_.end())
         return false;
 
@@ -180,16 +180,16 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
     for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
     {
         if (it->second.object == object)
-            list.append({ it->second.timer_id, it->second.interval, it->second.type });
+            list.append({ it->first, it->second.interval, it->second.type });
     }
 
     return list;
 }
 
 //--------------------------------------------------------------------------------------------------
-int AsioEventDispatcher::remainingTime(int id)
+int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    const auto& it = timers_.find(id);
+    const auto& it = timers_.find(timer_id);
     if (it == timers_.cend())
         return -1;
 
@@ -309,13 +309,13 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
     auto next_expire_timer = std::min_element(timers_.begin(), timers_.end(),
         [](const auto& lhs, const auto& rhs)
     {
-        return lhs.second.expire_time < rhs.second.expire_time;
+        return lhs.second.end_time < rhs.second.end_time;
     });
 
-    const int next_timer_id = next_expire_timer->second.timer_id;
+    const int next_timer_id = next_expire_timer->first;
 
     // Start waiting for the timer.
-    timer_.expires_at(next_expire_timer->second.expire_time);
+    timer_.expires_at(next_expire_timer->second.end_time);
     timer_.async_wait([this, next_timer_id](const std::error_code& error_code)
     {
         if (error_code || interrupted_.load(std::memory_order_relaxed))
@@ -333,8 +333,8 @@ void AsioEventDispatcher::asyncWaitForNextTimer()
             return;
 
         TimerData& timer = it->second;
-        timer.start_time = timer.expire_time;
-        timer.expire_time = timer.start_time + Milliseconds(timer.interval);
+        timer.start_time = timer.end_time;
+        timer.end_time = timer.start_time + Milliseconds(timer.interval);
 
         asyncWaitForNextTimer();
     });

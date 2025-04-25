@@ -45,11 +45,11 @@ public:
     void registerSocketNotifier(QSocketNotifier* notifier) final;
     void unregisterSocketNotifier(QSocketNotifier* notifier) final;
 
-    void registerTimer(int id, int interval, Qt::TimerType type, QObject* object) final;
-    bool unregisterTimer(int id) final;
+    void registerTimer(int timer_id, int interval, Qt::TimerType type, QObject* object) final;
+    bool unregisterTimer(int timer_id) final;
     bool unregisterTimers(QObject* object) final;
     QList<TimerInfo> registeredTimers(QObject* object) const final;
-    int remainingTime(int id) final;
+    int remainingTime(int timer_id) final;
 
 #if defined(Q_OS_WIN)
     bool registerEventNotifier(QWinEventNotifier* notifier) final;
@@ -70,13 +70,11 @@ private:
 
     struct TimerData
     {
-        int timer_id;
         int interval;
         Qt::TimerType type;
         QObject* object;
-
         TimePoint start_time;
-        TimePoint expire_time;
+        TimePoint end_time;
     };
 
 #if defined(Q_OS_WINDOWS)
