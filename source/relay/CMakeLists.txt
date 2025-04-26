@@ -79,8 +79,3 @@ target_link_libraries(aspia_relay
 set_property(TARGET aspia_relay PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_relay PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_relay PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_relay
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)

@@ -89,8 +89,3 @@ target_link_libraries(aspia_router
 set_property(TARGET aspia_router PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_router
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
