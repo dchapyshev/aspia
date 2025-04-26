@@ -33,7 +33,7 @@ SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidge
     : QWidget(parent),
       session_state_(std::move(session_state)),
       status_window_proxy_(
-          std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
+          std::make_shared<StatusWindowProxy>(base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -99,11 +99,12 @@ bool SessionWindow::connectToHost(Config config)
     // Create a client instance.
     std::unique_ptr<Client> client = createClient();
 
+    client->moveToThread(base::GuiApplication::ioThread());
     client->setStatusWindow(status_window_proxy_);
     client->setSessionState(session_state_);
 
     client_proxy_ = std::make_unique<ClientProxy>(
-        qt_base::Application::ioTaskRunner(), std::move(client));
+        base::GuiApplication::ioTaskRunner(), std::move(client));
 
     LOG(LS_INFO) << "Start client proxy";
     client_proxy_->start();
