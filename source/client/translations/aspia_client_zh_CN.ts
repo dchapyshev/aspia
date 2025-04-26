@@ -3094,37 +3094,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="110"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="113"/>
         <source>Deleting: %1</source>
         <translation>正在删除: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="141"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="144"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>检索文件列表时出错：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="146"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>删除失败 &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="152"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="155"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="169"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
@@ -3990,198 +3990,198 @@
         <translation type="vanished">已建立连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="134"/>
+        <location filename="../ui/session_window.cc" line="135"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="153"/>
+        <location filename="../ui/session_window.cc" line="154"/>
         <source>Connecting to router %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="157"/>
+        <location filename="../ui/session_window.cc" line="158"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="170"/>
+        <location filename="../ui/session_window.cc" line="171"/>
         <source>Connection to router %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="174"/>
+        <location filename="../ui/session_window.cc" line="175"/>
         <source>Connection to router established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="187"/>
+        <location filename="../ui/session_window.cc" line="188"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="191"/>
+        <location filename="../ui/session_window.cc" line="192"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="208"/>
+        <location filename="../ui/session_window.cc" line="209"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="212"/>
+        <location filename="../ui/session_window.cc" line="213"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="232"/>
+        <location filename="../ui/session_window.cc" line="233"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="239"/>
+        <location filename="../ui/session_window.cc" line="240"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="246"/>
+        <location filename="../ui/session_window.cc" line="247"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="253"/>
+        <location filename="../ui/session_window.cc" line="254"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="263"/>
+        <location filename="../ui/session_window.cc" line="264"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="284"/>
+        <location filename="../ui/session_window.cc" line="285"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>连接到路由器时出现网络错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="291"/>
+        <location filename="../ui/session_window.cc" line="292"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>连接到路由器时发生身份验证错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="316"/>
+        <location filename="../ui/session_window.cc" line="317"/>
         <source>Desktop Manage</source>
         <translation>桌面管理</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="321"/>
         <source>Desktop View</source>
         <translation>桌面查看</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="325"/>
         <source>File Transfer</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="329"/>
         <source>System Information</source>
         <translation type="unfinished">系统信息</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="333"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="336"/>
+        <location filename="../ui/session_window.cc" line="337"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="374"/>
+        <location filename="../ui/session_window.cc" line="375"/>
         <source>Violation of the communication protocol.</source>
         <translation>违反通信协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="378"/>
+        <location filename="../ui/session_window.cc" line="379"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密错误（消息加密或解密失败）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="382"/>
+        <location filename="../ui/session_window.cc" line="383"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>网络发生错误（例如，网络电缆被意外地拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="386"/>
+        <location filename="../ui/session_window.cc" line="387"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>连接被对方拒绝（或超时）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="390"/>
+        <location filename="../ui/session_window.cc" line="391"/>
         <source>Remote host closed the connection.</source>
         <translation>远程主机已关闭连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="394"/>
+        <location filename="../ui/session_window.cc" line="395"/>
         <source>Host address was not found.</source>
         <translation>找不到主机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="398"/>
+        <location filename="../ui/session_window.cc" line="399"/>
         <source>Socket operation timed out.</source>
         <translation>套接字操作超时。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="402"/>
+        <location filename="../ui/session_window.cc" line="403"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的地址已在使用中，并被设置为独占地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="406"/>
+        <location filename="../ui/session_window.cc" line="407"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定的地址的主机不可用。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="416"/>
-        <location filename="../ui/session_window.cc" line="458"/>
+        <location filename="../ui/session_window.cc" line="417"/>
+        <location filename="../ui/session_window.cc" line="459"/>
         <source>An unknown error occurred.</source>
         <translation>出现未知错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="433"/>
+        <location filename="../ui/session_window.cc" line="434"/>
         <source>Authentication successfully completed.</source>
         <translation>身份验证成功。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="437"/>
+        <location filename="../ui/session_window.cc" line="438"/>
         <source>Network authentication error.</source>
         <translation>网络身份验证错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="441"/>
+        <location filename="../ui/session_window.cc" line="442"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>违反数据交换协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="445"/>
+        <location filename="../ui/session_window.cc" line="446"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="450"/>
+        <location filename="../ui/session_window.cc" line="451"/>
         <source>Wrong user name or password.</source>
         <translation>错误的用户名或密码。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="454"/>
+        <location filename="../ui/session_window.cc" line="455"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>用户不允许指定的会话类型。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="474"/>
+        <location filename="../ui/session_window.cc" line="475"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4190,22 +4190,22 @@
         <translation type="vanished">找不到具有指定ID的主机。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="478"/>
+        <location filename="../ui/session_window.cc" line="479"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>没有可用的中继或密钥池为空。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="482"/>
+        <location filename="../ui/session_window.cc" line="483"/>
         <source>Failed to connect to the relay server.</source>
         <translation>无法连接到中继服务器。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="486"/>
+        <location filename="../ui/session_window.cc" line="487"/>
         <source>Access is denied.</source>
         <translation>访问被拒绝。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="490"/>
+        <location filename="../ui/session_window.cc" line="491"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>
