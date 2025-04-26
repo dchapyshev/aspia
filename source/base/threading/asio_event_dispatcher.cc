@@ -76,30 +76,21 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
     if (interrupted_.load(std::memory_order_relaxed))
         return false;
 
-    size_t total_count = 0;
+    size_t count = 0;
 
     if (flags & QEventLoop::WaitForMoreEvents)
     {
         emit aboutToBlock();
         io_context_.restart();
-        total_count += io_context_.run_one();
+        count += io_context_.run_one();
         emit awake();
     }
 
-    while (true)
-    {
-        io_context_.restart();
-        size_t count = io_context_.poll();
+    io_context_.restart();
+    count += io_context_.poll();
 
-        QCoreApplication::sendPostedEvents();
-
-        if (!count)
-            break;
-
-        total_count += count;
-    }
-
-    return total_count > 0;
+    QCoreApplication::sendPostedEvents();
+    return count > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
