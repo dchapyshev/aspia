@@ -19,15 +19,11 @@
 #include "qt_base/application.h"
 
 #include "base/crypto/scoped_crypto_initializer.h"
-#include "base/files/base_paths.h"
 #include "build/build_config.h"
-#include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/asio_task_runner.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_task_runner.h"
 
 #if defined(OS_WIN)
-#include "base/win/process_util.h"
 #include "base/win/scoped_object.h"
 #endif // defined(OS_WIN)
 
@@ -48,7 +44,7 @@
 #include <unistd.h>
 #endif // defined(OS_POSIX)
 
-namespace qt_base {
+namespace base {
 
 namespace {
 
@@ -109,7 +105,7 @@ bool isSameApplication(const QLocalSocket* socket)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Application::Application(int& argc, char* argv[])
+GuiApplication::GuiApplication(int& argc, char* argv[])
     : QApplication(argc, argv),
       io_thread_(base::Thread::AsioDispatcher, nullptr)
 {
@@ -151,7 +147,7 @@ Application::Application(int& argc, char* argv[])
 }
 
 //--------------------------------------------------------------------------------------------------
-Application::~Application()
+GuiApplication::~GuiApplication()
 {
     LOG(LS_INFO) << "Dtor";
 
@@ -170,16 +166,16 @@ Application::~Application()
 
 //--------------------------------------------------------------------------------------------------
 // static
-Application* Application::instance()
+GuiApplication* GuiApplication::instance()
 {
-    return static_cast<Application*>(QApplication::instance());
+    return static_cast<GuiApplication*>(QApplication::instance());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
+std::shared_ptr<base::TaskRunner> GuiApplication::uiTaskRunner()
 {
-    Application* application = instance();
+    GuiApplication* application = instance();
     if (!application)
     {
         LOG(LS_ERROR) << "Invalid application instance";
@@ -191,9 +187,9 @@ std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
+std::shared_ptr<base::TaskRunner> GuiApplication::ioTaskRunner()
 {
-    Application* application = instance();
+    GuiApplication* application = instance();
     if (!application)
     {
         LOG(LS_ERROR) << "Invalid application instance";
@@ -204,7 +200,21 @@ std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Application::isRunning()
+// static
+QThread* GuiApplication::ioThread()
+{
+    GuiApplication* application = instance();
+    if (!application)
+    {
+        LOG(LS_ERROR) << "Invalid application instance";
+        return nullptr;
+    }
+
+    return &application->io_thread_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool GuiApplication::isRunning()
 {
     if (!lock_file_->tryLock())
     {
@@ -224,32 +234,32 @@ bool Application::isRunning()
     }
     else
     {
-        connect(server_, &QLocalServer::newConnection, this, &Application::onNewConnection);
+        connect(server_, &QLocalServer::newConnection, this, &GuiApplication::onNewConnection);
     }
 
     return false;
 }
 
 //--------------------------------------------------------------------------------------------------
-Application::LocaleList Application::localeList() const
+GuiApplication::LocaleList GuiApplication::localeList() const
 {
     return locale_loader_->localeList();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Application::setLocale(const QString& locale)
+void GuiApplication::setLocale(const QString& locale)
 {
     locale_loader_->installTranslators(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Application::hasLocale(const QString& locale)
+bool GuiApplication::hasLocale(const QString& locale)
 {
     return locale_loader_->contains(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Application::sendMessage(const QByteArray& message)
+void GuiApplication::sendMessage(const QByteArray& message)
 {
     if (server_)
     {
@@ -301,7 +311,7 @@ void Application::sendMessage(const QByteArray& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Application::onNewConnection()
+void GuiApplication::onNewConnection()
 {
     DCHECK(server_);
 
@@ -368,4 +378,4 @@ void Application::onNewConnection()
     emit sig_messageReceived(message);
 }
 
-} // namespace qt_base
+} // namespace base

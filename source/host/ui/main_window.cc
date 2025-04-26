@@ -61,7 +61,7 @@ namespace host {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this))
+          base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -167,7 +167,7 @@ void MainWindow::connectToService()
     else
     {
         agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
-            qt_base::Application::ioTaskRunner(),
+            base::GuiApplication::ioTaskRunner(),
             std::make_unique<UserSessionAgent>(window_proxy_));
 
         LOG(LS_INFO) << "Connecting to service";
@@ -823,7 +823,7 @@ void MainWindow::onOneTimeSessionsChanged()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
-    Application::LocaleList locale_list = qt_base::Application::instance()->localeList();
+    Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
     QActionGroup* language_group = new QActionGroup(this);
 
     for (const auto& locale : std::as_const(locale_list))

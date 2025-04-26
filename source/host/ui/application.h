@@ -23,7 +23,7 @@
 
 namespace host {
 
-class Application final : public qt_base::Application
+class Application final : public base::GuiApplication
 {
     Q_OBJECT
 

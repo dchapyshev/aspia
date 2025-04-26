@@ -434,7 +434,7 @@ void ClientWindow::onCheckUpdates()
 void ClientWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
-    Application::LocaleList locale_list = qt_base::Application::instance()->localeList();
+    Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
 
     for (const auto& locale : std::as_const(locale_list))
     {

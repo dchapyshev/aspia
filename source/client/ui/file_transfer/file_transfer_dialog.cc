@@ -42,7 +42,7 @@ namespace client {
 FileTransferDialog::FileTransferDialog(QWidget* parent)
     : QDialog(parent),
       transfer_window_proxy_(std::make_shared<FileTransferWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this))
+          base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
 

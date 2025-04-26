@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE_QT_TASK_RUNNER_H
-#define QT_BASE_QT_TASK_RUNNER_H
+#ifndef BASE_QT_TASK_RUNNER_H
+#define BASE_QT_TASK_RUNNER_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
 
-namespace qt_base {
+namespace base {
 
 class QtTaskRunner final : public base::TaskRunner
 {
@@ -45,6 +45,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(QtTaskRunner);
 };
 
-} // namespace qt_base
+} // namespace base
 
-#endif // QT_BASE_QT_TASK_RUNNER_H
+#endif // BASE_QT_TASK_RUNNER_H

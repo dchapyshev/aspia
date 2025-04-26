@@ -34,7 +34,7 @@ const char kOpenFile[] = "open_file:";
 
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
-    : qt_base::Application(argc, argv)
+    : base::GuiApplication(argc, argv)
 {
     LOG(LS_INFO) << "Ctor";
 

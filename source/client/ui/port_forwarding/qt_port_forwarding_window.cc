@@ -50,7 +50,7 @@ std::unique_ptr<Client> QtPortForwardingWindow::createClient()
     LOG(LS_INFO) << "Create client";
 
     std::unique_ptr<ClientPortForwarding> client = std::make_unique<ClientPortForwarding>(
-        qt_base::Application::ioTaskRunner());
+        base::GuiApplication::ioTaskRunner());
 
     connect(client.get(), &ClientPortForwarding::sig_start,
             this, &QtPortForwardingWindow::start,

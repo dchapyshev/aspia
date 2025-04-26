@@ -40,7 +40,7 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
       ui(std::make_unique<Ui::FileManagerWindow>()),
       file_manager_window_proxy_(
-          std::make_shared<FileManagerWindowProxy>(qt_base::Application::uiTaskRunner(), this))
+          std::make_shared<FileManagerWindowProxy>(base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -71,7 +71,7 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
     LOG(LS_INFO) << "Create client";
 
     std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
-        qt_base::Application::ioTaskRunner());
+        base::GuiApplication::ioTaskRunner());
 
     client->setFileManagerWindow(file_manager_window_proxy_);
 

@@ -25,7 +25,7 @@
 #include <QLocale>
 #include <QTranslator>
 
-namespace qt_base {
+namespace base {
 
 namespace {
 
@@ -151,4 +151,4 @@ void LocaleLoader::removeTranslators()
     translator_list_.clear();
 }
 
-} // namespace qt_base
+} // namespace base

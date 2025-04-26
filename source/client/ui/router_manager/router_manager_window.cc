@@ -309,7 +309,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
       ui(std::make_unique<Ui::RouterManagerWindow>()),
       status_dialog_(new common::StatusDialog(this)),
       window_proxy_(std::make_shared<RouterWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this))
+          base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
@@ -460,7 +460,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     router->setPassword(router_config.password);
 
     router_proxy_ = std::make_unique<RouterProxy>(
-        qt_base::Application::ioTaskRunner(), std::move(router));
+        base::GuiApplication::ioTaskRunner(), std::move(router));
 
     router_proxy_->connectToRouter(router_config.address, router_config.port);
 }

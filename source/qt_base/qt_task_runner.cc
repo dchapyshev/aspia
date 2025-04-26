@@ -24,7 +24,7 @@
 #include <QEvent>
 #include <QThread>
 
-namespace qt_base {
+namespace base {
 
 namespace {
 
@@ -146,4 +146,4 @@ void QtTaskRunner::postQuit()
     NOTIMPLEMENTED();
 }
 
-} // namespace qt_base
+} // namespace base

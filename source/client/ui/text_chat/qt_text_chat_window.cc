@@ -64,7 +64,7 @@ std::unique_ptr<Client> QtTextChatWindow::createClient()
     LOG(LS_INFO) << "Create client";
 
     std::unique_ptr<ClientTextChat> client = std::make_unique<ClientTextChat>(
-        qt_base::Application::ioTaskRunner());
+        base::GuiApplication::ioTaskRunner());
 
     connect(this, &QtTextChatWindow::sig_textChatMessage,
             client.get(), &ClientTextChat::onTextChatMessage,

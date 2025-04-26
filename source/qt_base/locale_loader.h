@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE_LOCALE_LOADER_H
-#define QT_BASE_LOCALE_LOADER_H
+#ifndef BASE_LOCALE_LOADER_H
+#define BASE_LOCALE_LOADER_H
 
 #include "base/macros_magic.h"
 
@@ -29,7 +29,7 @@
 
 class QTranslator;
 
-namespace qt_base {
+namespace base {
 
 class LocaleLoader
 {
@@ -53,6 +53,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
 };
 
-} // namespace qt_base
+} // namespace base
 
-#endif // QT_BASE_LOCALE_LOADER_H
+#endif // BASE_LOCALE_LOADER_H

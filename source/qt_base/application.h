@@ -32,19 +32,21 @@ namespace base {
 class ScopedCryptoInitializer;
 } // namespace base
 
-namespace qt_base {
+namespace base {
 
-class Application : public QApplication
+class GuiApplication : public QApplication
 {
     Q_OBJECT
 
 public:
-    Application(int& argc, char* argv[]);
-    virtual ~Application() override;
+    GuiApplication(int& argc, char* argv[]);
+    virtual ~GuiApplication() override;
 
-    static Application* instance();
+    static GuiApplication* instance();
     static std::shared_ptr<base::TaskRunner> uiTaskRunner();
     static std::shared_ptr<base::TaskRunner> ioTaskRunner();
+
+    static QThread* ioThread();
 
     bool isRunning();
 
@@ -76,9 +78,9 @@ private:
     std::unique_ptr<LocaleLoader> locale_loader_;
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
-    DISALLOW_COPY_AND_ASSIGN(Application);
+    DISALLOW_COPY_AND_ASSIGN(GuiApplication);
 };
 
-} // namespace qt_base
+} // namespace base
 
-#endif // QT_BASE_APPLICATION_H
+#endif // BASE_APPLICATION_H

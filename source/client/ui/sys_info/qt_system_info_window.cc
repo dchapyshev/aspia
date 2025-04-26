@@ -380,7 +380,7 @@ std::unique_ptr<Client> QtSystemInfoWindow::createClient()
     LOG(LS_INFO) << "Create client";
 
     std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>(
-        qt_base::Application::ioTaskRunner());
+        base::GuiApplication::ioTaskRunner());
 
     connect(this, &QtSystemInfoWindow::sig_systemInfoRequired,
             client.get(), &ClientSystemInfo::onSystemInfoRequest,

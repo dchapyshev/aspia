@@ -43,7 +43,7 @@ namespace client {
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent),
       remover_window_proxy_(std::make_shared<FileRemoveWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this))
+          base::GuiApplication::uiTaskRunner(), this))
 {
     LOG(LS_INFO) << "Ctor";
 
