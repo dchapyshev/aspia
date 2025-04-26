@@ -142,7 +142,10 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
         return false;
 
     timers_.erase(it);
-    scheduleNextTimer();
+
+    if (!timers_.empty())
+        scheduleNextTimer();
+
     return true;
 }
 
@@ -168,7 +171,9 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
     if (!removed)
         return false;
 
-    scheduleNextTimer();
+    if (!timers_.empty())
+        scheduleNextTimer();
+
     return true;
 }
 
@@ -304,9 +309,6 @@ void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wai
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::scheduleNextTimer()
 {
-    if (timers_.empty())
-        return;
-
     // Find the timer that should be completed before all others.
     const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_.cend(),
         [](const auto& lhs, const auto& rhs)
