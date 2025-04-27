@@ -26,9 +26,7 @@ namespace router {
 
 //--------------------------------------------------------------------------------------------------
 SessionRelay::SessionRelay()
-    : Session(proto::ROUTER_SESSION_RELAY),
-      incoming_message_(std::make_unique<proto::RelayToRouter>()),
-      outgoing_message_(std::make_unique<proto::RouterToRelay>())
+    : Session(proto::ROUTER_SESSION_RELAY)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -43,17 +41,17 @@ SessionRelay::~SessionRelay()
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::sendKeyUsed(uint32_t key_id)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_key_used()->set_key_id(key_id);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_key_used()->set_key_id(key_id);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& request)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_peer_connection_request()->CopyFrom(request);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_peer_connection_request()->CopyFrom(request);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,21 +63,21 @@ void SessionRelay::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
-    incoming_message_->Clear();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Could not read message from relay server";
         return;
     }
 
-    if (incoming_message_->has_key_pool())
+    if (incoming_message_.has_key_pool())
     {
-        readKeyPool(incoming_message_->key_pool());
+        readKeyPool(incoming_message_.key_pool());
     }
-    else if (incoming_message_->has_relay_stat())
+    else if (incoming_message_.has_relay_stat())
     {
-        relay_stat_ = std::move(*incoming_message_->mutable_relay_stat());
+        relay_stat_ = std::move(*incoming_message_.mutable_relay_stat());
     }
     else
     {

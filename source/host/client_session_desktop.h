@@ -122,8 +122,8 @@ private:
     std::unique_ptr<TaskManager> task_manager_;
 #endif // defined(OS_WIN)
 
-    std::unique_ptr<proto::ClientToHost> incoming_message_;
-    std::unique_ptr<proto::HostToClient> outgoing_message_;
+    proto::ClientToHost incoming_message_;
+    proto::HostToClient outgoing_message_;
 
     StatCounter stat_counter_;
 

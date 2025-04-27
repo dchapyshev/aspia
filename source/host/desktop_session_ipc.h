@@ -79,8 +79,8 @@ private:
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 
-    std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
-    std::unique_ptr<proto::internal::DesktopToService> incoming_message_;
+    proto::internal::ServiceToDesktop outgoing_message_;
+    proto::internal::DesktopToService incoming_message_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);
 };

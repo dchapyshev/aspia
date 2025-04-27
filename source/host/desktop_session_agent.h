@@ -122,8 +122,8 @@ private:
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
-    std::unique_ptr<proto::internal::ServiceToDesktop> incoming_message_;
-    std::unique_ptr<proto::internal::DesktopToService> outgoing_message_;
+    proto::internal::ServiceToDesktop incoming_message_;
+    proto::internal::DesktopToService outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };

@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/location.h"
-#include "base/task_runner.h"
+
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.pb.h"
@@ -79,8 +79,8 @@ private:
     class Handler;
     base::local_shared_ptr<Handler> handler_;
 
-    std::unique_ptr<proto::port_forwarding::ClientToHost> incoming_message_;
-    std::unique_ptr<proto::port_forwarding::HostToClient> outgoing_message_;
+    proto::port_forwarding::ClientToHost incoming_message_;
+    proto::port_forwarding::HostToClient outgoing_message_;
 
     std::queue<std::string> write_queue_;
 
