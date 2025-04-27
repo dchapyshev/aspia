@@ -3278,34 +3278,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="402"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="411"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="401"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="410"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1159"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="403"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="402"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="412"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="411"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1127"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1126"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1129"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1128"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1159"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
@@ -3323,12 +3323,12 @@
         <translation>远程计算机</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="126"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="125"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="127"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="126"/>
         <source>Session error: %1</source>
         <translation>会话错误: %1</translation>
     </message>

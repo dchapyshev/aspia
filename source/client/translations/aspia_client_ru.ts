@@ -3513,34 +3513,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="402"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="411"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="401"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="410"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1159"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="403"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="402"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="412"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="411"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1127"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1126"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1129"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1128"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1159"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -3558,12 +3558,12 @@
         <translation>Удаленный компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="126"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="125"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="127"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="126"/>
         <source>Session error: %1</source>
         <translation>Ошибка сессии: %1</translation>
     </message>
