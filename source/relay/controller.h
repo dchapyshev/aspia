@@ -25,6 +25,7 @@
 #include "relay/sessions_worker.h"
 #include "relay/shared_pool.h"
 
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -82,14 +83,14 @@ private:
     std::chrono::seconds statistics_interval_;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    QTimer reconnect_timer_;
+    QPointer<QTimer> reconnect_timer_;
     std::unique_ptr<base::TcpChannel> channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    QPointer<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionsWorker> sessions_worker_;
 
-    std::unique_ptr<proto::RouterToRelay> incoming_message_;
-    std::unique_ptr<proto::RelayToRouter> outgoing_message_;
+    proto::RouterToRelay incoming_message_;
+    proto::RelayToRouter outgoing_message_;
 
     int session_count_ = 0;
 

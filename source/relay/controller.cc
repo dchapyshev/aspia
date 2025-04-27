@@ -62,14 +62,13 @@ private:
 Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
     : QObject(parent),
       task_runner_(task_runner),
-      shared_pool_(std::make_unique<SharedPool>(this)),
-      incoming_message_(std::make_unique<proto::RouterToRelay>()),
-      outgoing_message_(std::make_unique<proto::RelayToRouter>())
+      reconnect_timer_(new QTimer(this)),
+      shared_pool_(std::make_unique<SharedPool>(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    reconnect_timer_.setSingleShot(true);
-    connect(&reconnect_timer_, &QTimer::timeout, this, &Controller::connectToRouter);
+    reconnect_timer_->setSingleShot(true);
+    connect(reconnect_timer_, &QTimer::timeout, this, &Controller::connectToRouter);
 
     Settings settings;
 
@@ -176,13 +175,13 @@ void Controller::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_public_key_);
     authenticator_->setSessionType(proto::ROUTER_SESSION_RELAY);
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
@@ -213,7 +212,7 @@ void Controller::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
     });
 
     authenticator_->start(std::move(channel_));
@@ -235,27 +234,27 @@ void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
-    incoming_message_->Clear();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (incoming_message_->has_key_used())
+    if (incoming_message_.has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(shared_pool_->share(), incoming_message_->key_used().key_id());
+            std::make_shared<KeyDeleter>(shared_pool_->share(), incoming_message_.key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
         task_runner_->postDelayedTask(
             std::bind(&KeyDeleter::deleteKey, key_deleter), std::chrono::seconds(30));
     }
-    else if (incoming_message_->has_peer_connection_request())
+    else if (incoming_message_.has_peer_connection_request())
     {
-        const proto::PeerConnectionRequest& request = incoming_message_->peer_connection_request();
+        const proto::PeerConnectionRequest& request = incoming_message_.peer_connection_request();
 
         switch (request.type())
         {
@@ -289,11 +288,11 @@ void Controller::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_relay_stat()->CopyFrom(relay_stat);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,15 +338,15 @@ void Controller::connectToRouter()
 void Controller::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-    reconnect_timer_.start(kReconnectTimeout);
+    reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Controller::sendKeyPool(uint32_t key_count)
 {
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
-    proto::RelayKeyPool* relay_key_pool = outgoing_message_->mutable_key_pool();
+    proto::RelayKeyPool* relay_key_pool = outgoing_message_.mutable_key_pool();
 
     relay_key_pool->set_peer_host(peer_address_.toStdString());
     relay_key_pool->set_peer_port(peer_port_);
@@ -375,7 +374,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     }
 
     // Send a message to the router.
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
 }
 
 } // namespace relay
