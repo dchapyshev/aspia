@@ -136,8 +136,8 @@ void ClientDesktop::onSessionStarted()
     input_event_filter_.setSessionType(sessionState()->sessionType());
     emit sig_showWindow();
 
-    clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
-    connect(clipboard_monitor_.get(), &common::ClipboardMonitor::sig_clipboardEvent,
+    clipboard_monitor_ = new common::ClipboardMonitor(this);
+    connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
             this, &ClientDesktop::onClipboardEvent);
     clipboard_monitor_->start();
 
@@ -347,9 +347,9 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
             std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
         webm_video_encoder_ = std::make_unique<base::WebmVideoEncoder>();
 
-        webm_video_encode_timer_ = std::make_unique<QTimer>();
+        webm_video_encode_timer_ = new QTimer(this);
 
-        connect(webm_video_encode_timer_.get(), &QTimer::timeout, this, [this]()
+        connect(webm_video_encode_timer_, &QTimer::timeout, this, [this]()
         {
             if (!webm_video_encoder_ || !webm_file_writer_ || !desktop_frame_)
                 return;
@@ -368,7 +368,7 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
 
         video_recording.set_action(proto::VideoRecording::ACTION_STOPPED);
 
-        webm_video_encode_timer_.reset();
+        webm_video_encode_timer_->deleteLater();
         webm_video_encoder_.reset();
         webm_file_writer_.reset();
     }

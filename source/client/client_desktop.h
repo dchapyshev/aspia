@@ -32,6 +32,8 @@
 
 #include <filesystem>
 
+#include <QPointer>
+
 namespace base {
 class AudioDecoder;
 class AudioPlayer;
@@ -151,11 +153,11 @@ private:
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;
     std::unique_ptr<base::AudioDecoder> audio_decoder_;
     std::unique_ptr<base::AudioPlayer> audio_player_;
-    std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
+    QPointer<common::ClipboardMonitor> clipboard_monitor_;
 
     InputEventFilter input_event_filter_;
 
-    std::unique_ptr<QTimer> webm_video_encode_timer_;
+    QPointer<QTimer> webm_video_encode_timer_;
     std::unique_ptr<base::WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<base::WebmFileWriter> webm_file_writer_;
 
