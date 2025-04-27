@@ -177,10 +177,7 @@ private:
 
     UnconfirmedClientSessionList pending_clients_;
     ClientSessionList desktop_clients_;
-    ClientSessionList file_transfer_clients_;
-    ClientSessionList system_info_clients_;
-    ClientSessionList text_chat_clients_;
-    ClientSessionList port_forwarding_clients_;
+    ClientSessionList other_clients_;
 
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;

@@ -243,10 +243,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         };
 
         send_connection_list(desktop_clients_);
-        send_connection_list(file_transfer_clients_);
-        send_connection_list(system_info_clients_);
-        send_connection_list(text_chat_clients_);
-        send_connection_list(port_forwarding_clients_);
+        send_connection_list(other_clients_);
 
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
@@ -371,8 +368,7 @@ base::User UserSession::user() const
 //--------------------------------------------------------------------------------------------------
 size_t UserSession::clientsCount() const
 {
-    return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size() +
-           text_chat_clients_.size() + port_forwarding_clients_.size();
+    return desktop_clients_.size() + other_clients_.size();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -792,11 +788,14 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
 
-        for (const auto& client : text_chat_clients_)
+        for (const auto& client : other_clients_)
         {
-            ClientSessionTextChat* text_chat_session =
-                static_cast<ClientSessionTextChat*>(client.get());
-            text_chat_session->sendTextChat(incoming_message_.text_chat());
+            if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+            {
+                ClientSessionTextChat* text_chat_session =
+                    static_cast<ClientSessionTextChat*>(client.get());
+                text_chat_session->sendTextChat(incoming_message_.text_chat());
+            }
         }
     }
     else
@@ -843,7 +842,14 @@ void UserSession::onDesktopSessionStopped()
         LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid=" << session_id_ << ")";
 
         desktop_clients_.clear();
-        file_transfer_clients_.clear();
+
+        for (auto it = other_clients_.begin(); it != other_clients_.end();)
+        {
+            if ((*it)->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER)
+                it = other_clients_.erase(it);
+            else
+                ++it;
+        }
 
         onSessionDettached(FROM_HERE);
     }
@@ -1000,10 +1006,7 @@ void UserSession::onClientSessionFinished()
     LOG(LS_INFO) << "Client session finished (sid=" << session_id_ << ")";
 
     delete_finished(&desktop_clients_);
-    delete_finished(&file_transfer_clients_);
-    delete_finished(&system_info_clients_);
-    delete_finished(&text_chat_clients_);
-    delete_finished(&port_forwarding_clients_);
+    delete_finished(&other_clients_);
 
     if (desktop_clients_.empty())
     {
@@ -1048,9 +1051,9 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
         return;
     }
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
-        if (client->id() != id)
+        if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT && client->id() != id)
         {
             ClientSessionTextChat* text_chat_session =
                 static_cast<ClientSessionTextChat*>(client.get());
@@ -1099,8 +1102,11 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     // Stop all file transfer clients.
-    for (const auto& client : file_transfer_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_FILE_TRANSFER)
+            continue;
+
         LOG(LS_INFO) << "Stop file transfer client (id=" << client->id()
                      << " user_name=" << client->userName() << " sid=" << session_id_ << ")";
         client->stop();
@@ -1261,10 +1267,7 @@ void UserSession::killClientSession(uint32_t id)
     LOG(LS_INFO) << "Kill client session with ID: " << id << " (sid=" << session_id_ << ")";
 
     stop_by_id(&desktop_clients_, id);
-    stop_by_id(&file_transfer_clients_, id);
-    stop_by_id(&system_info_clients_, id);
-    stop_by_id(&text_chat_clients_, id);
-    stop_by_id(&port_forwarding_clients_, id);
+    stop_by_id(&other_clients_, id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1346,28 +1349,28 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
             LOG(LS_INFO) << "New file transfer session (sid=" << session_id_ << ")";
-            file_transfer_clients_.emplace_back(std::move(client_session));
+            other_clients_.emplace_back(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
         {
             LOG(LS_INFO) << "New system info session (sid=" << session_id_ << ")";
-            system_info_clients_.emplace_back(std::move(client_session));
+            other_clients_.emplace_back(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
         {
             LOG(LS_INFO) << "New text chat session (sid=" << session_id_ << ")";
-            text_chat_clients_.emplace_back(std::move(client_session));
+            other_clients_.emplace_back(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
         {
             LOG(LS_INFO) << "New port forwarding session (sid=" << session_id_ << ")";
-            port_forwarding_clients_.emplace_back(std::move(client_session));
+            other_clients_.emplace_back(std::move(client_session));
         }
         break;
 
@@ -1390,8 +1393,11 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         onTextChatSessionStarted(client_session_ptr->id());
 
         bool has_user = channel_ != nullptr;
-        for (const auto& client : text_chat_clients_)
+        for (const auto& client : other_clients_)
         {
+            if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+                continue;
+
             ClientSessionTextChat* text_chat_client =
                 static_cast<ClientSessionTextChat*>(client.get());
 
@@ -1414,8 +1420,11 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
     LOG(LS_INFO) << "User state changed (has_user=" << has_user << " sid=" << session_id_
                  << " from=" << location.toString() << ")";
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            continue;
+
         ClientSessionTextChat* text_chat_client =
             static_cast<ClientSessionTextChat*>(client.get());
 
@@ -1435,8 +1444,11 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            continue;
+
         if (client->id() == id)
         {
             ClientSessionTextChat* text_chat_client =
@@ -1459,8 +1471,11 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
         }
     }
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            continue;
+
         if (client->id() != id)
         {
             ClientSessionTextChat* text_chat_session =
@@ -1485,8 +1500,11 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            continue;
+
         if (client->id() == id)
         {
             ClientSessionTextChat* text_chat_session =
@@ -1506,8 +1524,11 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
         }
     }
 
-    for (const auto& client : text_chat_clients_)
+    for (const auto& client : other_clients_)
     {
+        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            continue;
+
         if (client->id() != id)
         {
             ClientSessionTextChat* text_chat_session =
