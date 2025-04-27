@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "console/application.h"
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
 
     qt_base::ScopedQtLogging scoped_logging(logging_settings);
 
+    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);

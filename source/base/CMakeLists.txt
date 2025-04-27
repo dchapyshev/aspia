@@ -46,6 +46,8 @@ list(APPEND SOURCE_BASE
     logging.cc
     logging.h
     macros_magic.h
+    meta_types.cc
+    meta_types.h
     power_controller.h
     process_handle.cc
     process_handle.h

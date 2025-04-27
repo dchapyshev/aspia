@@ -20,6 +20,7 @@
 
 #include "base/command_line.h"
 #include "base/environment.h"
+#include "base/meta_types.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
@@ -429,7 +430,9 @@ int hostServiceMain(int& argc, char* argv[])
         }
         else
         {
+            base::registerMetaTypes();
             proto::registerMetaTypes();
+
             Service().exec(argc, argv);
         }
     }

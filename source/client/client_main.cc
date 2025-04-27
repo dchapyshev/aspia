@@ -18,6 +18,7 @@
 
 #include "client/client_main.h"
 
+#include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "client/config_factory.h"
@@ -394,6 +395,7 @@ int clientMain(int argc, char* argv[])
 
     qt_base::ScopedQtLogging scoped_logging(logging_settings);
 
+    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);

@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
+#include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -221,6 +222,7 @@ int hostMain(int argc, char* argv[])
             return 1;
     }
 
+    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     host::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);

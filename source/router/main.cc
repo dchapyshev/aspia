@@ -17,6 +17,7 @@
 //
 
 #include "base/command_line.h"
+#include "base/meta_types.h"
 #include "base/scoped_logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
@@ -281,7 +282,9 @@ int main(int argc, char* argv[])
     }
     else
     {
+        base::registerMetaTypes();
         proto::registerMetaTypes();
+
         router::Service().exec(argc, argv);
     }
 
@@ -317,7 +320,10 @@ int main(int argc, const char* const* argv)
     else
     {
         LOG(LS_INFO) << "Starting router services";
+
+        base::registerMetaTypes();
         proto::registerMetaTypes();
+
         router::Service().exec();
     }
 }
