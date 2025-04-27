@@ -3926,198 +3926,198 @@
         <translation type="vanished">Connessione stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="135"/>
+        <location filename="../ui/session_window.cc" line="160"/>
         <source>Session started.</source>
         <translation>Sessione avviata.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="154"/>
+        <location filename="../ui/session_window.cc" line="179"/>
         <source>Connecting to router %1:%2...</source>
         <translation>Connessione al router %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="158"/>
+        <location filename="../ui/session_window.cc" line="183"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="171"/>
+        <location filename="../ui/session_window.cc" line="196"/>
         <source>Connection to router %1:%2 established.</source>
         <translation>Connessione al router %1:%2 stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="175"/>
+        <location filename="../ui/session_window.cc" line="200"/>
         <source>Connection to router established.</source>
         <translation>Connessione al router stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="188"/>
+        <location filename="../ui/session_window.cc" line="213"/>
         <source>Connecting to host %1...</source>
         <translation>Connessione ad host %1...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="192"/>
+        <location filename="../ui/session_window.cc" line="217"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Connessione ad host %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="209"/>
+        <location filename="../ui/session_window.cc" line="234"/>
         <source>Connection to host %1 established.</source>
         <translation>Connessione ad host %1 stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="213"/>
+        <location filename="../ui/session_window.cc" line="238"/>
         <source>Connection to host %1:%2 established.</source>
         <translation>Connessione ad host %1:%2 stabilita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="233"/>
+        <location filename="../ui/session_window.cc" line="258"/>
         <source>Router is unavailable yet. Waiting to reconnect...</source>
         <translation>Il router non è ancora disponibile. In attesa di riconnessione...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="240"/>
+        <location filename="../ui/session_window.cc" line="265"/>
         <source>Timeout waiting for reconnection to router.</source>
         <translation>Timeout durante la riconnessione al router.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="247"/>
+        <location filename="../ui/session_window.cc" line="272"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>L&apos;host non è ancora disponibile.In attesa di riconnessione...</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="254"/>
+        <location filename="../ui/session_window.cc" line="279"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Timeout durante la riconnessione all&apos;host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="264"/>
+        <location filename="../ui/session_window.cc" line="289"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>La versione dell&apos;host è più recente di quella del Client (%1 &gt; %2). Per cortesia aggiornare l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="285"/>
+        <location filename="../ui/session_window.cc" line="310"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>Errore di connessione durante la connessione al router: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="292"/>
+        <location filename="../ui/session_window.cc" line="317"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>Errore di autenticazione durante la connessione al router: %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="317"/>
+        <location filename="../ui/session_window.cc" line="342"/>
         <source>Desktop Manage</source>
         <translation>Gestione Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="321"/>
+        <location filename="../ui/session_window.cc" line="346"/>
         <source>Desktop View</source>
         <translation>Visualizzazione Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="325"/>
+        <location filename="../ui/session_window.cc" line="350"/>
         <source>File Transfer</source>
         <translation>Trasferimento File</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="329"/>
+        <location filename="../ui/session_window.cc" line="354"/>
         <source>System Information</source>
         <translation>Informazioni Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="333"/>
+        <location filename="../ui/session_window.cc" line="358"/>
         <source>Text Chat</source>
         <translation>Chat Testuale</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="337"/>
+        <location filename="../ui/session_window.cc" line="362"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="375"/>
+        <location filename="../ui/session_window.cc" line="400"/>
         <source>Violation of the communication protocol.</source>
         <translation>Violazione del protocollo di comunicazione.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="379"/>
+        <location filename="../ui/session_window.cc" line="404"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Errore Crittografia (decifratura o cifratura messaggio fallita).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="383"/>
+        <location filename="../ui/session_window.cc" line="408"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Si è verificato un errore di rete (es., il cavo di rete è stato accidentalmente scollegato).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="387"/>
+        <location filename="../ui/session_window.cc" line="412"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Connessione rifiutata (o fuori tempo massimo).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="391"/>
+        <location filename="../ui/session_window.cc" line="416"/>
         <source>Remote host closed the connection.</source>
         <translation>L&apos;host remoto ha chiuso la connessione.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="395"/>
+        <location filename="../ui/session_window.cc" line="420"/>
         <source>Host address was not found.</source>
         <translation>L&apos;indirizzo dell&apos;host non e stato trovato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="399"/>
+        <location filename="../ui/session_window.cc" line="424"/>
         <source>Socket operation timed out.</source>
         <translation>Operazione sul socket fuori tempo massimo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="403"/>
+        <location filename="../ui/session_window.cc" line="428"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>L&apos;indirizzo specificato è già in uso ed è stato impostato per essere esclusivo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="407"/>
+        <location filename="../ui/session_window.cc" line="432"/>
         <source>Address specified does not belong to the host.</source>
         <translation>L&apos;indirizzo specificato non appartiene all&apos;host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="417"/>
-        <location filename="../ui/session_window.cc" line="459"/>
+        <location filename="../ui/session_window.cc" line="442"/>
+        <location filename="../ui/session_window.cc" line="484"/>
         <source>An unknown error occurred.</source>
         <translation>Si è verificato un errore sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="434"/>
+        <location filename="../ui/session_window.cc" line="459"/>
         <source>Authentication successfully completed.</source>
         <translation>Autenticazione completata con successo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="438"/>
+        <location filename="../ui/session_window.cc" line="463"/>
         <source>Network authentication error.</source>
         <translation>Errore di autenticazione di rete.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="442"/>
+        <location filename="../ui/session_window.cc" line="467"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Violazione del protocollo di scambio dei dati.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="446"/>
+        <location filename="../ui/session_window.cc" line="471"/>
         <source>Version of the application you are connecting to is less than  the minimum supported version.</source>
         <translation>La versione dell&apos;applicazione a cui ti stai connettendo è inferiore a quella minima supportata.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="451"/>
+        <location filename="../ui/session_window.cc" line="476"/>
         <source>Wrong user name or password.</source>
         <translation>Nome utente o password errati.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="455"/>
+        <location filename="../ui/session_window.cc" line="480"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>La tipologia di sessione specificata non è ammessa per l&apos;utente.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="475"/>
+        <location filename="../ui/session_window.cc" line="500"/>
         <source>The host with the specified ID is not online.</source>
         <translation>L&apos;host con l&apos;ID specificato non è in linea.</translation>
     </message>
@@ -4126,22 +4126,22 @@
         <translation type="vanished">Non è stato trovato un host con l&apos;ID specificato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="479"/>
+        <location filename="../ui/session_window.cc" line="504"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Non ci sono relay disponibili o il pool di chiavi è vuoto.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="483"/>
+        <location filename="../ui/session_window.cc" line="508"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Connession a relay server fallita.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="487"/>
+        <location filename="../ui/session_window.cc" line="512"/>
         <source>Access is denied.</source>
         <translation>L&apos;accesso è stato rifiutato.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="491"/>
+        <location filename="../ui/session_window.cc" line="516"/>
         <source>Unknown error.</source>
         <translation>Errore sconosciuto.</translation>
     </message>
