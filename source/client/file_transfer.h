@@ -22,7 +22,7 @@
 #include "base/location.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <deque>
 #include <map>

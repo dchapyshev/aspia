@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "common/file_platform_util.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <QAbstractItemModel>
 

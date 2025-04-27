@@ -21,7 +21,7 @@
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 #include "ui_file_panel.h"
 
 namespace client {

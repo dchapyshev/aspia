@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <filesystem>
 

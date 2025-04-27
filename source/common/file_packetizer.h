@@ -20,7 +20,7 @@
 #define COMMON_FILE_PACKETIZER_H
 
 #include "base/macros_magic.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <filesystem>
 #include <fstream>

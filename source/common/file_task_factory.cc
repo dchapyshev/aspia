@@ -19,7 +19,7 @@
 #include "common/file_task_factory.h"
 
 #include "base/logging.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 namespace common {
 

@@ -20,7 +20,7 @@
 #define CLIENT_FILE_MANAGER_WINDOW_PROXY_H
 
 #include "common/file_task.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <memory>
 

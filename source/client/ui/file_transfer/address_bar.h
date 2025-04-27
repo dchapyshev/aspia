@@ -20,7 +20,7 @@
 #define CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
 
 #include "base/macros_magic.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <QComboBox>
 

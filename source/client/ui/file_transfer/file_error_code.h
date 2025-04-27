@@ -19,7 +19,7 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_ERROR_CODE_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_ERROR_CODE_H
 
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <QString>
 

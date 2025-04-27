@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "common/file_task_producer_proxy.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 namespace common {
 

@@ -20,7 +20,7 @@
 #define CLIENT_UI_FILE_TRANSFER_FILE_LIST_H
 
 #include "client/file_transfer.h"
-#include "proto/file_transfer.pb.h"
+#include "proto/file_transfer.h"
 
 #include <QTreeView>
 
