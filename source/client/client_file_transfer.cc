@@ -169,10 +169,7 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 void ClientFileTransfer::doNextRemoteTask()
 {
     if (remote_task_queue_.empty())
-    {
-        LOG(LS_INFO) << "No more tasks";
         return;
-    }
 
     // Send a request to the remote computer.
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front()->request());
@@ -239,23 +236,18 @@ void ClientFileTransfer::remove(FileRemover* remover)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                                  FileTransfer::Type transfer_type,
-                                  const std::string& source_path,
-                                  const std::string& target_path,
-                                  const std::vector<FileTransfer::Item>& items)
+void ClientFileTransfer::transfer(FileTransfer* transfer)
 {
     DCHECK(!transfer_);
-
-    transfer_ = std::make_unique<FileTransfer>(
-        local_worker_->taskRunner(), transfer_window_proxy, task_consumer_proxy_, transfer_type);
+    transfer_.reset(transfer);
 
     connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
     {
         transfer_.release()->deleteLater();
     });
 
-    transfer_->start(source_path, target_path, items);
+    transfer_->moveToThread(base::GuiApplication::ioThread());
+    transfer_->start(task_consumer_proxy_);
 }
 
 } // namespace client

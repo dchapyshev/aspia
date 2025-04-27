@@ -21,7 +21,6 @@
 
 #include "build/build_config.h"
 #include "client/file_transfer.h"
-#include "client/file_transfer_window.h"
 #include "ui_file_transfer_dialog.h"
 
 // Removed completely in qt6.
@@ -33,9 +32,7 @@ class QWinTaskbarProgress;
 
 namespace client {
 
-class FileTransferDialog final
-    : public QDialog,
-      public FileTransferWindow
+class FileTransferDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -43,15 +40,17 @@ public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
     ~FileTransferDialog() final;
 
-    std::shared_ptr<FileTransferWindowProxy> windowProxy() { return transfer_window_proxy_; }
+public slots:
+    void start();
+    void stop();
+    void setCurrentItem(const std::string& source_path, const std::string& target_path);
+    void setCurrentProgress(int total, int current);
+    void setCurrentSpeed(int64_t speed);
+    void errorOccurred(const FileTransfer::Error& error);
 
-    // FileTransferWindow implementation.
-    void start(std::shared_ptr<FileTransferProxy> transfer_proxy) final;
-    void stop() final;
-    void setCurrentItem(const std::string& source_path, const std::string& target_path) final;
-    void setCurrentProgress(int total, int current) final;
-    void setCurrentSpeed(int64_t speed) final;
-    void errorOccurred(const FileTransfer::Error& error) final;
+signals:
+    void sig_action(FileTransfer::Error::Type error_type, FileTransfer::Error::Action action);
+    void sig_stop();
 
 protected:
     // QDialog implementation.
@@ -63,9 +62,6 @@ private:
     QString speedToString(int64_t speed);
 
     Ui::FileTransferDialog ui;
-
-    std::shared_ptr<FileTransferProxy> transfer_proxy_;
-    std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy_;
     std::unique_ptr<QFontMetrics> label_metrics_;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

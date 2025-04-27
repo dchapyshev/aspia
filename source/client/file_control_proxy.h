@@ -44,12 +44,7 @@ public:
                 const std::string& new_path);
 
     void remove(FileRemover* remover);
-
-    void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                  FileTransfer::Type transfer_type,
-                  const std::string& source_path,
-                  const std::string& target_path,
-                  const std::vector<FileTransfer::Item>& items);
+    void transfer(FileTransfer* transfer);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;

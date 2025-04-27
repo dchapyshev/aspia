@@ -354,12 +354,36 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
     ui->local_panel->setEnabled(false);
     ui->remote_panel->setEnabled(false);
 
-    file_control_proxy_->transfer(
-        transfer_dialog_->windowProxy(),
-        type,
-        source_path.toStdString(),
-        target_path.toStdString(),
-        items);
+    FileTransfer* transfer =
+        new FileTransfer(type, source_path.toStdString(), target_path.toStdString(), items);
+
+    connect(transfer, &FileTransfer::sig_started,
+            transfer_dialog_, &FileTransferDialog::start,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_finished,
+            transfer_dialog_, &FileTransferDialog::stop,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_errorOccurred,
+            transfer_dialog_, &FileTransferDialog::errorOccurred,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_progressChanged,
+            transfer_dialog_, &FileTransferDialog::setCurrentProgress,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_currentItemChanged,
+            transfer_dialog_, &FileTransferDialog::setCurrentItem,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_currentSpeedChanged,
+            transfer_dialog_, &FileTransferDialog::setCurrentSpeed,
+            Qt::QueuedConnection);
+
+    connect(transfer_dialog_, &FileTransferDialog::sig_action,
+            transfer, &FileTransfer::setAction,
+            Qt::QueuedConnection);
+    connect(transfer_dialog_, &FileTransferDialog::sig_stop,
+            transfer, &FileTransfer::stop,
+            Qt::QueuedConnection);
+
+    file_control_proxy_->transfer(transfer);
 }
 
 //--------------------------------------------------------------------------------------------------

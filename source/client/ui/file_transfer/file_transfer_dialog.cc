@@ -19,10 +19,7 @@
 #include "client/ui/file_transfer/file_transfer_dialog.h"
 
 #include "base/logging.h"
-#include "client/file_transfer_proxy.h"
-#include "client/file_transfer_window_proxy.h"
 #include "client/ui/file_transfer/file_error_code.h"
-#include "qt_base/application.h"
 
 #include <QCloseEvent>
 #include <QPushButton>
@@ -40,9 +37,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 FileTransferDialog::FileTransferDialog(QWidget* parent)
-    : QDialog(parent),
-      transfer_window_proxy_(std::make_shared<FileTransferWindowProxy>(
-          base::GuiApplication::uiTaskRunner(), this))
+    : QDialog(parent)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -81,8 +76,6 @@ FileTransferDialog::~FileTransferDialog()
 {
     LOG(LS_INFO) << "Dtor";
 
-    transfer_window_proxy_->dettach();
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(OS_WIN)
     if (taskbar_progress_)
@@ -92,11 +85,8 @@ FileTransferDialog::~FileTransferDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferDialog::start(std::shared_ptr<FileTransferProxy> transfer_proxy)
+void FileTransferDialog::start()
 {
-    transfer_proxy_ = std::move(transfer_proxy);
-    DCHECK(transfer_proxy_);
-
     show();
     activateWindow();
 }
@@ -206,30 +196,30 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
         {
             if (button == skip_button)
             {
-                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_SKIP);
+                emit sig_action(error.type(), FileTransfer::Error::ACTION_SKIP);
                 return;
             }
 
             if (button == skip_all_button)
             {
-                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_SKIP_ALL);
+                emit sig_action(error.type(), FileTransfer::Error::ACTION_SKIP_ALL);
                 return;
             }
 
             if (button == replace_button)
             {
-                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_REPLACE);
+                emit sig_action(error.type(), FileTransfer::Error::ACTION_REPLACE);
                 return;
             }
 
             if (button == replace_all_button)
             {
-                transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_REPLACE_ALL);
+                emit sig_action(error.type(), FileTransfer::Error::ACTION_REPLACE_ALL);
                 return;
             }
         }
 
-        transfer_proxy_->setAction(error.type(), FileTransfer::Error::ACTION_ABORT);
+        emit sig_action(error.type(), FileTransfer::Error::ACTION_ABORT);
     });
 
     connect(dialog, &QMessageBox::finished, dialog, &QMessageBox::deleteLater);
@@ -279,7 +269,7 @@ void FileTransferDialog::closeEvent(QCloseEvent* event)
             ui.label_task->setText(tr("Current Task: Cancel transfer of files."));
             ui.button_box->setDisabled(true);
 
-            transfer_proxy_->stop();
+            emit sig_stop();
         }
     }
 }

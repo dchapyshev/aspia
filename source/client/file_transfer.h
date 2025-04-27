@@ -29,10 +29,6 @@
 
 #include <QTimer>
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace common {
 class FileTaskConsumerProxy;
 class FileTaskProducerProxy;
@@ -41,9 +37,7 @@ class FileTaskFactory;
 
 namespace client {
 
-class FileTransferProxy;
 class FileTransferQueueBuilder;
-class FileTransferWindowProxy;
 
 class FileTransfer final
     : public QObject,
@@ -164,22 +158,25 @@ public:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
-    FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
-                 std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                 std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                 Type type,
+    FileTransfer(Type type,
+                 const std::string& source_path,
+                 const std::string& target_path,
+                 const std::vector<Item>& items,
                  QObject* parent = nullptr);
     ~FileTransfer() final;
 
-    void start(const std::string& source_path,
-               const std::string& target_path,
-               const std::vector<Item>& items);
+    void start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy);
     void stop();
 
     void setAction(Error::Type error_type, Error::Action action);
 
 signals:
+    void sig_started();
     void sig_finished();
+    void sig_progressChanged(int total, int current);
+    void sig_currentItemChanged(const std::string& source_path, const std::string& target_path);
+    void sig_currentSpeedChanged(int64_t speed);
+    void sig_errorOccurred(const FileTransfer::Error& error);
 
 protected:
     // common::FileTaskProducer implementation.
@@ -197,10 +194,10 @@ private:
     void onFinished(const base::Location& location);
 
     const Type type_;
+    const std::string source_path_;
+    const std::string target_path_;
+    const std::vector<Item> items_;
 
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::shared_ptr<FileTransferProxy> transfer_proxy_;
-    std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy_;
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
     std::unique_ptr<common::FileTaskFactory> task_factory_source_;

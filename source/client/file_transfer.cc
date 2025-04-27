@@ -19,9 +19,7 @@
 #include "client/file_transfer.h"
 
 #include "base/logging.h"
-#include "client/file_transfer_proxy.h"
 #include "client/file_transfer_queue_builder.h"
-#include "client/file_transfer_window_proxy.h"
 #include "common/file_task_factory.h"
 #include "common/file_task_consumer_proxy.h"
 #include "common/file_task_producer_proxy.h"
@@ -94,17 +92,16 @@ int64_t calculateSpeed(int64_t last_speed, const FileTransfer::Milliseconds& dur
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
-                           std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                           std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                           Type type,
+FileTransfer::FileTransfer(Type type,
+                           const std::string& source_path,
+                           const std::string& target_path,
+                           const std::vector<Item>& items,
                            QObject* parent)
     : QObject(parent),
       type_(type),
-      io_task_runner_(io_task_runner),
-      transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
-      transfer_window_proxy_(std::move(transfer_window_proxy)),
-      task_consumer_proxy_(std::move(task_consumer_proxy)),
+      source_path_(source_path),
+      target_path_(target_path),
+      items_(items),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -123,15 +120,14 @@ FileTransfer::~FileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
-    transfer_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::start(const std::string& source_path,
-                         const std::string& target_path,
-                         const std::vector<Item>& items)
+void FileTransfer::start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy)
 {
     LOG(LS_INFO) << "File transfer start";
+
+    task_consumer_proxy_ = std::move(task_consumer_proxy);
 
     std::unique_ptr<common::FileTaskFactory> task_factory_local =
         std::make_unique<common::FileTaskFactory>(
@@ -155,7 +151,7 @@ void FileTransfer::start(const std::string& source_path,
     }
 
     // Asynchronously start UI.
-    transfer_window_proxy_->start(transfer_proxy_);
+    emit sig_started();
 
     queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
         task_consumer_proxy_, task_factory_source_->target());
@@ -188,7 +184,7 @@ void FileTransfer::start(const std::string& source_path,
     speed_update_timer_.start(Milliseconds(1000));
 
     // Start building a list of objects for transfer.
-    queue_builder_->start(source_path, target_path, items);
+    queue_builder_->start(source_path_, target_path_, items_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,7 +318,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
                 task_percentage_ = task_percentage;
                 total_percentage_ = total_percentage;
 
-                transfer_window_proxy_->setCurrentProgress(total_percentage_, task_percentage_);
+                emit sig_progressChanged(total_percentage_, task_percentage_);
             }
         }
 
@@ -429,7 +425,7 @@ void FileTransfer::doFrontTask(bool overwrite)
     Task& front_task = frontTask();
     front_task.setOverwrite(overwrite);
 
-    transfer_window_proxy_->setCurrentItem(front_task.sourcePath(), front_task.targetPath());
+    emit sig_currentItemChanged(front_task.sourcePath(), front_task.targetPath());
 
     if (front_task.isDirectory())
     {
@@ -481,7 +477,7 @@ void FileTransfer::doUpdateSpeed()
     begin_time_ = current_time;
     bytes_per_time_ = 0;
 
-    transfer_window_proxy_->setCurrentSpeed(speed_);
+    emit sig_currentSpeedChanged(speed_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,7 +490,7 @@ void FileTransfer::onError(Error::Type type, proto::FileError code, const std::s
         return;
     }
 
-    transfer_window_proxy_->errorOccurred(Error(type, code, path));
+    emit sig_errorOccurred(Error(type, code, path));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -504,7 +500,6 @@ void FileTransfer::onFinished(const base::Location& location)
 
     speed_update_timer_.stop();
     emit sig_finished();
-    transfer_window_proxy_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

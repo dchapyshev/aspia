@@ -81,11 +81,7 @@ private:
                 const std::string& old_path,
                 const std::string& new_path) final;
     void remove(FileRemover* remover) final;
-    void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                  FileTransfer::Type transfer_type,
-                  const std::string& source_path,
-                  const std::string& target_path,
-                  const std::vector<FileTransfer::Item>& items) final;
+    void transfer(FileTransfer* transfer) final;
 
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;

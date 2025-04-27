@@ -121,22 +121,17 @@ void FileControlProxy::remove(FileRemover* remover)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileControlProxy::transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                                FileTransfer::Type transfer_type,
-                                const std::string& source_path,
-                                const std::string& target_path,
-                                const std::vector<FileTransfer::Item>& items)
+void FileControlProxy::transfer(FileTransfer* transfer)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&FileControlProxy::transfer, shared_from_this(), transfer_window_proxy,
-                      transfer_type, source_path, target_path, items));
+            std::bind(&FileControlProxy::transfer, shared_from_this(), transfer));
         return;
     }
 
     if (file_control_)
-        file_control_->transfer(transfer_window_proxy, transfer_type, source_path, target_path, items);
+        file_control_->transfer(transfer);
 }
 
 } // namespace client

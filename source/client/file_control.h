@@ -38,12 +38,7 @@ public:
                         const std::string& new_path) = 0;
 
     virtual void remove(FileRemover* remover) = 0;
-
-    virtual void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
-                          FileTransfer::Type transfer_type,
-                          const std::string& source_path,
-                          const std::string& target_path,
-                          const std::vector<FileTransfer::Item>& items) = 0;
+    virtual void transfer(FileTransfer* transfer) = 0;
 };
 
 } // namespace client

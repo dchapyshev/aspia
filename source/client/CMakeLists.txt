@@ -51,13 +51,8 @@ list(APPEND SOURCE_CLIENT_CORE
     file_remover.h
     file_transfer.cc
     file_transfer.h
-    file_transfer_proxy.cc
-    file_transfer_proxy.h
     file_transfer_queue_builder.cc
     file_transfer_queue_builder.h
-    file_transfer_window.h
-    file_transfer_window_proxy.cc
-    file_transfer_window_proxy.h
     input_event_filter.cc
     input_event_filter.h
     router.cc
