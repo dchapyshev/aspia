@@ -27,143 +27,143 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="61"/>
+        <location filename="../client_main.cc" line="62"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>Valore non valido per &quot;%1&quot;. Possibili valori: &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="415"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Remote computer address.</source>
         <translation>Indirizzo computer remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="419"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Remote computer port.</source>
         <translation>Porta computer remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="424"/>
+        <location filename="../client_main.cc" line="427"/>
         <source>Name of host.</source>
         <translation>Nome host.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="428"/>
+        <location filename="../client_main.cc" line="431"/>
         <source>Name of user.</source>
         <translation>Nome utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="432"/>
+        <location filename="../client_main.cc" line="435"/>
         <source>Password of user.</source>
         <translation>Password utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="436"/>
+        <location filename="../client_main.cc" line="439"/>
         <source>Display name when connected</source>
         <translation>Nome da visualizzare quando connesso</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="440"/>
+        <location filename="../client_main.cc" line="443"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Tipo sessione. Possibili valori: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="448"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Tipo di codec. Possibili valori:  vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="452"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Profondità colore. Possibili valori: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="456"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Rapporto compressione. Possibili valori: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="460"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita audio. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="464"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita dimensione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="468"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita posizione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="469"/>
+        <location filename="../client_main.cc" line="472"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita appunti. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="473"/>
+        <location filename="../client_main.cc" line="476"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita effetti desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="477"/>
+        <location filename="../client_main.cc" line="480"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita sfondo desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="481"/>
+        <location filename="../client_main.cc" line="484"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilità smussatura cartatteri. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="485"/>
+        <location filename="../client_main.cc" line="488"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Azzera appunti alla disconnessione. Possibili valori: 0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="489"/>
+        <location filename="../client_main.cc" line="492"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Blocca computre alla disconnessione. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="493"/>
+        <location filename="../client_main.cc" line="496"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Blocca input remoto. Possibili valori: 0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="497"/>
+        <location filename="../client_main.cc" line="500"/>
         <source>Router address.</source>
         <translation>Indirizzo router.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="501"/>
+        <location filename="../client_main.cc" line="504"/>
         <source>Router port.</source>
         <translation>Porta router.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="506"/>
+        <location filename="../client_main.cc" line="509"/>
         <source>Router name of user.</source>
         <translation>Nome router utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="510"/>
+        <location filename="../client_main.cc" line="513"/>
         <source>Router password of user.</source>
         <translation>Password router utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="514"/>
+        <location filename="../client_main.cc" line="517"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="60"/>
-        <location filename="../client_main.cc" line="705"/>
+        <location filename="../client_main.cc" line="61"/>
+        <location filename="../client_main.cc" line="708"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="706"/>
+        <location filename="../client_main.cc" line="709"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>E&apos; stato inserito l&apos;ID di un host, ma non esiste un router configurato.E&apos; necessario configurare il router prima di connetersi.</translation>
     </message>
@@ -3201,34 +3201,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="419"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="428"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="402"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="411"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="420"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="403"/>
         <source>There are no supported video encodings.</source>
         <translation>Non ci sono codifiche video supportate.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="429"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="412"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>La modalità di codifica video attiva non è supportata dall&apos;host. Per cortesia selezionare un codifica video diversa.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1144"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1127"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1146"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1129"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="1177"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="1160"/>
         <source>Could not save image</source>
         <translation>Non è stato possibile salvare l&apos;immagine</translation>
     </message>
