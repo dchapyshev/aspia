@@ -103,7 +103,7 @@ private:
     QPointer<QTimer> reconnect_timer_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    QPointer<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
     std::shared_ptr<SessionState> session_state_;

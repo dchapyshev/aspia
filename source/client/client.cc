@@ -127,7 +127,7 @@ void Client::stop()
         state_ = State::STOPPPED;
 
         router_controller_.reset();
-        authenticator_.reset();
+        delete authenticator_;
         channel_.reset();
         delete timeout_timer_;
 
@@ -393,7 +393,7 @@ void Client::startAuthentication()
     channel_->setNoDelay(true);
     channel_->setKeepAlive(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(session_state_->hostUserName());
@@ -401,7 +401,7 @@ void Client::startAuthentication()
     authenticator_->setSessionType(static_cast<uint32_t>(session_state_->sessionType()));
     authenticator_->setDisplayName(session_state_->displayName());
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
@@ -449,7 +449,7 @@ void Client::startAuthentication()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
     });
 
     authenticator_->start(std::move(channel_));
