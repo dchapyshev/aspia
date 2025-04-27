@@ -89,13 +89,12 @@ void ClientPortForwarding::Handler::onRead(
 //--------------------------------------------------------------------------------------------------
 ClientPortForwarding::ClientPortForwarding(QObject* parent)
     : Client(parent),
-      incoming_message_(std::make_unique<proto::port_forwarding::HostToClient>()),
-      outgoing_message_(std::make_unique<proto::port_forwarding::ClientToHost>()),
-      handler_(base::make_local_shared<Handler>(this))
+      handler_(base::make_local_shared<Handler>(this)),
+      statistics_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    connect(&statistics_timer_, &QTimer::timeout, this, [this]()
+    connect(statistics_timer_, &QTimer::timeout, this, [this]()
     {
         Statistics statistics;
         statistics.rx_bytes = rx_bytes_;
@@ -129,7 +128,7 @@ void ClientPortForwarding::onSessionStarted()
 {
     LOG(LS_INFO) << "Port forwarding session started";
 
-    statistics_timer_.start(std::chrono::seconds(1));
+    statistics_timer_->start(std::chrono::seconds(1));
     sendPortForwardingRequest();
 
     emit sig_start();
@@ -138,15 +137,15 @@ void ClientPortForwarding::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientPortForwarding::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
-    incoming_message_->Clear();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Unable to parse message";
         return;
     }
 
-    if (incoming_message_->has_data())
+    if (incoming_message_.has_data())
     {
         if (!is_started_)
         {
@@ -160,7 +159,7 @@ void ClientPortForwarding::onSessionMessageReceived(uint8_t /* channel_id */, co
             return;
         }
 
-        proto::port_forwarding::Data* data = incoming_message_->mutable_data();
+        proto::port_forwarding::Data* data = incoming_message_.mutable_data();
         bool schedule_write = write_queue_.empty();
 
         write_queue_.emplace(std::move(*data->mutable_data()));
@@ -168,9 +167,9 @@ void ClientPortForwarding::onSessionMessageReceived(uint8_t /* channel_id */, co
         if (schedule_write)
             doWrite();
     }
-    else if (incoming_message_->has_result())
+    else if (incoming_message_.has_result())
     {
-        const proto::port_forwarding::Result& result = incoming_message_->result();
+        const proto::port_forwarding::Result& result = incoming_message_.result();
 
         if (result.error_code() != proto::port_forwarding::Result::SUCCESS)
         {
@@ -326,38 +325,38 @@ void ClientPortForwarding::doRead()
 //--------------------------------------------------------------------------------------------------
 void ClientPortForwarding::sendPortForwardingRequest()
 {
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
-    proto::port_forwarding::Request* request = outgoing_message_->mutable_request();
+    proto::port_forwarding::Request* request = outgoing_message_.mutable_request();
     request->set_remote_port(remote_port_);
 
     LOG(LS_INFO) << "Sending port forwarding request for " << remote_host_ << ":" << remote_port_;
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientPortForwarding::sendPortForwardingStart()
 {
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
-    proto::port_forwarding::Start* start = outgoing_message_->mutable_start();
+    proto::port_forwarding::Start* start = outgoing_message_.mutable_start();
     start->set_dummy(1);
 
     LOG(LS_INFO) << "Sending port forwarding start for " << remote_host_ << ":" << remote_port_;
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 void ClientPortForwarding::sendPortForwardingData(const char* buffer, size_t length)
 {
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
     tx_bytes_ += length;
 
-    proto::port_forwarding::Data* data = outgoing_message_->mutable_data();
+    proto::port_forwarding::Data* data = outgoing_message_.mutable_data();
     data->set_data(buffer, length);
 
     // Send data to client.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------

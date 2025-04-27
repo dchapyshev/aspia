@@ -25,6 +25,7 @@
 
 #include <queue>
 
+#include <QPointer>
 #include <QTimer>
 
 namespace client {
@@ -87,8 +88,8 @@ private:
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     std::unique_ptr<asio::ip::tcp::socket> socket_;
 
-    std::unique_ptr<proto::port_forwarding::HostToClient> incoming_message_;
-    std::unique_ptr<proto::port_forwarding::ClientToHost> outgoing_message_;
+    proto::port_forwarding::HostToClient incoming_message_;
+    proto::port_forwarding::ClientToHost outgoing_message_;
 
     class Handler;
     base::local_shared_ptr<Handler> handler_;
@@ -98,7 +99,7 @@ private:
     static const int kBufferSize = 8192;
     std::array<char, kBufferSize> read_buffer_;
 
-    QTimer statistics_timer_;
+    QPointer<QTimer> statistics_timer_;
     uint64_t rx_bytes_ = 0;
     uint64_t tx_bytes_ = 0;
 };
