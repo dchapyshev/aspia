@@ -586,34 +586,34 @@ void RouterManagerWindow::onVersionMismatch(const base::Version& router, const b
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void RouterManagerWindow::onAccessDenied(base::Authenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case base::ClientAuthenticator::ErrorCode::SUCCESS:
+        case base::Authenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+        case base::Authenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+        case base::Authenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::VERSION_ERROR:
+        case base::Authenticator::ErrorCode::VERSION_ERROR:
             message = QT_TR_NOOP("Version of the application you are connecting to is less than "
                                  " the minimum supported version.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+        case base::Authenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+        case base::Authenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

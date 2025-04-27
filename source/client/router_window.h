@@ -19,7 +19,7 @@
 #ifndef CLIENT_ROUTER_WINDOW_H
 #define CLIENT_ROUTER_WINDOW_H
 
-#include "base/peer/client_authenticator.h"
+#include "base/peer/authenticator.h"
 
 namespace proto {
 class SessionList;
@@ -41,7 +41,7 @@ public:
     virtual void onWaitForRouter() = 0;
     virtual void onWaitForRouterTimeout() = 0;
     virtual void onVersionMismatch(const base::Version& router, const base::Version& client) = 0;
-    virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
+    virtual void onAccessDenied(base::Authenticator::ErrorCode error_code) = 0;
     virtual void onSessionList(std::shared_ptr<proto::SessionList> session_list) = 0;
     virtual void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) = 0;
     virtual void onUserList(std::shared_ptr<proto::UserList> user_list) = 0;

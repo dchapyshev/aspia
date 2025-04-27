@@ -60,7 +60,7 @@ public:
     void onWaitForRouter() final;
     void onWaitForRouterTimeout() final;
     void onVersionMismatch(const base::Version& router, const base::Version& client) final;
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) final;
+    void onAccessDenied(base::Authenticator::ErrorCode error_code) final;
     void onSessionList(std::shared_ptr<proto::SessionList> session_list) final;
     void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) final;
     void onUserList(std::shared_ptr<proto::UserList> user_list) final;

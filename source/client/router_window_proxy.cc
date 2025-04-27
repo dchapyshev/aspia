@@ -134,7 +134,7 @@ void RouterWindowProxy::onVersionMismatch(const base::Version& router, const bas
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void RouterWindowProxy::onAccessDenied(base::Authenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
