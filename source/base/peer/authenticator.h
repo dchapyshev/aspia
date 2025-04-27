@@ -126,4 +126,6 @@ private:
 
 } // namespace base
 
+Q_DECLARE_METATYPE(base::Authenticator::ErrorCode)
+
 #endif // BASE_PEER_AUTHENTICATOR_H

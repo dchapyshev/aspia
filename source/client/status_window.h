@@ -35,7 +35,7 @@ public:
     virtual void onRouterConnected() = 0;
     virtual void onHostConnecting() = 0;
     virtual void onHostConnected() = 0;
-    virtual void onHostDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
+    virtual void onHostDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
     virtual void onWaitForRouter() = 0;
     virtual void onWaitForRouterTimeout() = 0;
     virtual void onWaitForHost() = 0;

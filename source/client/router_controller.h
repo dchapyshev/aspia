@@ -116,4 +116,6 @@ private:
 
 } // namespace client
 
+Q_DECLARE_METATYPE(client::RouterController::Error)
+
 #endif // CLIENT_ROUTER_CONTROLLER_H

@@ -111,4 +111,6 @@ private:
 
 } // namespace base
 
+Q_DECLARE_METATYPE(base::NetworkChannel::ErrorCode)
+
 #endif // BASE_NET_NETWORK_CHANNEL_H

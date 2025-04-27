@@ -31,6 +31,8 @@ namespace {
 constexpr uint8_t kChannelIdAuthenticator = 0;
 constexpr std::chrono::minutes kTimeout{ 1 };
 
+auto g_errorCodeType = qRegisterMetaType<base::Authenticator::ErrorCode>();
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------

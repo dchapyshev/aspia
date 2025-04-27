@@ -38,7 +38,7 @@ public:
 
     void onConnecting();
     void onConnected(const base::Version& peer_version);
-    void onDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onWaitForRouter();
     void onWaitForRouterTimeout();
     void onVersionMismatch(const base::Version& router, const base::Version& client);

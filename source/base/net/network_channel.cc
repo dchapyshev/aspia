@@ -24,6 +24,8 @@ namespace base {
 
 namespace {
 
+auto g_errorCodeType = qRegisterMetaType<base::NetworkChannel::ErrorCode>();
+
 //--------------------------------------------------------------------------------------------------
 int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration, int64_t bytes)
 {

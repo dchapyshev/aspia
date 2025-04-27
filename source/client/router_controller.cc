@@ -25,6 +25,12 @@
 
 namespace client {
 
+namespace {
+
+auto g_errorType = qRegisterMetaType<client::RouterController::Error>();
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterController::RouterController(const RouterConfig& router_config, QObject* parent)
     : QObject(parent),
