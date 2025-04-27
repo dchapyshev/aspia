@@ -55,7 +55,7 @@ Authenticator::~Authenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback)
+void Authenticator::start(std::unique_ptr<TcpChannel> channel)
 {
     if (state() != State::STOPPED)
     {
@@ -64,10 +64,7 @@ void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback
     }
 
     channel_ = std::move(channel);
-    callback_ = std::move(callback);
-
     DCHECK(channel_);
-    DCHECK(callback_);
 
     state_ = State::PENDING;
 
@@ -174,7 +171,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
 
     LOG(LS_INFO) << "Authenticator finished with code: " << errorToString(error_code)
                  << " (" << location.toString() << ")";
-    callback_(error_code);
+    emit sig_finished(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------

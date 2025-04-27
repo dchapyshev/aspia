@@ -401,10 +401,10 @@ void Client::startAuthentication()
     authenticator_->setSessionType(static_cast<uint32_t>(session_state_->sessionType()));
     authenticator_->setDisplayName(session_state_->displayName());
 
-    authenticator_->start(std::move(channel_),
-                          [this](base::ClientAuthenticator::ErrorCode error_code)
+    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+            this, [this](base::Authenticator::ErrorCode error_code)
     {
-        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
             LOG(LS_INFO) << "Successful authentication";
 
@@ -426,7 +426,7 @@ void Client::startAuthentication()
             if (host_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                              << " client: " << client_version.toString();
+                << " client: " << client_version.toString();
                 status_window_proxy_->onVersionMismatch();
             }
             else
@@ -444,13 +444,15 @@ void Client::startAuthentication()
         else
         {
             LOG(LS_INFO) << "Failed authentication: "
-                         << base::ClientAuthenticator::errorToString(error_code);
+                         << base::Authenticator::errorToString(error_code);
             status_window_proxy_->onAccessDenied(error_code);
         }
 
         // Authenticator is no longer needed.
         authenticator_.release()->deleteLater();
     });
+
+    authenticator_->start(std::move(channel_));
 }
 
 //--------------------------------------------------------------------------------------------------

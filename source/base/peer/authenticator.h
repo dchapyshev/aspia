@@ -58,9 +58,7 @@ public:
         SESSION_DENIED
     };
 
-    using Callback = std::function<void(ErrorCode error_code)>;
-
-    void start(std::unique_ptr<TcpChannel> channel, Callback callback);
+    void start(std::unique_ptr<TcpChannel> channel);
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
@@ -80,6 +78,9 @@ public:
 
     static const char* stateToString(State state);
     static const char* errorToString(Authenticator::ErrorCode error_code);
+
+signals:
+    void sig_finished(ErrorCode error_code);
 
 protected:
     [[nodiscard]] virtual bool onStarted() = 0;
@@ -115,7 +116,6 @@ protected:
 private:
     QTimer timer_;
     std::unique_ptr<TcpChannel> channel_;
-    Callback callback_;
     State state_ = State::STOPPED;
     Version peer_version_; // Remote peer version.
     QString peer_os_name_;

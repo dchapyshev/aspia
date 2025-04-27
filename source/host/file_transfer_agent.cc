@@ -27,8 +27,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 FileTransferAgent::FileTransferAgent(QObject* parent)
-    : QObject(parent),
-      worker_(std::make_unique<common::FileWorkerImpl>())
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -74,7 +73,7 @@ void FileTransferAgent::onIpcMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    worker_->doRequest(request_, &reply_);
+    worker_.doRequest(request_, &reply_);
     channel_->send(base::serialize(reply_));
 }
 

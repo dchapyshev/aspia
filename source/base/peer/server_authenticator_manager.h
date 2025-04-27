@@ -72,9 +72,10 @@ public:
     // If authentication fails, the channel will be automatically deleted.
     void addNewChannel(std::unique_ptr<TcpChannel> channel);
 
-private:
+private slots:
     void onComplete();
 
+private:
     base::local_shared_ptr<UserListBase> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 

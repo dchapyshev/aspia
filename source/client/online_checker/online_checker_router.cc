@@ -88,10 +88,10 @@ void OnlineCheckerRouter::onTcpConnected()
     authenticator_->setPassword(router_config_.password);
     authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
 
-    authenticator_->start(std::move(channel_),
-                          [this](base::ClientAuthenticator::ErrorCode error_code)
+    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+            this, [this](base::Authenticator::ErrorCode error_code)
     {
-        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
@@ -113,13 +113,15 @@ void OnlineCheckerRouter::onTcpConnected()
         else
         {
             LOG(LS_ERROR) << "Authentication failed: "
-                          << base::ClientAuthenticator::errorToString(error_code);
+                          << base::Authenticator::errorToString(error_code);
             onFinished(FROM_HERE);
         }
 
         // Authenticator is no longer needed.
         authenticator_.release()->deleteLater();
     });
+
+    authenticator_->start(std::move(channel_));
 }
 
 //--------------------------------------------------------------------------------------------------

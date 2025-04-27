@@ -232,10 +232,10 @@ void Router::onTcpConnected()
     authenticator_->setUserName(router_username_);
     authenticator_->setPassword(router_password_);
 
-    authenticator_->start(std::move(channel_),
-                          [this](base::ClientAuthenticator::ErrorCode error_code)
+    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+            this, [this](base::Authenticator::ErrorCode error_code)
     {
-        if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
+        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
             LOG(LS_INFO) << "Successful authentication";
 
@@ -255,7 +255,7 @@ void Router::onTcpConnected()
             if (router_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
-                              << " client: " << client_version.toString();
+                << " client: " << client_version.toString();
                 window_proxy_->onVersionMismatch(router_version, client_version);
             }
             else
@@ -269,13 +269,15 @@ void Router::onTcpConnected()
         else
         {
             LOG(LS_INFO) << "Failed authentication: "
-                         << base::ClientAuthenticator::errorToString(error_code);
+                         << base::Authenticator::errorToString(error_code);
             window_proxy_->onAccessDenied(error_code);
         }
 
         // Authenticator is no longer needed.
         authenticator_.release()->deleteLater();
     });
+
+    authenticator_->start(std::move(channel_));
 }
 
 //--------------------------------------------------------------------------------------------------

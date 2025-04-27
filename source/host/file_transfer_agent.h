@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/ipc/ipc_channel.h"
-#include "common/file_worker_impl.h"
+#include "common/file_worker.h"
 
 namespace host {
 
@@ -45,7 +45,7 @@ protected:
 
 private:
     std::unique_ptr<base::IpcChannel> channel_;
-    std::unique_ptr<common::FileWorkerImpl> worker_;
+    common::FileWorker worker_;
 
     proto::FileRequest request_;
     proto::FileReply reply_;

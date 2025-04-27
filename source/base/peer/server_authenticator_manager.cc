@@ -82,12 +82,14 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
         }
     }
 
+    connect(authenticator.get(), &Authenticator::sig_finished,
+            this, &ServerAuthenticatorManager::onComplete);
+
     // Create a new authenticator for the connection and put it on the list.
     pending_.emplace_back(std::move(authenticator));
 
     // Start the authentication process.
-    pending_.back()->start(
-        std::move(channel), std::bind(&ServerAuthenticatorManager::onComplete, this));
+    pending_.back()->start(std::move(channel));
 }
 
 //--------------------------------------------------------------------------------------------------
