@@ -39,12 +39,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_text_chat.h
     config_factory.cc
     config_factory.h
-    file_control.h
-    file_control_proxy.cc
-    file_control_proxy.h
-    file_manager_window.h
-    file_manager_window_proxy.cc
-    file_manager_window_proxy.h
     file_remove_queue_builder.cc
     file_remove_queue_builder.h
     file_remover.cc

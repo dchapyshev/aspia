@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 
+#include <QMetaType>
 #include <memory>
 
 namespace proto {
@@ -72,5 +73,7 @@ private:
 };
 
 } // namespace common
+
+Q_DECLARE_METATYPE(common::FileTask::Target)
 
 #endif // COMMON_FILE_TASK_H

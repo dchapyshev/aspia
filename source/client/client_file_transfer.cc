@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "client/file_control_proxy.h"
-#include "client/file_manager_window_proxy.h"
 #include "common/file_task_factory.h"
 #include "common/file_task_consumer_proxy.h"
 #include "common/file_task_producer_proxy.h"
@@ -35,8 +33,7 @@ ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task
     : Client(io_task_runner, parent),
       task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
-      local_worker_(std::make_unique<common::FileWorker>(io_task_runner)),
-      file_control_proxy_(std::make_shared<FileControlProxy>(io_task_runner, this))
+      local_worker_(std::make_unique<common::FileWorker>(io_task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -48,18 +45,9 @@ ClientFileTransfer::~ClientFileTransfer()
 
     task_consumer_proxy_->dettach();
     task_producer_proxy_->dettach();
-    file_control_proxy_->dettach();
 
     remover_.reset();
     transfer_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::setFileManagerWindow(
-    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy)
-{
-    LOG(LS_INFO) << "File transfer window installed";
-    file_manager_window_proxy_ = std::move(file_manager_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +61,7 @@ void ClientFileTransfer::onSessionStarted()
     remote_task_factory_ = std::make_unique<common::FileTaskFactory>(
         task_producer_proxy_, common::FileTask::Target::REMOTE);
 
-    file_manager_window_proxy_->start(file_control_proxy_);
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,7 +78,7 @@ void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, cons
     if (reply->error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
     {
         LOG(LS_INFO) << "No logged in user on host side";
-        file_manager_window_proxy_->onErrorOccurred(reply->error_code());
+        emit sig_errorOccurred(reply->error_code());
     }
     else if (!remote_task_queue_.empty())
     {
@@ -105,7 +93,7 @@ void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, cons
     }
     else
     {
-        file_manager_window_proxy_->onErrorOccurred(proto::FILE_ERROR_UNKNOWN);
+        emit sig_errorOccurred(proto::FILE_ERROR_UNKNOWN);
     }
 }
 
@@ -123,21 +111,19 @@ void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 
     if (request.has_drive_list_request())
     {
-        file_manager_window_proxy_->onDriveList(
-            task->target(), reply.error_code(), reply.drive_list());
+        emit sig_driveListReply(task->target(), reply.error_code(), reply.drive_list());
     }
     else if (request.has_file_list_request())
     {
-        file_manager_window_proxy_->onFileList(
-            task->target(), reply.error_code(), reply.file_list());
+        emit sig_fileListReply(task->target(), reply.error_code(), reply.file_list());
     }
     else if (request.has_create_directory_request())
     {
-        file_manager_window_proxy_->onCreateDirectory(task->target(), reply.error_code());
+        emit sig_createDirectoryReply(task->target(), reply.error_code());
     }
     else if (request.has_rename_request())
     {
-        file_manager_window_proxy_->onRename(task->target(), reply.error_code());
+        emit sig_renameReply(task->target(), reply.error_code());
     }
     else
     {
@@ -163,6 +149,62 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
         if (schedule)
             doNextRemoteTask();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onDriveListRequest(common::FileTask::Target target)
+{
+    task_consumer_proxy_->doTask(taskFactory(target)->driveList());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onFileListRequest(common::FileTask::Target target, const std::string& path)
+{
+    task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path)
+{
+    task_consumer_proxy_->doTask(taskFactory(target)->createDirectory(path));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onRenameRequest(common::FileTask::Target target,
+                                         const std::string& old_path,
+                                         const std::string& new_path)
+{
+    task_consumer_proxy_->doTask(taskFactory(target)->rename(old_path, new_path));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
+{
+    DCHECK(!remover_);
+    remover_.reset(remover);
+
+    connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
+            {
+                remover_.release()->deleteLater();
+            });
+
+    remover_->moveToThread(base::GuiApplication::ioThread());
+    remover_->start(task_consumer_proxy_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
+{
+    DCHECK(!transfer_);
+    transfer_.reset(transfer);
+
+    connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
+            {
+                transfer_.release()->deleteLater();
+            });
+
+    transfer_->moveToThread(base::GuiApplication::ioThread());
+    transfer_->start(task_consumer_proxy_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,62 +234,6 @@ common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Targe
 
     DCHECK(task_factory);
     return task_factory;
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::driveList(common::FileTask::Target target)
-{
-    task_consumer_proxy_->doTask(taskFactory(target)->driveList());
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::fileList(common::FileTask::Target target, const std::string& path)
-{
-    task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::createDirectory(common::FileTask::Target target, const std::string& path)
-{
-    task_consumer_proxy_->doTask(taskFactory(target)->createDirectory(path));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::rename(common::FileTask::Target target,
-                                const std::string& old_path,
-                                const std::string& new_path)
-{
-    task_consumer_proxy_->doTask(taskFactory(target)->rename(old_path, new_path));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::remove(FileRemover* remover)
-{
-    DCHECK(!remover_);
-    remover_.reset(remover);
-
-    connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
-    {
-        remover_.release()->deleteLater();
-    });
-
-    remover_->moveToThread(base::GuiApplication::ioThread());
-    remover_->start(task_consumer_proxy_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::transfer(FileTransfer* transfer)
-{
-    DCHECK(!transfer_);
-    transfer_.reset(transfer);
-
-    connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
-    {
-        transfer_.release()->deleteLater();
-    });
-
-    transfer_->moveToThread(base::GuiApplication::ioThread());
-    transfer_->start(task_consumer_proxy_);
 }
 
 } // namespace client

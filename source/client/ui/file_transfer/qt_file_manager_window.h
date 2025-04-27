@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_QT_FILE_MANAGER_WINDOW_H
 #define CLIENT_UI_FILE_TRANSFER_QT_FILE_MANAGER_WINDOW_H
 
-#include "client/file_manager_window.h"
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "client/ui/session_window.h"
@@ -32,14 +31,11 @@ class FileManagerWindow;
 
 namespace client {
 
-class FileManagerWindowProxy;
 class FilePanel;
 class FileRemoveDialog;
 class FileTransferDialog;
 
-class QtFileManagerWindow final
-    : public SessionWindow,
-      public FileManagerWindow
+class QtFileManagerWindow final : public SessionWindow
 {
     Q_OBJECT
 
@@ -50,23 +46,32 @@ public:
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() final;
 
-    // FileManagerWindow implementation.
-    void start(std::shared_ptr<FileControlProxy> file_control_proxy) final;
-    void onErrorOccurred(proto::FileError error_code) final;
-    void onDriveList(common::FileTask::Target target,
-                     proto::FileError error_code,
-                     const proto::DriveList& drive_list) final;
-    void onFileList(common::FileTask::Target target,
-                    proto::FileError error_code,
-                    const proto::FileList& file_list) final;
-    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code) final;
-    void onRename(common::FileTask::Target target, proto::FileError error_code) final;
-
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
 
 public slots:
+    void start();
+    void onErrorOccurred(proto::FileError error_code);
+    void onDriveList(common::FileTask::Target target,
+                     proto::FileError error_code,
+                     const proto::DriveList& drive_list);
+    void onFileList(common::FileTask::Target target,
+                    proto::FileError error_code,
+                    const proto::FileList& file_list);
+    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code);
+    void onRename(common::FileTask::Target target, proto::FileError error_code);
+
     void refresh();
+
+signals:
+    void sig_driveListRequest(common::FileTask::Target target);
+    void sig_fileListRequest(common::FileTask::Target target, const std::string& path);
+    void sig_createDirectoryRequest(common::FileTask::Target target, const std::string& path);
+    void sig_renameRequest(common::FileTask::Target target,
+                         const std::string& old_path,
+                         const std::string& new_path);
+    void sig_removeRequest(FileRemover* remover);
+    void sig_transferRequest(FileTransfer* transfer);
 
 protected:
     // SessionWindow implementation.
@@ -95,8 +100,6 @@ private:
                    FilePanel* panel);
 
     std::unique_ptr<Ui::FileManagerWindow> ui;
-    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
-    std::shared_ptr<FileControlProxy> file_control_proxy_;
 
     QPointer<FileRemoveDialog> remove_dialog_;
     QPointer<FileTransferDialog> transfer_dialog_;

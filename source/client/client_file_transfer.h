@@ -20,7 +20,9 @@
 #define CLIENT_CLIENT_FILE_TRANSFER_H
 
 #include "client/client.h"
-#include "client/file_control.h"
+#include "client/file_remover.h"
+#include "client/file_transfer.h"
+#include "common/file_task.h"
 #include "common/file_task_consumer.h"
 #include "common/file_task_producer.h"
 
@@ -39,12 +41,8 @@ class FileReply;
 
 namespace client {
 
-class FileControlProxy;
-class FileManagerWindowProxy;
-
 class ClientFileTransfer final
     : public Client,
-      public FileControl,
       public common::FileTaskConsumer,
       public common::FileTaskProducer
 {
@@ -54,10 +52,30 @@ public:
     explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientFileTransfer() final;
 
-    void setFileManagerWindow(std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy);
-
     // FileTaskConsumer implementation.
     void doTask(std::shared_ptr<common::FileTask> task) final;
+
+public slots:
+    void onDriveListRequest(common::FileTask::Target target);
+    void onFileListRequest(common::FileTask::Target target, const std::string& path);
+    void onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path);
+    void onRenameRequest(common::FileTask::Target target,
+                         const std::string& old_path,
+                         const std::string& new_path);
+    void onRemoveRequest(FileRemover* remover);
+    void onTransferRequest(FileTransfer* transfer);
+
+signals:
+    void sig_started();
+    void sig_errorOccurred(proto::FileError error_code);
+    void sig_driveListReply(common::FileTask::Target target,
+                            proto::FileError error_code,
+                            const proto::DriveList& drive_list);
+    void sig_fileListReply(common::FileTask::Target target,
+                      proto::FileError error_code,
+                      const proto::FileList& file_list);
+    void sig_createDirectoryReply(common::FileTask::Target target, proto::FileError error_code);
+    void sig_renameReply(common::FileTask::Target target, proto::FileError error_code);
 
 protected:
     // Client implementation.
@@ -73,16 +91,6 @@ private:
 
     common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
-    // FileControl implementation.
-    void driveList(common::FileTask::Target target) final;
-    void fileList(common::FileTask::Target target, const std::string& path) final;
-    void createDirectory(common::FileTask::Target target, const std::string& path) final;
-    void rename(common::FileTask::Target target,
-                const std::string& old_path,
-                const std::string& new_path) final;
-    void remove(FileRemover* remover) final;
-    void transfer(FileTransfer* transfer) final;
-
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
 
@@ -92,8 +100,6 @@ private:
     std::queue<std::shared_ptr<common::FileTask>> remote_task_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
 
-    std::shared_ptr<FileControlProxy> file_control_proxy_;
-    std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy_;
     std::unique_ptr<FileRemover> remover_;
     std::unique_ptr<FileTransfer> transfer_;
 

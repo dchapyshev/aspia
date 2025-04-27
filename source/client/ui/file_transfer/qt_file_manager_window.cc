@@ -20,8 +20,6 @@
 
 #include "ui_qt_file_manager_window.h"
 #include "base/logging.h"
-#include "client/file_control_proxy.h"
-#include "client/file_manager_window_proxy.h"
 #include "client/client_file_transfer.h"
 #include "client/ui/file_transfer/address_bar_model.h"
 #include "client/ui/file_transfer/file_error_code.h"
@@ -38,9 +36,7 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::FileManagerWindow>()),
-      file_manager_window_proxy_(
-          std::make_shared<FileManagerWindowProxy>(base::GuiApplication::uiTaskRunner(), this))
+      ui(std::make_unique<Ui::FileManagerWindow>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -62,7 +58,6 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
 QtFileManagerWindow::~QtFileManagerWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    file_manager_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,19 +68,51 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
     std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
         base::GuiApplication::ioTaskRunner());
 
-    client->setFileManagerWindow(file_manager_window_proxy_);
+    connect(client.get(), &ClientFileTransfer::sig_started,
+            this, &QtFileManagerWindow::start,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientFileTransfer::sig_errorOccurred,
+            this, &QtFileManagerWindow::onErrorOccurred,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientFileTransfer::sig_driveListReply,
+            this, &QtFileManagerWindow::onDriveList,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientFileTransfer::sig_fileListReply,
+            this, &QtFileManagerWindow::onFileList,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientFileTransfer::sig_createDirectoryReply,
+            this, &QtFileManagerWindow::onCreateDirectory,
+            Qt::QueuedConnection);
+    connect(client.get(), &ClientFileTransfer::sig_renameReply,
+            this, &QtFileManagerWindow::onRename,
+            Qt::QueuedConnection);
+
+    connect(this, &QtFileManagerWindow::sig_driveListRequest,
+            client.get(), &ClientFileTransfer::onDriveListRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtFileManagerWindow::sig_fileListRequest,
+            client.get(), &ClientFileTransfer::onFileListRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtFileManagerWindow::sig_createDirectoryRequest,
+            client.get(), &ClientFileTransfer::onCreateDirectoryRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtFileManagerWindow::sig_renameRequest,
+            client.get(), &ClientFileTransfer::onRenameRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtFileManagerWindow::sig_removeRequest,
+            client.get(), &ClientFileTransfer::onRemoveRequest,
+            Qt::QueuedConnection);
+    connect(this, &QtFileManagerWindow::sig_transferRequest,
+            client.get(), &ClientFileTransfer::onTransferRequest,
+            Qt::QueuedConnection);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_proxy)
+void QtFileManagerWindow::start()
 {
     LOG(LS_INFO) << "Show window";
-
-    file_control_proxy_ = std::move(file_control_proxy);
-    DCHECK(file_control_proxy_);
-
     show();
     activateWindow();
     refresh();
@@ -285,7 +312,7 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
             remover, &FileRemover::stop,
             Qt::QueuedConnection);
 
-    file_control_proxy_->remove(remover);
+    emit sig_removeRequest(remover);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -383,7 +410,7 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
             transfer, &FileTransfer::stop,
             Qt::QueuedConnection);
 
-    file_control_proxy_->transfer(transfer);
+    emit sig_transferRequest(transfer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -414,23 +441,23 @@ void QtFileManagerWindow::initPanel(
 
     connect(panel, &FilePanel::sig_driveList, this, [this, target]()
     {
-        file_control_proxy_->driveList(target);
+        emit sig_driveListRequest(target);
     });
 
     connect(panel, &FilePanel::sig_fileList, this, [this, target](const QString& path)
     {
-        file_control_proxy_->fileList(target, path.toStdString());
+        emit sig_fileListRequest(target, path.toStdString());
     });
 
     connect(panel, &FilePanel::sig_rename,
             this, [this, target](const QString& old_path, const QString& new_path)
     {
-        file_control_proxy_->rename(target, old_path.toStdString(), new_path.toStdString());
+        emit sig_renameRequest(target, old_path.toStdString(), new_path.toStdString());
     });
 
     connect(panel, &FilePanel::sig_createDirectory, this, [this, target](const QString& path)
     {
-        file_control_proxy_->createDirectory(target, path.toStdString());
+        emit sig_createDirectoryRequest(target, path.toStdString());
     });
 
     connect(panel, &FilePanel::sig_removeItems, this, &QtFileManagerWindow::removeItems);
