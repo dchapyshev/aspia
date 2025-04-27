@@ -20,15 +20,14 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "common/file_task_factory.h"
 #include "common/file_worker.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent),
+ClientFileTransfer::ClientFileTransfer(QObject* parent)
+    : Client(parent),
       local_worker_(std::make_unique<common::FileWorker>())
 {
     LOG(LS_INFO) << "Ctor";

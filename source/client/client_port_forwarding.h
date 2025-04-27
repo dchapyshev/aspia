@@ -34,7 +34,7 @@ class ClientPortForwarding final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
+    explicit ClientPortForwarding(QObject* parent = nullptr);
     ~ClientPortForwarding() final;
 
     struct Statistics

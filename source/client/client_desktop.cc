@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "base/codec/audio_decoder.h"
 #include "base/audio/audio_player.h"
 #include "base/codec/cursor_decoder.h"
@@ -114,8 +113,8 @@ const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent),
+ClientDesktop::ClientDesktop(QObject* parent)
+    : Client(parent),
       incoming_message_(std::make_unique<proto::HostToClient>()),
       outgoing_message_(std::make_unique<proto::ClientToHost>())
 {

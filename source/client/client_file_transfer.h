@@ -41,7 +41,7 @@ class ClientFileTransfer final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
+    explicit ClientFileTransfer(QObject* parent = nullptr);
     ~ClientFileTransfer() final;
 
 public slots:

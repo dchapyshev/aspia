@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "client/client_port_forwarding.h"
-#include "qt_base/application.h"
 #include "ui_qt_port_forwarding_window.h"
 
 Q_DECLARE_METATYPE(client::ClientPortForwarding::Statistics)
@@ -49,8 +48,7 @@ std::unique_ptr<Client> QtPortForwardingWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientPortForwarding> client = std::make_unique<ClientPortForwarding>(
-        base::GuiApplication::ioTaskRunner());
+    std::unique_ptr<ClientPortForwarding> client = std::make_unique<ClientPortForwarding>();
 
     connect(client.get(), &ClientPortForwarding::sig_start,
             this, &QtPortForwardingWindow::start,

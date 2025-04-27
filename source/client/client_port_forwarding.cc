@@ -87,8 +87,8 @@ void ClientPortForwarding::Handler::onRead(
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientPortForwarding::ClientPortForwarding(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent),
+ClientPortForwarding::ClientPortForwarding(QObject* parent)
+    : Client(parent),
       incoming_message_(std::make_unique<proto::port_forwarding::HostToClient>()),
       outgoing_message_(std::make_unique<proto::port_forwarding::ClientToHost>()),
       handler_(base::make_local_shared<Handler>(this))

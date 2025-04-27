@@ -65,8 +65,7 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
-        base::GuiApplication::ioTaskRunner());
+    std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>();
 
     connect(client.get(), &ClientFileTransfer::sig_started,
             this, &QtFileManagerWindow::start,

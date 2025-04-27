@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientSystemInfo::ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent)
+ClientSystemInfo::ClientSystemInfo(QObject* parent)
+    : Client(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

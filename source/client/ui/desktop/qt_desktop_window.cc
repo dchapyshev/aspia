@@ -288,8 +288,7 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(
-        base::GuiApplication::ioTaskRunner());
+    std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>();
 
     connect(client.get(), &ClientDesktop::sig_showWindow,
             this, &QtDesktopWindow::showWindow,

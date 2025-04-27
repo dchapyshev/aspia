@@ -30,12 +30,10 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : QObject(parent),
-      io_task_runner_(std::move(io_task_runner))
+Client::Client(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(io_task_runner_);
 
 #if defined(OS_MAC)
     base::addAppNapBlock();
@@ -46,7 +44,6 @@ Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent
 Client::~Client()
 {
     LOG(LS_INFO) << "Dtor";
-    DCHECK(io_task_runner_->belongsToCurrentThread());
     stop();
 
 #if defined(OS_MAC)
@@ -57,7 +54,6 @@ Client::~Client()
 //--------------------------------------------------------------------------------------------------
 void Client::start()
 {
-    DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(status_window_proxy_);
 
     if (state_ != State::CREATED)
@@ -125,8 +121,6 @@ void Client::start()
 //--------------------------------------------------------------------------------------------------
 void Client::stop()
 {
-    DCHECK(io_task_runner_->belongsToCurrentThread());
-
     if (state_ != State::STOPPPED)
     {
         LOG(LS_INFO) << "Stopping client...";
@@ -283,7 +277,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         {
             LOG(LS_INFO) << "Post task to destroy channel";
             channel_->setListener(nullptr);
-            io_task_runner_->deleteSoon(std::move(channel_));
+            channel_.release()->deleteLater();
         }
 
         if (session_state_->isConnectionByHostId())
@@ -364,7 +358,7 @@ void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
 
     // Router controller is no longer needed.
     LOG(LS_INFO) << "Post task to destroy router controller";
-    io_task_runner_->deleteSoon(std::move(router_controller_));
+    router_controller_.release()->deleteLater();
     is_connected_to_router_ = false;
 }
 
@@ -374,7 +368,7 @@ void Client::onErrorOccurred(const RouterController::Error& error)
     status_window_proxy_->onRouterError(error);
 
     LOG(LS_INFO) << "Post task to destroy router controller";
-    io_task_runner_->deleteSoon(std::move(router_controller_));
+    router_controller_.release()->deleteLater();
     is_connected_to_router_ = false;
 
     if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
@@ -455,7 +449,7 @@ void Client::startAuthentication()
         }
 
         // Authenticator is no longer needed.
-        io_task_runner_->deleteSoon(std::move(authenticator_));
+        authenticator_.release()->deleteLater();
     });
 }
 

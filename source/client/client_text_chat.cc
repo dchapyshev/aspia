@@ -24,8 +24,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientTextChat::ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
-    : Client(io_task_runner, parent)
+ClientTextChat::ClientTextChat(QObject* parent)
+    : Client(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

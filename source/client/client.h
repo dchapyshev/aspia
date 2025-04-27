@@ -46,7 +46,7 @@ class Client
     Q_OBJECT
 
 public:
-    Client(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent);
+    explicit Client(QObject* parent);
     virtual ~Client() override;
 
     // Starts a session.
@@ -66,8 +66,6 @@ public:
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
 protected:
-    std::shared_ptr<base::TaskRunner> ioTaskRunner() const { return io_task_runner_; }
-
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;
@@ -100,7 +98,6 @@ private:
     void delayedReconnectToRouter();
     void delayedReconnectToHost();
 
-    std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<QTimer> timeout_timer_;
     std::unique_ptr<QTimer> reconnect_timer_;
     std::unique_ptr<RouterController> router_controller_;

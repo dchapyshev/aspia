@@ -51,7 +51,7 @@ class ClientDesktop final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
+    explicit ClientDesktop(QObject* parent = nullptr);
     ~ClientDesktop() final;
 
     struct Metrics

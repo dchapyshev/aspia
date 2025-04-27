@@ -29,7 +29,7 @@ class ClientTextChat final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientTextChat(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
+    explicit ClientTextChat(QObject* parent = nullptr);
     ~ClientTextChat() final;
 
 public slots:

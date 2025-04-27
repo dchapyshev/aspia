@@ -29,7 +29,7 @@ class ClientSystemInfo final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
+    explicit ClientSystemInfo(QObject* parent = nullptr);
     ~ClientSystemInfo() final;
 
 public slots:
