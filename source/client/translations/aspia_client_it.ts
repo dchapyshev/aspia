@@ -3035,42 +3035,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="55"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="50"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="103"/>
         <source>Deleting: %1</source>
         <translation>Cancellazione: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="144"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="134"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Si è verificato un errore durante l&apos;acquisizione della lista dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="139"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Non sono riuscito a cancellare &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="155"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="145"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="156"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="169"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="159"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>

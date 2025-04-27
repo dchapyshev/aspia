@@ -3219,42 +3219,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="55"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="50"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="103"/>
         <source>Deleting: %1</source>
         <translation>Видалення: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="144"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="134"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="139"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не вдалося видалити &quot;%1&quot;:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="155"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="145"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="156"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="169"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="159"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>

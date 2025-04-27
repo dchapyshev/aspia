@@ -3089,42 +3089,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="55"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="50"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="103"/>
         <source>Deleting: %1</source>
         <translation>Verwijderen: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="144"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="134"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="139"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="155"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="145"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="166"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="156"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="169"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="159"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
