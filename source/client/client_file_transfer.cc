@@ -19,6 +19,7 @@
 #include "client/client_file_transfer.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/task_runner.h"
 #include "common/file_task_factory.h"
 #include "common/file_task_consumer_proxy.h"
@@ -69,7 +70,7 @@ void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, cons
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
 
-    if (!reply->ParseFromArray(buffer.data(), static_cast<int>(buffer.size())))
+    if (!base::parse(buffer, reply.get()))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;
@@ -184,9 +185,9 @@ void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
     remover_.reset(remover);
 
     connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
-            {
-                remover_.release()->deleteLater();
-            });
+    {
+        remover_.release()->deleteLater();
+    });
 
     remover_->moveToThread(base::GuiApplication::ioThread());
     remover_->start(task_consumer_proxy_);
@@ -199,9 +200,9 @@ void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
     transfer_.reset(transfer);
 
     connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
-            {
-                transfer_.release()->deleteLater();
-            });
+    {
+        transfer_.release()->deleteLater();
+    });
 
     transfer_->moveToThread(base::GuiApplication::ioThread());
     transfer_->start(task_consumer_proxy_);
