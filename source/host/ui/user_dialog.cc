@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "common/ui/session_type.h"
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <QMessageBox>
 #include <QMouseEvent>

@@ -16,27 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+#ifndef PROTO_TASK_MANAGER_H
+#define PROTO_TASK_MANAGER_H
 
-#include "proto/desktop.h"
+#include <QMetaType>
 
-#include <memory>
+#include "proto/task_manager.pb.h"
 
-namespace base {
+Q_DECLARE_METATYPE(proto::task_manager::ClientToHost)
+Q_DECLARE_METATYPE(proto::task_manager::HostToClient)
 
-class Frame;
-
-class VideoDecoder
-{
-public:
-    virtual ~VideoDecoder() = default;
-
-    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
-
-    virtual bool decode(const proto::VideoPacket& packet, Frame* frame) = 0;
-};
-
-} // namespace base
-
-#endif // BASE_CODEC_VIDEO_DECODER_H
+#endif // PROTO_TASK_MANAGER_H

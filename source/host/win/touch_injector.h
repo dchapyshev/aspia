@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "host/win/touch_injector_defines.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <cstdint>
 #include <map>

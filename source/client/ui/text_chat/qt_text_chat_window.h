@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "client/ui/session_window.h"
-#include "proto/text_chat.pb.h"
+#include "proto/text_chat.h"
 
 #include <QTreeWidget>
 

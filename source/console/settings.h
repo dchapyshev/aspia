@@ -20,7 +20,7 @@
 #define CONSOLE_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <QSettings>
 

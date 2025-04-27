@@ -21,6 +21,7 @@
 #include "console/application.h"
 #include "console/main_window.h"
 #include "qt_base/scoped_qt_logging.h"
+#include "proto/meta_types.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
@@ -46,6 +47,8 @@ int main(int argc, char *argv[])
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
     qt_base::ScopedQtLogging scoped_logging(logging_settings);
+
+    proto::registerMetaTypes();
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

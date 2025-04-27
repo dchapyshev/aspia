@@ -19,7 +19,7 @@
 #ifndef COMMON_CLIPBOARD_H
 #define COMMON_CLIPBOARD_H
 
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <QObject>
 

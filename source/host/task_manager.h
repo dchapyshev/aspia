@@ -20,7 +20,7 @@
 #define HOST_TASK_MANAGER_H
 
 #include "base/macros_magic.h"
-#include "proto/task_manager.pb.h"
+#include "proto/task_manager.h"
 
 #include <memory>
 

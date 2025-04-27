@@ -19,7 +19,7 @@
 #ifndef COMMON_UI_SESSION_TYPE_H
 #define COMMON_UI_SESSION_TYPE_H
 
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <QString>
 

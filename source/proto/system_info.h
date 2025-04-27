@@ -16,27 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+#ifndef PROTO_SYSTEM_INFO_H
+#define PROTO_SYSTEM_INFO_H
 
-#include "proto/desktop.h"
+#include <QMetaType>
 
-#include <memory>
+#include "proto/system_info.pb.h"
 
-namespace base {
+Q_DECLARE_METATYPE(proto::system_info::SystemInfoRequest)
+Q_DECLARE_METATYPE(proto::system_info::SystemInfo)
 
-class Frame;
-
-class VideoDecoder
-{
-public:
-    virtual ~VideoDecoder() = default;
-
-    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
-
-    virtual bool decode(const proto::VideoPacket& packet, Frame* frame) = 0;
-};
-
-} // namespace base
-
-#endif // BASE_CODEC_VIDEO_DECODER_H
+#endif // PROTO_SYSTEM_INFO_H

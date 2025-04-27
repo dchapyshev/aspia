@@ -20,7 +20,7 @@
 #define BASE_CODEC_VIDEO_ENCODER_H
 
 #include "base/desktop/geometry.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 namespace base {
 

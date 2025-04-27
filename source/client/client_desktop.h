@@ -25,10 +25,10 @@
 #include "client/client.h"
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop.pb.h"
-#include "proto/desktop_extensions.pb.h"
-#include "proto/system_info.pb.h"
-#include "proto/task_manager.pb.h"
+#include "proto/desktop.h"
+#include "proto/desktop_extensions.h"
+#include "proto/system_info.h"
+#include "proto/task_manager.h"
 
 #include <filesystem>
 
@@ -186,5 +186,7 @@ private:
 };
 
 } // namespace client
+
+Q_DECLARE_METATYPE(client::ClientDesktop::Metrics)
 
 #endif // CLIENT_CLIENT_DESKTOP_H

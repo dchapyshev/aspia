@@ -21,7 +21,7 @@
 
 #include "base/desktop/frame.h"
 #include "build/build_config.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_user_object.h"

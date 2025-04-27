@@ -30,6 +30,7 @@
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
 #include "qt_base/scoped_qt_logging.h"
+#include "proto/meta_types.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
@@ -219,6 +220,8 @@ int hostMain(int argc, char* argv[])
         if (!waitForValidInputDesktop())
             return 1;
     }
+
+    proto::registerMetaTypes();
 
     host::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

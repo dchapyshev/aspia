@@ -24,6 +24,7 @@
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
 #include "build/version.h"
+#include "proto/meta_types.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database.h"
 #include "router/service.h"
@@ -280,6 +281,7 @@ int main(int argc, char* argv[])
     }
     else
     {
+        proto::registerMetaTypes();
         router::Service().exec(argc, argv);
     }
 
@@ -315,6 +317,7 @@ int main(int argc, const char* const* argv)
     else
     {
         LOG(LS_INFO) << "Starting router services";
+        proto::registerMetaTypes();
         router::Service().exec();
     }
 }

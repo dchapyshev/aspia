@@ -22,8 +22,8 @@
 #include "base/session_id.h"
 #include "base/version.h"
 #include "base/net/tcp_channel.h"
-#include "proto/desktop_extensions.pb.h"
-#include "proto/text_chat.pb.h"
+#include "proto/desktop_extensions.h"
+#include "proto/text_chat.h"
 
 #include <QObject>
 

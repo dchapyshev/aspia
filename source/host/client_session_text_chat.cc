@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
-#include "proto/text_chat.pb.h"
+#include "proto/text_chat.h"
 
 namespace host {
 

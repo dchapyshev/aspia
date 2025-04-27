@@ -27,6 +27,7 @@
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
+#include "proto/meta_types.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
@@ -199,6 +200,7 @@ void desktopAgentMain(int& argc, char* argv[])
 
     if (command_line->hasSwitch(u"channel_id"))
     {
+        proto::registerMetaTypes();
         base::Application::setEventDispatcher(new base::AsioEventDispatcher());
         base::Application application(argc, argv);
         host::DesktopSessionAgent desktop_agent;

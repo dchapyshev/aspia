@@ -19,7 +19,7 @@
 #ifndef COMMON_UI_TEXT_CHAT_WIDGET_H
 #define COMMON_UI_TEXT_CHAT_WIDGET_H
 
-#include "proto/text_chat.pb.h"
+#include "proto/text_chat.h"
 
 #include <QWidget>
 

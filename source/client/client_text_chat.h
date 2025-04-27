@@ -20,7 +20,7 @@
 #define CLIENT_CLIENT_TEXT_CHAT_H
 
 #include "client/client.h"
-#include "proto/text_chat.pb.h"
+#include "proto/text_chat.h"
 
 namespace client {
 

@@ -27,7 +27,6 @@
 #endif // defined(OS_LINUX)
 
 #include "base/logging.h"
-#include "proto/desktop.pb.h"
 
 namespace base {
 

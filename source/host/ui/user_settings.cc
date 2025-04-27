@@ -18,7 +18,7 @@
 
 #include "host/ui/user_settings.h"
 
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <QLocale>
 

@@ -20,7 +20,7 @@
 #define CLIENT_UI_DESKTOP_TASK_MANAGER_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "proto/task_manager.pb.h"
+#include "proto/task_manager.h"
 #include "ui_task_manager_window.h"
 
 #include <QTreeWidget>

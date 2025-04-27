@@ -25,7 +25,7 @@
 #include "base/files/file_path_watcher.h"
 #include "base/files/file_descriptor_watcher_posix.h"
 #include "base/memory/local_memory.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <chrono>
 #include <cstdint>

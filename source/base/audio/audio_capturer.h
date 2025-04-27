@@ -20,7 +20,7 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_H
 
 #include "build/build_config.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <functional>
 #include <memory>

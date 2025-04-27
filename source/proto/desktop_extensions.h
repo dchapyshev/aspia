@@ -16,27 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+#ifndef PROTO_DESKTOP_EXTENSIONS_H
+#define PROTO_DESKTOP_EXTENSIONS_H
 
-#include "proto/desktop.h"
+#include <QMetaType>
 
-#include <memory>
+#include "proto/desktop_extensions.pb.h"
 
-namespace base {
+Q_DECLARE_METATYPE(proto::Resolution)
+Q_DECLARE_METATYPE(proto::Point)
+Q_DECLARE_METATYPE(proto::Screen)
+Q_DECLARE_METATYPE(proto::ScreenList)
+Q_DECLARE_METATYPE(proto::PreferredSize)
+Q_DECLARE_METATYPE(proto::Pause)
+Q_DECLARE_METATYPE(proto::PowerControl)
+Q_DECLARE_METATYPE(proto::PowerControl::Action)
+Q_DECLARE_METATYPE(proto::VideoRecording)
+Q_DECLARE_METATYPE(proto::VideoRecording::Action)
+Q_DECLARE_METATYPE(proto::ScreenType)
+Q_DECLARE_METATYPE(proto::ScreenType::Type)
 
-class Frame;
-
-class VideoDecoder
-{
-public:
-    virtual ~VideoDecoder() = default;
-
-    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
-
-    virtual bool decode(const proto::VideoPacket& packet, Frame* frame) = 0;
-};
-
-} // namespace base
-
-#endif // BASE_CODEC_VIDEO_DECODER_H
+#endif // PROTO_DESKTOP_EXTENSIONS_H

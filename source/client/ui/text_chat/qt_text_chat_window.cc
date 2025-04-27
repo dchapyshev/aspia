@@ -23,8 +23,6 @@
 #include "qt_base/application.h"
 #include "ui_qt_text_chat_window.h"
 
-Q_DECLARE_METATYPE(proto::TextChat)
-
 namespace client {
 
 //--------------------------------------------------------------------------------------------------

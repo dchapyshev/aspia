@@ -19,7 +19,7 @@
 #ifndef BASE_VERSION_H
 #define BASE_VERSION_H
 
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <cstdint>
 #include <iosfwd>

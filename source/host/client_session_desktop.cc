@@ -34,8 +34,8 @@
 #include "host/service_constants.h"
 #include "host/system_settings.h"
 #include "proto/desktop_internal.pb.h"
-#include "proto/task_manager.pb.h"
-#include "proto/text_chat.pb.h"
+#include "proto/task_manager.h"
+#include "proto/text_chat.h"
 
 #if defined(OS_WIN)
 #include "base/win/safe_mode_util.h"

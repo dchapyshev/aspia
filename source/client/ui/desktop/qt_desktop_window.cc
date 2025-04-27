@@ -54,23 +54,6 @@
 #include <QTimer>
 #include <QWindow>
 
-Q_DECLARE_METATYPE(proto::system_info::SystemInfoRequest)
-Q_DECLARE_METATYPE(proto::system_info::SystemInfo)
-Q_DECLARE_METATYPE(proto::DesktopCapabilities)
-Q_DECLARE_METATYPE(proto::DesktopConfig)
-Q_DECLARE_METATYPE(proto::ScreenType)
-Q_DECLARE_METATYPE(proto::ScreenList)
-Q_DECLARE_METATYPE(proto::Screen)
-Q_DECLARE_METATYPE(proto::CursorPosition)
-Q_DECLARE_METATYPE(proto::VideoErrorCode)
-Q_DECLARE_METATYPE(proto::KeyEvent)
-Q_DECLARE_METATYPE(proto::TextEvent)
-Q_DECLARE_METATYPE(proto::MouseEvent)
-Q_DECLARE_METATYPE(proto::PowerControl::Action)
-Q_DECLARE_METATYPE(proto::task_manager::ClientToHost)
-Q_DECLARE_METATYPE(proto::task_manager::HostToClient)
-Q_DECLARE_METATYPE(base::Size)
-Q_DECLARE_METATYPE(client::ClientDesktop::Metrics)
 Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
 Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)
 Q_DECLARE_METATYPE(std::filesystem::path)

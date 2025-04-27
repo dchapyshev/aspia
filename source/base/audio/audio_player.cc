@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/audio/audio_output.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 namespace base {
 

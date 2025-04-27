@@ -19,13 +19,9 @@
 #ifndef BASE_CODEC_AUDIO_DECODER_H
 #define BASE_CODEC_AUDIO_DECODER_H
 
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <memory>
-
-namespace proto {
-class AudioPacket;
-} // namespace proto
 
 namespace base {
 

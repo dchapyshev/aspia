@@ -20,7 +20,7 @@
 #define CLIENT_CLIENT_CONFIG_H
 
 #include "client/router_config.h"
-#include "proto/common.pb.h"
+#include "proto/common.h"
 
 #include <optional>
 

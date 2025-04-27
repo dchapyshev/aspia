@@ -16,27 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+#ifndef PROTO_META_TYPES_H
+#define PROTO_META_TYPES_H
 
-#include "proto/desktop.h"
+namespace proto {
 
-#include <memory>
+void registerMetaTypes();
 
-namespace base {
+} // namespace proto
 
-class Frame;
-
-class VideoDecoder
-{
-public:
-    virtual ~VideoDecoder() = default;
-
-    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
-
-    virtual bool decode(const proto::VideoPacket& packet, Frame* frame) = 0;
-};
-
-} // namespace base
-
-#endif // BASE_CODEC_VIDEO_DECODER_H
+#endif // PROTO_META_TYPES_H

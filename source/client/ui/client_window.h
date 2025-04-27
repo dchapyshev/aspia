@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "client/client_config.h"
 #include "common/update_checker.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 #include "ui_client_window.h"
 
 #include <QByteArray>

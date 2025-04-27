@@ -19,8 +19,8 @@
 #ifndef CLIENT_INPUT_EVENT_FILTER_H
 #define CLIENT_INPUT_EVENT_FILTER_H
 
-#include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
+#include "proto/common.h"
+#include "proto/desktop.h"
 
 #include <optional>
 

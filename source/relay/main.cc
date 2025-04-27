@@ -20,6 +20,7 @@
 #include "base/scoped_logging.h"
 #include "base/files/base_paths.h"
 #include "build/version.h"
+#include "proto/meta_types.h"
 #include "relay/service.h"
 #include "relay/settings.h"
 
@@ -112,6 +113,7 @@ int main(int argc, char* argv[])
     }
     else
     {
+        proto::registerMetaTypes();
         relay::Service().exec(argc, argv);
     }
 
@@ -142,6 +144,7 @@ int main(int argc, const char* const* argv)
     }
     else
     {
+        proto::registerMetaTypes();
         relay::Service().exec();
     }
 }

@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <chrono>
 #include <filesystem>

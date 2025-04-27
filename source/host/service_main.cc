@@ -28,6 +28,7 @@
 #include "host/host_key_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
+#include "proto/meta_types.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
@@ -428,6 +429,7 @@ int hostServiceMain(int& argc, char* argv[])
         }
         else
         {
+            proto::registerMetaTypes();
             Service().exec(argc, argv);
         }
     }

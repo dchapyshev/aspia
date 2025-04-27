@@ -19,6 +19,8 @@
 #ifndef BASE_DESKTOP_GEOMETRY_H
 #define BASE_DESKTOP_GEOMETRY_H
 
+#include <QMetaType>
+
 #include <cstdint>
 #include <ostream>
 
@@ -275,5 +277,9 @@ std::ostream& operator<<(std::ostream& stream, const Point& point);
 std::ostream& operator<<(std::ostream& stream, const Size& size);
 
 } // namespace base
+
+Q_DECLARE_METATYPE(base::Point)
+Q_DECLARE_METATYPE(base::Size)
+Q_DECLARE_METATYPE(base::Rect)
 
 #endif // BASE_DESKTOP_GEOMETRY_H

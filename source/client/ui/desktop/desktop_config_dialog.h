@@ -20,8 +20,8 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
+#include "proto/common.h"
+#include "proto/desktop.h"
 
 #include <QDialog>
 

@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
-#include "proto/desktop.pb.h"
+#include "proto/desktop.h"
 
 #include <libyuv/compare.h>
 
