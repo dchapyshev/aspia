@@ -114,9 +114,7 @@ const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
 
 //--------------------------------------------------------------------------------------------------
 ClientDesktop::ClientDesktop(QObject* parent)
-    : Client(parent),
-      incoming_message_(std::make_unique<proto::HostToClient>()),
-      outgoing_message_(std::make_unique<proto::ClientToHost>())
+    : Client(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -149,41 +147,41 @@ void ClientDesktop::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
 {
-    incoming_message_->Clear();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;
     }
 
-    if (incoming_message_->has_video_packet() || incoming_message_->has_cursor_shape())
+    if (incoming_message_.has_video_packet() || incoming_message_.has_cursor_shape())
     {
-        if (incoming_message_->has_video_packet())
-            readVideoPacket(incoming_message_->video_packet());
+        if (incoming_message_.has_video_packet())
+            readVideoPacket(incoming_message_.video_packet());
 
-        if (incoming_message_->has_cursor_shape())
-            readCursorShape(incoming_message_->cursor_shape());
+        if (incoming_message_.has_cursor_shape())
+            readCursorShape(incoming_message_.cursor_shape());
     }
-    else if (incoming_message_->has_audio_packet())
+    else if (incoming_message_.has_audio_packet())
     {
-        readAudioPacket(incoming_message_->audio_packet());
+        readAudioPacket(incoming_message_.audio_packet());
     }
-    else if (incoming_message_->has_cursor_position())
+    else if (incoming_message_.has_cursor_position())
     {
-        readCursorPosition(incoming_message_->cursor_position());
+        readCursorPosition(incoming_message_.cursor_position());
     }
-    else if (incoming_message_->has_clipboard_event())
+    else if (incoming_message_.has_clipboard_event())
     {
-        readClipboardEvent(incoming_message_->clipboard_event());
+        readClipboardEvent(incoming_message_.clipboard_event());
     }
-    else if (incoming_message_->has_capabilities())
+    else if (incoming_message_.has_capabilities())
     {
-        readCapabilities(incoming_message_->capabilities());
+        readCapabilities(incoming_message_.capabilities());
     }
-    else if (incoming_message_->has_extension())
+    else if (incoming_message_.has_extension())
     {
-        readExtension(incoming_message_->extension());
+        readExtension(incoming_message_.extension());
     }
     else
     {
@@ -208,9 +206,9 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_clipboard_event()->CopyFrom(*out_event);
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(*out_event);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,11 +234,11 @@ void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::ENABLE_CLIPBOARD);
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_config()->CopyFrom(desktop_config_);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_config()->CopyFrom(desktop_config_);
 
     LOG(LS_INFO) << "Send new config to host";
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -248,13 +246,13 @@ void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Current screen changed: " << screen.id();
 
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    outgoing_message_.Clear();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -262,18 +260,18 @@ void ClientDesktop::setPreferredSize(int width, int height)
 {
     LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
 
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
     proto::PreferredSize preferred_size;
     preferred_size.set_width(width);
     preferred_size.set_height(height);
 
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kPreferredSizeExtension);
     extension->set_data(preferred_size.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,17 +290,17 @@ void ClientDesktop::setVideoPause(bool enable)
         ++video_resume_count_;
     }
 
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
     proto::Pause pause;
     pause.set_enable(enable);
 
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kVideoPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -321,17 +319,17 @@ void ClientDesktop::setAudioPause(bool enable)
         ++audio_resume_count_;
     }
 
-    outgoing_message_->Clear();
+    outgoing_message_.Clear();
 
     proto::Pause pause;
     pause.set_enable(enable);
 
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kAudioPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -375,13 +373,13 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
         webm_file_writer_.reset();
     }
 
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    outgoing_message_.Clear();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kVideoRecordingExtension);
     extension->set_data(video_recording.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,10 +389,10 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_key_event()->CopyFrom(*out_event);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_key_event()->CopyFrom(*out_event);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -404,10 +402,10 @@ void ClientDesktop::onTextEvent(const proto::TextEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_text_event()->CopyFrom(*out_event);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_event()->CopyFrom(*out_event);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -417,10 +415,10 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_mouse_event()->CopyFrom(*out_event);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_mouse_event()->CopyFrom(*out_event);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,8 +430,8 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
         return;
     }
 
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    outgoing_message_.Clear();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     proto::PowerControl power_control;
     power_control.set_action(action);
@@ -441,37 +439,37 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
     extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRemoteUpdate()
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_extension()->set_name(common::kRemoteUpdateExtension);
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_extension()->set_name(common::kRemoteUpdateExtension);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    outgoing_message_.Clear();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
     extension->set_name(common::kSystemInfoExtension);
     extension->set_data(request.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& message)
 {
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    outgoing_message_.Clear();
+    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, *outgoing_message_);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
