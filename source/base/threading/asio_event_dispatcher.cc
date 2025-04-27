@@ -308,20 +308,23 @@ void AsioEventDispatcher::scheduleNextTimer()
     });
 
     const int timer_id = next_expire_timer->first;
-    QObject* object = next_expire_timer->second.object;
 
     // Start waiting for the timer.
     timer_.expires_at(next_expire_timer->second.end_time);
-    timer_.async_wait([this, timer_id, object](const std::error_code& error_code)
+    timer_.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code || interrupted_.load(std::memory_order_relaxed))
             return;
 
-        QCoreApplication::sendEvent(object, new QTimerEvent(timer_id));
+        auto it = timers_.find(timer_id);
+        if (it == timers_.end())
+            return;
+
+        QCoreApplication::sendEvent(it->second.object, new QTimerEvent(timer_id));
 
         // When calling method sendEvent the timer may have been deleted.
-        auto it = timers_.find(timer_id);
-        if (it != timers_.end())
+        it = timers_.find(timer_id);
+        if (it == timers_.end())
             return;
 
         TimerData& timer = it->second;
