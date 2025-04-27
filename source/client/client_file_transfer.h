@@ -23,12 +23,9 @@
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "common/file_task_factory.h"
+#include "common/file_worker.h"
 
 #include <queue>
-
-namespace common {
-class FileWorker;
-} // namespace common
 
 namespace proto {
 class FileReply;
@@ -52,8 +49,8 @@ public slots:
     void onRenameRequest(common::FileTask::Target target,
                          const std::string& old_path,
                          const std::string& new_path);
-    void onRemoveRequest(FileRemover* remover);
-    void onTransferRequest(FileTransfer* transfer);
+    void onRemoveRequest(client::FileRemover* remover);
+    void onTransferRequest(client::FileTransfer* transfer);
 
 signals:
     void sig_started();
@@ -81,14 +78,14 @@ private:
 
     common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
-    std::unique_ptr<common::FileTaskFactory> local_task_factory_;
-    std::unique_ptr<common::FileTaskFactory> remote_task_factory_;
+    QPointer<common::FileTaskFactory> local_task_factory_;
+    QPointer<common::FileTaskFactory> remote_task_factory_;
 
     std::queue<base::local_shared_ptr<common::FileTask>> remote_task_queue_;
-    std::unique_ptr<common::FileWorker> local_worker_;
+    common::FileWorker local_worker_;
 
-    std::unique_ptr<FileRemover> remover_;
-    std::unique_ptr<FileTransfer> transfer_;
+    QPointer<FileRemover> remover_;
+    QPointer<FileTransfer> transfer_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };

@@ -21,17 +21,14 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "common/file_task_factory.h"
-#include "common/file_worker.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::ClientFileTransfer(QObject* parent)
-    : Client(parent),
-      local_worker_(std::make_unique<common::FileWorker>())
+    : Client(parent)
 {
     LOG(LS_INFO) << "Ctor";
-
     qRegisterMetaType<base::local_shared_ptr<common::FileTask>>();
 }
 
@@ -39,9 +36,6 @@ ClientFileTransfer::ClientFileTransfer(QObject* parent)
 ClientFileTransfer::~ClientFileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
-
-    remover_.reset();
-    transfer_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,14 +43,14 @@ void ClientFileTransfer::onSessionStarted()
 {
     LOG(LS_INFO) << "File transfer session started";
 
-    local_task_factory_ = std::make_unique<common::FileTaskFactory>(common::FileTask::Target::LOCAL);
+    local_task_factory_ = new common::FileTaskFactory(common::FileTask::Target::LOCAL, this);
 
-    connect(local_task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+    connect(local_task_factory_, &common::FileTaskFactory::sig_taskDone,
             this, &ClientFileTransfer::onTaskDone);
 
-    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(common::FileTask::Target::REMOTE);
+    remote_task_factory_ = new common::FileTaskFactory(common::FileTask::Target::REMOTE, this);
 
-    connect(remote_task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+    connect(remote_task_factory_, &common::FileTaskFactory::sig_taskDone,
             this, &ClientFileTransfer::onTaskDone);
 
     emit sig_started();
@@ -134,7 +128,7 @@ void ClientFileTransfer::onTask(base::local_shared_ptr<common::FileTask> task)
 {
     if (task->target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_->doRequest(std::move(task));
+        local_worker_.doRequest(std::move(task));
     }
     else
     {
@@ -179,13 +173,10 @@ void ClientFileTransfer::onRenameRequest(common::FileTask::Target target,
 void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
 {
     DCHECK(!remover_);
-    remover_.reset(remover);
+    remover_ = remover;
 
-    connect(remover_.get(), &FileRemover::sig_doTask, this, &ClientFileTransfer::onTask);
-    connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
-    {
-        remover_.release()->deleteLater();
-    });
+    connect(remover_, &FileRemover::sig_doTask, this, &ClientFileTransfer::onTask);
+    connect(remover_, &FileRemover::sig_finished, remover_, &FileRemover::deleteLater);
 
     remover_->start();
 }
@@ -194,13 +185,10 @@ void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
 void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
 {
     DCHECK(!transfer_);
-    transfer_.reset(transfer);
+    transfer_ = transfer;
 
-    connect(transfer_.get(), &FileTransfer::sig_doTask, this, &ClientFileTransfer::onTask);
-    connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
-    {
-        transfer_.release()->deleteLater();
-    });
+    connect(transfer_, &FileTransfer::sig_doTask, this, &ClientFileTransfer::onTask);
+    connect(transfer_, &FileTransfer::sig_finished, transfer_, &FileTransfer::deleteLater);
 
     transfer_->start();
 }
@@ -222,12 +210,12 @@ common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Targe
 
     if (target == common::FileTask::Target::LOCAL)
     {
-        task_factory = local_task_factory_.get();
+        task_factory = local_task_factory_;
     }
     else
     {
         DCHECK_EQ(target, common::FileTask::Target::REMOTE);
-        task_factory = remote_task_factory_.get();
+        task_factory = remote_task_factory_;
     }
 
     DCHECK(task_factory);
