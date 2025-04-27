@@ -503,17 +503,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="73"/>
+        <location filename="../main.cc" line="75"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="76"/>
+        <location filename="../main.cc" line="78"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="77"/>
+        <location filename="../main.cc" line="79"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>

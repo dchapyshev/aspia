@@ -258,28 +258,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="240"/>
-        <location filename="../host_main.cc" line="259"/>
+        <location filename="../host_main.cc" line="242"/>
+        <location filename="../host_main.cc" line="261"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="241"/>
+        <location filename="../host_main.cc" line="243"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Le contrôle de l&apos;intégrité de l&apos;application a échoué. Des composants sont manquants ou endommagés.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="260"/>
+        <location filename="../host_main.cc" line="262"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Les paramètres d&apos;exportation et d&apos;importation ne peuvent pas être spécifiés ensemble.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="294"/>
+        <location filename="../host_main.cc" line="296"/>
         <source>Aspia Host</source>
         <translation>Hôte Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="295"/>
+        <location filename="../host_main.cc" line="297"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Version de l&apos;application: %1.%2.%3.%4.</translation>
     </message>

@@ -27,38 +27,38 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="61"/>
-        <location filename="../client_main.cc" line="708"/>
+        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="710"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="63"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>&quot;%1&quot; 的值不正確。可能的值：%2。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="420"/>
         <source>Remote computer address.</source>
         <translation>遠端電腦位址。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="424"/>
         <source>Remote computer port.</source>
         <translation>遠端電腦通訊埠。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="427"/>
+        <location filename="../client_main.cc" line="429"/>
         <source>Name of host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="431"/>
+        <location filename="../client_main.cc" line="433"/>
         <source>Name of user.</source>
         <translation>使用者名稱。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="435"/>
+        <location filename="../client_main.cc" line="437"/>
         <source>Password of user.</source>
         <translation>使用者密碼。</translation>
     </message>
@@ -67,107 +67,107 @@
         <translation type="vanished">工作階段類型。可能的值：desktop-manage、desktop-view、file-transfer。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="448"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>編碼類型。可能的值：vp8、vp9、zstd。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="452"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>色彩深度。可能的值：3、6、8、16、32。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="456"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>壓縮率。可能的值：1-22。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="460"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>啟用或停用音訊。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="464"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>啟用或停用游標形狀。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="472"/>
+        <location filename="../client_main.cc" line="474"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>啟用或停用剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="476"/>
+        <location filename="../client_main.cc" line="478"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌面特效。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="480"/>
+        <location filename="../client_main.cc" line="482"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌布。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="484"/>
+        <location filename="../client_main.cc" line="486"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>啟用或停用字體平滑。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="488"/>
+        <location filename="../client_main.cc" line="490"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時清除剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="492"/>
+        <location filename="../client_main.cc" line="494"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時鎖定電腦。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="496"/>
+        <location filename="../client_main.cc" line="498"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>阻止遠端輸入。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="500"/>
+        <location filename="../client_main.cc" line="502"/>
         <source>Router address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="504"/>
+        <location filename="../client_main.cc" line="506"/>
         <source>Router port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="509"/>
+        <location filename="../client_main.cc" line="511"/>
         <source>Router name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="513"/>
+        <location filename="../client_main.cc" line="515"/>
         <source>Router password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="517"/>
+        <location filename="../client_main.cc" line="519"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="709"/>
+        <location filename="../client_main.cc" line="711"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="468"/>
+        <location filename="../client_main.cc" line="470"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="439"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="443"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3094,122 +3094,122 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="118"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="108"/>
         <source>Current Task: Copying items.</source>
         <translation>目前工作：正在複製項目。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="132"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="122"/>
         <source>From: %1</source>
         <translation>從：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="127"/>
         <source>To: %1</source>
         <translation>到：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="177"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="167"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="179"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="182"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="195"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="185"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="198"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="188"/>
         <source>Replace All</source>
         <translation>全部取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="201"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="191"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="339"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="344"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="349"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="162"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="152"/>
         <source>Speed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="279"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="269"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>目前工作：取消檔案傳輸。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="294"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="284"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>建立用於複製的檔案佇列時出錯</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="299"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="289"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>無法建立資料夾 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="306"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="296"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>無法建立檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="302"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>無法開啟檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="308"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>無法寫入檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>無法讀取檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="330"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="320"/>
         <source>Unknown error type while copying files</source>
         <translation>複製檔案時出現未知錯誤類型</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="54"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="49"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
