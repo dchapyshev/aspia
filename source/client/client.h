@@ -31,13 +31,9 @@
 
 namespace base {
 class ClientAuthenticator;
-class TaskRunner;
 } // namespace base
 
 namespace client {
-
-class StatusWindow;
-class StatusWindowProxy;
 
 class Client
     : public QObject,
@@ -56,15 +52,27 @@ public:
     // Stops a session.
     void stop();
 
-    // Sets the implementation of the status window.
-    // The method must be called before calling method start().
-    void setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy);
-
     // Sets an instance of a class that stores session state.
     // The method must be called before calling method start().
     void setSessionState(std::shared_ptr<SessionState> session_state);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
+
+signals:
+    void sig_statusStarted();
+    void sig_statusStopped();
+    void sig_routerConnecting();
+    void sig_routerConnected();
+    void sig_hostConnecting();
+    void sig_hostConnected();
+    void sig_hostDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void sig_waitForRouter();
+    void sig_waitForRouterTimeout();
+    void sig_waitForHost();
+    void sig_waitForHostTimeout();
+    void sig_versionMismatch();
+    void sig_accessDenied(base::Authenticator::ErrorCode error_code);
+    void sig_routerError(const client::RouterController::Error& error);
 
 protected:
     // Indicates that the session is started.
@@ -104,7 +112,6 @@ private:
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
-    std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
     std::shared_ptr<SessionState> session_state_;
 

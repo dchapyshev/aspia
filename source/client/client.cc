@@ -20,8 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
-#include "client/status_window_proxy.h"
+#include "base/peer/client_authenticator.h"
 
 #if defined(OS_MAC)
 #include "base/mac/app_nap_blocker.h"
@@ -54,8 +53,6 @@ Client::~Client()
 //--------------------------------------------------------------------------------------------------
 void Client::start()
 {
-    DCHECK(status_window_proxy_);
-
     if (state_ != State::CREATED)
     {
         LOG(LS_ERROR) << "Client already started before";
@@ -90,10 +87,10 @@ void Client::start()
         if (!reconnecting)
         {
             // Show the status window.
-            status_window_proxy_->onStarted();
+            emit sig_statusStarted();
         }
 
-        status_window_proxy_->onRouterConnecting();
+        emit sig_routerConnecting();
         router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting, this);
     }
     else
@@ -103,7 +100,7 @@ void Client::start()
         if (!session_state_->isReconnecting())
         {
             // Show the status window.
-            status_window_proxy_->onStarted();
+            emit sig_statusStarted();
         }
 
         // Create a network channel for messaging.
@@ -113,7 +110,7 @@ void Client::start()
         channel_->setListener(this);
 
         // Now connect to the host.
-        status_window_proxy_->onHostConnecting();
+        emit sig_hostConnecting();
         channel_->connect(config.address_or_id, config.port);
     }
 }
@@ -134,7 +131,7 @@ void Client::stop()
         session_state_->setAutoReconnect(false);
         session_state_->setReconnecting(false);
 
-        status_window_proxy_->onStopped();
+        emit sig_statusStopped();
 
         LOG(LS_INFO) << "Client stopped";
     }
@@ -142,13 +139,6 @@ void Client::stop()
     {
         LOG(LS_ERROR) << "Client already stopped";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
-{
-    LOG(LS_INFO) << "Status window installed";
-    status_window_proxy_ = std::move(status_window_proxy);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -231,7 +221,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
-    status_window_proxy_->onHostDisconnected(error_code);
+    emit sig_hostDisconnected(error_code);
 
     if (session_state_->isAutoReconnect())
     {
@@ -248,9 +238,9 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 LOG(LS_INFO) << "Reconnect timeout";
 
                 if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
-                    status_window_proxy_->onWaitForRouterTimeout();
+                    emit sig_waitForRouterTimeout();
                 else
-                    status_window_proxy_->onWaitForHostTimeout();
+                    emit sig_waitForHostTimeout();
 
                 session_state_->setReconnecting(false);
                 session_state_->setAutoReconnect(false);
@@ -289,7 +279,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         }
         else
         {
-            status_window_proxy_->onWaitForHost();
+            emit sig_waitForHost();
             delayedReconnectToHost();
         }
     }
@@ -334,7 +324,7 @@ void Client::onRouterConnected(const base::Version& router_version)
 {
     LOG(LS_INFO) << "Router connected";
     session_state_->setRouterVersion(router_version);
-    status_window_proxy_->onRouterConnected();
+    emit sig_routerConnected();
     is_connected_to_router_ = true;
 }
 
@@ -342,7 +332,7 @@ void Client::onRouterConnected(const base::Version& router_version)
 void Client::onHostAwaiting()
 {
     LOG(LS_INFO) << "Host awaiting";
-    status_window_proxy_->onWaitForHost();
+    emit sig_waitForHost();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -365,7 +355,7 @@ void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
 //--------------------------------------------------------------------------------------------------
 void Client::onErrorOccurred(const RouterController::Error& error)
 {
-    status_window_proxy_->onRouterError(error);
+    emit sig_routerError(error);
 
     LOG(LS_INFO) << "Post task to destroy router controller";
     router_controller_.release()->deleteLater();
@@ -373,7 +363,7 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 
     if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
     {
-        status_window_proxy_->onWaitForRouter();
+        emit sig_waitForRouter();
         delayedReconnectToRouter();
     }
 }
@@ -426,12 +416,12 @@ void Client::startAuthentication()
             if (host_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                << " client: " << client_version.toString();
-                status_window_proxy_->onVersionMismatch();
+                              << " client: " << client_version.toString();
+                emit sig_versionMismatch();
             }
             else
             {
-                status_window_proxy_->onHostConnected();
+                emit sig_hostConnected();
 
                 // Signal that everything is ready to start the session (connection established,
                 // authentication passed).
@@ -445,7 +435,7 @@ void Client::startAuthentication()
         {
             LOG(LS_INFO) << "Failed authentication: "
                          << base::Authenticator::errorToString(error_code);
-            status_window_proxy_->onAccessDenied(error_code);
+            emit sig_accessDenied(error_code);
         }
 
         // Authenticator is no longer needed.

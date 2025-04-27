@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "client/client.h"
 #include "client/client_proxy.h"
-#include "client/status_window_proxy.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/status_dialog.h"
 #include "qt_base/application.h"
@@ -31,9 +30,7 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
     : QWidget(parent),
-      session_state_(std::move(session_state)),
-      status_window_proxy_(
-          std::make_shared<StatusWindowProxy>(base::GuiApplication::uiTaskRunner(), this))
+      session_state_(std::move(session_state))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -49,7 +46,6 @@ SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidge
 SessionWindow::~SessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
-    status_window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -100,7 +96,36 @@ bool SessionWindow::connectToHost(Config config)
     std::unique_ptr<Client> client = createClient();
 
     client->moveToThread(base::GuiApplication::ioThread());
-    client->setStatusWindow(status_window_proxy_);
+
+    connect(client.get(), &Client::sig_statusStarted, this, &SessionWindow::onStarted,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_statusStopped, this, &SessionWindow::onStopped,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_routerConnecting, this, &SessionWindow::onRouterConnecting,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_routerConnected, this, &SessionWindow::onRouterConnected,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_hostConnecting, this, &SessionWindow::onHostConnecting,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_hostConnected, this, &SessionWindow::onHostConnected,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_hostDisconnected, this, &SessionWindow::onHostDisconnected,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_waitForRouter, this, &SessionWindow::onWaitForRouter,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_waitForRouterTimeout, this, &SessionWindow::onWaitForRouterTimeout,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_waitForHost, this, &SessionWindow::onWaitForHost,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_waitForHostTimeout, this, &SessionWindow::onWaitForHostTimeout,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_versionMismatch, this, &SessionWindow::onVersionMismatch,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_accessDenied, this, &SessionWindow::onAccessDenied,
+            Qt::QueuedConnection);
+    connect(client.get(), &Client::sig_routerError, this, &SessionWindow::onRouterError,
+            Qt::QueuedConnection);
+
     client->setSessionState(session_state_);
 
     client_proxy_ = std::make_unique<ClientProxy>(
@@ -267,7 +292,7 @@ void SessionWindow::onVersionMismatch()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void SessionWindow::onAccessDenied(base::Authenticator::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Authentication error";
     onErrorOccurred(authErrorToString(error_code));
@@ -424,34 +449,34 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString SessionWindow::authErrorToString(base::ClientAuthenticator::ErrorCode error_code)
+QString SessionWindow::authErrorToString(base::Authenticator::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case base::ClientAuthenticator::ErrorCode::SUCCESS:
+        case base::Authenticator::ErrorCode::SUCCESS:
             message = QT_TR_NOOP("Authentication successfully completed.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+        case base::Authenticator::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("Network authentication error.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+        case base::Authenticator::ErrorCode::PROTOCOL_ERROR:
             message = QT_TR_NOOP("Violation of the data exchange protocol.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::VERSION_ERROR:
+        case base::Authenticator::ErrorCode::VERSION_ERROR:
             message = QT_TR_NOOP("Version of the application you are connecting to is less than "
                                  " the minimum supported version.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+        case base::Authenticator::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Wrong user name or password.");
             break;
 
-        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+        case base::Authenticator::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
 

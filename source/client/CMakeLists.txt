@@ -62,9 +62,6 @@ list(APPEND SOURCE_CLIENT_CORE
     router_config_storage.h
     router_controller.cc
     router_controller.h
-    status_window.h
-    status_window_proxy.cc
-    status_window_proxy.h
     client_session_state.cc
     client_session_state.h)
 

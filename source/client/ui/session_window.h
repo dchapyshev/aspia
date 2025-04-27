@@ -19,15 +19,13 @@
 #ifndef CLIENT_UI_SESSION_WINDOW_H
 #define CLIENT_UI_SESSION_WINDOW_H
 
+#include "base/net/network_channel.h"
+#include "base/peer/authenticator.h"
 #include "client/client_config.h"
+#include "client/router_controller.h"
 #include "client/client_session_state.h"
-#include "client/status_window.h"
 
 #include <QWidget>
-
-namespace base {
-class TaskRunner;
-} // namespace base
 
 namespace common {
 class StatusDialog;
@@ -37,11 +35,8 @@ namespace client {
 
 class Client;
 class ClientProxy;
-class StatusWindowProxy;
 
-class SessionWindow
-    : public QWidget,
-      public StatusWindow
+class SessionWindow : public QWidget
 {
     Q_OBJECT
 
@@ -63,32 +58,31 @@ protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
 
-    // StatusWindow implementation.
-    void onStarted() final;
-    void onStopped() final;
-    void onRouterConnecting() final;
-    void onRouterConnected() final;
-    void onHostConnecting() final;
-    void onHostConnected() final;
-    void onHostDisconnected(base::TcpChannel::ErrorCode error_code) final;
-    void onWaitForRouter() final;
-    void onWaitForRouterTimeout() final;
-    void onWaitForHost() final;
-    void onWaitForHostTimeout() final;
-    void onVersionMismatch() final;
-    void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) final;
-    void onRouterError(const RouterController::Error& error) final;
+public slots:
+    void onStarted();
+    void onStopped();
+    void onRouterConnecting();
+    void onRouterConnected();
+    void onHostConnecting();
+    void onHostConnected();
+    void onHostDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onWaitForRouter();
+    void onWaitForRouterTimeout();
+    void onWaitForHost();
+    void onWaitForHostTimeout();
+    void onVersionMismatch();
+    void onAccessDenied(base::Authenticator::ErrorCode error_code);
+    void onRouterError(const client::RouterController::Error& error);
 
 private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
 
     static QString netErrorToString(base::TcpChannel::ErrorCode error_code);
-    static QString authErrorToString(base::ClientAuthenticator::ErrorCode error_code);
+    static QString authErrorToString(base::Authenticator::ErrorCode error_code);
     static QString routerErrorToString(RouterController::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;
-    std::shared_ptr<StatusWindowProxy> status_window_proxy_;
     std::unique_ptr<ClientProxy> client_proxy_;
     common::StatusDialog* status_dialog_ = nullptr;
 };
