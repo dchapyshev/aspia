@@ -37,9 +37,7 @@ public:
                         const std::string& old_path,
                         const std::string& new_path) = 0;
 
-    virtual void remove(common::FileTask::Target target,
-                        std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                        const FileRemover::TaskList& items) = 0;
+    virtual void remove(FileRemover* remover) = 0;
 
     virtual void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                           FileTransfer::Type transfer_type,

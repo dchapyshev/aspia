@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "client/file_remove_queue_builder.h"
-#include "client/file_remove_window_proxy.h"
-#include "client/file_remover_proxy.h"
 #include "common/file_task_factory.h"
 #include "common/file_task_consumer_proxy.h"
 #include "common/file_task_producer_proxy.h"
@@ -29,20 +27,13 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-FileRemover::FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
-                         std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                         common::FileTask::Target target,
-                         QObject* parent)
+FileRemover::FileRemover(common::FileTask::Target target, const TaskList& items, QObject* parent)
     : QObject(parent),
-      remover_proxy_(std::make_shared<FileRemoverProxy>(std::move(io_task_runner), this)),
-      remove_window_proxy_(std::move(remove_window_proxy)),
-      task_consumer_proxy_(std::move(task_consumer_proxy)),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
+      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
+      tasks_(items)
 {
     LOG(LS_INFO) << "Ctor";
 
-    DCHECK(remove_window_proxy_);
     DCHECK(task_consumer_proxy_);
 
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
@@ -53,16 +44,17 @@ FileRemover::~FileRemover()
 {
     LOG(LS_INFO) << "Dtor";
     task_producer_proxy_->dettach();
-    remover_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemover::start(const TaskList& items)
+void FileRemover::start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy)
 {
     LOG(LS_INFO) << "Start file remover";
 
+    task_consumer_proxy_ = std::move(task_consumer_proxy);
+
     // Asynchronously start UI.
-    remove_window_proxy_->start(remover_proxy_);
+    emit sig_started();
 
     queue_builder_ = std::make_unique<FileRemoveQueueBuilder>(
         task_consumer_proxy_, task_factory_->target());
@@ -79,14 +71,14 @@ void FileRemover::start(const TaskList& items)
         }
         else
         {
-            remove_window_proxy_->errorOccurred(std::string(), error_code, ACTION_ABORT);
+            emit sig_errorOccurred(std::string(), error_code, ACTION_ABORT);
         }
 
         queue_builder_.release()->deleteLater();
     });
 
     // Start building a list of objects for deletion.
-    queue_builder_->start(items);
+    queue_builder_->start(tasks_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,7 +124,7 @@ void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
 
     if (!request.has_remove_request())
     {
-        remove_window_proxy_->errorOccurred(
+        emit sig_errorOccurred(
             request.remove_request().path(), proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
         return;
     }
@@ -161,8 +153,7 @@ void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
                 break;
         }
 
-        remove_window_proxy_->errorOccurred(
-            request.remove_request().path(), reply.error_code(), actions);
+        emit sig_errorOccurred(request.remove_request().path(), reply.error_code(), actions);
         return;
     }
 
@@ -194,7 +185,7 @@ void FileRemover::doCurrentTask()
     const std::string& path = tasks_.front().path();
 
     // Updating progress in UI.
-    remove_window_proxy_->setCurrentProgress(path, static_cast<int>(percentage));
+    emit sig_progressChanged(path, static_cast<int>(percentage));
 
     // Send a request to delete the next item.
     task_consumer_proxy_->doTask(task_factory_->remove(path));
@@ -204,9 +195,7 @@ void FileRemover::doCurrentTask()
 void FileRemover::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "File remover finished (from: " << location.toString() << ")";
-
     emit sig_finished();
-    remove_window_proxy_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

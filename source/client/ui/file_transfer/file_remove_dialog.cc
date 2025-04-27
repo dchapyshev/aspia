@@ -19,10 +19,7 @@
 #include "client/ui/file_transfer/file_remove_dialog.h"
 
 #include "base/logging.h"
-#include "client/file_remove_window_proxy.h"
-#include "client/file_remover_proxy.h"
 #include "client/ui/file_transfer/file_error_code.h"
-#include "qt_base/application.h"
 
 #include <QCloseEvent>
 #include <QPointer>
@@ -41,9 +38,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
-    : QDialog(parent),
-      remover_window_proxy_(std::make_shared<FileRemoveWindowProxy>(
-          base::GuiApplication::uiTaskRunner(), this))
+    : QDialog(parent)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -76,8 +71,6 @@ FileRemoveDialog::~FileRemoveDialog()
 {
     LOG(LS_INFO) << "Dtor";
 
-    remover_window_proxy_->dettach();
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(OS_WIN)
     if (taskbar_progress_)
@@ -87,11 +80,8 @@ FileRemoveDialog::~FileRemoveDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
+void FileRemoveDialog::start()
 {
-    remover_proxy_ = std::move(remover_proxy);
-    DCHECK(remover_proxy_);
-
     show();
     activateWindow();
 }
@@ -174,18 +164,18 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
         {
             if (button == skip_button)
             {
-                remover_proxy_->setAction(FileRemover::ACTION_SKIP);
+                emit sig_action(FileRemover::ACTION_SKIP);
                 return;
             }
 
             if (button == skip_all_button)
             {
-                remover_proxy_->setAction(FileRemover::ACTION_SKIP_ALL);
+                emit sig_action(FileRemover::ACTION_SKIP_ALL);
                 return;
             }
         }
 
-        remover_proxy_->setAction(FileRemover::ACTION_ABORT);
+        emit sig_action(FileRemover::ACTION_ABORT);
     });
 
     dialog->exec();
@@ -208,7 +198,7 @@ void FileRemoveDialog::closeEvent(QCloseEvent* event)
     }
     else
     {
-        remover_proxy_->stop();
+        emit sig_stop();
         event->ignore();
     }
 }

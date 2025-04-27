@@ -22,16 +22,12 @@
 #include "base/location.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
+#include "proto/file_transfer.pb.h"
 
-#include <functional>
 #include <deque>
 #include <string>
 
 #include <QObject>
-
-namespace base {
-class TaskRunner;
-} // namespace base
 
 namespace common {
 class FileTaskFactory;
@@ -42,8 +38,6 @@ class FileTaskProducerProxy;
 namespace client {
 
 class FileRemoveQueueBuilder;
-class FileRemoveWindowProxy;
-class FileRemoverProxy;
 
 class FileRemover final
     : public QObject,
@@ -52,13 +46,6 @@ class FileRemover final
     Q_OBJECT
 
 public:
-    FileRemover(std::shared_ptr<base::TaskRunner> io_task_runner,
-                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-                common::FileTask::Target target,
-                QObject* parent = nullptr);
-    ~FileRemover() final;
-
     enum Action
     {
         ACTION_ASK      = 0,
@@ -91,12 +78,21 @@ public:
 
     using TaskList = std::deque<Task>;
 
-    void start(const TaskList& items);
+    FileRemover(common::FileTask::Target target, const TaskList& items, QObject* parent = nullptr);
+    ~FileRemover() final;
+
+public slots:
+    void start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy);
     void stop();
     void setAction(Action action);
 
 signals:
+    void sig_started();
     void sig_finished();
+    void sig_progressChanged(const std::string& name, int percentage);
+    void sig_errorOccurred(const std::string& path,
+                           proto::FileError error_code,
+                           uint32_t available_actions);
 
 protected:
     // common::FileTaskProducer implementation.
@@ -107,8 +103,6 @@ private:
     void doCurrentTask();
     void onFinished(const base::Location& location);
 
-    std::shared_ptr<FileRemoverProxy> remover_proxy_;
-    std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy_;
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
     std::unique_ptr<common::FileTaskFactory> task_factory_;

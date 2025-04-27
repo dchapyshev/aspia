@@ -47,13 +47,8 @@ list(APPEND SOURCE_CLIENT_CORE
     file_manager_window_proxy.h
     file_remove_queue_builder.cc
     file_remove_queue_builder.h
-    file_remove_window.h
-    file_remove_window_proxy.cc
-    file_remove_window_proxy.h
     file_remover.cc
     file_remover.h
-    file_remover_proxy.cc
-    file_remover_proxy.h
     file_transfer.cc
     file_transfer.h
     file_transfer_proxy.cc

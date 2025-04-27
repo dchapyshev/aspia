@@ -107,19 +107,17 @@ void FileControlProxy::rename(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileControlProxy::remove(common::FileTask::Target target,
-                              std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                              const FileRemover::TaskList& items)
+void FileControlProxy::remove(FileRemover* remover)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(std::bind(
-            &FileControlProxy::remove, shared_from_this(), target, remove_window_proxy, items));
+            &FileControlProxy::remove, shared_from_this(), remover));
         return;
     }
 
     if (file_control_)
-        file_control_->remove(target, remove_window_proxy, items);
+        file_control_->remove(remover);
 }
 
 //--------------------------------------------------------------------------------------------------

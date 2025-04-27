@@ -264,7 +264,28 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
     ui->local_panel->setEnabled(false);
     ui->remote_panel->setEnabled(false);
 
-    file_control_proxy_->remove(target, remove_dialog_->windowProxy(), items);
+    FileRemover* remover = new FileRemover(target, items);
+
+    connect(remover, &FileRemover::sig_started,
+            remove_dialog_, &FileRemoveDialog::start,
+            Qt::QueuedConnection);
+    connect(remover, &FileRemover::sig_finished,
+            remove_dialog_, &FileRemoveDialog::stop,
+            Qt::QueuedConnection);
+    connect(remover, &FileRemover::sig_errorOccurred,
+            remove_dialog_, &FileRemoveDialog::errorOccurred,
+            Qt::QueuedConnection);
+    connect(remover, &FileRemover::sig_progressChanged,
+            remove_dialog_, &FileRemoveDialog::setCurrentProgress,
+            Qt::QueuedConnection);
+    connect(remove_dialog_, &FileRemoveDialog::sig_action,
+            remover, &FileRemover::setAction,
+            Qt::QueuedConnection);
+    connect(remove_dialog_, &FileRemoveDialog::sig_stop,
+            remover, &FileRemover::stop,
+            Qt::QueuedConnection);
+
+    file_control_proxy_->remove(remover);
 }
 
 //--------------------------------------------------------------------------------------------------

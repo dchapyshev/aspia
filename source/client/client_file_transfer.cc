@@ -26,6 +26,7 @@
 #include "common/file_task_consumer_proxy.h"
 #include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
+#include "qt_base/application.h"
 
 namespace client {
 
@@ -223,21 +224,18 @@ void ClientFileTransfer::rename(common::FileTask::Target target,
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::remove(common::FileTask::Target target,
-                                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                                const FileRemover::TaskList& items)
+void ClientFileTransfer::remove(FileRemover* remover)
 {
     DCHECK(!remover_);
-
-    remover_ = std::make_unique<FileRemover>(
-        local_worker_->taskRunner(), remove_window_proxy, task_consumer_proxy_, target);
+    remover_.reset(remover);
 
     connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
     {
         remover_.release()->deleteLater();
     });
 
-    remover_->start(items);
+    remover_->moveToThread(base::GuiApplication::ioThread());
+    remover_->start(task_consumer_proxy_);
 }
 
 //--------------------------------------------------------------------------------------------------

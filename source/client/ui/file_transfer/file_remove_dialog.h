@@ -20,7 +20,6 @@
 #define CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H
 
 #include "build/build_config.h"
-#include "client/file_remove_window.h"
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
 
@@ -33,9 +32,7 @@ class QWinTaskbarProgress;
 
 namespace client {
 
-class FileRemoveDialog final
-    : public QDialog,
-      public FileRemoveWindow
+class FileRemoveDialog final : public QDialog
 {
     Q_OBJECT
 
@@ -43,15 +40,17 @@ public:
     explicit FileRemoveDialog(QWidget* parent);
     ~FileRemoveDialog() final;
 
-    std::shared_ptr<FileRemoveWindowProxy> windowProxy() { return remover_window_proxy_; }
-
-    // FileRemoveWindow implementation.
-    void start(std::shared_ptr<FileRemoverProxy> remover_proxy) final;
-    void stop() final;
-    void setCurrentProgress(const std::string& name, int percentage) final;
+public slots:
+    void start();
+    void stop();
+    void setCurrentProgress(const std::string& name, int percentage);
     void errorOccurred(const std::string& path,
                        proto::FileError error_code,
-                       uint32_t available_actions) final;
+                       uint32_t available_actions);
+
+signals:
+    void sig_stop();
+    void sig_action(FileRemover::Action action);
 
 protected:
     // QDialog implementation.
@@ -66,10 +65,7 @@ private:
 #endif
 #endif
 
-    std::shared_ptr<FileRemoverProxy> remover_proxy_;
-    std::shared_ptr<FileRemoveWindowProxy> remover_window_proxy_;
     std::unique_ptr<QFontMetrics> label_metrics_;
-
     bool stopped_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FileRemoveDialog);

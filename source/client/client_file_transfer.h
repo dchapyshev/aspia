@@ -80,9 +80,7 @@ private:
     void rename(common::FileTask::Target target,
                 const std::string& old_path,
                 const std::string& new_path) final;
-    void remove(common::FileTask::Target target,
-                std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
-                const FileRemover::TaskList& items) final;
+    void remove(FileRemover* remover) final;
     void transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                   FileTransfer::Type transfer_type,
                   const std::string& source_path,
