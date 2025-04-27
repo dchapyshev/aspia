@@ -26,6 +26,7 @@
 #include "base/net/tcp_channel.h"
 
 #include <QObject>
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -98,8 +99,8 @@ private:
     void delayedReconnectToRouter();
     void delayedReconnectToHost();
 
-    std::unique_ptr<QTimer> timeout_timer_;
-    std::unique_ptr<QTimer> reconnect_timer_;
+    QPointer<QTimer> timeout_timer_;
+    QPointer<QTimer> reconnect_timer_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;

@@ -129,7 +129,7 @@ void Client::stop()
         router_controller_.reset();
         authenticator_.reset();
         channel_.reset();
-        timeout_timer_.reset();
+        delete timeout_timer_;
 
         session_state_->setAutoReconnect(false);
         session_state_->setReconnecting(false);
@@ -240,10 +240,10 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 
         if (!timeout_timer_)
         {
-            timeout_timer_ = std::make_unique<QTimer>();
+            timeout_timer_ = new QTimer(this);
             timeout_timer_->setSingleShot(true);
 
-            connect(timeout_timer_.get(), &QTimer::timeout, this, [this]()
+            connect(timeout_timer_, &QTimer::timeout, this, [this]()
             {
                 LOG(LS_INFO) << "Reconnect timeout";
 
@@ -384,8 +384,8 @@ void Client::startAuthentication()
     LOG(LS_INFO) << "Start authentication for '" << session_state_->hostUserName() << "'";
 
     session_state_->setReconnecting(false);
-    reconnect_timer_.reset();
-    timeout_timer_.reset();
+    reconnect_timer_->deleteLater();
+    timeout_timer_->deleteLater();
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
@@ -458,10 +458,13 @@ void Client::startAuthentication()
 //--------------------------------------------------------------------------------------------------
 void Client::delayedReconnectToRouter()
 {
-    reconnect_timer_ = std::make_unique<QTimer>();
+    if (reconnect_timer_)
+        reconnect_timer_->deleteLater();
+
+    reconnect_timer_ = new QTimer(this);
     reconnect_timer_->setSingleShot(true);
 
-    connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
+    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Reconnecting to router";
         state_ = State::CREATED;
@@ -474,10 +477,13 @@ void Client::delayedReconnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Client::delayedReconnectToHost()
 {
-    reconnect_timer_ = std::make_unique<QTimer>();
+    if (reconnect_timer_)
+        reconnect_timer_->deleteLater();
+
+    reconnect_timer_ = new QTimer(this);
     reconnect_timer_->setSingleShot(true);
 
-    connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
+    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Reconnecting to host";
         state_ = State::CREATED;
