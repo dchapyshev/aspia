@@ -3313,22 +3313,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="55"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="51"/>
         <source>Local Computer</source>
         <translation type="unfinished">Lokale Computer</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="56"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="52"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Computer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="99"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="126"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="100"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="127"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
     </message>
