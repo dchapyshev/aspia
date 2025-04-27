@@ -19,20 +19,20 @@
 #include "common/file_task.h"
 
 #include "base/logging.h"
-#include "common/file_task_producer_proxy.h"
+#include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
+FileTask::FileTask(QPointer<FileTaskFactory> factory,
                    std::unique_ptr<proto::FileRequest> request,
                    Target target)
-    : producer_proxy_(std::move(producer_proxy)),
+    : factory_(std::move(factory)),
       target_(target),
       request_(std::move(request))
 {
-    DCHECK(producer_proxy_);
+    DCHECK(factory_);
     DCHECK(request_);
     DCHECK(target_ == Target::LOCAL || target_ == Target::REMOTE);
 }
@@ -60,11 +60,14 @@ const proto::FileReply& FileTask::reply() const
 //--------------------------------------------------------------------------------------------------
 void FileTask::setReply(std::unique_ptr<proto::FileReply> reply)
 {
+    if (!factory_)
+        return;
+
     // Save the reply inside the request.
     reply_ = std::move(reply);
 
     // Now notify the sender of the reply.
-    producer_proxy_->onTaskDone(shared_from_this());
+    emit factory_->sig_taskDone(shared_from_this());
 }
 
 } // namespace common

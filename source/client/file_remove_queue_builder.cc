@@ -20,31 +20,25 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
-#include "common/file_task_consumer_proxy.h"
-#include "common/file_task_producer_proxy.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-FileRemoveQueueBuilder::FileRemoveQueueBuilder(
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-    common::FileTask::Target target,
-    QObject* parent)
+FileRemoveQueueBuilder::FileRemoveQueueBuilder(common::FileTask::Target target, QObject* parent)
     : QObject(parent),
-      task_consumer_proxy_(std::move(task_consumer_proxy)),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
+      task_factory_(std::make_unique<common::FileTaskFactory>(target))
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_consumer_proxy_);
 
-    task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
+    connect(task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+            this, &FileRemoveQueueBuilder::onTaskDone);
 }
 
 //--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
     LOG(LS_INFO) << "Dtor";
-    task_producer_proxy_->dettach();
+    task_factory_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,7 +56,7 @@ FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
+void FileRemoveQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
     const proto::FileReply& reply = task->reply();
@@ -102,7 +96,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
 
         if (tasks_.front().isDirectory())
         {
-            task_consumer_proxy_->doTask(task_factory_->fileList(tasks_.front().path()));
+            emit sig_doTask(task_factory_->fileList(tasks_.front().path()));
             return;
         }
     }

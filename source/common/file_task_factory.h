@@ -29,29 +29,33 @@ class FilePacket;
 
 namespace common {
 
-class FileTaskFactory
+class FileTaskFactory final : public QObject
 {
+    Q_OBJECT
+
 public:
-    FileTaskFactory(std::shared_ptr<FileTaskProducerProxy> producer_proxy, FileTask::Target target);
+    explicit FileTaskFactory(FileTask::Target target, QObject* parent = nullptr);
     ~FileTaskFactory();
 
     FileTask::Target target() const { return target_; }
 
-    std::shared_ptr<FileTask> driveList();
-    std::shared_ptr<FileTask> fileList(const std::string& path);
-    std::shared_ptr<FileTask> createDirectory(const std::string& path);
-    std::shared_ptr<FileTask> rename(const std::string& old_name, const std::string& new_name);
-    std::shared_ptr<FileTask> remove(const std::string& path);
-    std::shared_ptr<FileTask> download(const std::string& file_path);
-    std::shared_ptr<FileTask> upload(const std::string& file_path, bool overwrite);
-    std::shared_ptr<FileTask> packetRequest(uint32_t flags);
-    std::shared_ptr<FileTask> packet(const proto::FilePacket& packet);
-    std::shared_ptr<FileTask> packet(std::unique_ptr<proto::FilePacket> packet);
+    base::local_shared_ptr<FileTask> driveList();
+    base::local_shared_ptr<FileTask> fileList(const std::string& path);
+    base::local_shared_ptr<FileTask> createDirectory(const std::string& path);
+    base::local_shared_ptr<FileTask> rename(const std::string& old_name, const std::string& new_name);
+    base::local_shared_ptr<FileTask> remove(const std::string& path);
+    base::local_shared_ptr<FileTask> download(const std::string& file_path);
+    base::local_shared_ptr<FileTask> upload(const std::string& file_path, bool overwrite);
+    base::local_shared_ptr<FileTask> packetRequest(uint32_t flags);
+    base::local_shared_ptr<FileTask> packet(const proto::FilePacket& packet);
+    base::local_shared_ptr<FileTask> packet(std::unique_ptr<proto::FilePacket> packet);
+
+signals:
+    void sig_taskDone(base::local_shared_ptr<FileTask> task);
 
 private:
-    std::shared_ptr<FileTask> makeTask(std::unique_ptr<proto::FileRequest> request);
+    base::local_shared_ptr<FileTask> makeTask(std::unique_ptr<proto::FileRequest> request);
 
-    std::shared_ptr<FileTaskProducerProxy> producer_proxy_;
     const FileTask::Target target_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTaskFactory);

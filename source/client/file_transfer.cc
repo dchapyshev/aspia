@@ -20,14 +20,14 @@
 
 #include "base/logging.h"
 #include "client/file_transfer_queue_builder.h"
-#include "common/file_task_factory.h"
-#include "common/file_task_consumer_proxy.h"
-#include "common/file_task_producer_proxy.h"
 #include "common/file_packet.h"
 
 namespace client {
 
 namespace {
+
+auto g_errorType = qRegisterMetaType<client::FileTransfer::Error::Type>();
+auto g_actionType = qRegisterMetaType<client::FileTransfer::Error::Action>();
 
 struct ActionsMap
 {
@@ -102,14 +102,15 @@ FileTransfer::FileTransfer(Type type,
       source_path_(source_path),
       target_path_(target_path),
       items_(items),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
+      cancel_timer_(new QTimer(this)),
+      speed_update_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    connect(&speed_update_timer_, &QTimer::timeout, this, &FileTransfer::doUpdateSpeed);
+    connect(speed_update_timer_, &QTimer::timeout, this, &FileTransfer::doUpdateSpeed);
 
-    cancel_timer_.setSingleShot(true);
-    connect(&cancel_timer_, &QTimer::timeout, this, [this]()
+    cancel_timer_->setSingleShot(true);
+    connect(cancel_timer_, &QTimer::timeout, this, [this]()
     {
         onFinished(FROM_HERE);
     });
@@ -119,23 +120,24 @@ FileTransfer::FileTransfer(Type type,
 FileTransfer::~FileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
-    task_producer_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy)
+void FileTransfer::start()
 {
     LOG(LS_INFO) << "File transfer start";
 
-    task_consumer_proxy_ = std::move(task_consumer_proxy);
+    common::FileTaskFactory* task_factory_local =
+        new common::FileTaskFactory(common::FileTask::Target::LOCAL);
 
-    std::unique_ptr<common::FileTaskFactory> task_factory_local =
-        std::make_unique<common::FileTaskFactory>(
-            task_producer_proxy_, common::FileTask::Target::LOCAL);
+    connect(task_factory_local, &common::FileTaskFactory::sig_taskDone,
+            this, &FileTransfer::onTaskDone);
 
-    std::unique_ptr<common::FileTaskFactory> task_factory_remote =
-        std::make_unique<common::FileTaskFactory>(
-            task_producer_proxy_, common::FileTask::Target::REMOTE);
+    common::FileTaskFactory* task_factory_remote =
+        new common::FileTaskFactory(common::FileTask::Target::REMOTE);
+
+    connect(task_factory_remote, &common::FileTaskFactory::sig_taskDone,
+            this, &FileTransfer::onTaskDone);
 
     if (type_ == Type::DOWNLOADER)
     {
@@ -153,10 +155,10 @@ void FileTransfer::start(std::shared_ptr<common::FileTaskConsumerProxy> task_con
     // Asynchronously start UI.
     emit sig_started();
 
-    queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
-        task_consumer_proxy_, task_factory_source_->target());
+    queue_builder_ = new FileTransferQueueBuilder(task_factory_source_->target(), this);
 
-    connect(queue_builder_.get(), &FileTransferQueueBuilder::sig_finished,
+    connect(queue_builder_, &FileTransferQueueBuilder::sig_doTask, this, &FileTransfer::sig_doTask);
+    connect(queue_builder_, &FileTransferQueueBuilder::sig_finished,
             this, [this](proto::FileError error_code)
     {
         if (error_code == proto::FILE_ERROR_SUCCESS)
@@ -178,10 +180,10 @@ void FileTransfer::start(std::shared_ptr<common::FileTaskConsumerProxy> task_con
             onError(Error::Type::QUEUE, proto::FILE_ERROR_UNKNOWN);
         }
 
-        queue_builder_.release()->deleteLater();
+        queue_builder_->deleteLater();
     });
 
-    speed_update_timer_.start(Milliseconds(1000));
+    speed_update_timer_->start(Milliseconds(1000));
 
     // Start building a list of objects for transfer.
     queue_builder_->start(source_path_, target_path_, items_);
@@ -194,13 +196,13 @@ void FileTransfer::stop()
 
     if (queue_builder_)
     {
-        queue_builder_.reset();
+        delete queue_builder_;
         onFinished(FROM_HERE);
     }
     else
     {
         is_canceled_ = true;
-        cancel_timer_.start(std::chrono::seconds(5));
+        cancel_timer_->start(std::chrono::seconds(5));
     }
 }
 
@@ -213,7 +215,7 @@ void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action a
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
+void FileTransfer::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 {
     if (type_ == Type::DOWNLOADER)
     {
@@ -281,8 +283,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             return;
         }
 
-        task_consumer_proxy_->doTask(
-            task_factory_source_->packetRequest(proto::FilePacketRequest::NO_FLAGS));
+        emit sig_doTask(task_factory_source_->packetRequest(proto::FilePacketRequest::NO_FLAGS));
     }
     else if (request.has_packet())
     {
@@ -332,7 +333,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
         if (is_canceled_)
             flags = proto::FilePacketRequest::CANCEL;
 
-        task_consumer_proxy_->doTask(task_factory_source_->packetRequest(flags));
+        emit sig_doTask(task_factory_source_->packetRequest(flags));
     }
     else
     {
@@ -359,8 +360,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
             return;
         }
 
-        task_consumer_proxy_->doTask(
-            task_factory_target_->upload(front_task.targetPath(), front_task.overwrite()));
+        emit sig_doTask(task_factory_target_->upload(front_task.targetPath(), front_task.overwrite()));
     }
     else if (request.has_packet_request())
     {
@@ -370,7 +370,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
             return;
         }
 
-        task_consumer_proxy_->doTask(task_factory_target_->packet(reply.packet()));
+        emit sig_doTask(task_factory_target_->packet(reply.packet()));
     }
     else
     {
@@ -429,13 +429,11 @@ void FileTransfer::doFrontTask(bool overwrite)
 
     if (front_task.isDirectory())
     {
-        task_consumer_proxy_->doTask(
-            task_factory_target_->createDirectory(front_task.targetPath()));
+        emit sig_doTask(task_factory_target_->createDirectory(front_task.targetPath()));
     }
     else
     {
-        task_consumer_proxy_->doTask(
-            task_factory_source_->download(front_task.sourcePath()));
+        emit sig_doTask(task_factory_source_->download(front_task.sourcePath()));
     }
 }
 
@@ -456,8 +454,8 @@ void FileTransfer::doNextTask()
 
     if (tasks_.empty())
     {
-        if (cancel_timer_.isActive())
-            cancel_timer_.stop();
+        if (cancel_timer_->isActive())
+            cancel_timer_->stop();
 
         onFinished(FROM_HERE);
         return;
@@ -498,7 +496,7 @@ void FileTransfer::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "File transfer finished (from: " << location.toString() << ")";
 
-    speed_update_timer_.stop();
+    speed_update_timer_->stop();
     emit sig_finished();
 }
 

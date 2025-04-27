@@ -20,31 +20,24 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
-#include "common/file_task_consumer_proxy.h"
-#include "common/file_task_producer_proxy.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-FileTransferQueueBuilder::FileTransferQueueBuilder(
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-    common::FileTask::Target target,
-    QObject* parent)
+FileTransferQueueBuilder::FileTransferQueueBuilder(common::FileTask::Target target, QObject* parent)
     : QObject(parent),
-      task_consumer_proxy_(std::move(task_consumer_proxy)),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this))
+      task_factory_(std::make_unique<common::FileTaskFactory>(target))
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_consumer_proxy_);
 
-    task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
+    connect(task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+            this, &FileTransferQueueBuilder::onTaskDone);
 }
 
 //--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::~FileTransferQueueBuilder()
 {
     LOG(LS_INFO) << "Dtor";
-    task_producer_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +66,7 @@ int64_t FileTransferQueueBuilder::totalSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
+void FileTransferQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 {
     DCHECK(!tasks_.empty());
 
@@ -135,7 +128,7 @@ void FileTransferQueueBuilder::doPendingTasks()
 
         if (tasks_.back().isDirectory())
         {
-            task_consumer_proxy_->doTask(task_factory_->fileList(tasks_.back().sourcePath()));
+            emit sig_doTask(task_factory_->fileList(tasks_.back().sourcePath()));
             return;
         }
     }

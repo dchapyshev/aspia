@@ -22,30 +22,24 @@
 #include "base/serialization.h"
 #include "base/task_runner.h"
 #include "common/file_task_factory.h"
-#include "common/file_task_consumer_proxy.h"
-#include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
-#include "qt_base/application.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent)
     : Client(io_task_runner, parent),
-      task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
-      local_worker_(std::make_unique<common::FileWorker>(io_task_runner))
+      local_worker_(std::make_unique<common::FileWorker>())
 {
     LOG(LS_INFO) << "Ctor";
+
+    qRegisterMetaType<base::local_shared_ptr<common::FileTask>>();
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::~ClientFileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
-
-    task_consumer_proxy_->dettach();
-    task_producer_proxy_->dettach();
 
     remover_.reset();
     transfer_.reset();
@@ -56,11 +50,15 @@ void ClientFileTransfer::onSessionStarted()
 {
     LOG(LS_INFO) << "File transfer session started";
 
-    local_task_factory_ = std::make_unique<common::FileTaskFactory>(
-        task_producer_proxy_, common::FileTask::Target::LOCAL);
+    local_task_factory_ = std::make_unique<common::FileTaskFactory>(common::FileTask::Target::LOCAL);
 
-    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(
-        task_producer_proxy_, common::FileTask::Target::REMOTE);
+    connect(local_task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+            this, &ClientFileTransfer::onTaskDone);
+
+    remote_task_factory_ = std::make_unique<common::FileTaskFactory>(common::FileTask::Target::REMOTE);
+
+    connect(remote_task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
+            this, &ClientFileTransfer::onTaskDone);
 
     emit sig_started();
 }
@@ -105,7 +103,7 @@ void ClientFileTransfer::onSessionMessageWritten(uint8_t /* channel_id */, size_
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
+void ClientFileTransfer::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
     const proto::FileReply& reply = task->reply();
@@ -133,11 +131,11 @@ void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
+void ClientFileTransfer::onTask(base::local_shared_ptr<common::FileTask> task)
 {
     if (task->target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_->doTask(std::move(task));
+        local_worker_->doRequest(std::move(task));
     }
     else
     {
@@ -155,19 +153,19 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onDriveListRequest(common::FileTask::Target target)
 {
-    task_consumer_proxy_->doTask(taskFactory(target)->driveList());
+    onTask(taskFactory(target)->driveList());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onFileListRequest(common::FileTask::Target target, const std::string& path)
 {
-    task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
+    onTask(taskFactory(target)->fileList(path));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path)
 {
-    task_consumer_proxy_->doTask(taskFactory(target)->createDirectory(path));
+    onTask(taskFactory(target)->createDirectory(path));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,7 +173,7 @@ void ClientFileTransfer::onRenameRequest(common::FileTask::Target target,
                                          const std::string& old_path,
                                          const std::string& new_path)
 {
-    task_consumer_proxy_->doTask(taskFactory(target)->rename(old_path, new_path));
+    onTask(taskFactory(target)->rename(old_path, new_path));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -184,13 +182,13 @@ void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
     DCHECK(!remover_);
     remover_.reset(remover);
 
+    connect(remover_.get(), &FileRemover::sig_doTask, this, &ClientFileTransfer::onTask);
     connect(remover_.get(), &FileRemover::sig_finished, this, [this]()
     {
         remover_.release()->deleteLater();
     });
 
-    remover_->moveToThread(base::GuiApplication::ioThread());
-    remover_->start(task_consumer_proxy_);
+    remover_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,13 +197,13 @@ void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
     DCHECK(!transfer_);
     transfer_.reset(transfer);
 
+    connect(transfer_.get(), &FileTransfer::sig_doTask, this, &ClientFileTransfer::onTask);
     connect(transfer_.get(), &FileTransfer::sig_finished, this, [this]()
     {
         transfer_.release()->deleteLater();
     });
 
-    transfer_->moveToThread(base::GuiApplication::ioThread());
-    transfer_->start(task_consumer_proxy_);
+    transfer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

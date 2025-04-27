@@ -21,45 +21,44 @@
 #include "base/logging.h"
 #include "client/file_remove_queue_builder.h"
 #include "common/file_task_factory.h"
-#include "common/file_task_consumer_proxy.h"
-#include "common/file_task_producer_proxy.h"
 
 namespace client {
+
+namespace {
+
+auto g_actionType = qRegisterMetaType<client::FileRemover::Action>();
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 FileRemover::FileRemover(common::FileTask::Target target, const TaskList& items, QObject* parent)
     : QObject(parent),
-      task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
+      task_factory_(new common::FileTaskFactory(target, this)),
       tasks_(items)
 {
     LOG(LS_INFO) << "Ctor";
 
-    DCHECK(task_consumer_proxy_);
-
-    task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
+    connect(task_factory_, &common::FileTaskFactory::sig_taskDone, this, &FileRemover::onTaskDone);
 }
 
 //--------------------------------------------------------------------------------------------------
 FileRemover::~FileRemover()
 {
     LOG(LS_INFO) << "Dtor";
-    task_producer_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemover::start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy)
+void FileRemover::start()
 {
     LOG(LS_INFO) << "Start file remover";
-
-    task_consumer_proxy_ = std::move(task_consumer_proxy);
 
     // Asynchronously start UI.
     emit sig_started();
 
-    queue_builder_ = std::make_unique<FileRemoveQueueBuilder>(
-        task_consumer_proxy_, task_factory_->target());
+    queue_builder_ = new FileRemoveQueueBuilder(task_factory_->target(), this);
 
-    connect(queue_builder_.get(), &FileRemoveQueueBuilder::sig_finished,
+    connect(queue_builder_, &FileRemoveQueueBuilder::sig_doTask, this, &FileRemover::sig_doTask);
+    connect(queue_builder_, &FileRemoveQueueBuilder::sig_finished,
             this, [this](proto::FileError error_code)
     {
         if (error_code == proto::FILE_ERROR_SUCCESS)
@@ -74,7 +73,7 @@ void FileRemover::start(std::shared_ptr<common::FileTaskConsumerProxy> task_cons
             emit sig_errorOccurred(std::string(), error_code, ACTION_ABORT);
         }
 
-        queue_builder_.release()->deleteLater();
+        queue_builder_->deleteLater();
     });
 
     // Start building a list of objects for deletion.
@@ -86,7 +85,7 @@ void FileRemover::stop()
 {
     LOG(LS_INFO) << "File remover stop";
 
-    queue_builder_.reset();
+    delete queue_builder_;
     tasks_.clear();
 
     onFinished(FROM_HERE);
@@ -117,7 +116,7 @@ void FileRemover::setAction(Action action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
+void FileRemover::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
     const proto::FileReply& reply = task->reply();
@@ -188,7 +187,7 @@ void FileRemover::doCurrentTask()
     emit sig_progressChanged(path, static_cast<int>(percentage));
 
     // Send a request to delete the next item.
-    task_consumer_proxy_->doTask(task_factory_->remove(path));
+    emit sig_doTask(task_factory_->remove(path));
 }
 
 //--------------------------------------------------------------------------------------------------

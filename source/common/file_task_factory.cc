@@ -24,12 +24,10 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileTaskFactory::FileTaskFactory(
-    std::shared_ptr<FileTaskProducerProxy> producer_proxy, FileTask::Target target)
-    : producer_proxy_(std::move(producer_proxy)),
+FileTaskFactory::FileTaskFactory(FileTask::Target target, QObject* parent)
+    : QObject(parent),
       target_(target)
 {
-    DCHECK(producer_proxy_);
     DCHECK(target_ == FileTask::Target::LOCAL || target_ == FileTask::Target::REMOTE);
 }
 
@@ -37,7 +35,7 @@ FileTaskFactory::FileTaskFactory(
 FileTaskFactory::~FileTaskFactory() = default;
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::driveList()
+base::local_shared_ptr<FileTask> FileTaskFactory::driveList()
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_drive_list_request()->set_dummy(1);
@@ -45,7 +43,7 @@ std::shared_ptr<FileTask> FileTaskFactory::driveList()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::fileList(const std::string& path)
+base::local_shared_ptr<FileTask> FileTaskFactory::fileList(const std::string& path)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_file_list_request()->set_path(path);
@@ -53,7 +51,7 @@ std::shared_ptr<FileTask> FileTaskFactory::fileList(const std::string& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::createDirectory(const std::string& path)
+base::local_shared_ptr<FileTask> FileTaskFactory::createDirectory(const std::string& path)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_create_directory_request()->set_path(path);
@@ -61,7 +59,7 @@ std::shared_ptr<FileTask> FileTaskFactory::createDirectory(const std::string& pa
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::rename(
+base::local_shared_ptr<FileTask> FileTaskFactory::rename(
     const std::string& old_name, const std::string& new_name)
 {
     auto request = std::make_unique<proto::FileRequest>();
@@ -74,7 +72,7 @@ std::shared_ptr<FileTask> FileTaskFactory::rename(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::remove(const std::string& path)
+base::local_shared_ptr<FileTask> FileTaskFactory::remove(const std::string& path)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_remove_request()->set_path(path);
@@ -82,7 +80,7 @@ std::shared_ptr<FileTask> FileTaskFactory::remove(const std::string& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::download(const std::string& file_path)
+base::local_shared_ptr<FileTask> FileTaskFactory::download(const std::string& file_path)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_download_request()->set_path(file_path);
@@ -90,7 +88,7 @@ std::shared_ptr<FileTask> FileTaskFactory::download(const std::string& file_path
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::upload(const std::string& file_path, bool overwrite)
+base::local_shared_ptr<FileTask> FileTaskFactory::upload(const std::string& file_path, bool overwrite)
 {
     auto request = std::make_unique<proto::FileRequest>();
 
@@ -102,7 +100,7 @@ std::shared_ptr<FileTask> FileTaskFactory::upload(const std::string& file_path, 
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::packetRequest(uint32_t flags)
+base::local_shared_ptr<FileTask> FileTaskFactory::packetRequest(uint32_t flags)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_packet_request()->set_flags(flags);
@@ -110,7 +108,7 @@ std::shared_ptr<FileTask> FileTaskFactory::packetRequest(uint32_t flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::packet(const proto::FilePacket& packet)
+base::local_shared_ptr<FileTask> FileTaskFactory::packet(const proto::FilePacket& packet)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_packet()->CopyFrom(packet);
@@ -118,7 +116,7 @@ std::shared_ptr<FileTask> FileTaskFactory::packet(const proto::FilePacket& packe
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::packet(std::unique_ptr<proto::FilePacket> packet)
+base::local_shared_ptr<FileTask> FileTaskFactory::packet(std::unique_ptr<proto::FilePacket> packet)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->set_allocated_packet(packet.release());
@@ -126,9 +124,9 @@ std::shared_ptr<FileTask> FileTaskFactory::packet(std::unique_ptr<proto::FilePac
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<FileTask> FileTaskFactory::makeTask(std::unique_ptr<proto::FileRequest> request)
+base::local_shared_ptr<FileTask> FileTaskFactory::makeTask(std::unique_ptr<proto::FileRequest> request)
 {
-    return std::make_shared<FileTask>(producer_proxy_, std::move(request), target_);
+    return base::make_local_shared<FileTask>(this, std::move(request), target_);
 }
 
 } // namespace common

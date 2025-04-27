@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/file_worker_impl.h"
+#include "common/file_worker.h"
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
@@ -34,19 +34,27 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileWorkerImpl::FileWorkerImpl()
+FileWorker::FileWorker()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-FileWorkerImpl::~FileWorkerImpl()
+FileWorker::~FileWorker()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doRequest(const proto::FileRequest& request, proto::FileReply* reply)
+void FileWorker::doRequest(base::local_shared_ptr<FileTask> task)
+{
+    std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
+    doRequest(task->request(), reply.get());
+    task->setReply(std::move(reply));
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileWorker::doRequest(const proto::FileRequest& request, proto::FileReply* reply)
 {
 #if defined(OS_WIN)
     // We send a notification to the system that it is used to prevent the screen saver, going into
@@ -97,7 +105,7 @@ void FileWorkerImpl::doRequest(const proto::FileRequest& request, proto::FileRep
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
+void FileWorker::doDriveListRequest(proto::FileReply* reply)
 {
     proto::DriveList* drive_list = reply->mutable_drive_list();
 
@@ -172,8 +180,7 @@ void FileWorkerImpl::doDriveListRequest(proto::FileReply* reply)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doFileListRequest(
-    const proto::FileListRequest& request, proto::FileReply* reply)
+void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto::FileReply* reply)
 {
     std::filesystem::path path = base::filePathFromUtf8(request.path());
 
@@ -212,7 +219,7 @@ void FileWorkerImpl::doFileListRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doCreateDirectoryRequest(
+void FileWorker::doCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request, proto::FileReply* reply)
 {
     std::filesystem::path directory_path = base::filePathFromUtf8(request.path());
@@ -234,8 +241,7 @@ void FileWorkerImpl::doCreateDirectoryRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doRenameRequest(
-    const proto::RenameRequest& request, proto::FileReply* reply)
+void FileWorker::doRenameRequest(const proto::RenameRequest& request, proto::FileReply* reply)
 {
     std::filesystem::path old_name = base::filePathFromUtf8(request.old_name());
     std::filesystem::path new_name = base::filePathFromUtf8(request.new_name());
@@ -283,8 +289,7 @@ void FileWorkerImpl::doRenameRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doRemoveRequest(
-    const proto::RemoveRequest& request, proto::FileReply* reply)
+void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::FileReply* reply)
 {
     std::filesystem::path path = base::filePathFromUtf8(request.path());
 
@@ -316,8 +321,7 @@ void FileWorkerImpl::doRemoveRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doDownloadRequest(
-    const proto::DownloadRequest& request, proto::FileReply* reply)
+void FileWorker::doDownloadRequest(const proto::DownloadRequest& request, proto::FileReply* reply)
 {
     packetizer_ = FilePacketizer::create(base::filePathFromUtf8(request.path()));
     if (!packetizer_)
@@ -327,8 +331,7 @@ void FileWorkerImpl::doDownloadRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doUploadRequest(
-    const proto::UploadRequest& request, proto::FileReply* reply)
+void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::FileReply* reply)
 {
     std::filesystem::path file_path = base::filePathFromUtf8(request.path());
 
@@ -357,8 +360,7 @@ void FileWorkerImpl::doUploadRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doPacketRequest(
-    const proto::FilePacketRequest& request, proto::FileReply* reply)
+void FileWorker::doPacketRequest(const proto::FilePacketRequest& request, proto::FileReply* reply)
 {
     if (!packetizer_)
     {
@@ -386,7 +388,7 @@ void FileWorkerImpl::doPacketRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorkerImpl::doPacket(const proto::FilePacket& packet, proto::FileReply* reply)
+void FileWorker::doPacket(const proto::FilePacket& packet, proto::FileReply* reply)
 {
     if (!depacketizer_)
     {

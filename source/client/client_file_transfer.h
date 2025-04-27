@@ -22,16 +22,11 @@
 #include "client/client.h"
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "common/file_task.h"
-#include "common/file_task_consumer.h"
-#include "common/file_task_producer.h"
+#include "common/file_task_factory.h"
 
 #include <queue>
 
 namespace common {
-class FileTaskConsumerProxy;
-class FileTaskProducerProxy;
-class FileTaskFactory;
 class FileWorker;
 } // namespace common
 
@@ -41,10 +36,7 @@ class FileReply;
 
 namespace client {
 
-class ClientFileTransfer final
-    : public Client,
-      public common::FileTaskConsumer,
-      public common::FileTaskProducer
+class ClientFileTransfer final : public Client
 {
     Q_OBJECT
 
@@ -52,10 +44,8 @@ public:
     explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner, QObject* parent = nullptr);
     ~ClientFileTransfer() final;
 
-    // FileTaskConsumer implementation.
-    void doTask(std::shared_ptr<common::FileTask> task) final;
-
 public slots:
+    void onTask(base::local_shared_ptr<common::FileTask> task);
     void onDriveListRequest(common::FileTask::Target target);
     void onFileListRequest(common::FileTask::Target target, const std::string& path);
     void onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path);
@@ -83,21 +73,18 @@ protected:
     void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
 
-    // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
+private slots:
+    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
 
 private:
     void doNextRemoteTask();
 
     common::FileTaskFactory* taskFactory(common::FileTask::Target target);
 
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
-    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
-
     std::unique_ptr<common::FileTaskFactory> local_task_factory_;
     std::unique_ptr<common::FileTaskFactory> remote_task_factory_;
 
-    std::queue<std::shared_ptr<common::FileTask>> remote_task_queue_;
+    std::queue<base::local_shared_ptr<common::FileTask>> remote_task_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
 
     std::unique_ptr<FileRemover> remover_;

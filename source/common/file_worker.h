@@ -16,23 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_FILE_WORKER_IMPL_H
-#define COMMON_FILE_WORKER_IMPL_H
+#ifndef COMMON_FILE_WORKER_H
+#define COMMON_FILE_WORKER_H
 
 #include "base/macros_magic.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
+#include "common/file_task.h"
 
 #include <memory>
 
 namespace common {
 
-class FileWorkerImpl
+class FileWorker
 {
 public:
-    FileWorkerImpl();
-    ~FileWorkerImpl();
+    FileWorker();
+    ~FileWorker();
 
+    void doRequest(base::local_shared_ptr<common::FileTask> task);
     void doRequest(const proto::FileRequest& request, proto::FileReply* reply);
 
 private:
@@ -49,7 +51,7 @@ private:
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileWorkerImpl);
+    DISALLOW_COPY_AND_ASSIGN(FileWorker);
 };
 
 } // namespace common

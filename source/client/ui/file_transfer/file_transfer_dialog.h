@@ -46,10 +46,11 @@ public slots:
     void setCurrentItem(const std::string& source_path, const std::string& target_path);
     void setCurrentProgress(int total, int current);
     void setCurrentSpeed(int64_t speed);
-    void errorOccurred(const FileTransfer::Error& error);
+    void errorOccurred(const client::FileTransfer::Error& error);
 
 signals:
-    void sig_action(FileTransfer::Error::Type error_type, FileTransfer::Error::Action action);
+    void sig_action(client::FileTransfer::Error::Type error_type,
+                    client::FileTransfer::Error::Action action);
     void sig_stop();
 
 protected:

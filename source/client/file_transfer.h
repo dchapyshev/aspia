@@ -20,28 +20,20 @@
 #define CLIENT_FILE_TRANSFER_H
 
 #include "base/location.h"
-#include "common/file_task.h"
-#include "common/file_task_producer.h"
+#include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
 #include <deque>
 #include <map>
 
+#include <QPointer>
 #include <QTimer>
-
-namespace common {
-class FileTaskConsumerProxy;
-class FileTaskProducerProxy;
-class FileTaskFactory;
-} // namespace common
 
 namespace client {
 
 class FileTransferQueueBuilder;
 
-class FileTransfer final
-    : public QObject,
-      public common::FileTaskProducer
+class FileTransfer final : public QObject
 {
     Q_OBJECT
 
@@ -57,6 +49,7 @@ public:
     public:
         enum class Type
         {
+            UNKNOWN,
             QUEUE,
             CREATE_DIRECTORY,
             CREATE_FILE,
@@ -76,6 +69,11 @@ public:
             ACTION_REPLACE = 8,
             ACTION_REPLACE_ALL = 16
         };
+
+        Error() : type_(Type::UNKNOWN), code_(proto::FILE_ERROR_UNKNOWN)
+        {
+            // Nothing
+        }
 
         Error(Type type, proto::FileError code, const std::string& path)
             : type_(type),
@@ -165,10 +163,11 @@ public:
                  QObject* parent = nullptr);
     ~FileTransfer() final;
 
-    void start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy);
+    void start();
     void stop();
 
-    void setAction(Error::Type error_type, Error::Action action);
+    void setAction(client::FileTransfer::Error::Type error_type,
+                   client::FileTransfer::Error::Action action);
 
 signals:
     void sig_started();
@@ -176,11 +175,11 @@ signals:
     void sig_progressChanged(int total, int current);
     void sig_currentItemChanged(const std::string& source_path, const std::string& target_path);
     void sig_currentSpeedChanged(int64_t speed);
-    void sig_errorOccurred(const FileTransfer::Error& error);
+    void sig_errorOccurred(const client::FileTransfer::Error& error);
+    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
 
-protected:
-    // common::FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
+private slots:
+    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
 
 private:
     Task& frontTask();
@@ -198,16 +197,14 @@ private:
     const std::string target_path_;
     const std::vector<Item> items_;
 
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
-    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
-    std::unique_ptr<common::FileTaskFactory> task_factory_source_;
-    std::unique_ptr<common::FileTaskFactory> task_factory_target_;
+    QPointer<common::FileTaskFactory> task_factory_source_;
+    QPointer<common::FileTaskFactory> task_factory_target_;
 
-    QTimer cancel_timer_;
+    QPointer<QTimer> cancel_timer_ = nullptr;
 
     // The map contains available actions for the error and the current action.
     std::map<Error::Type, Error::Action> actions_;
-    std::unique_ptr<FileTransferQueueBuilder> queue_builder_;
+    QPointer<FileTransferQueueBuilder> queue_builder_;
     TaskList tasks_;
 
     int64_t total_size_ = 0;
@@ -219,7 +216,7 @@ private:
 
     bool is_canceled_ = false;
 
-    QTimer speed_update_timer_;
+    QPointer<QTimer> speed_update_timer_;
     TimePoint begin_time_;
     int64_t bytes_per_time_ = 0;
     int64_t speed_ = 0;
@@ -228,5 +225,9 @@ private:
 };
 
 } // namespace client
+
+Q_DECLARE_METATYPE(client::FileTransfer::Error::Action)
+Q_DECLARE_METATYPE(client::FileTransfer::Error::Type)
+Q_DECLARE_METATYPE(client::FileTransfer::Error)
 
 #endif // CLIENT_FILE_TRANSFER_H

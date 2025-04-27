@@ -20,8 +20,11 @@
 #define COMMON_FILE_TASK_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 
 #include <QMetaType>
+#include <QPointer>
+
 #include <memory>
 
 namespace proto {
@@ -32,9 +35,8 @@ class FileReply;
 namespace common {
 
 class FileTaskFactory;
-class FileTaskProducerProxy;
 
-class FileTask final : public std::enable_shared_from_this<FileTask>
+class FileTask final : public base::enable_shared_from_this<FileTask>
 {
 public:
     enum class Target
@@ -43,7 +45,7 @@ public:
         REMOTE // Remote task.
     };
 
-    FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
+    FileTask(QPointer<FileTaskFactory> factory,
              std::unique_ptr<proto::FileRequest> request,
              Target target);
     virtual ~FileTask();
@@ -63,7 +65,7 @@ public:
     void setReply(std::unique_ptr<proto::FileReply> reply);
 
 private:
-    std::shared_ptr<FileTaskProducerProxy> producer_proxy_;
+    QPointer<FileTaskFactory> factory_;
     const Target target_;
 
     std::unique_ptr<proto::FileRequest> request_;
@@ -74,6 +76,7 @@ private:
 
 } // namespace common
 
+Q_DECLARE_METATYPE(base::local_shared_ptr<common::FileTask>)
 Q_DECLARE_METATYPE(common::FileTask::Target)
 
 #endif // COMMON_FILE_TASK_H

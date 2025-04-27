@@ -20,28 +20,20 @@
 #define CLIENT_FILE_REMOVER_H
 
 #include "base/location.h"
-#include "common/file_task.h"
-#include "common/file_task_producer.h"
+#include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
 #include <deque>
 #include <string>
 
 #include <QObject>
-
-namespace common {
-class FileTaskFactory;
-class FileTaskConsumerProxy;
-class FileTaskProducerProxy;
-} // namespace common
+#include <QPointer>
 
 namespace client {
 
 class FileRemoveQueueBuilder;
 
-class FileRemover final
-    : public QObject,
-      public common::FileTaskProducer
+class FileRemover final : public QObject
 {
     Q_OBJECT
 
@@ -82,7 +74,7 @@ public:
     ~FileRemover() final;
 
 public slots:
-    void start(std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy);
+    void start();
     void stop();
     void setAction(Action action);
 
@@ -93,21 +85,18 @@ signals:
     void sig_errorOccurred(const std::string& path,
                            proto::FileError error_code,
                            uint32_t available_actions);
+    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
 
-protected:
-    // common::FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
+private slots:
+    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
 
 private:
     void doNextTask();
     void doCurrentTask();
     void onFinished(const base::Location& location);
 
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
-    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
-    std::unique_ptr<common::FileTaskFactory> task_factory_;
-
-    std::unique_ptr<FileRemoveQueueBuilder> queue_builder_;
+    QPointer<common::FileTaskFactory> task_factory_;
+    QPointer<FileRemoveQueueBuilder> queue_builder_;
 
     TaskList tasks_;
 
@@ -118,5 +107,7 @@ private:
 };
 
 } // namespace client
+
+Q_DECLARE_METATYPE(client::FileRemover::Action)
 
 #endif // CLIENT_FILE_REMOVER_H

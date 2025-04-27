@@ -292,6 +292,7 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
     ui->remote_panel->setEnabled(false);
 
     FileRemover* remover = new FileRemover(target, items);
+    remover->moveToThread(base::GuiApplication::ioThread());
 
     connect(remover, &FileRemover::sig_started,
             remove_dialog_, &FileRemoveDialog::start,
@@ -383,6 +384,7 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
 
     FileTransfer* transfer =
         new FileTransfer(type, source_path.toStdString(), target_path.toStdString(), items);
+    transfer->moveToThread(base::GuiApplication::ioThread());
 
     connect(transfer, &FileTransfer::sig_started,
             transfer_dialog_, &FileTransferDialog::start,

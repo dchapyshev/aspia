@@ -34,18 +34,10 @@ list(APPEND SOURCE_COMMON
     file_platform_util.h
     file_task.cc
     file_task.h
-    file_task_consumer.h
-    file_task_consumer_proxy.cc
-    file_task_consumer_proxy.h
     file_task_factory.cc
     file_task_factory.h
-    file_task_producer.h
-    file_task_producer_proxy.cc
-    file_task_producer_proxy.h
     file_worker.cc
     file_worker.h
-    file_worker_impl.cc
-    file_worker_impl.h
     http_file_downloader.cc
     http_file_downloader.h
     keycode_converter.cc

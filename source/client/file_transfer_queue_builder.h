@@ -24,17 +24,12 @@
 namespace client {
 
 // The class prepares the task queue to perform the downloading/uploading.
-class FileTransferQueueBuilder final
-    : public QObject,
-      public common::FileTaskProducer
+class FileTransferQueueBuilder final : public QObject
 {
     Q_OBJECT
 
 public:
-    FileTransferQueueBuilder(
-        std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
-        common::FileTask::Target target,
-        QObject* parent = nullptr);
+    explicit FileTransferQueueBuilder(common::FileTask::Target target, QObject* parent = nullptr);
     ~FileTransferQueueBuilder() final;
 
     // Starts building of the task queue.
@@ -47,10 +42,10 @@ public:
 
 signals:
     void sig_finished(proto::FileError error_code);
+    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
 
-protected:
-    // FileTaskProducer implementation.
-    void onTaskDone(std::shared_ptr<common::FileTask> task) final;
+private slots:
+    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
 
 private:
     void addPendingTask(const std::string& source_dir,
@@ -61,10 +56,7 @@ private:
     void doPendingTasks();
     void onAborted(proto::FileError error_code);
 
-    std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy_;
-    std::shared_ptr<common::FileTaskProducerProxy> task_producer_proxy_;
     std::unique_ptr<common::FileTaskFactory> task_factory_;
-
     FileTransfer::TaskList pending_tasks_;
     FileTransfer::TaskList tasks_;
     int64_t total_size_ = 0;
