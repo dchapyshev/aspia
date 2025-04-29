@@ -90,7 +90,7 @@ private:
     void checkForUpdates();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<QTimer> update_timer_;
+    QPointer<QTimer> update_timer_;
 
     QPointer<QFileSystemWatcher> settings_watcher_;
     SystemSettings settings_;

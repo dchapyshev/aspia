@@ -85,8 +85,8 @@ void Server::start()
         LOG(LS_ERROR) << "Configuration file does not exist";
     }
 
-    update_timer_ = std::make_unique<QTimer>();
-    connect(update_timer_.get(), &QTimer::timeout, this, &Server::checkForUpdates);
+    update_timer_ = new QTimer(this);
+    connect(update_timer_, &QTimer::timeout, this, &Server::checkForUpdates);
     update_timer_->start(std::chrono::minutes(5));
 
     settings_watcher_ = new QFileSystemWatcher(this);
@@ -580,6 +580,9 @@ void Server::disconnectFromRouter()
 void Server::checkForUpdates()
 {
 #if defined(OS_WIN)
+    if (!settings_.isAutoUpdateEnabled())
+        return;
+
     int64_t last_timepoint = settings_.lastUpdateCheck();
     int64_t current_timepoint = std::time(nullptr);
 
