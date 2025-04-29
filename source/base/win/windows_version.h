@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/version.h"
 
-#include <string>
+#include <QString>
 
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;
@@ -134,12 +134,12 @@ public:
     VersionNumber versionNumber() const { return version_number_; }
     VersionType versionType() const { return version_type_; }
     ServicePack servicePack() const { return service_pack_; }
-    std::u16string servicePackString() const { return service_pack_str_; }
+    QString servicePackString() const { return service_pack_str_; }
     WindowsArchitecture architecture() const { return architecture_; }
     int processors() const { return processors_; }
     size_t allocationGranularity() const { return allocation_granularity_; }
     WOW64Status wow64Status() const { return wow64_status_; }
-    std::u16string processorModelName();
+    QString processorModelName();
 
 private:
     static OSInfo** instanceStorage();
@@ -156,12 +156,12 @@ private:
 
     // A string, such as "Service Pack 3", that indicates the latest Service Pack installed on the
     // system. If no Service Pack has been installed, the string is empty.
-    std::u16string service_pack_str_;
+    QString service_pack_str_;
     WindowsArchitecture architecture_;
     int processors_;
     size_t allocation_granularity_;
     WOW64Status wow64_status_;
-    std::u16string processor_model_name_;
+    QString processor_model_name_;
 
     DISALLOW_COPY_AND_ASSIGN(OSInfo);
 };

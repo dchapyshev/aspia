@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/system_error.h"
-#include "base/strings/unicode.h"
 
 #include <Windows.h>
 #include <lm.h>
@@ -64,19 +63,19 @@ bool UserGroupEnumerator::isAtEnd() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserGroupEnumerator::name() const
+QString UserGroupEnumerator::name() const
 {
     if (!group_info_[current_entry_].lgrpi1_name)
-        return std::string();
-    return utf8FromWide(group_info_[current_entry_].lgrpi1_name);
+        return QString();
+    return QString::fromWCharArray(group_info_[current_entry_].lgrpi1_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserGroupEnumerator::comment() const
+QString UserGroupEnumerator::comment() const
 {
     if (!group_info_[current_entry_].lgrpi1_comment)
-        return std::string();
-    return utf8FromWide(group_info_[current_entry_].lgrpi1_comment);
+        return QString();
+    return QString::fromWCharArray(group_info_[current_entry_].lgrpi1_comment);
 }
 
 } // base::win

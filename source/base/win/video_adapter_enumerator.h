@@ -28,10 +28,10 @@ class VideoAdapterEnumarator : public DeviceEnumerator
 public:
     VideoAdapterEnumarator();
 
-    std::string adapterString() const;
-    std::string biosString() const;
-    std::string chipString() const;
-    std::string dacType() const;
+    QString adapterString() const;
+    QString biosString() const;
+    QString chipString() const;
+    QString dacType() const;
     uint64_t memorySize() const;
 
 private:

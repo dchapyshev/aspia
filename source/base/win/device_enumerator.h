@@ -21,7 +21,7 @@
 
 #include "base/win/scoped_device_info.h"
 
-#include <string>
+#include <QString>
 
 namespace base::win {
 
@@ -34,21 +34,21 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    std::string friendlyName() const;
-    std::string description() const;
-    std::string driverVersion() const;
-    std::string driverDate() const;
-    std::string driverVendor() const;
-    std::string deviceID() const;
+    QString friendlyName() const;
+    QString description() const;
+    QString driverVersion() const;
+    QString driverDate() const;
+    QString driverVendor() const;
+    QString deviceID() const;
 
 protected:
     DeviceEnumerator(const GUID* class_guid, DWORD flags);
 
-    std::wstring driverRegistryString(const wchar_t* key_name) const;
+    QString driverRegistryString(const wchar_t* key_name) const;
     DWORD driverRegistryDW(const wchar_t* key_name) const;
 
 private:
-    std::wstring driverKeyPath() const;
+    QString driverKeyPath() const;
 
     ScopedDeviceInfo device_info_;
     mutable SP_DEVINFO_DATA device_info_data_;

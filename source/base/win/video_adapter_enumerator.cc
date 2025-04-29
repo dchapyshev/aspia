@@ -18,8 +18,6 @@
 
 #include "base/win/video_adapter_enumerator.h"
 
-#include "base/strings/unicode.h"
-
 #include <devguid.h>
 
 namespace base::win {
@@ -32,27 +30,27 @@ VideoAdapterEnumarator::VideoAdapterEnumarator()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string VideoAdapterEnumarator::adapterString() const
+QString VideoAdapterEnumarator::adapterString() const
 {
-    return utf8FromWide(driverRegistryString(L"HardwareInformation.AdapterString"));
+    return driverRegistryString(L"HardwareInformation.AdapterString");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string VideoAdapterEnumarator::biosString() const
+QString VideoAdapterEnumarator::biosString() const
 {
-    return utf8FromWide(driverRegistryString(L"HardwareInformation.BiosString"));
+    return driverRegistryString(L"HardwareInformation.BiosString");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string VideoAdapterEnumarator::chipString() const
+QString VideoAdapterEnumarator::chipString() const
 {
-    return utf8FromWide(driverRegistryString(L"HardwareInformation.ChipType"));
+    return driverRegistryString(L"HardwareInformation.ChipType");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string VideoAdapterEnumarator::dacType() const
+QString VideoAdapterEnumarator::dacType() const
 {
-    return utf8FromWide(driverRegistryString(L"HardwareInformation.DacType"));
+    return driverRegistryString(L"HardwareInformation.DacType");
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,14 +20,13 @@
 
 #include "base/logging.h"
 #include "base/system_error.h"
-#include "base/strings/unicode.h"
 #include "base/win/registry.h"
 
 namespace base::win {
 
 namespace {
 
-constexpr wchar_t kClassRootPath[] = L"SYSTEM\\CurrentControlSet\\Control\\Class\\";
+constexpr char kClassRootPath[] = "SYSTEM\\CurrentControlSet\\Control\\Class\\";
 constexpr wchar_t kDriverVersionKey[] = L"DriverVersion";
 constexpr wchar_t kDriverDateKey[] = L"DriverDate";
 constexpr wchar_t kProviderNameKey[] = L"ProviderName";
@@ -83,7 +82,7 @@ void DeviceEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::friendlyName() const
+QString DeviceEnumerator::friendlyName() const
 {
     wchar_t friendly_name[MAX_PATH] = { 0 };
 
@@ -96,14 +95,14 @@ std::string DeviceEnumerator::friendlyName() const
                                            nullptr))
     {
         PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
-        return std::string();
+        return QString();
     }
 
-    return utf8FromWide(friendly_name);
+    return QString::fromWCharArray(friendly_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::description() const
+QString DeviceEnumerator::description() const
 {
     wchar_t description[MAX_PATH] = { 0 };
 
@@ -116,14 +115,14 @@ std::string DeviceEnumerator::description() const
                                            nullptr))
     {
         PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
-        return std::string();
+        return QString();
     }
 
-    return utf8FromWide(description);
+    return QString::fromWCharArray(description);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring DeviceEnumerator::driverKeyPath() const
+QString DeviceEnumerator::driverKeyPath() const
 {
     wchar_t driver[MAX_PATH] = { 0 };
 
@@ -136,25 +135,24 @@ std::wstring DeviceEnumerator::driverKeyPath() const
                                            nullptr))
     {
         PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
-        return std::wstring();
+        return QString();
     }
 
-    std::wstring driver_key_path(kClassRootPath);
-    driver_key_path.append(driver);
-
-    return driver_key_path;
+    return kClassRootPath + QString::fromWCharArray(driver);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
+QString DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
 {
-    std::wstring driver_key_path = driverKeyPath();
+    QString driver_key_path = driverKeyPath();
 
-    RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
+    RegistryKey driver_key(HKEY_LOCAL_MACHINE,
+                           reinterpret_cast<const wchar_t*>(driver_key_path.utf16()),
+                           KEY_READ);
     if (!driver_key.isValid())
     {
         PLOG(LS_ERROR) << "Unable to open registry key";
-        return std::wstring();
+        return QString();
     }
 
     wchar_t value[MAX_PATH] = { 0 };
@@ -165,18 +163,20 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     {
         LOG(LS_ERROR) << "Unable to read key value: "
                       << SystemError(static_cast<DWORD>(status)).toString();
-        return std::wstring();
+        return QString();
     }
 
-    return value;
+    return QString::fromWCharArray(value);
 }
 
 //--------------------------------------------------------------------------------------------------
 DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
 {
-    std::wstring driver_key_path = driverKeyPath();
+    QString driver_key_path = driverKeyPath();
 
-    RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
+    RegistryKey driver_key(HKEY_LOCAL_MACHINE,
+                           reinterpret_cast<const wchar_t*>(driver_key_path.utf16()),
+                           KEY_READ);
     if (!driver_key.isValid())
     {
         DPLOG(LS_ERROR) << "Unable to open registry key";
@@ -197,25 +197,25 @@ DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::driverVersion() const
+QString DeviceEnumerator::driverVersion() const
 {
-    return utf8FromWide(driverRegistryString(kDriverVersionKey));
+    return driverRegistryString(kDriverVersionKey);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::driverDate() const
+QString DeviceEnumerator::driverDate() const
 {
-    return utf8FromWide(driverRegistryString(kDriverDateKey));
+    return driverRegistryString(kDriverDateKey);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::driverVendor() const
+QString DeviceEnumerator::driverVendor() const
 {
-    return utf8FromWide(driverRegistryString(kProviderNameKey));
+    return driverRegistryString(kProviderNameKey);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DeviceEnumerator::deviceID() const
+QString DeviceEnumerator::deviceID() const
 {
     wchar_t device_id[MAX_PATH] = { 0 };
 
@@ -226,10 +226,10 @@ std::string DeviceEnumerator::deviceID() const
                                      nullptr))
     {
         PLOG(LS_ERROR) << "SetupDiGetDeviceInstanceIdW failed";
-        return std::string();
+        return QString();
     }
 
-    return utf8FromWide(device_id);
+    return QString::fromWCharArray(device_id);
 }
 
 } // namespace base::win

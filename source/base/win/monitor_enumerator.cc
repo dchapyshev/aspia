@@ -19,11 +19,7 @@
 #include "base/win/monitor_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/registry.h"
-
-#include <fmt/format.h>
-#include <fmt/xchar.h>
 
 #include <devguid.h>
 
@@ -39,12 +35,10 @@ MonitorEnumerator::MonitorEnumerator()
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<Edid> MonitorEnumerator::edid() const
 {
-    std::wstring key_path =
-        fmt::format(L"SYSTEM\\CurrentControlSet\\Enum\\{}\\Device Parameters",
-                     wideFromUtf8(deviceID()));
+    QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters").arg(deviceID());
 
     RegistryKey key;
-    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
+    LONG status = key.open(HKEY_LOCAL_MACHINE, reinterpret_cast<const wchar_t*>(key_path.utf16()), KEY_READ);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to open registry key: "

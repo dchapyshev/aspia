@@ -21,8 +21,10 @@
 
 #include "base/macros_magic.h"
 
+#include <QString>
+#include <QVector>
+
 #include <cstdint>
-#include <string>
 #include <vector>
 
 struct _USER_INFO_3;
@@ -38,11 +40,11 @@ public:
     void advance();
     bool isAtEnd() const;
 
-    std::string name() const;
-    std::string fullName() const;
-    std::string comment() const;
-    std::string homeDir() const;
-    std::vector<std::pair<std::string, std::string>> groups() const;
+    QString name() const;
+    QString fullName() const;
+    QString comment() const;
+    QString homeDir() const;
+    QVector<std::pair<QString, QString>> groups() const;
     bool isDisabled() const;
     bool isPasswordCantChange() const;
     bool isPasswordExpired() const;

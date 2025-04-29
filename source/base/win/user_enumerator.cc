@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/system_error.h"
-#include "base/strings/unicode.h"
 #include "base/win/user_group_enumerator.h"
 
 #include <Windows.h>
@@ -66,39 +65,39 @@ bool UserEnumerator::isAtEnd() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserEnumerator::name() const
+QString UserEnumerator::name() const
 {
     if (!user_info_[current_entry_].usri3_name)
-        return std::string();
-    return utf8FromWide(user_info_[current_entry_].usri3_name);
+        return QString();
+    return QString::fromWCharArray(user_info_[current_entry_].usri3_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserEnumerator::fullName() const
+QString UserEnumerator::fullName() const
 {
     if (!user_info_[current_entry_].usri3_full_name)
-        return std::string();
-    return utf8FromWide(user_info_[current_entry_].usri3_full_name);
+        return QString();
+    return QString::fromWCharArray(user_info_[current_entry_].usri3_full_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserEnumerator::comment() const
+QString UserEnumerator::comment() const
 {
     if (!user_info_[current_entry_].usri3_comment)
-        return std::string();
-    return utf8FromWide(user_info_[current_entry_].usri3_comment);
+        return QString();
+    return QString::fromWCharArray(user_info_[current_entry_].usri3_comment);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string UserEnumerator::homeDir() const
+QString UserEnumerator::homeDir() const
 {
     if (!user_info_[current_entry_].usri3_home_dir)
-        return std::string();
-    return utf8FromWide(user_info_[current_entry_].usri3_home_dir);
+        return QString();
+    return QString::fromWCharArray(user_info_[current_entry_].usri3_home_dir);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
+QVector<std::pair<QString, QString>> UserEnumerator::groups() const
 {
     const wchar_t* user_name = user_info_[current_entry_].usri3_name;
     if (!user_name)
@@ -122,14 +121,14 @@ std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
         return {};
     }
 
-    std::vector<std::pair<std::string, std::string>> result;
+    QVector<std::pair<QString, QString>> result;
 
     for (DWORD i = 0; i < total_entries; ++i)
     {
         if (group_info[i].lgrui0_name)
         {
-            std::string name = utf8FromWide(group_info[i].lgrui0_name);
-            std::string comment;
+            QString name = QString::fromWCharArray(group_info[i].lgrui0_name);
+            QString comment;
 
             for (UserGroupEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
             {
@@ -140,7 +139,7 @@ std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
                 }
             }
 
-            result.emplace_back(name, comment);
+            result.append(std::make_pair(name, comment));
         }
     }
 

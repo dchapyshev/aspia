@@ -21,9 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
-#include <string>
-#include <vector>
+#include <QString>
 
 struct _LOCALGROUP_INFO_1;
 
@@ -38,8 +36,8 @@ public:
     void advance();
     bool isAtEnd() const;
 
-    std::string name() const;
-    std::string comment() const;
+    QString name() const;
+    QString comment() const;
 
 private:
     _LOCALGROUP_INFO_1* group_info_ = nullptr;

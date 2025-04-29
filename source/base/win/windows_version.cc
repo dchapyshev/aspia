@@ -19,7 +19,6 @@
 #include "base/win/windows_version.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/file_version_info.h"
 #include "base/win/registry.h"
 
@@ -188,7 +187,7 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
         version_number_.major, version_number_.minor, version_number_.build);
     service_pack_.major = version_info.wServicePackMajor;
     service_pack_.minor = version_info.wServicePackMinor;
-    service_pack_str_ = base::utf16FromWide(version_info.szCSDVersion);
+    service_pack_str_ = QString::fromWCharArray(version_info.szCSDVersion);
 
     switch (system_info.wProcessorArchitecture)
     {
@@ -348,9 +347,9 @@ base::Version OSInfo::kernel32BaseVersion() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string OSInfo::processorModelName()
+QString OSInfo::processorModelName()
 {
-    if (processor_model_name_.empty())
+    if (processor_model_name_.isEmpty())
     {
         const wchar_t kProcessorNameString[] =
             L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0";
@@ -360,7 +359,7 @@ std::u16string OSInfo::processorModelName()
         std::wstring value;
         key.readValue(L"ProcessorNameString", &value);
 
-        processor_model_name_ = utf16FromWide(value);
+        processor_model_name_ = QString::fromStdWString(value);
     }
 
     return processor_model_name_;

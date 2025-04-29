@@ -59,12 +59,12 @@ void fillDevices(proto::system_info::SystemInfo* system_info)
         proto::system_info::WindowsDevices::Device* device =
             system_info->mutable_windows_devices()->add_device();
 
-        device->set_friendly_name(enumerator.friendlyName());
-        device->set_description(enumerator.description());
-        device->set_driver_version(enumerator.driverVersion());
-        device->set_driver_date(enumerator.driverDate());
-        device->set_driver_vendor(enumerator.driverVendor());
-        device->set_device_id(enumerator.deviceID());
+        device->set_friendly_name(enumerator.friendlyName().toStdString());
+        device->set_description(enumerator.description().toStdString());
+        device->set_driver_version(enumerator.driverVersion().toStdString());
+        device->set_driver_date(enumerator.driverDate().toStdString());
+        device->set_driver_vendor(enumerator.driverVendor().toStdString());
+        device->set_device_id(enumerator.deviceID().toStdString());
     }
 }
 
@@ -358,11 +358,11 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         proto::system_info::Monitors::Monitor* monitor =
             system_info->mutable_monitors()->add_monitor();
 
-        std::string system_name = enumerator.friendlyName();
-        if (system_name.empty())
+        QString system_name = enumerator.friendlyName();
+        if (system_name.isEmpty())
             system_name = enumerator.description();
 
-        monitor->set_system_name(system_name);
+        monitor->set_system_name(system_name.toStdString());
         monitor->set_monitor_name(edid->monitorName());
         monitor->set_manufacturer_name(edid->manufacturerName());
         monitor->set_monitor_id(edid->monitorId());
@@ -565,14 +565,14 @@ void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
         proto::system_info::VideoAdapters::Adapter* adapter =
             system_info->mutable_video_adapters()->add_adapter();
 
-        adapter->set_description(enumerator.description());
-        adapter->set_adapter_string(enumerator.adapterString());
-        adapter->set_bios_string(enumerator.biosString());
-        adapter->set_chip_type(enumerator.chipString());
-        adapter->set_dac_type(enumerator.dacType());
-        adapter->set_driver_date(enumerator.driverDate());
-        adapter->set_driver_version(enumerator.driverVersion());
-        adapter->set_driver_provider(enumerator.driverVendor());
+        adapter->set_description(enumerator.description().toStdString());
+        adapter->set_adapter_string(enumerator.adapterString().toStdString());
+        adapter->set_bios_string(enumerator.biosString().toStdString());
+        adapter->set_chip_type(enumerator.chipString().toStdString());
+        adapter->set_dac_type(enumerator.dacType().toStdString());
+        adapter->set_driver_date(enumerator.driverDate().toStdString());
+        adapter->set_driver_version(enumerator.driverVersion().toStdString());
+        adapter->set_driver_provider(enumerator.driverVendor().toStdString());
         adapter->set_memory_size(enumerator.memorySize());
     }
 }
@@ -918,18 +918,18 @@ void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
         proto::system_info::LocalUsers::LocalUser* local_user =
             system_info->mutable_local_users()->add_local_user();
 
-        local_user->set_name(enumerator.name());
-        local_user->set_full_name(enumerator.fullName());
-        local_user->set_comment(enumerator.comment());
-        local_user->set_home_dir(enumerator.homeDir());
+        local_user->set_name(enumerator.name().toStdString());
+        local_user->set_full_name(enumerator.fullName().toStdString());
+        local_user->set_comment(enumerator.comment().toStdString());
+        local_user->set_home_dir(enumerator.homeDir().toStdString());
 
         for (const auto& group : enumerator.groups())
         {
             proto::system_info::LocalUsers::LocalUser::LocalUserGroup* group_item =
                 local_user->add_group();
 
-            group_item->set_name(group.first);
-            group_item->set_comment(group.second);
+            group_item->set_name(group.first.toStdString());
+            group_item->set_comment(group.second.toStdString());
         }
 
         local_user->set_disabled(enumerator.isDisabled());
@@ -951,8 +951,8 @@ void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
         proto::system_info::LocalUserGroups::LocalUserGroup* local_group =
             system_info->mutable_local_user_groups()->add_local_user_group();
 
-        local_group->set_name(enumerator.name());
-        local_group->set_comment(enumerator.comment());
+        local_group->set_name(enumerator.name().toStdString());
+        local_group->set_comment(enumerator.comment().toStdString());
     }
 }
 
