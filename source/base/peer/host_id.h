@@ -19,6 +19,7 @@
 #ifndef BASE_PEER_HOST_ID_H
 #define BASE_PEER_HOST_ID_H
 
+#include <QMetaType>
 #include <QString>
 
 namespace base {
@@ -39,5 +40,7 @@ HostId stringToHostId(const QString& str);
 QString hostIdToString(HostId host_id);
 
 } // namespace base
+
+Q_DECLARE_METATYPE(base::HostId)
 
 #endif // BASE_PEER_HOST_ID_H
