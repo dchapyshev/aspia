@@ -27,10 +27,6 @@
 
 #include <queue>
 
-namespace proto {
-class FileReply;
-} // namespace proto
-
 namespace client {
 
 class ClientFileTransfer final : public Client

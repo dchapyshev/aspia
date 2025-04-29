@@ -42,7 +42,6 @@
 #include "client/ui/sys_info/sys_info_widget_video_adapters.h"
 #include "client/ui/sys_info/tree_to_html.h"
 #include "common/system_info_constants.h"
-#include "qt_base/application.h"
 #include "ui_qt_system_info_window.h"
 
 #include <QClipboard>
@@ -52,9 +51,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
-
-Q_DECLARE_METATYPE(proto::system_info::SystemInfoRequest)
-Q_DECLARE_METATYPE(proto::system_info::SystemInfo)
 
 namespace client {
 

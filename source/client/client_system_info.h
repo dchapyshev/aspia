@@ -20,7 +20,7 @@
 #define CLIENT_CLIENT_SYSTEM_INFO_H
 
 #include "client/client.h"
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 namespace client {
 
