@@ -67,11 +67,12 @@ ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
                                            QObject* parent)
     : ClientSession(session_type, std::move(channel), parent),
+      overflow_detection_timer_(new QTimer(this)),
       stat_counter_(id())
 {
     LOG(LS_INFO) << "Ctor";
 
-    connect(&overflow_detection_timer_, &QTimer::timeout,
+    connect(overflow_detection_timer_, &QTimer::timeout,
             this, &ClientSessionDesktop::onOverflowDetectionTimer);
 }
 
@@ -100,7 +101,7 @@ void ClientSessionDesktop::onStarted()
                      << desktop_session_proxy_->screenCaptureFps()
                      << ", max FPS: " << max_fps_ << ")";
 
-        overflow_detection_timer_.start(std::chrono::milliseconds(1000));
+        overflow_detection_timer_->start(std::chrono::milliseconds(1000));
     }
     else
     {

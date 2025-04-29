@@ -27,6 +27,7 @@
 
 #include <vector>
 
+#include <QPointer>
 #include <QTimer>
 
 namespace host {
@@ -60,7 +61,7 @@ protected:
 private:
     void onError(const base::Location& location);
 
-    std::unique_ptr<QTimer> attach_timer_;
+    QPointer<QTimer> attach_timer_;
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;
     std::vector<QByteArray> pending_messages_;

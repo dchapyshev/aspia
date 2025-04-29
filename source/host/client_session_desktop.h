@@ -31,6 +31,7 @@
 #include "host/task_manager.h"
 #endif // defined(OS_WIN)
 
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -111,7 +112,7 @@ private:
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 
-    QTimer overflow_detection_timer_;
+    QPointer<QTimer> overflow_detection_timer_;
     size_t write_overflow_count_ = 0;
     size_t write_normal_count_ = 1;
     size_t last_pending_count_ = 0;

@@ -182,12 +182,12 @@ std::filesystem::path agentFilePath()
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
                                                      QObject* parent)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel), parent),
-      attach_timer_(std::make_unique<QTimer>())
+      attach_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
     attach_timer_->setSingleShot(true);
-    connect(attach_timer_.get(), &QTimer::timeout, this, [this]()
+    connect(attach_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_ERROR) << "Timeout at the start of the session process";
         onError(FROM_HERE);
