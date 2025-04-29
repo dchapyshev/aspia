@@ -40,8 +40,8 @@ public:
 
 private:
     std::chrono::milliseconds update_interval_;
-    std::chrono::time_point<std::chrono::high_resolution_clock> begin_time_;
-    std::chrono::time_point<std::chrono::high_resolution_clock> end_time_;
+    std::chrono::time_point<std::chrono::steady_clock> begin_time_;
+    std::chrono::time_point<std::chrono::steady_clock> end_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };

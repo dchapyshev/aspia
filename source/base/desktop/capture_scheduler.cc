@@ -42,13 +42,13 @@ std::chrono::milliseconds CaptureScheduler::updateInterval() const
 //--------------------------------------------------------------------------------------------------
 void CaptureScheduler::beginCapture()
 {
-    begin_time_ = std::chrono::high_resolution_clock::now();
+    begin_time_ = std::chrono::steady_clock::now();
 }
 
 //--------------------------------------------------------------------------------------------------
 void CaptureScheduler::endCapture()
 {
-    end_time_ = std::chrono::high_resolution_clock::now();
+    end_time_ = std::chrono::steady_clock::now();
 }
 
 //--------------------------------------------------------------------------------------------------
