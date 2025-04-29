@@ -26,6 +26,7 @@
 #include <asio/io_context.hpp>
 
 #include <array>
+#include <queue>
 
 #include <QObject>
 
@@ -49,12 +50,14 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewConnection(std::unique_ptr<IpcChannel> channel) = 0;
+        virtual void onNewConnection() = 0;
         virtual void onErrorOccurred() = 0;
     };
 
     bool start(const QString& channel_id, Delegate* delegate);
     void stop();
+    bool hasPendingConnections();
+    IpcChannel* nextPendingConnection();
 
 private:
     bool runListener(size_t index);
@@ -74,6 +77,7 @@ private:
 
     class Listener;
     std::array<base::local_shared_ptr<Listener>, kListenersCount> listeners_;
+    std::queue<std::unique_ptr<IpcChannel>> pending_;
 
     THREAD_CHECKER(thread_checker_);
 

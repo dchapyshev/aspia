@@ -342,14 +342,28 @@ void ClientSessionFileTransfer::onWritten(uint8_t /* channel_id */, size_t /* pe
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
+void ClientSessionFileTransfer::onNewConnection()
 {
     LOG(LS_INFO) << "IPC channel for file transfer session is connected";
+
+    if (!ipc_server_)
+    {
+        LOG(LS_ERROR) << "No IPC server instance!";
+        return;
+    }
+
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(LS_ERROR) << "No pending connections in IPC server";
+        return;
+    }
+
+    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
 
     ipc_server_.release()->deleteLater();
     attach_timer_->stop();
 
-    ipc_channel_ = std::move(channel);
+    ipc_channel_.reset(channel);
     ipc_channel_->setListener(this);
     ipc_channel_->resume();
 

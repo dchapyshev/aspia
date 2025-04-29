@@ -71,11 +71,9 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
-                                     Delegate* delegate,
-                                     QObject* parent)
+DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, Delegate* delegate, QObject* parent)
     : DesktopSession(parent),
-      channel_(std::move(channel)),
+      channel_(channel),
       delegate_(delegate)
 {
     DCHECK(channel_);

@@ -61,7 +61,7 @@ public:
 
 protected:
     // base::IpcServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onNewConnection() final;
     void onErrorOccurred() final;
 
     // UserSession::Delegate implementation.
@@ -73,7 +73,7 @@ protected:
 private:
     void startSessionProcess(const base::Location& location, base::SessionId session_id);
     void addUserSession(const base::Location& location, base::SessionId session_id,
-                        std::unique_ptr<base::IpcChannel> channel);
+                        base::IpcChannel* channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;

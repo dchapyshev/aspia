@@ -196,20 +196,29 @@ base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
+void DesktopSessionManager::onNewConnection()
 {
     LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 
-    session_attach_timer_.stop();
-
-    if (server_)
+    if (!server_)
     {
-        LOG(LS_INFO) << "IPC server already exists. Stop it (sid=" << session_id_ << ")";
-        server_->stop();
-        server_.release()->deleteLater();
+        LOG(LS_ERROR) << "No IPC server instance!";
+        return;
     }
 
-    session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
+    if (!server_->hasPendingConnections())
+    {
+        LOG(LS_ERROR) << "No pending connections in IPC server";
+        return;
+    }
+
+    base::IpcChannel* channel = server_->nextPendingConnection();
+
+    session_attach_timer_.stop();
+    server_->stop();
+    server_.release()->deleteLater();
+
+    session_ = std::make_unique<DesktopSessionIpc>(channel, this);
 
     setState(FROM_HERE, State::ATTACHED);
     session_proxy_->attachAndStart(session_.get());

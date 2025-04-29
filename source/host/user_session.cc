@@ -63,13 +63,13 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 //--------------------------------------------------------------------------------------------------
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
-                         std::unique_ptr<base::IpcChannel> channel,
+                         base::IpcChannel* channel,
                          Delegate* delegate,
                          QObject* parent)
     : QObject(parent),
       task_runner_(task_runner),
       scoped_task_runner_(std::make_unique<base::ScopedTaskRunner>(task_runner)),
-      channel_(std::move(channel)),
+      channel_(channel),
       session_id_(session_id),
       delegate_(delegate)
 {
@@ -214,9 +214,9 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
+void UserSession::restart(base::IpcChannel* channel)
 {
-    channel_ = std::move(channel);
+    channel_.reset(channel);
 
     LOG(LS_INFO) << "User session restarted "
                  << (channel_ ? "WITH" : "WITHOUT")

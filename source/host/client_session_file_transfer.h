@@ -50,7 +50,7 @@ protected:
     void onWritten(uint8_t channel_id, size_t pending) final;
 
     // base::IpcServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onNewConnection() final;
     void onErrorOccurred() final;
 
     // base::IpcChannel::Listener implemenation.

@@ -75,7 +75,7 @@ public:
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                 base::SessionId session_id,
-                std::unique_ptr<base::IpcChannel> channel,
+                base::IpcChannel* channel,
                 Delegate* delegate,
                 QObject* parent = nullptr);
     ~UserSession() final;
@@ -84,7 +84,7 @@ public:
     static const char* stateToString(State state);
 
     void start(const proto::internal::RouterState& router_state);
-    void restart(std::unique_ptr<base::IpcChannel> channel);
+    void restart(base::IpcChannel* channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }

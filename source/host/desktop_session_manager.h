@@ -57,7 +57,7 @@ public:
 
 protected:
     // ipc::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::IpcChannel> channel) final;
+    void onNewConnection() final;
     void onErrorOccurred() final;
 
     // DesktopSession::Delegate implementation.

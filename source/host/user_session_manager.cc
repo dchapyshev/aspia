@@ -22,13 +22,10 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/scoped_task_runner.h"
-#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/files/base_paths.h"
-#include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
-#include "base/strings/string_split.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
 #include "host/user_session.h"
@@ -497,9 +494,23 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
+void UserSessionManager::onNewConnection()
 {
     LOG(LS_INFO) << "New IPC connection";
+
+    if (!ipc_server_)
+    {
+        LOG(LS_ERROR) << "No IPC server instance!";
+        return;
+    }
+
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(LS_ERROR) << "No pending connections in IPC server";
+        return;
+    }
+
+    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
 
 #if defined(OS_WIN)
     base::SessionId session_id = channel->peerSessionId();
@@ -509,9 +520,9 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
         return;
     }
 
-    addUserSession(FROM_HERE, session_id, std::move(channel));
+    addUserSession(FROM_HERE, session_id, channel);
 #else
-    addUserSession(FROM_HERE, 0, std::move(channel));
+    addUserSession(FROM_HERE, 0, channel);
 #endif
 }
 
@@ -738,7 +749,7 @@ void UserSessionManager::startSessionProcess(
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::addUserSession(const base::Location& location, base::SessionId session_id,
-                                        std::unique_ptr<base::IpcChannel> channel)
+                                        base::IpcChannel* channel)
 {
     LOG(LS_INFO) << "Add user session: " << session_id << " (from=" << location.toString() << ")";
 
@@ -747,13 +758,13 @@ void UserSessionManager::addUserSession(const base::Location& location, base::Se
         if (session->sessionId() == session_id)
         {
             LOG(LS_INFO) << "Restart user session: " << session_id;
-            session->restart(std::move(channel));
+            session->restart(channel);
             return;
         }
     }
 
     std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
-        task_runner_, session_id, std::move(channel), this);
+        task_runner_, session_id, channel, this);
 
     LOG(LS_INFO) << "Start user session: " << session_id;
     sessions_.emplace_back(std::move(user_session));

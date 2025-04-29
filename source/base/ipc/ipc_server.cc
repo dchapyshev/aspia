@@ -358,6 +358,24 @@ void IpcServer::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool IpcServer::hasPendingConnections()
+{
+    return !pending_.empty();
+}
+
+//--------------------------------------------------------------------------------------------------
+IpcChannel* IpcServer::nextPendingConnection()
+{
+    if (pending_.empty())
+        return nullptr;
+
+    IpcChannel* channel = pending_.front().release();
+    pending_.pop();
+
+    return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::runListener(size_t index)
 {
     base::local_shared_ptr<Listener> listener = listeners_[index];
@@ -375,9 +393,11 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
 {
     LOG(LS_INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
 
+    pending_.emplace(std::move(channel));
+
     if (delegate_)
     {
-        delegate_->onNewConnection(std::move(channel));
+        delegate_->onNewConnection();
         runListener(index);
     }
     else
