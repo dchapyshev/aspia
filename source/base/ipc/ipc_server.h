@@ -45,26 +45,19 @@ public:
 
     static QString createUniqueId();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection() = 0;
-        virtual void onErrorOccurred() = 0;
-    };
-
-    bool start(const QString& channel_id, Delegate* delegate);
+    bool start(const QString& channel_id);
     void stop();
     bool hasPendingConnections();
     IpcChannel* nextPendingConnection();
+
+signals:
+    void sig_newConnection();
+    void sig_errorOccurred();
 
 private:
     bool runListener(size_t index);
     void onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel);
     void onErrorOccurred(const Location& location);
-
-    Delegate* delegate_ = nullptr;
 
     asio::io_context& io_context_;
     QString channel_name_;

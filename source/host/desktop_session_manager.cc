@@ -133,7 +133,13 @@ void DesktopSessionManager::attachSession(
     LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
     server_ = std::make_unique<base::IpcServer>();
-    if (!server_->start(channel_id, this))
+
+    connect(server_.get(), &base::IpcServer::sig_newConnection,
+            this, &DesktopSessionManager::onNewIpcConnection);
+    connect(server_.get(), &base::IpcServer::sig_errorOccurred,
+            this, &DesktopSessionManager::onErrorOccurred);
+
+    if (!server_->start(channel_id))
     {
         LOG(LS_ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
 
@@ -196,7 +202,7 @@ base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onNewConnection()
+void DesktopSessionManager::onNewIpcConnection()
 {
     LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 

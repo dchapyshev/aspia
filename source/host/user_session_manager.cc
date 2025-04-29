@@ -143,8 +143,10 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
+                                       QObject* parent)
+    : QObject(parent),
+      task_runner_(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
@@ -177,6 +179,9 @@ bool UserSessionManager::start(Delegate* delegate)
 
     ipc_server_ = std::make_unique<base::IpcServer>();
 
+    connect(ipc_server_.get(), &base::IpcServer::sig_newConnection,
+            this, &UserSessionManager::onIpcNewConnection);
+
     QString ipc_channel_for_ui = base::IpcServer::createUniqueId();
     HostIpcStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
@@ -184,7 +189,7 @@ bool UserSessionManager::start(Delegate* delegate)
     LOG(LS_INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
-    if (!ipc_server_->start(ipc_channel_for_ui, this))
+    if (!ipc_server_->start(ipc_channel_for_ui))
     {
         LOG(LS_ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
         return false;
@@ -494,45 +499,6 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onNewConnection()
-{
-    LOG(LS_INFO) << "New IPC connection";
-
-    if (!ipc_server_)
-    {
-        LOG(LS_ERROR) << "No IPC server instance!";
-        return;
-    }
-
-    if (!ipc_server_->hasPendingConnections())
-    {
-        LOG(LS_ERROR) << "No pending connections in IPC server";
-        return;
-    }
-
-    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
-
-#if defined(OS_WIN)
-    base::SessionId session_id = channel->peerSessionId();
-    if (session_id == base::kInvalidSessionId)
-    {
-        LOG(LS_ERROR) << "Invalid session id";
-        return;
-    }
-
-    addUserSession(FROM_HERE, session_id, channel);
-#else
-    addUserSession(FROM_HERE, 0, channel);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionManager::onErrorOccurred()
-{
-    // Ignore.
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionHostIdRequest(const QString& session_name)
 {
     LOG(LS_INFO) << "User session host id request for session name: " << session_name;
@@ -582,6 +548,39 @@ void UserSessionManager::onUserSessionFinished()
             }
         }
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionManager::onIpcNewConnection()
+{
+    LOG(LS_INFO) << "New IPC connection";
+
+    if (!ipc_server_)
+    {
+        LOG(LS_ERROR) << "No IPC server instance!";
+        return;
+    }
+
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(LS_ERROR) << "No pending connections in IPC server";
+        return;
+    }
+
+    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
+
+#if defined(OS_WIN)
+    base::SessionId session_id = channel->peerSessionId();
+    if (session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_ERROR) << "Invalid session id";
+        return;
+    }
+
+    addUserSession(FROM_HERE, session_id, channel);
+#else
+    addUserSession(FROM_HERE, 0, channel);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

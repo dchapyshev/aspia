@@ -25,6 +25,8 @@
 #include "base/win/session_status.h"
 #include "host/user_session.h"
 
+#include <QObject>
+
 namespace base {
 class ScopedTaskRunner;
 } // namespace base
@@ -34,11 +36,13 @@ namespace host {
 class UserSession;
 
 class UserSessionManager final
-    : public base::IpcServer::Delegate,
+    : public QObject,
       public UserSession::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner);
+    explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
     ~UserSessionManager() final;
 
     class Delegate
@@ -60,15 +64,14 @@ public:
     std::unique_ptr<base::UserList> userList() const;
 
 protected:
-    // base::IpcServer::Delegate implementation.
-    void onNewConnection() final;
-    void onErrorOccurred() final;
-
     // UserSession::Delegate implementation.
     void onUserSessionHostIdRequest(const QString& session_name) final;
     void onUserSessionCredentialsChanged() final;
     void onUserSessionDettached() final;
     void onUserSessionFinished() final;
+
+private slots:
+    void onIpcNewConnection();
 
 private:
     void startSessionProcess(const base::Location& location, base::SessionId session_id);

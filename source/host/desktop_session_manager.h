@@ -41,7 +41,6 @@ class DesktopSessionProxy;
 
 class DesktopSessionManager final
     : public QObject,
-      public base::IpcServer::Delegate,
       public DesktopSession::Delegate
 {
     Q_OBJECT
@@ -55,11 +54,11 @@ public:
 
     base::local_shared_ptr<DesktopSessionProxy> sessionProxy() const;
 
-protected:
-    // ipc::Server::Delegate implementation.
-    void onNewConnection() final;
-    void onErrorOccurred() final;
+public slots:
+    void onNewIpcConnection();
+    void onErrorOccurred();
 
+protected:
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() final;
     void onDesktopSessionStopped() final;

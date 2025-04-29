@@ -34,7 +34,6 @@ namespace host {
 
 class ClientSessionFileTransfer final
     : public ClientSession,
-      public base::IpcServer::Delegate,
       public base::IpcChannel::Listener
 {
     Q_OBJECT
@@ -49,14 +48,14 @@ protected:
     void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onWritten(uint8_t channel_id, size_t pending) final;
 
-    // base::IpcServer::Delegate implementation.
-    void onNewConnection() final;
-    void onErrorOccurred() final;
-
     // base::IpcChannel::Listener implemenation.
     void onIpcDisconnected() final;
     void onIpcMessageReceived(const QByteArray& buffer) final;
     void onIpcMessageWritten() final;
+
+private slots:
+    void onIpcNewConnection();
+    void onIpcErrorOccurred();
 
 private:
     void onError(const base::Location& location);

@@ -208,7 +208,13 @@ void ClientSessionFileTransfer::onStarted()
     LOG(LS_INFO) << "Starting ipc channel for file transfer";
 
     ipc_server_ = std::make_unique<base::IpcServer>();
-    if (!ipc_server_->start(channel_id, this))
+
+    connect(ipc_server_.get(), &base::IpcServer::sig_newConnection,
+            this, &ClientSessionFileTransfer::onIpcNewConnection);
+    connect(ipc_server_.get(), &base::IpcServer::sig_errorOccurred,
+            this, &ClientSessionFileTransfer::onIpcErrorOccurred);
+
+    if (!ipc_server_->start(channel_id))
     {
         LOG(LS_ERROR) << "Failed to start IPC server (channel_id: " << channel_id << ")";
         onError(FROM_HERE);
@@ -342,7 +348,25 @@ void ClientSessionFileTransfer::onWritten(uint8_t /* channel_id */, size_t /* pe
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onNewConnection()
+void ClientSessionFileTransfer::onIpcDisconnected()
+{
+    onError(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
+{
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, QByteArray(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionFileTransfer::onIpcMessageWritten()
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionFileTransfer::onIpcNewConnection()
 {
     LOG(LS_INFO) << "IPC channel for file transfer session is connected";
 
@@ -374,27 +398,9 @@ void ClientSessionFileTransfer::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onErrorOccurred()
+void ClientSessionFileTransfer::onIpcErrorOccurred()
 {
     onError(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcDisconnected()
-{
-    onError(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
-{
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, QByteArray(buffer));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageWritten()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

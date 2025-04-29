@@ -313,10 +313,9 @@ QString IpcServer::createUniqueId()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::start(const QString& channel_id, Delegate* delegate)
+bool IpcServer::start(const QString& channel_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-    DCHECK(delegate);
 
     LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
 
@@ -327,7 +326,6 @@ bool IpcServer::start(const QString& channel_id, Delegate* delegate)
     }
 
     channel_name_ = IpcChannel::channelName(channel_id);
-    delegate_ = delegate;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -345,7 +343,6 @@ bool IpcServer::start(const QString& channel_id, Delegate* delegate)
 void IpcServer::stop()
 {
     LOG(LS_INFO) << "Stopping IPC server (channel_name=" << channel_name_ << ")";
-    delegate_ = nullptr;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -394,16 +391,7 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
     LOG(LS_INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
 
     pending_.emplace(std::move(channel));
-
-    if (delegate_)
-    {
-        delegate_->onNewConnection();
-        runListener(index);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No delegate (channel_name=" << channel_name_ << ")";
-    }
+    emit sig_newConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -411,15 +399,7 @@ void IpcServer::onErrorOccurred(const Location& location)
 {
     LOG(LS_ERROR) << "Error in IPC server (channel_name=" << channel_name_
                   << " from=" << location.toString() << ")";
-
-    if (delegate_)
-    {
-        delegate_->onErrorOccurred();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No delegate (channel_name=" << channel_name_ << ")";
-    }
+    emit sig_errorOccurred();
 }
 
 } // namespace base
