@@ -67,20 +67,15 @@ RelayPeer::RelayPeer(QObject* parent)
 RelayPeer::~RelayPeer()
 {
     LOG(LS_INFO) << "Dtor";
-    delegate_ = nullptr;
-
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
+void RelayPeer::start(const proto::ConnectionOffer& offer)
 {
-    delegate_ = delegate;
     connection_offer_ = offer;
-
-    DCHECK(delegate_);
 
     const proto::RelayCredentials& credentials = connection_offer_.relay();
 
@@ -124,6 +119,18 @@ void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
             onConnected();
         });
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+TcpChannel* RelayPeer::takeChannel()
+{
+    return pending_channel_.release();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RelayPeer::hasChannel() const
+{
+    return pending_channel_ != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,18 +189,12 @@ void RelayPeer::onConnected()
             }
 
             is_finished_ = true;
-            if (delegate_)
-            {
-                std::unique_ptr<TcpChannel> channel =
-                    std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_), nullptr));
-                channel->setHostId(connection_offer_.host_data().host_id());
 
-                delegate_->onRelayConnectionReady(std::move(channel));
-            }
-            else
-            {
-                LOG(LS_ERROR) << "Invalid delegate";
-            }
+            pending_channel_ =
+                std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_), nullptr));
+            pending_channel_->setHostId(connection_offer_.host_data().host_id());
+
+            emit sig_connectionReady();
         });
     });
 }
@@ -204,16 +205,8 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
     LOG(LS_ERROR) << "Failed to connect to relay server: "
                   << utf16FromLocal8Bit(error_code.message()) << " ("
                   << location.toString() << ")";
-
     is_finished_ = true;
-    if (delegate_)
-    {
-        delegate_->onRelayConnectionError();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-    }
+    emit sig_connectionError();
 }
 
 //--------------------------------------------------------------------------------------------------

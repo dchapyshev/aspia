@@ -33,9 +33,7 @@ class ClientAuthenticator;
 
 namespace client {
 
-class RouterController final
-    : public QObject,
-      public base::RelayPeer::Delegate
+class RouterController final : public QObject
 {
     Q_OBJECT
 
@@ -89,11 +87,8 @@ private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-
-protected:
-    // base::RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel) final;
-    void onRelayConnectionError() final;
+    void onRelayConnectionReady();
+    void onRelayConnectionError();
 
 private:
     void sendConnectionRequest();
@@ -108,6 +103,8 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;
     Delegate* delegate_ = nullptr;
+
+    std::queue<std::unique_ptr<base::TcpChannel>> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

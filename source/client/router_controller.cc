@@ -231,7 +231,13 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
         else
         {
             relay_peer_ = std::make_unique<base::RelayPeer>();
-            relay_peer_->start(connection_offer, this);
+
+            connect(relay_peer_.get(), &base::RelayPeer::sig_connectionError,
+                    this, &RouterController::onRelayConnectionError);
+            connect(relay_peer_.get(), &base::RelayPeer::sig_connectionReady,
+                    this, &RouterController::onRelayConnectionReady);
+
+            relay_peer_->start(connection_offer);
         }
     }
     else if (message.has_host_status())
@@ -255,12 +261,18 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel)
+void RouterController::onRelayConnectionReady()
 {
     LOG(LS_INFO) << "Relay connection ready";
 
+    if (!relay_peer_)
+    {
+        LOG(LS_ERROR) << "No relay peer instance";
+        return;
+    }
+
     if (delegate_)
-        delegate_->onHostConnected(std::move(channel));
+        delegate_->onHostConnected(std::unique_ptr<base::TcpChannel>(relay_peer_->takeChannel()));
     else
         LOG(LS_ERROR) << "Invalid delegate";
 }

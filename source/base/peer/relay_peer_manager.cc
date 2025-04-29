@@ -42,16 +42,29 @@ RelayPeerManager::~RelayPeerManager()
 //--------------------------------------------------------------------------------------------------
 void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 {
-    pending_.emplace_back(std::make_unique<RelayPeer>());
-    pending_.back()->start(offer, this);
+    std::unique_ptr<RelayPeer> peer = std::make_unique<RelayPeer>();
+
+    connect(peer.get(), &RelayPeer::sig_connectionError,
+            this, &RelayPeerManager::onRelayConnectionError);
+    connect(peer.get(), &RelayPeer::sig_connectionReady,
+            this, &RelayPeerManager::onRelayConnectionReady);
+
+    pending_.emplace_back(std::move(peer));
+    pending_.back()->start(offer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<TcpChannel> channel)
+void RelayPeerManager::onRelayConnectionReady()
 {
     if (delegate_)
     {
-        delegate_->onNewPeerConnected(std::move(channel));
+        for (auto it = pending_.cbegin(), it_end = pending_.cend(); it != it_end; ++it)
+        {
+            if (!it->get()->hasChannel())
+                continue;
+
+            delegate_->onNewPeerConnected(std::unique_ptr<TcpChannel>(it->get()->takeChannel()));
+        }
     }
     else
     {

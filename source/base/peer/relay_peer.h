@@ -42,18 +42,16 @@ public:
     explicit RelayPeer(QObject* parent = nullptr);
     ~RelayPeer();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) = 0;
-        virtual void onRelayConnectionError() = 0;
-    };
-
-    void start(const proto::ConnectionOffer& offer, Delegate* delegate);
+    void start(const proto::ConnectionOffer& offer);
     bool isFinished() const { return is_finished_; }
     const proto::ConnectionOffer& connectionOffer() const { return connection_offer_; }
+
+    TcpChannel* takeChannel();
+    bool hasChannel() const;
+
+signals:
+    void sig_connectionReady();
+    void sig_connectionError();
 
 private:
     void onConnected();
@@ -61,7 +59,6 @@ private:
 
     static QByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
 
-    Delegate* delegate_ = nullptr;
     proto::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
@@ -71,6 +68,8 @@ private:
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     asio::ip::tcp::resolver resolver_;
+
+    std::unique_ptr<TcpChannel> pending_channel_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeer);
 };

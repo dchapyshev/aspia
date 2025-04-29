@@ -36,9 +36,7 @@ namespace base {
 class TcpChannel;
 class TaskRunner;
 
-class RelayPeerManager final
-    : public QObject,
-      public RelayPeer::Delegate
+class RelayPeerManager final : public QObject
 {
     Q_OBJECT
 
@@ -56,10 +54,9 @@ public:
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
 
-protected:
-    // RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) final;
-    void onRelayConnectionError() final;
+private slots:
+    void onRelayConnectionReady();
+    void onRelayConnectionError();
 
 private:
     void cleanup();
