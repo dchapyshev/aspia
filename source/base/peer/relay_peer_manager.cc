@@ -51,20 +51,9 @@ void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RelayPeerManager::hasPendingConnections() const
+std::queue<std::unique_ptr<TcpChannel>> RelayPeerManager::takePendingConnections()
 {
-    return !channels_.empty();
-}
-
-//--------------------------------------------------------------------------------------------------
-TcpChannel* RelayPeerManager::nextPendingConnection()
-{
-    if (channels_.empty())
-        return nullptr;
-
-    TcpChannel* channel = channels_.front().release();
-    channels_.pop();
-    return channel;
+    return std::move(channels_);
 }
 
 //--------------------------------------------------------------------------------------------------

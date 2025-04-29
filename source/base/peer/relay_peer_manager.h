@@ -45,8 +45,7 @@ public:
     ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
-    bool hasPendingConnections() const;
-    TcpChannel* nextPendingConnection();
+    std::queue<std::unique_ptr<TcpChannel>> takePendingConnections();
 
 signals:
     void sig_newPeerConnected();

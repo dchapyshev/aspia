@@ -40,7 +40,6 @@ namespace host {
 
 class Server final
     : public QObject,
-      public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
@@ -55,11 +54,6 @@ public:
     void setPowerEvent(uint32_t power_event);
 
 protected:
-    // RouterController::Delegate implementation.
-    void onRouterStateChanged(const proto::internal::RouterState& router_state) final;
-    void onHostIdAssigned(const QString& session_name, base::HostId host_id) final;
-    void onClientConnected(std::unique_ptr<base::TcpChannel> channel) final;
-
     // base::AuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
 
@@ -69,7 +63,12 @@ protected:
     void onUserListChanged() final;
 
 private slots:
-    void onNewConnection();
+    void onNewDirectConnection();
+
+    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onHostIdAssigned(const QString& session_name, base::HostId host_id);
+    void onNewRelayConnection();
+
     void onUpdateCheckedFinished(const QByteArray& result);
 
     void onFileDownloaderError(int error_code);

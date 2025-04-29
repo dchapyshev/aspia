@@ -102,7 +102,9 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    connect(server_.get(), &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+
+    connect(server_.get(), &base::TcpServer::sig_newConnection,
+            this, &Server::onNewDirectConnection);
 
     server_->start("", settings_.tcpPort());
 
@@ -160,27 +162,6 @@ void Server::setPowerEvent(uint32_t power_event)
             break;
     }
 #endif // defined(OS_WIN)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
-{
-    LOG(LS_INFO) << "Router state changed";
-    user_session_manager_->onRouterStateChanged(router_state);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onHostIdAssigned(const QString& session_name, base::HostId host_id)
-{
-    LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
-    user_session_manager_->onHostIdChanged(session_name, host_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onClientConnected(std::unique_ptr<base::TcpChannel> channel)
-{
-    LOG(LS_INFO) << "New RELAY connection";
-    startAuthentication(std::move(channel));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -262,7 +243,7 @@ void Server::onUserListChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewConnection()
+void Server::onNewDirectConnection()
 {
     LOG(LS_INFO) << "New DIRECT connection";
 
@@ -275,6 +256,38 @@ void Server::onNewConnection()
     while (server_->hasPendingConnections())
     {
         std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
+        startAuthentication(std::move(channel));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
+{
+    LOG(LS_INFO) << "Router state changed";
+    user_session_manager_->onRouterStateChanged(router_state);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onHostIdAssigned(const QString& session_name, base::HostId host_id)
+{
+    LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
+    user_session_manager_->onHostIdChanged(session_name, host_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onNewRelayConnection()
+{
+    LOG(LS_INFO) << "New RELAY connection";
+
+    if (!router_controller_)
+    {
+        LOG(LS_ERROR) << "No router controller instance";
+        return;
+    }
+
+    while (router_controller_->hasPendingConnections())
+    {
+        std::unique_ptr<base::TcpChannel> channel(router_controller_->nextPendingConnection());
         startAuthentication(std::move(channel));
     }
 }
@@ -570,7 +583,15 @@ void Server::connectToRouter()
 
     // Connect to the router.
     router_controller_ = std::make_unique<RouterController>();
-    router_controller_->start(router_info, this);
+
+    connect(router_controller_.get(), &RouterController::sig_routerStateChanged,
+            this, &Server::onRouterStateChanged);
+    connect(router_controller_.get(), &RouterController::sig_hostIdAssigned,
+            this, &Server::onHostIdAssigned);
+    connect(router_controller_.get(), &RouterController::sig_clientConnected,
+            this, &Server::onNewRelayConnection);
+
+    router_controller_->start(router_info);
 }
 
 //--------------------------------------------------------------------------------------------------

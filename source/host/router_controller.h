@@ -50,17 +50,7 @@ public:
         QByteArray public_key;
     };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onRouterStateChanged(const proto::internal::RouterState& router_state) = 0;
-        virtual void onHostIdAssigned(const QString& username, base::HostId host_id) = 0;
-        virtual void onClientConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
-    };
-
-    void start(const RouterInfo& router_info, Delegate* delegate);
+    void start(const RouterInfo& router_info);
 
     void hostIdRequest(const QString& session_name);
     void resetHostId(base::HostId host_id);
@@ -68,6 +58,14 @@ public:
     const QString& address() const { return router_info_.address; }
     uint16_t port() const { return router_info_.port; }
     const QByteArray& publicKey() const { return router_info_.public_key; }
+
+    bool hasPendingConnections() const;
+    base::TcpChannel* nextPendingConnection();
+
+signals:
+    void sig_routerStateChanged(const proto::internal::RouterState& router_state);
+    void sig_hostIdAssigned(const QString& username, base::HostId host_id);
+    void sig_clientConnected();
 
 private slots:
     void onTcpConnected();
@@ -81,8 +79,6 @@ private:
     void routerStateChanged(proto::internal::RouterState::State state);
     static const char* routerStateToString(proto::internal::RouterState::State state);
 
-    Delegate* delegate_ = nullptr;
-
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     QPointer<base::RelayPeerManager> peer_manager_;
@@ -90,6 +86,7 @@ private:
     RouterInfo router_info_;
 
     std::queue<QString> pending_id_requests_;
+    std::queue<std::unique_ptr<base::TcpChannel>> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

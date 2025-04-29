@@ -54,16 +54,9 @@ RouterController::~RouterController()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
+void RouterController::start(const RouterInfo& router_info)
 {
     router_info_ = router_info;
-    delegate_ = delegate;
-
-    if (!delegate_)
-    {
-        LOG(LS_ERROR) << "Invalid parameters";
-        return;
-    }
 
     LOG(LS_INFO) << "Starting host controller for router: "
                  << router_info_.address << ":" << router_info_.port;
@@ -121,6 +114,23 @@ void RouterController::resetHostId(base::HostId host_id)
     proto::PeerToRouter message;
     message.mutable_reset_host_id()->set_host_id(host_id);
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterController::hasPendingConnections() const
+{
+    return !channels_.empty();
+}
+
+//--------------------------------------------------------------------------------------------------
+base::TcpChannel* RouterController::nextPendingConnection()
+{
+    if (channels_.empty())
+        return nullptr;
+
+    base::TcpChannel* channel = channels_.front().release();
+    channels_.pop();
+    return channel;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,7 +265,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
         if (host_key_storage.lastHostId(session_name) != host_id)
             host_key_storage.setLastHostId(session_name, host_id);
 
-        delegate_->onHostIdAssigned(session_name, host_id);
+        emit sig_hostIdAssigned(session_name, host_id);
         pending_id_requests_.pop();
     }
     else if (in_message.has_connection_offer())
@@ -284,19 +294,8 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
 void RouterController::onNewPeerConnected()
 {
     LOG(LS_INFO) << "New peer connected";
-
-    if (delegate_)
-    {
-        while (peer_manager_->hasPendingConnections())
-        {
-            std::unique_ptr<base::TcpChannel> channel(peer_manager_->nextPendingConnection());
-            delegate_->onClientConnected(std::move(channel));
-        }
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-    }
+    channels_ = peer_manager_->takePendingConnections();
+    emit sig_clientConnected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -326,19 +325,13 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
 {
     LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
 
-    if (!delegate_)
-    {
-        LOG(LS_INFO) << "Invalid delegate";
-        return;
-    }
-
     proto::internal::RouterState router_state;
     router_state.set_state(state);
 
     router_state.set_host_name(router_info_.address.toStdString());
     router_state.set_host_port(router_info_.port);
 
-    delegate_->onRouterStateChanged(router_state);
+    emit sig_routerStateChanged(router_state);
 }
 
 //--------------------------------------------------------------------------------------------------
