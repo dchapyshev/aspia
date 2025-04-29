@@ -152,41 +152,29 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring ServiceEnumerator::nameW() const
+QString ServiceEnumerator::name() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = currentService();
 
     if (!service || !service->lpServiceName)
-        return std::wstring();
+        return QString();
 
-    return service->lpServiceName;
+    return QString::fromWCharArray(service->lpServiceName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ServiceEnumerator::name() const
-{
-    return utf8FromWide(nameW());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::wstring ServiceEnumerator::displayNameW() const
+QString ServiceEnumerator::displayName() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = currentService();
 
     if (!service || !service->lpDisplayName)
-        return std::wstring();
+        return QString();
 
-    return service->lpDisplayName;
+    return QString::fromWCharArray(service->lpDisplayName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ServiceEnumerator::displayName() const
-{
-    return utf8FromWide(displayNameW());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::wstring ServiceEnumerator::descriptionW() const
+QString ServiceEnumerator::description() const
 {
     SC_HANDLE service_handle = currentServiceHandle();
 
@@ -200,7 +188,7 @@ std::wstring ServiceEnumerator::descriptionW() const
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
-        return std::wstring();
+        return QString();
     }
 
     std::unique_ptr<uint8_t[]> result = std::make_unique<uint8_t[]>(bytes_needed);
@@ -212,20 +200,14 @@ std::wstring ServiceEnumerator::descriptionW() const
                               &bytes_needed))
     {
         PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
-        return std::wstring();
+        return QString();
     }
 
     SERVICE_DESCRIPTION* description = reinterpret_cast<SERVICE_DESCRIPTION*>(result.get());
     if (!description->lpDescription)
-        return std::wstring();
+        return QString();
 
-    return description->lpDescription;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string ServiceEnumerator::description() const
-{
-    return utf8FromWide(descriptionW());
+    return QString::fromWCharArray(description->lpDescription);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,37 +277,25 @@ ServiceEnumerator::StartupType ServiceEnumerator::startupType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring ServiceEnumerator::binaryPathW() const
+QString ServiceEnumerator::binaryPath() const
 {
     LPQUERY_SERVICE_CONFIG config = currentServiceConfig();
 
     if (!config || !config->lpBinaryPathName)
-        return std::wstring();
+        return QString();
 
-    return config->lpBinaryPathName;
+    return QString::fromWCharArray(config->lpBinaryPathName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ServiceEnumerator::binaryPath() const
-{
-    return utf8FromWide(binaryPathW());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::wstring ServiceEnumerator::startNameW() const
+QString ServiceEnumerator::startName() const
 {
     LPQUERY_SERVICE_CONFIG config = currentServiceConfig();
 
     if (!config || !config->lpServiceStartName)
-        return std::wstring();
+        return QString();
 
-    return config->lpServiceStartName;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string ServiceEnumerator::startName() const
-{
-    return utf8FromWide(startNameW());
+    return QString::fromWCharArray(config->lpServiceStartName);
 }
 
 } // namespace base::win

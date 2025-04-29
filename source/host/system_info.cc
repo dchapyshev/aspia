@@ -191,9 +191,9 @@ void fillServices(proto::system_info::SystemInfo* system_info)
         proto::system_info::Services::Service* service =
             system_info->mutable_services()->add_service();
 
-        service->set_name(enumerator.name());
-        service->set_display_name(enumerator.displayName());
-        service->set_description(enumerator.description());
+        service->set_name(enumerator.name().toStdString());
+        service->set_display_name(enumerator.displayName().toStdString());
+        service->set_description(enumerator.description().toStdString());
 
         switch (enumerator.status())
         {
@@ -257,8 +257,8 @@ void fillServices(proto::system_info::SystemInfo* system_info)
                 break;
         }
 
-        service->set_binary_path(enumerator.binaryPath());
-        service->set_start_name(enumerator.startName());
+        service->set_binary_path(enumerator.binaryPath().toStdString());
+        service->set_start_name(enumerator.startName().toStdString());
     }
 }
 
@@ -273,9 +273,9 @@ void fillDrivers(proto::system_info::SystemInfo* system_info)
     {
         proto::system_info::Drivers::Driver* driver = system_info->mutable_drivers()->add_driver();
 
-        driver->set_name(enumerator.name());
-        driver->set_display_name(enumerator.displayName());
-        driver->set_description(enumerator.description());
+        driver->set_name(enumerator.name().toStdString());
+        driver->set_display_name(enumerator.displayName().toStdString());
+        driver->set_description(enumerator.description().toStdString());
 
         switch (enumerator.status())
         {
@@ -339,7 +339,7 @@ void fillDrivers(proto::system_info::SystemInfo* system_info)
                 break;
         }
 
-        driver->set_binary_path(enumerator.binaryPath());
+        driver->set_binary_path(enumerator.binaryPath().toStdString());
     }
 }
 

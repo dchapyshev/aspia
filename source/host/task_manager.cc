@@ -223,9 +223,9 @@ void TaskManager::sendServiceList()
     {
         proto::task_manager::Service* item = service_list->add_service();
 
-        item->set_name(enumerator.name());
-        item->set_display_name(enumerator.displayName());
-        item->set_description(enumerator.description());
+        item->set_name(enumerator.name().toStdString());
+        item->set_display_name(enumerator.displayName().toStdString());
+        item->set_description(enumerator.description().toStdString());
 
         switch (enumerator.startupType())
         {

@@ -23,7 +23,8 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
+
+#include <QString>
 
 namespace base::win {
 
@@ -38,14 +39,9 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    std::wstring nameW() const;
-    std::string name() const;
-
-    std::wstring displayNameW() const;
-    std::string displayName() const;
-
-    std::wstring descriptionW() const;
-    std::string description() const;
+    QString name() const;
+    QString displayName() const;
+    QString description() const;
 
     enum class Status
     {
@@ -72,12 +68,8 @@ public:
     };
 
     StartupType startupType() const;
-
-    std::wstring binaryPathW() const;
-    std::string binaryPath() const;
-
-    std::wstring startNameW() const;
-    std::string startName() const;
+    QString binaryPath() const;
+    QString startName() const;
 
 private:
     ENUM_SERVICE_STATUS_PROCESS* currentService() const;
