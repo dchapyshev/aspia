@@ -24,7 +24,7 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
+#include <queue>
 
 #include <QObject>
 
@@ -45,11 +45,13 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewConnection(std::unique_ptr<TcpChannel> channel) = 0;
+        virtual void onNewConnection() = 0;
     };
 
     void start(const QString& listen_interface, uint16_t port, Delegate* delegate);
     void stop();
+    bool hasPendingConnections();
+    TcpChannel* nextPendingConnection();
 
     QString listenInterface() const;
     uint16_t port() const;
@@ -57,8 +59,13 @@ public:
     static bool isValidListenInterface(const QString& interface);
 
 private:
+    void onNewConnection(std::unique_ptr<TcpChannel> channel);
+
     class Impl;
     base::local_shared_ptr<Impl> impl_;
+
+    Delegate* delegate_ = nullptr;
+    std::queue<std::unique_ptr<TcpChannel>> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpServer);
 };

@@ -346,17 +346,28 @@ Session* Server::sessionById(Session::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
+void Server::onNewConnection()
 {
-    LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+    if (!server_)
+    {
+        LOG(LS_ERROR) << "No TCP server instance";
+        return;
+    }
 
-    channel->setKeepAlive(true);
-    channel->setNoDelay(true);
+    while (server_->hasPendingConnections())
+    {
+        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
 
-    if (authenticator_manager_)
-        authenticator_manager_->addNewChannel(std::move(channel));
-    else
-        LOG(LS_ERROR) << "Authenticator not available";
+        LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+
+        channel->setKeepAlive(true);
+        channel->setNoDelay(true);
+
+        if (authenticator_manager_)
+            authenticator_manager_->addNewChannel(std::move(channel));
+        else
+            LOG(LS_ERROR) << "Authenticator not available";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

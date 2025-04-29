@@ -57,7 +57,7 @@ public:
 
 protected:
     // net::TcpServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) final;
+    void onNewConnection() final;
 
     // RouterController::Delegate implementation.
     void onRouterStateChanged(const proto::internal::RouterState& router_state) final;

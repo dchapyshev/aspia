@@ -33,7 +33,7 @@ public:
     explicit Impl(asio::io_context& io_context);
     ~Impl();
 
-    void start(const QString& listen_interface, uint16_t port, Delegate* delegate);
+    void start(const QString& listen_interface, uint16_t port, TcpServer* server);
     void stop();
 
     QString listenInterface() const;
@@ -45,7 +45,7 @@ private:
 
     asio::io_context& io_context_;
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
-    Delegate* delegate_ = nullptr;
+    TcpServer* server_ = nullptr;
 
     QString listen_interface_;
     uint16_t port_ = 0;
@@ -70,13 +70,13 @@ TcpServer::Impl::~Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::start(const QString& listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::Impl::start(const QString& listen_interface, uint16_t port, TcpServer* server)
 {
-    delegate_ = delegate;
+    server_ = server;
     listen_interface_ = listen_interface;
     port_ = port;
 
-    DCHECK(delegate_);
+    DCHECK(server_);
 
     LOG(LS_INFO) << "Listen interface: "
                  << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << port;
@@ -141,7 +141,7 @@ void TcpServer::Impl::start(const QString& listen_interface, uint16_t port, Dele
 //--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::stop()
 {
-    delegate_ = nullptr;
+    server_ = nullptr;
     acceptor_.reset();
 }
 
@@ -167,7 +167,7 @@ void TcpServer::Impl::doAccept()
 //--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
 {
-    if (!delegate_)
+    if (!server_)
         return;
 
     if (error_code)
@@ -193,7 +193,7 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
             std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket), nullptr));
 
         // Connection accepted.
-        delegate_->onNewConnection(std::move(channel));
+        server_->onNewConnection(std::move(channel));
     }
 
     // Accept next connection.
@@ -218,13 +218,35 @@ TcpServer::~TcpServer()
 //--------------------------------------------------------------------------------------------------
 void TcpServer::start(const QString& listen_interface, uint16_t port, Delegate* delegate)
 {
-    impl_->start(listen_interface, port, delegate);
+    delegate_ = delegate;
+    DCHECK(delegate_);
+
+    impl_->start(listen_interface, port, this);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpServer::stop()
 {
+    delegate_ = nullptr;
     impl_->stop();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TcpServer::hasPendingConnections()
+{
+    return !pending_.empty();
+}
+
+//--------------------------------------------------------------------------------------------------
+TcpChannel* TcpServer::nextPendingConnection()
+{
+    if (pending_.empty())
+        return nullptr;
+
+    TcpChannel* channel = pending_.front().release();
+    pending_.pop();
+
+    return channel;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,6 +278,16 @@ bool TcpServer::isValidListenInterface(const QString& interface)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::onNewConnection(std::unique_ptr<TcpChannel> channel)
+{
+    if (!delegate_)
+        return;
+
+    pending_.emplace(std::move(channel));
+    delegate_->onNewConnection();
 }
 
 } // namespace base

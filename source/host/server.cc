@@ -161,10 +161,21 @@ void Server::setPowerEvent(uint32_t power_event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
+void Server::onNewConnection()
 {
     LOG(LS_INFO) << "New DIRECT connection";
-    startAuthentication(std::move(channel));
+
+    if (!server_)
+    {
+        LOG(LS_ERROR) << "No TCP server instance";
+        return;
+    }
+
+    while (server_->hasPendingConnections())
+    {
+        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
+        startAuthentication(std::move(channel));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

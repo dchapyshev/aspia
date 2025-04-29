@@ -54,7 +54,7 @@ public:
 
 protected:
     // base::TcpServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) final;
+    void onNewConnection() final;
 
     // SharedKeyPool::Delegate implementation.
     void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) final;
