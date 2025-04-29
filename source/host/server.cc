@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
-#include "base/files/file_path_watcher.h"
 #include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
@@ -57,7 +56,6 @@ Server::~Server()
     LOG(LS_INFO) << "Dtor";
     LOG(LS_INFO) << "Stopping the server...";
 
-    settings_watcher_.reset();
     authenticator_manager_.reset();
     user_session_manager_.reset();
     server_.reset();
@@ -91,9 +89,9 @@ void Server::start()
     connect(update_timer_.get(), &QTimer::timeout, this, &Server::checkForUpdates);
     update_timer_->start(std::chrono::minutes(5));
 
-    settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
-    settings_watcher_->watch(settings_file, false,
-        std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
+    settings_watcher_ = new QFileSystemWatcher(this);
+    settings_watcher_->addPath(QString::fromStdU16String(settings_file.u16string()));
+    connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
 
     authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(this);
 
@@ -453,83 +451,73 @@ void Server::deleteFirewallRules()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::updateConfiguration(const std::filesystem::path& path, bool error)
+void Server::updateConfiguration(const QString& path)
 {
     LOG(LS_INFO) << "Configuration file change detected";
 
-    if (!error)
+    std::filesystem::path settings_file_path = settings_.filePath();
+    std::error_code ignored_error;
+
+    // While writing the configuration, the file may be empty for a short time. The configuration
+    // monitor has time to detect this, but we must not load an empty configuration.
+    if (std::filesystem::file_size(settings_file_path, ignored_error) <= 0)
     {
-        std::filesystem::path settings_file_path = settings_.filePath();
-        std::error_code ignored_error;
+        LOG(LS_INFO) << "Configuration file is empty. Configuration update skipped";
+        return;
+    }
 
-        // While writing the configuration, the file may be empty for a short time. The
-        // configuration monitor has time to detect this, but we must not load an empty
-        // configuration.
-        if (std::filesystem::file_size(settings_file_path, ignored_error) <= 0)
+    // Synchronize the parameters from the file.
+    settings_.sync();
+
+    // Apply settings for user sessions BEFORE reloading the user list.
+    user_session_manager_->onSettingsChanged();
+
+    // Reload user lists.
+    reloadUserList();
+
+    // If a controller instance already exists.
+    if (router_controller_)
+    {
+        LOG(LS_INFO) << "Has router controller";
+
+        if (settings_.isRouterEnabled())
         {
-            LOG(LS_INFO) << "Configuration file is empty. Configuration update skipped";
-            return;
-        }
+            LOG(LS_INFO) << "Router enabled";
 
-        DCHECK_EQ(path, settings_file_path);
-
-        // Synchronize the parameters from the file.
-        settings_.sync();
-
-        // Apply settings for user sessions BEFORE reloading the user list.
-        user_session_manager_->onSettingsChanged();
-
-        // Reload user lists.
-        reloadUserList();
-
-        // If a controller instance already exists.
-        if (router_controller_)
-        {
-            LOG(LS_INFO) << "Has router controller";
-
-            if (settings_.isRouterEnabled())
+            // Check if the connection parameters have changed.
+            if (router_controller_->address() != settings_.routerAddress() ||
+                router_controller_->port() != settings_.routerPort() ||
+                router_controller_->publicKey() != settings_.routerPublicKey())
             {
-                LOG(LS_INFO) << "Router enabled";
-
-                // Check if the connection parameters have changed.
-                if (router_controller_->address() != settings_.routerAddress() ||
-                    router_controller_->port() != settings_.routerPort() ||
-                    router_controller_->publicKey() != settings_.routerPublicKey())
-                {
-                    // Reconnect to the router with new parameters.
-                    LOG(LS_INFO) << "Router parameters have changed";
-                    connectToRouter();
-                }
-                else
-                {
-                    LOG(LS_INFO) << "Router parameters without changes";
-                }
+                // Reconnect to the router with new parameters.
+                LOG(LS_INFO) << "Router parameters have changed";
+                connectToRouter();
             }
             else
             {
-                // Destroy the controller.
-                LOG(LS_INFO) << "The router is now disabled";
-                router_controller_.reset();
-
-                proto::internal::RouterState router_state;
-                router_state.set_state(proto::internal::RouterState::DISABLED);
-                user_session_manager_->onRouterStateChanged(router_state);
+                LOG(LS_INFO) << "Router parameters without changes";
             }
         }
         else
         {
-            LOG(LS_INFO) << "No router controller";
+            // Destroy the controller.
+            LOG(LS_INFO) << "The router is now disabled";
+            router_controller_.reset();
 
-            if (settings_.isRouterEnabled())
-            {
-                LOG(LS_INFO) << "Router enabled";
-                connectToRouter();
-            }
+            proto::internal::RouterState router_state;
+            router_state.set_state(proto::internal::RouterState::DISABLED);
+            user_session_manager_->onRouterStateChanged(router_state);
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Error detected";
+        LOG(LS_INFO) << "No router controller";
+
+        if (settings_.isRouterEnabled())
+        {
+            LOG(LS_INFO) << "Router enabled";
+            connectToRouter();
+        }
     }
 }
 

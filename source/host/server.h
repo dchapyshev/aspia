@@ -28,10 +28,11 @@
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
 
+#include <QFileSystemWatcher>
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
-class FilePathWatcher;
 class TaskRunner;
 } // namespace base
 
@@ -82,7 +83,7 @@ private:
     void startAuthentication(std::unique_ptr<base::TcpChannel> channel);
     void addFirewallRules();
     void deleteFirewallRules();
-    void updateConfiguration(const std::filesystem::path& path, bool error);
+    void updateConfiguration(const QString& path);
     void reloadUserList();
     void connectToRouter();
     void disconnectFromRouter();
@@ -91,7 +92,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<QTimer> update_timer_;
 
-    std::unique_ptr<base::FilePathWatcher> settings_watcher_;
+    QPointer<QFileSystemWatcher> settings_watcher_;
     SystemSettings settings_;
 
     // Accepts incoming network connections.

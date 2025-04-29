@@ -449,27 +449,14 @@ list(APPEND SOURCE_BASE_FILES
     files/base_paths.h
     files/file_path.cc
     files/file_path.h
-    files/file_path_watcher.cc
-    files/file_path_watcher.h
     files/file_util.cc
     files/file_util.h
     files/scoped_temp_file.cc
     files/scoped_temp_file.h)
 
-if (WIN32)
-    list(APPEND SOURCE_BASE_FILES
-        files/file_path_watcher_win.cc)
-endif()
-
-if (LINUX)
-    list(APPEND SOURCE_BASE_FILES
-        files/file_path_watcher_linux.cc)
-endif()
-
 if (APPLE)
     list(APPEND SOURCE_BASE_FILES
-        files/base_paths_mac.mm
-        files/file_path_watcher_mac.cc)
+        files/base_paths_mac.mm)
 endif()
 
 if (UNIX)
