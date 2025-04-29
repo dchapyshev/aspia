@@ -155,8 +155,8 @@ std::optional<QString> currentSessionName()
     if (!current_session_info.isValid())
         return std::nullopt;
 
-    QString user_name = QString::fromStdU16String(current_session_info.userName16()).toLower();
-    QString domain = QString::fromStdU16String(current_session_info.domain16()).toLower();
+    QString user_name = current_session_info.userName().toLower();
+    QString domain = current_session_info.domain().toLower();
 
     if (user_name.isEmpty())
         return std::nullopt;

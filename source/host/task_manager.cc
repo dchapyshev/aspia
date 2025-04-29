@@ -314,7 +314,7 @@ void TaskManager::sendUserList()
         item->set_user_name(enumerator.userName());
         item->set_session_id(enumerator.sessionId());
         item->set_session_name(enumerator.sessionName());
-        item->set_client_name(session_info.clientName());
+        item->set_client_name(session_info.clientName().toStdString());
 
         switch (session_info.connectState())
         {

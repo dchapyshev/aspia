@@ -22,7 +22,7 @@
 #include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
 
-#include <string>
+#include <QString>
 
 namespace base::win {
 
@@ -53,17 +53,10 @@ public:
     ConnectState connectState() const;
     static const char* connectStateToString(ConnectState connect_state);
 
-    std::string winStationName() const;
-    std::u16string winStationName16() const;
-
-    std::string domain() const;
-    std::u16string domain16() const;
-
-    std::string userName() const;
-    std::u16string userName16() const;
-
-    std::string clientName() const;
-    std::u16string clientName16() const;
+    QString winStationName() const;
+    QString domain() const;
+    QString userName() const;
+    QString clientName() const;
 
     int64_t connectTime() const;
     int64_t disconnectTime() const;

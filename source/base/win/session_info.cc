@@ -19,7 +19,6 @@
 #include "base/win/session_info.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/windows_version.h"
 
 namespace base::win {
@@ -102,61 +101,37 @@ const char* SessionInfo::connectStateToString(ConnectState connect_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionInfo::winStationName() const
-{
-    return utf8FromUtf16(winStationName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionInfo::winStationName16() const
+QString SessionInfo::winStationName() const
 {
     if (!isValid())
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.WinStationName);
+    return QString::fromWCharArray(info_->Data.WTSInfoExLevel1.WinStationName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionInfo::domain() const
-{
-    return utf8FromUtf16(domain16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionInfo::domain16() const
+QString SessionInfo::domain() const
 {
     if (!isValid())
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.DomainName);
+    return QString::fromWCharArray(info_->Data.WTSInfoExLevel1.DomainName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionInfo::userName() const
-{
-    return utf8FromUtf16(userName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionInfo::userName16() const
+QString SessionInfo::userName() const
 {
     if (!isValid())
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.UserName);
+    return QString::fromWCharArray(info_->Data.WTSInfoExLevel1.UserName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionInfo::clientName() const
-{
-    return utf8FromUtf16(clientName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionInfo::clientName16() const
+QString SessionInfo::clientName() const
 {
     if (!isValid())
-        return std::u16string();
+        return QString();
 
     LPWSTR client_name = nullptr;
     DWORD size = 0;
@@ -165,18 +140,16 @@ std::u16string SessionInfo::clientName16() const
         WTS_CURRENT_SERVER_HANDLE, sessionId(), WTSClientName, &client_name, &size))
     {
         LOG(LS_ERROR) << "WTSQuerySessionInformationW() failed: " << ::GetLastError();
-        return std::u16string();
+        return QString();
     }
 
     if (!client_name)
     {
         LOG(LS_ERROR) << "Invalid client name";
-        return std::u16string();
+        return QString();
     }
 
-    std::u16string result;
-    result.assign(reinterpret_cast<const char16_t*>(client_name));
-
+    QString result = QString::fromWCharArray(client_name);
     WTSFreeMemory(client_name);
     return result;
 }
