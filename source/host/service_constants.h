@@ -21,10 +21,10 @@
 
 namespace host {
 
-extern const char16_t kHostServiceFileName[];
-extern const char16_t kHostServiceName[];
-extern const char16_t kHostServiceDisplayName[];
-extern const char16_t kHostServiceDescription[];
+extern const char kHostServiceFileName[];
+extern const char kHostServiceName[];
+extern const char kHostServiceDisplayName[];
+extern const char kHostServiceDescription[];
 
 } // namespace host
 

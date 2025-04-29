@@ -20,12 +20,9 @@
 
 namespace relay {
 
-const char16_t kServiceFileName[] = u"aspia_relay.exe";
-
-const char16_t kServiceName[] = u"aspia-relay";
-
-const char16_t kServiceDisplayName[] = u"Aspia Relay Service";
-
-const char16_t kServiceDescription[] = u"Proxies user traffic to bypass NAT.";
+const char kServiceFileName[] = "aspia_relay.exe";
+const char kServiceName[] = "aspia-relay";
+const char kServiceDisplayName[] = "Aspia Relay Service";
+const char kServiceDescription[] = "Proxies user traffic to bypass NAT.";
 
 } // namespace relay

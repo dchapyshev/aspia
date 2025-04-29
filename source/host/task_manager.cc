@@ -19,7 +19,6 @@
 #include "host/task_manager.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/service_controller.h"
 #include "base/win/session_enumerator.h"
@@ -75,7 +74,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             case proto::task_manager::ServiceRequest::COMMAND_START:
             {
                 base::win::ServiceController controller = base::win::ServiceController::open(
-                    base::utf16FromUtf8(message.service_request().name()));
+                    QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
                     LOG(LS_ERROR) << "Unable to open service: " << message.service_request().name();
@@ -95,7 +94,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             case proto::task_manager::ServiceRequest::COMMAND_STOP:
             {
                 base::win::ServiceController controller = base::win::ServiceController::open(
-                    base::utf16FromUtf8(message.service_request().name()));
+                    QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
                     LOG(LS_ERROR) << "Unable to open service: " << message.service_request().name();
@@ -311,9 +310,9 @@ void TaskManager::sendUserList()
 
         proto::task_manager::User* item = user_list->add_user();
 
-        item->set_user_name(enumerator.userName());
+        item->set_user_name(enumerator.userName().toStdString());
         item->set_session_id(enumerator.sessionId());
-        item->set_session_name(enumerator.sessionName());
+        item->set_session_name(enumerator.sessionName().toStdString());
         item->set_client_name(session_info.clientName().toStdString());
 
         switch (session_info.connectState())

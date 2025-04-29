@@ -234,7 +234,8 @@ void ServiceThread::run()
 {
     SERVICE_TABLE_ENTRYW service_table[2];
 
-    service_table[0].lpServiceName = const_cast<wchar_t*>(asWide(service_->name()));
+    service_table[0].lpServiceName = const_cast<wchar_t*>(
+        reinterpret_cast<const wchar_t*>(service_->name().utf16()));
     service_table[0].lpServiceProc = ServiceThread::serviceMain;
     service_table[1].lpServiceName = nullptr;
     service_table[1].lpServiceProc = nullptr;
@@ -288,7 +289,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     }
 
     self->status_handle_ = RegisterServiceCtrlHandlerExW(
-        asWide(self->service_->name()), serviceControlHandler, nullptr);
+        reinterpret_cast<const wchar_t*>(self->service_->name().utf16()), serviceControlHandler, nullptr);
 
     if (!self->status_handle_)
     {
@@ -355,7 +356,7 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Service::Service(std::u16string_view name)
+Service::Service(const QString& name)
     : name_(name)
 {
     LOG(LS_INFO) << "Ctor";

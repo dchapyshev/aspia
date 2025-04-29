@@ -972,7 +972,7 @@ bool ConfigDialog::installService()
     }
     else
     {
-        controller.setDependencies({ u"RpcSs", u"Tcpip", u"NDIS", u"AFD" });
+        controller.setDependencies({ "RpcSs", "Tcpip", "NDIS", "AFD" });
         controller.setDescription(kHostServiceDescription);
     }
 

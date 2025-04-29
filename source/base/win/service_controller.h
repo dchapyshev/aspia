@@ -21,9 +21,9 @@
 
 #include "base/win/scoped_object.h"
 
+#include <QString>
+
 #include <filesystem>
-#include <string>
-#include <vector>
 
 namespace base::win {
 
@@ -37,23 +37,23 @@ public:
 
     virtual ~ServiceController();
 
-    static ServiceController open(std::u16string_view name);
-    static ServiceController install(std::u16string_view name,
-                                     std::u16string_view display_name,
+    static ServiceController open(const QString& name);
+    static ServiceController install(const QString& name,
+                                     const QString& display_name,
                                      const std::filesystem::path& file_path);
-    static bool remove(std::u16string_view name);
-    static bool isInstalled(std::u16string_view name);
-    static bool isRunning(std::u16string_view name);
+    static bool remove(const QString& name);
+    static bool isInstalled(const QString& name);
+    static bool isRunning(const QString& name);
 
     void close();
 
-    bool setDescription(std::u16string_view description);
+    bool setDescription(const QString& description);
     std::u16string description() const;
 
-    bool setDependencies(const std::vector<std::u16string>& dependencies);
-    std::vector<std::u16string> dependencies() const;
+    bool setDependencies(const QStringList& dependencies);
+    QStringList dependencies() const;
 
-    bool setAccount(std::u16string_view username, std::u16string_view password);
+    bool setAccount(const QString& username, const QString& password);
 
     std::filesystem::path filePath() const;
 

@@ -57,7 +57,7 @@ ServiceController::~ServiceController() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-ServiceController ServiceController::open(std::u16string_view name)
+ServiceController ServiceController::open(const QString& name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -66,7 +66,9 @@ ServiceController ServiceController::open(std::u16string_view name)
         return ServiceController();
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_ALL_ACCESS));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             reinterpret_cast<const wchar_t*>(name.utf16()),
+                                             SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -78,8 +80,8 @@ ServiceController ServiceController::open(std::u16string_view name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ServiceController ServiceController::install(std::u16string_view name,
-                                             std::u16string_view display_name,
+ServiceController ServiceController::install(const QString& name,
+                                             const QString& display_name,
                                              const std::filesystem::path& file_path)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
@@ -90,8 +92,8 @@ ServiceController ServiceController::install(std::u16string_view name,
     }
 
     win::ScopedScHandle service(CreateServiceW(sc_manager,
-                                               asWide(name),
-                                               asWide(display_name),
+                                               reinterpret_cast<const wchar_t*>(name.utf16()),
+                                               reinterpret_cast<const wchar_t*>(display_name.utf16()),
                                                SERVICE_ALL_ACCESS,
                                                SERVICE_WIN32_OWN_PROCESS,
                                                SERVICE_AUTO_START,
@@ -130,7 +132,7 @@ ServiceController ServiceController::install(std::u16string_view name,
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::remove(std::u16string_view name)
+bool ServiceController::remove(const QString& name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -139,7 +141,9 @@ bool ServiceController::remove(std::u16string_view name)
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_ALL_ACCESS));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             reinterpret_cast<const wchar_t*>(name.utf16()),
+                                             SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -171,7 +175,7 @@ bool ServiceController::remove(std::u16string_view name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::isInstalled(std::u16string_view name)
+bool ServiceController::isInstalled(const QString& name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
@@ -180,7 +184,9 @@ bool ServiceController::isInstalled(std::u16string_view name)
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_QUERY_CONFIG));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             reinterpret_cast<const wchar_t*>(name.utf16()),
+                                             SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -196,7 +202,7 @@ bool ServiceController::isInstalled(std::u16string_view name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::isRunning(std::u16string_view name)
+bool ServiceController::isRunning(const QString& name)
 {
     win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
@@ -205,7 +211,9 @@ bool ServiceController::isRunning(std::u16string_view name)
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager, asWide(name), SERVICE_QUERY_STATUS));
+    win::ScopedScHandle service(OpenServiceW(sc_manager,
+                                             reinterpret_cast<const wchar_t*>(name.utf16()),
+                                             SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -231,10 +239,11 @@ void ServiceController::close()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::setDescription(std::u16string_view description)
+bool ServiceController::setDescription(const QString& description)
 {
     SERVICE_DESCRIPTIONW service_description;
-    service_description.lpDescription = const_cast<LPWSTR>(asWide(description));
+    service_description.lpDescription =
+        const_cast<LPWSTR>(reinterpret_cast<const wchar_t*>(description.utf16()));
 
     // Set the service description.
     if (!ChangeServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, &service_description))
@@ -279,20 +288,20 @@ std::u16string ServiceController::description() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::setDependencies(const std::vector<std::u16string>& dependencies)
+bool ServiceController::setDependencies(const QStringList& dependencies)
 {
-    std::string buffer;
+    QByteArray buffer;
 
-    for (auto it = dependencies.cbegin(); it != dependencies.cend(); ++it)
+    for (auto it = dependencies.constBegin(); it != dependencies.constEnd(); ++it)
     {
-        const std::u16string& str = *it;
+        const QString& str = *it;
 
-        buffer.append(reinterpret_cast<const char*>(str.c_str()),
-                      (str.length() + 1) * sizeof(wchar_t));
+        buffer += QByteArray(reinterpret_cast<const char*>(str.utf16()),
+                             (str.length() + 1) * sizeof(wchar_t));
     }
 
-    buffer.push_back(static_cast<char>(0));
-    buffer.push_back(static_cast<char>(0));
+    buffer.append(static_cast<char>(0));
+    buffer.append(static_cast<char>(0));
 
     if (!ChangeServiceConfigW(service_,
                               SERVICE_NO_CHANGE,
@@ -310,7 +319,7 @@ bool ServiceController::setDependencies(const std::vector<std::u16string>& depen
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<std::u16string> ServiceController::dependencies() const
+QStringList ServiceController::dependencies() const
 {
     DWORD bytes_needed = 0;
 
@@ -318,11 +327,11 @@ std::vector<std::u16string> ServiceController::dependencies() const
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         LOG(LS_FATAL) << "QueryServiceConfigW: unexpected result";
-        return std::vector<std::u16string>();
+        return QStringList();
     }
 
     if (!bytes_needed)
-        return std::vector<std::u16string>();
+        return QStringList();
 
     std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(bytes_needed);
     QUERY_SERVICE_CONFIGW* service_config = reinterpret_cast<QUERY_SERVICE_CONFIGW*>(buffer.get());
@@ -330,39 +339,39 @@ std::vector<std::u16string> ServiceController::dependencies() const
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {
         PLOG(LS_ERROR) << "QueryServiceConfigW failed";
-        return std::vector<std::u16string>();
+        return QStringList();
     }
 
     if (!service_config->lpDependencies)
-        return std::vector<std::u16string>();
+        return QStringList();
 
-    std::vector<std::u16string> list;
+    QStringList list;
     size_t len = 0;
-
     for (;;)
     {
-        std::u16string str = asUtf16(service_config->lpDependencies + len);
+        QString str = QString::fromWCharArray(service_config->lpDependencies + len);
 
         len += str.length() + 1;
 
-        if (str.empty())
+        if (str.isEmpty())
             break;
 
-        list.emplace_back(std::move(str));
+        list.append(str);
     }
 
     return list;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::setAccount(std::u16string_view username, std::u16string_view password)
+bool ServiceController::setAccount(const QString& username, const QString& password)
 {
     if (!ChangeServiceConfigW(service_,
                               SERVICE_NO_CHANGE,
                               SERVICE_NO_CHANGE,
                               SERVICE_NO_CHANGE,
                               nullptr, nullptr, nullptr, nullptr,
-                              asWide(username), asWide(password),
+                              reinterpret_cast<const wchar_t*>(username.utf16()),
+                              reinterpret_cast<const wchar_t*>(password.utf16()),
                               nullptr))
     {
         PLOG(LS_ERROR) << "ChangeServiceConfigW failed";

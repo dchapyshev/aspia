@@ -168,7 +168,7 @@ std::optional<QString> currentSessionName()
     TimeInfoList times;
     for (base::win::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
-        if (user_name != base::toLower(it.userName16()))
+        if (user_name != it.userName().toLower())
             continue;
 
         base::win::SessionInfo session_info(it.sessionId());

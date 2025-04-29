@@ -19,7 +19,6 @@
 #include "base/win/session_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/session_info.h"
 
 namespace base::win {
@@ -95,78 +94,48 @@ SessionId SessionEnumerator::sessionId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionEnumerator::sessionName() const
-{
-    return base::utf8FromUtf16(sessionName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionEnumerator::sessionName16() const
+QString SessionEnumerator::sessionName() const
 {
     if (!info_[current_]->pSessionName)
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_[current_]->pSessionName);
+    return QString::fromWCharArray(info_[current_]->pSessionName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionEnumerator::hostName() const
-{
-    return base::utf8FromUtf16(hostName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionEnumerator::hostName16() const
+QString SessionEnumerator::hostName() const
 {
     if (!info_[current_]->pHostName)
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_[current_]->pHostName);
+    return QString::fromWCharArray(info_[current_]->pHostName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionEnumerator::userName() const
-{
-    return base::utf8FromUtf16(userName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionEnumerator::userName16() const
+QString SessionEnumerator::userName() const
 {
     if (!info_[current_]->pUserName)
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_[current_]->pUserName);
+    return QString::fromWCharArray(info_[current_]->pUserName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionEnumerator::domainName() const
-{
-    return base::utf8FromUtf16(domainName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionEnumerator::domainName16() const
+QString SessionEnumerator::domainName() const
 {
     if (!info_[current_]->pDomainName)
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_[current_]->pDomainName);
+    return QString::fromWCharArray(info_[current_]->pDomainName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionEnumerator::farmName() const
-{
-    return base::utf8FromUtf16(farmName16());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::u16string SessionEnumerator::farmName16() const
+QString SessionEnumerator::farmName() const
 {
     if (!info_[current_]->pFarmName)
-        return std::u16string();
+        return QString();
 
-    return reinterpret_cast<const char16_t*>(info_[current_]->pFarmName);
+    return QString::fromWCharArray(info_[current_]->pFarmName);
 }
 
 //--------------------------------------------------------------------------------------------------

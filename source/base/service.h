@@ -28,8 +28,7 @@
 #include "base/win/session_status.h"
 #endif // defined(OS_WIN)
 
-#include <string_view>
-#include <string>
+#include <QString>
 
 namespace base {
 
@@ -40,12 +39,12 @@ class ServiceThread;
 class Service
 {
 public:
-    explicit Service(std::u16string_view name);
+    explicit Service(const QString& name);
     virtual ~Service();
 
     void exec(int& argc, char* argv[]);
 
-    const std::u16string& name() const { return name_; }
+    const QString& name() const { return name_; }
     std::shared_ptr<TaskRunner> taskRunner() const { return task_runner_; }
 
 protected:
@@ -65,7 +64,7 @@ private:
     static void signalHandler(int sig);
 #endif // defined(OS_POSIX)
 
-    std::u16string name_;
+    QString name_;
     std::unique_ptr<Application> application_;
     std::shared_ptr<TaskRunner> task_runner_;
 

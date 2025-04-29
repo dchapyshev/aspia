@@ -20,13 +20,10 @@
 
 namespace router {
 
-const char16_t kServiceFileName[] = u"aspia_router.exe";
-
-const char16_t kServiceName[] = u"aspia-router";
-
-const char16_t kServiceDisplayName[] = u"Aspia Router Service";
-
-const char16_t kServiceDescription[] =
-    u"Assigns identifiers to peers and routes traffic to bypass NAT.";
+const char kServiceFileName[] = "aspia_router.exe";
+const char kServiceName[] = "aspia-router";
+const char kServiceDisplayName[] = "Aspia Router Service";
+const char kServiceDescription[] =
+    "Assigns identifiers to peers and routes traffic to bypass NAT.";
 
 } // namespace router

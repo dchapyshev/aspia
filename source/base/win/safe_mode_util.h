@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <string>
+#include <QString>
 
 namespace base::win {
 
@@ -29,7 +29,7 @@ class SafeModeUtil
 {
 public:
     static bool setSafeMode(bool enable);
-    static bool setSafeModeService(std::u16string_view service_name, bool enable);
+    static bool setSafeModeService(const QString& service_name, bool enable);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(SafeModeUtil);

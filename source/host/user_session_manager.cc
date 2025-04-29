@@ -212,8 +212,8 @@ bool UserSessionManager::start(Delegate* delegate)
         if (session_id == base::kServiceSessionId)
             continue;
 
-        std::u16string name = session.sessionName16();
-        if (base::compareCaseInsensitive(name, u"console") != 0)
+        QString name = session.sessionName();
+        if (name.compare("console", Qt::CaseInsensitive) != 0)
         {
             LOG(LS_INFO) << "RDP session detected";
 

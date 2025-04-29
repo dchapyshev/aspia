@@ -174,15 +174,17 @@ bool SafeModeUtil::setSafeMode(bool enable)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool enable)
+bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
 {
-    std::wstring key_path = L"SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Network\\";
-    key_path.append(reinterpret_cast<const wchar_t*>(service_name.data()));
+    QString key_path = "SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Network\\";
+    key_path.append(service_name);
 
     if (enable)
     {
         RegistryKey key;
-        LONG status = key.create(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ | KEY_WRITE);
+        LONG status = key.create(HKEY_LOCAL_MACHINE,
+                                 reinterpret_cast<const wchar_t*>(key_path.utf16()),
+                                 KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
             LOG(LS_ERROR) << "create failed: "
@@ -199,7 +201,8 @@ bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool ena
     }
     else
     {
-        LONG status = RegDeleteTreeW(HKEY_LOCAL_MACHINE, key_path.c_str());
+        LONG status = RegDeleteTreeW(HKEY_LOCAL_MACHINE,
+                                     reinterpret_cast<const wchar_t*>(key_path.utf16()));
         if (status == ERROR_FILE_NOT_FOUND)
         {
             // Service is no longer listed to boot in Safe Mode.
