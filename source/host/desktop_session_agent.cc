@@ -126,195 +126,12 @@ void DesktopSessionAgent::start(const QString& channel_id)
         return;
     }
 
-    channel_->setListener(this);
+    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+            this, &DesktopSessionAgent::onIpcDisconnected);
+    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+            this, &DesktopSessionAgent::onIpcMessageReceived);
+
     channel_->resume();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcDisconnected()
-{
-    LOG(LS_INFO) << "IPC channel disconnected";
-
-    setEnabled(false);
-
-    LOG(LS_INFO) << "Post quit";
-    QCoreApplication::quit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
-{
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
-    {
-        LOG(LS_ERROR) << "Invalid message from service";
-        return;
-    }
-
-    if (incoming_message_.has_next_screen_capture())
-    {
-        captureEnd(std::chrono::milliseconds(
-            incoming_message_.next_screen_capture().update_interval()));
-    }
-    else if (incoming_message_.has_mouse_event())
-    {
-        if (input_injector_)
-        {
-            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_key_event())
-    {
-        if (input_injector_)
-        {
-            input_injector_->injectKeyEvent(incoming_message_.key_event());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_touch_event())
-    {
-        if (input_injector_)
-        {
-            input_injector_->injectTouchEvent(incoming_message_.touch_event());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_text_event())
-    {
-        if (input_injector_)
-        {
-            input_injector_->injectTextEvent(incoming_message_.text_event());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_clipboard_event())
-    {
-        if (clipboard_monitor_)
-        {
-            clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_select_source())
-    {
-        LOG(LS_INFO) << "Select source received";
-
-        if (screen_capturer_)
-        {
-            const proto::Screen& screen = incoming_message_.select_source().screen();
-            const proto::Resolution& resolution = screen.resolution();
-
-            screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
-                screen.id()), base::Size(resolution.width(), resolution.height()));
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Screen capturer NOT initialized";
-        }
-    }
-    else if (incoming_message_.has_configure())
-    {
-        const proto::internal::Configure& config = incoming_message_.configure();
-
-        LOG(LS_INFO) << "Configure received";
-        LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
-        LOG(LS_INFO) << "Disable effects: " << config.disable_effects();
-        LOG(LS_INFO) << "Disable font smoothing: " << config.disable_font_smoothing();
-        LOG(LS_INFO) << "Block input: " << config.block_input();
-        LOG(LS_INFO) << "Lock at disconnect: " << config.lock_at_disconnect();
-        LOG(LS_INFO) << "Clear clipboard: " << config.clear_clipboard();
-        LOG(LS_INFO) << "Cursor position: " << config.cursor_position();
-
-        if (screen_capturer_)
-        {
-            screen_capturer_->enableWallpaper(!config.disable_wallpaper());
-            screen_capturer_->enableEffects(!config.disable_effects());
-            screen_capturer_->enableFontSmoothing(!config.disable_font_smoothing());
-            screen_capturer_->enableCursorPosition(config.cursor_position());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Screen capturer NOT initialized";
-        }
-
-        if (input_injector_)
-        {
-            input_injector_->setBlockInput(config.block_input());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
-        }
-
-        lock_at_disconnect_ = config.lock_at_disconnect();
-        clear_clipboard_ = config.clear_clipboard();
-    }
-    else if (incoming_message_.has_control())
-    {
-        LOG(LS_INFO) << "Control received: "
-                     << controlActionToString(incoming_message_.control().action());
-
-        switch (incoming_message_.control().action())
-        {
-            case proto::internal::DesktopControl::ENABLE:
-                setEnabled(true);
-                break;
-
-            case proto::internal::DesktopControl::DISABLE:
-                setEnabled(false);
-                break;
-
-            case proto::internal::DesktopControl::LOGOFF:
-            {
-                if (!base::PowerController::logoff())
-                {
-                    LOG(LS_ERROR) << "base::PowerController::logoff failed";
-                }
-            }
-            break;
-
-            case proto::internal::DesktopControl::LOCK:
-            {
-                if (!base::PowerController::lock())
-                {
-                    LOG(LS_ERROR) << "base::PowerController::lock failed";
-                }
-            }
-            break;
-
-            default:
-                NOTREACHED();
-                break;
-        }
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Unhandled message from service";
-        return;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageWritten()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -547,6 +364,187 @@ void DesktopSessionAgent::onAfterThreadRunning()
 #if defined(OS_WIN)
     message_window_.reset();
 #endif // defined(OS_WIN)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onIpcDisconnected()
+{
+    LOG(LS_INFO) << "IPC channel disconnected";
+
+    setEnabled(false);
+
+    LOG(LS_INFO) << "Post quit";
+    QCoreApplication::quit();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
+{
+    incoming_message_.Clear();
+
+    if (!base::parse(buffer, &incoming_message_))
+    {
+        LOG(LS_ERROR) << "Invalid message from service";
+        return;
+    }
+
+    if (incoming_message_.has_next_screen_capture())
+    {
+        captureEnd(std::chrono::milliseconds(
+            incoming_message_.next_screen_capture().update_interval()));
+    }
+    else if (incoming_message_.has_mouse_event())
+    {
+        if (input_injector_)
+        {
+            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_key_event())
+    {
+        if (input_injector_)
+        {
+            input_injector_->injectKeyEvent(incoming_message_.key_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_touch_event())
+    {
+        if (input_injector_)
+        {
+            input_injector_->injectTouchEvent(incoming_message_.touch_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_text_event())
+    {
+        if (input_injector_)
+        {
+            input_injector_->injectTextEvent(incoming_message_.text_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_clipboard_event())
+    {
+        if (clipboard_monitor_)
+        {
+            clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_select_source())
+    {
+        LOG(LS_INFO) << "Select source received";
+
+        if (screen_capturer_)
+        {
+            const proto::Screen& screen = incoming_message_.select_source().screen();
+            const proto::Resolution& resolution = screen.resolution();
+
+            screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
+                                               screen.id()), base::Size(resolution.width(), resolution.height()));
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+        }
+    }
+    else if (incoming_message_.has_configure())
+    {
+        const proto::internal::Configure& config = incoming_message_.configure();
+
+        LOG(LS_INFO) << "Configure received";
+        LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
+        LOG(LS_INFO) << "Disable effects: " << config.disable_effects();
+        LOG(LS_INFO) << "Disable font smoothing: " << config.disable_font_smoothing();
+        LOG(LS_INFO) << "Block input: " << config.block_input();
+        LOG(LS_INFO) << "Lock at disconnect: " << config.lock_at_disconnect();
+        LOG(LS_INFO) << "Clear clipboard: " << config.clear_clipboard();
+        LOG(LS_INFO) << "Cursor position: " << config.cursor_position();
+
+        if (screen_capturer_)
+        {
+            screen_capturer_->enableWallpaper(!config.disable_wallpaper());
+            screen_capturer_->enableEffects(!config.disable_effects());
+            screen_capturer_->enableFontSmoothing(!config.disable_font_smoothing());
+            screen_capturer_->enableCursorPosition(config.cursor_position());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+        }
+
+        if (input_injector_)
+        {
+            input_injector_->setBlockInput(config.block_input());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
+
+        lock_at_disconnect_ = config.lock_at_disconnect();
+        clear_clipboard_ = config.clear_clipboard();
+    }
+    else if (incoming_message_.has_control())
+    {
+        LOG(LS_INFO) << "Control received: "
+                     << controlActionToString(incoming_message_.control().action());
+
+        switch (incoming_message_.control().action())
+        {
+        case proto::internal::DesktopControl::ENABLE:
+            setEnabled(true);
+            break;
+
+        case proto::internal::DesktopControl::DISABLE:
+            setEnabled(false);
+            break;
+
+        case proto::internal::DesktopControl::LOGOFF:
+        {
+            if (!base::PowerController::logoff())
+            {
+                LOG(LS_ERROR) << "base::PowerController::logoff failed";
+            }
+        }
+        break;
+
+        case proto::internal::DesktopControl::LOCK:
+        {
+            if (!base::PowerController::lock())
+            {
+                LOG(LS_ERROR) << "base::PowerController::lock failed";
+            }
+        }
+        break;
+
+        default:
+            NOTREACHED();
+            break;
+        }
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Unhandled message from service";
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -50,7 +50,11 @@ void FileTransferAgent::start(const QString& channel_id)
         return;
     }
 
-    channel_->setListener(this);
+    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+            this, &FileTransferAgent::onIpcDisconnected);
+    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+            this, &FileTransferAgent::onIpcMessageReceived);
+
     channel_->resume();
 }
 
@@ -75,12 +79,6 @@ void FileTransferAgent::onIpcMessageReceived(const QByteArray& buffer)
 
     worker_.doRequest(request_, &reply_);
     channel_->send(base::serialize(reply_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileTransferAgent::onIpcMessageWritten()
-{
-    // Nothing
 }
 
 } // namespace host

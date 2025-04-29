@@ -196,7 +196,11 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        channel_->setListener(this);
+        connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+                this, &UserSession::onIpcDisconnected);
+        connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+                this, &UserSession::onIpcMessageReceived);
+
         channel_->resume();
 
         sendRouterState(FROM_HERE);
@@ -233,7 +237,11 @@ void UserSession::restart(base::IpcChannel* channel)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        channel_->setListener(this);
+        connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+                this, &UserSession::onIpcDisconnected);
+        connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+                this, &UserSession::onIpcMessageReceived);
+
         channel_->resume();
 
         auto send_connection_list = [this](const ClientSessionList& list)
@@ -623,194 +631,6 @@ void UserSession::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcDisconnected()
-{
-    LOG(LS_INFO) << "Ipc channel disconnected (sid=" << session_id_ << ")";
-    desktop_dettach_timer_.start(std::chrono::seconds(5));
-    onSessionDettached(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(const QByteArray& buffer)
-{
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
-    {
-        LOG(LS_ERROR) << "Invalid message from UI (sid=" << session_id_ << ")";
-        return;
-    }
-
-    if (incoming_message_.has_credentials_request())
-    {
-        const proto::internal::CredentialsRequest& request = incoming_message_.credentials_request();
-        proto::internal::CredentialsRequest::Type type = request.type();
-
-        if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
-        {
-            LOG(LS_INFO) << "New credentials requested (sid=" << session_id_ << ")";
-            updateCredentials(FROM_HERE);
-        }
-        else
-        {
-            DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
-            LOG(LS_INFO) << "Credentials update requested (sid=" << session_id_ << ")";
-        }
-
-        sendCredentials(FROM_HERE);
-    }
-    else if (incoming_message_.has_one_time_sessions())
-    {
-        uint32_t one_time_sessions = incoming_message_.one_time_sessions().sessions();
-        if (one_time_sessions != one_time_sessions_)
-        {
-            LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
-                         << " to " << one_time_sessions << " (sid=" << session_id_ << ")";
-            one_time_sessions_ = one_time_sessions;
-
-            delegate_->onUserSessionCredentialsChanged();
-        }
-    }
-    else if (incoming_message_.has_connect_confirmation())
-    {
-        proto::internal::ConnectConfirmation connect_confirmation =
-            incoming_message_.connect_confirmation();
-
-        LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
-                     << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
-
-        if (connect_confirmation.accept_connection())
-            onUnconfirmedSessionAccept(connect_confirmation.id());
-        else
-            onUnconfirmedSessionReject(connect_confirmation.id());
-    }
-    else if (incoming_message_.has_control())
-    {
-        const proto::internal::ServiceControl& control = incoming_message_.control();
-
-        switch (control.code())
-        {
-            case proto::internal::ServiceControl::CODE_KILL:
-            {
-                if (!control.has_unsigned_integer())
-                {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_KILL (sid=" << session_id_ << ")";
-                    return;
-                }
-
-                LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
-                             << control.unsigned_integer() << ")";
-                killClientSession(static_cast<uint32_t>(control.unsigned_integer()));
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_PAUSE:
-            {
-                if (!control.has_boolean())
-                {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE (sid=" << session_id_ << ")";
-                    return;
-                }
-
-                bool is_paused = control.boolean();
-
-                LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
-                             << is_paused << ")";
-
-                desktop_session_proxy_->setPaused(is_paused);
-                desktop_session_proxy_->control(is_paused ?
-                    proto::internal::DesktopControl::DISABLE :
-                    proto::internal::DesktopControl::ENABLE);
-
-                if (is_paused)
-                {
-                    scoped_task_runner_->postDelayedTask(std::chrono::milliseconds(500), [this]()
-                    {
-                        for (const auto& client : desktop_clients_)
-                        {
-                            static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
-                                proto::VIDEO_ERROR_CODE_PAUSED);
-                        }
-                    });
-                }
-                else
-                {
-                    mergeAndSendConfiguration();
-                }
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
-            {
-                if (!control.has_boolean())
-                {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid=" << session_id_ << ")";
-                    return;
-                }
-
-                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
-                             << " lock_mouse=" << control.boolean() << ")";
-
-                desktop_session_proxy_->setMouseLock(control.boolean());
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
-            {
-                if (!control.has_boolean())
-                {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid=" << session_id_ << ")";
-                    return;
-                }
-
-                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
-                             << " lock_keyboard=" << control.boolean() << ")";
-
-                desktop_session_proxy_->setKeyboardLock(control.boolean());
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_VOICE_CHAT:
-            {
-                // TODO
-                NOTIMPLEMENTED();
-            }
-            break;
-
-            default:
-            {
-                LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid=" << session_id_ << ")";
-                return;
-            }
-        }
-    }
-    else if (incoming_message_.has_text_chat())
-    {
-        LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
-
-        for (const auto& client : other_clients_)
-        {
-            if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
-            {
-                ClientSessionTextChat* text_chat_session =
-                    static_cast<ClientSessionTextChat*>(client.get());
-                text_chat_session->sendTextChat(incoming_message_.text_chat());
-            }
-        }
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Unhandled message from UI (sid=" << session_id_ << ")";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageWritten()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
@@ -1064,7 +884,188 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
     channel_->send(base::serialize(outgoing_message_));
+}
 
+//--------------------------------------------------------------------------------------------------
+void UserSession::onIpcDisconnected()
+{
+    LOG(LS_INFO) << "Ipc channel disconnected (sid=" << session_id_ << ")";
+    desktop_dettach_timer_.start(std::chrono::seconds(5));
+    onSessionDettached(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onIpcMessageReceived(const QByteArray& buffer)
+{
+    incoming_message_.Clear();
+
+    if (!base::parse(buffer, &incoming_message_))
+    {
+        LOG(LS_ERROR) << "Invalid message from UI (sid=" << session_id_ << ")";
+        return;
+    }
+
+    if (incoming_message_.has_credentials_request())
+    {
+        const proto::internal::CredentialsRequest& request = incoming_message_.credentials_request();
+        proto::internal::CredentialsRequest::Type type = request.type();
+
+        if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
+        {
+            LOG(LS_INFO) << "New credentials requested (sid=" << session_id_ << ")";
+            updateCredentials(FROM_HERE);
+        }
+        else
+        {
+            DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
+            LOG(LS_INFO) << "Credentials update requested (sid=" << session_id_ << ")";
+        }
+
+        sendCredentials(FROM_HERE);
+    }
+    else if (incoming_message_.has_one_time_sessions())
+    {
+        uint32_t one_time_sessions = incoming_message_.one_time_sessions().sessions();
+        if (one_time_sessions != one_time_sessions_)
+        {
+            LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
+                         << " to " << one_time_sessions << " (sid=" << session_id_ << ")";
+            one_time_sessions_ = one_time_sessions;
+
+            delegate_->onUserSessionCredentialsChanged();
+        }
+    }
+    else if (incoming_message_.has_connect_confirmation())
+    {
+        proto::internal::ConnectConfirmation connect_confirmation =
+            incoming_message_.connect_confirmation();
+
+        LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
+                     << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
+
+        if (connect_confirmation.accept_connection())
+            onUnconfirmedSessionAccept(connect_confirmation.id());
+        else
+            onUnconfirmedSessionReject(connect_confirmation.id());
+    }
+    else if (incoming_message_.has_control())
+    {
+        const proto::internal::ServiceControl& control = incoming_message_.control();
+
+        switch (control.code())
+        {
+        case proto::internal::ServiceControl::CODE_KILL:
+        {
+            if (!control.has_unsigned_integer())
+            {
+                LOG(LS_ERROR) << "Invalid parameter for CODE_KILL (sid=" << session_id_ << ")";
+                return;
+            }
+
+            LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
+                         << control.unsigned_integer() << ")";
+            killClientSession(static_cast<uint32_t>(control.unsigned_integer()));
+        }
+        break;
+
+        case proto::internal::ServiceControl::CODE_PAUSE:
+        {
+            if (!control.has_boolean())
+            {
+                LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE (sid=" << session_id_ << ")";
+                return;
+            }
+
+            bool is_paused = control.boolean();
+
+            LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
+                         << is_paused << ")";
+
+            desktop_session_proxy_->setPaused(is_paused);
+            desktop_session_proxy_->control(is_paused ?
+                                                proto::internal::DesktopControl::DISABLE :
+                                                proto::internal::DesktopControl::ENABLE);
+
+            if (is_paused)
+            {
+                scoped_task_runner_->postDelayedTask(std::chrono::milliseconds(500), [this]()
+                                                     {
+                                                         for (const auto& client : desktop_clients_)
+                                                         {
+                                                             static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
+                                                                 proto::VIDEO_ERROR_CODE_PAUSED);
+                                                         }
+                                                     });
+            }
+            else
+            {
+                mergeAndSendConfiguration();
+            }
+        }
+        break;
+
+        case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
+        {
+            if (!control.has_boolean())
+            {
+                LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid=" << session_id_ << ")";
+                return;
+            }
+
+            LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
+                         << " lock_mouse=" << control.boolean() << ")";
+
+            desktop_session_proxy_->setMouseLock(control.boolean());
+        }
+        break;
+
+        case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
+        {
+            if (!control.has_boolean())
+            {
+                LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid=" << session_id_ << ")";
+                return;
+            }
+
+            LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
+                         << " lock_keyboard=" << control.boolean() << ")";
+
+            desktop_session_proxy_->setKeyboardLock(control.boolean());
+        }
+        break;
+
+        case proto::internal::ServiceControl::CODE_VOICE_CHAT:
+        {
+            // TODO
+            NOTIMPLEMENTED();
+        }
+        break;
+
+        default:
+        {
+            LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid=" << session_id_ << ")";
+            return;
+        }
+        }
+    }
+    else if (incoming_message_.has_text_chat())
+    {
+        LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
+
+        for (const auto& client : other_clients_)
+        {
+            if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+            {
+                ClientSessionTextChat* text_chat_session =
+                    static_cast<ClientSessionTextChat*>(client.get());
+                text_chat_session->sendTextChat(incoming_message_.text_chat());
+            }
+        }
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Unhandled message from UI (sid=" << session_id_ << ")";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1082,8 +1083,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     if (channel_)
     {
         LOG(LS_INFO) << "Post task to delete IPC channel (sid=" << session_id_ << ")";
-        channel_->setListener(nullptr);
-        task_runner_->deleteSoon(std::move(channel_));
+        channel_.release()->deleteLater();
     }
 
     one_time_sessions_ = 0;

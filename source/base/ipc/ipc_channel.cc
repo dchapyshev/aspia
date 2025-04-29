@@ -208,7 +208,6 @@ IpcChannel::~IpcChannel()
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
 
-    listener_ = nullptr;
     disconnect();
 }
 
@@ -216,14 +215,6 @@ IpcChannel::~IpcChannel()
 std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 {
     return proxy_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::setListener(Listener* listener)
-{
-    LOG(LS_INFO) << "Listener changed (listener=" << (listener != nullptr) << " channel_name="
-                 << channel_name_ << ")";
-    listener_ = listener;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,16 +425,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
                   << " (code=" << error_code.value() << " location=" << location.toString() << ")";
 
     disconnect();
-
-    if (listener_)
-    {
-        listener_->onIpcDisconnected();
-        listener_ = nullptr;
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
-    }
+    emit sig_disconnected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -593,29 +575,14 @@ void IpcChannel::onReadData(const std::error_code& error_code, size_t bytes_tran
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
-    if (listener_)
-    {
-        listener_->onIpcMessageReceived(read_buffer_);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
-    }
-
+    emit sig_messageReceived(read_buffer_);
     read_size_ = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageWritten()
 {
-    if (listener_)
-    {
-        listener_->onIpcMessageWritten();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No listener (channel_name=" << channel_name_ << ")";
-    }
+    emit sig_messageWritten();
 }
 
 } // namespace base

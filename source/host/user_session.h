@@ -41,7 +41,6 @@ namespace host {
 
 class UserSession final
     : public QObject,
-      public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public UnconfirmedClientSession::Delegate,
       public ClientSession::Delegate
@@ -102,11 +101,6 @@ public:
     void onSettingsChanged();
 
 protected:
-    // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() final;
-    void onIpcMessageReceived(const QByteArray& buffer) final;
-    void onIpcMessageWritten() final;
-
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() final;
     void onDesktopSessionStopped() final;
@@ -128,6 +122,10 @@ protected:
     void onClientSessionVideoRecording(
         const QString& computer_name, const QString& user_name, bool started) final;
     void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) final;
+
+private slots:
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
     void onSessionDettached(const base::Location& location);

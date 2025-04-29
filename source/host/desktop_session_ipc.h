@@ -26,9 +26,7 @@
 
 namespace host {
 
-class DesktopSessionIpc final
-    : public DesktopSession,
-      public base::IpcChannel::Listener
+class DesktopSessionIpc final : public DesktopSession
 {
     Q_OBJECT
 
@@ -50,11 +48,9 @@ public:
     void injectTouchEvent(const proto::TouchEvent& event) final;
     void injectClipboardEvent(const proto::ClipboardEvent& event) final;
 
-protected:
-    // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() final;
-    void onIpcMessageReceived(const QByteArray& buffer) final;
-    void onIpcMessageWritten() final;
+private slots:
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
     class SharedBuffer;

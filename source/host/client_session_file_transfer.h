@@ -32,9 +32,7 @@
 
 namespace host {
 
-class ClientSessionFileTransfer final
-    : public ClientSession,
-      public base::IpcChannel::Listener
+class ClientSessionFileTransfer final : public ClientSession
 {
     Q_OBJECT
 
@@ -48,12 +46,9 @@ protected:
     void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
     void onWritten(uint8_t channel_id, size_t pending) final;
 
-    // base::IpcChannel::Listener implemenation.
-    void onIpcDisconnected() final;
-    void onIpcMessageReceived(const QByteArray& buffer) final;
-    void onIpcMessageWritten() final;
-
 private slots:
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
     void onIpcNewConnection();
     void onIpcErrorOccurred();
 

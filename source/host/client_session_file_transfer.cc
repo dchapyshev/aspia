@@ -360,12 +360,6 @@ void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageWritten()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onIpcNewConnection()
 {
     LOG(LS_INFO) << "IPC channel for file transfer session is connected";
@@ -388,7 +382,12 @@ void ClientSessionFileTransfer::onIpcNewConnection()
     attach_timer_->stop();
 
     ipc_channel_.reset(channel);
-    ipc_channel_->setListener(this);
+
+    connect(ipc_channel_.get(), &base::IpcChannel::sig_disconnected,
+            this, &ClientSessionFileTransfer::onIpcDisconnected);
+    connect(ipc_channel_.get(), &base::IpcChannel::sig_messageReceived,
+            this, &ClientSessionFileTransfer::onIpcMessageReceived);
+
     ipc_channel_->resume();
 
     for (auto& message : pending_messages_)

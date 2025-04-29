@@ -55,7 +55,11 @@ void UserSessionAgent::start()
     LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
     ipc_channel_ = std::make_unique<base::IpcChannel>();
-    ipc_channel_->setListener(this);
+
+    connect(ipc_channel_.get(), &base::IpcChannel::sig_disconnected,
+            this, &UserSessionAgent::onIpcDisconnected);
+    connect(ipc_channel_.get(), &base::IpcChannel::sig_messageReceived,
+            this, &UserSessionAgent::onIpcMessageReceived);
 
     if (ipc_channel_->connect(channel_id))
     {
@@ -158,12 +162,6 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_ERROR) << "Unhandled message from service";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageWritten()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

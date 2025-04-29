@@ -44,25 +44,13 @@ class Location;
 
 class IpcChannel final : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
 
-    class Listener
-    {
-    public:
-        virtual ~Listener() = default;
-
-        virtual void onIpcDisconnected() = 0;
-        virtual void onIpcMessageReceived(const QByteArray& buffer) = 0;
-        virtual void onIpcMessageWritten() = 0;
-    };
-
     std::shared_ptr<IpcChannelProxy> channelProxy();
-
-    // Sets an instance of the class to receive connection status notifications or new messages.
-    // You can change this in the process.
-    void setListener(Listener* listener);
 
     [[nodiscard]]
     bool connect(const QString& channel_id);
@@ -80,6 +68,11 @@ public:
     ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
     std::filesystem::path peerFilePath() const;
+
+signals:
+    void sig_disconnected();
+    void sig_messageReceived(const QByteArray& buffer);
+    void sig_messageWritten();
 
 private:
     friend class IpcServer;
@@ -111,7 +104,6 @@ private:
     Stream stream_;
 
     std::shared_ptr<IpcChannelProxy> proxy_;
-    Listener* listener_ = nullptr;
 
     bool is_connected_ = false;
     bool is_paused_ = true;

@@ -27,9 +27,7 @@ namespace host {
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent final
-    : public QObject,
-      public base::IpcChannel::Listener
+class UserSessionAgent final : public QObject
 {
     Q_OBJECT
 
@@ -66,11 +64,9 @@ public:
 
     void start();
 
-protected:
-    // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() final;
-    void onIpcMessageReceived(const QByteArray& buffer) final;
-    void onIpcMessageWritten() final;
+private slots:
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
     friend class UserSessionAgentProxy;

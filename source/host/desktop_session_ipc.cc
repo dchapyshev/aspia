@@ -101,9 +101,12 @@ void DesktopSessionIpc::start()
         return;
     }
 
-    channel_->setListener(this);
-    channel_->resume();
+    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+            this, &DesktopSessionIpc::onIpcDisconnected);
+    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+            this, &DesktopSessionIpc::onIpcMessageReceived);
 
+    channel_->resume();
     delegate_->onDesktopSessionStarted();
 }
 
@@ -321,12 +324,6 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
         LOG(LS_ERROR) << "Unhandled message from desktop (sid=" << session_id_ << ")";
         return;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onIpcMessageWritten()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

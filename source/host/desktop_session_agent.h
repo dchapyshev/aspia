@@ -52,7 +52,6 @@ class InputInjector;
 
 class DesktopSessionAgent final
     : public QObject,
-      public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
       public base::Thread::Delegate
@@ -66,11 +65,6 @@ public:
     void start(const QString& channel_id);
 
 protected:
-    // base::IpcChannel::Listener implementation.
-    void onIpcDisconnected() final;
-    void onIpcMessageReceived(const QByteArray& buffer) final;
-    void onIpcMessageWritten() final;
-
     // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) final;
     void onSharedMemoryDestroy(int id) final;
@@ -89,6 +83,8 @@ protected:
     void onAfterThreadRunning() final;
 
 private slots:
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
     void onClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
