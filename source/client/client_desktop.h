@@ -161,7 +161,7 @@ private:
     std::unique_ptr<base::WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<base::WebmFileWriter> webm_file_writer_;
 
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
     int64_t video_packet_count_ = 0;

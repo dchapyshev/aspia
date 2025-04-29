@@ -449,7 +449,7 @@ Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 bool DxgiDuplicatorController::ensureFrameCaptured(
     Context* context, SharedFrame* target, DxgiCursor* cursor)
 {
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 

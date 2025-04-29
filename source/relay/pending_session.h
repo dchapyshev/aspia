@@ -53,7 +53,7 @@ public:
         virtual void onPendingSessionFailed(PendingSession* session) = 0;
     };
 
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
     PendingSession(asio::ip::tcp::socket&& socket,

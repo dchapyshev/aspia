@@ -53,7 +53,7 @@ private:
     int file_counter_ = 0;
     FILE* file_ = nullptr;
 
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using NanoSeconds = std::chrono::nanoseconds;
 

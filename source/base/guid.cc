@@ -152,7 +152,7 @@ bool Guid::isNull() const
 Guid Guid::create()
 {
     uint64_t seed = static_cast<uint64_t>(
-        std::chrono::high_resolution_clock::now().time_since_epoch().count());
+        std::chrono::steady_clock::now().time_since_epoch().count());
 
     std::mt19937_64 engine(seed);
 

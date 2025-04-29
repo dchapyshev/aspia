@@ -89,14 +89,14 @@ private:
     const uint16_t port_;
 
     const std::chrono::minutes idle_timeout_;
-    asio::high_resolution_timer idle_timer_;
+    asio::steady_timer idle_timer_;
 
-    asio::high_resolution_timer stat_timer_;
+    asio::steady_timer stat_timer_;
 
     std::unique_ptr<SharedPool> shared_pool_;
     Delegate* delegate_ = nullptr;
 
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
     TimePoint start_time_;

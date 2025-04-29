@@ -45,7 +45,7 @@ public:
     void onObjectSignaled(HANDLE object) final;
 
 private:
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using FileTime = std::filesystem::file_time_type;
 
