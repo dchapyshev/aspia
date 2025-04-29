@@ -72,7 +72,6 @@ public:
 signals:
     void sig_disconnected();
     void sig_messageReceived(const QByteArray& buffer);
-    void sig_messageWritten();
 
 private:
     friend class IpcServer;
@@ -98,7 +97,6 @@ private:
     void onReadData(const std::error_code& error_code, size_t bytes_transferred);
 
     void onMessageReceived();
-    void onMessageWritten();
 
     QString channel_name_;
     Stream stream_;

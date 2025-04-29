@@ -37,8 +37,7 @@ namespace client {
 
 class Client
     : public QObject,
-      public RouterController::Delegate,
-      public base::TcpChannel::Listener
+      public RouterController::Delegate
 {
     Q_OBJECT
 
@@ -90,12 +89,13 @@ protected:
     int speedRx();
     int speedTx();
 
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+private slots:
+    void onTcpConnected();
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
 
+protected:
     // RouterController::Delegate implementation.
     void onRouterConnected(const base::Version& router_version) final;
     void onHostAwaiting() final;

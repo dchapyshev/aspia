@@ -45,22 +45,7 @@ public:
     explicit TcpChannel(QObject* parent = nullptr);
     ~TcpChannel() final;
 
-    class Listener
-    {
-    public:
-        virtual ~Listener() = default;
-
-        virtual void onTcpConnected() = 0;
-        virtual void onTcpDisconnected(ErrorCode error_code) = 0;
-        virtual void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
-        virtual void onTcpMessageWritten(uint8_t channel_id, size_t pending) = 0;
-    };
-
     std::shared_ptr<TcpChannelProxy> channelProxy();
-
-    // Sets an instance of the class to receive connection status notifications or new messages.
-    // You can change this in the process.
-    void setListener(Listener* listener);
 
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.
@@ -110,6 +95,12 @@ public:
 
     base::HostId hostId() const { return host_id_; }
     void setHostId(base::HostId host_id) { host_id_ = host_id; }
+
+signals:
+    void sig_connected();
+    void sig_disconnected(ErrorCode error_code);
+    void sig_messageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void sig_messageWritten(uint8_t channel_id, size_t pending);
 
 protected:
     friend class TcpServer;
@@ -203,7 +194,6 @@ private:
     QByteArray keep_alive_counter_;
     TimePoint keep_alive_timestamp_;
 
-    Listener* listener_ = nullptr;
     bool connected_ = false;
     bool paused_ = true;
 

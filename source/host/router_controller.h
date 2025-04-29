@@ -36,7 +36,6 @@ namespace host {
 
 class RouterController final
     : public QObject,
-      public base::TcpChannel::Listener,
       public base::RelayPeerManager::Delegate
 {
     Q_OBJECT
@@ -71,13 +70,12 @@ public:
     uint16_t port() const { return router_info_.port; }
     const QByteArray& publicKey() const { return router_info_.public_key; }
 
-protected:
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+private slots:
+    void onTcpConnected();
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
 
+protected:
     // base::RelayPeerManager::Delegate implementation.
     void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) final;
 

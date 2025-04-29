@@ -35,9 +35,7 @@ const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
 
-class OnlineCheckerDirect::Instance final
-    : public QObject,
-      public base::TcpChannel::Listener
+class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
     Instance(int computer_id, const QString& address, uint16_t port);
@@ -48,12 +46,10 @@ public:
     void start(FinishCallback finish_callback);
     int computerId() const { return computer_id_; }
 
-protected:
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+private slots:
+    void onTcpConnected();
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
 
 private:
     void onFinished(const base::Location& location, bool online);
@@ -91,12 +87,7 @@ OnlineCheckerDirect::Instance::~Instance()
 {
     finished_ = true;
     timer_.stop();
-
-    if (channel_)
-    {
-        channel_->setListener(nullptr);
-        channel_.reset();
-    }
+    channel_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,7 +100,11 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
                  << " (computer: " << computer_id_ << ")";
 
     channel_ = std::make_unique<base::TcpChannel>();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
+    connect(channel_.get(), &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
+    connect(channel_.get(), &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
+
     channel_->connect(address_, port_);
 }
 
@@ -172,12 +167,6 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(uint8_t /* channel_id *
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, bool online)
 {
     LOG(LS_INFO) << "Finished from: " << location.toString();
@@ -186,10 +175,7 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
         return;
 
     finished_ = true;
-
     timer_.stop();
-    if (channel_)
-        channel_->setListener(nullptr);
 
     finish_callback_(computer_id_, online);
 }

@@ -74,7 +74,9 @@ void Router::connectToRouter(const QString& address, uint16_t port)
     window_proxy_->onConnecting();
 
     channel_ = std::make_unique<base::TcpChannel>();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
+
     channel_->connect(router_address_, router_port_);
 }
 
@@ -242,7 +244,11 @@ void Router::onTcpConnected()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &Router::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &Router::onTcpMessageReceived);
 
             const base::Version& router_version = authenticator_->peerVersion();
             if (router_version >= base::Version::kVersion_2_6_0)
@@ -304,12 +310,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 reconnect_timer_.reset();
                 reconnect_in_progress_ = false;
                 setAutoReconnect(false);
-
-                if (channel_)
-                {
-                    channel_->setListener(nullptr);
-                    channel_.reset();
-                }
+                channel_.reset();
             });
 
             timeout_timer_->start(std::chrono::minutes(5));
@@ -317,10 +318,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 
         // Delete old channel.
         if (channel_)
-        {
-            channel_->setListener(nullptr);
             channel_.release()->deleteLater();
-        }
 
         window_proxy_->onWaitForRouter();
 
@@ -380,12 +378,6 @@ void Router::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& bu
     {
         LOG(LS_ERROR) << "Unknown message type from the router";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Not used.
 }
 
 } // namespace client

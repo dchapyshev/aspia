@@ -80,8 +80,7 @@ void Client::start()
             return;
         }
 
-        router_controller_ =
-            std::make_unique<RouterController>(*config.router_config);
+        router_controller_ = std::make_unique<RouterController>(*config.router_config);
 
         bool reconnecting = session_state_->isReconnecting();
         if (!reconnecting)
@@ -106,8 +105,8 @@ void Client::start()
         // Create a network channel for messaging.
         channel_ = std::make_unique<base::TcpChannel>();
 
-        // Set the listener for the network channel.
-        channel_->setListener(this);
+        connect(channel_.get(), &base::TcpChannel::sig_connected,
+                this, &Client::onTcpConnected);
 
         // Now connect to the host.
         emit sig_hostConnecting();
@@ -248,7 +247,6 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 if (channel_)
                 {
                     LOG(LS_INFO) << "Destroy channel";
-                    channel_->setListener(nullptr);
                     channel_.reset();
                 }
 
@@ -266,7 +264,6 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         if (channel_)
         {
             LOG(LS_INFO) << "Post task to destroy channel";
-            channel_->setListener(nullptr);
             channel_.release()->deleteLater();
         }
 
@@ -342,7 +339,6 @@ void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
     DCHECK(channel);
 
     channel_ = std::move(channel);
-    channel_->setListener(this);
 
     startAuthentication();
 
@@ -401,7 +397,13 @@ void Client::startAuthentication()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &Client::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &Client::onTcpMessageReceived);
+            connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
+                    this, &Client::onTcpMessageWritten);
 
             const base::Version& host_version = authenticator_->peerVersion();
             session_state_->setHostVersion(host_version);

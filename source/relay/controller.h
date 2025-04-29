@@ -36,7 +36,6 @@ namespace relay {
 
 class Controller final
     : public QObject,
-      public base::TcpChannel::Listener,
       public SessionManager::Delegate,
       public SharedPool::Delegate
 {
@@ -48,13 +47,12 @@ public:
 
     bool start();
 
-protected:
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
+private slots:
+    void onTcpConnected();
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
 
+protected:
     // SessionManager::Delegate implementation.
     void onSessionStarted() final;
     void onSessionStatistics(const proto::RelayStat& relay_stat) final;

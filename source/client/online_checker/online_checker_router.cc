@@ -69,7 +69,10 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
     LOG(LS_INFO) << "Connecting to router...";
 
     channel_ = std::make_unique<base::TcpChannel>();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_connected,
+            this, &OnlineCheckerRouter::onTcpConnected);
+
     channel_->connect(router_config_.address, router_config_.port);
 }
 
@@ -96,7 +99,11 @@ void OnlineCheckerRouter::onTcpConnected()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &OnlineCheckerRouter::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &OnlineCheckerRouter::onTcpMessageReceived);
 
             const base::Version& router_version = authenticator_->peerVersion();
             if (router_version >= base::Version::kVersion_2_6_0)
@@ -160,12 +167,6 @@ void OnlineCheckerRouter::onTcpMessageReceived(uint8_t /* channel_id */, const Q
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::checkNextComputer()
 {
     if (computers_.empty())
@@ -191,10 +192,7 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
 
     if (channel_)
-    {
-        channel_->setListener(nullptr);
         channel_.release()->deleteLater();
-    }
 
     if (authenticator_)
         authenticator_.release()->deleteLater();

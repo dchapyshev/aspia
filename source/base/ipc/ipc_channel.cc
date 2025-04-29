@@ -490,8 +490,6 @@ void IpcChannel::onWriteData(const std::error_code& error_code, size_t bytes_tra
     // Delete the sent message from the queue.
     write_queue_.pop();
 
-    onMessageWritten();
-
     // If the queue is not empty, then we send the following message.
     if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
         return;
@@ -577,12 +575,6 @@ void IpcChannel::onMessageReceived()
 {
     emit sig_messageReceived(read_buffer_);
     read_size_ = 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onMessageWritten()
-{
-    emit sig_messageWritten();
 }
 
 } // namespace base

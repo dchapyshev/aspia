@@ -59,7 +59,10 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host, Deleg
                  << wait_for_host_ << ")";
 
     channel_ = std::make_unique<base::TcpChannel>();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_connected,
+            this, &RouterController::onTcpConnected);
+
     channel_->connect(router_config_.address, router_config_.port);
 }
 
@@ -93,7 +96,11 @@ void RouterController::onTcpConnected()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &RouterController::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &RouterController::onTcpMessageReceived);
 
             if (router_version >= base::Version::kVersion_2_6_0)
             {
@@ -245,12 +252,6 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
     {
         LOG(LS_ERROR) << "Unhandled message from router";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

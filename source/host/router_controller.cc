@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
 #include "host/host_key_storage.h"
 #include "proto/router_peer.pb.h"
@@ -144,7 +143,11 @@ void RouterController::onTcpConnected()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &RouterController::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &RouterController::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::Version::kVersion_2_6_0)
             {
@@ -274,12 +277,6 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New peer connected";
@@ -302,7 +299,10 @@ void RouterController::connectToRouter()
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
     channel_ = std::make_unique<base::TcpChannel>();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_connected,
+            this, &RouterController::onTcpConnected);
+
     channel_->connect(router_info_.address, router_info_.port);
 }
 

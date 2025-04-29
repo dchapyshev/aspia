@@ -29,9 +29,7 @@ namespace base {
 
 class Location;
 
-class Authenticator
-    : public QObject,
-      public TcpChannel::Listener
+class Authenticator : public QObject
 {
     Q_OBJECT
 
@@ -96,12 +94,6 @@ protected:
     void setPeerArch(const QString& arch);
     void setPeerDisplayName(const QString& display_name);
 
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
-
     [[nodiscard]] bool onSessionKeyChanged();
 
     proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
@@ -112,6 +104,11 @@ protected:
 
     uint32_t session_type_ = 0; // Selected session type.
     QString user_name_;
+
+private slots:
+    void onTcpDisconnected(NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
 
 private:
     QTimer timer_;

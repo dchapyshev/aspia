@@ -74,7 +74,13 @@ void Authenticator::start(std::unique_ptr<TcpChannel> channel)
     // raised.
     timer_.start(kTimeout);
 
-    channel_->setListener(this);
+    connect(channel_.get(), &TcpChannel::sig_disconnected,
+            this, &Authenticator::onTcpDisconnected);
+    connect(channel_.get(), &TcpChannel::sig_messageReceived,
+            this, &Authenticator::onTcpMessageReceived);
+    connect(channel_.get(), &TcpChannel::sig_messageWritten,
+            this, &Authenticator::onTcpMessageWritten);
+
     if (onStarted())
         channel_->resume();
 }
@@ -84,6 +90,13 @@ std::unique_ptr<TcpChannel> Authenticator::takeChannel()
 {
     if (state() != State::SUCCESS)
         return nullptr;
+
+    disconnect(channel_.get(), &TcpChannel::sig_disconnected,
+               this, &Authenticator::onTcpDisconnected);
+    disconnect(channel_.get(), &TcpChannel::sig_messageReceived,
+               this, &Authenticator::onTcpMessageReceived);
+    disconnect(channel_.get(), &TcpChannel::sig_messageWritten,
+               this, &Authenticator::onTcpMessageWritten);
 
     return std::move(channel_);
 }
@@ -161,7 +174,6 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
         return;
 
     channel_->pause();
-    channel_->setListener(nullptr);
     timer_.stop();
 
     if (error_code == ErrorCode::SUCCESS)
@@ -205,44 +217,6 @@ void Authenticator::setPeerDisplayName(const QString& display_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpConnected()
-{
-    // The authenticator receives the channel always in an already connected state.
-    NOTREACHED();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
-{
-    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
-
-    ErrorCode result = ErrorCode::NETWORK_ERROR;
-
-    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
-        result = ErrorCode::ACCESS_DENIED;
-
-    finish(FROM_HERE, result);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
-{
-    if (state() != State::PENDING)
-        return;
-
-    onReceived(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    if (state() != State::PENDING)
-        return;
-
-    onWritten();
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Authenticator::onSessionKeyChanged()
 {
     LOG(LS_INFO) << "Session key changed";
@@ -282,6 +256,37 @@ bool Authenticator::onSessionKeyChanged()
     channel_->setEncryptor(std::move(encryptor));
     channel_->setDecryptor(std::move(decryptor));
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
+{
+    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
+
+    ErrorCode result = ErrorCode::NETWORK_ERROR;
+
+    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
+        result = ErrorCode::ACCESS_DENIED;
+
+    finish(FROM_HERE, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+{
+    if (state() != State::PENDING)
+        return;
+
+    onReceived(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+{
+    if (state() != State::PENDING)
+        return;
+
+    onWritten();
 }
 
 } // namespace base

@@ -33,9 +33,7 @@ class DatabaseFactory;
 class Server;
 class SharedKeyPool;
 
-class Session
-    : public QObject,
-      public base::TcpChannel::Listener
+class Session : public QObject
 {
     Q_OBJECT
 
@@ -86,17 +84,16 @@ protected:
     virtual void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
-
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }
 
     Server& server() { return *server_; }
     const Server& server() const { return *server_; }
+
+private slots:
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
 
 private:
     const proto::RouterSession session_type_;

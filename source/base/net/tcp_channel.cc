@@ -198,9 +198,7 @@ TcpChannel::~TcpChannel()
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
 
-    listener_ = nullptr;
     disconnect();
-
     LOG(LS_INFO) << "Dtor (end)";
 }
 
@@ -208,12 +206,6 @@ TcpChannel::~TcpChannel()
 std::shared_ptr<TcpChannelProxy> TcpChannel::channelProxy()
 {
     return proxy_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::setListener(Listener* listener)
-{
-    listener_ = listener;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -531,12 +523,7 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
                   << " from: " << location.toString();
 
     disconnect();
-
-    if (listener_)
-    {
-        listener_->onTcpDisconnected(error_code);
-        listener_ = nullptr;
-    }
+    emit sig_disconnected(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -578,16 +565,13 @@ void TcpChannel::onConnected(const std::error_code &error_code, const asio::ip::
     LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
                  << ":" << endpoint.port();
     connected_ = true;
-
-    if (listener_)
-        listener_->onTcpConnected();
+    emit sig_connected();
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageWritten(uint8_t channel_id)
 {
-    if (listener_)
-        listener_->onTcpMessageWritten(channel_id, write_queue_.size());
+    emit sig_messageWritten(channel_id, write_queue_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -630,8 +614,7 @@ void TcpChannel::onMessageReceived()
         return;
     }
 
-    if (listener_)
-        listener_->onTcpMessageReceived(header.channel_id, decrypt_buffer_);
+    emit sig_messageReceived(header.channel_id, decrypt_buffer_);
 }
 
 //--------------------------------------------------------------------------------------------------

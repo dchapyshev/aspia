@@ -101,7 +101,13 @@ void ClientSession::start(Delegate* delegate)
     delegate_ = delegate;
     DCHECK(delegate_);
 
-    channel_->setListener(this);
+    connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            this, &ClientSession::onTcpDisconnected);
+    connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            this, &ClientSession::onTcpMessageReceived);
+    connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
+            this, &ClientSession::onTcpMessageWritten);
+
     channel_->setKeepAlive(true);
     channel_->resume();
 
@@ -178,9 +184,9 @@ void ClientSession::sendMessage(uint8_t channel_id, const google::protobuf::Mess
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpConnected()
+size_t ClientSession::pendingMessages() const
 {
-    NOTREACHED();
+    return channel_->pendingMessages();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,12 +231,6 @@ void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     {
         LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-size_t ClientSession::pendingMessages() const
-{
-    return channel_->pendingMessages();
 }
 
 } // namespace host

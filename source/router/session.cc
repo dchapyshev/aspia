@@ -106,7 +106,14 @@ void Session::start(Delegate* delegate)
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
     address_ = channel_->peerAddress();
-    channel_->setListener(this);
+
+    connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            this, &Session::onTcpDisconnected);
+    connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            this, &Session::onTcpMessageReceived);
+    connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
+            this, &Session::onTcpMessageWritten);
+
     channel_->resume();
 
     onSessionReady();
@@ -163,12 +170,6 @@ void Session::sendMessage(uint8_t channel_id, const google::protobuf::MessageLit
 {
     if (channel_)
         channel_->send(channel_id, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::onTcpConnected()
-{
-    NOTREACHED();
 }
 
 //--------------------------------------------------------------------------------------------------

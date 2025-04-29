@@ -36,9 +36,7 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSession
-    : public QObject,
-      public base::TcpChannel::Listener
+class ClientSession : public QObject
 {
     Q_OBJECT
 
@@ -108,15 +106,14 @@ protected:
     void sendMessage(uint8_t channel_id, QByteArray&& buffer);
     void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
 
-    // base::TcpChannel::Listener implementation.
-    void onTcpConnected() final;
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
-
     size_t pendingMessages() const;
 
     Delegate* delegate_ = nullptr;
+
+private slots:
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
 
 private:
     base::SessionId session_id_ = base::kInvalidSessionId;

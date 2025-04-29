@@ -189,7 +189,11 @@ void Controller::onTcpConnected()
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
-            channel_->setListener(this);
+
+            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+                    this, &Controller::onTcpDisconnected);
+            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+                    this, &Controller::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::Version::kVersion_2_6_0)
             {
@@ -274,12 +278,6 @@ void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void Controller::onSessionStarted()
 {
     ++session_count_;
@@ -329,8 +327,9 @@ void Controller::connectToRouter()
     // Create channel.
     channel_ = std::make_unique<base::TcpChannel>();
 
+    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
+
     // Connect to router.
-    channel_->setListener(this);
     channel_->connect(router_address_, router_port_);
 }
 
