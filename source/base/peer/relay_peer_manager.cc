@@ -24,19 +24,16 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-RelayPeerManager::RelayPeerManager(Delegate* delegate, QObject* parent)
-    : QObject(parent),
-      delegate_(delegate)
+RelayPeerManager::RelayPeerManager(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
 RelayPeerManager::~RelayPeerManager()
 {
     LOG(LS_INFO) << "Dtor";
-    delegate_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,21 +51,32 @@ void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool RelayPeerManager::hasPendingConnections() const
+{
+    return !channels_.empty();
+}
+
+//--------------------------------------------------------------------------------------------------
+TcpChannel* RelayPeerManager::nextPendingConnection()
+{
+    if (channels_.empty())
+        return nullptr;
+
+    TcpChannel* channel = channels_.front().release();
+    channels_.pop();
+    return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
 void RelayPeerManager::onRelayConnectionReady()
 {
-    if (delegate_)
+    for (auto it = pending_.cbegin(), it_end = pending_.cend(); it != it_end; ++it)
     {
-        for (auto it = pending_.cbegin(), it_end = pending_.cend(); it != it_end; ++it)
-        {
-            if (!it->get()->hasChannel())
-                continue;
+        if (!it->get()->hasChannel())
+            continue;
 
-            delegate_->onNewPeerConnected(std::unique_ptr<TcpChannel>(it->get()->takeChannel()));
-        }
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
+        channels_.emplace(std::unique_ptr<TcpChannel>(it->get()->takeChannel()));
+        emit sig_newPeerConnected();
     }
 
     cleanup();

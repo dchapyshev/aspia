@@ -35,12 +35,16 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 //--------------------------------------------------------------------------------------------------
 RouterController::RouterController(QObject* parent)
     : QObject(parent),
-      peer_manager_(std::make_unique<base::RelayPeerManager>(this))
+      peer_manager_(new base::RelayPeerManager(this)),
+      reconnect_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    reconnect_timer_.setSingleShot(true);
-    connect(&reconnect_timer_, &QTimer::timeout, this, &RouterController::connectToRouter);
+    connect(peer_manager_, &base::RelayPeerManager::sig_newPeerConnected,
+            this, &RouterController::onNewPeerConnected);
+
+    reconnect_timer_->setSingleShot(true);
+    connect(reconnect_timer_, &QTimer::timeout, this, &RouterController::connectToRouter);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,13 +281,17 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel)
+void RouterController::onNewPeerConnected()
 {
     LOG(LS_INFO) << "New peer connected";
 
     if (delegate_)
     {
-        delegate_->onClientConnected(std::move(channel));
+        while (peer_manager_->hasPendingConnections())
+        {
+            std::unique_ptr<base::TcpChannel> channel(peer_manager_->nextPendingConnection());
+            delegate_->onClientConnected(std::move(channel));
+        }
     }
     else
     {
@@ -310,7 +318,7 @@ void RouterController::connectToRouter()
 void RouterController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
-    reconnect_timer_.start(kReconnectTimeout);
+    reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------

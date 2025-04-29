@@ -23,6 +23,7 @@
 #include "base/peer/relay_peer.h"
 
 #include <memory>
+#include <queue>
 #include <vector>
 
 #include <QObject>
@@ -34,25 +35,21 @@ class RelayCredentials;
 namespace base {
 
 class TcpChannel;
-class TaskRunner;
 
 class RelayPeerManager final : public QObject
 {
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewPeerConnected(std::unique_ptr<TcpChannel> channel) = 0;
-    };
-
-    explicit RelayPeerManager(Delegate* delegate, QObject* parent = nullptr);
+    explicit RelayPeerManager(QObject* parent = nullptr);
     ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
+    bool hasPendingConnections() const;
+    TcpChannel* nextPendingConnection();
+
+signals:
+    void sig_newPeerConnected();
 
 private slots:
     void onRelayConnectionReady();
@@ -61,8 +58,8 @@ private slots:
 private:
     void cleanup();
 
-    Delegate* delegate_;
     std::vector<std::unique_ptr<RelayPeer>> pending_;
+    std::queue<std::unique_ptr<TcpChannel>> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);
 };

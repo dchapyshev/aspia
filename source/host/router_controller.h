@@ -26,6 +26,7 @@
 
 #include <queue>
 
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -34,9 +35,7 @@ class ClientAuthenticator;
 
 namespace host {
 
-class RouterController final
-    : public QObject,
-      public base::RelayPeerManager::Delegate
+class RouterController final : public QObject
 {
     Q_OBJECT
 
@@ -74,10 +73,7 @@ private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-
-protected:
-    // base::RelayPeerManager::Delegate implementation.
-    void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) final;
+    void onNewPeerConnected();
 
 private:
     void connectToRouter();
@@ -89,8 +85,8 @@ private:
 
     std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    std::unique_ptr<base::RelayPeerManager> peer_manager_;
-    QTimer reconnect_timer_;
+    QPointer<base::RelayPeerManager> peer_manager_;
+    QPointer<QTimer> reconnect_timer_;
     RouterInfo router_info_;
 
     std::queue<QString> pending_id_requests_;
