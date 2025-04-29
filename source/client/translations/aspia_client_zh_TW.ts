@@ -3298,142 +3298,142 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="139"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="135"/>
         <source>Summary</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="147"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="143"/>
         <source>Hardware</source>
         <translation>硬體</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="152"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="148"/>
         <source>Devices</source>
         <translation>裝置</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="158"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="154"/>
         <source>Video Adapters</source>
         <translation>顯示卡</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="164"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="160"/>
         <source>Monitors</source>
         <translation>顯示器</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="170"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="166"/>
         <source>Printers</source>
         <translation>印表機</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="176"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="172"/>
         <source>Power Options</source>
         <translation>電源選項</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="190"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="186"/>
         <source>Software</source>
         <translation>軟體</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="201"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="197"/>
         <source>Drivers</source>
         <translation>驅動程式</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="207"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="203"/>
         <source>Services</source>
         <translation>服務</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="213"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="209"/>
         <source>Processes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="276"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="272"/>
         <source>Operating System</source>
         <translation type="unfinished">作業系統</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="281"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="277"/>
         <source>Environment Variables</source>
         <translation>環境變數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="287"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="283"/>
         <source>Event Logs</source>
         <translation>事件紀錄</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="233"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="229"/>
         <source>Network</source>
         <translation>網路</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="238"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="234"/>
         <source>Network Adapters</source>
         <translation>網路卡</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="244"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="240"/>
         <source>Routes</source>
         <translation>路由</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="250"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="246"/>
         <source>Connections</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="256"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="252"/>
         <source>Network Shares</source>
         <translation>網路分享</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="293"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="289"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="299"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="295"/>
         <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="326"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="322"/>
         <source>HTML File</source>
         <translation>HTML 檔案</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="328"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="324"/>
         <source>HTML File (*.html)</source>
         <translation>HTML 檔案 (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="339"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="335"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="340"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="336"/>
         <source>Failed to save file: %1</source>
         <translation>無法儲存檔案：%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="219"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="215"/>
         <source>Licenses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="195"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="191"/>
         <source>Applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="262"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="258"/>
         <source>Open Files</source>
         <translation type="unfinished"></translation>
     </message>
