@@ -105,7 +105,7 @@ private:
     QPointer<QTimer> timeout_timer_;
     QPointer<QTimer> reconnect_timer_;
     QPointer<RouterController> router_controller_;
-    std::unique_ptr<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
 
     std::shared_ptr<SessionState> session_state_;

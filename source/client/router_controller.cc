@@ -94,10 +94,6 @@ void RouterController::onTcpConnected()
 
             emit sig_routerConnected(router_version);
 
-            // The authenticator takes the listener on itself, we return the receipt of
-            // notifications.
-            router_channel_ = authenticator_->takeChannel();
-
             connect(router_channel_.get(), &base::TcpChannel::sig_disconnected,
                     this, &RouterController::onTcpDisconnected);
             connect(router_channel_.get(), &base::TcpChannel::sig_messageReceived,
@@ -132,7 +128,7 @@ void RouterController::onTcpConnected()
         authenticator_.release()->deleteLater();
     });
 
-    authenticator_->start(std::move(router_channel_));
+    authenticator_->start(router_channel_.get());
 }
 
 //--------------------------------------------------------------------------------------------------

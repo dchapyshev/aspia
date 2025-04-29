@@ -112,10 +112,9 @@ void Client::start()
         }
 
         // Create a network channel for messaging.
-        channel_ = std::make_unique<base::TcpChannel>();
+        channel_ = new base::TcpChannel(this);
 
-        connect(channel_.get(), &base::TcpChannel::sig_connected,
-                this, &Client::onTcpConnected);
+        connect(channel_, &base::TcpChannel::sig_connected, this, &Client::onTcpConnected);
 
         // Now connect to the host.
         emit sig_hostConnecting();
@@ -131,10 +130,14 @@ void Client::stop()
         LOG(LS_INFO) << "Stopping client...";
         state_ = State::STOPPPED;
 
-        router_controller_->deleteLater();
-        delete authenticator_;
-        channel_.reset();
-        delete timeout_timer_;
+        if (router_controller_)
+            router_controller_->deleteLater();
+        if (authenticator_)
+            authenticator_->deleteLater();
+        if (channel_)
+            channel_->deleteLater();
+        if (timeout_timer_)
+            timeout_timer_->deleteLater();
 
         session_state_->setAutoReconnect(false);
         session_state_->setReconnecting(false);
@@ -256,7 +259,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 if (channel_)
                 {
                     LOG(LS_INFO) << "Destroy channel";
-                    channel_.reset();
+                    channel_->deleteLater();
                 }
 
                 if (router_controller_)
@@ -273,7 +276,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         if (channel_)
         {
             LOG(LS_INFO) << "Post task to destroy channel";
-            channel_.release()->deleteLater();
+            channel_->deleteLater();
         }
 
         if (session_state_->isConnectionByHostId())
@@ -352,7 +355,9 @@ void Client::onHostConnected()
         return;
     }
 
-    channel_.reset(router_controller_->takeChannel());
+    channel_ = router_controller_->takeChannel();
+    channel_->setParent(this);
+
     startAuthentication();
 
     // Router controller is no longer needed.
@@ -407,15 +412,11 @@ void Client::startAuthentication()
         {
             LOG(LS_INFO) << "Successful authentication";
 
-            // The authenticator takes the listener on itself, we return the receipt of
-            // notifications.
-            channel_ = authenticator_->takeChannel();
-
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(channel_, &base::TcpChannel::sig_disconnected,
                     this, &Client::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Client::onTcpMessageReceived);
-            connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
+            connect(channel_, &base::TcpChannel::sig_messageWritten,
                     this, &Client::onTcpMessageWritten);
 
             const base::Version& host_version = authenticator_->peerVersion();

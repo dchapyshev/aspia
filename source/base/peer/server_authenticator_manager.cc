@@ -86,10 +86,11 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
             this, &ServerAuthenticatorManager::onComplete);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::move(authenticator));
+    pending_.emplace_back(Pending(std::move(channel), std::move(authenticator)));
 
     // Start the authentication process.
-    pending_.back()->start(std::move(channel));
+    const Pending& current = pending_.back();
+    current.authenticator->start(current.channel.get());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +98,7 @@ void ServerAuthenticatorManager::onComplete()
 {
     for (auto it = pending_.begin(); it != pending_.end();)
     {
-        ServerAuthenticator* current = it->get();
+        ServerAuthenticator* current = it->authenticator.get();
 
         switch (current->state())
         {
@@ -108,7 +109,7 @@ void ServerAuthenticatorManager::onComplete()
                 {
                     SessionInfo session_info;
 
-                    session_info.channel       = current->takeChannel();
+                    session_info.channel       = std::move(it->channel);
                     session_info.version       = current->peerVersion();
                     session_info.os_name       = current->peerOsName();
                     session_info.computer_name = current->peerComputerName();
@@ -121,7 +122,7 @@ void ServerAuthenticatorManager::onComplete()
                 }
 
                 // Authenticator not needed anymore.
-                it->release()->deleteLater();
+                it->authenticator.release()->deleteLater();
                 it = pending_.erase(it);
             }
             break;

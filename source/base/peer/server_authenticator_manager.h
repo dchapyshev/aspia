@@ -76,8 +76,14 @@ private slots:
     void onComplete();
 
 private:
+    struct Pending
+    {
+        std::unique_ptr<TcpChannel> channel;
+        std::unique_ptr<ServerAuthenticator> authenticator;
+    };
+
     base::local_shared_ptr<UserListBase> user_list_;
-    std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
+    std::vector<Pending> pending_;
 
     QByteArray private_key_;
 

@@ -96,10 +96,6 @@ void OnlineCheckerRouter::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            // The authenticator takes the listener on itself, we return the receipt of
-            // notifications.
-            channel_ = authenticator_->takeChannel();
-
             connect(channel_.get(), &base::TcpChannel::sig_disconnected,
                     this, &OnlineCheckerRouter::onTcpDisconnected);
             connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
@@ -128,7 +124,7 @@ void OnlineCheckerRouter::onTcpConnected()
         authenticator_.release()->deleteLater();
     });
 
-    authenticator_->start(std::move(channel_));
+    authenticator_->start(channel_.get());
 }
 
 //--------------------------------------------------------------------------------------------------

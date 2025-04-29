@@ -37,12 +37,13 @@ auto g_errorCodeType = qRegisterMetaType<base::Authenticator::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
 Authenticator::Authenticator(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    timer_.setSingleShot(true);
-    connect(&timer_, &QTimer::timeout, this, [this]()
+    timer_->setSingleShot(true);
+    connect(timer_, &QTimer::timeout, this, [this]()
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
     });
@@ -55,7 +56,7 @@ Authenticator::~Authenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::start(std::unique_ptr<TcpChannel> channel)
+void Authenticator::start(TcpChannel* channel)
 {
     if (state() != State::STOPPED)
     {
@@ -63,42 +64,22 @@ void Authenticator::start(std::unique_ptr<TcpChannel> channel)
         return;
     }
 
-    channel_ = std::move(channel);
+    channel_ = channel;
     DCHECK(channel_);
 
-    state_ = State::PENDING;
-
     LOG(LS_INFO) << "Authentication started for: " << channel_->peerAddress();
+    state_ = State::PENDING;
 
     // If authentication does not complete within the specified time interval, an error will be
     // raised.
-    timer_.start(kTimeout);
+    timer_->start(kTimeout);
 
-    connect(channel_.get(), &TcpChannel::sig_disconnected,
-            this, &Authenticator::onTcpDisconnected);
-    connect(channel_.get(), &TcpChannel::sig_messageReceived,
-            this, &Authenticator::onTcpMessageReceived);
-    connect(channel_.get(), &TcpChannel::sig_messageWritten,
-            this, &Authenticator::onTcpMessageWritten);
+    connect(channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
+    connect(channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
+    connect(channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
 
     if (onStarted())
         channel_->resume();
-}
-
-//--------------------------------------------------------------------------------------------------
-std::unique_ptr<TcpChannel> Authenticator::takeChannel()
-{
-    if (state() != State::SUCCESS)
-        return nullptr;
-
-    disconnect(channel_.get(), &TcpChannel::sig_disconnected,
-               this, &Authenticator::onTcpDisconnected);
-    disconnect(channel_.get(), &TcpChannel::sig_messageReceived,
-               this, &Authenticator::onTcpMessageReceived);
-    disconnect(channel_.get(), &TcpChannel::sig_messageWritten,
-               this, &Authenticator::onTcpMessageWritten);
-
-    return std::move(channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,8 +143,8 @@ void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 //--------------------------------------------------------------------------------------------------
 void Authenticator::sendMessage(QByteArray&& data)
 {
-    DCHECK(channel_);
-    channel_->send(kChannelIdAuthenticator, std::move(data));
+    if (channel_)
+        channel_->send(kChannelIdAuthenticator, std::move(data));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,7 +155,11 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
         return;
 
     channel_->pause();
-    timer_.stop();
+    timer_->stop();
+
+    disconnect(channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
+    disconnect(channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
+    disconnect(channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
 
     if (error_code == ErrorCode::SUCCESS)
         state_ = State::SUCCESS;
@@ -220,6 +205,12 @@ void Authenticator::setPeerDisplayName(const QString& display_name)
 bool Authenticator::onSessionKeyChanged()
 {
     LOG(LS_INFO) << "Session key changed";
+
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "No valid TCP channel";
+        return false;
+    }
 
     std::unique_ptr<MessageEncryptor> encryptor;
     std::unique_ptr<MessageDecryptor> decryptor;

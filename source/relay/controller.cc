@@ -186,10 +186,6 @@ void Controller::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            // The authenticator takes the listener on itself, we return the receipt of
-            // notifications.
-            channel_ = authenticator_->takeChannel();
-
             connect(channel_.get(), &base::TcpChannel::sig_disconnected,
                     this, &Controller::onTcpDisconnected);
             connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
@@ -219,7 +215,7 @@ void Controller::onTcpConnected()
         authenticator_->deleteLater();
     });
 
-    authenticator_->start(std::move(channel_));
+    authenticator_->start(channel_.get());
 }
 
 //--------------------------------------------------------------------------------------------------

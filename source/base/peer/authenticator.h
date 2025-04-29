@@ -23,6 +23,7 @@
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -56,7 +57,7 @@ public:
         SESSION_DENIED
     };
 
-    void start(std::unique_ptr<TcpChannel> channel);
+    void start(TcpChannel* channel);
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
@@ -70,9 +71,6 @@ public:
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
-
-    // Releases network channel.
-    [[nodiscard]] std::unique_ptr<TcpChannel> takeChannel();
 
     static const char* stateToString(State state);
     static const char* errorToString(Authenticator::ErrorCode error_code);
@@ -111,8 +109,8 @@ private slots:
     void onTcpMessageWritten(uint8_t channel_id, size_t pending);
 
 private:
-    QTimer timer_;
-    std::unique_ptr<TcpChannel> channel_;
+    QPointer<QTimer> timer_;
+    QPointer<TcpChannel> channel_;
     State state_ = State::STOPPED;
     Version peer_version_; // Remote peer version.
     QString peer_os_name_;
