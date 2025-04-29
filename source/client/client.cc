@@ -80,7 +80,16 @@ void Client::start()
             return;
         }
 
-        router_controller_ = std::make_unique<RouterController>(*config.router_config);
+        router_controller_ = new RouterController(*config.router_config, this);
+
+        connect(router_controller_, &RouterController::sig_routerConnected,
+                this, &Client::onRouterConnected);
+        connect(router_controller_, &RouterController::sig_hostAwaiting,
+                this, &Client::onHostAwaiting);
+        connect(router_controller_, &RouterController::sig_hostConnected,
+                this, &Client::onHostConnected);
+        connect(router_controller_, &RouterController::sig_errorOccurred,
+                this, &Client::onRouterErrorOccurred);
 
         bool reconnecting = session_state_->isReconnecting();
         if (!reconnecting)
@@ -90,7 +99,7 @@ void Client::start()
         }
 
         emit sig_routerConnecting();
-        router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting, this);
+        router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting);
     }
     else
     {
@@ -122,7 +131,7 @@ void Client::stop()
         LOG(LS_INFO) << "Stopping client...";
         state_ = State::STOPPPED;
 
-        router_controller_.reset();
+        router_controller_->deleteLater();
         delete authenticator_;
         channel_.reset();
         delete timeout_timer_;
@@ -253,7 +262,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 if (router_controller_)
                 {
                     LOG(LS_INFO) << "Destroy router controller";
-                    router_controller_.reset();
+                    router_controller_->deleteLater();
                 }
             });
 
@@ -333,28 +342,32 @@ void Client::onHostAwaiting()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
+void Client::onHostConnected()
 {
     LOG(LS_INFO) << "Host connected";
-    DCHECK(channel);
 
-    channel_ = std::move(channel);
+    if (!router_controller_)
+    {
+        LOG(LS_ERROR) << "No router controller instance";
+        return;
+    }
 
+    channel_.reset(router_controller_->takeChannel());
     startAuthentication();
 
     // Router controller is no longer needed.
     LOG(LS_INFO) << "Post task to destroy router controller";
-    router_controller_.release()->deleteLater();
+    router_controller_->deleteLater();
     is_connected_to_router_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onErrorOccurred(const RouterController::Error& error)
+void Client::onRouterErrorOccurred(const RouterController::Error& error)
 {
     emit sig_routerError(error);
 
     LOG(LS_INFO) << "Post task to destroy router controller";
-    router_controller_.release()->deleteLater();
+    router_controller_->deleteLater();
     is_connected_to_router_ = false;
 
     if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())

@@ -67,21 +67,17 @@ public:
         } code;
     };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onRouterConnected(const base::Version& version) = 0;
-        virtual void onHostAwaiting() = 0;
-        virtual void onHostConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
-        virtual void onErrorOccurred(const Error& error) = 0;
-    };
-
     explicit RouterController(const RouterConfig& router_config, QObject* parent = nullptr);
     ~RouterController() final;
 
-    void connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate);
+    void connectTo(base::HostId host_id, bool wait_for_host);
+    base::TcpChannel* takeChannel();
+
+signals:
+    void sig_routerConnected(const base::Version& version);
+    void sig_hostAwaiting();
+    void sig_hostConnected();
+    void sig_errorOccurred(const client::RouterController::Error& error);
 
 private slots:
     void onTcpConnected();
@@ -94,7 +90,7 @@ private:
     void sendConnectionRequest();
     void waitForHost();
 
-    std::unique_ptr<base::TcpChannel> channel_;
+    std::unique_ptr<base::TcpChannel> router_channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<QTimer> status_request_timer_;
     std::unique_ptr<base::RelayPeer> relay_peer_;
@@ -102,9 +98,8 @@ private:
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;
-    Delegate* delegate_ = nullptr;
 
-    std::queue<std::unique_ptr<base::TcpChannel>> pending_;
+    std::unique_ptr<base::TcpChannel> host_channel_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

@@ -46,24 +46,28 @@ RouterController::~RouterController()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::connectTo(base::HostId host_id, bool wait_for_host, Delegate* delegate)
+void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
 {
     host_id_ = host_id;
     wait_for_host_ = wait_for_host;
-    delegate_ = delegate;
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
-    DCHECK(delegate_);
 
     LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << " wait_for_host="
                  << wait_for_host_ << ")";
 
-    channel_ = std::make_unique<base::TcpChannel>();
+    router_channel_ = std::make_unique<base::TcpChannel>();
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected,
+    connect(router_channel_.get(), &base::TcpChannel::sig_connected,
             this, &RouterController::onTcpConnected);
 
-    channel_->connect(router_config_.address, router_config_.port);
+    router_channel_->connect(router_config_.address, router_config_.port);
+}
+
+//--------------------------------------------------------------------------------------------------
+base::TcpChannel* RouterController::takeChannel()
+{
+    return host_channel_.release();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,8 +75,8 @@ void RouterController::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    channel_->setKeepAlive(true);
-    channel_->setNoDelay(true);
+    router_channel_->setKeepAlive(true);
+    router_channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
@@ -88,30 +92,27 @@ void RouterController::onTcpConnected()
         {
             const base::Version& router_version = authenticator_->peerVersion();
 
-            if (delegate_)
-                delegate_->onRouterConnected(router_version);
-            else
-                LOG(LS_ERROR) << "Invalid delegate";
+            emit sig_routerConnected(router_version);
 
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
-            channel_ = authenticator_->takeChannel();
+            router_channel_ = authenticator_->takeChannel();
 
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(router_channel_.get(), &base::TcpChannel::sig_disconnected,
                     this, &RouterController::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(router_channel_.get(), &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
             if (router_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                router_channel_->setChannelIdSupport(true);
             }
 
             LOG(LS_INFO) << "Sending connection request (host_id: " << host_id_ << ")";
 
             // Now the session will receive incoming messages.
-            channel_->resume();
+            router_channel_->resume();
 
             sendConnectionRequest();
         }
@@ -120,25 +121,18 @@ void RouterController::onTcpConnected()
             LOG(LS_ERROR) << "Authentication failed: "
                           << base::Authenticator::errorToString(error_code);
 
-            if (delegate_)
-            {
-                Error error;
-                error.type = ErrorType::AUTHENTICATION;
-                error.code.authentication = error_code;
+            Error error;
+            error.type = ErrorType::AUTHENTICATION;
+            error.code.authentication = error_code;
 
-                delegate_->onErrorOccurred(error);
-            }
-            else
-            {
-                LOG(LS_ERROR) << "Invalid delegate";
-            }
+            emit sig_errorOccurred(error);
         }
 
         // Authenticator is no longer needed.
         authenticator_.release()->deleteLater();
     });
 
-    authenticator_->start(std::move(channel_));
+    authenticator_->start(std::move(router_channel_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,17 +141,11 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::TcpChannel::errorToString(error_code) << ")";
 
-    if (!delegate_)
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-        return;
-    }
-
     Error error;
     error.type = ErrorType::NETWORK;
     error.code.network = error_code;
 
-    delegate_->onErrorOccurred(error);
+    emit sig_errorOccurred(error);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,10 +160,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
         LOG(LS_ERROR) << "Invalid message from router";
 
         error.code.router = ErrorCode::UNKNOWN_ERROR;
-        if (delegate_)
-            delegate_->onErrorOccurred(error);
-        else
-            LOG(LS_ERROR) << "Invalid delegate";
+        emit sig_errorOccurred(error);
         return;
     }
 
@@ -192,40 +177,33 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByt
         if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS ||
             connection_offer.peer_role() != proto::ConnectionOffer::CLIENT)
         {
-            if (delegate_)
+            switch (connection_offer.error_code())
             {
-                switch (connection_offer.error_code())
-                {
-                    case proto::ConnectionOffer::PEER_NOT_FOUND:
-                        error.code.router = ErrorCode::PEER_NOT_FOUND;
-                        break;
+                case proto::ConnectionOffer::PEER_NOT_FOUND:
+                    error.code.router = ErrorCode::PEER_NOT_FOUND;
+                    break;
 
-                    case proto::ConnectionOffer::ACCESS_DENIED:
-                        error.code.router = ErrorCode::ACCESS_DENIED;
-                        break;
+                case proto::ConnectionOffer::ACCESS_DENIED:
+                    error.code.router = ErrorCode::ACCESS_DENIED;
+                    break;
 
-                    case proto::ConnectionOffer::KEY_POOL_EMPTY:
-                        error.code.router = ErrorCode::KEY_POOL_EMPTY;
-                        break;
+                case proto::ConnectionOffer::KEY_POOL_EMPTY:
+                    error.code.router = ErrorCode::KEY_POOL_EMPTY;
+                    break;
 
-                    default:
-                        error.code.router = ErrorCode::UNKNOWN_ERROR;
-                        break;
-                }
+                default:
+                    error.code.router = ErrorCode::UNKNOWN_ERROR;
+                    break;
+            }
 
-                if (error.code.router == ErrorCode::PEER_NOT_FOUND && wait_for_host_)
-                {
-                    LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
-                    waitForHost();
-                }
-                else
-                {
-                    delegate_->onErrorOccurred(error);
-                }
+            if (error.code.router == ErrorCode::PEER_NOT_FOUND && wait_for_host_)
+            {
+                LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
+                waitForHost();
             }
             else
             {
-                LOG(LS_ERROR) << "Invalid delegate";
+                emit sig_errorOccurred(error);
             }
         }
         else
@@ -271,10 +249,8 @@ void RouterController::onRelayConnectionReady()
         return;
     }
 
-    if (delegate_)
-        delegate_->onHostConnected(std::unique_ptr<base::TcpChannel>(relay_peer_->takeChannel()));
-    else
-        LOG(LS_ERROR) << "Invalid delegate";
+    host_channel_.reset(relay_peer_->takeChannel());
+    emit sig_hostConnected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,17 +258,11 @@ void RouterController::onRelayConnectionError()
 {
     LOG(LS_INFO) << "Relay connection error";
 
-    if (!delegate_)
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-        return;
-    }
-
     Error error;
     error.type = ErrorType::ROUTER;
     error.code.router = ErrorCode::RELAY_ERROR;
 
-    delegate_->onErrorOccurred(error);
+    emit sig_errorOccurred(error);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -302,7 +272,7 @@ void RouterController::sendConnectionRequest()
 
     proto::PeerToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -319,14 +289,10 @@ void RouterController::waitForHost()
 
         proto::PeerToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
-        channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+        router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
     });
 
-    if (delegate_)
-        delegate_->onHostAwaiting();
-    else
-        LOG(LS_ERROR) << "Invalid delegate";
-
+    emit sig_hostAwaiting();
     status_request_timer_->start(std::chrono::milliseconds(5000));
 }
 

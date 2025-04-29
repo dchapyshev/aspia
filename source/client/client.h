@@ -35,9 +35,7 @@ class ClientAuthenticator;
 
 namespace client {
 
-class Client
-    : public QObject,
-      public RouterController::Delegate
+class Client : public QObject
 {
     Q_OBJECT
 
@@ -94,13 +92,10 @@ private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(uint8_t channel_id, size_t pending);
-
-protected:
-    // RouterController::Delegate implementation.
-    void onRouterConnected(const base::Version& router_version) final;
-    void onHostAwaiting() final;
-    void onHostConnected(std::unique_ptr<base::TcpChannel> channel) final;
-    void onErrorOccurred(const RouterController::Error& error) final;
+    void onRouterConnected(const base::Version& router_version);
+    void onHostAwaiting();
+    void onHostConnected();
+    void onRouterErrorOccurred(const client::RouterController::Error& error);
 
 private:
     void startAuthentication();
@@ -109,7 +104,7 @@ private:
 
     QPointer<QTimer> timeout_timer_;
     QPointer<QTimer> reconnect_timer_;
-    std::unique_ptr<RouterController> router_controller_;
+    QPointer<RouterController> router_controller_;
     std::unique_ptr<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
 
