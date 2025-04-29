@@ -70,27 +70,38 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
     interrupted_.store(false, std::memory_order_relaxed);
 
+    emit awake();
     QCoreApplication::sendPostedEvents();
 
     // When calling method sendPostedEvents, the state of variable may change, so we check it.
     if (interrupted_.load(std::memory_order_relaxed))
         return false;
 
-    size_t count = 0;
+    size_t total_count = 0;
+    size_t current_count = 0;
 
-    if (flags & QEventLoop::WaitForMoreEvents)
+    do
     {
-        emit aboutToBlock();
         io_context_.restart();
-        count += io_context_.run_one();
-        emit awake();
+        current_count = io_context_.poll();
+
+        QCoreApplication::sendPostedEvents();
+
+        if (flags.testFlag(QEventLoop::WaitForMoreEvents) &&
+            !interrupted_.load(std::memory_order_relaxed) &&
+            !current_count)
+        {
+            emit aboutToBlock();
+            io_context_.restart();
+            current_count = io_context_.run_one();
+            emit awake();
+        }
+
+        total_count += current_count;
     }
+    while (!interrupted_.load(std::memory_order_relaxed) && current_count);
 
-    io_context_.restart();
-    count += io_context_.poll();
-
-    QCoreApplication::sendPostedEvents();
-    return count > 0;
+    return total_count != 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -313,14 +324,15 @@ void AsioEventDispatcher::scheduleNextTimer()
     timer_.expires_at(next_expire_timer->second.end_time);
     timer_.async_wait([this, timer_id](const std::error_code& error_code)
     {
-        if (error_code || interrupted_.load(std::memory_order_relaxed))
+        if (error_code)
             return;
 
         auto it = timers_.find(timer_id);
         if (it == timers_.end())
             return;
 
-        QCoreApplication::sendEvent(it->second.object, new QTimerEvent(timer_id));
+        QTimerEvent event(timer_id);
+        QCoreApplication::sendEvent(it->second.object, &event);
 
         // When calling method sendEvent the timer may have been deleted.
         it = timers_.find(timer_id);
