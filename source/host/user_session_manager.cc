@@ -612,7 +612,7 @@ void UserSessionManager::startSessionProcess(
     {
         std::wstring desktops;
 
-        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        base::WindowStation window_station = base::WindowStation::open(window_station_name);
         if (window_station.isValid())
         {
             std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());

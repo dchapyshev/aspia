@@ -23,8 +23,7 @@
 
 #include <Windows.h>
 
-#include <string>
-#include <vector>
+#include <QStringList>
 
 namespace base {
 
@@ -35,14 +34,14 @@ public:
     WindowStation(WindowStation&& other) noexcept;
     ~WindowStation();
 
-    static WindowStation open(const wchar_t* name);
+    static WindowStation open(const QString& name);
     static WindowStation forCurrentProcess();
-    static std::vector<std::wstring> windowStationList();
+    static QStringList windowStationList();
 
     bool isValid() const;
     HWINSTA get() const;
     bool setProcessWindowStation();
-    std::wstring name();
+    QString name();
     void close();
 
     WindowStation& operator=(WindowStation&& other) noexcept;

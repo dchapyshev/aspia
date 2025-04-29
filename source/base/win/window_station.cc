@@ -51,9 +51,10 @@ WindowStation::~WindowStation()
 
 //--------------------------------------------------------------------------------------------------
 // static
-WindowStation WindowStation::open(const wchar_t* name)
+WindowStation WindowStation::open(const QString& name)
 {
-    HWINSTA winsta = OpenWindowStationW(name, TRUE, GENERIC_ALL);
+    HWINSTA winsta = OpenWindowStationW(
+        reinterpret_cast<const wchar_t*>(name.utf16()), TRUE, GENERIC_ALL);
     if (!winsta)
     {
         PLOG(LS_ERROR) << "OpenWindowStationW failed";
@@ -79,9 +80,9 @@ WindowStation WindowStation::forCurrentProcess()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::vector<std::wstring> WindowStation::windowStationList()
+QStringList WindowStation::windowStationList()
 {
-    std::vector<std::wstring> list;
+    QStringList list;
 
     if (!EnumWindowStationsW(enumWindowStationProc, reinterpret_cast<LPARAM>(&list)))
     {
@@ -117,20 +118,20 @@ bool WindowStation::setProcessWindowStation()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring WindowStation::name()
+QString WindowStation::name()
 {
     if (!winsta_)
-        return std::wstring();
+        return QString();
 
     wchar_t buffer[128] = { 0 };
 
     if (!GetUserObjectInformationW(winsta_, UOI_NAME, buffer, sizeof(buffer), nullptr))
     {
         PLOG(LS_ERROR) << "GetUserObjectInformationW failed";
-        return std::wstring();
+        return QString();
     }
 
-    return buffer;
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +166,7 @@ WindowStation& WindowStation::operator=(WindowStation&& other) noexcept
 // static
 BOOL WindowStation::enumWindowStationProc(LPWSTR window_station, LPARAM lparam)
 {
-    std::vector<std::wstring>* list = reinterpret_cast<std::vector<std::wstring>*>(lparam);
+    QStringList* list = reinterpret_cast<QStringList*>(lparam);
     if (!list)
     {
         LOG(LS_ERROR) << "Invalid window station list pointer";
@@ -178,7 +179,7 @@ BOOL WindowStation::enumWindowStationProc(LPWSTR window_station, LPARAM lparam)
         return FALSE;
     }
 
-    list->emplace_back(window_station);
+    list->append(QString::fromWCharArray(window_station));
     return TRUE;
 }
 
