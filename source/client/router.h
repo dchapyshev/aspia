@@ -60,8 +60,8 @@ private slots:
     void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
 
 private:
-    std::unique_ptr<QTimer> timeout_timer_;
-    std::unique_ptr<QTimer> reconnect_timer_;
+    QTimer* timeout_timer_ = nullptr;
+    QTimer* reconnect_timer_ = nullptr;
     QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;

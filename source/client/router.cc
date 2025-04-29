@@ -28,9 +28,30 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent)
     : QObject(parent),
+      timeout_timer_(new QTimer(this)),
+      reconnect_timer_(new QTimer(this)),
       window_proxy_(std::move(window_proxy))
 {
     LOG(LS_INFO) << "Ctor";
+
+    reconnect_timer_->setSingleShot(true);
+    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Reconnecting to router";
+        connectToRouter(router_address_, router_port_);
+    });
+
+    timeout_timer_->setSingleShot(true);
+    connect(timeout_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Reconnect timeout";
+        window_proxy_->onWaitForRouterTimeout();
+
+        reconnect_timer_->stop();
+        reconnect_in_progress_ = false;
+        setAutoReconnect(false);
+        delete channel_;
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,8 +243,8 @@ void Router::onTcpConnected()
     LOG(LS_INFO) << "Router connected";
 
     reconnect_in_progress_ = false;
-    reconnect_timer_.reset();
-    timeout_timer_.reset();
+    reconnect_timer_->stop();
+    timeout_timer_->stop();
 
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
@@ -292,26 +313,9 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     if (isAutoReconnect())
     {
         LOG(LS_INFO) << "Reconnect to router enabled";
+
+        timeout_timer_->start(std::chrono::minutes(5));
         reconnect_in_progress_ = true;
-
-        if (!timeout_timer_)
-        {
-            timeout_timer_ = std::make_unique<QTimer>();
-            timeout_timer_->setSingleShot(true);
-
-            connect(timeout_timer_.get(), &QTimer::timeout, this, [this]()
-            {
-                LOG(LS_INFO) << "Reconnect timeout";
-                window_proxy_->onWaitForRouterTimeout();
-
-                reconnect_timer_.reset();
-                reconnect_in_progress_ = false;
-                setAutoReconnect(false);
-                delete channel_;
-            });
-
-            timeout_timer_->start(std::chrono::minutes(5));
-        }
 
         // Delete old channel.
         if (channel_)
@@ -321,15 +325,6 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         }
 
         window_proxy_->onWaitForRouter();
-
-        reconnect_timer_ = std::make_unique<QTimer>();
-
-        connect(reconnect_timer_.get(), &QTimer::timeout, this, [this]()
-        {
-            LOG(LS_INFO) << "Reconnecting to router";
-            connectToRouter(router_address_, router_port_);
-        });
-
         reconnect_timer_->start(std::chrono::seconds(5));
     }
 }
