@@ -73,9 +73,9 @@ void Router::connectToRouter(const QString& address, uint16_t port)
 
     window_proxy_->onConnecting();
 
-    channel_ = std::make_unique<base::TcpChannel>();
+    channel_ = new base::TcpChannel(this);
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
+    connect(channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
 
     channel_->connect(router_address_, router_port_);
 }
@@ -228,22 +228,22 @@ void Router::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
     authenticator_->setUserName(router_username_);
     authenticator_->setPassword(router_password_);
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
             LOG(LS_INFO) << "Successful authentication";
 
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(channel_, &base::TcpChannel::sig_disconnected,
                     this, &Router::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Router::onTcpMessageReceived);
 
             const base::Version& router_version = authenticator_->peerVersion();
@@ -276,10 +276,11 @@ void Router::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_.get());
+    authenticator_->start(channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -306,7 +307,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                 reconnect_timer_.reset();
                 reconnect_in_progress_ = false;
                 setAutoReconnect(false);
-                channel_.reset();
+                delete channel_;
             });
 
             timeout_timer_->start(std::chrono::minutes(5));
@@ -314,7 +315,10 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 
         // Delete old channel.
         if (channel_)
-            channel_.release()->deleteLater();
+        {
+            channel_->deleteLater();
+            channel_ = nullptr;
+        }
 
         window_proxy_->onWaitForRouter();
 

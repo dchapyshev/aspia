@@ -62,8 +62,8 @@ private slots:
 private:
     std::unique_ptr<QTimer> timeout_timer_;
     std::unique_ptr<QTimer> reconnect_timer_;
-    std::unique_ptr<base::TcpChannel> channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    QPointer<base::TcpChannel> channel_;
+    QPointer<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;
 
     QString router_address_;
