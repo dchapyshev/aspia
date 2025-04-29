@@ -20,6 +20,7 @@
 
 #include <QMetaType>
 
+#include <cstdint>
 #include <filesystem>
 #include <string>
 
@@ -29,6 +30,16 @@ void registerMetaTypes()
 {
     qRegisterMetaType<std::filesystem::path>("std::filesystem::path");
     qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<std::u16string>("std::u16string");
+    qRegisterMetaType<uint8_t>("uint8_t");
+    qRegisterMetaType<uint16_t>("uint16_t");
+    qRegisterMetaType<uint32_t>("uint32_t");
+    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<int8_t>("int8_t");
+    qRegisterMetaType<int16_t>("int16_t");
+    qRegisterMetaType<int32_t>("int32_t");
+    qRegisterMetaType<int64_t>("int64_t");
+    qRegisterMetaType<size_t>("size_t");
 }
 
 } // namespace base

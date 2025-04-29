@@ -29,7 +29,6 @@
 
 namespace base {
 class TcpChannelProxy;
-class TaskRunner;
 } // namespace base
 
 namespace host {
