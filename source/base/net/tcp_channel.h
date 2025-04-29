@@ -26,7 +26,7 @@
 #include "base/peer/host_id.h"
 
 #include <asio/ip/tcp.hpp>
-#include <asio/high_resolution_timer.hpp>
+#include <asio/steady_timer.hpp>
 
 namespace base {
 
@@ -90,7 +90,7 @@ public:
     void resume();
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
-    void send(uint8_t channel_id, QByteArray&& buffer, WriteTask::Priority priority = WriteTask::Priority::NORMAL);
+    void send(uint8_t channel_id, QByteArray&& buffer);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -171,7 +171,7 @@ private:
     void onMessageWritten(uint8_t channel_id);
     void onMessageReceived();
 
-    void addWriteTask(WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, QByteArray&& data);
+    void addWriteTask(WriteTask::Type type, uint8_t channel_id, QByteArray&& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
@@ -197,7 +197,7 @@ private:
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
-    std::unique_ptr<asio::high_resolution_timer> keep_alive_timer_;
+    std::unique_ptr<asio::steady_timer> keep_alive_timer_;
     Seconds keep_alive_interval_;
     Seconds keep_alive_timeout_;
     QByteArray keep_alive_counter_;
@@ -210,7 +210,6 @@ private:
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    int next_sequence_num_ = 0;
     WriteQueue write_queue_;
     VariableSizeWriter variable_size_writer_;
     QByteArray write_buffer_;

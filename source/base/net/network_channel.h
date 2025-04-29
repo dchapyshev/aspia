@@ -33,7 +33,7 @@ class NetworkChannel : public QObject
 public:
     static const uint32_t kMaxMessageSize;
 
-    using Clock = std::chrono::high_resolution_clock;
+    using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;

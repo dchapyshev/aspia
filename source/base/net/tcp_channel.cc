@@ -339,9 +339,9 @@ void TcpChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(uint8_t channel_id, QByteArray&& buffer, WriteTask::Priority priority)
+void TcpChannel::send(uint8_t channel_id, QByteArray&& buffer)
 {
-    addWriteTask(WriteTask::Type::USER_DATA, priority, channel_id, std::move(buffer));
+    addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -406,7 +406,7 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
         keep_alive_counter_.resize(sizeof(uint32_t));
         memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 
-        keep_alive_timer_ = std::make_unique<asio::high_resolution_timer>(io_context_);
+        keep_alive_timer_ = std::make_unique<asio::steady_timer>(io_context_);
         keep_alive_timer_->expires_after(keep_alive_interval_);
         keep_alive_timer_->async_wait(
             std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
@@ -635,13 +635,12 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(
-    WriteTask::Type type, WriteTask::Priority priority, uint8_t channel_id, QByteArray&& data)
+void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, QByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(type, priority, next_sequence_num_++, channel_id, std::move(data));
+    write_queue_.emplace(type, channel_id, std::move(data));
 
     if (schedule_write)
         doWrite();
@@ -650,7 +649,7 @@ void TcpChannel::addWriteTask(
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::doWrite()
 {
-    const WriteTask& task = write_queue_.top();
+    const WriteTask& task = write_queue_.front();
     const QByteArray& source_buffer = task.data();
     const uint8_t channel_id = task.channelId();
 
@@ -733,7 +732,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     // Update TX statistics.
     addTxBytes(bytes_transferred);
 
-    const WriteTask& task = write_queue_.top();
+    const WriteTask& task = write_queue_.front();
     WriteTask::Type task_type = task.type();
     uint8_t channel_id = task.channelId();
 
@@ -1084,7 +1083,7 @@ void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
     memcpy(buffer.data() + sizeof(uint8_t) + sizeof(header), data, size);
 
     // Add a task to the queue.
-    addWriteTask(WriteTask::Type::SERVICE_DATA, WriteTask::Priority::REAL_TIME, 0, std::move(buffer));
+    addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
 }
 
 } // namespace base
