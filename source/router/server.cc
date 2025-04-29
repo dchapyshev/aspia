@@ -63,8 +63,9 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Server::Server()
-    : database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
+Server::Server(QObject* parent)
+    : QObject(parent),
+      database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -188,7 +189,8 @@ bool Server::start()
     relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start(listen_interface, port, this);
+    connect(server_.get(), &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+    server_->start(listen_interface, port);
 
     LOG(LS_INFO) << "Server started";
     return true;
@@ -346,31 +348,6 @@ Session* Server::sessionById(Session::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewConnection()
-{
-    if (!server_)
-    {
-        LOG(LS_ERROR) << "No TCP server instance";
-        return;
-    }
-
-    while (server_->hasPendingConnections())
-    {
-        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
-
-        LOG(LS_INFO) << "New connection: " << channel->peerAddress();
-
-        channel->setKeepAlive(true);
-        channel->setNoDelay(true);
-
-        if (authenticator_manager_)
-            authenticator_manager_->addNewChannel(std::move(channel));
-        else
-            LOG(LS_ERROR) << "Authenticator not available";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 {
     for (const auto& session : sessions_)
@@ -478,6 +455,31 @@ void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSessi
             sessions_.erase(it);
             break;
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onNewConnection()
+{
+    if (!server_)
+    {
+        LOG(LS_ERROR) << "No TCP server instance";
+        return;
+    }
+
+    while (server_->hasPendingConnections())
+    {
+        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
+
+        LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+
+        channel->setKeepAlive(true);
+        channel->setNoDelay(true);
+
+        if (authenticator_manager_)
+            authenticator_manager_->addNewChannel(std::move(channel));
+        else
+            LOG(LS_ERROR) << "Authenticator not available";
     }
 }
 

@@ -40,15 +40,7 @@ public:
     explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onNewConnection() = 0;
-    };
-
-    void start(const QString& listen_interface, uint16_t port, Delegate* delegate);
+    void start(const QString& listen_interface, uint16_t port);
     void stop();
     bool hasPendingConnections();
     TcpChannel* nextPendingConnection();
@@ -58,13 +50,15 @@ public:
 
     static bool isValidListenInterface(const QString& interface);
 
+signals:
+    void sig_newConnection();
+
 private:
     void onNewConnection(std::unique_ptr<TcpChannel> channel);
 
     class Impl;
     base::local_shared_ptr<Impl> impl_;
 
-    Delegate* delegate_ = nullptr;
     std::queue<std::unique_ptr<TcpChannel>> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpServer);

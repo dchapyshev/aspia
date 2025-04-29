@@ -216,18 +216,14 @@ TcpServer::~TcpServer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(const QString& listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::start(const QString& listen_interface, uint16_t port)
 {
-    delegate_ = delegate;
-    DCHECK(delegate_);
-
     impl_->start(listen_interface, port, this);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpServer::stop()
 {
-    delegate_ = nullptr;
     impl_->stop();
 }
 
@@ -283,11 +279,8 @@ bool TcpServer::isValidListenInterface(const QString& interface)
 //--------------------------------------------------------------------------------------------------
 void TcpServer::onNewConnection(std::unique_ptr<TcpChannel> channel)
 {
-    if (!delegate_)
-        return;
-
     pending_.emplace(std::move(channel));
-    delegate_->onNewConnection();
+    emit sig_newConnection();
 }
 
 } // namespace base

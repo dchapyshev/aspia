@@ -102,7 +102,9 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start("", settings_.tcpPort(), this);
+    connect(server_.get(), &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+
+    server_->start("", settings_.tcpPort());
 
     if (settings_.isRouterEnabled())
     {
@@ -158,24 +160,6 @@ void Server::setPowerEvent(uint32_t power_event)
             break;
     }
 #endif // defined(OS_WIN)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onNewConnection()
-{
-    LOG(LS_INFO) << "New DIRECT connection";
-
-    if (!server_)
-    {
-        LOG(LS_ERROR) << "No TCP server instance";
-        return;
-    }
-
-    while (server_->hasPendingConnections())
-    {
-        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
-        startAuthentication(std::move(channel));
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,6 +259,24 @@ void Server::onUserListChanged()
 {
     LOG(LS_INFO) << "User list changed";
     reloadUserList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onNewConnection()
+{
+    LOG(LS_INFO) << "New DIRECT connection";
+
+    if (!server_)
+    {
+        LOG(LS_ERROR) << "No TCP server instance";
+        return;
+    }
+
+    while (server_->hasPendingConnections())
+    {
+        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
+        startAuthentication(std::move(channel));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

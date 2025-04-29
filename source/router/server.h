@@ -34,13 +34,15 @@ class SessionHost;
 class SessionRelay;
 
 class Server final
-    : public base::TcpServer::Delegate,
+    : public QObject,
       public SharedKeyPool::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
+    Q_OBJECT
+
 public:
-    Server();
+    explicit Server(QObject* parent = nullptr);
     ~Server() final;
 
     bool start();
@@ -53,9 +55,6 @@ public:
     Session* sessionById(Session::SessionId session_id);
 
 protected:
-    // base::TcpServer::Delegate implementation.
-    void onNewConnection() final;
-
     // SharedKeyPool::Delegate implementation.
     void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) final;
 
@@ -65,6 +64,9 @@ protected:
     // Session::Delegate implementation.
     void onSessionFinished(Session::SessionId session_id,
                            proto::RouterSession session_type) final;
+
+private slots:
+    void onNewConnection();
 
 private:
     base::local_shared_ptr<DatabaseFactory> database_factory_;
