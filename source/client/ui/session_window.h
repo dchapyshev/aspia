@@ -34,7 +34,6 @@ class StatusDialog;
 namespace client {
 
 class Client;
-class ClientProxy;
 
 class SessionWindow : public QWidget
 {
@@ -51,8 +50,12 @@ public:
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
+signals:
+    void sig_start();
+    void sig_stop();
+
 protected:
-    virtual std::unique_ptr<Client> createClient() = 0;
+    virtual Client* createClient() = 0;
     virtual void onInternalReset() = 0;
 
     // QWidget implementation.
@@ -83,7 +86,6 @@ private:
     static QString routerErrorToString(RouterController::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;
-    std::unique_ptr<ClientProxy> client_proxy_;
     common::StatusDialog* status_dialog_ = nullptr;
 };
 

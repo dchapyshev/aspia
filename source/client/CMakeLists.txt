@@ -31,8 +31,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_main.h
     client_port_forwarding.cc
     client_port_forwarding.h
-    client_proxy.cc
-    client_proxy.h
     client_system_info.cc
     client_system_info.h
     client_text_chat.cc

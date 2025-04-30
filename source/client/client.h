@@ -46,9 +46,6 @@ public:
     // Starts a session.
     void start();
 
-    // Stops a session.
-    void stop();
-
     // Sets an instance of a class that stores session state.
     // The method must be called before calling method start().
     void setSessionState(std::shared_ptr<SessionState> session_state);
@@ -99,8 +96,7 @@ private slots:
 
 private:
     void startAuthentication();
-    void delayedReconnectToRouter();
-    void delayedReconnectToHost();
+    void delayedReconnect();
 
     QPointer<QTimer> timeout_timer_;
     QPointer<QTimer> reconnect_timer_;

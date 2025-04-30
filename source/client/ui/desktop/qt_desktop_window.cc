@@ -284,98 +284,71 @@ QtDesktopWindow::~QtDesktopWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Client> QtDesktopWindow::createClient()
+Client* QtDesktopWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>();
+    ClientDesktop* client = new ClientDesktop();
 
-    connect(client.get(), &ClientDesktop::sig_showWindow,
-            this, &QtDesktopWindow::showWindow,
+    connect(client, &ClientDesktop::sig_showWindow, this, &QtDesktopWindow::showWindow,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_configRequired,
-            this, &QtDesktopWindow::configRequired,
+    connect(client, &ClientDesktop::sig_configRequired, this, &QtDesktopWindow::configRequired,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_capabilities,
-            this, &QtDesktopWindow::setCapabilities,
+    connect(client, &ClientDesktop::sig_capabilities, this, &QtDesktopWindow::setCapabilities,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_screenListChanged,
-            this, &QtDesktopWindow::setScreenList,
+    connect(client, &ClientDesktop::sig_screenListChanged, this, &QtDesktopWindow::setScreenList,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_screenTypeChanged,
-            this, &QtDesktopWindow::setScreenType,
+    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &QtDesktopWindow::setScreenType,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_cursorPositionChanged,
-            this, &QtDesktopWindow::setCursorPosition,
+    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &QtDesktopWindow::setCursorPosition,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_systemInfo,
-            this, &QtDesktopWindow::setSystemInfo,
+    connect(client, &ClientDesktop::sig_systemInfo, this, &QtDesktopWindow::setSystemInfo,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_taskManager,
-            this, &QtDesktopWindow::setTaskManager,
+    connect(client, &ClientDesktop::sig_taskManager, this, &QtDesktopWindow::setTaskManager,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_metrics,
-            this, &QtDesktopWindow::setMetrics,
+    connect(client, &ClientDesktop::sig_metrics, this, &QtDesktopWindow::setMetrics,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_frameError,
-            this, &QtDesktopWindow::setFrameError,
+    connect(client, &ClientDesktop::sig_frameError, this, &QtDesktopWindow::setFrameError,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_frameChanged,
-            this, &QtDesktopWindow::setFrame,
+    connect(client, &ClientDesktop::sig_frameChanged, this, &QtDesktopWindow::setFrame,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_drawFrame,
-            this, &QtDesktopWindow::drawFrame,
+    connect(client, &ClientDesktop::sig_drawFrame, this, &QtDesktopWindow::drawFrame,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientDesktop::sig_mouseCursorChanged,
-            this, &QtDesktopWindow::setMouseCursor,
+    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &QtDesktopWindow::setMouseCursor,
             Qt::QueuedConnection);
 
-    connect(this, &QtDesktopWindow::sig_desktopConfigChanged,
-            client.get(), &ClientDesktop::setDesktopConfig,
+    connect(this, &QtDesktopWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_screenSelected,
-            client.get(), &ClientDesktop::setCurrentScreen,
+    connect(this, &QtDesktopWindow::sig_screenSelected, client, &ClientDesktop::setCurrentScreen,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_preferredSizeChanged,
-            client.get(), &ClientDesktop::setPreferredSize,
+    connect(this, &QtDesktopWindow::sig_preferredSizeChanged, client, &ClientDesktop::setPreferredSize,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_videoPaused,
-            client.get(), &ClientDesktop::setVideoPause,
+    connect(this, &QtDesktopWindow::sig_videoPaused, client, &ClientDesktop::setVideoPause,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_audioPaused,
-            client.get(), &ClientDesktop::setAudioPause,
+    connect(this, &QtDesktopWindow::sig_audioPaused, client, &ClientDesktop::setAudioPause,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_videoRecording,
-            client.get(), &ClientDesktop::setVideoRecording,
+    connect(this, &QtDesktopWindow::sig_videoRecording, client, &ClientDesktop::setVideoRecording,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_keyEvent,
-            client.get(), &ClientDesktop::onKeyEvent,
+    connect(this, &QtDesktopWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_textEvent,
-            client.get(), &ClientDesktop::onTextEvent,
+    connect(this, &QtDesktopWindow::sig_textEvent, client, &ClientDesktop::onTextEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_mouseEvent,
-            client.get(), &ClientDesktop::onMouseEvent,
+    connect(this, &QtDesktopWindow::sig_mouseEvent, client, &ClientDesktop::onMouseEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_powerControl,
-            client.get(), &ClientDesktop::onPowerControl,
+    connect(this, &QtDesktopWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_remoteUpdate,
-            client.get(), &ClientDesktop::onRemoteUpdate,
+    connect(this, &QtDesktopWindow::sig_remoteUpdate, client, &ClientDesktop::onRemoteUpdate,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_systemInfoRequested,
-            client.get(), &ClientDesktop::onSystemInfoRequest,
+    connect(this, &QtDesktopWindow::sig_systemInfoRequested, client, &ClientDesktop::onSystemInfoRequest,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_taskManager,
-            client.get(), &ClientDesktop::onTaskManager,
+    connect(this, &QtDesktopWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_metricsRequested,
-            client.get(), &ClientDesktop::onMetricsRequest,
+    connect(this, &QtDesktopWindow::sig_metricsRequested, client, &ClientDesktop::onMetricsRequest,
             Qt::QueuedConnection);
 
     client->setDesktopConfig(desktop_config_);
 
-    return std::move(client);
+    return client;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -830,7 +803,7 @@ void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
+void QtDesktopWindow::closeEvent(QCloseEvent* event)
 {
     LOG(LS_INFO) << "Close event";
 
@@ -845,6 +818,8 @@ void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
         LOG(LS_INFO) << "Close Task Manager window";
         task_manager_->close();
     }
+
+    SessionWindow::closeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

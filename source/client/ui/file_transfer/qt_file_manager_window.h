@@ -44,13 +44,13 @@ public:
     ~QtFileManagerWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() final;
+    Client* createClient() final;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
 
 public slots:
-    void start();
+    void showSessionWindow();
     void onErrorOccurred(proto::FileError error_code);
     void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,

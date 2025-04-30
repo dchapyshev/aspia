@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "client/client_text_chat.h"
-#include "qt_base/application.h"
 #include "ui_qt_text_chat_window.h"
 
 namespace client {
@@ -57,23 +56,20 @@ QtTextChatWindow::~QtTextChatWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Client> QtTextChatWindow::createClient()
+Client* QtTextChatWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientTextChat> client = std::make_unique<ClientTextChat>();
+    ClientTextChat* client = new ClientTextChat();
 
-    connect(this, &QtTextChatWindow::sig_textChatMessage,
-            client.get(), &ClientTextChat::onTextChatMessage,
+    connect(this, &QtTextChatWindow::sig_textChatMessage, client, &ClientTextChat::onTextChatMessage,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientTextChat::sig_start,
-            this, &QtTextChatWindow::start,
+    connect(client, &ClientTextChat::sig_start, this, &QtTextChatWindow::start,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientTextChat::sig_textChatMessage,
-            this, &QtTextChatWindow::onTextChatMessage,
+    connect(client, &ClientTextChat::sig_textChatMessage, this, &QtTextChatWindow::onTextChatMessage,
             Qt::QueuedConnection);
 
-    return std::move(client);
+    return client;
 }
 
 //--------------------------------------------------------------------------------------------------

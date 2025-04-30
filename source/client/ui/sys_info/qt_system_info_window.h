@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "client/ui/session_window.h"
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 #include <QTreeWidget>
 
@@ -45,7 +45,7 @@ public:
     ~QtSystemInfoWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() final;
+    Client* createClient() final;
 
 public slots:
     void start();

@@ -44,17 +44,15 @@ QtPortForwardingWindow::~QtPortForwardingWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Client> QtPortForwardingWindow::createClient()
+Client* QtPortForwardingWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientPortForwarding> client = std::make_unique<ClientPortForwarding>();
+    ClientPortForwarding* client = new ClientPortForwarding();
 
-    connect(client.get(), &ClientPortForwarding::sig_start,
-            this, &QtPortForwardingWindow::start,
+    connect(client, &ClientPortForwarding::sig_start, this, &QtPortForwardingWindow::start,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientPortForwarding::sig_statistics,
-            this, &QtPortForwardingWindow::setStatistics,
+    connect(client, &ClientPortForwarding::sig_statistics, this, &QtPortForwardingWindow::setStatistics,
             Qt::QueuedConnection);
 
     client->setPortForwardingConfig(session_config_);

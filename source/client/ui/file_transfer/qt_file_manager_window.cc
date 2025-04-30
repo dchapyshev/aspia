@@ -61,55 +61,43 @@ QtFileManagerWindow::~QtFileManagerWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Client> QtFileManagerWindow::createClient()
+Client* QtFileManagerWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>();
+    ClientFileTransfer* client = new ClientFileTransfer();
 
-    connect(client.get(), &ClientFileTransfer::sig_started,
-            this, &QtFileManagerWindow::start,
+    connect(client, &ClientFileTransfer::sig_started, this, &QtFileManagerWindow::start,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientFileTransfer::sig_errorOccurred,
-            this, &QtFileManagerWindow::onErrorOccurred,
+    connect(client, &ClientFileTransfer::sig_errorOccurred, this, &QtFileManagerWindow::onErrorOccurred,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientFileTransfer::sig_driveListReply,
-            this, &QtFileManagerWindow::onDriveList,
+    connect(client, &ClientFileTransfer::sig_driveListReply, this, &QtFileManagerWindow::onDriveList,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientFileTransfer::sig_fileListReply,
-            this, &QtFileManagerWindow::onFileList,
+    connect(client, &ClientFileTransfer::sig_fileListReply, this, &QtFileManagerWindow::onFileList,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientFileTransfer::sig_createDirectoryReply,
-            this, &QtFileManagerWindow::onCreateDirectory,
+    connect(client, &ClientFileTransfer::sig_createDirectoryReply, this, &QtFileManagerWindow::onCreateDirectory,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientFileTransfer::sig_renameReply,
-            this, &QtFileManagerWindow::onRename,
+    connect(client, &ClientFileTransfer::sig_renameReply, this, &QtFileManagerWindow::onRename,
             Qt::QueuedConnection);
 
-    connect(this, &QtFileManagerWindow::sig_driveListRequest,
-            client.get(), &ClientFileTransfer::onDriveListRequest,
+    connect(this, &QtFileManagerWindow::sig_driveListRequest, client, &ClientFileTransfer::onDriveListRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_fileListRequest,
-            client.get(), &ClientFileTransfer::onFileListRequest,
+    connect(this, &QtFileManagerWindow::sig_fileListRequest, client, &ClientFileTransfer::onFileListRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_createDirectoryRequest,
-            client.get(), &ClientFileTransfer::onCreateDirectoryRequest,
+    connect(this, &QtFileManagerWindow::sig_createDirectoryRequest, client, &ClientFileTransfer::onCreateDirectoryRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_renameRequest,
-            client.get(), &ClientFileTransfer::onRenameRequest,
+    connect(this, &QtFileManagerWindow::sig_renameRequest, client, &ClientFileTransfer::onRenameRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_removeRequest,
-            client.get(), &ClientFileTransfer::onRemoveRequest,
+    connect(this, &QtFileManagerWindow::sig_removeRequest, client, &ClientFileTransfer::onRemoveRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_transferRequest,
-            client.get(), &ClientFileTransfer::onTransferRequest,
+    connect(this, &QtFileManagerWindow::sig_transferRequest, client, &ClientFileTransfer::onTransferRequest,
             Qt::QueuedConnection);
 
-    return std::move(client);
+    return client;
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::start()
+void QtFileManagerWindow::showSessionWindow()
 {
     LOG(LS_INFO) << "Show window";
     show();

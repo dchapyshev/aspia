@@ -30,9 +30,45 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 Client::Client(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      timeout_timer_(new QTimer(this)),
+      reconnect_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    timeout_timer_->setSingleShot(true);
+    connect(timeout_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Reconnect timeout";
+
+        if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
+            emit sig_waitForRouterTimeout();
+        else
+            emit sig_waitForHostTimeout();
+
+        session_state_->setReconnecting(false);
+        session_state_->setAutoReconnect(false);
+
+        if (channel_)
+        {
+            LOG(LS_INFO) << "Destroy channel";
+            channel_->deleteLater();
+        }
+
+        if (router_controller_)
+        {
+            LOG(LS_INFO) << "Destroy router controller";
+            router_controller_->deleteLater();
+        }
+    });
+
+    reconnect_timer_->setSingleShot(true);
+    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Reconnecting...";
+        state_ = State::CREATED;
+        start();
+    });
 
 #if defined(OS_MAC)
     base::addAppNapBlock();
@@ -43,7 +79,9 @@ Client::Client(QObject* parent)
 Client::~Client()
 {
     LOG(LS_INFO) << "Dtor";
-    stop();
+
+    state_ = State::STOPPPED;
+    emit sig_statusStopped();
 
 #if defined(OS_MAC)
     base::releaseAppNapBlock();
@@ -119,36 +157,6 @@ void Client::start()
         // Now connect to the host.
         emit sig_hostConnecting();
         channel_->connect(config.address_or_id, config.port);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::stop()
-{
-    if (state_ != State::STOPPPED)
-    {
-        LOG(LS_INFO) << "Stopping client...";
-        state_ = State::STOPPPED;
-
-        if (router_controller_)
-            router_controller_->deleteLater();
-        if (authenticator_)
-            authenticator_->deleteLater();
-        if (channel_)
-            channel_->deleteLater();
-        if (timeout_timer_)
-            timeout_timer_->deleteLater();
-
-        session_state_->setAutoReconnect(false);
-        session_state_->setReconnecting(false);
-
-        emit sig_statusStopped();
-
-        LOG(LS_INFO) << "Client stopped";
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Client already stopped";
     }
 }
 
@@ -239,38 +247,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         LOG(LS_INFO) << "Reconnect to host enabled";
         session_state_->setReconnecting(true);
 
-        if (!timeout_timer_)
-        {
-            timeout_timer_ = new QTimer(this);
-            timeout_timer_->setSingleShot(true);
-
-            connect(timeout_timer_, &QTimer::timeout, this, [this]()
-            {
-                LOG(LS_INFO) << "Reconnect timeout";
-
-                if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
-                    emit sig_waitForRouterTimeout();
-                else
-                    emit sig_waitForHostTimeout();
-
-                session_state_->setReconnecting(false);
-                session_state_->setAutoReconnect(false);
-
-                if (channel_)
-                {
-                    LOG(LS_INFO) << "Destroy channel";
-                    channel_->deleteLater();
-                }
-
-                if (router_controller_)
-                {
-                    LOG(LS_INFO) << "Destroy router controller";
-                    router_controller_->deleteLater();
-                }
-            });
-
-            timeout_timer_->start(std::chrono::minutes(5));
-        }
+        timeout_timer_->start(std::chrono::minutes(5));
 
         // Delete old channel.
         if (channel_)
@@ -289,7 +266,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         else
         {
             emit sig_waitForHost();
-            delayedReconnectToHost();
+            delayedReconnect();
         }
     }
 }
@@ -378,7 +355,7 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
     if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
     {
         emit sig_waitForRouter();
-        delayedReconnectToRouter();
+        delayedReconnect();
     }
 }
 
@@ -388,8 +365,8 @@ void Client::startAuthentication()
     LOG(LS_INFO) << "Start authentication for '" << session_state_->hostUserName() << "'";
 
     session_state_->setReconnecting(false);
-    reconnect_timer_->deleteLater();
-    timeout_timer_->deleteLater();
+    reconnect_timer_->stop();
+    timeout_timer_->stop();
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
@@ -462,40 +439,8 @@ void Client::startAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::delayedReconnectToRouter()
+void Client::delayedReconnect()
 {
-    if (reconnect_timer_)
-        reconnect_timer_->deleteLater();
-
-    reconnect_timer_ = new QTimer(this);
-    reconnect_timer_->setSingleShot(true);
-
-    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
-    {
-        LOG(LS_INFO) << "Reconnecting to router";
-        state_ = State::CREATED;
-        start();
-    });
-
-    reconnect_timer_->start(std::chrono::seconds(5));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::delayedReconnectToHost()
-{
-    if (reconnect_timer_)
-        reconnect_timer_->deleteLater();
-
-    reconnect_timer_ = new QTimer(this);
-    reconnect_timer_->setSingleShot(true);
-
-    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
-    {
-        LOG(LS_INFO) << "Reconnecting to host";
-        state_ = State::CREATED;
-        start();
-    });
-
     reconnect_timer_->start(std::chrono::seconds(5));
 }
 

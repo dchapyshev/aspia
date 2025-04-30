@@ -371,20 +371,17 @@ QtSystemInfoWindow::~QtSystemInfoWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Client> QtSystemInfoWindow::createClient()
+Client* QtSystemInfoWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
-    std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>();
+    ClientSystemInfo* client = new ClientSystemInfo();
 
-    connect(this, &QtSystemInfoWindow::sig_systemInfoRequired,
-            client.get(), &ClientSystemInfo::onSystemInfoRequest,
+    connect(this, &QtSystemInfoWindow::sig_systemInfoRequired, client, &ClientSystemInfo::onSystemInfoRequest,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientSystemInfo::sig_start,
-            this, &QtSystemInfoWindow::start,
+    connect(client, &ClientSystemInfo::sig_start, this, &QtSystemInfoWindow::start,
             Qt::QueuedConnection);
-    connect(client.get(), &ClientSystemInfo::sig_systemInfo,
-            this, &QtSystemInfoWindow::setSystemInfo,
+    connect(client, &ClientSystemInfo::sig_systemInfo, this, &QtSystemInfoWindow::setSystemInfo,
             Qt::QueuedConnection);
 
     return std::move(client);

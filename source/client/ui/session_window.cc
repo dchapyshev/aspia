@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "client/client.h"
-#include "client/client_proxy.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/status_dialog.h"
 #include "qt_base/application.h"
@@ -52,12 +51,6 @@ SessionWindow::~SessionWindow()
 bool SessionWindow::connectToHost(Config config)
 {
     LOG(LS_INFO) << "Connecting to host";
-
-    if (client_proxy_)
-    {
-        LOG(LS_ERROR) << "Attempt to start an already running client";
-        return false;
-    }
 
     // Set the window title.
     setClientTitle(config);
@@ -93,46 +86,45 @@ bool SessionWindow::connectToHost(Config config)
     session_state_ = std::make_shared<SessionState>(config);
 
     // Create a client instance.
-    std::unique_ptr<Client> client = createClient();
+    Client* client = createClient();
 
     client->moveToThread(base::GuiApplication::ioThread());
-
-    connect(client.get(), &Client::sig_statusStarted, this, &SessionWindow::onStarted,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_statusStopped, this, &SessionWindow::onStopped,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_routerConnecting, this, &SessionWindow::onRouterConnecting,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_routerConnected, this, &SessionWindow::onRouterConnected,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_hostConnecting, this, &SessionWindow::onHostConnecting,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_hostConnected, this, &SessionWindow::onHostConnected,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_hostDisconnected, this, &SessionWindow::onHostDisconnected,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_waitForRouter, this, &SessionWindow::onWaitForRouter,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_waitForRouterTimeout, this, &SessionWindow::onWaitForRouterTimeout,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_waitForHost, this, &SessionWindow::onWaitForHost,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_waitForHostTimeout, this, &SessionWindow::onWaitForHostTimeout,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_versionMismatch, this, &SessionWindow::onVersionMismatch,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_accessDenied, this, &SessionWindow::onAccessDenied,
-            Qt::QueuedConnection);
-    connect(client.get(), &Client::sig_routerError, this, &SessionWindow::onRouterError,
-            Qt::QueuedConnection);
-
     client->setSessionState(session_state_);
 
-    client_proxy_ = std::make_unique<ClientProxy>(
-        base::GuiApplication::ioTaskRunner(), std::move(client));
+    connect(client, &Client::sig_statusStarted, this, &SessionWindow::onStarted,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_statusStopped, this, &SessionWindow::onStopped,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_routerConnecting, this, &SessionWindow::onRouterConnecting,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_routerConnected, this, &SessionWindow::onRouterConnected,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_hostConnecting, this, &SessionWindow::onHostConnecting,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_hostConnected, this, &SessionWindow::onHostConnected,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_hostDisconnected, this, &SessionWindow::onHostDisconnected,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_waitForRouter, this, &SessionWindow::onWaitForRouter,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_waitForRouterTimeout, this, &SessionWindow::onWaitForRouterTimeout,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_waitForHost, this, &SessionWindow::onWaitForHost,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_waitForHostTimeout, this, &SessionWindow::onWaitForHostTimeout,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_versionMismatch, this, &SessionWindow::onVersionMismatch,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_accessDenied, this, &SessionWindow::onAccessDenied,
+            Qt::QueuedConnection);
+    connect(client, &Client::sig_routerError, this, &SessionWindow::onRouterError,
+            Qt::QueuedConnection);
 
-    LOG(LS_INFO) << "Start client proxy";
-    client_proxy_->start();
+    connect(this, &SessionWindow::sig_start, client, &Client::start, Qt::QueuedConnection);
+    connect(this, &SessionWindow::sig_stop, client, &Client::deleteLater, Qt::QueuedConnection);
+
+    LOG(LS_INFO) << "Start client";
+    emit sig_start();
     return true;
 }
 
@@ -140,17 +132,7 @@ bool SessionWindow::connectToHost(Config config)
 void SessionWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(LS_INFO) << "Close event";
-
-    if (client_proxy_)
-    {
-        LOG(LS_INFO) << "Stopping client proxy";
-        client_proxy_->stop();
-        client_proxy_.reset();
-    }
-    else
-    {
-        LOG(LS_INFO) << "No client proxy";
-    }
+    emit sig_stop();
 }
 
 //--------------------------------------------------------------------------------------------------

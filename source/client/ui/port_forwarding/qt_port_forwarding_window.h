@@ -40,7 +40,7 @@ public:
     ~QtPortForwardingWindow() final;
 
     // SessionWindow implementation.
-    std::unique_ptr<Client> createClient() final;
+    Client* createClient() final;
 
 public slots:
     void start();
