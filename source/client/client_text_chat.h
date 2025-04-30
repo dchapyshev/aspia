@@ -36,7 +36,6 @@ public slots:
     void onTextChatMessage(const proto::TextChat& text_chat);
 
 signals:
-    void sig_start();
     void sig_textChatMessage(const proto::TextChat& text_chat);
 
 protected:

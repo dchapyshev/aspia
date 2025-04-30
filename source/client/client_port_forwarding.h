@@ -47,7 +47,6 @@ public:
     void setPortForwardingConfig(const proto::port_forwarding::Config& config);
 
 signals:
-    void sig_start();
     void sig_statistics(const client::ClientPortForwarding::Statistics& statistics);
 
 protected:

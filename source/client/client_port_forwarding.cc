@@ -130,8 +130,6 @@ void ClientPortForwarding::onSessionStarted()
 
     statistics_timer_->start(std::chrono::seconds(1));
     sendPortForwardingRequest();
-
-    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------

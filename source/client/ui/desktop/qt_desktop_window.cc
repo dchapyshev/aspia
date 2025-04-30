@@ -175,7 +175,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                     this, &QtDesktopWindow::sig_systemInfoRequested);
         }
 
-        system_info_->start();
+        system_info_->onShowWindow();
     });
 
     connect(toolbar_, &DesktopToolBar::sig_startTaskManager, this, [this]()
@@ -290,31 +290,31 @@ Client* QtDesktopWindow::createClient()
 
     ClientDesktop* client = new ClientDesktop();
 
-    connect(client, &ClientDesktop::sig_showWindow, this, &QtDesktopWindow::showWindow,
+    connect(client, &ClientDesktop::sig_showSessionWindow, this, &QtDesktopWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_configRequired, this, &QtDesktopWindow::configRequired,
+    connect(client, &ClientDesktop::sig_configRequired, this, &QtDesktopWindow::onConfigRequired,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_capabilities, this, &QtDesktopWindow::setCapabilities,
+    connect(client, &ClientDesktop::sig_capabilities, this, &QtDesktopWindow::onCapabilitiesChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenListChanged, this, &QtDesktopWindow::setScreenList,
+    connect(client, &ClientDesktop::sig_screenListChanged, this, &QtDesktopWindow::onScreenListChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &QtDesktopWindow::setScreenType,
+    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &QtDesktopWindow::onScreenTypeChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &QtDesktopWindow::setCursorPosition,
+    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &QtDesktopWindow::onCursorPositionChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_systemInfo, this, &QtDesktopWindow::setSystemInfo,
+    connect(client, &ClientDesktop::sig_systemInfo, this, &QtDesktopWindow::onSystemInfoChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_taskManager, this, &QtDesktopWindow::setTaskManager,
+    connect(client, &ClientDesktop::sig_taskManager, this, &QtDesktopWindow::onTaskManagerChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_metrics, this, &QtDesktopWindow::setMetrics,
+    connect(client, &ClientDesktop::sig_metrics, this, &QtDesktopWindow::onMetricsChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameError, this, &QtDesktopWindow::setFrameError,
+    connect(client, &ClientDesktop::sig_frameError, this, &QtDesktopWindow::onFrameError,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameChanged, this, &QtDesktopWindow::setFrame,
+    connect(client, &ClientDesktop::sig_frameChanged, this, &QtDesktopWindow::onFrameChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_drawFrame, this, &QtDesktopWindow::drawFrame,
+    connect(client, &ClientDesktop::sig_drawFrame, this, &QtDesktopWindow::onDrawFrame,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &QtDesktopWindow::setMouseCursor,
+    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &QtDesktopWindow::onMouseCursorChanged,
             Qt::QueuedConnection);
 
     connect(this, &QtDesktopWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
@@ -352,7 +352,7 @@ Client* QtDesktopWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::showWindow()
+void QtDesktopWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
@@ -363,7 +363,7 @@ void QtDesktopWindow::showWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::configRequired()
+void QtDesktopWindow::onConfigRequired()
 {
     LOG(LS_INFO) << "Config required";
 
@@ -398,7 +398,7 @@ void QtDesktopWindow::configRequired()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabilities)
+void QtDesktopWindow::onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities)
 {
     video_encodings_ = capabilities.video_encodings();
 
@@ -481,19 +481,19 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
+void QtDesktopWindow::onScreenListChanged(const proto::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setScreenType(const proto::ScreenType& screen_type)
+void QtDesktopWindow::onScreenTypeChanged(const proto::ScreenType& screen_type)
 {
     toolbar_->setScreenType(screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_position)
+void QtDesktopWindow::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     base::Frame* frame = desktop_->desktopFrame();
     if (!frame)
@@ -513,21 +513,21 @@ void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_posi
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
+void QtDesktopWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
 {
     if (system_info_)
-        system_info_->setSystemInfo(system_info);
+        system_info_->onSystemInfoChanged(system_info);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setTaskManager(const proto::task_manager::HostToClient& message)
+void QtDesktopWindow::onTaskManagerChanged(const proto::task_manager::HostToClient& message)
 {
     if (task_manager_)
         task_manager_->readMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setMetrics(const client::ClientDesktop::Metrics& metrics)
+void QtDesktopWindow::onMetricsChanged(const client::ClientDesktop::Metrics& metrics)
 {
     if (!statistics_dialog_)
     {
@@ -547,14 +547,14 @@ void QtDesktopWindow::setMetrics(const client::ClientDesktop::Metrics& metrics)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setFrameError(proto::VideoErrorCode error_code)
+void QtDesktopWindow::onFrameError(proto::VideoErrorCode error_code)
 {
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setFrame(
+void QtDesktopWindow::onFrameChanged(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
@@ -582,14 +582,14 @@ void QtDesktopWindow::setFrame(
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::drawFrame()
+void QtDesktopWindow::onDrawFrame()
 {
     desktop_->drawDesktopFrame();
     toolbar_->update();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
+void QtDesktopWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     base::Point local_dpi(base::MouseCursor::kDefaultDpiX, base::MouseCursor::kDefaultDpiY);
     base::Point remote_dpi = mouse_cursor->constDpi();

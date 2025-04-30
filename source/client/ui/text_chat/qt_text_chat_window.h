@@ -45,7 +45,7 @@ public:
     Client* createClient() final;
 
 public slots:
-    void start();
+    void onShowWindow();
     void onTextChatMessage(const proto::TextChat& text_chat);
 
 signals:

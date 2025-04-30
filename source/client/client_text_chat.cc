@@ -46,7 +46,6 @@ void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
 void ClientTextChat::onSessionStarted()
 {
     LOG(LS_INFO) << "Text chat session started";
-    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------

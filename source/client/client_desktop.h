@@ -106,7 +106,6 @@ public slots:
     void onMetricsRequest();
 
 signals:
-    void sig_showWindow();
     void sig_configRequired();
     void sig_capabilities(const proto::DesktopCapabilities& capabilities);
     void sig_screenListChanged(const proto::ScreenList& screen_list);

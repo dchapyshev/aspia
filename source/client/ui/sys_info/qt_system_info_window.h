@@ -48,8 +48,8 @@ public:
     Client* createClient() final;
 
 public slots:
-    void start();
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
+    void onShowWindow();
+    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
 
 signals:
     void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);

@@ -134,7 +134,6 @@ void ClientDesktop::onSessionStarted()
     started_ = true;
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
-    emit sig_showWindow();
 
     clipboard_monitor_ = new common::ClipboardMonitor(this);
     connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,

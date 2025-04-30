@@ -55,19 +55,19 @@ public:
     Client* createClient() final;
 
 public slots:
-    void showWindow();
-    void configRequired();
-    void setCapabilities(const proto::DesktopCapabilities& capabilities);
-    void setScreenList(const proto::ScreenList& screen_list);
-    void setScreenType(const proto::ScreenType& screen_type);
-    void setCursorPosition(const proto::CursorPosition& cursor_position);
-    void setSystemInfo(const proto::system_info::SystemInfo& system_info);
-    void setTaskManager(const proto::task_manager::HostToClient& message);
-    void setMetrics(const client::ClientDesktop::Metrics& metrics);
-    void setFrameError(proto::VideoErrorCode error_code);
-    void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
-    void drawFrame();
-    void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);
+    void onShowWindow();
+    void onConfigRequired();
+    void onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities);
+    void onScreenListChanged(const proto::ScreenList& screen_list);
+    void onScreenTypeChanged(const proto::ScreenType& screen_type);
+    void onCursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
+    void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
+    void onMetricsChanged(const client::ClientDesktop::Metrics& metrics);
+    void onFrameError(proto::VideoErrorCode error_code);
+    void onFrameChanged(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
+    void onDrawFrame();
+    void onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
 signals:
     void sig_desktopConfigChanged(const proto::DesktopConfig& config);

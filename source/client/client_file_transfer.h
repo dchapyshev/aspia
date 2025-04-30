@@ -49,7 +49,6 @@ public slots:
     void onTransferRequest(client::FileTransfer* transfer);
 
 signals:
-    void sig_started();
     void sig_errorOccurred(proto::FileError error_code);
     void sig_driveListReply(common::FileTask::Target target,
                             proto::FileError error_code,

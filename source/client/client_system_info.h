@@ -36,7 +36,6 @@ public slots:
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
 signals:
-    void sig_start();
     void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
 
 protected:

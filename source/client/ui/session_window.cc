@@ -278,7 +278,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
         break;
 
         default:
-            return;
+            break;
     }
 }
 

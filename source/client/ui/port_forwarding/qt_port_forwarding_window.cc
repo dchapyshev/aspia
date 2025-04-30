@@ -50,9 +50,9 @@ Client* QtPortForwardingWindow::createClient()
 
     ClientPortForwarding* client = new ClientPortForwarding();
 
-    connect(client, &ClientPortForwarding::sig_start, this, &QtPortForwardingWindow::start,
+    connect(client, &ClientPortForwarding::sig_showSessionWindow, this, &QtPortForwardingWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientPortForwarding::sig_statistics, this, &QtPortForwardingWindow::setStatistics,
+    connect(client, &ClientPortForwarding::sig_statistics, this, &QtPortForwardingWindow::onStatisticsChanged,
             Qt::QueuedConnection);
 
     client->setPortForwardingConfig(session_config_);
@@ -65,7 +65,7 @@ Client* QtPortForwardingWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::start()
+void QtPortForwardingWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
     show();
@@ -73,7 +73,7 @@ void QtPortForwardingWindow::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::setStatistics(const ClientPortForwarding::Statistics& statistics)
+void QtPortForwardingWindow::onStatisticsChanged(const ClientPortForwarding::Statistics& statistics)
 {
     ui->labelReceivedValue->setText(QString::number(statistics.rx_bytes));
     ui->labelSentValue->setText(QString::number(statistics.tx_bytes));

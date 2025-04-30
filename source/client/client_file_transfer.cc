@@ -52,8 +52,6 @@ void ClientFileTransfer::onSessionStarted()
 
     connect(remote_task_factory_, &common::FileTaskFactory::sig_taskDone,
             this, &ClientFileTransfer::onTaskDone);
-
-    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------

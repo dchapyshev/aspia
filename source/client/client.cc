@@ -465,6 +465,8 @@ void Client::startAuthentication()
                 // authentication passed).
                 onSessionStarted();
 
+                emit sig_showSessionWindow();
+
                 // Now the session will receive incoming messages.
                 channel_->resume();
             }

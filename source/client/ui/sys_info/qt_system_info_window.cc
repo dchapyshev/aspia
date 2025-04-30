@@ -379,16 +379,16 @@ Client* QtSystemInfoWindow::createClient()
 
     connect(this, &QtSystemInfoWindow::sig_systemInfoRequired, client, &ClientSystemInfo::onSystemInfoRequest,
             Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_start, this, &QtSystemInfoWindow::start,
+    connect(client, &ClientSystemInfo::sig_showSessionWindow, this, &QtSystemInfoWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_systemInfo, this, &QtSystemInfoWindow::setSystemInfo,
+    connect(client, &ClientSystemInfo::sig_systemInfo, this, &QtSystemInfoWindow::onSystemInfoChanged,
             Qt::QueuedConnection);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::start()
+void QtSystemInfoWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
@@ -411,7 +411,7 @@ void QtSystemInfoWindow::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
+void QtSystemInfoWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {

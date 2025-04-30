@@ -43,8 +43,8 @@ public:
     Client* createClient() final;
 
 public slots:
-    void start();
-    void setStatistics(const client::ClientPortForwarding::Statistics& statistics);
+    void onShowWindow();
+    void onStatisticsChanged(const client::ClientPortForwarding::Statistics& statistics);
 
 protected:
     // SessionWindow implementation.

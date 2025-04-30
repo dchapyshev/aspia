@@ -74,6 +74,7 @@ public:
 
 signals:
     void sig_statusChanged(Client::Status status, const QVariant& data = QVariant());
+    void sig_showSessionWindow();
 
 protected:
     // Indicates that the session is started.

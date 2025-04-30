@@ -67,7 +67,7 @@ Client* QtFileManagerWindow::createClient()
 
     ClientFileTransfer* client = new ClientFileTransfer();
 
-    connect(client, &ClientFileTransfer::sig_started, this, &QtFileManagerWindow::showSessionWindow,
+    connect(client, &ClientFileTransfer::sig_showSessionWindow, this, &QtFileManagerWindow::showSessionWindow,
             Qt::QueuedConnection);
     connect(client, &ClientFileTransfer::sig_errorOccurred, this, &QtFileManagerWindow::onErrorOccurred,
             Qt::QueuedConnection);

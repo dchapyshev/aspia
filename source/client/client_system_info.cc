@@ -46,7 +46,6 @@ void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoR
 void ClientSystemInfo::onSessionStarted()
 {
     LOG(LS_INFO) << "System info session started";
-    emit sig_start();
 }
 
 //--------------------------------------------------------------------------------------------------

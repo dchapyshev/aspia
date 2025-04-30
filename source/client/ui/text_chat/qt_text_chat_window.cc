@@ -64,7 +64,7 @@ Client* QtTextChatWindow::createClient()
 
     connect(this, &QtTextChatWindow::sig_textChatMessage, client, &ClientTextChat::onTextChatMessage,
             Qt::QueuedConnection);
-    connect(client, &ClientTextChat::sig_start, this, &QtTextChatWindow::start,
+    connect(client, &ClientTextChat::sig_showSessionWindow, this, &QtTextChatWindow::onShowWindow,
             Qt::QueuedConnection);
     connect(client, &ClientTextChat::sig_textChatMessage, this, &QtTextChatWindow::onTextChatMessage,
             Qt::QueuedConnection);
@@ -73,7 +73,7 @@ Client* QtTextChatWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTextChatWindow::start()
+void QtTextChatWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
