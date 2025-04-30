@@ -27,14 +27,12 @@
 
 namespace client {
 
-class RouterWindowProxy;
-
 class Router final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent = nullptr);
+    explicit Router(QObject* parent = nullptr);
     ~Router() final;
 
     void setUserName(const QString& username);
@@ -54,6 +52,19 @@ public:
     void deleteUser(int64_t entry_id);
     void disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
 
+signals:
+    void sig_connecting();
+    void sig_connected(const base::Version& peer_version);
+    void sig_disconnected(base::NetworkChannel::ErrorCode error_code);
+    void sig_waitForRouter();
+    void sig_waitForRouterTimeout();
+    void sig_versionMismatch(const base::Version& router, const base::Version& client);
+    void sig_accessDenied(base::Authenticator::ErrorCode error_code);
+    void sig_sessionList(std::shared_ptr<proto::SessionList> session_list);
+    void sig_sessionResult(std::shared_ptr<proto::SessionResult> session_result);
+    void sig_userList(std::shared_ptr<proto::UserList> user_list);
+    void sig_userResult(std::shared_ptr<proto::UserResult> user_result);
+
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
@@ -64,7 +75,6 @@ private:
     QTimer* reconnect_timer_ = nullptr;
     QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
-    std::shared_ptr<RouterWindowProxy> window_proxy_;
 
     QString router_address_;
     uint16_t router_port_ = 0;

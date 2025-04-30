@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include <QMetaType>
+
 namespace base {
 
 // Version represents a dotted version number, like "1.2.3.4", supporting parsing and comparison.
@@ -97,5 +99,7 @@ bool operator>=(const Version& v1, const Version& v2);
 std::ostream& operator<<(std::ostream& stream, const Version& v);
 
 } // namespace base
+
+Q_DECLARE_METATYPE(base::Version)
 
 #endif // BASE_VERSION_H

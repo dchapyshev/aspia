@@ -19,8 +19,11 @@
 #ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 #define CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 
+#include "base/version.h"
+#include "base/peer/authenticator.h"
+#include "base/net/network_channel.h"
 #include "client/router_config.h"
-#include "client/router_window.h"
+#include "proto/router_admin.pb.h"
 
 #include <QMainWindow>
 #include <QPointer>
@@ -39,11 +42,8 @@ class StatusDialog;
 namespace client {
 
 class RouterProxy;
-class RouterWindowProxy;
 
-class RouterManagerWindow final
-    : public QMainWindow,
-      public RouterWindow
+class RouterManagerWindow final : public QMainWindow
 {
     Q_OBJECT
 
@@ -53,18 +53,18 @@ public:
 
     void connectToRouter(const RouterConfig& router_config);
 
-    // RouterWindow implementation.
-    void onConnecting() final;
-    void onConnected(const base::Version& peer_version) final;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) final;
-    void onWaitForRouter() final;
-    void onWaitForRouterTimeout() final;
-    void onVersionMismatch(const base::Version& router, const base::Version& client) final;
-    void onAccessDenied(base::Authenticator::ErrorCode error_code) final;
-    void onSessionList(std::shared_ptr<proto::SessionList> session_list) final;
-    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) final;
-    void onUserList(std::shared_ptr<proto::UserList> user_list) final;
-    void onUserResult(std::shared_ptr<proto::UserResult> user_result) final;
+public slots:
+    void onConnecting();
+    void onConnected(const base::Version& peer_version);
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onWaitForRouter();
+    void onWaitForRouterTimeout();
+    void onVersionMismatch(const base::Version& router, const base::Version& client);
+    void onAccessDenied(base::Authenticator::ErrorCode error_code);
+    void onSessionList(std::shared_ptr<proto::SessionList> session_list);
+    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result);
+    void onUserList(std::shared_ptr<proto::UserList> user_list);
+    void onUserResult(std::shared_ptr<proto::UserResult> user_result);
 
     static QString delayToString(uint64_t delay);
     static QString sizeToString(int64_t size);
@@ -114,7 +114,6 @@ private:
 
     common::StatusDialog* status_dialog_;
 
-    std::shared_ptr<RouterWindowProxy> window_proxy_;
     std::unique_ptr<RouterProxy> router_proxy_;
 
     int current_hosts_column_ = 0;

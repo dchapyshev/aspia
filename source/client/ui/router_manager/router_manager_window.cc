@@ -23,7 +23,6 @@
 #include "base/gui_application.h"
 #include "client/router.h"
 #include "client/router_proxy.h"
-#include "client/router_window_proxy.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/router_manager/router_user_dialog.h"
 #include "common/ui/status_dialog.h"
@@ -39,6 +38,11 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTimer>
+
+Q_DECLARE_METATYPE(std::shared_ptr<proto::SessionList>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::SessionResult>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::UserList>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::UserResult>)
 
 namespace client {
 
@@ -307,9 +311,7 @@ void copyTextToClipboard(const QString& text)
 RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(std::make_unique<Ui::RouterManagerWindow>()),
-      status_dialog_(new common::StatusDialog(this)),
-      window_proxy_(std::make_shared<RouterWindowProxy>(
-          base::GuiApplication::uiTaskRunner(), this))
+      status_dialog_(new common::StatusDialog(this))
 {
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
@@ -441,8 +443,6 @@ RouterManagerWindow::~RouterManagerWindow()
 
     ClientSettings settings;
     settings.setRouterManagerState(saveState());
-
-    window_proxy_->dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -454,10 +454,45 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     peer_address_ = router_config.address;
     peer_port_ = router_config.port;
 
-    std::unique_ptr<Router> router = std::make_unique<Router>(window_proxy_);
+    std::unique_ptr<Router> router = std::make_unique<Router>();
 
+    router->moveToThread(base::GuiApplication::ioThread());
     router->setUserName(router_config.username);
     router->setPassword(router_config.password);
+
+    connect(router.get(), &Router::sig_connecting,
+            this, &RouterManagerWindow::onConnecting,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_connected,
+            this, &RouterManagerWindow::onConnected,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_disconnected,
+            this, &RouterManagerWindow::onDisconnected,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_waitForRouter,
+            this, &RouterManagerWindow::onWaitForRouter,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_waitForRouterTimeout,
+            this, &RouterManagerWindow::onWaitForRouterTimeout,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_versionMismatch,
+            this, &RouterManagerWindow::onVersionMismatch,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_accessDenied,
+            this, &RouterManagerWindow::onAccessDenied,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_sessionList,
+            this, &RouterManagerWindow::onSessionList,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_sessionResult,
+            this, &RouterManagerWindow::onSessionResult,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_userList,
+            this, &RouterManagerWindow::onUserList,
+            Qt::QueuedConnection);
+    connect(router.get(), &Router::sig_userResult,
+            this, &RouterManagerWindow::onUserResult,
+            Qt::QueuedConnection);
 
     router_proxy_ = std::make_unique<RouterProxy>(
         base::GuiApplication::ioTaskRunner(), std::move(router));

@@ -20,17 +20,15 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "client/router_window_proxy.h"
 #include "proto/router_common.pb.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent)
+Router::Router(QObject* parent)
     : QObject(parent),
       timeout_timer_(new QTimer(this)),
-      reconnect_timer_(new QTimer(this)),
-      window_proxy_(std::move(window_proxy))
+      reconnect_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -45,7 +43,7 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy, QObject* parent)
     connect(timeout_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Reconnect timeout";
-        window_proxy_->onWaitForRouterTimeout();
+        emit sig_waitForRouterTimeout();
 
         reconnect_timer_->stop();
         reconnect_in_progress_ = false;
@@ -92,12 +90,10 @@ void Router::connectToRouter(const QString& address, uint16_t port)
 
     LOG(LS_INFO) << "Connecting to router " << router_address_ << ":" << router_port_;
 
-    window_proxy_->onConnecting();
+    emit sig_connecting();
 
     channel_ = new base::TcpChannel(this);
-
     connect(channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
-
     channel_->connect(router_address_, router_port_);
 }
 
@@ -279,11 +275,11 @@ void Router::onTcpConnected()
             {
                 LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
                 << " client: " << client_version.toString();
-                window_proxy_->onVersionMismatch(router_version, client_version);
+                emit sig_versionMismatch(router_version, client_version);
             }
             else
             {
-                window_proxy_->onConnected(router_version);
+                emit sig_connected(router_version);
 
                 // Now the session will receive incoming messages.
                 channel_->resume();
@@ -293,7 +289,7 @@ void Router::onTcpConnected()
         {
             LOG(LS_INFO) << "Failed authentication: "
                          << base::Authenticator::errorToString(error_code);
-            window_proxy_->onAccessDenied(error_code);
+            emit sig_accessDenied(error_code);
         }
 
         // Authenticator is no longer needed.
@@ -308,7 +304,7 @@ void Router::onTcpConnected()
 void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
-    window_proxy_->onDisconnected(error_code);
+    emit sig_disconnected(error_code);
 
     if (isAutoReconnect())
     {
@@ -324,7 +320,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
             channel_ = nullptr;
         }
 
-        window_proxy_->onWaitForRouter();
+        emit sig_waitForRouter();
         reconnect_timer_->start(std::chrono::seconds(5));
     }
 }
@@ -343,31 +339,23 @@ void Router::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& bu
     if (message.has_session_list())
     {
         LOG(LS_INFO) << "Session list received";
-
-        window_proxy_->onSessionList(
-            std::shared_ptr<proto::SessionList>(message.release_session_list()));
+        emit sig_sessionList(std::shared_ptr<proto::SessionList>(message.release_session_list()));
     }
     else if (message.has_session_result())
     {
         LOG(LS_INFO) << "Session result received with code: "
                      << message.session_result().error_code();
-
-        window_proxy_->onSessionResult(
-            std::shared_ptr<proto::SessionResult>(message.release_session_result()));
+        emit sig_sessionResult(std::shared_ptr<proto::SessionResult>(message.release_session_result()));
     }
     else if (message.has_user_list())
     {
         LOG(LS_INFO) << "User list received";
-
-        window_proxy_->onUserList(
-            std::shared_ptr<proto::UserList>(message.release_user_list()));
+        emit sig_userList(std::shared_ptr<proto::UserList>(message.release_user_list()));
     }
     else if (message.has_user_result())
     {
         LOG(LS_INFO) << "User result received with code: " << message.user_result().error_code();
-
-        window_proxy_->onUserResult(
-            std::shared_ptr<proto::UserResult>(message.release_user_result()));
+        emit sig_userResult(std::shared_ptr<proto::UserResult>(message.release_user_result()));
     }
     else
     {

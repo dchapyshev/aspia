@@ -51,9 +51,6 @@ list(APPEND SOURCE_CLIENT_CORE
     router.h
     router_proxy.cc
     router_proxy.h
-    router_window.h
-    router_window_proxy.cc
-    router_window_proxy.h
     router_config.cc
     router_config.h
     router_config_storage.cc
