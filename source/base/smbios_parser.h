@@ -22,14 +22,15 @@
 #include "base/macros_magic.h"
 #include "base/smbios.h"
 
-#include <string>
+#include <QByteArray>
+#include <QString>
 
 namespace base {
 
 class SmbiosTableEnumerator
 {
 public:
-    explicit SmbiosTableEnumerator(const std::string& smbios_data);
+    explicit SmbiosTableEnumerator(const QByteArray& smbios_data);
     ~SmbiosTableEnumerator();
 
     const SmbiosTable* table() const;
@@ -51,16 +52,16 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SmbiosTableEnumerator);
 };
 
-std::string smbiosString(const SmbiosTable* table, uint8_t number);
+QString smbiosString(const SmbiosTable* table, uint8_t number);
 
 class SmbiosBios
 {
 public:
     explicit SmbiosBios(const SmbiosTable* table);
 
-    std::string vendor() const;
-    std::string version() const;
-    std::string releaseDate() const;
+    QString vendor() const;
+    QString version() const;
+    QString releaseDate() const;
 
 private:
     const SmbiosBiosTable* table_;
@@ -73,8 +74,8 @@ public:
     explicit SmbiosBaseboard(const SmbiosTable* table);
 
     bool isValid() const;
-    std::string manufacturer() const;
-    std::string product() const;
+    QString manufacturer() const;
+    QString product() const;
 
 private:
     const SmbiosBaseboardTable* table_;
@@ -88,12 +89,12 @@ public:
 
     bool isValid() const;
     bool isPresent() const;
-    std::string location() const;
-    std::string manufacturer() const;
+    QString location() const;
+    QString manufacturer() const;
     uint64_t size() const;
-    std::string type() const;
-    std::string formFactor() const;
-    std::string partNumber() const;
+    QString type() const;
+    QString formFactor() const;
+    QString partNumber() const;
     uint32_t speed() const;
 
 private:

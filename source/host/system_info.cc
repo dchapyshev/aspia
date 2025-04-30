@@ -715,9 +715,9 @@ void fillBios(proto::system_info::SystemInfo* system_info)
                 base::SmbiosBios bios_table(table);
 
                 proto::system_info::Bios* bios = system_info->mutable_bios();
-                bios->set_vendor(bios_table.vendor());
-                bios->set_version(bios_table.version());
-                bios->set_date(bios_table.releaseDate());
+                bios->set_vendor(bios_table.vendor().toStdString());
+                bios->set_version(bios_table.version().toStdString());
+                bios->set_date(bios_table.releaseDate().toStdString());
             }
             break;
 
@@ -744,8 +744,8 @@ void fillMotherboard(proto::system_info::SystemInfo* system_info)
                     continue;
 
                 proto::system_info::Motherboard* motherboard = system_info->mutable_motherboard();
-                motherboard->set_manufacturer(baseboard_table.manufacturer());
-                motherboard->set_model(baseboard_table.product());
+                motherboard->set_manufacturer(baseboard_table.manufacturer().toStdString());
+                motherboard->set_model(baseboard_table.product().toStdString());
             }
             break;
 
@@ -775,15 +775,15 @@ void fillMemory(proto::system_info::SystemInfo* system_info)
                     system_info->mutable_memory()->add_module();
 
                 module->set_present(memory_device_table.isPresent());
-                module->set_location(memory_device_table.location());
+                module->set_location(memory_device_table.location().toStdString());
 
                 if (memory_device_table.isPresent())
                 {
-                    module->set_manufacturer(memory_device_table.manufacturer());
+                    module->set_manufacturer(memory_device_table.manufacturer().toStdString());
                     module->set_size(memory_device_table.size());
-                    module->set_type(memory_device_table.type());
-                    module->set_form_factor(memory_device_table.formFactor());
-                    module->set_part_number(memory_device_table.partNumber());
+                    module->set_type(memory_device_table.type().toStdString());
+                    module->set_form_factor(memory_device_table.formFactor().toStdString());
+                    module->set_part_number(memory_device_table.partNumber().toStdString());
                     module->set_speed(memory_device_table.speed());
                 }
             }
@@ -927,7 +927,8 @@ void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
         local_user->set_comment(enumerator.comment().toStdString());
         local_user->set_home_dir(enumerator.homeDir().toStdString());
 
-        for (const auto& group : enumerator.groups())
+        auto groups = enumerator.groups();
+        for (const auto& group : std::as_const(groups))
         {
             proto::system_info::LocalUsers::LocalUser::LocalUserGroup* group_item =
                 local_user->add_group();

@@ -25,22 +25,22 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-std::string readSmbiosDump()
+QByteArray readSmbiosDump()
 {
     UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);
     if (!buffer_size)
     {
         PLOG(LS_ERROR) << "GetSystemFirmwareTable failed";
-        return std::string();
+        return QByteArray();
     }
 
-    std::string buffer;
-    buffer.resize(buffer_size);
+    QByteArray buffer;
+    buffer.resize(static_cast<QByteArray::size_type>(buffer_size));
 
     if (!GetSystemFirmwareTable('RSMB', 'PCAF', buffer.data(), buffer_size))
     {
         PLOG(LS_ERROR) << "GetSystemFirmwareTable failed";
-        return std::string();
+        return QByteArray();
     }
 
     return buffer;

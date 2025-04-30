@@ -17,16 +17,15 @@
 //
 
 #include "base/smbios_parser.h"
-#include "base/strings/string_util.h"
 
 #include <cstring>
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-SmbiosTableEnumerator::SmbiosTableEnumerator(const std::string& smbios_dump)
+SmbiosTableEnumerator::SmbiosTableEnumerator(const QByteArray& smbios_dump)
 {
-    if (smbios_dump.empty())
+    if (smbios_dump.isEmpty())
         return;
 
     if (smbios_dump.size() > sizeof(SmbiosDump))
@@ -100,10 +99,10 @@ uint32_t SmbiosTableEnumerator::length() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string smbiosString(const SmbiosTable* table, uint8_t number)
+QString smbiosString(const SmbiosTable* table, uint8_t number)
 {
     if (!number)
-        return std::string();
+        return QString();
 
     const char* string = reinterpret_cast<const char*>(table) + table->length;
 
@@ -113,9 +112,7 @@ std::string smbiosString(const SmbiosTable* table, uint8_t number)
         --number;
     }
 
-    std::string result;
-    trimWhitespaceASCII(string, TRIM_ALL, &result);
-    return result;
+    return QString::fromLatin1(string).trimmed();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,19 +123,19 @@ SmbiosBios::SmbiosBios(const SmbiosTable* table)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosBios::vendor() const
+QString SmbiosBios::vendor() const
 {
     return smbiosString(table_, table_->vendor);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosBios::version() const
+QString SmbiosBios::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosBios::releaseDate() const
+QString SmbiosBios::releaseDate() const
 {
     return smbiosString(table_, table_->release_date);
 }
@@ -157,13 +154,13 @@ bool SmbiosBaseboard::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosBaseboard::manufacturer() const
+QString SmbiosBaseboard::manufacturer() const
 {
     return smbiosString(table_, table_->manufactorer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosBaseboard::product() const
+QString SmbiosBaseboard::product() const
 {
     return smbiosString(table_, table_->product);
 }
@@ -188,25 +185,25 @@ bool SmbiosMemoryDevice::isPresent() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosMemoryDevice::location() const
+QString SmbiosMemoryDevice::location() const
 {
     return smbiosString(table_, table_->device_location);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosMemoryDevice::manufacturer() const
+QString SmbiosMemoryDevice::manufacturer() const
 {
     if (table_->length < 0x1B)
-        return std::string();
+        return QString();
 
     static const char* kBlackList[] = { "0000" };
 
-    std::string result = smbiosString(table_, table_->manufacturer);
+    QString result = smbiosString(table_, table_->manufacturer);
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
         if (result == kBlackList[i])
-            return std::string();
+            return QString();
     }
 
     return result;
@@ -257,7 +254,7 @@ uint64_t SmbiosMemoryDevice::size() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosMemoryDevice::type() const
+QString SmbiosMemoryDevice::type() const
 {
     static const char* kType[] =
     {
@@ -302,11 +299,11 @@ std::string SmbiosMemoryDevice::type() const
     if (table_->memory_type >= 0x01 && table_->memory_type <= 0x24)
         return kType[table_->memory_type - 0x01];
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosMemoryDevice::formFactor() const
+QString SmbiosMemoryDevice::formFactor() const
 {
     static const char* kFormFactor[] =
     {
@@ -330,23 +327,23 @@ std::string SmbiosMemoryDevice::formFactor() const
     if (table_->form_factor >= 0x01 && table_->form_factor <= 0x0F)
         return kFormFactor[table_->form_factor - 0x01];
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SmbiosMemoryDevice::partNumber() const
+QString SmbiosMemoryDevice::partNumber() const
 {
     if (table_->length < 0x1B)
-        return std::string();
+        return QString();
 
     static const char* kBlackList[] = { "[Empty]" };
 
-    std::string result = smbiosString(table_, table_->part_number);
+    QString result = smbiosString(table_, table_->part_number);
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
         if (result == kBlackList[i])
-            return std::string();
+            return QString();
     }
 
     return result;

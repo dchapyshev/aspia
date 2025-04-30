@@ -19,11 +19,11 @@
 #ifndef BASE_SMBIOS_READER_H
 #define BASE_SMBIOS_READER_H
 
-#include <string>
+#include <QByteArray>
 
 namespace base {
 
-std::string readSmbiosDump();
+QByteArray readSmbiosDump();
 
 } // namespace base
 
