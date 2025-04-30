@@ -32,10 +32,6 @@
 #include "client/ui/text_chat/text_chat_session_window.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
-#endif
-
 #include <QCommandLineParser>
 #include <QMessageBox>
 
@@ -383,10 +379,6 @@ int clientMain(int argc, char* argv[])
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
-#endif
-
-#if defined(OS_WIN)
-    base::installFailureHandler(L"aspia_client");
 #endif
 
     base::LoggingSettings logging_settings;

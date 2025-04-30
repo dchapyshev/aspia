@@ -21,7 +21,7 @@
 
 namespace base {
 
-void installFailureHandler(const wchar_t* file_prefix);
+void installFailureHandler();
 
 } // namespace base
 

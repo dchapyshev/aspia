@@ -24,10 +24,6 @@
 #include "console/main_window.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
-#endif
-
 #include <QCommandLineParser>
 
 //--------------------------------------------------------------------------------------------------
@@ -38,10 +34,6 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
-#endif
-
-#if defined(OS_WIN)
-    base::installFailureHandler(L"aspia_console");
 #endif
 
     base::LoggingSettings logging_settings;

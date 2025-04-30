@@ -26,7 +26,6 @@
 #include "relay/settings.h"
 
 #if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
 #include "relay/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -79,7 +78,6 @@ void showHelp()
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    base::installFailureHandler(L"aspia_relay");
     base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.

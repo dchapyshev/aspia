@@ -32,7 +32,6 @@
 #include "router/settings.h"
 
 #if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
 #include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -243,7 +242,6 @@ void showHelp()
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    base::installFailureHandler(L"aspia_router");
     base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.

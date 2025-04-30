@@ -30,7 +30,6 @@
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
 #include "base/win/session_info.h"
 #endif // defined(OS_WIN)
 
@@ -39,10 +38,6 @@
 //--------------------------------------------------------------------------------------------------
 void fileTransferAgentMain(int& argc, char* argv[])
 {
-#if defined(OS_WIN)
-    base::installFailureHandler(L"aspia_file_transfer_agent");
-#endif // defined(OS_WIN)
-
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
 

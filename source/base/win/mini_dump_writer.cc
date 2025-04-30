@@ -18,6 +18,8 @@
 
 #include "base/win/mini_dump_writer.h"
 
+#include "base/files/base_paths.h"
+
 #include <Windows.h>
 #include <DbgHelp.h>
 #include <strsafe.h>
@@ -78,9 +80,16 @@ LONG WINAPI exceptionFilter(EXCEPTION_POINTERS* exception_pointers)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-void installFailureHandler(const wchar_t* file_prefix)
+void installFailureHandler()
 {
-    StringCbCopyW(g_file_prefix, sizeof(g_file_prefix), file_prefix);
+    std::filesystem::path exec_file_path;
+    if (!base::BasePaths::currentExecFile(&exec_file_path))
+        return;
+
+    std::filesystem::path exec_file_name = exec_file_path.filename();
+    exec_file_name.replace_extension();
+
+    StringCbCopyW(g_file_prefix, sizeof(g_file_prefix), exec_file_name.wstring().c_str());
     SetUnhandledExceptionFilter(exceptionFilter);
 }
 

@@ -34,7 +34,6 @@
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
 #include "base/win/process_util.h"
 #include "base/win/desktop.h"
 #include "base/win/session_info.h"
@@ -92,10 +91,6 @@ int hostMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
-
-#if defined(OS_WIN)
-    base::installFailureHandler(L"aspia_host");
-#endif
 
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;

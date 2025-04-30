@@ -31,7 +31,6 @@
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
-#include "base/win/mini_dump_writer.h"
 #include "base/win/service_controller.h"
 #include "base/win/session_info.h"
 #include "base/win/session_enumerator.h"
@@ -280,8 +279,6 @@ int hostServiceMain(int& argc, char* argv[])
 {
     (void)argc;
     (void)argv;
-
-    base::installFailureHandler(L"aspia_host_service");
 
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;

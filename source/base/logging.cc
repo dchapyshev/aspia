@@ -29,6 +29,8 @@
 #include <thread>
 
 #if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
+
 #include <Windows.h>
 #include <Psapi.h>
 #endif // defined(OS_WIN)
@@ -327,6 +329,10 @@ std::string logFilePrefix()
 //--------------------------------------------------------------------------------------------------
 bool initLogging(const LoggingSettings& settings)
 {
+#if defined(OS_WIN)
+    installFailureHandler();
+#endif // defined(OS_WIN)
+
     {
         std::scoped_lock lock(g_log_file_lock);
 
