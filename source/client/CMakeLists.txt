@@ -107,8 +107,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/desktop_widget.h
     ui/desktop/desktop_settings.cc
     ui/desktop/desktop_settings.h
-    ui/desktop/frame_qimage.cc
-    ui/desktop/frame_qimage.h
     ui/desktop/record_settings_dialog.cc
     ui/desktop/record_settings_dialog.h
     ui/desktop/record_settings_dialog.ui

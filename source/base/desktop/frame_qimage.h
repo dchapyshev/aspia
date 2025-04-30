@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_FRAME_QIMAGE_H
-#define CLIENT_UI_DESKTOP_FRAME_QIMAGE_H
+#ifndef BASE_DESKTOP_FRAME_QIMAGE_H
+#define BASE_DESKTOP_FRAME_QIMAGE_H
 
 #include "base/desktop/frame.h"
 
@@ -25,14 +25,14 @@
 
 #include <memory>
 
-namespace client {
+namespace base {
 
-class FrameQImage final : public base::Frame
+class FrameQImage final : public Frame
 {
 public:
     ~FrameQImage() final = default;
 
-    static std::unique_ptr<FrameQImage> create(const base::Size& size);
+    static std::unique_ptr<FrameQImage> create(const Size& size);
     static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
     static std::unique_ptr<FrameQImage> create(QImage&& image);
 
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FrameQImage);
 };
 
-} // namespace client
+} // namespace base
 
-#endif // CLIENT_UI_DESKTOP_FRAME_QIMAGE_H
+#endif // BASE_DESKTOP_FRAME_QIMAGE_H

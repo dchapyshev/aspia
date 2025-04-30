@@ -19,12 +19,12 @@
 #include "client/ui/desktop/desktop_session_window.h"
 
 #include "base/stl_util.h"
+#include "base/desktop/frame_qimage.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/strings/string_split.h"
 #include "client/client_desktop.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_toolbar.h"
-#include "client/ui/desktop/frame_qimage.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/text_chat/text_chat_session_window.h"
@@ -1110,7 +1110,7 @@ void DesktopSessionWindow::takeScreenshot()
         return;
     }
 
-    FrameQImage* frame = static_cast<FrameQImage*>(desktop_->desktopFrame());
+    base::FrameQImage* frame = static_cast<base::FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
     {
         LOG(LS_INFO) << "No desktop frame";

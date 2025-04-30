@@ -303,6 +303,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/frame.h
     desktop/frame_aligned.cc
     desktop/frame_aligned.h
+    desktop/frame_qimage.cc
+    desktop/frame_qimage.h
     desktop/frame_rotation.cc
     desktop/frame_rotation.h
     desktop/frame_simple.cc

@@ -19,8 +19,8 @@
 #include "client/ui/desktop/desktop_widget.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame_qimage.h"
 #include "common/keycode_converter.h"
-#include "client/ui/desktop/frame_qimage.h"
 
 #include <QApplication>
 #include <QWheelEvent>
@@ -191,7 +191,7 @@ void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
 
             if (frame_)
             {
-                QImage* source_image = static_cast<FrameQImage*>(frame_.get())->image();
+                QImage* source_image = static_cast<base::FrameQImage*>(frame_.get())->image();
                 error_image_ = std::make_unique<QImage>(
                     source_image->convertToFormat(QImage::Format_Grayscale8));
             }
@@ -471,7 +471,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 #endif
     if (current_error_code_ == proto::VIDEO_ERROR_CODE_OK)
     {
-        FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
+        base::FrameQImage* frame = reinterpret_cast<base::FrameQImage*>(frame_.get());
         if (frame)
         {
             painter_.drawImage(rect(), frame->constImage());

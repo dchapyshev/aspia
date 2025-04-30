@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop/frame_qimage.h"
+#include "base/desktop/frame_qimage.h"
 
 #include <QPixmap>
 
-namespace client {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(base::Size(img.size().width(), img.size().height()),
-            base::PixelFormat::ARGB(),
+    : Frame(Size(img.size().width(), img.size().height()),
+            PixelFormat::ARGB(),
             img.bytesPerLine(),
             img.bits(),
             nullptr),
@@ -36,7 +36,7 @@ FrameQImage::FrameQImage(QImage&& img)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameQImage> FrameQImage::create(const base::Size& size)
+std::unique_ptr<FrameQImage> FrameQImage::create(const Size& size)
 {
     if (size.isEmpty())
         return nullptr;
@@ -59,4 +59,4 @@ std::unique_ptr<FrameQImage> FrameQImage::create(QImage&& image)
     return std::unique_ptr<FrameQImage>(new FrameQImage(std::move(image)));
 }
 
-} // namespace client
+} // namespace base
