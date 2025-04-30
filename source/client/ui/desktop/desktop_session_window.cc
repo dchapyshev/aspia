@@ -18,6 +18,7 @@
 
 #include "client/ui/desktop/desktop_session_window.h"
 
+#include "base/gui_logging.h"
 #include "base/stl_util.h"
 #include "base/desktop/frame_qimage.h"
 #include "base/desktop/mouse_cursor.h"
@@ -32,7 +33,6 @@
 #include "client/ui/desktop/statistics_dialog.h"
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
-#include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
 #include "base/win/windows_version.h"

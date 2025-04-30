@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/logging.h"
-#include "base/threading/asio_task_runner.h"
+#include "base/task_runner.h"
 
 #include <memory>
 
@@ -36,7 +36,7 @@ class Application final : public QCoreApplication
 public:
     Application(int& argc, char* argv[])
         : QCoreApplication(argc, argv),
-          task_runner_(std::make_shared<AsioTaskRunner>())
+          task_runner_(std::make_shared<TaskRunner>())
     {
         // Nothing
     }

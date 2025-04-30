@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/logging.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
-#include "qt_base/scoped_qt_logging.h"
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
-    qt_base::ScopedQtLogging scoped_logging(logging_settings);
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::registerMetaTypes();
     proto::registerMetaTypes();

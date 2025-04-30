@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE_APPLICATION_H
-#define QT_BASE_APPLICATION_H
+#ifndef BASE_GUI_APPLICATION_H
+#define BASE_GUI_APPLICATION_H
 
 #include "base/threading/thread.h"
-#include "qt_base/locale_loader.h"
+#include "base/translations_loader.h"
 
 #include <QApplication>
 #include <QThread>
@@ -50,8 +50,8 @@ public:
 
     bool isRunning();
 
-    using Locale = LocaleLoader::Locale;
-    using LocaleList = LocaleLoader::LocaleList;
+    using Locale = TranslationsLoader::Locale;
+    using LocaleList = TranslationsLoader::LocaleList;
 
     LocaleList localeList() const;
     void setLocale(const QString& locale);
@@ -75,7 +75,7 @@ private:
 
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
-    std::unique_ptr<LocaleLoader> locale_loader_;
+    std::unique_ptr<TranslationsLoader> locale_loader_;
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(GuiApplication);
@@ -83,4 +83,4 @@ private:
 
 } // namespace base
 
-#endif // BASE_APPLICATION_H
+#endif // BASE_GUI_APPLICATION_H

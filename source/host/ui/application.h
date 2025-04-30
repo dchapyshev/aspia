@@ -19,7 +19,7 @@
 #ifndef HOST_UI_APPLICATION_H
 #define HOST_UI_APPLICATION_H
 
-#include "qt_base/application.h"
+#include "base/gui_application.h"
 
 namespace host {
 

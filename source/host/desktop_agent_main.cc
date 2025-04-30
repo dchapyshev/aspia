@@ -22,7 +22,7 @@
 #include "base/application.h"
 #include "base/command_line.h"
 #include "base/meta_types.h"
-#include "base/scoped_logging.h"
+#include "base/logging.h"
 #include "base/sys_info.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"

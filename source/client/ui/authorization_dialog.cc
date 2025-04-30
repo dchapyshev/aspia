@@ -19,7 +19,7 @@
 #include "client/ui/authorization_dialog.h"
 
 #include "client/ui/client_settings.h"
-#include "qt_base/qt_logging.h"
+#include "base/logging.h"
 
 #include <QMessageBox>
 #include <QTimer>

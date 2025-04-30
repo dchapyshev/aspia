@@ -18,9 +18,9 @@
 
 #include "host/service_main.h"
 
+#include "base/logging.h"
 #include "base/command_line.h"
 #include "base/meta_types.h"
-#include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
 #include "build/version.h"

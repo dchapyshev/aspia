@@ -16,63 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/qt_logging.h"
-
-#include <QDebug>
-
-namespace qt_base {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
-{
-    switch (type)
-    {
-        case QtCriticalMsg:
-        case QtFatalMsg:
-        case QtWarningMsg:
-            return base::LOG_LS_ERROR;
-
-        case QtDebugMsg:
-        case QtInfoMsg:
-        default:
-            return base::LOG_LS_INFO;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void messageHandler(QtMsgType type,
-                    const QMessageLogContext& context,
-                    const QString& msg)
-{
-    const char* filename = context.file;
-    if (!filename)
-        filename = "<filename>";
-
-    const char* function = context.function;
-    if (!function)
-        function = "<function>";
-
-    base::LogMessage log_message(filename, context.line, function, messageTypeToSeverity(type));
-    log_message.stream() << msg;
-}
-
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-void initQtLogging()
-{
-    qInstallMessageHandler(messageHandler);
-}
-
-} // namespace qt_base
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
-{
-    return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
-}
+#include "base/gui_logging.h"
 
 //--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QPoint& qpoint)

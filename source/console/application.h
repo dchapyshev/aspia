@@ -19,8 +19,8 @@
 #ifndef CONSOLE_APPLICATION_H
 #define CONSOLE_APPLICATION_H
 
+#include "base/gui_application.h"
 #include "console/settings.h"
-#include "qt_base/application.h"
 
 namespace console {
 

@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/qt_task_runner.h"
+#include "base/task_runner.h"
 
 #include "base/logging.h"
 
 #include <QApplication>
 #include <QEvent>
 #include <QThread>
+#include <QTimer>
 
 namespace base {
 
@@ -46,9 +47,42 @@ private:
     DISALLOW_COPY_AND_ASSIGN(TaskEvent);
 };
 
+class DeleteHelper
+{
+public:
+    DeleteHelper(void(*deleter)(const void*), const void* object)
+        : deleter_(deleter),
+        object_(object)
+    {
+        // Nothing
+    }
+
+    ~DeleteHelper()
+    {
+        doDelete();
+    }
+
+    void doDelete()
+    {
+        if (deleter_ && object_)
+        {
+            deleter_(object_);
+
+            deleter_ = nullptr;
+            object_ = nullptr;
+        }
+    }
+
+private:
+    void(*deleter_)(const void*);
+    const void* object_;
+
+    DISALLOW_COPY_AND_ASSIGN(DeleteHelper);
+};
+
 } // namespace
 
-class QtTaskRunner::Impl final : public QObject
+class TaskRunner::Impl final : public QObject
 {
 public:
     Impl();
@@ -56,6 +90,8 @@ public:
 
     bool belongsToCurrentThread() const;
     void postTask(Callback&& callback, int priority);
+    void postDelayedTask(Callback&& callback, const Milliseconds& delay);
+    void postQuit();
 
 protected:
     // QObject implementation.
@@ -68,82 +104,107 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-QtTaskRunner::Impl::Impl()
+TaskRunner::Impl::Impl()
     : current_thread_(QThread::currentThreadId())
 {
     DCHECK(QApplication::instance());
 }
 
 //--------------------------------------------------------------------------------------------------
-QtTaskRunner::Impl::~Impl() = default;
+TaskRunner::Impl::~Impl() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool QtTaskRunner::Impl::belongsToCurrentThread() const
+bool TaskRunner::Impl::belongsToCurrentThread() const
 {
     return QThread::currentThreadId() == current_thread_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::Impl::postTask(Callback&& callback, int priority)
+void TaskRunner::Impl::postTask(Callback&& callback, int priority)
 {
     QApplication::postEvent(this, new TaskEvent(std::move(callback)), priority);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::Impl::customEvent(QEvent* event)
+void TaskRunner::Impl::postDelayedTask(Callback&& callback, const Milliseconds& delay)
+{
+    QTimer::singleShot(delay.count(), this, [callback]()
+    {
+        callback();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskRunner::Impl::postQuit()
+{
+    QTimer::singleShot(0, this, []()
+    {
+        QThread::currentThread()->quit();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskRunner::Impl::customEvent(QEvent* event)
 {
     if (event->type() == TaskEvent::kType)
         reinterpret_cast<TaskEvent*>(event)->callback();
 }
 
 //--------------------------------------------------------------------------------------------------
-QtTaskRunner::QtTaskRunner()
+TaskRunner::TaskRunner()
     : impl_(std::make_unique<Impl>())
 {
     LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-QtTaskRunner::~QtTaskRunner()
+TaskRunner::~TaskRunner()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-bool QtTaskRunner::belongsToCurrentThread() const
+bool TaskRunner::belongsToCurrentThread() const
 {
     return impl_->belongsToCurrentThread();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::postTask(Callback callback)
+void TaskRunner::postTask(Callback callback)
 {
     impl_->postTask(std::move(callback), Qt::NormalEventPriority);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::postDelayedTask(Callback /* callback */, const Milliseconds& /* delay */)
+void TaskRunner::postDelayedTask(Callback callback, const Milliseconds& delay)
 {
-    NOTIMPLEMENTED();
+    impl_->postDelayedTask(std::move(callback), delay);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::postNonNestableTask(Callback callback)
+void TaskRunner::postNonNestableTask(Callback callback)
 {
     impl_->postTask(std::move(callback), Qt::LowEventPriority);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::postNonNestableDelayedTask(
+void TaskRunner::postNonNestableDelayedTask(
     Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTaskRunner::postQuit()
+void TaskRunner::postQuit()
 {
-    NOTIMPLEMENTED();
+    impl_->postQuit();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskRunner::deleteSoonInternal(void(*deleter)(const void*), const void* object)
+{
+    postNonNestableTask(
+        std::bind(&DeleteHelper::doDelete, std::make_shared<DeleteHelper>(deleter, object)));
 }
 
 } // namespace base

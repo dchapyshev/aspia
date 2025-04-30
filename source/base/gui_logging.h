@@ -16,43 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_LOCALE_LOADER_H
-#define BASE_LOCALE_LOADER_H
+#ifndef BASE_GUI_LOGGING_H
+#define BASE_GUI_LOGGING_H
 
-#include "base/macros_magic.h"
+#include "base/logging.h"
 
-#include <utility>
+#include <QRect>
+#include <QSize>
 
-#include <QHash>
-#include <QStringList>
-#include <QVector>
+std::ostream& operator<<(std::ostream& out, const QPoint& qpoint);
+std::ostream& operator<<(std::ostream& out, const QRect& qrect);
+std::ostream& operator<<(std::ostream& out, const QSize& qsize);
 
-class QTranslator;
-
-namespace base {
-
-class LocaleLoader
-{
-public:
-    LocaleLoader();
-    ~LocaleLoader();
-
-    using Locale = std::pair<QString, QString>;
-    using LocaleList = QVector<Locale>;
-
-    LocaleList localeList() const;
-    bool contains(const QString& locale) const;
-    void installTranslators(const QString& locale);
-
-private:
-    void removeTranslators();
-
-    QHash<QString, QStringList> locale_list_;
-    QVector<QTranslator*> translator_list_;
-
-    DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
-};
-
-} // namespace base
-
-#endif // BASE_LOCALE_LOADER_H
+#endif // BASE_GUI_LOGGING_H

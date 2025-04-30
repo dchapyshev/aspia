@@ -18,6 +18,7 @@
 
 #include "console/address_book_tab.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor_chacha20_poly1305.h"
@@ -32,7 +33,6 @@
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
 #include "console/settings.h"
-#include "qt_base/application.h"
 
 #include <QFileDialog>
 #include <QMenu>

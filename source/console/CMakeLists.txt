@@ -154,7 +154,6 @@ target_link_libraries(aspia_console
     aspia_client_core
     aspia_common
     aspia_proto
-    aspia_qt_base
     ${CONSOLE_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}

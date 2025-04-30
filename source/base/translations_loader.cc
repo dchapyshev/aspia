@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/locale_loader.h"
+#include "base/translations_loader.h"
 
-#include "qt_base/qt_logging.h"
+#include "base/logging.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -34,7 +34,7 @@ const QString kTranslationsDir = QStringLiteral(":/tr/");
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-LocaleLoader::LocaleLoader()
+TranslationsLoader::TranslationsLoader()
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -66,14 +66,14 @@ LocaleLoader::LocaleLoader()
 }
 
 //--------------------------------------------------------------------------------------------------
-LocaleLoader::~LocaleLoader()
+TranslationsLoader::~TranslationsLoader()
 {
     LOG(LS_INFO) << "Dtor";
     removeTranslators();
 }
 
 //--------------------------------------------------------------------------------------------------
-LocaleLoader::LocaleList LocaleLoader::localeList() const
+TranslationsLoader::LocaleList TranslationsLoader::localeList() const
 {
     LocaleList list;
 
@@ -109,13 +109,13 @@ LocaleLoader::LocaleList LocaleLoader::localeList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocaleLoader::contains(const QString& locale) const
+bool TranslationsLoader::contains(const QString& locale) const
 {
     return locale_list_.contains(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocaleLoader::installTranslators(const QString& locale)
+void TranslationsLoader::installTranslators(const QString& locale)
 {
     removeTranslators();
 
@@ -138,7 +138,7 @@ void LocaleLoader::installTranslators(const QString& locale)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocaleLoader::removeTranslators()
+void TranslationsLoader::removeTranslators()
 {
     LOG(LS_INFO) << "Cleanup translators";
 

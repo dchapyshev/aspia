@@ -18,6 +18,7 @@
 
 #include "host/ui/main_window.h"
 
+#include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
@@ -36,7 +37,6 @@
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/user_settings.h"
-#include "qt_base/qt_logging.h"
 
 #include <QActionGroup>
 #include <QCloseEvent>

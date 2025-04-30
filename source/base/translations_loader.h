@@ -16,37 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREADING_ASIO_TASK_RUNNER_H
-#define BASE_THREADING_ASIO_TASK_RUNNER_H
+#ifndef BASE_TRANSLATIONS_LOADER_H
+#define BASE_TRANSLATIONS_LOADER_H
 
 #include "base/macros_magic.h"
-#include "base/task_runner.h"
 
-#include <QThread>
+#include <utility>
+
+#include <QHash>
+#include <QStringList>
+#include <QVector>
+
+class QTranslator;
 
 namespace base {
 
-class AsioTaskRunner final : public base::TaskRunner
+class TranslationsLoader
 {
 public:
-    AsioTaskRunner();
-    ~AsioTaskRunner() final;
+    TranslationsLoader();
+    ~TranslationsLoader();
 
-    // TaskRunner implementation.
-    bool belongsToCurrentThread() const final;
-    void postTask(Callback callback) final;
-    void postDelayedTask(Callback callback, const Milliseconds& delay) final;
-    void postNonNestableTask(Callback callback) final;
-    void postNonNestableDelayedTask(Callback callback, const Milliseconds& delay) final;
-    void postQuit() final;
+    using Locale = std::pair<QString, QString>;
+    using LocaleList = QVector<Locale>;
+
+    LocaleList localeList() const;
+    bool contains(const QString& locale) const;
+    void installTranslators(const QString& locale);
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    void removeTranslators();
 
-    DISALLOW_COPY_AND_ASSIGN(AsioTaskRunner);
+    QHash<QString, QStringList> locale_list_;
+    QVector<QTranslator*> translator_list_;
+
+    DISALLOW_COPY_AND_ASSIGN(TranslationsLoader);
 };
 
 } // namespace base
 
-#endif // BASE_THREADING_ASIO_TASK_RUNNER_H
+#endif // BASE_TRANSLATIONS_LOADER_H

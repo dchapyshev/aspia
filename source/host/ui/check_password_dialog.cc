@@ -19,7 +19,7 @@
 #include "host/ui/check_password_dialog.h"
 
 #include "host/system_settings.h"
-#include "qt_base/qt_logging.h"
+#include "base/logging.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>

@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/peer/user.h"
-#include "qt_base/application.h"
+#include "base/gui_application.h"
 #include "client/router.h"
 #include "client/router_proxy.h"
 #include "client/router_window_proxy.h"

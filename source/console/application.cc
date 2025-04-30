@@ -18,8 +18,8 @@
 
 #include "console/application.h"
 
+#include "base/logging.h"
 #include "build/version.h"
-#include "qt_base/qt_logging.h"
 
 #include <QIcon>
 

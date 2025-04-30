@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
+#include "base/logging.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
@@ -30,7 +31,6 @@
 #include "host/ui/main_window.h"
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
-#include "qt_base/scoped_qt_logging.h"
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
@@ -100,7 +100,7 @@ int hostMain(int argc, char* argv[])
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
-    qt_base::ScopedQtLogging scoped_logging(logging_settings);
+    base::ScopedLogging scoped_logging(logging_settings);
     base::CommandLine command_line(argc, argv);
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";

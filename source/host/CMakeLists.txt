@@ -187,7 +187,6 @@ target_link_libraries(aspia_host_core PRIVATE
     aspia_base
     aspia_common
     aspia_proto
-    aspia_qt_base
     ${HOST_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}

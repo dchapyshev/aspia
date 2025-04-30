@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "qt_base/application.h"
+#include "base/gui_application.h"
 
+#include "base/logging.h"
+#include "base/task_runner.h"
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "build/build_config.h"
-#include "qt_base/qt_logging.h"
-#include "qt_base/qt_task_runner.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
@@ -142,8 +142,8 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     io_thread_.start();
 
-    locale_loader_ = std::make_unique<LocaleLoader>();
-    ui_task_runner_ = std::make_shared<QtTaskRunner>();
+    locale_loader_ = std::make_unique<TranslationsLoader>();
+    ui_task_runner_ = std::make_shared<TaskRunner>();
 }
 
 //--------------------------------------------------------------------------------------------------

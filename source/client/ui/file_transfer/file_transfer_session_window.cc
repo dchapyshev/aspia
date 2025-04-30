@@ -19,6 +19,7 @@
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 
 #include "ui_file_transfer_session_window.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/client_file_transfer.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -27,7 +28,6 @@
 #include "client/ui/file_transfer/file_transfer_dialog.h"
 #include "client/ui/file_transfer/file_manager_settings.h"
 #include "client/ui/file_transfer/file_mime_data.h"
-#include "qt_base/application.h"
 
 #include <QMessageBox>
 

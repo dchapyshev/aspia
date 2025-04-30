@@ -18,8 +18,8 @@
 
 #include "host/ui/change_password_dialog.h"
 
+#include "base/logging.h"
 #include "host/system_settings.h"
-#include "qt_base/qt_logging.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>

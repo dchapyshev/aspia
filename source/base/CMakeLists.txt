@@ -36,6 +36,10 @@ list(APPEND SOURCE_BASE
     edid.h
     endian_util.cc
     endian_util.h
+    gui_application.cc
+    gui_application.h
+    gui_logging.cc
+    gui_logging.h
     guid.cc
     guid.h
     license_reader.h
@@ -51,7 +55,6 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
-    scoped_logging.h
     scoped_task_runner.cc
     scoped_task_runner.h
     serialization.h
@@ -71,6 +74,8 @@ list(APPEND SOURCE_BASE
     system_time.h
     task_runner.cc
     task_runner.h
+    translations_loader.cc
+    translations_loader.h
     version.cc
     version.h
     waitable_event.cc
@@ -611,8 +616,6 @@ list(APPEND SOURCE_BASE_STRINGS_TESTS
 list(APPEND SOURCE_BASE_THREADING
     threading/asio_event_dispatcher.cc
     threading/asio_event_dispatcher.h
-    threading/asio_task_runner.cc
-    threading/asio_task_runner.h
     threading/simple_thread.cc
     threading/simple_thread.h
     threading/thread.cc

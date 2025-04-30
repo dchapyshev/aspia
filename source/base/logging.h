@@ -556,6 +556,24 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ErrorLogMessage);
 };
 
+class ScopedLogging
+{
+public:
+    ScopedLogging(const LoggingSettings& settings = LoggingSettings())
+    {
+        initialized_ = initLogging(settings);
+    }
+
+    ~ScopedLogging()
+    {
+        if (initialized_)
+            shutdownLogging();
+    }
+
+private:
+    bool initialized_ = false;
+};
+
 } // namespace base
 
 // Note that "The behavior of a C++ program is undefined if it adds declarations or definitions to
@@ -584,6 +602,7 @@ std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
 
 std::ostream& operator<<(std::ostream& out, const QString& qstr);
 std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist);
+std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray);
 
 } // namespace std
 

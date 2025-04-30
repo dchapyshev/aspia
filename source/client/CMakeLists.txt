@@ -265,7 +265,6 @@ target_link_libraries(aspia_client_core
     aspia_base
     aspia_common
     aspia_proto
-    aspia_qt_base
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})

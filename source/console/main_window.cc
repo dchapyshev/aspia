@@ -18,6 +18,7 @@
 
 #include "console/main_window.h"
 
+#include "base/logging.h"
 #include "build/build_config.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
@@ -34,7 +35,6 @@
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
 #include "common/ui/update_dialog.h"
-#include "qt_base/qt_logging.h"
 
 #include <QActionGroup>
 #include <QCloseEvent>

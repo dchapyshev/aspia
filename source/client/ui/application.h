@@ -19,7 +19,7 @@
 #ifndef CLIENT_UI_APPLICATION_H
 #define CLIENT_UI_APPLICATION_H
 
-#include "qt_base/application.h"
+#include "base/gui_application.h"
 
 namespace client {
 

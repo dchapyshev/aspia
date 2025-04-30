@@ -18,8 +18,8 @@
 
 #include "host/ui/notifier_window.h"
 
+#include "base/gui_logging.h"
 #include "build/build_config.h"
-#include "qt_base/qt_logging.h"
 
 #include <QHideEvent>
 #include <QMenu>

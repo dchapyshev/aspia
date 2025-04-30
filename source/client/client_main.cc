@@ -18,6 +18,7 @@
 
 #include "client/client_main.h"
 
+#include "base/logging.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
@@ -29,7 +30,6 @@
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/text_chat/text_chat_session_window.h"
-#include "qt_base/scoped_qt_logging.h"
 #include "proto/meta_types.h"
 
 #if defined(OS_WIN)
@@ -392,7 +392,7 @@ int clientMain(int argc, char* argv[])
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
-    qt_base::ScopedQtLogging scoped_logging(logging_settings);
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::registerMetaTypes();
     proto::registerMetaTypes();

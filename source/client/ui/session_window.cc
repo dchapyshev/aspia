@@ -18,10 +18,10 @@
 
 #include "client/ui/session_window.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/status_dialog.h"
-#include "qt_base/application.h"
 
 namespace client {
 

@@ -19,8 +19,8 @@
 #include "base/threading/thread.h"
 
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/asio_task_runner.h"
 #include "base/application.h"
+#include "base/task_runner.h"
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -68,7 +68,7 @@ std::shared_ptr<base::TaskRunner> Thread::taskRunner()
 //--------------------------------------------------------------------------------------------------
 void Thread::run()
 {
-    task_runner_ = std::make_shared<AsioTaskRunner>();
+    task_runner_ = std::make_shared<TaskRunner>();
 
 #if defined(Q_OS_WINDOWS)
     win::ScopedCOMInitializer com_initializer;

@@ -43,6 +43,8 @@
 #include <sys/syslimits.h>
 #endif // defined(OS_MAC)
 
+#include <QDebug>
+
 namespace base {
 
 namespace {
@@ -170,6 +172,38 @@ bool initLoggingUnlocked(const std::string& prefix)
 
     g_log_file_path = std::move(file_path);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+base::LoggingSeverity qtMessageTypeToSeverity(QtMsgType type)
+{
+    switch (type)
+    {
+        case QtCriticalMsg:
+        case QtFatalMsg:
+        case QtWarningMsg:
+            return base::LOG_LS_ERROR;
+
+        case QtDebugMsg:
+        case QtInfoMsg:
+        default:
+            return base::LOG_LS_INFO;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void qtMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    const char* filename = context.file;
+    if (!filename)
+        filename = "<filename>";
+
+    const char* function = context.function;
+    if (!function)
+        function = "<function>";
+
+    base::LogMessage log_message(filename, context.line, function, qtMessageTypeToSeverity(type));
+    log_message.stream() << msg;
 }
 
 } // namespace
@@ -305,6 +339,8 @@ bool initLogging(const LoggingSettings& settings)
         if (!initLoggingUnlocked(logFilePrefix()))
             return false;
     }
+
+    qInstallMessageHandler(qtMessageHandler);
 
     LOG(LS_INFO) << "Executable file: " << execFilePath();
     if (g_logging_destination & LOG_TO_FILE)
@@ -606,6 +642,12 @@ std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist)
     }
 
     return out << ")";
+}
+
+//--------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
+{
+    return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
 }
 
 } // namespace std
