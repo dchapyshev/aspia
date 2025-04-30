@@ -157,11 +157,11 @@ bool sharedModeInitialize(IAudioClient* client,
 
     if (buffer_duration != 0)
     {
-        LOG(LS_ERROR) << "Non-default buffer size is used";
+        LOG(LS_INFO) << "Non-default buffer size is used";
     }
     if (auto_convert_pcm)
     {
-        LOG(LS_ERROR) << "Sample rate converter can be utilized";
+        LOG(LS_INFO) << "Sample rate converter can be utilized";
     }
     // The AUDCLNT_STREAMFLAGS_NOPERSIST flag disables persistence of the volume and mute settings
     // for a session that contains rendering streams. By default, the volume level and muting state

@@ -66,7 +66,7 @@ std::mutex g_log_file_lock;
 //--------------------------------------------------------------------------------------------------
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = { "I", "E", "F" };
+    static const char* const kLogSeverityNames[] = { "🔵", "🔴", "⛔️" };
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
@@ -192,7 +192,7 @@ LoggingSettings::LoggingSettings()
         if (ok)
         {
             int log_level = std::max(log_level_var, LOG_LS_INFO);
-            log_level = std::min(log_level_var, LOG_LS_FATAL);
+            log_level = std::min(log_level, LOG_LS_FATAL);
 
             min_log_level = log_level;
         }
@@ -515,12 +515,12 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
     SystemTime time = SystemTime::now();
 
     stream_ << std::setfill('0')
+            << severityName(severity_)            << ' '
             << std::setw(2) << time.hour()        << ':'
             << std::setw(2) << time.minute()      << ':'
             << std::setw(2) << time.second()      << '.'
             << std::setw(3) << time.millisecond() << ' '
             << std::this_thread::get_id()         << ' '
-            << severityName(severity_)            << ' '
             << file.data() << ":" << line << " " << function.data() << "] ";
 
     message_start_ = stream_.str().length();

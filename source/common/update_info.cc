@@ -35,6 +35,14 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         return UpdateInfo();
     }
 
+    LOG(LS_INFO) << "XML: " << QString::fromUtf8(buffer);
+
+    if (!buffer.startsWith('<'))
+    {
+        // No updates or an error occurred on the update server.
+        return UpdateInfo();
+    }
+
     rapidxml::xml_document<> xml;
 
     try

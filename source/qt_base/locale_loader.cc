@@ -56,7 +56,7 @@ LocaleLoader::LocaleLoader()
             locale_name = locale_name.right(2);
         }
 
-        LOG(LS_INFO) << "Translation file added: " << qm_file << " (" << locale_name << ")";
+        LOG(LS_INFO) << "Added: " << qm_file << " (" << locale_name << ")";
 
         if (locale_list_.contains(locale_name))
             locale_list_[locale_name].push_back(qm_file);
