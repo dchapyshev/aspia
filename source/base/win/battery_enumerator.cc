@@ -19,7 +19,6 @@
 #include "base/win/battery_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 #include <fmt/format.h>
 
@@ -174,71 +173,71 @@ void BatteryEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::deviceName() const
+QString BatteryEnumerator::deviceName() const
 {
     wchar_t buffer[256] = { 0 };
 
     if (!batteryInformation(battery_, battery_tag_, BatteryDeviceName, buffer, sizeof(buffer)))
-        return std::string();
+        return QString();
 
-    return utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::manufacturer() const
+QString BatteryEnumerator::manufacturer() const
 {
     wchar_t buffer[256] = { 0 };
 
     if (!batteryInformation(battery_, battery_tag_, BatteryManufactureName, buffer, sizeof(buffer)))
-        return std::string();
+        return QString();
 
-    return utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::manufactureDate() const
+QString BatteryEnumerator::manufactureDate() const
 {
     BATTERY_MANUFACTURE_DATE date;
 
     memset(&date, 0, sizeof(date));
 
     if (!batteryInformation(battery_, battery_tag_, BatteryManufactureDate, &date, sizeof(date)))
-        return std::string();
+        return QString();
 
-    return fmt::format("{}-{}-{}", date.Day, date.Month, date.Year);
+    return QString("%1-%2-%3").arg(date.Day).arg(date.Month).arg(date.Year);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::uniqueId() const
+QString BatteryEnumerator::uniqueId() const
 {
     wchar_t buffer[256] = { 0 };
 
     if (!batteryInformation(battery_, battery_tag_, BatteryUniqueID, buffer, sizeof(buffer)))
-        return std::string();
+        return QString();
 
-    return utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::serialNumber() const
+QString BatteryEnumerator::serialNumber() const
 {
     wchar_t buffer[256] = { 0 };
 
     if (!batteryInformation(battery_, battery_tag_, BatterySerialNumber, buffer, sizeof(buffer)))
-        return std::string();
+        return QString();
 
-    return utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::temperature() const
+QString BatteryEnumerator::temperature() const
 {
     wchar_t buffer[256] = { 0 };
 
     if (!batteryInformation(battery_, battery_tag_, BatteryTemperature, buffer, sizeof(buffer)))
-        return std::string();
+        return QString();
 
-    return utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,7 +255,7 @@ uint32_t BatteryEnumerator::designCapacity() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string BatteryEnumerator::type() const
+QString BatteryEnumerator::type() const
 {
     BATTERY_INFORMATION battery_info;
     memset(&battery_info, 0, sizeof(battery_info));
@@ -284,7 +283,7 @@ std::string BatteryEnumerator::type() const
             return "Rechargeable Alkaline-Manganese";
     }
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

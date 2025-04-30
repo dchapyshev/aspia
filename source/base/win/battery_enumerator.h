@@ -22,7 +22,7 @@
 #include "base/win/device.h"
 #include "base/win/scoped_device_info.h"
 
-#include <string>
+#include <QString>
 
 namespace base::win {
 
@@ -44,14 +44,14 @@ public:
         POWER_ONLINE = 8
     };
 
-    std::string deviceName() const;
-    std::string manufacturer() const;
-    std::string manufactureDate() const;
-    std::string uniqueId() const;
-    std::string serialNumber() const;
-    std::string temperature() const;
+    QString deviceName() const;
+    QString manufacturer() const;
+    QString manufactureDate() const;
+    QString uniqueId() const;
+    QString serialNumber() const;
+    QString temperature() const;
     uint32_t designCapacity() const;
-    std::string type() const;
+    QString type() const;
     uint32_t fullChargedCapacity() const;
     uint32_t depreciation() const;
     uint32_t currentCapacity() const;

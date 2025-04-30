@@ -23,7 +23,6 @@
 #include "base/smbios.h"
 
 #include <string>
-#include <vector>
 
 namespace base {
 

@@ -634,14 +634,14 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
     for (base::win::BatteryEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::system_info::PowerOptions::Battery* battery = power_options->add_battery();
-        battery->set_device_name(enumerator.deviceName());
-        battery->set_manufacturer(enumerator.manufacturer());
-        battery->set_manufacture_date(enumerator.manufactureDate());
-        battery->set_unique_id(enumerator.uniqueId());
-        battery->set_serial_number(enumerator.serialNumber());
-        battery->set_temperature(enumerator.temperature());
+        battery->set_device_name(enumerator.deviceName().toStdString());
+        battery->set_manufacturer(enumerator.manufacturer().toStdString());
+        battery->set_manufacture_date(enumerator.manufactureDate().toStdString());
+        battery->set_unique_id(enumerator.uniqueId().toStdString());
+        battery->set_serial_number(enumerator.serialNumber().toStdString());
+        battery->set_temperature(enumerator.temperature().toStdString());
         battery->set_design_capacity(enumerator.designCapacity());
-        battery->set_type(enumerator.type());
+        battery->set_type(enumerator.type().toStdString());
         battery->set_full_charged_capacity(enumerator.fullChargedCapacity());
         battery->set_depreciation(enumerator.depreciation());
         battery->set_current_capacity(enumerator.currentCapacity());
