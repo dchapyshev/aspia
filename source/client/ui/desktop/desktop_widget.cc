@@ -142,7 +142,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state)
     {
-        LOG(LS_ERROR) << "Application state changed: " << applicationStateToString(state);
+        LOG(LS_INFO) << "Application state changed: " << applicationStateToString(state);
         if (state != Qt::ApplicationActive)
         {
             releaseKeyboardButtons();

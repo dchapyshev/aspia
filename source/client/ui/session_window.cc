@@ -19,7 +19,6 @@
 #include "client/ui/session_window.h"
 
 #include "base/logging.h"
-#include "client/client.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/status_dialog.h"
 #include "qt_base/application.h"
@@ -91,35 +90,7 @@ bool SessionWindow::connectToHost(Config config)
     client->moveToThread(base::GuiApplication::ioThread());
     client->setSessionState(session_state_);
 
-    connect(client, &Client::sig_statusStarted, this, &SessionWindow::onStarted,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_statusStopped, this, &SessionWindow::onStopped,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_routerConnecting, this, &SessionWindow::onRouterConnecting,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_routerConnected, this, &SessionWindow::onRouterConnected,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_hostConnecting, this, &SessionWindow::onHostConnecting,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_hostConnected, this, &SessionWindow::onHostConnected,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_hostDisconnected, this, &SessionWindow::onHostDisconnected,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_waitForRouter, this, &SessionWindow::onWaitForRouter,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_waitForRouterTimeout, this, &SessionWindow::onWaitForRouterTimeout,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_waitForHost, this, &SessionWindow::onWaitForHost,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_waitForHostTimeout, this, &SessionWindow::onWaitForHostTimeout,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_versionMismatch, this, &SessionWindow::onVersionMismatch,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_accessDenied, this, &SessionWindow::onAccessDenied,
-            Qt::QueuedConnection);
-    connect(client, &Client::sig_routerError, this, &SessionWindow::onRouterError,
-            Qt::QueuedConnection);
-
+    connect(client, &Client::sig_statusChanged, this, &SessionWindow::onStatusChanged, Qt::QueuedConnection);
     connect(this, &SessionWindow::sig_start, client, &Client::start, Qt::QueuedConnection);
     connect(this, &SessionWindow::sig_stop, client, &Client::deleteLater, Qt::QueuedConnection);
 
@@ -136,180 +107,178 @@ void SessionWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onStarted()
+void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
 {
-    LOG(LS_INFO) << "Session started";
-    status_dialog_->addMessageAndActivate(tr("Session started."));
-}
+    LOG(LS_INFO) << "Client status changed: " << Client::statusToString(status);
 
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onStopped()
-{
-    LOG(LS_INFO) << "Connection stopped";
-    status_dialog_->close();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onRouterConnecting()
-{
-    LOG(LS_INFO) << "Connecting to router";
-
-    const std::optional<RouterConfig>& router = session_state_->router();
-    if (router.has_value())
+    switch (status)
     {
-        status_dialog_->addMessageAndActivate(
-            tr("Connecting to router %1:%2...").arg(router->address).arg(router->port));
-    }
-    else
-    {
-        status_dialog_->addMessageAndActivate(tr("Connecting to router..."));
-    }
-}
+        case Client::Status::STARTED:
+            status_dialog_->addMessageAndActivate(tr("Session started."));
+            break;
 
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onRouterConnected()
-{
-    LOG(LS_INFO) << "Connection to router established";
+        case Client::Status::STOPPED:
+            status_dialog_->close();
+            break;
 
-    const std::optional<RouterConfig>& router = session_state_->router();
-    if (router.has_value())
-    {
-        status_dialog_->addMessageAndActivate(
-            tr("Connection to router %1:%2 established.").arg(router->address).arg(router->port));
-    }
-    else
-    {
-        status_dialog_->addMessageAndActivate(tr("Connection to router established."));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onHostConnecting()
-{
-    LOG(LS_INFO) << "Connecting to host";
-
-    QString message;
-
-    if (session_state_->isConnectionByHostId())
-    {
-        message = tr("Connecting to host %1...").arg(session_state_->hostAddress());
-    }
-    else
-    {
-        message = tr("Connecting to host %1:%2...")
-                      .arg(session_state_->hostAddress())
-                      .arg(session_state_->hostPort());
-    }
-
-    status_dialog_->addMessageAndActivate(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onHostConnected()
-{
-    LOG(LS_INFO) << "Connection to host established";
-
-    QString message;
-
-    if (session_state_->isConnectionByHostId())
-    {
-        message = tr("Connection to host %1 established.").arg(session_state_->hostAddress());
-    }
-    else
-    {
-        message = tr("Connection to host %1:%2 established.")
-                      .arg(session_state_->hostAddress())
-                      .arg(session_state_->hostPort());
-    }
-
-    status_dialog_->addMessageAndActivate(message);
-    status_dialog_->hide();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onHostDisconnected(base::TcpChannel::ErrorCode error_code)
-{
-    LOG(LS_INFO) << "Host disconnected";
-    onErrorOccurred(netErrorToString(error_code));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onWaitForRouter()
-{
-    LOG(LS_INFO) << "Wait for router";
-    onErrorOccurred(tr("Router is unavailable yet. Waiting to reconnect..."));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onWaitForRouterTimeout()
-{
-    LOG(LS_INFO) << "Wait for router timeout";
-    onErrorOccurred(tr("Timeout waiting for reconnection to router."));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onWaitForHost()
-{
-    LOG(LS_INFO) << "Wait for host";
-    onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onWaitForHostTimeout()
-{
-    LOG(LS_INFO) << "Wait for host timeout";
-    onErrorOccurred(tr("Timeout waiting for reconnection to host."));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onVersionMismatch()
-{
-    QString host_version = QString::fromStdU16String(session_state_->hostVersion().toString());
-    QString client_version = QString::fromStdU16String(base::Version::kCurrentFullVersion.toString());
-
-    onErrorOccurred(
-        tr("The Host version is newer than the Client version (%1 > %2). "
-           "Please update the application.")
-           .arg(host_version, client_version));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onAccessDenied(base::Authenticator::ErrorCode error_code)
-{
-    LOG(LS_INFO) << "Authentication error";
-    onErrorOccurred(authErrorToString(error_code));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionWindow::onRouterError(const RouterController::Error& error)
-{
-    LOG(LS_INFO) << "Router error";
-
-    switch (error.type)
-    {
-        case RouterController::ErrorType::NETWORK:
+        case Client::Status::ROUTER_CONNECTING:
         {
-            onErrorOccurred(tr("Network error when connecting to the router: %1")
-                            .arg(netErrorToString(error.code.network)));
+            const std::optional<RouterConfig>& router = session_state_->router();
+            if (router.has_value())
+            {
+                status_dialog_->addMessageAndActivate(
+                    tr("Connecting to router %1:%2...").arg(router->address).arg(router->port));
+            }
+            else
+            {
+                status_dialog_->addMessageAndActivate(tr("Connecting to router..."));
+            }
         }
         break;
 
-        case RouterController::ErrorType::AUTHENTICATION:
+        case Client::Status::ROUTER_CONNECTED:
         {
-            onErrorOccurred(tr("Authentication error when connecting to the router: %1")
-                            .arg(authErrorToString(error.code.authentication)));
+            const std::optional<RouterConfig>& router = session_state_->router();
+            if (router.has_value())
+            {
+                status_dialog_->addMessageAndActivate(
+                    tr("Connection to router %1:%2 established.").arg(router->address).arg(router->port));
+            }
+            else
+            {
+                status_dialog_->addMessageAndActivate(tr("Connection to router established."));
+            }
         }
         break;
 
-        case RouterController::ErrorType::ROUTER:
+        case Client::Status::ROUTER_ERROR:
         {
-            onErrorOccurred(routerErrorToString(error.code.router));
+            if (!data.canConvert<client::RouterController::Error>())
+            {
+                LOG(LS_ERROR) << "Unable to convert error type";
+                return;
+            }
+
+            RouterController::Error error = data.value<client::RouterController::Error>();
+            switch (error.type)
+            {
+                case RouterController::ErrorType::NETWORK:
+                {
+                    onErrorOccurred(tr("Network error when connecting to the router: %1")
+                        .arg(netErrorToString(error.code.network)));
+                }
+                break;
+
+                case RouterController::ErrorType::AUTHENTICATION:
+                {
+                    onErrorOccurred(tr("Authentication error when connecting to the router: %1")
+                        .arg(authErrorToString(error.code.authentication)));
+                }
+                break;
+
+                case RouterController::ErrorType::ROUTER:
+                    onErrorOccurred(routerErrorToString(error.code.router));
+                    break;
+
+                default:
+                    NOTREACHED();
+                    break;
+            }
+        }
+        break;
+
+        case Client::Status::HOST_CONNECTING:
+        {
+            if (session_state_->isConnectionByHostId())
+            {
+                status_dialog_->addMessageAndActivate(
+                    tr("Connecting to host %1...").arg(session_state_->hostAddress()));
+            }
+            else
+            {
+                status_dialog_->addMessageAndActivate(tr("Connecting to host %1:%2...")
+                    .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
+            }
+        }
+        break;
+
+        case Client::Status::HOST_CONNECTED:
+        {
+            if (session_state_->isConnectionByHostId())
+            {
+                status_dialog_->addMessageAndActivate(
+                    tr("Connection to host %1 established.").arg(session_state_->hostAddress()));
+            }
+            else
+            {
+                status_dialog_->addMessageAndActivate(tr("Connection to host %1:%2 established.")
+                    .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
+            }
+
+            status_dialog_->hide();
+        }
+        break;
+
+        case Client::Status::HOST_DISCONNECTED:
+        {
+            if (data.canConvert<base::NetworkChannel::ErrorCode>())
+            {
+                base::NetworkChannel::ErrorCode error_code =
+                    data.value<base::NetworkChannel::ErrorCode>();
+                onErrorOccurred(netErrorToString(error_code));
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Unable to convert error code";
+            }
+        }
+        break;
+
+        case Client::Status::WAIT_FOR_ROUTER:
+            onErrorOccurred(tr("Router is unavailable yet. Waiting to reconnect..."));
+            break;
+
+        case Client::Status::WAIT_FOR_ROUTER_TIMEOUT:
+            onErrorOccurred(tr("Timeout waiting for reconnection to router."));
+            break;
+
+        case Client::Status::WAIT_FOR_HOST:
+            onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
+            break;
+
+        case Client::Status::WAIT_FOR_HOST_TIMEOUT:
+            onErrorOccurred(tr("Timeout waiting for reconnection to host."));
+            break;
+
+        case Client::Status::VERSION_MISMATCH:
+        {
+            QString host_version = QString::fromStdU16String(session_state_->hostVersion().toString());
+            QString client_version = QString::fromStdU16String(base::Version::kCurrentFullVersion.toString());
+
+            onErrorOccurred(
+                tr("The Host version is newer than the Client version (%1 > %2). "
+                   "Please update the application.")
+                    .arg(host_version, client_version));
+        }
+        break;
+
+        case Client::Status::ACCESS_DENIED:
+        {
+            if (data.canConvert<base::Authenticator::ErrorCode>())
+            {
+                base::Authenticator::ErrorCode error_code =
+                    data.value<base::Authenticator::ErrorCode>();
+                onErrorOccurred(authErrorToString(error_code));
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Unable to convert error code";
+            }
         }
         break;
 
         default:
-            NOTREACHED();
-            break;
+            return;
     }
 }
 

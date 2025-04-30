@@ -28,6 +28,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QTimer>
+#include <QVariant>
 
 namespace base {
 class ClientAuthenticator;
@@ -49,24 +50,30 @@ public:
     // Sets an instance of a class that stores session state.
     // The method must be called before calling method start().
     void setSessionState(std::shared_ptr<SessionState> session_state);
-
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
+    enum class Status
+    {
+        STARTED,
+        STOPPED,
+        ROUTER_CONNECTING,
+        ROUTER_CONNECTED,
+        ROUTER_ERROR,
+        HOST_CONNECTING,
+        HOST_CONNECTED,
+        HOST_DISCONNECTED,
+        WAIT_FOR_ROUTER,
+        WAIT_FOR_ROUTER_TIMEOUT,
+        WAIT_FOR_HOST,
+        WAIT_FOR_HOST_TIMEOUT,
+        VERSION_MISMATCH,
+        ACCESS_DENIED
+    };
+
+    static const char* statusToString(Status status);
+
 signals:
-    void sig_statusStarted();
-    void sig_statusStopped();
-    void sig_routerConnecting();
-    void sig_routerConnected();
-    void sig_hostConnecting();
-    void sig_hostConnected();
-    void sig_hostDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void sig_waitForRouter();
-    void sig_waitForRouterTimeout();
-    void sig_waitForHost();
-    void sig_waitForHostTimeout();
-    void sig_versionMismatch();
-    void sig_accessDenied(base::Authenticator::ErrorCode error_code);
-    void sig_routerError(const client::RouterController::Error& error);
+    void sig_statusChanged(Client::Status status, const QVariant& data = QVariant());
 
 protected:
     // Indicates that the session is started.
@@ -113,5 +120,7 @@ private:
 };
 
 } // namespace client
+
+Q_DECLARE_METATYPE(client::Client::Status)
 
 #endif // CLIENT_CLIENT_H

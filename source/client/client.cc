@@ -28,6 +28,12 @@
 
 namespace client {
 
+namespace {
+
+auto g_statusType = qRegisterMetaType<client::Client::Status>();
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Client::Client(QObject* parent)
     : QObject(parent),
@@ -42,9 +48,9 @@ Client::Client(QObject* parent)
         LOG(LS_INFO) << "Reconnect timeout";
 
         if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
-            emit sig_waitForRouterTimeout();
+            emit sig_statusChanged(Status::WAIT_FOR_ROUTER_TIMEOUT);
         else
-            emit sig_waitForHostTimeout();
+            emit sig_statusChanged(Status::WAIT_FOR_HOST_TIMEOUT);
 
         session_state_->setReconnecting(false);
         session_state_->setAutoReconnect(false);
@@ -81,7 +87,7 @@ Client::~Client()
     LOG(LS_INFO) << "Dtor";
 
     state_ = State::STOPPPED;
-    emit sig_statusStopped();
+    emit sig_statusChanged(Status::STOPPED);
 
 #if defined(OS_MAC)
     base::releaseAppNapBlock();
@@ -133,10 +139,10 @@ void Client::start()
         if (!reconnecting)
         {
             // Show the status window.
-            emit sig_statusStarted();
+            emit sig_statusChanged(Status::STARTED);
         }
 
-        emit sig_routerConnecting();
+        emit sig_statusChanged(Status::ROUTER_CONNECTING);
         router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting);
     }
     else
@@ -146,7 +152,7 @@ void Client::start()
         if (!session_state_->isReconnecting())
         {
             // Show the status window.
-            emit sig_statusStarted();
+            emit sig_statusChanged(Status::STARTED);
         }
 
         // Create a network channel for messaging.
@@ -155,7 +161,7 @@ void Client::start()
         connect(channel_, &base::TcpChannel::sig_connected, this, &Client::onTcpConnected);
 
         // Now connect to the host.
-        emit sig_hostConnecting();
+        emit sig_statusChanged(Status::HOST_CONNECTING);
         channel_->connect(config.address_or_id, config.port);
     }
 }
@@ -165,6 +171,45 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 {
     LOG(LS_INFO) << "Session state installed";
     session_state_ = session_state;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+const char* Client::statusToString(Status status)
+{
+    switch (status)
+    {
+        case Status::STARTED:
+            return "STARTED";
+        case Status::STOPPED:
+            return "STOPPED";
+        case Status::ROUTER_CONNECTING:
+            return "ROUTER_CONNECTING";
+        case Status::ROUTER_CONNECTED:
+            return "ROUTER_CONNECTED";
+        case Status::ROUTER_ERROR:
+            return "ROUTER_ERROR";
+        case Status::HOST_CONNECTING:
+            return "HOST_CONNECTING";
+        case Status::HOST_CONNECTED:
+            return "HOST_CONNECTED";
+        case Status::HOST_DISCONNECTED:
+            return "HOST_DISCONNECTED";
+        case Status::WAIT_FOR_ROUTER:
+            return "WAIT_FOR_ROUTER";
+        case Status::WAIT_FOR_ROUTER_TIMEOUT:
+            return "WAIT_FOR_ROUTER_TIMEOUT";
+        case Status::WAIT_FOR_HOST:
+            return "WAIT_FOR_HOST";
+        case Status::WAIT_FOR_HOST_TIMEOUT:
+            return "WAIT_FOR_HOST_TIMEOUT";
+        case Status::VERSION_MISMATCH:
+            return "VERSION_MISMATCH";
+        case Status::ACCESS_DENIED:
+            return "ACCESS_DENIED";
+        default:
+            return "UNKNOWN";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,7 +285,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
-    emit sig_hostDisconnected(error_code);
+    emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
     if (session_state_->isAutoReconnect())
     {
@@ -265,7 +310,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         }
         else
         {
-            emit sig_waitForHost();
+            emit sig_statusChanged(Status::WAIT_FOR_HOST);
             delayedReconnect();
         }
     }
@@ -310,7 +355,7 @@ void Client::onRouterConnected(const base::Version& router_version)
 {
     LOG(LS_INFO) << "Router connected";
     session_state_->setRouterVersion(router_version);
-    emit sig_routerConnected();
+    emit sig_statusChanged(Status::ROUTER_CONNECTED);
     is_connected_to_router_ = true;
 }
 
@@ -318,7 +363,7 @@ void Client::onRouterConnected(const base::Version& router_version)
 void Client::onHostAwaiting()
 {
     LOG(LS_INFO) << "Host awaiting";
-    emit sig_waitForHost();
+    emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -346,7 +391,7 @@ void Client::onHostConnected()
 //--------------------------------------------------------------------------------------------------
 void Client::onRouterErrorOccurred(const RouterController::Error& error)
 {
-    emit sig_routerError(error);
+    emit sig_statusChanged(Status::ROUTER_ERROR, QVariant::fromValue(error));
 
     LOG(LS_INFO) << "Post task to destroy router controller";
     router_controller_->deleteLater();
@@ -354,7 +399,7 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
 
     if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
     {
-        emit sig_waitForRouter();
+        emit sig_statusChanged(Status::WAIT_FOR_ROUTER);
         delayedReconnect();
     }
 }
@@ -410,11 +455,11 @@ void Client::startAuthentication()
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
                               << " client: " << client_version.toString();
-                emit sig_versionMismatch();
+                emit sig_statusChanged(Status::VERSION_MISMATCH);
             }
             else
             {
-                emit sig_hostConnected();
+                emit sig_statusChanged(Status::HOST_CONNECTED);
 
                 // Signal that everything is ready to start the session (connection established,
                 // authentication passed).
@@ -428,7 +473,7 @@ void Client::startAuthentication()
         {
             LOG(LS_INFO) << "Failed authentication: "
                          << base::Authenticator::errorToString(error_code);
-            emit sig_accessDenied(error_code);
+            emit sig_statusChanged(Status::ACCESS_DENIED, QVariant::fromValue(error_code));
         }
 
         // Authenticator is no longer needed.

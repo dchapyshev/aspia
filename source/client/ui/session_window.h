@@ -21,6 +21,7 @@
 
 #include "base/net/network_channel.h"
 #include "base/peer/authenticator.h"
+#include "client/client.h"
 #include "client/client_config.h"
 #include "client/router_controller.h"
 #include "client/client_session_state.h"
@@ -32,8 +33,6 @@ class StatusDialog;
 } // namespace common
 
 namespace client {
-
-class Client;
 
 class SessionWindow : public QWidget
 {
@@ -62,20 +61,7 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 public slots:
-    void onStarted();
-    void onStopped();
-    void onRouterConnecting();
-    void onRouterConnected();
-    void onHostConnecting();
-    void onHostConnected();
-    void onHostDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onWaitForRouter();
-    void onWaitForRouterTimeout();
-    void onWaitForHost();
-    void onWaitForHostTimeout();
-    void onVersionMismatch();
-    void onAccessDenied(base::Authenticator::ErrorCode error_code);
-    void onRouterError(const client::RouterController::Error& error);
+    void onStatusChanged(Client::Status status, const QVariant& data);
 
 private:
     void setClientTitle(const Config& config);
