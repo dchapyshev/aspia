@@ -40,8 +40,6 @@ list(APPEND SOURCE_BASE
     gui_application.h
     gui_logging.cc
     gui_logging.h
-    guid.cc
-    guid.h
     license_reader.h
     location.cc
     location.h
@@ -115,7 +113,6 @@ list(APPEND SOURCE_BASE_TESTS
     bitset_unittest.cc
     converter_unittest.cc
     crc32_unittest.cc
-    guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
     tests_main.cc)

@@ -18,7 +18,6 @@
 
 #include "console/address_book_dialog.h"
 
-#include "base/guid.h"
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
@@ -34,6 +33,7 @@
 
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QUuid>
 
 namespace console {
 
@@ -650,7 +650,7 @@ bool AddressBookDialog::saveChanges()
     data_->set_display_name(display_name.toStdString());
 
     if (data_->guid().empty())
-        data_->set_guid(base::Guid::create().toStdString());
+        data_->set_guid(QUuid::createUuid().toString().toStdString());
 
     return true;
 }

@@ -18,12 +18,12 @@
 
 #include "base/net/firewall_manager.h"
 
-#include "base/guid.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 #include <comutil.h>
 #include <Unknwn.h>
+
+#include <QUuid>
 
 namespace base {
 
@@ -286,7 +286,7 @@ void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
 {
     // Rename rule to unique name and delete by unique name. We can't just delete rule by name.
     // Multiple rules with the same name and different app are possible.
-    _bstr_t unique_name(wideFromUtf8(Guid::create().toStdString()).c_str());
+    _bstr_t unique_name(QUuid::createUuid().toString().toStdWString().c_str());
 
     rule->put_Name(unique_name);
     firewall_rules_->Remove(unique_name);
