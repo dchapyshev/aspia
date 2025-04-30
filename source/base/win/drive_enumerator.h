@@ -24,6 +24,8 @@
 #include <filesystem>
 #include <vector>
 
+#include <QString>
+
 namespace base::win {
 
 class DriveEnumerator
@@ -51,9 +53,9 @@ public:
         Type type() const;
         uint64_t totalSpace() const;
         uint64_t freeSpace() const;
-        std::string fileSystem() const;
-        std::string volumeName() const;
-        std::string volumeSerial() const;
+        QString fileSystem() const;
+        QString volumeName() const;
+        QString volumeSerial() const;
 
     private:
         friend class DriveEnumerator;

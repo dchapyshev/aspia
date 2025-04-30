@@ -806,7 +806,7 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
             system_info->mutable_logical_drives()->add_drive();
 
         drive->set_path(base::utf8FromFilePath(drive_info.path()));
-        drive->set_file_system(drive_info.fileSystem());
+        drive->set_file_system(drive_info.fileSystem().toStdString());
         drive->set_total_size(drive_info.totalSpace());
         drive->set_free_size(drive_info.freeSpace());
     }

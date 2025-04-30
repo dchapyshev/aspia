@@ -19,9 +19,6 @@
 #include "base/win/drive_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
-
-#include <fmt/format.h>
 
 #include <Windows.h>
 
@@ -121,7 +118,7 @@ uint64_t DriveEnumerator::DriveInfo::freeSpace() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DriveEnumerator::DriveInfo::fileSystem() const
+QString DriveEnumerator::DriveInfo::fileSystem() const
 {
     wchar_t fs[MAX_PATH];
 
@@ -131,14 +128,14 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
                                fs, static_cast<DWORD>(std::size(fs))))
     {
         PLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::string();
+        return QString();
     }
 
-    return utf8FromWide(fs);
+    return QString::fromWCharArray(fs);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DriveEnumerator::DriveInfo::volumeName() const
+QString DriveEnumerator::DriveInfo::volumeName() const
 {
     wchar_t name[MAX_PATH];
 
@@ -148,24 +145,26 @@ std::string DriveEnumerator::DriveInfo::volumeName() const
                                nullptr, 0))
     {
         PLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::string();
+        return QString();
     }
 
-    return utf8FromWide(name);
+    return QString::fromWCharArray(name);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string DriveEnumerator::DriveInfo::volumeSerial() const
+QString DriveEnumerator::DriveInfo::volumeSerial() const
 {
     DWORD serial;
 
     if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
     {
         PLOG(LS_ERROR) << "GetVolumeInformationW failed";
-        return std::string();
+        return QString();
     }
 
-    return fmt::format("{:x}-{:x}", HIWORD(serial), LOWORD(serial));
+    return QString("%1-%2")
+        .arg(HIWORD(serial), 4, 16, QLatin1Char('0'))
+        .arg(LOWORD(serial), 4, 16, QLatin1Char('0')).toUpper();
 }
 
 } // namespace base::win
