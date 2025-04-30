@@ -126,7 +126,7 @@ std::unique_ptr<Database> Session::openDatabase() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::setVersion(const base::Version& version)
+void Session::setVersion(const QVersionNumber& version)
 {
     version_ = version;
 }

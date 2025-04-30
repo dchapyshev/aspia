@@ -19,6 +19,7 @@
 #include "console/main_window.h"
 
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "build/build_config.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
@@ -1493,8 +1494,8 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
         }
         else
         {
-            const base::Version& current_version = base::Version::kCurrentShortVersion;
-            const base::Version& update_version = update_info.version();
+            const QVersionNumber& current_version = base::kCurrentVersion;
+            const QVersionNumber& update_version = update_info.version();
 
             if (update_version > current_version)
             {

@@ -19,9 +19,10 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_SUMMARY_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_SUMMARY_H
 
-#include "base/version.h"
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "ui_sys_info_widget_summary.h"
+
+#include <QVersionNumber>
 
 namespace client {
 
@@ -38,9 +39,9 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 
-    void setRouterVersion(const base::Version& router_version);
-    void setHostVersion(const base::Version& host_version);
-    void setClientVersion(const base::Version& client_version);
+    void setRouterVersion(const QVersionNumber& router_version);
+    void setHostVersion(const QVersionNumber& host_version);
+    void setClientVersion(const QVersionNumber& client_version);
 
 private slots:
     void onContextMenu(const QPoint& point);

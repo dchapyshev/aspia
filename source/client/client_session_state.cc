@@ -93,28 +93,28 @@ const QString& SessionState::hostPassword() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionState::setRouterVersion(const base::Version& router_version)
+void SessionState::setRouterVersion(const QVersionNumber& router_version)
 {
     std::scoped_lock lock(lock_);
     router_version_ = router_version;
 }
 
 //--------------------------------------------------------------------------------------------------
-base::Version SessionState::routerVersion() const
+QVersionNumber SessionState::routerVersion() const
 {
     std::scoped_lock lock(lock_);
     return router_version_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionState::setHostVersion(const base::Version& host_version)
+void SessionState::setHostVersion(const QVersionNumber& host_version)
 {
     std::scoped_lock lock(lock_);
     host_version_ = host_version;
 }
 
 //--------------------------------------------------------------------------------------------------
-base::Version SessionState::hostVersion() const
+QVersionNumber SessionState::hostVersion() const
 {
     std::scoped_lock lock(lock_);
     return host_version_;

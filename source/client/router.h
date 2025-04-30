@@ -54,11 +54,11 @@ public:
 
 signals:
     void sig_connecting();
-    void sig_connected(const base::Version& peer_version);
+    void sig_connected(const QVersionNumber& peer_version);
     void sig_disconnected(base::NetworkChannel::ErrorCode error_code);
     void sig_waitForRouter();
     void sig_waitForRouterTimeout();
-    void sig_versionMismatch(const base::Version& router, const base::Version& client);
+    void sig_versionMismatch(const QVersionNumber& router, const QVersionNumber& client);
     void sig_accessDenied(base::Authenticator::ErrorCode error_code);
     void sig_sessionList(std::shared_ptr<proto::SessionList> session_list);
     void sig_sessionResult(std::shared_ptr<proto::SessionResult> session_result);

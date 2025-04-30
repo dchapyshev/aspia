@@ -19,10 +19,11 @@
 #ifndef CLIENT_CLIENT_SESSION_STATE_H
 #define CLIENT_CLIENT_SESSION_STATE_H
 
-#include "base/version.h"
 #include "client/client_config.h"
 
 #include <mutex>
+
+#include <QVersionNumber>
 
 namespace client {
 
@@ -45,11 +46,11 @@ public:
     const QString& hostUserName() const;
     const QString& hostPassword() const;
 
-    void setRouterVersion(const base::Version& router_version);
-    base::Version routerVersion() const;
+    void setRouterVersion(const QVersionNumber& router_version);
+    QVersionNumber routerVersion() const;
 
-    void setHostVersion(const base::Version& host_version);
-    base::Version hostVersion() const;
+    void setHostVersion(const QVersionNumber& host_version);
+    QVersionNumber hostVersion() const;
 
     void setAutoReconnect(bool enable);
     bool isAutoReconnect() const;
@@ -61,8 +62,8 @@ private:
     const Config config_;
 
     mutable std::mutex lock_;
-    base::Version router_version_;
-    base::Version host_version_;
+    QVersionNumber router_version_;
+    QVersionNumber host_version_;
     bool auto_reconnect_ = false;
     bool reconnecting_ = false;
 };

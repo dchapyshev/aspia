@@ -19,7 +19,6 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
-#include "base/version.h"
 #include "client/client_config.h"
 #include "client/client_session_state.h"
 #include "client/router_controller.h"
@@ -97,7 +96,7 @@ private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(uint8_t channel_id, size_t pending);
-    void onRouterConnected(const base::Version& router_version);
+    void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
     void onHostConnected();
     void onRouterErrorOccurred(const client::RouterController::Error& error);

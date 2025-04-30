@@ -39,7 +39,7 @@ public:
         SessionInfo& operator=(const SessionInfo& other) = delete;
 
         std::unique_ptr<TcpChannel> channel;
-        Version version;
+        QVersionNumber version;
         QString os_name;
         QString computer_name;
         QString display_name;

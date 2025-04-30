@@ -19,6 +19,7 @@
 #include "common/ui/update_dialog.h"
 
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "build/build_config.h"
 #include "common/ui/download_dialog.h"
 #include "ui_update_dialog.h"
@@ -77,7 +78,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     initialize();
 
-    ui->label_available->setText(QString::fromStdU16String(update_info_.version().toString(3)));
+    ui->label_available->setText(update_info_.version().toString());
     ui->label_url->setText(makeUrl(update_info_.url()));
     ui->edit_description->setText(update_info_.description());
     ui->button_update->setEnabled(true);
@@ -217,25 +218,23 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
     }
     else
     {
-        const base::Version& current_version = base::Version::kCurrentShortVersion;
-
         update_info_ = UpdateInfo::fromXml(result);
         if (!update_info_.isValid())
         {
             LOG(LS_INFO) << "No updates available";
 
-            ui->label_available->setText(QString::fromStdU16String(current_version.toString(3)));
+            ui->label_available->setText(base::kCurrentVersion.toString());
             ui->edit_description->setText(tr("No updates available."));
         }
         else
         {
-            const base::Version& update_version = update_info_.version();
+            const QVersionNumber& update_version = update_info_.version();
 
-            if (update_version > current_version)
+            if (update_version > base::kCurrentVersion)
             {
                 LOG(LS_INFO) << "New version available: " << update_version.toString();
 
-                ui->label_available->setText(QString::fromStdU16String(update_version.toString(3)));
+                ui->label_available->setText(update_version.toString());
                 ui->edit_description->setText(update_info_.description());
                 ui->label_url->setText(makeUrl(update_info_.url()));
 
@@ -247,7 +246,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
             {
                 LOG(LS_INFO) << "New version less then current: " << update_version.toString();
 
-                ui->label_available->setText(QString::fromStdU16String(current_version.toString(3)));
+                ui->label_available->setText(base::kCurrentVersion.toString());
                 ui->edit_description->setText(tr("No updates available."));
             }
         }
@@ -268,9 +267,7 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
 
-    const base::Version& current_version = base::Version::kCurrentShortVersion;
-
-    ui->label_current->setText(QString::fromStdU16String(current_version.toString(3)));
+    ui->label_current->setText(base::kCurrentVersion.toString());
 }
 
 } // namespace common

@@ -57,6 +57,7 @@ list(APPEND SOURCE_BASE
     scoped_clear_last_error.h
     scoped_task_runner.cc
     scoped_task_runner.h
+    serialization.cc
     serialization.h
     service.h
     session_id.cc
@@ -76,8 +77,8 @@ list(APPEND SOURCE_BASE
     task_runner.h
     translations_loader.cc
     translations_loader.h
-    version.cc
-    version.h
+    version_constants.cc
+    version_constants.h
     waitable_event.cc
     waitable_event.h)
 
@@ -119,8 +120,7 @@ list(APPEND SOURCE_BASE_TESTS
     guid_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
-    tests_main.cc
-    version_unittest.cc)
+    tests_main.cc)
 
 list(APPEND SOURCE_BASE_AUDIO
     audio/audio_capturer.cc

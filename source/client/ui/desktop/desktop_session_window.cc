@@ -20,6 +20,7 @@
 
 #include "base/gui_logging.h"
 #include "base/stl_util.h"
+#include "base/version_constants.h"
 #include "base/desktop/frame_qimage.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/strings/string_split.h"
@@ -360,7 +361,7 @@ void DesktopSessionWindow::onShowWindow()
     showNormal();
     activateWindow();
 
-    toolbar_->enableTextChat(sessionState()->hostVersion() >= base::Version::kVersion_2_4_0);
+    toolbar_->enableTextChat(sessionState()->hostVersion() >= base::kVersion_2_4_0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -413,7 +414,7 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilitie
 
     if (base::contains(extensions_list, common::kRemoteUpdateExtension))
     {
-        if (base::Version::kCurrentFullVersion > sessionState()->hostVersion())
+        if (base::kCurrentVersion > sessionState()->hostVersion())
             toolbar_->enableRemoteUpdate(true);
     }
 

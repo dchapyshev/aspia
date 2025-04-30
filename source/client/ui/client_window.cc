@@ -19,6 +19,7 @@
 #include "client/ui/client_window.h"
 
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/router_config_storage.h"
@@ -176,8 +177,8 @@ void ClientWindow::onUpdateCheckedFinished(const QByteArray& result)
         }
         else
         {
-            const base::Version& current_version = base::Version::kCurrentShortVersion;
-            const base::Version& update_version = update_info.version();
+            const QVersionNumber& current_version = base::kCurrentVersion;
+            const QVersionNumber& update_version = update_info.version();
 
             if (update_version > current_version)
             {

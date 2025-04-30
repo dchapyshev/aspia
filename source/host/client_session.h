@@ -20,12 +20,13 @@
 #define HOST_CLIENT_SESSION_H
 
 #include "base/session_id.h"
-#include "base/version.h"
 #include "base/net/tcp_channel.h"
+#include "proto/common.h"
 #include "proto/desktop_extensions.h"
 #include "proto/text_chat.h"
 
 #include <QObject>
+#include <QVersionNumber>
 
 namespace base {
 class TcpChannelProxy;
@@ -71,8 +72,8 @@ public:
     State state() const { return state_; }
     uint32_t id() const { return id_; }
 
-    void setClientVersion(const base::Version& version);
-    const base::Version& clientVersion() const { return version_; }
+    void setClientVersion(const QVersionNumber& version);
+    const QVersionNumber& clientVersion() const { return version_; }
 
     void setUserName(const QString& username);
     const QString& userName() const { return username_; }
@@ -119,7 +120,7 @@ private:
     State state_ = State::CREATED;
     uint32_t id_;
     proto::SessionType session_type_;
-    base::Version version_;
+    QVersionNumber version_;
     QString username_;
     QString computer_name_;
     QString display_name_;

@@ -19,14 +19,13 @@
 #include "router/server.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/stl_util.h"
-#include "base/crypto/key_pair.h"
+#include "base/version_constants.h"
 #include "base/crypto/random.h"
-#include "base/files/base_paths.h"
-#include "base/files/file_util.h"
 #include "base/net/tcp_channel.h"
+#include "router/database.h"
 #include "router/database_factory_sqlite.h"
-#include "router/database_sqlite.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
 #include "router/session_host.h"
@@ -209,7 +208,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
         item->set_session_type(session->sessionType());
         item->set_timepoint(static_cast<uint64_t>(session->startTime()));
         item->set_ip_address(session->address().toStdString());
-        item->mutable_version()->CopyFrom(session->version().toProto());
+        item->mutable_version()->CopyFrom(base::serialize(session->version()));
         item->set_os_name(session->osName().toStdString());
         item->set_computer_name(session->computerName().toStdString());
         item->set_architecture(session->architecture().toStdString());
@@ -367,7 +366,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
 
-    if (session_info.version >= base::Version::kVersion_2_6_0)
+    if (session_info.version >= base::kVersion_2_6_0)
     {
         LOG(LS_INFO) << "Using channel id support";
         session_info.channel->setChannelIdSupport(true);

@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 #include "host/host_key_storage.h"
 #include "proto/router_peer.pb.h"
@@ -159,7 +160,7 @@ void RouterController::onTcpConnected()
             connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
-            if (authenticator_->peerVersion() >= base::Version::kVersion_2_6_0)
+            if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);

@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
+#include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
@@ -311,22 +312,22 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         LOG(LS_INFO) << "ServerHello with version info";
         setPeerVersion(server_hello->version());
 
-        const base::Version& peer_version = peerVersion();
+        const QVersionNumber& peer_version = peerVersion();
 
-        if (!peer_version.isValid())
+        if (peer_version.isNull())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return false;
         }
 
         // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
-        if (peer_version < base::Version::kVersion_2_7_0)
+        if (peer_version < kVersion_2_7_0)
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return false;
         }
 
-        if (peer_version < base::Version::kMinimumSupportedVersion)
+        if (peer_version < kMinimumSupportedVersion)
         {
             finish(FROM_HERE, ErrorCode::VERSION_ERROR);
             return false;
@@ -463,26 +464,26 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
-    if (!peerVersion().isValid())
+    if (peerVersion().isNull())
     {
         setPeerVersion(challenge->version());
 
-        const base::Version& peer_version = peerVersion();
+        const QVersionNumber& peer_version = peerVersion();
 
-        if (!peer_version.isValid())
+        if (peer_version.isNull())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return false;
         }
 
         // Versions greater than or equal to 2.7.0 must send the peer version in ServerHello message.
-        if (peer_version >= base::Version::kVersion_2_7_0)
+        if (peer_version >= kVersion_2_7_0)
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return false;
         }
 
-        if (peer_version < base::Version::kMinimumSupportedVersion)
+        if (peer_version < kMinimumSupportedVersion)
         {
             finish(FROM_HERE, ErrorCode::VERSION_ERROR);
             return false;
@@ -500,7 +501,7 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(challenge->arch()));
     setPeerDisplayName(QString::fromStdString(challenge->display_name()));
 
-    LOG(LS_INFO) << "Server (version=" << peerVersion() << " name=" << challenge->computer_name()
+    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << " name=" << challenge->computer_name()
                  << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
                  << " arch=" << challenge->arch() << " display_name=" << challenge->display_name()
                  << ")";

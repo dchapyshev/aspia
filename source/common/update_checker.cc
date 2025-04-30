@@ -19,9 +19,10 @@
 #include "common/update_checker.h"
 
 #include "base/logging.h"
-#include "base/version.h"
 #include "base/net/curl_util.h"
 #include "build/build_config.h"
+
+#include <QVersionNumber>
 
 namespace common {
 
@@ -117,13 +118,13 @@ void UpdateChecker::run()
 #error Unknown architecture
 #endif
 
-    const base::Version& version = base::Version::kCurrentShortVersion;
-
+    QVersionNumber version({ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH});
     QString unicode_url(update_server_);
+
     unicode_url += "/update.php?";
     unicode_url += "package=" + package_name_;
     unicode_url += '&';
-    unicode_url += "version=" + QString::fromStdU16String(version.toString(3));
+    unicode_url += "version=" + version.toString();
 
     if (!os.isEmpty())
     {

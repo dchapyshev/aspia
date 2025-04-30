@@ -74,7 +74,7 @@ public:
     base::TcpChannel* takeChannel();
 
 signals:
-    void sig_routerConnected(const base::Version& version);
+    void sig_routerConnected(const QVersionNumber& version);
     void sig_hostAwaiting();
     void sig_hostConnected();
     void sig_errorOccurred(const client::RouterController::Error& error);

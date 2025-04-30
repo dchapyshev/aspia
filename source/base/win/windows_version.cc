@@ -306,21 +306,21 @@ OSInfo::~OSInfo() = default;
 //--------------------------------------------------------------------------------------------------
 Version OSInfo::kernel32Version() const
 {
-    base::Version base_version = kernel32BaseVersion();
+    QVersionNumber base_version = kernel32BaseVersion();
 
     static const Version kernel32_version =
-        majorMinorBuildToVersion(static_cast<int>(base_version.components()[0]),
-                                 static_cast<int>(base_version.components()[1]),
-                                 static_cast<int>(base_version.components()[2]));
+        majorMinorBuildToVersion(static_cast<int>(base_version.majorVersion()),
+                                 static_cast<int>(base_version.minorVersion()),
+                                 static_cast<int>(base_version.microVersion()));
     return kernel32_version;
 }
 
 //--------------------------------------------------------------------------------------------------
 // Retrieve a version from kernel32. This is useful because when running in compatibility mode for
 // a down-level version of the OS, the file version of kernel32 will still be the "real" version.
-base::Version OSInfo::kernel32BaseVersion() const
+QVersionNumber OSInfo::kernel32BaseVersion() const
 {
-    static const base::Version version([]
+    static const QVersionNumber version([]
     {
         std::unique_ptr<FileVersionInfo> file_version_info =
             FileVersionInfo::createFileVersionInfo(L"kernel32.dll");
@@ -335,12 +335,12 @@ base::Version OSInfo::kernel32BaseVersion() const
 
         const VS_FIXEDFILEINFO* file_info = file_version_info->fixed_file_info();
 
-        const uint32_t major = HIWORD(file_info->dwFileVersionMS);
-        const uint32_t minor = LOWORD(file_info->dwFileVersionMS);
-        const uint32_t build = HIWORD(file_info->dwFileVersionLS);
-        const uint32_t patch = LOWORD(file_info->dwFileVersionLS);
+        const int major = static_cast<int>(HIWORD(file_info->dwFileVersionMS));
+        const int minor = static_cast<int>(LOWORD(file_info->dwFileVersionMS));
+        const int build = static_cast<int>(HIWORD(file_info->dwFileVersionLS));
+        const int patch = static_cast<int>(LOWORD(file_info->dwFileVersionLS));
 
-        return base::Version(std::vector<uint32_t>{major, minor, build, patch});
+        return QVersionNumber({major, minor, build, patch});
     }());
 
     return version;

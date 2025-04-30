@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/codec/audio_encoder_opus.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
@@ -409,7 +410,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 {
     CHECK_NE(error_code, proto::VIDEO_ERROR_CODE_OK);
 
-    if (clientVersion() < base::Version::kVersion_2_6_0)
+    if (clientVersion() < base::kVersion_2_6_0)
     {
         // Old version Client does not work with error codes.
         return;

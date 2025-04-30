@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "proto/router_common.pb.h"
 
 namespace client {
@@ -263,14 +264,14 @@ void Router::onTcpConnected()
             connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Router::onTcpMessageReceived);
 
-            const base::Version& router_version = authenticator_->peerVersion();
-            if (router_version >= base::Version::kVersion_2_6_0)
+            const QVersionNumber& router_version = authenticator_->peerVersion();
+            if (router_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            const base::Version& client_version = base::Version::kCurrentFullVersion;
+            const QVersionNumber& client_version = base::kCurrentVersion;
             if (router_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()

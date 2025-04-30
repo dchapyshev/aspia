@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 
 #if defined(OS_MAC)
@@ -351,7 +352,7 @@ void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterConnected(const base::Version& router_version)
+void Client::onRouterConnected(const QVersionNumber& router_version)
 {
     LOG(LS_INFO) << "Router connected";
     session_state_->setRouterVersion(router_version);
@@ -441,16 +442,16 @@ void Client::startAuthentication()
             connect(channel_, &base::TcpChannel::sig_messageWritten,
                     this, &Client::onTcpMessageWritten);
 
-            const base::Version& host_version = authenticator_->peerVersion();
+            const QVersionNumber& host_version = authenticator_->peerVersion();
             session_state_->setHostVersion(host_version);
 
-            if (host_version >= base::Version::kVersion_2_6_0)
+            if (host_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            const base::Version& client_version = base::Version::kCurrentFullVersion;
+            const QVersionNumber& client_version = base::kCurrentVersion;
             if (host_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()

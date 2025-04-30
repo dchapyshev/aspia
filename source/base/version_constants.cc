@@ -16,29 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_MEMORY_BYTE_ARRAY_H
-#define BASE_MEMORY_BYTE_ARRAY_H
-
-#include "proto/common.h"
-
-#include <QByteArray>
-#include <QVersionNumber>
-
-#include <google/protobuf/message_lite.h>
+#include "base/version_constants.h"
 
 namespace base {
 
-QByteArray serialize(const google::protobuf::MessageLite& message);
-
-template <class T>
-bool parse(const QByteArray& buffer, T* message)
-{
-    return message->ParseFromArray(buffer.data(), static_cast<int>(buffer.size()));
-}
-
-proto::Version serialize(const QVersionNumber& version);
-QVersionNumber parse(const proto::Version& version);
+const QVersionNumber kCurrentVersion(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+const QVersionNumber kMinimumSupportedVersion(2, 3, 0);
+const QVersionNumber kVersion_2_7_0(2, 7, 0);
+const QVersionNumber kVersion_2_6_0(2, 6, 0);
+const QVersionNumber kVersion_2_4_0(2, 4, 0);
 
 } // namespace base
-
-#endif // BASE_MEMORY_BYTE_ARRAY_H

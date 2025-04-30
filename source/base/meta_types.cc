@@ -18,8 +18,6 @@
 
 #include "base/meta_types.h"
 
-#include "base/version.h"
-
 #include <QMetaType>
 
 #include <cstdint>
@@ -42,8 +40,6 @@ void registerMetaTypes()
     qRegisterMetaType<int32_t>("int32_t");
     qRegisterMetaType<int64_t>("int64_t");
     qRegisterMetaType<size_t>("size_t");
-
-    qRegisterMetaType<base::Version>("base::Version");
 }
 
 } // namespace base

@@ -19,12 +19,12 @@
 #ifndef ROUTER_SESSION_H
 #define ROUTER_SESSION_H
 
-#include "base/version.h"
 #include "base/net/tcp_channel.h"
 #include "base/memory/local_memory.h"
 #include "proto/router_common.pb.h"
 
 #include <QObject>
+#include <QVersionNumber>
 
 namespace router {
 
@@ -59,8 +59,8 @@ public:
 
     void start(Delegate* delegate);
 
-    void setVersion(const base::Version& version);
-    const base::Version& version() const { return version_; }
+    void setVersion(const QVersionNumber& version);
+    const QVersionNumber& version() const { return version_; }
     void setOsName(const QString& os_name);
     const QString& osName() const { return os_name_; }
     void setComputerName(const QString& computer_name);
@@ -107,7 +107,7 @@ private:
 
     QString address_;
     QString username_;
-    base::Version version_;
+    QVersionNumber version_;
     QString os_name_;
     QString computer_name_;
     QString architecture_;

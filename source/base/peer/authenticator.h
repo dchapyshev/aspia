@@ -19,12 +19,12 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
-#include "base/version.h"
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
 #include <QPointer>
 #include <QTimer>
+#include <QVersionNumber>
 
 namespace base {
 
@@ -61,7 +61,7 @@ public:
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
-    [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
+    [[nodiscard]] const QVersionNumber& peerVersion() const { return peer_version_; }
     [[nodiscard]] const QString& peerOsName() const { return peer_os_name_; }
     [[nodiscard]] const QString& peerComputerName() const { return peer_computer_name_; }
     [[nodiscard]] const QString& peerArch() const { return peer_arch_; }
@@ -112,7 +112,7 @@ private:
     QPointer<QTimer> timer_;
     QPointer<TcpChannel> channel_;
     State state_ = State::STOPPED;
-    Version peer_version_; // Remote peer version.
+    QVersionNumber peer_version_; // Remote peer version.
     QString peer_os_name_;
     QString peer_computer_name_;
     QString peer_arch_;

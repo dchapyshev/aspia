@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "base/strings/unicode.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
 #include "build/build_config.h"
@@ -191,7 +190,7 @@ QString SysInfo::operatingSystemName()
 // static
 QString SysInfo::operatingSystemVersion()
 {
-    return QString::fromStdU16String(win::OSInfo::instance()->kernel32BaseVersion().toString());
+    return win::OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
 //--------------------------------------------------------------------------------------------------

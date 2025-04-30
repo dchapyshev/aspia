@@ -20,8 +20,8 @@
 #define BASE_WIN_WINDOWS_VERSION_H
 
 #include "base/macros_magic.h"
-#include "base/version.h"
 
+#include <QVersionNumber>
 #include <QString>
 
 struct _OSVERSIONINFOEXW;
@@ -129,7 +129,7 @@ public:
 
     Version version() const { return version_; }
     Version kernel32Version() const;
-    base::Version kernel32BaseVersion() const;
+    QVersionNumber kernel32BaseVersion() const;
     // The next two functions return arrays of values, [major, minor(, build)].
     VersionNumber versionNumber() const { return version_number_; }
     VersionType versionType() const { return version_type_; }

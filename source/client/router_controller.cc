@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.pb.h"
 
@@ -90,7 +91,7 @@ void RouterController::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            const base::Version& router_version = authenticator_->peerVersion();
+            const QVersionNumber& router_version = authenticator_->peerVersion();
 
             emit sig_routerConnected(router_version);
 
@@ -99,7 +100,7 @@ void RouterController::onTcpConnected()
             connect(router_channel_.get(), &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
-            if (router_version >= base::Version::kVersion_2_6_0)
+            if (router_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 router_channel_->setChannelIdSupport(true);

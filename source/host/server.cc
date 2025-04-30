@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/net/tcp_channel.h"
@@ -169,13 +170,13 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 {
     LOG(LS_INFO) << "New client session";
 
-    bool channel_id_support = (session_info.version >= base::Version::kVersion_2_6_0);
+    bool channel_id_support = (session_info.version >= base::kVersion_2_6_0);
     if (channel_id_support)
         session_info.channel->setChannelIdSupport(true);
 
     LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
 
-    const base::Version& host_version = base::Version::kCurrentFullVersion;
+    const QVersionNumber& host_version = base::kCurrentVersion;
     if (host_version > session_info.version)
     {
         LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
@@ -308,8 +309,8 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
         }
         else
         {
-            const base::Version& current_version = base::Version::kCurrentShortVersion;
-            const base::Version& update_version = update_info.version();
+            const QVersionNumber& current_version = base::kCurrentVersion;
+            const QVersionNumber& update_version = update_info.version();
 
             if (update_version > current_version)
             {

@@ -19,7 +19,6 @@
 #include "client/ui/sys_info/sys_info_widget_summary.h"
 
 #include "base/macros_magic.h"
-#include "base/version.h"
 #include "common/system_info_constants.h"
 
 #include <QMenu>
@@ -348,24 +347,24 @@ QTreeWidget* SysInfoWidgetSummary::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSummary::setRouterVersion(const base::Version& router_version)
+void SysInfoWidgetSummary::setRouterVersion(const QVersionNumber& router_version)
 {
-    if (router_version.isValid())
-        router_version_ = QString::fromStdU16String(router_version.toString());
+    if (!router_version.isNull())
+        router_version_ = router_version.toString();
     else
         router_version_ = tr("No");
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSummary::setHostVersion(const base::Version& host_version)
+void SysInfoWidgetSummary::setHostVersion(const QVersionNumber& host_version)
 {
-    host_version_ = QString::fromStdU16String(host_version.toString());
+    host_version_ = host_version.toString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSummary::setClientVersion(const base::Version& client_version)
+void SysInfoWidgetSummary::setClientVersion(const QVersionNumber& client_version)
 {
-    client_version_ = QString::fromStdU16String(client_version.toString());
+    client_version_ = client_version.toString();
 }
 
 //--------------------------------------------------------------------------------------------------

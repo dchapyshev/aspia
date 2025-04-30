@@ -20,6 +20,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/status_dialog.h"
 
@@ -252,8 +253,8 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
 
         case Client::Status::VERSION_MISMATCH:
         {
-            QString host_version = QString::fromStdU16String(session_state_->hostVersion().toString());
-            QString client_version = QString::fromStdU16String(base::Version::kCurrentFullVersion.toString());
+            QString host_version = session_state_->hostVersion().toString();
+            QString client_version = base::kCurrentVersion.toString();
 
             onErrorOccurred(
                 tr("The Host version is newer than the Client version (%1 > %2). "

@@ -19,7 +19,6 @@
 #include "common/update_info.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 #include "third_party/rapidxml/rapidxml.hpp"
 
@@ -79,9 +78,9 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         {
             if (name == "version")
             {
-                update_info.version_ = base::Version(base::utf16FromUtf8(
-                    std::string_view(node->value(), node->value_size())));
-                if (!update_info.version_.isValid())
+                update_info.version_ = QVersionNumber::fromString(
+                    QString::fromUtf8(node->value(), static_cast<QString::size_type>(node->value_size())));
+                if (update_info.version_.isNull())
                 {
                     LOG(LS_ERROR) << "Invalid version: " << node->value();
                     return UpdateInfo();

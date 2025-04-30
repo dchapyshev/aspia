@@ -19,10 +19,9 @@
 #ifndef COMMON_UPDATE_INFO_H
 #define COMMON_UPDATE_INFO_H
 
-#include "base/version.h"
-
 #include <QByteArray>
 #include <QString>
+#include <QVersionNumber>
 
 namespace common {
 
@@ -37,13 +36,13 @@ public:
     static UpdateInfo fromXml(const QByteArray& buffer);
 
     bool isValid() const { return valid_; }
-    const base::Version& version() const { return version_; }
+    const QVersionNumber& version() const { return version_; }
     const QString& description() const { return description_; }
     const QString& url() const { return url_; }
 
 private:
     bool valid_ = false;
-    base::Version version_;
+    QVersionNumber version_;
     QString description_;
     QString url_;
 };

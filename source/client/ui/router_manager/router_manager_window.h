@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 #define CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 
-#include "base/version.h"
 #include "base/peer/authenticator.h"
 #include "base/net/network_channel.h"
 #include "client/router_config.h"
@@ -27,6 +26,7 @@
 
 #include <QMainWindow>
 #include <QPointer>
+#include <QVersionNumber>
 
 namespace Ui {
 class RouterManagerWindow;
@@ -53,11 +53,11 @@ public:
 
 public slots:
     void onConnecting();
-    void onConnected(const base::Version& peer_version);
+    void onConnected(const QVersionNumber& peer_version);
     void onDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onWaitForRouter();
     void onWaitForRouterTimeout();
-    void onVersionMismatch(const base::Version& router, const base::Version& client);
+    void onVersionMismatch(const QVersionNumber& router, const QVersionNumber& client);
     void onAccessDenied(base::Authenticator::ErrorCode error_code);
     void onSessionList(std::shared_ptr<proto::SessionList> session_list);
     void onSessionResult(std::shared_ptr<proto::SessionResult> session_result);

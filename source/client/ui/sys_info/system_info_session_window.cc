@@ -19,6 +19,7 @@
 #include "client/ui/sys_info/system_info_session_window.h"
 
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "client/client_system_info.h"
 #include "client/ui/sys_info/sys_info_widget_applications.h"
 #include "client/ui/sys_info/sys_info_widget_connections.h"
@@ -402,7 +403,7 @@ void SystemInfoSessionWindow::onShowWindow()
         {
             SysInfoWidgetSummary* summary = static_cast<SysInfoWidgetSummary*>(sys_info_widgets_[i]);
 
-            summary->setClientVersion(base::Version::kCurrentFullVersion);
+            summary->setClientVersion(base::kCurrentVersion);
             summary->setHostVersion(sessionState()->hostVersion());
             summary->setRouterVersion(sessionState()->routerVersion());
             break;

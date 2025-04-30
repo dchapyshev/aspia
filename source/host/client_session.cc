@@ -124,7 +124,7 @@ void ClientSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setClientVersion(const base::Version& version)
+void ClientSession::setClientVersion(const QVersionNumber& version)
 {
     version_ = version;
 }

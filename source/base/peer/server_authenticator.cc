@@ -24,12 +24,12 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
+#include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/peer/user_list.h"
-#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -287,22 +287,22 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         LOG(LS_INFO) << "ClientHello with version info";
         setPeerVersion(client_hello->version());
 
-        const base::Version& peer_version = peerVersion();
+        const QVersionNumber& peer_version = peerVersion();
 
-        if (!peer_version.isValid())
+        if (peer_version.isNull())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
         // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
-        if (peer_version < base::Version::kVersion_2_7_0)
+        if (peer_version < kVersion_2_7_0)
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
-        if (peer_version < base::Version::kMinimumSupportedVersion)
+        if (peer_version < kMinimumSupportedVersion)
         {
             finish(FROM_HERE, ErrorCode::VERSION_ERROR);
             return;
@@ -637,13 +637,13 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
         return;
     }
 
-    if (!peerVersion().isValid())
+    if (peerVersion().isNull())
     {
         setPeerVersion(response->version());
 
-        const base::Version& peer_version = peerVersion();
+        const QVersionNumber& peer_version = peerVersion();
 
-        if (!peer_version.isValid())
+        if (peer_version.isNull())
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
@@ -651,13 +651,13 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 
         // Versions greater than or equal to 2.7.0 must send the peer version in
         // ServerHello/ClientHello message.
-        if (peer_version >= base::Version::kVersion_2_7_0)
+        if (peer_version >= kVersion_2_7_0)
         {
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
         }
 
-        if (peer_version < base::Version::kMinimumSupportedVersion)
+        if (peer_version < kMinimumSupportedVersion)
         {
             finish(FROM_HERE, ErrorCode::VERSION_ERROR);
             return;
@@ -670,7 +670,7 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(response->display_name()));
 
     LOG(LS_INFO) << "Client (session_type=" << response->session_type()
-                 << " version=" << peerVersion() << " name=" << response->computer_name()
+                 << " version=" << peerVersion().toString() << " name=" << response->computer_name()
                  << " os=" << response->os_name() << " cores=" << response->cpu_cores()
                  << " arch=" << response->arch() << " display_name=" << response->display_name()
                  << ")";
