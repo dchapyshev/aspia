@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_FILE_TRANSFER_QT_FILE_MANAGER_WINDOW_H
-#define CLIENT_UI_FILE_TRANSFER_QT_FILE_MANAGER_WINDOW_H
+#ifndef CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_SESSION_WINDOW_H
+#define CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_SESSION_WINDOW_H
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
@@ -26,7 +26,7 @@
 #include <QPointer>
 
 namespace Ui {
-class FileManagerWindow;
+class FileTransferSessionWindow;
 } // namespace Ui
 
 namespace client {
@@ -35,13 +35,13 @@ class FilePanel;
 class FileRemoveDialog;
 class FileTransferDialog;
 
-class QtFileManagerWindow final : public SessionWindow
+class FileTransferSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    explicit QtFileManagerWindow(QWidget* parent = nullptr);
-    ~QtFileManagerWindow() final;
+    explicit FileTransferSessionWindow(QWidget* parent = nullptr);
+    ~FileTransferSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
@@ -50,7 +50,7 @@ public:
     void restoreState(const QByteArray& state);
 
 public slots:
-    void showSessionWindow();
+    void onShowWindow();
     void onErrorOccurred(proto::FileError error_code);
     void onDriveList(common::FileTask::Target target,
                      proto::FileError error_code,
@@ -99,14 +99,14 @@ private:
                    const QString& mime_type,
                    FilePanel* panel);
 
-    std::unique_ptr<Ui::FileManagerWindow> ui;
+    std::unique_ptr<Ui::FileTransferSessionWindow> ui;
 
     QPointer<FileRemoveDialog> remove_dialog_;
     QPointer<FileTransferDialog> transfer_dialog_;
 
-    DISALLOW_COPY_AND_ASSIGN(QtFileManagerWindow);
+    DISALLOW_COPY_AND_ASSIGN(FileTransferSessionWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_FILE_TRANSFER_QT_FILE_MANAGER_WINDOW_H
+#endif // CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_SESSION_WINDOW_H

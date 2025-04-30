@@ -25,11 +25,11 @@
 #include "client/router_config_storage.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
-#include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/file_transfer/qt_file_manager_window.h"
-#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
-#include "client/ui/sys_info/qt_system_info_window.h"
-#include "client/ui/text_chat/qt_text_chat_window.h"
+#include "client/ui/desktop/desktop_session_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
+#include "client/ui/port_forwarding/port_forwarding_session_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
+#include "client/ui/text_chat/text_chat_session_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/application.h"
@@ -320,7 +320,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             else
                 desktop_config = state_.desktop_manage_config;
 
-            session_window = new client::QtDesktopWindow(
+            session_window = new client::DesktopSessionWindow(
                 state_.session_type, desktop_config);
         }
         break;
@@ -334,21 +334,21 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             else
                 desktop_config = state_.desktop_view_config;
 
-            session_window = new client::QtDesktopWindow(
+            session_window = new client::DesktopSessionWindow(
                 state_.session_type, desktop_config);
         }
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_window = new client::QtFileManagerWindow();
+            session_window = new client::FileTransferSessionWindow();
             break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
-            session_window = new client::QtSystemInfoWindow();
+            session_window = new client::SystemInfoSessionWindow();
             break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
-            session_window = new client::QtTextChatWindow();
+            session_window = new client::TextChatSessionWindow();
             break;
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
@@ -360,7 +360,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             else
                 port_forwarding_config = state_.port_forwarding_config;
 
-            session_window = new client::QtPortForwardingWindow(port_forwarding_config);
+            session_window = new client::PortForwardingSessionWindow(port_forwarding_config);
         }
         break;
 

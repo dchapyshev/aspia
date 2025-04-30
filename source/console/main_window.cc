@@ -19,11 +19,11 @@
 #include "console/main_window.h"
 
 #include "build/build_config.h"
-#include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/file_transfer/qt_file_manager_window.h"
-#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
-#include "client/ui/sys_info/qt_system_info_window.h"
-#include "client/ui/text_chat/qt_text_chat_window.h"
+#include "client/ui/desktop/desktop_session_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
+#include "client/ui/port_forwarding/port_forwarding_session_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
+#include "client/ui/text_chat/text_chat_session_window.h"
 #include "client/ui/router_manager/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
@@ -1726,33 +1726,33 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            session_window = new client::QtDesktopWindow(
+            session_window = new client::DesktopSessionWindow(
                 config.session_type, computer.session_config().desktop_manage());
         }
         break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            session_window = new client::QtDesktopWindow(
+            session_window = new client::DesktopSessionWindow(
                 config.session_type, computer.session_config().desktop_view());
         }
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_window = new client::QtFileManagerWindow();
+            session_window = new client::FileTransferSessionWindow();
             break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
-            session_window = new client::QtSystemInfoWindow();
+            session_window = new client::SystemInfoSessionWindow();
             break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
-            session_window = new client::QtTextChatWindow();
+            session_window = new client::TextChatSessionWindow();
             break;
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
         {
-            session_window = new client::QtPortForwardingWindow(
+            session_window = new client::PortForwardingSessionWindow(
                 computer.session_config().port_forwarding());
         }
         break;

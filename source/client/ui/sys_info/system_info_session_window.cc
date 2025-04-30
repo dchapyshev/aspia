@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/sys_info/qt_system_info_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
 
 #include "base/logging.h"
 #include "client/client_system_info.h"
@@ -42,7 +42,7 @@
 #include "client/ui/sys_info/sys_info_widget_video_adapters.h"
 #include "client/ui/sys_info/tree_to_html.h"
 #include "common/system_info_constants.h"
-#include "ui_qt_system_info_window.h"
+#include "ui_system_info_session_window.h"
 
 #include <QClipboard>
 #include <QDateTime>
@@ -86,9 +86,10 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
+SystemInfoSessionWindow::SystemInfoSessionWindow(
+    std::shared_ptr<SessionState> session_state, QWidget* parent)
     : SessionWindow(session_state, parent),
-      ui(std::make_unique<Ui::SystemInfoWindow>())
+      ui(std::make_unique<Ui::SystemInfoSessionWindow>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -126,7 +127,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_sta
             sys_info_widgets_[i]->hide();
 
         connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest,
-                this, &QtSystemInfoWindow::sig_systemInfoRequired);
+                this, &SystemInfoSessionWindow::sig_systemInfoRequired);
     }
 
     CategoryItem* summary_category = new CategoryItem(
@@ -354,10 +355,10 @@ QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_sta
         document.print(&printer);
     });
 
-    connect(ui->action_refresh, &QAction::triggered, this, &QtSystemInfoWindow::onRefresh);
+    connect(ui->action_refresh, &QAction::triggered, this, &SystemInfoSessionWindow::onRefresh);
 
     connect(ui->tree_category, &QTreeWidget::itemClicked,
-            this, &QtSystemInfoWindow::onCategoryItemClicked);
+            this, &SystemInfoSessionWindow::onCategoryItemClicked);
 
     layout_ = new QHBoxLayout(ui->widget);
     layout_->setContentsMargins(0, 0, 0, 0);
@@ -365,30 +366,33 @@ QtSystemInfoWindow::QtSystemInfoWindow(std::shared_ptr<SessionState> session_sta
 }
 
 //--------------------------------------------------------------------------------------------------
-QtSystemInfoWindow::~QtSystemInfoWindow()
+SystemInfoSessionWindow::~SystemInfoSessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* QtSystemInfoWindow::createClient()
+Client* SystemInfoSessionWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
     ClientSystemInfo* client = new ClientSystemInfo();
 
-    connect(this, &QtSystemInfoWindow::sig_systemInfoRequired, client, &ClientSystemInfo::onSystemInfoRequest,
+    connect(this, &SystemInfoSessionWindow::sig_systemInfoRequired,
+            client, &ClientSystemInfo::onSystemInfoRequest,
             Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_showSessionWindow, this, &QtSystemInfoWindow::onShowWindow,
+    connect(client, &ClientSystemInfo::sig_showSessionWindow,
+            this, &SystemInfoSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_systemInfo, this, &QtSystemInfoWindow::onSystemInfoChanged,
+    connect(client, &ClientSystemInfo::sig_systemInfo,
+            this, &SystemInfoSessionWindow::onSystemInfoChanged,
             Qt::QueuedConnection);
 
     return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::onShowWindow()
+void SystemInfoSessionWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
@@ -411,7 +415,7 @@ void QtSystemInfoWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
+void SystemInfoSessionWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -435,13 +439,13 @@ void QtSystemInfoWindow::onSystemInfoChanged(const proto::system_info::SystemInf
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::onInternalReset()
+void SystemInfoSessionWindow::onInternalReset()
 {
-    // TODO
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
+void SystemInfoSessionWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);
     if (!category_item)
@@ -485,7 +489,7 @@ void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* col
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtSystemInfoWindow::onRefresh()
+void SystemInfoSessionWindow::onRefresh()
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {

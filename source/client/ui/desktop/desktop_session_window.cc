@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop/qt_desktop_window.h"
+#include "client/ui/desktop/desktop_session_window.h"
 
 #include "base/stl_util.h"
 #include "base/desktop/mouse_cursor.h"
@@ -25,14 +25,13 @@
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_toolbar.h"
 #include "client/ui/desktop/frame_qimage.h"
-#include "client/ui/file_transfer/qt_file_manager_window.h"
-#include "client/ui/sys_info/qt_system_info_window.h"
-#include "client/ui/text_chat/qt_text_chat_window.h"
-#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
+#include "client/ui/text_chat/text_chat_session_window.h"
+#include "client/ui/port_forwarding/port_forwarding_session_window.h"
 #include "client/ui/desktop/statistics_dialog.h"
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
-#include "qt_base/application.h"
 #include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
@@ -77,9 +76,9 @@ QSize scaledSize(const QSize& source_size, int scale)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
-                                 const proto::DesktopConfig& desktop_config,
-                                 QWidget* parent)
+DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
+                                           const proto::DesktopConfig& desktop_config,
+                                           QWidget* parent)
     : SessionWindow(nullptr, parent),
       session_type_(session_type),
       desktop_config_(desktop_config)
@@ -107,27 +106,27 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     toolbar_->installEventFilter(this);
 
     resize_timer_ = new QTimer(this);
-    connect(resize_timer_, &QTimer::timeout, this, &QtDesktopWindow::onResizeTimer);
+    connect(resize_timer_, &QTimer::timeout, this, &DesktopSessionWindow::onResizeTimer);
 
     scroll_timer_ = new QTimer(this);
-    connect(scroll_timer_, &QTimer::timeout, this, &QtDesktopWindow::onScrollTimer);
+    connect(scroll_timer_, &QTimer::timeout, this, &DesktopSessionWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
-    connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &QtDesktopWindow::changeSettings);
-    connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
-    connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
-    connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &QtDesktopWindow::scaleDesktop);
+    connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::changeSettings);
+    connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &DesktopSessionWindow::autosizeWindow);
+    connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &DesktopSessionWindow::takeScreenshot);
+    connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &DesktopSessionWindow::scaleDesktop);
     connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
     {
         LOG(LS_INFO) << "Minimize from full screen";
         is_minimized_from_full_screen_ = true;
         showMinimized();
     });
-    connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &QtDesktopWindow::close);
-    connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
+    connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &DesktopSessionWindow::close);
+    connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &DesktopSessionWindow::onShowHidePanel);
 
     enable_video_pause_ = toolbar_->isVideoPauseEnabled();
     connect(toolbar_, &DesktopToolBar::sig_videoPauseChanged, this, [this](bool enable)
@@ -142,7 +141,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     });
 
     connect(toolbar_, &DesktopToolBar::sig_screenSelected,
-            this, &QtDesktopWindow::sig_screenSelected);
+            this, &DesktopSessionWindow::sig_screenSelected);
 
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
             this, [this](proto::PowerControl::Action action, bool wait)
@@ -162,17 +161,17 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     });
 
     connect(toolbar_, &DesktopToolBar::sig_startRemoteUpdate,
-            this, &QtDesktopWindow::sig_remoteUpdate);
+            this, &DesktopSessionWindow::sig_remoteUpdate);
 
     connect(toolbar_, &DesktopToolBar::sig_startSystemInfo, this, [this]()
     {
         if (!system_info_)
         {
-            system_info_ = new QtSystemInfoWindow(sessionState());
+            system_info_ = new SystemInfoSessionWindow(sessionState());
             system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-            connect(system_info_, &QtSystemInfoWindow::sig_systemInfoRequired,
-                    this, &QtDesktopWindow::sig_systemInfoRequested);
+            connect(system_info_, &SystemInfoSessionWindow::sig_systemInfoRequired,
+                    this, &DesktopSessionWindow::sig_systemInfoRequested);
         }
 
         system_info_->onShowWindow();
@@ -186,15 +185,17 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             task_manager_->setAttribute(Qt::WA_DeleteOnClose);
 
             connect(task_manager_, &TaskManagerWindow::sig_sendMessage,
-                    this, &QtDesktopWindow::sig_taskManager);
+                    this, &DesktopSessionWindow::sig_taskManager);
         }
 
         task_manager_->show();
         task_manager_->activateWindow();
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, &QtDesktopWindow::sig_metricsRequested);
-    connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
+    connect(toolbar_, &DesktopToolBar::sig_startStatistics,
+            this, &DesktopSessionWindow::sig_metricsRequested);
+    connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes,
+            this, &DesktopSessionWindow::onPasteKeystrokes);
     connect(toolbar_, &DesktopToolBar::sig_switchToFullscreen, this, [this](bool fullscreen)
     {
         if (fullscreen)
@@ -219,24 +220,24 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     connect(toolbar_, &DesktopToolBar::sig_startSession, this, [this](proto::SessionType session_type)
     {
-        client::Config session_config = sessionState()->config();
+        Config session_config = sessionState()->config();
         session_config.session_type = session_type;
 
-        client::SessionWindow* session_window = nullptr;
+        SessionWindow* session_window = nullptr;
 
         switch (session_config.session_type)
         {
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                session_window = new client::QtFileManagerWindow();
+                session_window = new FileTransferSessionWindow();
                 break;
 
             case proto::SESSION_TYPE_TEXT_CHAT:
-                session_window = new client::QtTextChatWindow();
+                session_window = new TextChatSessionWindow();
                 break;
 
             case proto::SESSION_TYPE_PORT_FORWARDING:
                 LOG(LS_ERROR) << "Fix me! Use real config";
-                session_window = new client::QtPortForwardingWindow(proto::port_forwarding::Config());
+                session_window = new PortForwardingSessionWindow(proto::port_forwarding::Config());
                 break;
 
             default:
@@ -271,79 +272,79 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         emit sig_videoRecording(enable, file_path);
     });
 
-    connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
-    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::sig_keyEvent);
+    connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &DesktopSessionWindow::onMouseEvent);
+    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &DesktopSessionWindow::sig_keyEvent);
 
     desktop_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
-QtDesktopWindow::~QtDesktopWindow()
+DesktopSessionWindow::~DesktopSessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* QtDesktopWindow::createClient()
+Client* DesktopSessionWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
     ClientDesktop* client = new ClientDesktop();
 
-    connect(client, &ClientDesktop::sig_showSessionWindow, this, &QtDesktopWindow::onShowWindow,
+    connect(client, &ClientDesktop::sig_showSessionWindow, this, &DesktopSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_configRequired, this, &QtDesktopWindow::onConfigRequired,
+    connect(client, &ClientDesktop::sig_configRequired, this, &DesktopSessionWindow::onConfigRequired,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_capabilities, this, &QtDesktopWindow::onCapabilitiesChanged,
+    connect(client, &ClientDesktop::sig_capabilities, this, &DesktopSessionWindow::onCapabilitiesChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenListChanged, this, &QtDesktopWindow::onScreenListChanged,
+    connect(client, &ClientDesktop::sig_screenListChanged, this, &DesktopSessionWindow::onScreenListChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &QtDesktopWindow::onScreenTypeChanged,
+    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &DesktopSessionWindow::onScreenTypeChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &QtDesktopWindow::onCursorPositionChanged,
+    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &DesktopSessionWindow::onCursorPositionChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_systemInfo, this, &QtDesktopWindow::onSystemInfoChanged,
+    connect(client, &ClientDesktop::sig_systemInfo, this, &DesktopSessionWindow::onSystemInfoChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_taskManager, this, &QtDesktopWindow::onTaskManagerChanged,
+    connect(client, &ClientDesktop::sig_taskManager, this, &DesktopSessionWindow::onTaskManagerChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_metrics, this, &QtDesktopWindow::onMetricsChanged,
+    connect(client, &ClientDesktop::sig_metrics, this, &DesktopSessionWindow::onMetricsChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameError, this, &QtDesktopWindow::onFrameError,
+    connect(client, &ClientDesktop::sig_frameError, this, &DesktopSessionWindow::onFrameError,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameChanged, this, &QtDesktopWindow::onFrameChanged,
+    connect(client, &ClientDesktop::sig_frameChanged, this, &DesktopSessionWindow::onFrameChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_drawFrame, this, &QtDesktopWindow::onDrawFrame,
+    connect(client, &ClientDesktop::sig_drawFrame, this, &DesktopSessionWindow::onDrawFrame,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &QtDesktopWindow::onMouseCursorChanged,
+    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &DesktopSessionWindow::onMouseCursorChanged,
             Qt::QueuedConnection);
 
-    connect(this, &QtDesktopWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
+    connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_screenSelected, client, &ClientDesktop::setCurrentScreen,
+    connect(this, &DesktopSessionWindow::sig_screenSelected, client, &ClientDesktop::setCurrentScreen,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_preferredSizeChanged, client, &ClientDesktop::setPreferredSize,
+    connect(this, &DesktopSessionWindow::sig_preferredSizeChanged, client, &ClientDesktop::setPreferredSize,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_videoPaused, client, &ClientDesktop::setVideoPause,
+    connect(this, &DesktopSessionWindow::sig_videoPaused, client, &ClientDesktop::setVideoPause,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_audioPaused, client, &ClientDesktop::setAudioPause,
+    connect(this, &DesktopSessionWindow::sig_audioPaused, client, &ClientDesktop::setAudioPause,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_videoRecording, client, &ClientDesktop::setVideoRecording,
+    connect(this, &DesktopSessionWindow::sig_videoRecording, client, &ClientDesktop::setVideoRecording,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
+    connect(this, &DesktopSessionWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_textEvent, client, &ClientDesktop::onTextEvent,
+    connect(this, &DesktopSessionWindow::sig_textEvent, client, &ClientDesktop::onTextEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_mouseEvent, client, &ClientDesktop::onMouseEvent,
+    connect(this, &DesktopSessionWindow::sig_mouseEvent, client, &ClientDesktop::onMouseEvent,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
+    connect(this, &DesktopSessionWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_remoteUpdate, client, &ClientDesktop::onRemoteUpdate,
+    connect(this, &DesktopSessionWindow::sig_remoteUpdate, client, &ClientDesktop::onRemoteUpdate,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_systemInfoRequested, client, &ClientDesktop::onSystemInfoRequest,
+    connect(this, &DesktopSessionWindow::sig_systemInfoRequested, client, &ClientDesktop::onSystemInfoRequest,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
+    connect(this, &DesktopSessionWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
             Qt::QueuedConnection);
-    connect(this, &QtDesktopWindow::sig_metricsRequested, client, &ClientDesktop::onMetricsRequest,
+    connect(this, &DesktopSessionWindow::sig_metricsRequested, client, &ClientDesktop::onMetricsRequest,
             Qt::QueuedConnection);
 
     client->setDesktopConfig(desktop_config_);
@@ -352,7 +353,7 @@ Client* QtDesktopWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onShowWindow()
+void DesktopSessionWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
@@ -363,7 +364,7 @@ void QtDesktopWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onConfigRequired()
+void DesktopSessionWindow::onConfigRequired()
 {
     LOG(LS_INFO) << "Config required";
 
@@ -389,8 +390,9 @@ void QtDesktopWindow::onConfigRequired()
             session_type_, desktop_config_, video_encodings_, this);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &QtDesktopWindow::onConfigChanged);
-        connect(dialog, &DesktopConfigDialog::rejected, this, &QtDesktopWindow::close);
+        connect(dialog, &DesktopConfigDialog::sig_configChanged,
+                this, &DesktopSessionWindow::onConfigChanged);
+        connect(dialog, &DesktopConfigDialog::rejected, this, &DesktopSessionWindow::close);
 
         dialog->show();
         dialog->activateWindow();
@@ -398,7 +400,7 @@ void QtDesktopWindow::onConfigRequired()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities)
+void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities)
 {
     video_encodings_ = capabilities.video_encodings();
 
@@ -481,19 +483,19 @@ void QtDesktopWindow::onCapabilitiesChanged(const proto::DesktopCapabilities& ca
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onScreenListChanged(const proto::ScreenList& screen_list)
+void DesktopSessionWindow::onScreenListChanged(const proto::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onScreenTypeChanged(const proto::ScreenType& screen_type)
+void DesktopSessionWindow::onScreenTypeChanged(const proto::ScreenType& screen_type)
 {
     toolbar_->setScreenType(screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+void DesktopSessionWindow::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     base::Frame* frame = desktop_->desktopFrame();
     if (!frame)
@@ -513,21 +515,21 @@ void QtDesktopWindow::onCursorPositionChanged(const proto::CursorPosition& curso
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
+void DesktopSessionWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
 {
     if (system_info_)
         system_info_->onSystemInfoChanged(system_info);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onTaskManagerChanged(const proto::task_manager::HostToClient& message)
+void DesktopSessionWindow::onTaskManagerChanged(const proto::task_manager::HostToClient& message)
 {
     if (task_manager_)
         task_manager_->readMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onMetricsChanged(const client::ClientDesktop::Metrics& metrics)
+void DesktopSessionWindow::onMetricsChanged(const client::ClientDesktop::Metrics& metrics)
 {
     if (!statistics_dialog_)
     {
@@ -537,7 +539,7 @@ void QtDesktopWindow::onMetricsChanged(const client::ClientDesktop::Metrics& met
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
         connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
-                this, &QtDesktopWindow::sig_metricsRequested);
+                this, &DesktopSessionWindow::sig_metricsRequested);
 
         statistics_dialog_->show();
         statistics_dialog_->activateWindow();
@@ -547,14 +549,14 @@ void QtDesktopWindow::onMetricsChanged(const client::ClientDesktop::Metrics& met
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onFrameError(proto::VideoErrorCode error_code)
+void DesktopSessionWindow::onFrameError(proto::VideoErrorCode error_code)
 {
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onFrameChanged(
+void DesktopSessionWindow::onFrameChanged(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
@@ -582,14 +584,14 @@ void QtDesktopWindow::onFrameChanged(
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onDrawFrame()
+void DesktopSessionWindow::onDrawFrame()
 {
     desktop_->drawDesktopFrame();
     toolbar_->update();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor)
+void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     base::Point local_dpi(base::MouseCursor::kDefaultDpiX, base::MouseCursor::kDefaultDpiY);
     base::Point remote_dpi = mouse_cursor->constDpi();
@@ -639,7 +641,7 @@ void QtDesktopWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mo
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onInternalReset()
+void DesktopSessionWindow::onInternalReset()
 {
     LOG(LS_INFO) << "Internal reset";
 
@@ -692,7 +694,7 @@ void QtDesktopWindow::onInternalReset()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::resizeEvent(QResizeEvent* event)
+void DesktopSessionWindow::resizeEvent(QResizeEvent* event)
 {
     int panel_width = toolbar_->width();
     int window_width = width();
@@ -713,7 +715,7 @@ void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::leaveEvent(QEvent* event)
+void DesktopSessionWindow::leaveEvent(QEvent* event)
 {
     if (scroll_timer_->isActive())
         scroll_timer_->stop();
@@ -722,7 +724,7 @@ void QtDesktopWindow::leaveEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::changeEvent(QEvent* event)
+void DesktopSessionWindow::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::WindowStateChange)
     {
@@ -772,7 +774,7 @@ void QtDesktopWindow::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::showEvent(QShowEvent* event)
+void DesktopSessionWindow::showEvent(QShowEvent* event)
 {
     if (is_minimized_from_full_screen_)
     {
@@ -795,7 +797,7 @@ void QtDesktopWindow::showEvent(QShowEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
+void DesktopSessionWindow::focusOutEvent(QFocusEvent* event)
 {
     LOG(LS_INFO) << "Focus out event";
     desktop_->userLeftFromWindow();
@@ -803,7 +805,7 @@ void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::closeEvent(QCloseEvent* event)
+void DesktopSessionWindow::closeEvent(QCloseEvent* event)
 {
     LOG(LS_INFO) << "Close event";
 
@@ -823,7 +825,7 @@ void QtDesktopWindow::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
+bool DesktopSessionWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == desktop_)
     {
@@ -932,7 +934,7 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
+void DesktopSessionWindow::onMouseEvent(const proto::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
 
@@ -1015,7 +1017,7 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::changeSettings()
+void DesktopSessionWindow::changeSettings()
 {
     LOG(LS_INFO) << "Create desktop config dialog";
 
@@ -1034,14 +1036,14 @@ void QtDesktopWindow::changeSettings()
     dialog->enableLockAtDisconnectFeature(!disable_feature_lock_at_disconnect_);
     dialog->enableBlockInputFeature(!disable_feature_block_input_);
 
-    connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &QtDesktopWindow::onConfigChanged);
+    connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &DesktopSessionWindow::onConfigChanged);
 
     dialog->show();
     dialog->activateWindow();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config)
+void DesktopSessionWindow::onConfigChanged(const proto::DesktopConfig& desktop_config)
 {
     LOG(LS_INFO) << "Desktop config changed";
 
@@ -1055,7 +1057,7 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::autosizeWindow()
+void DesktopSessionWindow::autosizeWindow()
 {
     if (screen_size_.isEmpty())
     {
@@ -1094,7 +1096,7 @@ void QtDesktopWindow::autosizeWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::takeScreenshot()
+void DesktopSessionWindow::takeScreenshot()
 {
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -1140,7 +1142,7 @@ void QtDesktopWindow::takeScreenshot()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::scaleDesktop()
+void DesktopSessionWindow::scaleDesktop()
 {
     if (screen_size_.isEmpty())
     {
@@ -1174,7 +1176,7 @@ void QtDesktopWindow::scaleDesktop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onResizeTimer()
+void DesktopSessionWindow::onResizeTimer()
 {
     QSize desktop_size = desktop_->size();
 
@@ -1189,7 +1191,7 @@ void QtDesktopWindow::onResizeTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onScrollTimer()
+void DesktopSessionWindow::onScrollTimer()
 {
     if (scroll_delta_.x() != 0)
     {
@@ -1217,7 +1219,7 @@ void QtDesktopWindow::onScrollTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onPasteKeystrokes()
+void DesktopSessionWindow::onPasteKeystrokes()
 {
     QClipboard* clipboard = QApplication::clipboard();
     if (clipboard)
@@ -1241,7 +1243,7 @@ void QtDesktopWindow::onPasteKeystrokes()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::onShowHidePanel()
+void DesktopSessionWindow::onShowHidePanel()
 {
     QSize start_panel_size = toolbar_->size();
     QSize end_panel_size = toolbar_->sizeHint();

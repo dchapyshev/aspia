@@ -16,51 +16,47 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
-#define CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
+#ifndef CLIENT_UI_PORT_FORWARDING_PORT_FORWARDING_SESSION_WINDOW_H
+#define CLIENT_UI_PORT_FORWARDING_PORT_FORWARDING_SESSION_WINDOW_H
 
 #include "base/macros_magic.h"
+#include "client/client_port_forwarding.h"
 #include "client/ui/session_window.h"
-#include "proto/text_chat.h"
-
-#include <QTreeWidget>
+#include "proto/port_forwarding.pb.h"
 
 namespace Ui {
-class TextChatWindow;
+class PortForwardingSessionWindow;
 } // namespace Ui
-
-class QHBoxLayout;
 
 namespace client {
 
-class QtTextChatWindow final : public SessionWindow
+class PortForwardingSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    explicit QtTextChatWindow(QWidget* parent = nullptr);
-    ~QtTextChatWindow() final;
+    explicit PortForwardingSessionWindow(const proto::port_forwarding::Config& session_config,
+                                         QWidget* parent = nullptr);
+    ~PortForwardingSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
 
 public slots:
     void onShowWindow();
-    void onTextChatMessage(const proto::TextChat& text_chat);
-
-signals:
-    void sig_textChatMessage(const proto::TextChat& text_chat);
+    void onStatisticsChanged(const client::ClientPortForwarding::Statistics& statistics);
 
 protected:
     // SessionWindow implementation.
     void onInternalReset() final;
 
 private:
-    std::unique_ptr<Ui::TextChatWindow> ui;
+    std::unique_ptr<Ui::PortForwardingSessionWindow> ui;
+    proto::port_forwarding::Config session_config_;
 
-    DISALLOW_COPY_AND_ASSIGN(QtTextChatWindow);
+    DISALLOW_COPY_AND_ASSIGN(PortForwardingSessionWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
+#endif // CLIENT_UI_PORT_FORWARDING_PORT_FORWARDING_SESSION_WINDOW_H

@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_transfer/qt_file_manager_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
 
-#include "ui_qt_file_manager_window.h"
+#include "ui_file_transfer_session_window.h"
 #include "base/logging.h"
 #include "client/client_file_transfer.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -34,9 +34,9 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
+FileTransferSessionWindow::FileTransferSessionWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::FileManagerWindow>())
+      ui(std::make_unique<Ui::FileTransferSessionWindow>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -55,49 +55,61 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-QtFileManagerWindow::~QtFileManagerWindow()
+FileTransferSessionWindow::~FileTransferSessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* QtFileManagerWindow::createClient()
+Client* FileTransferSessionWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
     ClientFileTransfer* client = new ClientFileTransfer();
 
-    connect(client, &ClientFileTransfer::sig_showSessionWindow, this, &QtFileManagerWindow::showSessionWindow,
+    connect(client, &ClientFileTransfer::sig_showSessionWindow,
+            this, &FileTransferSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_errorOccurred, this, &QtFileManagerWindow::onErrorOccurred,
+    connect(client, &ClientFileTransfer::sig_errorOccurred,
+            this, &FileTransferSessionWindow::onErrorOccurred,
             Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_driveListReply, this, &QtFileManagerWindow::onDriveList,
+    connect(client, &ClientFileTransfer::sig_driveListReply,
+            this, &FileTransferSessionWindow::onDriveList,
             Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_fileListReply, this, &QtFileManagerWindow::onFileList,
+    connect(client, &ClientFileTransfer::sig_fileListReply,
+            this, &FileTransferSessionWindow::onFileList,
             Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_createDirectoryReply, this, &QtFileManagerWindow::onCreateDirectory,
+    connect(client, &ClientFileTransfer::sig_createDirectoryReply,
+            this, &FileTransferSessionWindow::onCreateDirectory,
             Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_renameReply, this, &QtFileManagerWindow::onRename,
+    connect(client, &ClientFileTransfer::sig_renameReply,
+            this, &FileTransferSessionWindow::onRename,
             Qt::QueuedConnection);
 
-    connect(this, &QtFileManagerWindow::sig_driveListRequest, client, &ClientFileTransfer::onDriveListRequest,
+    connect(this, &FileTransferSessionWindow::sig_driveListRequest,
+            client, &ClientFileTransfer::onDriveListRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_fileListRequest, client, &ClientFileTransfer::onFileListRequest,
+    connect(this, &FileTransferSessionWindow::sig_fileListRequest,
+            client, &ClientFileTransfer::onFileListRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_createDirectoryRequest, client, &ClientFileTransfer::onCreateDirectoryRequest,
+    connect(this, &FileTransferSessionWindow::sig_createDirectoryRequest,
+            client, &ClientFileTransfer::onCreateDirectoryRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_renameRequest, client, &ClientFileTransfer::onRenameRequest,
+    connect(this, &FileTransferSessionWindow::sig_renameRequest,
+            client, &ClientFileTransfer::onRenameRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_removeRequest, client, &ClientFileTransfer::onRemoveRequest,
+    connect(this, &FileTransferSessionWindow::sig_removeRequest,
+            client, &ClientFileTransfer::onRemoveRequest,
             Qt::QueuedConnection);
-    connect(this, &QtFileManagerWindow::sig_transferRequest, client, &ClientFileTransfer::onTransferRequest,
+    connect(this, &FileTransferSessionWindow::sig_transferRequest,
+            client, &ClientFileTransfer::onTransferRequest,
             Qt::QueuedConnection);
 
     return client;
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::showSessionWindow()
+void FileTransferSessionWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
     show();
@@ -106,7 +118,7 @@ void QtFileManagerWindow::showSessionWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
+void FileTransferSessionWindow::onErrorOccurred(proto::FileError error_code)
 {
     LOG(LS_ERROR) << "Session error: " << error_code;
     QMessageBox::warning(this,
@@ -117,7 +129,7 @@ void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onDriveList(
+void FileTransferSessionWindow::onDriveList(
     common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
     if (target == common::FileTask::Target::LOCAL)
@@ -132,7 +144,7 @@ void QtFileManagerWindow::onDriveList(
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onFileList(
+void FileTransferSessionWindow::onFileList(
     common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
     if (target == common::FileTask::Target::LOCAL)
@@ -147,7 +159,7 @@ void QtFileManagerWindow::onFileList(
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onCreateDirectory(
+void FileTransferSessionWindow::onCreateDirectory(
     common::FileTask::Target target, proto::FileError error_code)
 {
     if (target == common::FileTask::Target::LOCAL)
@@ -162,7 +174,8 @@ void QtFileManagerWindow::onCreateDirectory(
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onRename(common::FileTask::Target target, proto::FileError error_code)
+void FileTransferSessionWindow::onRename(
+    common::FileTask::Target target, proto::FileError error_code)
 {
     if (target == common::FileTask::Target::LOCAL)
     {
@@ -176,7 +189,7 @@ void QtFileManagerWindow::onRename(common::FileTask::Target target, proto::FileE
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray QtFileManagerWindow::saveState() const
+QByteArray FileTransferSessionWindow::saveState() const
 {
     QByteArray buffer;
 
@@ -192,7 +205,7 @@ QByteArray QtFileManagerWindow::saveState() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::restoreState(const QByteArray& state)
+void FileTransferSessionWindow::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
     stream.setVersion(QDataStream::Qt_5_12);
@@ -210,20 +223,20 @@ void QtFileManagerWindow::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::refresh()
+void FileTransferSessionWindow::refresh()
 {
     ui->local_panel->refresh();
     ui->remote_panel->refresh();
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onInternalReset()
+void FileTransferSessionWindow::onInternalReset()
 {
-    // TODO
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::closeEvent(QCloseEvent* event)
+void FileTransferSessionWindow::closeEvent(QCloseEvent* event)
 {
     LOG(LS_INFO) << "Close event detected";
 
@@ -248,7 +261,7 @@ void QtFileManagerWindow::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::TaskList& items)
+void FileTransferSessionWindow::removeItems(FilePanel* sender, const FileRemover::TaskList& items)
 {
     remove_dialog_ = new FileRemoveDialog(this);
     remove_dialog_->setAttribute(Qt::WA_DeleteOnClose);
@@ -304,7 +317,8 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items)
+void FileTransferSessionWindow::sendItems(
+    FilePanel* sender, const std::vector<FileTransfer::Item>& items)
 {
     if (sender == ui->local_panel)
     {
@@ -325,9 +339,8 @@ void QtFileManagerWindow::sendItems(FilePanel* sender, const std::vector<FileTra
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::receiveItems(FilePanel* sender,
-                                       const QString& target_folder,
-                                       const std::vector<FileTransfer::Item>& items)
+void FileTransferSessionWindow::receiveItems(
+    FilePanel* sender, const QString& target_folder, const std::vector<FileTransfer::Item>& items)
 {
     if (sender == ui->local_panel)
     {
@@ -348,10 +361,9 @@ void QtFileManagerWindow::receiveItems(FilePanel* sender,
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::transferItems(FileTransfer::Type type,
-                                        const QString& source_path,
-                                        const QString& target_path,
-                                        const std::vector<FileTransfer::Item>& items)
+void FileTransferSessionWindow::transferItems(
+    FileTransfer::Type type, const QString& source_path, const QString& target_path,
+    const std::vector<FileTransfer::Item>& items)
 {
     transfer_dialog_ = new FileTransferDialog(this);
     transfer_dialog_->setAttribute(Qt::WA_DeleteOnClose);
@@ -403,7 +415,7 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
+void FileTransferSessionWindow::onPathChanged(FilePanel* sender, const QString& path)
 {
     bool allow = path != AddressBarModel::computerPath();
 
@@ -420,7 +432,7 @@ void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtFileManagerWindow::initPanel(
+void FileTransferSessionWindow::initPanel(
     common::FileTask::Target target, const QString& title, const QString& mime_type, FilePanel* panel)
 {
     LOG(LS_INFO) << "Init file manager panel (target=" << static_cast<int>(target) << ")";
@@ -449,10 +461,10 @@ void QtFileManagerWindow::initPanel(
         emit sig_createDirectoryRequest(target, path.toStdString());
     });
 
-    connect(panel, &FilePanel::sig_removeItems, this, &QtFileManagerWindow::removeItems);
-    connect(panel, &FilePanel::sig_sendItems, this, &QtFileManagerWindow::sendItems);
-    connect(panel, &FilePanel::sig_receiveItems, this, &QtFileManagerWindow::receiveItems);
-    connect(panel, &FilePanel::sig_pathChanged, this, &QtFileManagerWindow::onPathChanged);
+    connect(panel, &FilePanel::sig_removeItems, this, &FileTransferSessionWindow::removeItems);
+    connect(panel, &FilePanel::sig_sendItems, this, &FileTransferSessionWindow::sendItems);
+    connect(panel, &FilePanel::sig_receiveItems, this, &FileTransferSessionWindow::receiveItems);
+    connect(panel, &FilePanel::sig_pathChanged, this, &FileTransferSessionWindow::onPathChanged);
 }
 
 } // namespace client

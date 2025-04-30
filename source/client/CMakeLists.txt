@@ -98,6 +98,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/desktop_config_dialog.cc
     ui/desktop/desktop_config_dialog.h
     ui/desktop/desktop_config_dialog.ui
+    ui/desktop/desktop_session_window.cc
+    ui/desktop/desktop_session_window.h
     ui/desktop/desktop_toolbar.cc
     ui/desktop/desktop_toolbar.h
     ui/desktop/desktop_toolbar.ui
@@ -107,8 +109,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/desktop_settings.h
     ui/desktop/frame_qimage.cc
     ui/desktop/frame_qimage.h
-    ui/desktop/qt_desktop_window.cc
-    ui/desktop/qt_desktop_window.h
     ui/desktop/record_settings_dialog.cc
     ui/desktop/record_settings_dialog.h
     ui/desktop/record_settings_dialog.ui
@@ -150,14 +150,14 @@ list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
     ui/file_transfer/file_transfer_dialog.cc
     ui/file_transfer/file_transfer_dialog.h
     ui/file_transfer/file_transfer_dialog.ui
-    ui/file_transfer/qt_file_manager_window.cc
-    ui/file_transfer/qt_file_manager_window.h
-    ui/file_transfer/qt_file_manager_window.ui)
+    ui/file_transfer/file_transfer_session_window.cc
+    ui/file_transfer/file_transfer_session_window.h
+    ui/file_transfer/file_transfer_session_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_PORT_FORWARDING
-    ui/port_forwarding/qt_port_forwarding_window.cc
-    ui/port_forwarding/qt_port_forwarding_window.h
-    ui/port_forwarding/qt_port_forwarding_window.ui)
+    ui/port_forwarding/port_forwarding_session_window.cc
+    ui/port_forwarding/port_forwarding_session_window.h
+    ui/port_forwarding/port_forwarding_session_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
     ui/router_manager/router_manager_window.cc
@@ -168,9 +168,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
     ui/router_manager/router_user_dialog.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
-    ui/sys_info/qt_system_info_window.cc
-    ui/sys_info/qt_system_info_window.h
-    ui/sys_info/qt_system_info_window.ui
     ui/sys_info/sys_info_widget.cc
     ui/sys_info/sys_info_widget.h
     ui/sys_info/sys_info_widget_applications.cc
@@ -233,13 +230,16 @@ list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/sys_info_widget_video_adapters.cc
     ui/sys_info/sys_info_widget_video_adapters.h
     ui/sys_info/sys_info_widget_video_adapters.ui
+    ui/sys_info/system_info_session_window.cc
+    ui/sys_info/system_info_session_window.h
+    ui/sys_info/system_info_session_window.ui
     ui/sys_info/tree_to_html.cc
     ui/sys_info/tree_to_html.h)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
-    ui/text_chat/qt_text_chat_window.cc
-    ui/text_chat/qt_text_chat_window.h
-    ui/text_chat/qt_text_chat_window.ui)
+    ui/text_chat/text_chat_session_window.cc
+    ui/text_chat/text_chat_session_window.h
+    ui/text_chat/text_chat_session_window.ui)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SystemInfoWindow</class>
- <widget class="QWidget" name="SystemInfoWindow">
+ <class>SystemInfoSessionWindow</class>
+ <widget class="QWidget" name="SystemInfoSessionWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -101,7 +101,7 @@
   </layout>
   <action name="action_save">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../resources/client.qrc">
      <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
    </property>
    <property name="text">
@@ -116,7 +116,7 @@
   </action>
   <action name="action_print">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../resources/client.qrc">
      <normaloff>:/img/printer.png</normaloff>:/img/printer.png</iconset>
    </property>
    <property name="text">
@@ -146,7 +146,7 @@
   </action>
   <action name="action_refresh">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../resources/client.qrc">
      <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
@@ -161,7 +161,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../resources/client.qrc"/>
+  <include location="../../resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

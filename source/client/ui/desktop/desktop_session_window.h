@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
-#define CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
+#ifndef CLIENT_UI_DESKTOP_DESKTOP_SESSION_WINDOW_H
+#define CLIENT_UI_DESKTOP_DESKTOP_SESSION_WINDOW_H
 
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
@@ -37,19 +37,19 @@ namespace client {
 
 class DesktopConfigDialog;
 class DesktopToolBar;
-class QtSystemInfoWindow;
+class SystemInfoSessionWindow;
 class StatisticsDialog;
 class TaskManagerWindow;
 
-class QtDesktopWindow final : public SessionWindow
+class DesktopSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    QtDesktopWindow(proto::SessionType session_type,
+    DesktopSessionWindow(proto::SessionType session_type,
                     const proto::DesktopConfig& desktop_config,
                     QWidget* parent = nullptr);
-    ~QtDesktopWindow() final;
+    ~DesktopSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
@@ -121,7 +121,7 @@ private:
     DesktopToolBar* toolbar_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
 
-    QPointer<QtSystemInfoWindow> system_info_;
+    QPointer<SystemInfoSessionWindow> system_info_;
     QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
 
@@ -154,9 +154,9 @@ private:
 
     QPoint wheel_angle_;
 
-    DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
+    DISALLOW_COPY_AND_ASSIGN(DesktopSessionWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
+#endif // CLIENT_UI_DESKTOP_DESKTOP_SESSION_WINDOW_H

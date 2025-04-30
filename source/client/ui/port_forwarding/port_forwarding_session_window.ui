@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PortForwardingWindow</class>
- <widget class="QWidget" name="PortForwardingWindow">
+ <class>PortForwardingSessionWindow</class>
+ <widget class="QWidget" name="PortForwardingSessionWindow">
   <property name="geometry">
    <rect>
     <x>0</x>

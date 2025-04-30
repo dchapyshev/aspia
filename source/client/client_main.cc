@@ -24,12 +24,11 @@
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"
 #include "client/ui/application.h"
-#include "client/ui/client_settings.h"
 #include "client/ui/client_window.h"
-#include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/file_transfer/qt_file_manager_window.h"
-#include "client/ui/sys_info/qt_system_info_window.h"
-#include "client/ui/text_chat/qt_text_chat_window.h"
+#include "client/ui/desktop/desktop_session_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
+#include "client/ui/text_chat/text_chat_session_window.h"
 #include "qt_base/scoped_qt_logging.h"
 #include "proto/meta_types.h"
 
@@ -727,23 +726,23 @@ int clientMain(int argc, char* argv[])
         switch (config.session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
-                session_window = new client::QtDesktopWindow(config.session_type, *desktop_config);
+                session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
                 break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
-                session_window = new client::QtDesktopWindow(config.session_type, *desktop_config);
+                session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
                 break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                session_window = new client::QtFileManagerWindow();
+                session_window = new client::FileTransferSessionWindow();
                 break;
 
             case proto::SESSION_TYPE_SYSTEM_INFO:
-                session_window = new client::QtSystemInfoWindow();
+                session_window = new client::SystemInfoSessionWindow();
                 break;
 
             case proto::SESSION_TYPE_TEXT_CHAT:
-                session_window = new client::QtTextChatWindow();
+                session_window = new client::TextChatSessionWindow();
                 break;
 
             default:

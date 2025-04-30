@@ -16,47 +16,61 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_PORT_FORWARDING_QT_PORT_FORWARDING_WINDOW_H
-#define CLIENT_UI_PORT_FORWARDING_QT_PORT_FORWARDING_WINDOW_H
+#ifndef CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
+#define CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
 
 #include "base/macros_magic.h"
-#include "client/client_port_forwarding.h"
 #include "client/ui/session_window.h"
-#include "proto/port_forwarding.pb.h"
+#include "proto/system_info.h"
+
+#include <QTreeWidget>
 
 namespace Ui {
-class PortForwardingWindow;
+class SystemInfoSessionWindow;
 } // namespace Ui
+
+class QHBoxLayout;
 
 namespace client {
 
-class QtPortForwardingWindow final : public SessionWindow
+class SysInfoWidget;
+
+class SystemInfoSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    explicit QtPortForwardingWindow(const proto::port_forwarding::Config& session_config,
-                                    QWidget* parent = nullptr);
-    ~QtPortForwardingWindow() final;
+    explicit SystemInfoSessionWindow(std::shared_ptr<SessionState> session_state = nullptr,
+                                     QWidget* parent = nullptr);
+    ~SystemInfoSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
 
 public slots:
     void onShowWindow();
-    void onStatisticsChanged(const client::ClientPortForwarding::Statistics& statistics);
+    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
+
+signals:
+    void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
 
 protected:
     // SessionWindow implementation.
     void onInternalReset() final;
 
-private:
-    std::unique_ptr<Ui::PortForwardingWindow> ui;
-    proto::port_forwarding::Config session_config_;
+private slots:
+    void onCategoryItemClicked(QTreeWidgetItem* item, int column);
+    void onRefresh();
 
-    DISALLOW_COPY_AND_ASSIGN(QtPortForwardingWindow);
+private:
+    std::unique_ptr<Ui::SystemInfoSessionWindow> ui;
+    QHBoxLayout* layout_ = nullptr;
+    QList<SysInfoWidget*> sys_info_widgets_;
+    int current_widget_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(SystemInfoSessionWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_PORT_FORWARDING_QT_PORT_FORWARDING_WINDOW_H
+#endif // CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H

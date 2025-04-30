@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FileManagerWindow</class>
- <widget class="QWidget" name="FileManagerWindow">
+ <class>FileTransferSessionWindow</class>
+ <widget class="QWidget" name="FileTransferSessionWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -51,8 +51,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/client.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

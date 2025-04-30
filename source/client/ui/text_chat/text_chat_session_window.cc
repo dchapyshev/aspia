@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/text_chat/qt_text_chat_window.h"
+#include "client/ui/text_chat/text_chat_session_window.h"
 
 #include "base/logging.h"
 #include "client/client_text_chat.h"
-#include "ui_qt_text_chat_window.h"
+#include "ui_text_chat_session_window.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-QtTextChatWindow::QtTextChatWindow(QWidget* parent)
+TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::TextChatWindow>())
+      ui(std::make_unique<Ui::TextChatSessionWindow>())
 {
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
@@ -50,30 +50,30 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-QtTextChatWindow::~QtTextChatWindow()
+TextChatSessionWindow::~TextChatSessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* QtTextChatWindow::createClient()
+Client* TextChatSessionWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
     ClientTextChat* client = new ClientTextChat();
 
-    connect(this, &QtTextChatWindow::sig_textChatMessage, client, &ClientTextChat::onTextChatMessage,
+    connect(this, &TextChatSessionWindow::sig_textChatMessage, client, &ClientTextChat::onTextChatMessage,
             Qt::QueuedConnection);
-    connect(client, &ClientTextChat::sig_showSessionWindow, this, &QtTextChatWindow::onShowWindow,
+    connect(client, &ClientTextChat::sig_showSessionWindow, this, &TextChatSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientTextChat::sig_textChatMessage, this, &QtTextChatWindow::onTextChatMessage,
+    connect(client, &ClientTextChat::sig_textChatMessage, this, &TextChatSessionWindow::onTextChatMessage,
             Qt::QueuedConnection);
 
     return client;
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTextChatWindow::onShowWindow()
+void TextChatSessionWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
 
@@ -84,7 +84,7 @@ void QtTextChatWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
+void TextChatSessionWindow::onTextChatMessage(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
     {
@@ -107,7 +107,7 @@ void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtTextChatWindow::onInternalReset()
+void TextChatSessionWindow::onInternalReset()
 {
     // Nothing
 }

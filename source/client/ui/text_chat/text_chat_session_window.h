@@ -16,61 +16,51 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_SYS_INFO_QT_SYSTEM_INFO_WINDOW_H
-#define CLIENT_UI_SYS_INFO_QT_SYSTEM_INFO_WINDOW_H
+#ifndef CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
+#define CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
 
 #include "base/macros_magic.h"
 #include "client/ui/session_window.h"
-#include "proto/system_info.h"
+#include "proto/text_chat.h"
 
 #include <QTreeWidget>
 
 namespace Ui {
-class SystemInfoWindow;
+class TextChatSessionWindow;
 } // namespace Ui
 
 class QHBoxLayout;
 
 namespace client {
 
-class SysInfoWidget;
-
-class QtSystemInfoWindow final : public SessionWindow
+class TextChatSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    explicit QtSystemInfoWindow(std::shared_ptr<SessionState> session_state = nullptr,
-                                QWidget* parent = nullptr);
-    ~QtSystemInfoWindow() final;
+    explicit TextChatSessionWindow(QWidget* parent = nullptr);
+    ~TextChatSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
 
 public slots:
     void onShowWindow();
-    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
+    void onTextChatMessage(const proto::TextChat& text_chat);
 
 signals:
-    void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
+    void sig_textChatMessage(const proto::TextChat& text_chat);
 
 protected:
     // SessionWindow implementation.
     void onInternalReset() final;
 
-private slots:
-    void onCategoryItemClicked(QTreeWidgetItem* item, int column);
-    void onRefresh();
-
 private:
-    std::unique_ptr<Ui::SystemInfoWindow> ui;
-    QHBoxLayout* layout_ = nullptr;
-    QList<SysInfoWidget*> sys_info_widgets_;
-    int current_widget_ = 0;
+    std::unique_ptr<Ui::TextChatSessionWindow> ui;
 
-    DISALLOW_COPY_AND_ASSIGN(QtSystemInfoWindow);
+    DISALLOW_COPY_AND_ASSIGN(TextChatSessionWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_SYS_INFO_QT_SYSTEM_INFO_WINDOW_H
+#endif // CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H

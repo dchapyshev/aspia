@@ -16,21 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/port_forwarding/qt_port_forwarding_window.h"
+#include "client/ui/port_forwarding/port_forwarding_session_window.h"
 
 #include "base/logging.h"
 #include "client/client_port_forwarding.h"
-#include "ui_qt_port_forwarding_window.h"
+#include "ui_port_forwarding_session_window.h"
 
 Q_DECLARE_METATYPE(client::ClientPortForwarding::Statistics)
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-QtPortForwardingWindow::QtPortForwardingWindow(
+PortForwardingSessionWindow::PortForwardingSessionWindow(
     const proto::port_forwarding::Config& session_config, QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::PortForwardingWindow>()),
+      ui(std::make_unique<Ui::PortForwardingSessionWindow>()),
       session_config_(session_config)
 {
     LOG(LS_INFO) << "Ctor";
@@ -38,21 +38,23 @@ QtPortForwardingWindow::QtPortForwardingWindow(
 }
 
 //--------------------------------------------------------------------------------------------------
-QtPortForwardingWindow::~QtPortForwardingWindow()
+PortForwardingSessionWindow::~PortForwardingSessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* QtPortForwardingWindow::createClient()
+Client* PortForwardingSessionWindow::createClient()
 {
     LOG(LS_INFO) << "Create client";
 
     ClientPortForwarding* client = new ClientPortForwarding();
 
-    connect(client, &ClientPortForwarding::sig_showSessionWindow, this, &QtPortForwardingWindow::onShowWindow,
+    connect(client, &ClientPortForwarding::sig_showSessionWindow,
+            this, &PortForwardingSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientPortForwarding::sig_statistics, this, &QtPortForwardingWindow::onStatisticsChanged,
+    connect(client, &ClientPortForwarding::sig_statistics,
+            this, &PortForwardingSessionWindow::onStatisticsChanged,
             Qt::QueuedConnection);
 
     client->setPortForwardingConfig(session_config_);
@@ -65,7 +67,7 @@ Client* QtPortForwardingWindow::createClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::onShowWindow()
+void PortForwardingSessionWindow::onShowWindow()
 {
     LOG(LS_INFO) << "Show window";
     show();
@@ -73,16 +75,16 @@ void QtPortForwardingWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::onStatisticsChanged(const ClientPortForwarding::Statistics& statistics)
+void PortForwardingSessionWindow::onStatisticsChanged(const ClientPortForwarding::Statistics& statistics)
 {
     ui->labelReceivedValue->setText(QString::number(statistics.rx_bytes));
     ui->labelSentValue->setText(QString::number(statistics.tx_bytes));
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtPortForwardingWindow::onInternalReset()
+void PortForwardingSessionWindow::onInternalReset()
 {
-    // TODO
+    // Nothing
 }
 
 } // namespace client
