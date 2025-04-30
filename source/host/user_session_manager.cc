@@ -21,7 +21,6 @@
 #include "base/command_line.h"
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/scoped_task_runner.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/files/base_paths.h"
@@ -151,7 +150,6 @@ UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_ru
     LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 
-    scoped_task_runner_ = std::make_unique<base::ScopedTaskRunner>(task_runner_);
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
@@ -524,7 +522,7 @@ void UserSessionManager::onUserSessionFinished()
 {
     LOG(LS_INFO) << "User session finished";
 
-    scoped_task_runner_->postTask([this]()
+    QTimer::singleShot(0, this, [this]()
     {
         for (auto it = sessions_.begin(); it != sessions_.end();)
         {

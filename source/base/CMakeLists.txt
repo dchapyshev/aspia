@@ -55,8 +55,6 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
-    scoped_task_runner.cc
-    scoped_task_runner.h
     serialization.cc
     serialization.h
     service.h

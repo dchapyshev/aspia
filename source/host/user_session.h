@@ -33,10 +33,6 @@
 
 #include <QTimer>
 
-namespace base {
-class ScopedTaskRunner;
-} // namespace base
-
 namespace host {
 
 class UserSession final
@@ -144,7 +140,6 @@ private:
     void mergeAndSendConfiguration();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
 
     Type type_;

@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/task_runner.h"
-#include "base/scoped_task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
 #include "base/strings/string_util.h"
@@ -68,7 +67,6 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          QObject* parent)
     : QObject(parent),
       task_runner_(task_runner),
-      scoped_task_runner_(std::make_unique<base::ScopedTaskRunner>(task_runner)),
       channel_(channel),
       session_id_(session_id),
       delegate_(delegate)
@@ -750,9 +748,9 @@ void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid=" << session_id_ << ")";
 
-    scoped_task_runner_->postTask([this, id]()
+    QTimer::singleShot(0, this, [this, id]()
     {
-        for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
+        for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
         {
             if ((*it)->id() != id)
                 continue;
@@ -771,9 +769,9 @@ void UserSession::onUnconfirmedSessionReject(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid=" << session_id_ << ")";
 
-    scoped_task_runner_->postTask([this, id]()
+    QTimer::singleShot(0, this, [this, id]()
     {
-        for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
+        for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
         {
             if ((*it)->id() != id)
                 continue;
@@ -988,14 +986,14 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
             if (is_paused)
             {
-                scoped_task_runner_->postDelayedTask(std::chrono::milliseconds(500), [this]()
-                                                     {
-                                                         for (const auto& client : desktop_clients_)
-                                                         {
-                                                             static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
-                                                                 proto::VIDEO_ERROR_CODE_PAUSED);
-                                                         }
-                                                     });
+                QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
+                {
+                    for (const auto& client : desktop_clients_)
+                    {
+                        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
+                            proto::VIDEO_ERROR_CODE_PAUSED);
+                    }
+                });
             }
             else
             {

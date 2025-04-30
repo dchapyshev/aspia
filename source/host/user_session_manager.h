@@ -27,10 +27,6 @@
 
 #include <QObject>
 
-namespace base {
-class ScopedTaskRunner;
-} // namespace base
-
 namespace host {
 
 class UserSession;
@@ -79,7 +75,6 @@ private:
                         base::IpcChannel* channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
