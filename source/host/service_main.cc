@@ -19,7 +19,6 @@
 #include "host/service_main.h"
 
 #include "base/command_line.h"
-#include "base/environment.h"
 #include "base/meta_types.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
@@ -39,6 +38,8 @@
 #endif // defined(OS_WIN)
 
 #include <iostream>
+
+#include <QProcessEnvironment>
 
 namespace host {
 
@@ -370,13 +371,7 @@ int hostServiceMain(int& argc, char* argv[])
     }
     LOG(LS_INFO) << "#####################################################";
 
-    LOG(LS_INFO) << "Environment variables";
-    LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
-    {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
-    }
-    LOG(LS_INFO) << "#####################################################";
+    LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
 
     if (!integrityCheck())
     {

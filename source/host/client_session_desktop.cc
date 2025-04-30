@@ -18,7 +18,6 @@
 
 #include "host/client_session_desktop.h"
 
-#include "base/environment.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
@@ -95,7 +94,7 @@ void ClientSessionDesktop::onStarted()
 {
     max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
 
-    if (!base::Environment::has("ASPIA_NO_OVERFLOW_DETECTION"))
+    if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
     {
         LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
                      << desktop_session_proxy_->screenCaptureFps()

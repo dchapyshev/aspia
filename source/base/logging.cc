@@ -20,9 +20,7 @@
 
 #include "base/debug.h"
 #include "base/endian_util.h"
-#include "base/environment.h"
 #include "base/system_time.h"
-#include "base/strings/string_number_conversions.h"
 #include "base/strings/unicode.h"
 #include <fstream>
 #include <iomanip>
@@ -187,14 +185,14 @@ LoggingSettings::LoggingSettings()
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
-    std::string log_level_string;
-    if (Environment::get("ASPIA_LOG_LEVEL", &log_level_string))
+    if (qEnvironmentVariableIsSet("ASPIA_LOG_LEVEL"))
     {
-        LoggingSeverity log_level = kDefaultLogLevel;
-        if (stringToInt(log_level_string, &log_level))
+        bool ok = false;
+        int log_level_var = qEnvironmentVariableIntValue("ASPIA_LOG_LEVEL", &ok);
+        if (ok)
         {
-            log_level = std::max(log_level, LOG_LS_INFO);
-            log_level = std::min(log_level, LOG_LS_FATAL);
+            int log_level = std::max(log_level_var, LOG_LS_INFO);
+            log_level = std::min(log_level_var, LOG_LS_FATAL);
 
             min_log_level = log_level;
         }
@@ -204,11 +202,11 @@ LoggingSettings::LoggingSettings()
     if (LOG_DEFAULT & LOG_TO_FILE)
         log_to_file = 1;
 
-    std::string log_to_file_string;
-    if (Environment::get("ASPIA_LOG_TO_FILE", &log_to_file_string))
+    if (qEnvironmentVariableIsSet("ASPIA_LOG_TO_FILE"))
     {
-        int value;
-        if (stringToInt(log_to_file_string, &value))
+        bool ok = false;
+        int value = qEnvironmentVariableIntValue("ASPIA_LOG_TO_FILE", &ok);
+        if (ok)
             log_to_file = value;
     }
 
@@ -216,11 +214,11 @@ LoggingSettings::LoggingSettings()
     if (LOG_DEFAULT & LOG_TO_STDOUT)
         log_to_stdout = 1;
 
-    std::string log_to_stdout_string;
-    if (Environment::get("ASPIA_LOG_TO_STDOUT", &log_to_stdout_string))
+    if (qEnvironmentVariableIsSet("ASPIA_LOG_TO_STDOUT"))
     {
-        int value;
-        if (stringToInt(log_to_stdout_string, &value))
+        bool ok = false;
+        int value = qEnvironmentVariableIntValue("ASPIA_LOG_TO_STDOUT", &ok);
+        if (ok)
             log_to_stdout = value;
     }
 
@@ -233,26 +231,26 @@ LoggingSettings::LoggingSettings()
     else
         destination = LOG_NONE;
 
-    std::string max_log_file_size_string;
-    if (Environment::get("ASPIA_MAX_LOG_FILE_SIZE", &max_log_file_size_string))
+    if (qEnvironmentVariableIsSet("ASPIA_MAX_LOG_FILE_SIZE"))
     {
-        unsigned long long value;
-        if (stringToULong64(max_log_file_size_string, &value))
+        bool ok = false;
+        int value = qEnvironmentVariableIntValue("ASPIA_MAX_LOG_FILE_SIZE", &ok);
+        if (ok)
         {
-            static const unsigned long long kMinValue = 1024;
-            static const unsigned long long kMaxValue = 10 * 1024 * 1024;
+            static const int kMinValue = 1024;
+            static const int kMaxValue = 10 * 1024 * 1024;
 
             max_log_file_size = static_cast<size_t>(std::min(std::max(value, kMinValue), kMaxValue));
         }
     }
 
-    std::string max_log_file_age_string;
-    if (Environment::get("ASPIA_MAX_LOG_FILE_AGE", &max_log_file_age_string))
+    if (qEnvironmentVariableIsSet("ASPIA_MAX_LOG_FILE_AGE"))
     {
-        unsigned long long value;
-        if (stringToULong64(max_log_file_age_string, &value))
+        bool ok = false;
+        int value = qEnvironmentVariableIntValue("ASPIA_MAX_LOG_FILE_AGE", &ok);
+        if (ok)
         {
-            max_log_file_age = static_cast<size_t>(std::min(value, 366ULL));
+            max_log_file_age = static_cast<size_t>(std::min(value, 366));
         }
     }
 }

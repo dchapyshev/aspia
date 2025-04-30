@@ -18,7 +18,6 @@
 
 #include "common/update_checker.h"
 
-#include "base/environment.h"
 #include "base/logging.h"
 #include "base/version.h"
 #include "base/net/curl_util.h"
@@ -151,7 +150,7 @@ void UpdateChecker::run()
     curl_easy_setopt(curl.get(), CURLOPT_DEBUGFUNCTION, debugFunc);
 
     long verify_peer = 1;
-    if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+    if (qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
     {
         LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;

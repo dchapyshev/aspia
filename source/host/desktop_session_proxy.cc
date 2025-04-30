@@ -19,8 +19,6 @@
 #include "host/desktop_session_proxy.h"
 
 #include "base/logging.h"
-#include "base/environment.h"
-#include "base/strings/string_number_conversions.h"
 
 #include <thread>
 
@@ -31,12 +29,11 @@ DesktopSessionProxy::DesktopSessionProxy()
 {
     LOG(LS_INFO) << "Ctor";
 
-    std::string default_fps_string;
-    if (base::Environment::get("ASPIA_DEFAULT_FPS", &default_fps_string))
+    if (qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
     {
-        int default_fps = kDefaultScreenCaptureFps;
-
-        if (base::stringToInt(default_fps_string, &default_fps))
+        bool ok = false;
+        int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
+        if (ok)
         {
             LOG(LS_INFO) << "Default FPS specified by environment variable";
 
@@ -51,12 +48,11 @@ DesktopSessionProxy::DesktopSessionProxy()
         }
     }
 
-    std::string min_fps_string;
-    if (base::Environment::get("ASPIA_MIN_FPS", &min_fps_string))
+    if (qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
     {
-        int min_fps = kMinScreenCaptureFps;
-
-        if (base::stringToInt(min_fps_string, &min_fps))
+        bool ok = false;
+        int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
+        if (ok)
         {
             LOG(LS_INFO) << "Minimum FPS specified by environment variable";
 
@@ -72,12 +68,11 @@ DesktopSessionProxy::DesktopSessionProxy()
     }
 
     bool max_fps_from_env = false;
-    std::string max_fps_string;
-    if (base::Environment::get("ASPIA_MAX_FPS", &max_fps_string))
+    if (qEnvironmentVariableIsSet("ASPIA_MAX_FPS"))
     {
-        int max_fps = kMaxScreenCaptureFpsHighEnd;
-
-        if (base::stringToInt(max_fps_string, &max_fps))
+        bool ok = false;
+        int max_fps = qEnvironmentVariableIntValue("ASPIA_MAX_FPS", &ok);
+        if (ok)
         {
             LOG(LS_INFO) << "Maximum FPS specified by environment variable";
 

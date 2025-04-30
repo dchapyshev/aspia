@@ -19,7 +19,6 @@
 #include "host/system_info.h"
 
 #include "base/applications_reader.h"
-#include "base/environment.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
 #include "base/smbios_parser.h"
@@ -46,6 +45,8 @@
 #include "host/process_monitor.h"
 
 #include <thread>
+
+#include <QProcessEnvironment>
 
 namespace host {
 
@@ -545,15 +546,18 @@ void fillRoutes(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
 {
-    std::vector<std::pair<std::string, std::string>> list = base::Environment::list();
+    QStringList list = QProcessEnvironment::systemEnvironment().toStringList();
 
-    for (const auto& item : list)
+    for (const auto& item : std::as_const(list))
     {
         proto::system_info::EnvironmentVariables::Variable* variable =
             system_info->mutable_env_vars()->add_variable();
-
-        variable->set_name(item.first);
-        variable->set_value(item.second);
+        QStringList splitted = item.split('=');
+        if (splitted.size() == 2)
+        {
+            variable->set_name(splitted[0].toStdString());
+            variable->set_value(splitted[1].toStdString());
+        }
     }
 }
 

@@ -18,7 +18,6 @@
 
 #include "common/http_file_downloader.h"
 
-#include "base/environment.h"
 #include "base/logging.h"
 #include "base/net/curl_util.h"
 
@@ -93,7 +92,7 @@ void HttpFileDownloader::run()
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
 
     long verify_peer = 1;
-    if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+    if (qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
     {
         LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;

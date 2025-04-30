@@ -21,7 +21,6 @@
 #include "build/build_config.h"
 #include "base/application.h"
 #include "base/command_line.h"
-#include "base/environment.h"
 #include "base/meta_types.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
@@ -34,6 +33,8 @@
 #include "base/win/mini_dump_writer.h"
 #include "base/win/session_info.h"
 #endif // defined(OS_WIN)
+
+#include <QProcessEnvironment>
 
 //--------------------------------------------------------------------------------------------------
 void fileTransferAgentMain(int& argc, char* argv[])
@@ -115,14 +116,7 @@ void fileTransferAgentMain(int& argc, char* argv[])
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
-
-    LOG(LS_INFO) << "Environment variables";
-    LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
-    {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
-    }
-    LOG(LS_INFO) << "#####################################################";
+    LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
 #endif // defined(OS_WIN)
 
     if (command_line->hasSwitch(u"channel_id"))

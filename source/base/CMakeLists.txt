@@ -36,8 +36,6 @@ list(APPEND SOURCE_BASE
     edid.h
     endian_util.cc
     endian_util.h
-    environment.cc
-    environment.h
     guid.cc
     guid.h
     license_reader.h

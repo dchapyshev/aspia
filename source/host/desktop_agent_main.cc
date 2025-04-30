@@ -21,7 +21,6 @@
 #include "build/build_config.h"
 #include "base/application.h"
 #include "base/command_line.h"
-#include "base/environment.h"
 #include "base/meta_types.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
@@ -40,6 +39,8 @@
 #include <comdef.h>
 #include <wrl/client.h>
 #endif // defined(OS_WIN)
+
+#include <QProcessEnvironment>
 
 //--------------------------------------------------------------------------------------------------
 void desktopAgentMain(int& argc, char* argv[])
@@ -189,14 +190,7 @@ void desktopAgentMain(int& argc, char* argv[])
         LOG(LS_INFO) << window_station_name << " (desktops: " << desktops << ")";
     }
     LOG(LS_INFO) << "#####################################################";
-
-    LOG(LS_INFO) << "Environment variables";
-    LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
-    {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
-    }
-    LOG(LS_INFO) << "#####################################################";
+    LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
 #endif // defined(OS_WIN)
 
     if (command_line->hasSwitch(u"channel_id"))
