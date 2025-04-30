@@ -33,6 +33,7 @@ list(APPEND SOURCE_PROTO
     port_forwarding.proto
     host_internal.proto
     relay_peer.proto
+    router_admin.h
     router_admin.proto
     router_common.proto
     router_peer.proto

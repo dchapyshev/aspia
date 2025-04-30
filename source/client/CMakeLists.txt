@@ -49,8 +49,6 @@ list(APPEND SOURCE_CLIENT_CORE
     input_event_filter.h
     router.cc
     router.h
-    router_proxy.cc
-    router_proxy.h
     router_config.cc
     router_config.h
     router_config_storage.cc

@@ -22,6 +22,7 @@
 #include "proto/desktop.h"
 #include "proto/desktop_extensions.h"
 #include "proto/file_transfer.h"
+#include "proto/router_admin.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 #include "proto/text_chat.h"
@@ -97,6 +98,9 @@ void registerMetaTypes()
     qRegisterMetaType<proto::FileError>("proto::FileError");
     qRegisterMetaType<proto::FileReply>("proto::FileReply");
     qRegisterMetaType<proto::FileRequest>("proto::FileRequest");
+
+    // router_admin.h
+    qRegisterMetaType<proto::User>("proto::User");
 
     // system_info.h
     qRegisterMetaType<proto::system_info::SystemInfoRequest>("proto::system_info::SystemInfoRequest");

@@ -22,7 +22,6 @@
 #include "base/peer/user.h"
 #include "base/gui_application.h"
 #include "client/router.h"
-#include "client/router_proxy.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/router_manager/router_user_dialog.h"
 #include "common/ui/status_dialog.h"
@@ -322,7 +321,6 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     connect(status_dialog_, &common::StatusDialog::finished, this, [this]()
     {
         LOG(LS_INFO) << "Session closed";
-        router_proxy_.reset();
         close();
     });
 
@@ -454,50 +452,55 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     peer_address_ = router_config.address;
     peer_port_ = router_config.port;
 
-    std::unique_ptr<Router> router = std::make_unique<Router>();
+    Router* router = new Router();
 
     router->moveToThread(base::GuiApplication::ioThread());
     router->setUserName(router_config.username);
     router->setPassword(router_config.password);
 
-    connect(router.get(), &Router::sig_connecting,
-            this, &RouterManagerWindow::onConnecting,
+    connect(router, &Router::sig_connecting, this, &RouterManagerWindow::onConnecting,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_connected,
-            this, &RouterManagerWindow::onConnected,
+    connect(router, &Router::sig_connected, this, &RouterManagerWindow::onConnected,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_disconnected,
-            this, &RouterManagerWindow::onDisconnected,
+    connect(router, &Router::sig_disconnected, this, &RouterManagerWindow::onDisconnected,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_waitForRouter,
-            this, &RouterManagerWindow::onWaitForRouter,
+    connect(router, &Router::sig_waitForRouter, this, &RouterManagerWindow::onWaitForRouter,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_waitForRouterTimeout,
-            this, &RouterManagerWindow::onWaitForRouterTimeout,
+    connect(router, &Router::sig_waitForRouterTimeout, this, &RouterManagerWindow::onWaitForRouterTimeout,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_versionMismatch,
-            this, &RouterManagerWindow::onVersionMismatch,
+    connect(router, &Router::sig_versionMismatch, this, &RouterManagerWindow::onVersionMismatch,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_accessDenied,
-            this, &RouterManagerWindow::onAccessDenied,
+    connect(router, &Router::sig_accessDenied, this, &RouterManagerWindow::onAccessDenied,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_sessionList,
-            this, &RouterManagerWindow::onSessionList,
+    connect(router, &Router::sig_sessionList, this, &RouterManagerWindow::onSessionList,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_sessionResult,
-            this, &RouterManagerWindow::onSessionResult,
+    connect(router, &Router::sig_sessionResult, this, &RouterManagerWindow::onSessionResult,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_userList,
-            this, &RouterManagerWindow::onUserList,
+    connect(router, &Router::sig_userList, this, &RouterManagerWindow::onUserList,
             Qt::QueuedConnection);
-    connect(router.get(), &Router::sig_userResult,
-            this, &RouterManagerWindow::onUserResult,
+    connect(router, &Router::sig_userResult, this, &RouterManagerWindow::onUserResult,
             Qt::QueuedConnection);
 
-    router_proxy_ = std::make_unique<RouterProxy>(
-        base::GuiApplication::ioTaskRunner(), std::move(router));
+    connect(this, &RouterManagerWindow::sig_connectToRouter, router, &Router::connectToRouter,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_disconnectFromRouter, router, &Router::deleteLater,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_refreshSessionList, router, &Router::refreshSessionList,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_stopSession, router, &Router::stopSession,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_refreshUserList, router, &Router::refreshUserList,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_addUser, router, &Router::addUser,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_modifyUser, router, &Router::modifyUser,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_deleteUser, router, &Router::deleteUser,
+            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_disconnectPeerSession, router, &Router::disconnectPeerSession,
+            Qt::QueuedConnection);
 
-    router_proxy_->connectToRouter(router_config.address, router_config.port);
+    emit sig_connectToRouter(router_config.address, router_config.port);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -524,15 +527,8 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     show();
     activateWindow();
 
-    if (router_proxy_)
-    {
-        router_proxy_->refreshSessionList();
-        router_proxy_->refreshUserList();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No router proxy";
-    }
+    emit sig_refreshSessionList();
+    emit sig_refreshUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -850,8 +846,7 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_r
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
 {
-    if (router_proxy_)
-        router_proxy_->disconnectFromRouter();
+    emit sig_disconnectFromRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1001,25 +996,22 @@ void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
     }
     else if (action == disconnect)
     {
-        if (router_proxy_ && peer_item)
+        if (peer_item)
         {
-            router_proxy_->disconnectPeerSession(
+            emit sig_disconnectPeerSession(
                 relay_item->session.session_id(), peer_item->conn.session_id());
         }
     }
     else if (action == disconnect_all)
     {
-        if (router_proxy_)
+        for (int i = 0; i < ui->tree_active_conn->topLevelItemCount(); ++i)
         {
-            for (int i = 0; i < ui->tree_active_conn->topLevelItemCount(); ++i)
+            PeerConnectionTreeItem* item =
+                static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->topLevelItem(i));
+            if (item)
             {
-                PeerConnectionTreeItem* item =
-                    static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->topLevelItem(i));
-                if (item)
-                {
-                    router_proxy_->disconnectPeerSession(
+                emit sig_disconnectPeerSession(
                         relay_item->session.session_id(), item->conn.session_id());
-                }
             }
         }
     }
@@ -1222,15 +1214,8 @@ void RouterManagerWindow::refreshSessionList()
     if (!is_connected_)
         return;
 
-    if (router_proxy_)
-    {
-        beforeRequest();
-        router_proxy_->refreshSessionList();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No router proxy";
-    }
+    beforeRequest();
+    emit sig_refreshSessionList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1259,23 +1244,14 @@ void RouterManagerWindow::disconnectRelay()
         return;
     }
 
-    if (router_proxy_)
-    {
-        beforeRequest();
-        router_proxy_->stopSession(tree_item->session.session_id());
-    }
+    beforeRequest();
+    emit sig_stopSession(tree_item->session.session_id());
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllRelays()
 {
     LOG(LS_INFO) << "[ACTION] Disconnect all relays";
-
-    if (!router_proxy_)
-    {
-        LOG(LS_ERROR) << "No router proxy";
-        return;
-    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1300,7 +1276,7 @@ void RouterManagerWindow::disconnectAllRelays()
     {
         RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(tree_relay->topLevelItem(i));
         if (tree_item)
-            router_proxy_->stopSession(tree_item->session.session_id());
+            emit sig_stopSession(tree_item->session.session_id());
     }
 }
 
@@ -1333,27 +1309,14 @@ void RouterManagerWindow::disconnectHost()
 
     LOG(LS_INFO) << "[ACTION] Accepted by user";
 
-    if (router_proxy_)
-    {
-        beforeRequest();
-        router_proxy_->stopSession(tree_item->session.session_id());
-    }
-    else
-    {
-        LOG(LS_INFO) << "No router proxy";
-    }
+    beforeRequest();
+    emit sig_stopSession(tree_item->session.session_id());
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllHosts()
 {
     LOG(LS_INFO) << "[ACTION] Disconnect all hosts";
-
-    if (!router_proxy_)
-    {
-        LOG(LS_INFO) << "No router proxy";
-        return;
-    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1377,18 +1340,15 @@ void RouterManagerWindow::disconnectAllHosts()
     {
         HostTreeItem* tree_item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(i));
         if (tree_item)
-            router_proxy_->stopSession(tree_item->session.session_id());
+            emit sig_stopSession(tree_item->session.session_id());
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::refreshUserList()
 {
-    if (router_proxy_)
-    {
-        beforeRequest();
-        router_proxy_->refreshUserList();
-    }
+    beforeRequest();
+    emit sig_refreshUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1407,15 +1367,8 @@ void RouterManagerWindow::addUser()
     {
         LOG(LS_INFO) << "[ACTION] Accepeted by user";
 
-        if (router_proxy_)
-        {
-            beforeRequest();
-            router_proxy_->addUser(dialog.user().serialize());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "No router proxy";
-        }
+        beforeRequest();
+        emit sig_addUser(dialog.user().serialize());
     }
     else
     {
@@ -1450,15 +1403,8 @@ void RouterManagerWindow::modifyUser()
     {
         LOG(LS_INFO) << "[ACTION] Accepted by user";
 
-        if (router_proxy_)
-        {
-            beforeRequest();
-            router_proxy_->modifyUser(dialog.user().serialize());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "No router proxy";
-        }
+        beforeRequest();
+        emit sig_modifyUser(dialog.user().serialize());
     }
     else
     {
@@ -1498,11 +1444,9 @@ void RouterManagerWindow::deleteUser()
     if (message_box.exec() == QMessageBox::Yes)
     {
         LOG(LS_INFO) << "[ACTION] Accepted by user";
-        if (router_proxy_)
-        {
-            beforeRequest();
-            router_proxy_->deleteUser(entry_id);
-        }
+
+        beforeRequest();
+        emit sig_deleteUser(entry_id);
     }
     else
     {

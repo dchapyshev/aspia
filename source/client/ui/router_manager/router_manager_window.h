@@ -23,7 +23,7 @@
 #include "base/peer/authenticator.h"
 #include "base/net/network_channel.h"
 #include "client/router_config.h"
-#include "proto/router_admin.pb.h"
+#include "proto/router_admin.h"
 
 #include <QMainWindow>
 #include <QPointer>
@@ -40,8 +40,6 @@ class StatusDialog;
 } // namespace common
 
 namespace client {
-
-class RouterProxy;
 
 class RouterManagerWindow final : public QMainWindow
 {
@@ -68,6 +66,17 @@ public slots:
 
     static QString delayToString(uint64_t delay);
     static QString sizeToString(int64_t size);
+
+signals:
+    void sig_connectToRouter(const QString& address, uint16_t port);
+    void sig_disconnectFromRouter();
+    void sig_refreshSessionList();
+    void sig_stopSession(int64_t session_id);
+    void sig_refreshUserList();
+    void sig_addUser(const proto::User& user);
+    void sig_modifyUser(const proto::User& user);
+    void sig_deleteUser(int64_t entry_id);
+    void sig_disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
 
 protected:
     // QMainWindow implementation.
@@ -113,8 +122,6 @@ private:
     bool is_connected_ = false;
 
     common::StatusDialog* status_dialog_;
-
-    std::unique_ptr<RouterProxy> router_proxy_;
 
     int current_hosts_column_ = 0;
     int current_relays_column_ = 0;
