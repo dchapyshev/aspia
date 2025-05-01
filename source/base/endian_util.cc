@@ -66,7 +66,7 @@ uint32_t EndianUtil::byteSwap(uint32_t value)
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint64_t EndianUtil::byteSwap(uint64_t value)
+quint64 EndianUtil::byteSwap(quint64 value)
 {
 #if defined(CC_MSVC)
     return _byteswap_uint64(value);

@@ -107,7 +107,7 @@ public:
         setText(PROC_COL_SESSION_ID, QString::number(process.session_id()));
     }
 
-    uint64_t processId() const { return process_.process_id(); }
+    quint64 processId() const { return process_.process_id(); }
 
     void updateItem(const proto::task_manager::Process& process)
     {
@@ -810,7 +810,7 @@ void TaskManagerWindow::sendProcessListRequest(uint32_t flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManagerWindow::sendEndProcessRequest(uint64_t process_id)
+void TaskManagerWindow::sendEndProcessRequest(quint64 process_id)
 {
     proto::task_manager::ClientToHost message;
     message.mutable_end_process_request()->set_pid(process_id);

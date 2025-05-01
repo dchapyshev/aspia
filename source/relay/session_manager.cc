@@ -212,7 +212,7 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::disconnectSession(uint64_t session_id)
+void SessionManager::disconnectSession(quint64 session_id)
 {
     LOG(LS_INFO) << "Disconnect session by session id: " << session_id;
 

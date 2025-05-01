@@ -19,7 +19,8 @@
 #ifndef BASE_AUDIO_AUDIO_OUTPUT_H
 #define BASE_AUDIO_AUDIO_OUTPUT_H
 
-#include <cstdint>
+#include <QtGlobal>
+
 #include <functional>
 #include <memory>
 

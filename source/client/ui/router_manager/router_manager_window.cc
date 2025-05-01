@@ -1144,7 +1144,7 @@ void RouterManagerWindow::updateRelayStatistics()
                 const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
 
                 auto has_session_with_id = [](const proto::RelaySessionData::RelayStat& relay_stat,
-                    uint64_t session_id)
+                    quint64 session_id)
                 {
                     for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
                     {
@@ -1734,12 +1734,12 @@ void RouterManagerWindow::restoreState(const QByteArray& state)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString RouterManagerWindow::delayToString(uint64_t delay)
+QString RouterManagerWindow::delayToString(quint64 delay)
 {
-    uint64_t days = (delay / 86400);
-    uint64_t hours = (delay % 86400) / 3600;
-    uint64_t minutes = ((delay % 86400) % 3600) / 60;
-    uint64_t seconds = ((delay % 86400) % 3600) % 60;
+    quint64 days = (delay / 86400);
+    quint64 hours = (delay % 86400) / 3600;
+    quint64 minutes = ((delay % 86400) % 3600) / 60;
+    quint64 seconds = ((delay % 86400) % 3600) % 60;
 
     QString seconds_string = tr("%n seconds", "", static_cast<int>(seconds));
     QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));

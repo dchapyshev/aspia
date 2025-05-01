@@ -34,7 +34,7 @@ void registerMetaTypes()
     qRegisterMetaType<uint8_t>("uint8_t");
     qRegisterMetaType<quint16>("quint16");
     qRegisterMetaType<uint32_t>("uint32_t");
-    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<quint64>("quint64");
     qRegisterMetaType<int8_t>("int8_t");
     qRegisterMetaType<int16_t>("int16_t");
     qRegisterMetaType<int32_t>("int32_t");

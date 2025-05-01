@@ -118,7 +118,7 @@ public:
     struct Data
     {
         // Header (8 bytes)
-        uint64_t header;                            // 00h-07h
+        quint64 header;                            // 00h-07h
 
         // Vendor / Product Identification (10 bytes)
         quint16 id_manufacturer_name;              // 08h-09h

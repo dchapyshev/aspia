@@ -210,7 +210,7 @@ QString SmbiosMemoryDevice::manufacturer() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t SmbiosMemoryDevice::size() const
+quint64 SmbiosMemoryDevice::size() const
 {
     if (table_->length >= 0x20 && table_->module_size == 0x7FFF)
     {
@@ -219,17 +219,17 @@ uint64_t SmbiosMemoryDevice::size() const
         if (ext_size & 0x3FFUL)
         {
             // Size in MB. Convert to bytes and return.
-            return static_cast<uint64_t>(ext_size) * 1024ULL * 1024ULL;
+            return static_cast<quint64>(ext_size) * 1024ULL * 1024ULL;
         }
         else if (ext_size & 0xFFC00UL)
         {
             // Size in GB. Convert to bytes and return.
-            return static_cast<uint64_t>(ext_size >> 10) * 1024ULL * 1024ULL * 1024ULL;
+            return static_cast<quint64>(ext_size >> 10) * 1024ULL * 1024ULL * 1024ULL;
         }
         else
         {
             // Size in TB. Convert to bytes and return.
-            return static_cast<uint64_t>(ext_size >> 20) * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+            return static_cast<quint64>(ext_size >> 20) * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
         }
     }
     else
@@ -243,12 +243,12 @@ uint64_t SmbiosMemoryDevice::size() const
         if (table_->module_size & 0x8000)
         {
             // Size in kB. Convert to bytes and return.
-            return static_cast<uint64_t>(table_->module_size & 0x7FFF) * 1024ULL;
+            return static_cast<quint64>(table_->module_size & 0x7FFF) * 1024ULL;
         }
         else
         {
             // Size in MB. Convert to bytes and return.
-            return static_cast<uint64_t>(table_->module_size) * 1024ULL * 1024ULL;
+            return static_cast<quint64>(table_->module_size) * 1024ULL * 1024ULL;
         }
     }
 }

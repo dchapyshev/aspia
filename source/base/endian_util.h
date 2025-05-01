@@ -33,7 +33,7 @@ public:
 
     static quint16 byteSwap(quint16 value);
     static uint32_t byteSwap(uint32_t value);
-    static uint64_t byteSwap(uint64_t value);
+    static quint64 byteSwap(quint64 value);
 
     template <typename T>
     static T toBig(T value)

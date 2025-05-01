@@ -213,7 +213,7 @@ void Router::deleteUser(int64_t entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
+void Router::disconnectPeerSession(int64_t relay_session_id, quint64 peer_session_id)
 {
     LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
                  << " (relay: " << relay_session_id << ")";

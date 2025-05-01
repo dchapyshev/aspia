@@ -51,8 +51,8 @@ public:
 
         const std::filesystem::path& path() const { return path_; }
         Type type() const;
-        uint64_t totalSpace() const;
-        uint64_t freeSpace() const;
+        quint64 totalSpace() const;
+        quint64 freeSpace() const;
         QString fileSystem() const;
         QString volumeName() const;
         QString volumeSerial() const;

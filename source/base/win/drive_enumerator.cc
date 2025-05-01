@@ -90,7 +90,7 @@ DriveEnumerator::DriveInfo::Type DriveEnumerator::DriveInfo::type() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t DriveEnumerator::DriveInfo::totalSpace() const
+quint64 DriveEnumerator::DriveInfo::totalSpace() const
 {
     ULARGE_INTEGER total_space;
 
@@ -104,7 +104,7 @@ uint64_t DriveEnumerator::DriveInfo::totalSpace() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t DriveEnumerator::DriveInfo::freeSpace() const
+quint64 DriveEnumerator::DriveInfo::freeSpace() const
 {
     ULARGE_INTEGER free_space;
 

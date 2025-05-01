@@ -86,9 +86,9 @@ uint32_t Random::number32()
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint64_t Random::number64()
+quint64 Random::number64()
 {
-    return generateNumber<uint64_t>();
+    return generateNumber<quint64>();
 }
 
 } // namespace base

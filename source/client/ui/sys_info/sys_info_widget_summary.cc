@@ -318,7 +318,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
                          QString::fromStdString(drive.file_system()));
             }
 
-            if (drive.total_size() && drive.total_size() != static_cast<uint64_t>(-1))
+            if (drive.total_size() && drive.total_size() != static_cast<quint64>(-1))
             {
                 value = tr("%1 (%2 free)")
                     .arg(sizeToString(static_cast<int64_t>(drive.total_size())),

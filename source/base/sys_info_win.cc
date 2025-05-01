@@ -301,7 +301,7 @@ int64_t SysInfo::operatingSystemInstallDate()
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint64_t SysInfo::uptime()
+quint64 SysInfo::uptime()
 {
     LARGE_INTEGER counter;
     LARGE_INTEGER frequency;
@@ -318,7 +318,7 @@ uint64_t SysInfo::uptime()
         return 0;
     }
 
-    return static_cast<uint64_t>(counter.QuadPart / frequency.QuadPart);
+    return static_cast<quint64>(counter.QuadPart / frequency.QuadPart);
 }
 
 //--------------------------------------------------------------------------------------------------

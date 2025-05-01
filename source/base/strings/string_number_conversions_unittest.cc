@@ -21,11 +21,12 @@
 
 #include <gtest/gtest.h>
 
+#include <QtGlobal>
+
 #include <cerrno>
 #include <climits>
 #include <cmath>
 #include <cstdarg>
-#include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <limits>
@@ -154,7 +155,7 @@ TEST(StringNumberConversionsTest, NumberToString)
     for (const auto& test : int64_tests)
     {
         EXPECT_EQ(numberToString(test.num), test.sexpected);
-        EXPECT_EQ(numberToString(static_cast<uint64_t>(test.num)), test.uexpected);
+        EXPECT_EQ(numberToString(static_cast<quint64>(test.num)), test.uexpected);
     }
 }
 
@@ -162,14 +163,14 @@ TEST(StringNumberConversionsTest, Uint64ToString)
 {
     static const struct
     {
-        uint64_t input;
+        quint64 input;
         std::string output;
     } cases[] =
     {
         { 0, "0" },
         { 42, "42" },
         { INT_MAX, "2147483647" },
-        { std::numeric_limits<uint64_t>::max(), "18446744073709551615" },
+        { std::numeric_limits<quint64>::max(), "18446744073709551615" },
     };
 
     for (const auto& i : cases)
@@ -420,9 +421,9 @@ TEST(StringNumberConversionsTest, StringToUint64)
         { "-9223372036854775809", 0, false },
         { "-99999999999999999999", 0, false },
         { "9223372036854775808", UINT64_C(9223372036854775808), true },
-        { "99999999999999999999", std::numeric_limits<uint64_t>::max(), false },
-        { "18446744073709551615", std::numeric_limits<uint64_t>::max(), true },
-        { "18446744073709551616", std::numeric_limits<uint64_t>::max(), false },
+        { "99999999999999999999", std::numeric_limits<quint64>::max(), false },
+        { "18446744073709551615", std::numeric_limits<quint64>::max(), true },
+        { "18446744073709551616", std::numeric_limits<quint64>::max(), false },
     };
 
     for (const auto& i : cases)

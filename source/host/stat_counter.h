@@ -54,16 +54,16 @@ private:
 
     QTimer timer_;
 
-    uint64_t video_packets_ = 0;
-    uint64_t audio_packets_ = 0;
-    uint64_t incoming_clipboard_events_ = 0;
-    uint64_t outgoing_clipboard_events_ = 0;
-    uint64_t keyboard_events_ = 0;
-    uint64_t text_events_ = 0;
-    uint64_t mouse_events_ = 0;
-    uint64_t touch_events_ = 0;
-    uint64_t video_error_count_ = 0;
-    uint64_t cursor_positions_ = 0;
+    quint64 video_packets_ = 0;
+    quint64 audio_packets_ = 0;
+    quint64 incoming_clipboard_events_ = 0;
+    quint64 outgoing_clipboard_events_ = 0;
+    quint64 keyboard_events_ = 0;
+    quint64 text_events_ = 0;
+    quint64 mouse_events_ = 0;
+    quint64 touch_events_ = 0;
+    quint64 video_error_count_ = 0;
+    quint64 cursor_positions_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(StatCounter);
 };

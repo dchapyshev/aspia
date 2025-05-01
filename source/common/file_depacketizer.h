@@ -45,8 +45,8 @@ private:
     std::filesystem::path file_path_;
     std::ofstream file_stream_;
 
-    uint64_t file_size_ = 0;
-    uint64_t left_size_ = 0;
+    quint64 file_size_ = 0;
+    quint64 left_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };

@@ -190,7 +190,7 @@ uint32_t UserEnumerator::badPasswordCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t UserEnumerator::lastLogonTime() const
+quint64 UserEnumerator::lastLogonTime() const
 {
     return user_info_[current_entry_].usri3_last_logon;
 }

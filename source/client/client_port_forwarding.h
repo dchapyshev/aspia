@@ -40,8 +40,8 @@ public:
 
     struct Statistics
     {
-        uint64_t rx_bytes = 0;
-        uint64_t tx_bytes = 0;
+        quint64 rx_bytes = 0;
+        quint64 tx_bytes = 0;
     };
 
     void setPortForwardingConfig(const proto::port_forwarding::Config& config);
@@ -99,8 +99,8 @@ private:
     std::array<char, kBufferSize> read_buffer_;
 
     QPointer<QTimer> statistics_timer_;
-    uint64_t rx_bytes_ = 0;
-    uint64_t tx_bytes_ = 0;
+    quint64 rx_bytes_ = 0;
+    quint64 tx_bytes_ = 0;
 };
 
 } // namespace client

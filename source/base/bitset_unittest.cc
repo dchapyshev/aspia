@@ -26,21 +26,21 @@ namespace base {
 
 TEST(BitSetTest, Range64)
 {
-    EXPECT_EQ(BitSet<uint64_t>(0).range(0, 63), 0);
-    EXPECT_EQ(BitSet<uint64_t>(0x4020000000000000).range(48, 63), 0x4020);
-    EXPECT_EQ(BitSet<uint64_t>(0x00000000000000E0).range(4, 5), 2);
-    EXPECT_EQ(BitSet<uint64_t>(0xC0000000000000E0).range(62, 63), 3);
-    EXPECT_EQ(BitSet<uint64_t>(0xC0008000000000E0).range(46, 47), 2);
-    EXPECT_EQ(BitSet<uint64_t>(0xF0208902001080E0).range(32, 63), 0xF0208902);
-    EXPECT_EQ(BitSet<uint64_t>(0xF0208902001080E0).range(0, 31), 0x1080E0);
+    EXPECT_EQ(BitSet<quint64>(0).range(0, 63), 0);
+    EXPECT_EQ(BitSet<quint64>(0x4020000000000000).range(48, 63), 0x4020);
+    EXPECT_EQ(BitSet<quint64>(0x00000000000000E0).range(4, 5), 2);
+    EXPECT_EQ(BitSet<quint64>(0xC0000000000000E0).range(62, 63), 3);
+    EXPECT_EQ(BitSet<quint64>(0xC0008000000000E0).range(46, 47), 2);
+    EXPECT_EQ(BitSet<quint64>(0xF0208902001080E0).range(32, 63), 0xF0208902);
+    EXPECT_EQ(BitSet<quint64>(0xF0208902001080E0).range(0, 31), 0x1080E0);
 
-    EXPECT_EQ(BitSet<uint64_t>(1).range(0, 0), 1);
-    EXPECT_EQ(BitSet<uint64_t>(2).range(1, 1), 1);
-    EXPECT_EQ(BitSet<uint64_t>(2).range(0, 0), 0);
-    EXPECT_EQ(BitSet<uint64_t>(0x2000000000000000).range(61, 61), 1);
-    EXPECT_EQ(BitSet<uint64_t>(0x1000000000000000).range(60, 60), 1);
+    EXPECT_EQ(BitSet<quint64>(1).range(0, 0), 1);
+    EXPECT_EQ(BitSet<quint64>(2).range(1, 1), 1);
+    EXPECT_EQ(BitSet<quint64>(2).range(0, 0), 0);
+    EXPECT_EQ(BitSet<quint64>(0x2000000000000000).range(61, 61), 1);
+    EXPECT_EQ(BitSet<quint64>(0x1000000000000000).range(60, 60), 1);
 
-    const BitSet<uint64_t> set1(0xFFFFFFFFFFFFFFFF);
+    const BitSet<quint64> set1(0xFFFFFFFFFFFFFFFF);
 
     for (size_t i = 0; i < set1.size(); ++i)
     {
@@ -48,7 +48,7 @@ TEST(BitSetTest, Range64)
         EXPECT_TRUE(set1.test(i));
     }
 
-    const BitSet<uint64_t> set2(0x0000000000000000);
+    const BitSet<quint64> set2(0x0000000000000000);
 
     for (size_t i = 0; i < set2.size(); ++i)
     {
@@ -56,7 +56,7 @@ TEST(BitSetTest, Range64)
         EXPECT_FALSE(set2.test(i));
     }
 
-    const BitSet<uint64_t> set3(0xAAAAAAAAAAAAAAAA);
+    const BitSet<quint64> set3(0xAAAAAAAAAAAAAAAA);
 
     for (size_t i = 0; i < set3.size(); ++i)
     {

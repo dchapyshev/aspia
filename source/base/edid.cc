@@ -31,7 +31,7 @@ namespace base {
 namespace {
 
 const size_t kMinEdidSize = 0x80; // 128 bytes
-const uint64_t kEdidHeader = 0x00FFFFFFFFFFFF00;
+const quint64 kEdidHeader = 0x00FFFFFFFFFFFF00;
 const uint8_t kMinWeekOfManufacture = 1;
 const uint8_t kMaxWeekOfManufacture = 53;
 const int kUnknownDescriptor = -1;

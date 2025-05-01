@@ -32,7 +32,7 @@ public:
     QString biosString() const;
     QString chipString() const;
     QString dacType() const;
-    uint64_t memorySize() const;
+    quint64 memorySize() const;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(VideoAdapterEnumarator);

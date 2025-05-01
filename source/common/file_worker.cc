@@ -208,7 +208,7 @@ void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto:
 
         proto::FileList::Item* item = file_list->add_item();
         item->set_name(file_info.u8name());
-        item->set_size(static_cast<uint64_t>(file_info.size()));
+        item->set_size(static_cast<quint64>(file_info.size()));
         item->set_modification_time(file_info.lastWriteTime());
         item->set_is_directory(file_info.isDirectory());
 

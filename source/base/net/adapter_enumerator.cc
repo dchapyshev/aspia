@@ -221,7 +221,7 @@ uint32_t AdapterEnumerator::mtu() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t AdapterEnumerator::speed() const
+quint64 AdapterEnumerator::speed() const
 {
 #if defined(OS_WIN)
     if (adapter_->TransmitLinkSpeed == std::numeric_limits<ULONG64>::max())

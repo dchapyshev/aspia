@@ -63,7 +63,7 @@ private slots:
 
 private:
     void sendProcessListRequest(uint32_t flags);
-    void sendEndProcessRequest(uint64_t process_id);
+    void sendEndProcessRequest(quint64 process_id);
     void sendServiceListRequest();
     void sendServiceRequest(const std::string& name, proto::task_manager::ServiceRequest::Command command);
     void sendUserListRequest();

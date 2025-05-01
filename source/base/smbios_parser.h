@@ -91,7 +91,7 @@ public:
     bool isPresent() const;
     QString location() const;
     QString manufacturer() const;
-    uint64_t size() const;
+    quint64 size() const;
     QString type() const;
     QString formFactor() const;
     QString partNumber() const;

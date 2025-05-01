@@ -130,7 +130,7 @@ void sha256_append(struct sha256 *sha, const void *src, size_t n_bytes){
 
 void sha256_finalize(struct sha256 *sha){
     int i;
-    uint64_t n_bits = sha->n_bits;
+    quint64 n_bits = sha->n_bits;
 
     sha256_append_byte(sha, 0x80);
 

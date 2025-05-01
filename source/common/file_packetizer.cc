@@ -39,7 +39,7 @@ FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     : file_stream_(std::move(file_stream))
 {
     file_stream_.seekg(0, file_stream_.end);
-    file_size_ = static_cast<uint64_t>(file_stream_.tellg());
+    file_size_ = static_cast<quint64>(file_stream_.tellg());
     file_stream_.seekg(0);
     left_size_ = file_size_;
 }

@@ -64,7 +64,7 @@ public slots:
     void onUserList(std::shared_ptr<proto::UserList> user_list);
     void onUserResult(std::shared_ptr<proto::UserResult> user_result);
 
-    static QString delayToString(uint64_t delay);
+    static QString delayToString(quint64 delay);
     static QString sizeToString(int64_t size);
 
 signals:
@@ -76,7 +76,7 @@ signals:
     void sig_addUser(const proto::User& user);
     void sig_modifyUser(const proto::User& user);
     void sig_deleteUser(int64_t entry_id);
-    void sig_disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
+    void sig_disconnectPeerSession(int64_t relay_session_id, quint64 peer_session_id);
 
 protected:
     // QMainWindow implementation.

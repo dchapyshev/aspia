@@ -38,7 +38,7 @@ public:
 
     // Generates a random number.
     static uint32_t number32();
-    static uint64_t number64();
+    static quint64 number64();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Random);

@@ -65,7 +65,7 @@ void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionsWorker::disconnectSession(uint64_t session_id)
+void SessionsWorker::disconnectSession(quint64 session_id)
 {
     if (!self_task_runner_->belongsToCurrentThread())
     {

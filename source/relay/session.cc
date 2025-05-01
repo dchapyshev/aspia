@@ -32,7 +32,7 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
                  const QByteArray& secret)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
-    static uint64_t session_id = 0;
+    static quint64 session_id = 0;
     ++session_id;
     session_id_ = session_id;
 

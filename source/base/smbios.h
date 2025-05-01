@@ -60,7 +60,7 @@ struct SmbiosBiosTable : public SmbiosTable
     quint16 address_segment;   // 06h-07h
     uint8_t release_date;       // 08h
     uint8_t rom_size;           // 09h
-    uint64_t characters;        // 0Ah-11h
+    quint64 characters;        // 0Ah-11h
 
     // 2.4+
     uint8_t ext_characters1;    // 12h

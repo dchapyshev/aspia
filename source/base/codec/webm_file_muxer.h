@@ -21,10 +21,10 @@
 
 #include "base/macros_magic.h"
 
+#include <QtGlobal>
+
 #include <chrono>
-#include <cstdint>
 #include <memory>
-#include <string>
 
 #include "third_party/libwebm/mkvmuxer.hpp"
 #include "third_party/libwebm/mkvwriter.hpp"
@@ -72,12 +72,12 @@ private:
     // |is_key| flag telling if the frame is a key frame.
     bool writeFrame(std::string_view frame,
                     const std::chrono::nanoseconds& timestamp,
-                    uint64_t track_num, bool is_key);
+                    quint64 track_num, bool is_key);
 
     std::unique_ptr<mkvmuxer::MkvWriter> writer_;
     std::unique_ptr<mkvmuxer::Segment> segment_;
-    uint64_t audio_track_num_ = 0;
-    uint64_t video_track_num_ = 0;
+    quint64 audio_track_num_ = 0;
+    quint64 video_track_num_ = 0;
     bool initialized_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(WebmFileMuxer);

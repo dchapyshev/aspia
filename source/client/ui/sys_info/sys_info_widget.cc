@@ -132,12 +132,12 @@ QString SysInfoWidget::sizeToString(int64_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SysInfoWidget::delayToString(uint64_t delay)
+QString SysInfoWidget::delayToString(quint64 delay)
 {
-    uint64_t days = (delay / 86400);
-    uint64_t hours = (delay % 86400) / 3600;
-    uint64_t minutes = ((delay % 86400) % 3600) / 60;
-    uint64_t seconds = ((delay % 86400) % 3600) % 60;
+    quint64 days = (delay / 86400);
+    quint64 hours = (delay % 86400) / 3600;
+    quint64 minutes = ((delay % 86400) % 3600) / 60;
+    quint64 seconds = ((delay % 86400) % 3600) % 60;
 
     QString seconds_string = tr("%n seconds", "", static_cast<int>(seconds));
     QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
@@ -176,14 +176,14 @@ QString SysInfoWidget::delayToString(uint64_t delay)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString SysInfoWidget::speedToString(uint64_t speed)
+QString SysInfoWidget::speedToString(quint64 speed)
 {
-    static const uint64_t kKbps = 1000ULL;
-    static const uint64_t kMbps = kKbps * 1000ULL;
-    static const uint64_t kGbps = kMbps * 1000ULL;
+    static const quint64 kKbps = 1000ULL;
+    static const quint64 kMbps = kKbps * 1000ULL;
+    static const quint64 kGbps = kMbps * 1000ULL;
 
     QString units;
-    uint64_t divider;
+    quint64 divider;
 
     if (speed >= kGbps)
     {

@@ -52,7 +52,7 @@ public:
     bool isLockout() const;
     uint32_t numberLogons() const;
     uint32_t badPasswordCount() const;
-    uint64_t lastLogonTime() const;
+    quint64 lastLogonTime() const;
 
 private:
     _USER_INFO_3* user_info_ = nullptr;

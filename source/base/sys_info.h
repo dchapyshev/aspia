@@ -37,7 +37,7 @@ public:
     static QString operatingSystemKey();
     static int64_t operatingSystemInstallDate();
 
-    static uint64_t uptime();
+    static quint64 uptime();
 
     static QString computerName();
     static QString computerDomain();

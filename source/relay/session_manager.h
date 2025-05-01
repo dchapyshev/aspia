@@ -57,7 +57,7 @@ public:
     ~SessionManager() final;
 
     void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
-    void disconnectSession(uint64_t session_id);
+    void disconnectSession(quint64 session_id);
 
 protected:
     // PendingSession::Delegate implementation.

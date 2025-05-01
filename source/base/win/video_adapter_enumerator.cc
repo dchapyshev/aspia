@@ -54,7 +54,7 @@ QString VideoAdapterEnumarator::dacType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t VideoAdapterEnumarator::memorySize() const
+quint64 VideoAdapterEnumarator::memorySize() const
 {
     return driverRegistryDW(L"HardwareInformation.MemorySize");
 }

@@ -49,7 +49,7 @@ public:
     std::string connectionName() const;
     std::string interfaceType() const;
     uint32_t mtu() const;
-    uint64_t speed() const;
+    quint64 speed() const;
     std::string macAddress() const;
 
     bool isDhcp4Enabled() const;
