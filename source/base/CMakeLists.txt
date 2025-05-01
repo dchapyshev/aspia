@@ -19,8 +19,6 @@
 list(APPEND SOURCE_BASE
     application.h
     applications_reader.h
-    base64.cc
-    base64.h
     bitset.h
     command_line.cc
     command_line.h
@@ -107,7 +105,6 @@ if (APPLE)
 endif()
 
 list(APPEND SOURCE_BASE_TESTS
-    base64_unittest.cc
     bitset_unittest.cc
     converter_unittest.cc
     scoped_clear_last_error_unittest.cc
