@@ -30,14 +30,11 @@ class JsonSettings final : public Settings
 {
 public:
     enum class Scope { USER, SYSTEM };
-    enum class Encrypted { YES, NO };
 
-    JsonSettings(std::string_view file_name,
-                 Encrypted encrypted = Encrypted::NO);
+    explicit JsonSettings(std::string_view file_name);
     JsonSettings(Scope scope,
                  std::string_view application_name,
-                 std::string_view file_name,
-                 Encrypted encrypted = Encrypted::NO);
+                 std::string_view file_name);
     ~JsonSettings() final;
 
     bool isWritable() const;
@@ -51,15 +48,10 @@ public:
                                           std::string_view application_name,
                                           std::string_view file_name);
 
-    static bool readFile(const std::filesystem::path& file,
-                         Map& map,
-                         Encrypted encrypted = Encrypted::NO);
-    static bool writeFile(const std::filesystem::path& file,
-                          const Map& map,
-                          Encrypted encrypted = Encrypted::NO);
+    static bool readFile(const std::filesystem::path& file, Map& map);
+    static bool writeFile(const std::filesystem::path& file, const Map& map);
 
 private:
-    const Encrypted encrypted_;
     std::filesystem::path path_;
 
     DISALLOW_COPY_AND_ASSIGN(JsonSettings);

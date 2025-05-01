@@ -24,10 +24,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 RouterConfigStorage::RouterConfigStorage()
-    : storage_(base::JsonSettings::Scope::USER,
-               "aspia",
-               "router_config",
-               base::JsonSettings::Encrypted::YES)
+    : storage_(base::JsonSettings::Scope::USER, "aspia", "router_config")
 {
     // Nothing
 }

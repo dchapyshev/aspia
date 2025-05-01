@@ -19,7 +19,6 @@
 #include "base/settings/json_settings.h"
 
 #include "base/logging.h"
-#include "base/crypto/os_crypt.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/files/scoped_temp_file.h"
@@ -95,8 +94,7 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
-    : encrypted_(encrypted)
+JsonSettings::JsonSettings(std::string_view file_name)
 {
     path_ = filePath(file_name);
     if (path_.empty())
@@ -108,9 +106,7 @@ JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
 //--------------------------------------------------------------------------------------------------
 JsonSettings::JsonSettings(Scope scope,
                            std::string_view application_name,
-                           std::string_view file_name,
-                           Encrypted encrypted)
-    : encrypted_(encrypted)
+                           std::string_view file_name)
 {
     path_ = filePath(scope, application_name, file_name);
     if (path_.empty())
@@ -152,7 +148,7 @@ bool JsonSettings::isWritable() const
 //--------------------------------------------------------------------------------------------------
 void JsonSettings::sync()
 {
-    readFile(path_, map(), encrypted_);
+    readFile(path_, map());
     setChanged(false);
 }
 
@@ -167,7 +163,7 @@ bool JsonSettings::flush()
     }
 
     // Write to the configuration file.
-    if (writeFile(path_, map(), encrypted_))
+    if (writeFile(path_, map()))
     {
         LOG(LS_INFO) << "Configuration file '" << path_ << "' successfully written to disk";
         setChanged(false);
@@ -236,7 +232,7 @@ std::filesystem::path JsonSettings::filePath(Scope scope,
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypted encrypted)
+bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
 {
     map.clear();
 
@@ -246,7 +242,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
     if (!std::filesystem::exists(status))
     {
         // If the configuration file does not yet exist, then we write an empty file.
-        writeFile(file, map, encrypted);
+        writeFile(file, map);
 
         // The absence of a configuration file is normal case.
         return true;
@@ -280,18 +276,6 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
         return false;
     }
 
-    if (encrypted == Encrypted::YES)
-    {
-        std::string decrypted;
-        if (!OSCrypt::decryptString(buffer, &decrypted))
-        {
-            LOG(LS_ERROR) << "Failed to decrypt config file: '" << file << "'";
-            return false;
-        }
-
-        buffer.swap(decrypted);
-    }
-
     rapidjson::StringStream stream(buffer.data());
     rapidjson::Document doc;
     doc.ParseStream(stream);
@@ -311,7 +295,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, Encrypted encrypted)
+bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map)
 {
     std::error_code error_code;
     if (!std::filesystem::create_directories(file.parent_path(), error_code))
@@ -379,31 +363,10 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
 
     std::string_view source_buffer(buffer.GetString(), buffer.GetSize());
 
-    if (encrypted == Encrypted::YES)
+    if (!base::writeFile(file, source_buffer))
     {
-        std::string cipher_buffer;
-
-        if (!OSCrypt::encryptString(source_buffer, &cipher_buffer))
-        {
-            LOG(LS_ERROR) << "Failed to encrypt config file";
-            return false;
-        }
-
-        if (!base::writeFile(file, cipher_buffer))
-        {
-            LOG(LS_ERROR) << "Failed to write config file";
-            return false;
-        }
-    }
-    else
-    {
-        DCHECK_EQ(encrypted, Encrypted::NO);
-
-        if (!base::writeFile(file, source_buffer))
-        {
-            LOG(LS_ERROR) << "Failed to write config file";
-            return false;
-        }
+        LOG(LS_ERROR) << "Failed to write config file";
+        return false;
     }
 
     return true;
