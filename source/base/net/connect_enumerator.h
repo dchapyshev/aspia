@@ -22,7 +22,8 @@
 #include "base/macros_magic.h"
 #include "base/win/scoped_object.h"
 
-#include <cstdint>
+#include <QtGlobal>
+
 #include <memory>
 #include <string>
 
@@ -43,8 +44,8 @@ public:
     std::string processName() const;
     std::string localAddress() const;
     std::string remoteAddress() const;
-    uint16_t localPort() const;
-    uint16_t remotePort() const;
+    quint16 localPort() const;
+    quint16 remotePort() const;
     std::string state() const;
 
 private:

@@ -32,7 +32,7 @@ class SessionsWorker final
 {
 public:
     SessionsWorker(const QString& listen_interface,
-                   uint16_t peer_port,
+                   quint16 peer_port,
                    const std::chrono::minutes& peer_idle_timeout,
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval,
@@ -55,7 +55,7 @@ protected:
 
 private:
     const QString listen_interface_;
-    const uint16_t peer_port_;
+    const quint16 peer_port_;
     const std::chrono::minutes peer_idle_timeout_;
     const bool statistics_enabled_;
     const std::chrono::seconds statistics_interval_;

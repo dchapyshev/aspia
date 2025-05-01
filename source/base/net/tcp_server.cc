@@ -33,11 +33,11 @@ public:
     explicit Impl(asio::io_context& io_context);
     ~Impl();
 
-    void start(const QString& listen_interface, uint16_t port, TcpServer* server);
+    void start(const QString& listen_interface, quint16 port, TcpServer* server);
     void stop();
 
     QString listenInterface() const;
-    uint16_t port() const;
+    quint16 port() const;
 
 private:
     void doAccept();
@@ -48,7 +48,7 @@ private:
     TcpServer* server_ = nullptr;
 
     QString listen_interface_;
-    uint16_t port_ = 0;
+    quint16 port_ = 0;
 
     int accept_error_count_ = 0;
 
@@ -70,7 +70,7 @@ TcpServer::Impl::~Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::start(const QString& listen_interface, uint16_t port, TcpServer* server)
+void TcpServer::Impl::start(const QString& listen_interface, quint16 port, TcpServer* server)
 {
     server_ = server;
     listen_interface_ = listen_interface;
@@ -152,7 +152,7 @@ QString TcpServer::Impl::listenInterface() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t TcpServer::Impl::port() const
+quint16 TcpServer::Impl::port() const
 {
     return port_;
 }
@@ -216,7 +216,7 @@ TcpServer::~TcpServer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(const QString& listen_interface, uint16_t port)
+void TcpServer::start(const QString& listen_interface, quint16 port)
 {
     impl_->start(listen_interface, port, this);
 }
@@ -252,7 +252,7 @@ QString TcpServer::listenInterface() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t TcpServer::port() const
+quint16 TcpServer::port() const
 {
     return impl_->port();
 }

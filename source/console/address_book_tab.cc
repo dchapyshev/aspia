@@ -417,7 +417,7 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
     client::RouterConfig router_config;
 
     router_config.address  = QString::fromStdString(router.address());
-    router_config.port     = static_cast<uint16_t>(router.port());
+    router_config.port     = static_cast<quint16>(router.port());
     router_config.username = QString::fromStdString(router.username());
     router_config.password = QString::fromStdString(router.password());
 

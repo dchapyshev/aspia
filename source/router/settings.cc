@@ -78,15 +78,15 @@ QString Settings::listenInterface() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPort(uint16_t port)
+void Settings::setPort(quint16 port)
 {
-    impl_.set<uint16_t>("Port", port);
+    impl_.set<quint16>("Port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t Settings::port() const
+quint16 Settings::port() const
 {
-    return impl_.get<uint16_t>("Port", DEFAULT_ROUTER_TCP_PORT);
+    return impl_.get<quint16>("Port", DEFAULT_ROUTER_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------

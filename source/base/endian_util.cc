@@ -37,7 +37,7 @@ bool EndianUtil::isLittle()
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint16_t EndianUtil::byteSwap(uint16_t value)
+quint16 EndianUtil::byteSwap(quint16 value)
 {
 #if defined(CC_MSVC)
     return _byteswap_ushort(value);

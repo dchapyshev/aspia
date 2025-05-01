@@ -21,7 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
+#include <QtGlobal>
+
 #include <memory>
 #include <string>
 
@@ -68,7 +69,7 @@ public:
     struct MonitorDescriptor
     {
         // Flag = 0000h when block used as descriptor.
-        uint16_t flag;
+        quint16 flag;
 
         // Reserved = 00h when block used as descriptor.
         uint8_t reserved1;
@@ -85,7 +86,7 @@ public:
 
     struct DetailedTimingDescriptor
     {
-        uint16_t pixel_clock;
+        quint16 pixel_clock;
         uint8_t horizontal_active;
         uint8_t horizontal_blanking;
         uint8_t horizontal_active_blanking;
@@ -120,8 +121,8 @@ public:
         uint64_t header;                            // 00h-07h
 
         // Vendor / Product Identification (10 bytes)
-        uint16_t id_manufacturer_name;              // 08h-09h
-        uint16_t id_product_code;                   // 0Ah-0Bh
+        quint16 id_manufacturer_name;              // 08h-09h
+        quint16 id_product_code;                   // 0Ah-0Bh
         uint32_t id_serial_number;                  // 0Ch-0Fh
         uint8_t week_of_manufacture;                // 10h
         uint8_t year_of_manufacture;                // 11h

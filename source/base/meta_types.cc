@@ -32,7 +32,7 @@ void registerMetaTypes()
     qRegisterMetaType<std::string>("std::string");
     qRegisterMetaType<std::u16string>("std::u16string");
     qRegisterMetaType<uint8_t>("uint8_t");
-    qRegisterMetaType<uint16_t>("uint16_t");
+    qRegisterMetaType<quint16>("quint16");
     qRegisterMetaType<uint32_t>("uint32_t");
     qRegisterMetaType<uint64_t>("uint64_t");
     qRegisterMetaType<int8_t>("int8_t");

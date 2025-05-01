@@ -123,7 +123,7 @@ std::u16string peerAddress(const asio::ip::tcp::socket& socket)
 //--------------------------------------------------------------------------------------------------
 SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                                const asio::ip::address& address,
-                               uint16_t port,
+                               quint16 port,
                                const std::chrono::minutes& idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval)

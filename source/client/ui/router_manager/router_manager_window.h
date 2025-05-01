@@ -68,7 +68,7 @@ public slots:
     static QString sizeToString(int64_t size);
 
 signals:
-    void sig_connectToRouter(const QString& address, uint16_t port);
+    void sig_connectToRouter(const QString& address, quint16 port);
     void sig_disconnectFromRouter();
     void sig_refreshSessionList();
     void sig_stopSession(int64_t session_id);
@@ -118,7 +118,7 @@ private:
     std::unique_ptr<Ui::RouterManagerWindow> ui;
 
     QString peer_address_;
-    uint16_t peer_port_ = 0;
+    quint16 peer_port_ = 0;
     bool is_connected_ = false;
 
     common::StatusDialog* status_dialog_;

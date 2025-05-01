@@ -702,7 +702,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         // Update the parameters.
         settings.setApplicationShutdownDisabled(ui.checkbox_disable_shutdown->isChecked());
-        settings.setTcpPort(static_cast<uint16_t>(ui.spinbox_port->value()));
+        settings.setTcpPort(static_cast<quint16>(ui.spinbox_port->value()));
         settings.setUserList(*user_list);
         settings.setAutoUpdateEnabled(ui.checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui.combobox_update_check_freq->currentData().toInt());

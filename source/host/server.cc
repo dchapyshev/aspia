@@ -442,7 +442,7 @@ void Server::addFirewallRules()
         return;
     }
 
-    uint16_t tcp_port = settings_.tcpPort();
+    quint16 tcp_port = settings_.tcpPort();
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
     {

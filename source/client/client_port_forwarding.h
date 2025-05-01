@@ -80,8 +80,8 @@ private:
     bool is_started_ = false;
 
     std::string remote_host_;
-    uint16_t remote_port_ = 0;
-    uint16_t local_port_ = 0;
+    quint16 remote_port_ = 0;
+    quint16 local_port_ = 0;
     std::string command_line_;
 
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;

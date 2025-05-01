@@ -40,7 +40,7 @@ struct RouterConfig
     bool isValid() const;
 
     QString address;
-    uint16_t port;
+    quint16 port;
     QString username;
     QString password;
 };

@@ -19,8 +19,7 @@
 #ifndef BASE_SMBIOS_H
 #define BASE_SMBIOS_H
 
-#include <cstdint>
-#include <cstddef>
+#include <QtGlobal>
 
 namespace base {
 
@@ -50,7 +49,7 @@ struct SmbiosTable
 {
     uint8_t type;    // 00h
     uint8_t length;  // 01h
-    uint16_t handle; // 02h-03h
+    quint16 handle; // 02h-03h
 };
 
 struct SmbiosBiosTable : public SmbiosTable
@@ -58,7 +57,7 @@ struct SmbiosBiosTable : public SmbiosTable
     // 2.0+
     uint8_t vendor;             // 04h
     uint8_t version;            // 05h
-    uint16_t address_segment;   // 06h-07h
+    quint16 address_segment;   // 06h-07h
     uint8_t release_date;       // 08h
     uint8_t rom_size;           // 09h
     uint64_t characters;        // 0Ah-11h
@@ -72,7 +71,7 @@ struct SmbiosBiosTable : public SmbiosTable
     uint8_t ctrl_minor_release; // 17h
 
     // 3.1+
-    uint16_t ext_rom_size;      // 18h
+    quint16 ext_rom_size;      // 18h
 };
 
 struct SmbiosBaseboardTable : public SmbiosTable
@@ -84,7 +83,7 @@ struct SmbiosBaseboardTable : public SmbiosTable
     uint8_t asset_tag;       // 08h
     uint8_t feature_flags;   // 09h
     uint8_t location;        // 0Ah
-    uint16_t chassis_handle; // 0Bh-0Ch
+    quint16 chassis_handle; // 0Bh-0Ch
     uint8_t board_type;      // 0Dh
     uint8_t obj_handles_num; // 0Eh
     // obj_handles_num * WORDs
@@ -93,20 +92,20 @@ struct SmbiosBaseboardTable : public SmbiosTable
 struct SmbiosMemoryDeviceTable : public SmbiosTable
 {
     // 2.1+
-    uint16_t memory_array_handle;    // 04h-05h
-    uint16_t error_info_handle;      // 06h-07h
-    uint16_t total_width;            // 08h-09h
-    uint16_t data_width;             // 0Ah-0Bh
-    uint16_t module_size;            // 0Ch-0Dh
+    quint16 memory_array_handle;    // 04h-05h
+    quint16 error_info_handle;      // 06h-07h
+    quint16 total_width;            // 08h-09h
+    quint16 data_width;             // 0Ah-0Bh
+    quint16 module_size;            // 0Ch-0Dh
     uint8_t form_factor;             // 0Eh
     uint8_t device_set;              // 0Fh
     uint8_t device_location;         // 10h
     uint8_t bank_locator;            // 11h
     uint8_t memory_type;             // 12h
-    uint16_t type_detail;            // 13h-14h
+    quint16 type_detail;            // 13h-14h
 
     // 2.3+
-    uint16_t speed;                  // 15h-16h
+    quint16 speed;                  // 15h-16h
     uint8_t manufacturer;            // 17h
     uint8_t serial_number;           // 18h
     uint8_t asset_tag;               // 19h
@@ -117,12 +116,12 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
 
     // 2.7+
     uint32_t ext_size;               // 1Ch-1Fh
-    uint16_t configured_clock_speed; // 20h-21h
+    quint16 configured_clock_speed; // 20h-21h
 
     // 2.8+
-    uint16_t min_voltage;            // 22h-23h
-    uint16_t max_voltage;            // 24h-25h
-    uint16_t configured_voltage;     // 26h-27h
+    quint16 min_voltage;            // 22h-23h
+    quint16 max_voltage;            // 24h-25h
+    quint16 configured_voltage;     // 26h-27h
 
 };
 

@@ -42,7 +42,7 @@ public:
     const QString& computerName() const;
     const QString& displayName() const;
     const QString& hostAddress() const;
-    uint16_t hostPort() const;
+    quint16 hostPort() const;
     const QString& hostUserName() const;
     const QString& hostPassword() const;
 

@@ -39,8 +39,8 @@ public:
     void setListenInterface(const QString& interface);
     QString listenInterface() const;
 
-    void setPort(uint16_t port);
-    uint16_t port() const;
+    void setPort(quint16 port);
+    quint16 port() const;
 
     void setPrivateKey(const QByteArray& private_key);
     QByteArray privateKey() const;

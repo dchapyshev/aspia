@@ -53,7 +53,7 @@ RouterConfig RouterConfigStorage::routerConfig() const
     RouterConfig config;
 
     config.address = storage_.get<QString>("address");
-    config.port = storage_.get<uint16_t>("port");
+    config.port = storage_.get<quint16>("port");
     config.username = storage_.get<QString>("username");
     config.password = storage_.get<QString>("password");
 

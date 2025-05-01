@@ -25,7 +25,7 @@ namespace relay {
 
 //--------------------------------------------------------------------------------------------------
 SessionsWorker::SessionsWorker(const QString& listen_interface,
-                               uint16_t peer_port,
+                               quint16 peer_port,
                                const std::chrono::minutes& peer_idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval,

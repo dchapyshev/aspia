@@ -230,14 +230,14 @@ struct ConverterImpl<unsigned long>
 };
 
 template <>
-struct ConverterImpl<uint16_t>
+struct ConverterImpl<quint16>
 {
-    static bool fromString(std::string_view str, uint16_t* value)
+    static bool fromString(std::string_view str, quint16* value)
     {
         return stringToUShort(str, value);
     }
 
-    static std::string toString(uint16_t value)
+    static std::string toString(quint16 value)
     {
         return numberToString(value);
     }

@@ -21,7 +21,7 @@
 
 #include "build/build_config.h"
 
-#include <cstdint>
+#include <QtGlobal>
 #include <string>
 
 namespace base {
@@ -29,7 +29,7 @@ namespace base {
 class Address
 {
 public:
-    explicit Address(uint16_t default_port);
+    explicit Address(quint16 default_port);
 
     Address(const Address& other);
     Address& operator=(const Address& other);
@@ -39,15 +39,15 @@ public:
 
     ~Address() = default;
 
-    static Address fromString(std::u16string_view str, uint16_t default_port);
+    static Address fromString(std::u16string_view str, quint16 default_port);
 
     std::u16string toString() const;
 
     void setHost(std::u16string_view host);
     std::u16string host() const;
 
-    void setPort(uint16_t port);
-    uint16_t port() const;
+    void setPort(quint16 port);
+    quint16 port() const;
 
     bool isValid() const;
 
@@ -57,11 +57,11 @@ public:
     bool operator!=(const Address& other);
 
 private:
-    Address(std::u16string&& host, uint16_t port, uint16_t default_port);
+    Address(std::u16string&& host, quint16 port, quint16 default_port);
 
     std::u16string host_;
-    uint16_t port_ = 0;
-    uint16_t default_port_;
+    quint16 port_ = 0;
+    quint16 default_port_;
 };
 
 } // namespace base

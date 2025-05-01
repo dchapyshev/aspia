@@ -80,15 +80,15 @@ QString Settings::routerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterPort(uint16_t port)
+void Settings::setRouterPort(quint16 port)
 {
-    impl_.set<uint16_t>("RouterPort", port);
+    impl_.set<quint16>("RouterPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t Settings::routerPort() const
+quint16 Settings::routerPort() const
 {
-    return impl_.get<uint16_t>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+    return impl_.get<quint16>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,15 +128,15 @@ QString Settings::peerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPeerPort(uint16_t port)
+void Settings::setPeerPort(quint16 port)
 {
-    impl_.set<uint16_t>("PeerPort", port);
+    impl_.set<quint16>("PeerPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t Settings::peerPort() const
+quint16 Settings::peerPort() const
 {
-    return impl_.get<uint16_t>("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT);
+    return impl_.get<quint16>("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------

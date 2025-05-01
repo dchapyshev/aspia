@@ -19,7 +19,8 @@
 #ifndef BASE_DESKTOP_PIXEL_FORMAT_H
 #define BASE_DESKTOP_PIXEL_FORMAT_H
 
-#include <cstdint>
+#include <QtGlobal>
+
 #include <ostream>
 
 namespace base {
@@ -30,9 +31,9 @@ public:
     PixelFormat() = default;
     PixelFormat(const PixelFormat& other);
     PixelFormat(uint8_t bits_per_pixel,
-                uint16_t red_max,
-                uint16_t green_max,
-                uint16_t blue_max,
+                quint16 red_max,
+                quint16 green_max,
+                quint16 blue_max,
                 uint8_t red_shift,
                 uint8_t green_shift,
                 uint8_t blue_shift);
@@ -76,14 +77,14 @@ public:
 
     uint8_t bytesPerPixel() const { return bytes_per_pixel_; }
 
-    uint16_t redMax() const { return red_max_; }
-    void setRedMax(uint16_t red_max) { red_max_ = red_max; }
+    quint16 redMax() const { return red_max_; }
+    void setRedMax(quint16 red_max) { red_max_ = red_max; }
 
-    uint16_t greenMax() const { return green_max_; }
-    void setGreenMax(uint16_t green_max) { green_max_ = green_max; }
+    quint16 greenMax() const { return green_max_; }
+    void setGreenMax(quint16 green_max) { green_max_ = green_max; }
 
-    uint16_t blueMax() const { return blue_max_; }
-    void setBlueMax(uint16_t blue_max) { blue_max_ = blue_max; }
+    quint16 blueMax() const { return blue_max_; }
+    void setBlueMax(quint16 blue_max) { blue_max_ = blue_max; }
 
     uint8_t redShift() const { return red_shift_; }
     void setRedShift(uint8_t red_shift) { red_shift_ = red_shift; }
@@ -107,9 +108,9 @@ private:
     uint8_t bits_per_pixel_ = 0;
     uint8_t bytes_per_pixel_ = 0;
 
-    uint16_t red_max_ = 0;
-    uint16_t green_max_ = 0;
-    uint16_t blue_max_ = 0;
+    quint16 red_max_ = 0;
+    quint16 green_max_ = 0;
+    quint16 blue_max_ = 0;
 
     uint8_t red_shift_ = 0;
     uint8_t green_shift_ = 0;

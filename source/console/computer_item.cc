@@ -60,7 +60,7 @@ void ComputerItem::updateItem()
     {
         base::Address address(DEFAULT_HOST_TCP_PORT);
         address.setHost(base::utf16FromUtf8(computer_->address()));
-        address.setPort(static_cast<uint16_t>(computer_->port()));
+        address.setPort(static_cast<quint16>(computer_->port()));
 
         address_title = QString::fromStdU16String(address.toString());
     }

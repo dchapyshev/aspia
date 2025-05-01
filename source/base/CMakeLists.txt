@@ -780,7 +780,7 @@ target_link_libraries(aspia_base PRIVATE aspia_proto
     ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 
 if (WIN32)
-    set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)
+    set(BASE_TESTS_PLATFORM_LIBS crypt32 dbghelp iphlpapi ws2_32)
 endif()
 
 if (LINUX)

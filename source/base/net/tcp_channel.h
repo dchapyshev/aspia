@@ -57,7 +57,7 @@ public:
     QString peerAddress() const;
 
     // Connects to a host at the specified address and port.
-    void connect(const QString& address, uint16_t port);
+    void connect(const QString& address, quint16 port);
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const;

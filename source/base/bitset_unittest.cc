@@ -20,6 +20,8 @@
 
 #include <gtest/gtest.h>
 
+#include <QtGlobal>
+
 namespace base {
 
 TEST(BitSetTest, Range64)
@@ -120,19 +122,19 @@ TEST(BitSetTest, Range32)
 
 TEST(BitSetTest, Range16)
 {
-    EXPECT_EQ(BitSet<uint16_t>(0).range(0, 15), 0);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(0, 15), 0xC081);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(5, 7), 4);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(13, 15), 6);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(0, 3), 1);
+    EXPECT_EQ(BitSet<quint16>(0).range(0, 15), 0);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(0, 15), 0xC081);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(5, 7), 4);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(13, 15), 6);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(0, 3), 1);
 
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(11, 11), 0);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(15, 15), 1);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(14, 14), 1);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(0, 0), 1);
-    EXPECT_EQ(BitSet<uint16_t>(0xC081).range(1, 1), 0);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(11, 11), 0);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(15, 15), 1);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(14, 14), 1);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(0, 0), 1);
+    EXPECT_EQ(BitSet<quint16>(0xC081).range(1, 1), 0);
 
-    const BitSet<uint16_t> set1(0xFFFF);
+    const BitSet<quint16> set1(0xFFFF);
 
     for (size_t i = 0; i < set1.size(); ++i)
     {
@@ -140,7 +142,7 @@ TEST(BitSetTest, Range16)
         EXPECT_TRUE(set1.test(i));
     }
 
-    const BitSet<uint16_t> set2(0x0000);
+    const BitSet<quint16> set2(0x0000);
 
     for (size_t i = 0; i < set2.size(); ++i)
     {
@@ -148,7 +150,7 @@ TEST(BitSetTest, Range16)
         EXPECT_FALSE(set2.test(i));
     }
 
-    const BitSet<uint16_t> set3(0xAAAA);
+    const BitSet<quint16> set3(0xAAAA);
 
     for (size_t i = 0; i < set3.size(); ++i)
     {

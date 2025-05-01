@@ -267,7 +267,7 @@ QString TcpChannel::peerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connect(const QString& address, uint16_t port)
+void TcpChannel::connect(const QString& address, quint16 port)
 {
     if (connected_ || !resolver_)
         return;

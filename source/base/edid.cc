@@ -267,7 +267,7 @@ uint8_t Edid::featureSupport() const
 //--------------------------------------------------------------------------------------------------
 std::string Edid::getManufacturerSignature() const
 {
-    BitSet<uint16_t> id = EndianUtil::byteSwap(edid_->id_manufacturer_name);
+    BitSet<quint16> id = EndianUtil::byteSwap(edid_->id_manufacturer_name);
 
     // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
     // Bits 9:5 : second letter.

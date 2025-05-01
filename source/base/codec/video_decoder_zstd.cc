@@ -31,9 +31,9 @@ PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return PixelFormat(
         static_cast<uint8_t>(format.bits_per_pixel()),
-        static_cast<uint16_t>(format.red_max()),
-        static_cast<uint16_t>(format.green_max()),
-        static_cast<uint16_t>(format.blue_max()),
+        static_cast<quint16>(format.red_max()),
+        static_cast<quint16>(format.green_max()),
+        static_cast<quint16>(format.blue_max()),
         static_cast<uint8_t>(format.red_shift()),
         static_cast<uint8_t>(format.green_shift()),
         static_cast<uint8_t>(format.blue_shift()));

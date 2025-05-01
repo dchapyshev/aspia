@@ -36,7 +36,7 @@ struct Config
     QString computer_name;
     QString display_name;
     QString address_or_id;
-    uint16_t port;
+    quint16 port;
     QString username;
     QString password;
     proto::SessionType session_type;

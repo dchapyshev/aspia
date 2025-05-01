@@ -107,7 +107,7 @@ bool Server::start()
         return false;
     }
 
-    uint16_t port = settings.port();
+    quint16 port = settings.port();
     if (!port)
     {
         LOG(LS_ERROR) << "Invalid port specified in configuration file";

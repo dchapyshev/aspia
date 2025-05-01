@@ -75,7 +75,7 @@ const QString& SessionState::hostAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t SessionState::hostPort() const
+quint16 SessionState::hostPort() const
 {
     return config_.port;
 }

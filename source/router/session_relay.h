@@ -31,7 +31,7 @@ public:
     SessionRelay();
     ~SessionRelay() final;
 
-    using PeerData = std::pair<std::string, uint16_t>;
+    using PeerData = std::pair<std::string, quint16>;
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::RelayStat>& relayStat() const { return relay_stat_; }

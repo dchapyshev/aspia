@@ -50,7 +50,7 @@ public:
 
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                    const asio::ip::address& address,
-                   uint16_t port,
+                   quint16 port,
                    const std::chrono::minutes& idle_timeout,
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval);
@@ -86,7 +86,7 @@ private:
     std::vector<std::unique_ptr<Session>> active_sessions_;
 
     const asio::ip::address address_;
-    const uint16_t port_;
+    const quint16 port_;
 
     const std::chrono::minutes idle_timeout_;
     asio::steady_timer idle_timer_;

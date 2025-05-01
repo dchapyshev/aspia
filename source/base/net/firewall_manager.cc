@@ -101,7 +101,7 @@ bool FirewallManager::hasAnyRule()
 //--------------------------------------------------------------------------------------------------
 bool FirewallManager::addTcpRule(std::wstring_view rule_name,
                                  std::wstring_view description,
-                                 uint16_t port)
+                                 quint16 port)
 {
     // Delete the rule. According MDSN |INetFwRules::Add| should replace rule with same
     // "rule identifier". It's not clear what is "rule identifier", but it can successfully
@@ -141,7 +141,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
 //--------------------------------------------------------------------------------------------------
 bool FirewallManager::addUdpRule(std::wstring_view rule_name,
                                  std::wstring_view description,
-                                 uint16_t port)
+                                 quint16 port)
 {
     // Delete the rule. According MDSN |INetFwRules::Add| should replace rule with same
     // "rule identifier". It's not clear what is "rule identifier", but it can successfully

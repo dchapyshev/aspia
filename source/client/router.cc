@@ -84,7 +84,7 @@ bool Router::isAutoReconnect() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::connectToRouter(const QString& address, uint16_t port)
+void Router::connectToRouter(const QString& address, quint16 port)
 {
     router_address_ = address;
     router_port_ = port;

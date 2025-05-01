@@ -45,7 +45,7 @@ public:
     {
         int computer_id = -1;
         QString address_or_id;
-        uint16_t port = 0;
+        quint16 port = 0;
     };
     using ComputerList = std::vector<Computer>;
 

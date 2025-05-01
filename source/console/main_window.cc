@@ -1715,7 +1715,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     config.router_config = router_config;
     config.computer_name = QString::fromStdString(computer.name());
     config.address_or_id = QString::fromStdString(computer.address());
-    config.port          = static_cast<uint16_t>(computer.port());
+    config.port          = static_cast<quint16>(computer.port());
     config.username      = QString::fromStdString(computer.username());
     config.password      = QString::fromStdString(computer.password());
     config.session_type  = computer.session_type();

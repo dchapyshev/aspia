@@ -40,13 +40,13 @@ public:
     explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
-    void start(const QString& listen_interface, uint16_t port);
+    void start(const QString& listen_interface, quint16 port);
     void stop();
     bool hasPendingConnections();
     TcpChannel* nextPendingConnection();
 
     QString listenInterface() const;
-    uint16_t port() const;
+    quint16 port() const;
 
     static bool isValidListenInterface(const QString& interface);
 

@@ -246,7 +246,7 @@ std::string ConnectEnumerator::remoteAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t ConnectEnumerator::localPort() const
+quint16 ConnectEnumerator::localPort() const
 {
     if (mode_ == Mode::TCP)
     {
@@ -255,7 +255,7 @@ uint16_t ConnectEnumerator::localPort() const
         if (!tcp_table)
             return 0;
 
-        return static_cast<uint16_t>(tcp_table->table[pos_].dwLocalPort);
+        return static_cast<quint16>(tcp_table->table[pos_].dwLocalPort);
     }
     else
     {
@@ -264,12 +264,12 @@ uint16_t ConnectEnumerator::localPort() const
         if (!udp_table)
             return 0;
 
-        return static_cast<uint16_t>(udp_table->table[pos_].dwLocalPort);
+        return static_cast<quint16>(udp_table->table[pos_].dwLocalPort);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t ConnectEnumerator::remotePort() const
+quint16 ConnectEnumerator::remotePort() const
 {
     if (mode_ == Mode::TCP)
     {
@@ -278,7 +278,7 @@ uint16_t ConnectEnumerator::remotePort() const
         if (!tcp_table)
             return 0;
 
-        return static_cast<uint16_t>(tcp_table->table[pos_].dwRemotePort);
+        return static_cast<quint16>(tcp_table->table[pos_].dwRemotePort);
     }
     else
     {

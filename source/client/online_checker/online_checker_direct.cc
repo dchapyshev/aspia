@@ -38,7 +38,7 @@ const std::chrono::seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(int computer_id, const QString& address, uint16_t port);
+    Instance(int computer_id, const QString& address, quint16 port);
     ~Instance() final;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
@@ -56,7 +56,7 @@ private:
 
     const int computer_id_;
     const QString address_;
-    const uint16_t port_;
+    const quint16 port_;
 
     FinishCallback finish_callback_;
     std::unique_ptr<base::TcpChannel> channel_;
@@ -66,7 +66,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const QString& address, uint16_t port)
+    int computer_id, const QString& address, quint16 port)
     : computer_id_(computer_id),
       address_(address),
       port_(port)
@@ -213,7 +213,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
     {
         const Computer& computer = pending_queue_.front();
 
-        uint16_t port = computer.port;
+        quint16 port = computer.port;
         if (port == 0)
             port = DEFAULT_HOST_TCP_PORT;
 

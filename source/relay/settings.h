@@ -39,8 +39,8 @@ public:
     void setRouterAddress(const QString& address);
     QString routerAddress() const;
 
-    void setRouterPort(uint16_t port);
-    uint16_t routerPort() const;
+    void setRouterPort(quint16 port);
+    quint16 routerPort() const;
 
     void setRouterPublicKey(const QByteArray& public_key);
     QByteArray routerPublicKey() const;
@@ -51,8 +51,8 @@ public:
     void setPeerAddress(const QString& address);
     QString peerAddress() const;
 
-    void setPeerPort(uint16_t port);
-    uint16_t peerPort() const;
+    void setPeerPort(quint16 port);
+    quint16 peerPort() const;
 
     void setPeerIdleTimeout(const std::chrono::minutes& timeout);
     std::chrono::minutes peerIdleTimeout() const;

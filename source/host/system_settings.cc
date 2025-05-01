@@ -110,15 +110,15 @@ bool SystemSettings::flush()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t SystemSettings::tcpPort() const
+quint16 SystemSettings::tcpPort() const
 {
-    return settings_.get<uint16_t>("TcpPort", DEFAULT_HOST_TCP_PORT);
+    return settings_.get<quint16>("TcpPort", DEFAULT_HOST_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setTcpPort(uint16_t port)
+void SystemSettings::setTcpPort(quint16 port)
 {
-    settings_.set<uint16_t>("TcpPort", port);
+    settings_.set<quint16>("TcpPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,15 +146,15 @@ void SystemSettings::setRouterAddress(const QString& address)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t SystemSettings::routerPort() const
+quint16 SystemSettings::routerPort() const
 {
-    return settings_.get<uint16_t>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+    return settings_.get<quint16>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterPort(uint16_t port)
+void SystemSettings::setRouterPort(quint16 port)
 {
-    settings_.set<uint16_t>("RouterPort", port);
+    settings_.set<quint16>("RouterPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------

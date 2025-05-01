@@ -30,9 +30,9 @@ PixelFormat::PixelFormat(const PixelFormat& other)
 
 //--------------------------------------------------------------------------------------------------
 PixelFormat::PixelFormat(uint8_t bits_per_pixel,
-                         uint16_t red_max,
-                         uint16_t green_max,
-                         uint16_t blue_max,
+                         quint16 red_max,
+                         quint16 green_max,
+                         quint16 blue_max,
                          uint8_t red_shift,
                          uint8_t green_shift,
                          uint8_t blue_shift)

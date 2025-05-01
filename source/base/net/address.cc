@@ -73,7 +73,7 @@ bool isValidHostName(std::u16string_view host)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isValidPort(uint16_t port)
+bool isValidPort(quint16 port)
 {
     return port != 0;
 }
@@ -81,7 +81,7 @@ bool isValidPort(uint16_t port)
 //--------------------------------------------------------------------------------------------------
 bool isValidPort(std::u16string_view str)
 {
-    uint16_t value;
+    quint16 value;
 
     if (!stringToUShort(str, &value))
         return false;
@@ -219,14 +219,14 @@ bool parse(std::u16string_view::const_iterator& it,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Address::Address(uint16_t default_port)
+Address::Address(quint16 default_port)
     : default_port_(default_port)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-Address::Address(std::u16string&& host, uint16_t port, uint16_t default_port)
+Address::Address(std::u16string&& host, quint16 port, quint16 default_port)
     : host_(std::move(host)),
       port_(port),
       default_port_(default_port)
@@ -280,7 +280,7 @@ Address& Address::operator=(Address&& other) noexcept
 
 //--------------------------------------------------------------------------------------------------
 // static
-Address Address::fromString(std::u16string_view str, uint16_t default_port)
+Address Address::fromString(std::u16string_view str, quint16 default_port)
 {
     auto begin = str.cbegin();
     auto end = str.cend();
@@ -293,7 +293,7 @@ Address Address::fromString(std::u16string_view str, uint16_t default_port)
             isValidIpV6Address(QString::fromStdU16String(parts.host)) ||
             isValidHostName(parts.host))
         {
-            uint16_t port;
+            quint16 port;
 
             if (!stringToUShort(parts.port, &port))
                 port = default_port;
@@ -347,13 +347,13 @@ std::u16string Address::host() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Address::setPort(uint16_t port)
+void Address::setPort(quint16 port)
 {
     port_ = port;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint16_t Address::port() const
+quint16 Address::port() const
 {
     return port_;
 }

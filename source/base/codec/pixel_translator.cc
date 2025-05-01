@@ -135,7 +135,7 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        static_assert(sizeof(SourceT) == sizeof(uint8_t) || sizeof(SourceT) == sizeof(uint16_t));
+        static_assert(sizeof(SourceT) == sizeof(uint8_t) || sizeof(SourceT) == sizeof(quint16));
 
         const size_t table_size = std::numeric_limits<SourceT>::max() + 1;
         table_ = std::make_unique<uint32_t[]>(table_size);
@@ -230,7 +230,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                         source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint32_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, uint32_t>>(
                         source_format, target_format);
 
                 case 1:
@@ -248,15 +248,15 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<uint32_t, uint16_t>>(
+                    return std::make_unique<PixelTranslatorT<uint32_t, quint16>>(
                         source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint16_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, quint16>>(
                         source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint16_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, quint16>>(
                         source_format, target_format);
 
                 default:
@@ -274,7 +274,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                         source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint16_t, uint8_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, uint8_t>>(
                         source_format, target_format);
 
                 case 1:

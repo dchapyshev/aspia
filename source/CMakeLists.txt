@@ -94,13 +94,12 @@ set(THIRD_PARTY_LIBS
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
-    modp_b64
     libwebm
     unofficial::libvpx::libvpx
     x11region
     yuv)
 
-include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source ${WTL_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 20)

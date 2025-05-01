@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
+#include <QtGlobal>
 
 namespace base {
 
@@ -31,7 +31,7 @@ public:
     static bool isLittle();
     static bool isBig() { return !isLittle(); }
 
-    static uint16_t byteSwap(uint16_t value);
+    static quint16 byteSwap(quint16 value);
     static uint32_t byteSwap(uint32_t value);
     static uint64_t byteSwap(uint64_t value);
 

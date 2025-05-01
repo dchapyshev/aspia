@@ -41,7 +41,7 @@ public:
     void setAutoReconnect(bool enable);
     bool isAutoReconnect() const;
 
-    void connectToRouter(const QString& address, uint16_t port);
+    void connectToRouter(const QString& address, quint16 port);
 
     void refreshSessionList();
     void stopSession(int64_t session_id);
@@ -77,7 +77,7 @@ private:
     QPointer<base::ClientAuthenticator> authenticator_;
 
     QString router_address_;
-    uint16_t router_port_ = 0;
+    quint16 router_port_ = 0;
     QString router_username_;
     QString router_password_;
 

@@ -44,8 +44,8 @@ public:
     void sync();
     bool flush();
 
-    uint16_t tcpPort() const;
-    void setTcpPort(uint16_t port);
+    quint16 tcpPort() const;
+    void setTcpPort(quint16 port);
 
     bool isRouterEnabled() const;
     void setRouterEnabled(bool enable);
@@ -53,8 +53,8 @@ public:
     QString routerAddress() const;
     void setRouterAddress(const QString& address);
 
-    uint16_t routerPort() const;
-    void setRouterPort(uint16_t port);
+    quint16 routerPort() const;
+    void setRouterPort(quint16 port);
 
     QByteArray routerPublicKey() const;
     void setRouterPublicKey(const QByteArray& key);

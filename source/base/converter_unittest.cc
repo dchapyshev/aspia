@@ -148,13 +148,13 @@ TEST(converter_test, for_double)
 }
 #endif
 
-TEST(converter_test, for_uint16_t)
+TEST(converter_test, for_quint16)
 {
     struct TestTable
     {
         const char* source_value;
         bool expected_has_value;
-        uint16_t expected_value;
+        quint16 expected_value;
     } const kTable[] =
     {
         { "0",       true,  0  },
@@ -168,7 +168,7 @@ TEST(converter_test, for_uint16_t)
 
     for (size_t i = 0; i < std::size(kTable); ++i)
     {
-        std::optional<uint16_t> result = Converter<uint16_t>::get_value(kTable[i].source_value);
+        std::optional<quint16> result = Converter<quint16>::get_value(kTable[i].source_value);
 
         EXPECT_EQ(result.has_value(), kTable[i].expected_has_value);
 

@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 
+#include <QtGlobal>
+
 #include <filesystem>
 #include <vector>
 
@@ -48,13 +50,13 @@ public:
     // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
     bool addTcpRule(std::wstring_view rule_name,
                     std::wstring_view description,
-                    uint16_t port);
+                    quint16 port);
 
     // Adds a firewall rule allowing inbound connections to the application on
     // UDP port |port|. Replaces the rule if it already exists. Needs elevation.
     bool addUdpRule(std::wstring_view rule_name,
                     std::wstring_view description,
-                    uint16_t port);
+                    quint16 port);
 
     // Deletes all rules with specified name. Needs elevation.
     void deleteRuleByName(std::wstring_view rule_name);

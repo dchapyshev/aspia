@@ -103,9 +103,9 @@ void alphaMul(uint32_t* data, int width, int height)
         RGBQUAD* from = reinterpret_cast<RGBQUAD*>(data);
         RGBQUAD* to = reinterpret_cast<RGBQUAD*>(data);
 
-        to->rgbBlue  = static_cast<BYTE>((static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF);
-        to->rgbGreen = static_cast<BYTE>((static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF);
-        to->rgbRed   = static_cast<BYTE>((static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF);
+        to->rgbBlue  = static_cast<BYTE>((static_cast<quint16>(from->rgbBlue)  * from->rgbReserved) / 0xFF);
+        to->rgbGreen = static_cast<BYTE>((static_cast<quint16>(from->rgbGreen) * from->rgbReserved) / 0xFF);
+        to->rgbRed   = static_cast<BYTE>((static_cast<quint16>(from->rgbRed)   * from->rgbReserved) / 0xFF);
     }
 }
 

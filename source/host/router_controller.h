@@ -46,7 +46,7 @@ public:
     struct RouterInfo
     {
         QString address;
-        uint16_t port = 0;
+        quint16 port = 0;
         QByteArray public_key;
     };
 
@@ -56,7 +56,7 @@ public:
     void resetHostId(base::HostId host_id);
 
     const QString& address() const { return router_info_.address; }
-    uint16_t port() const { return router_info_.port; }
+    quint16 port() const { return router_info_.port; }
     const QByteArray& publicKey() const { return router_info_.public_key; }
 
     bool hasPendingConnections() const;

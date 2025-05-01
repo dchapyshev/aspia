@@ -173,7 +173,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     base::Address address(DEFAULT_ROUTER_TCP_PORT);
     address.setHost(base::utf16FromUtf8(router.address()));
-    address.setPort(static_cast<uint16_t>(router.port()));
+    address.setPort(static_cast<quint16>(router.port()));
 
     bool enable_router = data_->enable_router();
     ui.checkbox_use_router->setChecked(enable_router);
