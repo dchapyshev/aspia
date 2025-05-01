@@ -23,16 +23,16 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
 
 #include <QByteArray>
+#include <QString>
 
 namespace base::win {
 
 class EventEnumerator
 {
 public:
-    EventEnumerator(std::wstring_view log_name, uint32_t start, uint32_t count);
+    EventEnumerator(const QString& log_name, uint32_t start, uint32_t count);
     ~EventEnumerator();
 
     uint32_t count() const;
@@ -43,15 +43,15 @@ public:
 
     Type type() const;
     int64_t time() const;
-    std::string category() const;
+    QString category() const;
     uint32_t eventId() const;
-    std::string source() const;
-    std::string description() const;
+    QString source() const;
+    QString description() const;
 
 private:
     EVENTLOGRECORD* record() const;
 
-    std::wstring log_name_;
+    QString log_name_;
     ScopedEventLog event_log_;
     uint32_t records_count_ = 0;
     int end_record_ = 0;

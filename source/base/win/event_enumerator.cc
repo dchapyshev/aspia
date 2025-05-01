@@ -19,8 +19,6 @@
 #include "base/win/event_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/string_number_conversions.h"
-#include "base/strings/unicode.h"
 #include "base/win/registry.h"
 
 #include <strsafe.h>
@@ -110,23 +108,15 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, QByteArray* record_bu
 
 //--------------------------------------------------------------------------------------------------
 bool eventLogMessageFileDLL(
-    const wchar_t* log_name, const wchar_t* source, std::wstring* message_file)
+    const QString& log_name, const QString& source, std::wstring* message_file)
 {
-    wchar_t key_path[MAX_PATH];
-
-    HRESULT hr = StringCbPrintfW(key_path, sizeof(key_path),
-                                 L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\%s\\%s",
-                                 log_name, source);
-    if (FAILED(hr))
-    {
-        LOG(LS_ERROR) << "StringCbPrintfW failed: "
-                      << SystemError(static_cast<DWORD>(hr)).toString();
-        return false;
-    }
+    QString key_path = QString("SYSTEM\\CurrentControlSet\\Services\\EventLog\\%1\\%2")
+        .arg(log_name, source);
 
     RegistryKey key;
 
-    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
+    LONG status = key.open(HKEY_LOCAL_MACHINE, reinterpret_cast<const wchar_t*>(key_path.utf16()),
+                           KEY_READ);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "key.open failed: "
@@ -199,9 +189,9 @@ wchar_t* loadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t*
 }
 
 //--------------------------------------------------------------------------------------------------
-bool eventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstring* message)
+bool eventLogMessage(const QString& log_name, EVENTLOGRECORD* record, QString* message)
 {
-    wchar_t* source = reinterpret_cast<wchar_t*>(record + 1);
+    QString source = QString::fromWCharArray(reinterpret_cast<wchar_t*>(record + 1));
 
     std::wstring message_file;
 
@@ -242,7 +232,7 @@ bool eventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstri
 
             if (message_buffer)
             {
-                message->assign(message_buffer);
+                *message = QString::fromWCharArray(message_buffer);
                 LocalFree(message_buffer);
                 return true;
             }
@@ -275,7 +265,7 @@ bool eventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstri
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumerator::EventEnumerator(std::wstring_view log_name, uint32_t start, uint32_t count)
+EventEnumerator::EventEnumerator(const QString& log_name, uint32_t start, uint32_t count)
     : log_name_(log_name)
 {
     if (!count)
@@ -284,7 +274,8 @@ EventEnumerator::EventEnumerator(std::wstring_view log_name, uint32_t start, uin
     DWORD first_record = 0;
     DWORD records_count = 0;
 
-    event_log_.reset(openEventLogHandle(log_name_.c_str(), &records_count, &first_record));
+    event_log_.reset(openEventLogHandle(reinterpret_cast<const wchar_t*>(log_name_.utf16()),
+                                        &records_count, &first_record));
     if (!records_count)
         return;
 
@@ -377,9 +368,9 @@ int64_t EventEnumerator::time() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string EventEnumerator::category() const
+QString EventEnumerator::category() const
 {
-    return numberToString(record()->EventCategory);
+    return QString::number(record()->EventCategory);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,19 +380,19 @@ uint32_t EventEnumerator::eventId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string EventEnumerator::source() const
+QString EventEnumerator::source() const
 {
-    return utf8FromWide(reinterpret_cast<wchar_t*>(record() + 1));
+    return QString::fromWCharArray(reinterpret_cast<wchar_t*>(record() + 1));
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string EventEnumerator::description() const
+QString EventEnumerator::description() const
 {
-    std::wstring desc_wide;
-    if (!eventLogMessage(log_name_.c_str(), record(), &desc_wide))
-        return std::string();
+    QString desc_wide;
+    if (!eventLogMessage(log_name_, record(), &desc_wide))
+        return QString();
 
-    return utf8FromWide(desc_wide);
+    return desc_wide;
 }
 
 //--------------------------------------------------------------------------------------------------

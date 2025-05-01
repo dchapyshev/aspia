@@ -816,19 +816,19 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
 void fillEventLogs(proto::system_info::SystemInfo* system_info,
                    const proto::system_info::EventLogsData& data)
 {
-    const wchar_t* log_name;
+    const char* log_name;
     switch (data.type())
     {
         case proto::system_info::EventLogs::Event::TYPE_APPLICATION:
-            log_name = L"Application";
+            log_name = "Application";
             break;
 
         case proto::system_info::EventLogs::Event::TYPE_SECURITY:
-            log_name = L"Security";
+            log_name = "Security";
             break;
 
         case proto::system_info::EventLogs::Event::TYPE_SYSTEM:
-            log_name = L"System";
+            log_name = "System";
             break;
 
         default:
@@ -878,10 +878,10 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
 
         event->set_level(level);
         event->set_time(enumerator.time());
-        event->set_category(enumerator.category());
+        event->set_category(enumerator.category().toStdString());
         event->set_event_id(enumerator.eventId());
-        event->set_source(enumerator.source());
-        event->set_description(enumerator.description());
+        event->set_source(enumerator.source().toStdString());
+        event->set_description(enumerator.description().toStdString());
 
         enumerator.advance();
     }
