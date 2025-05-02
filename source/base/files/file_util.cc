@@ -18,7 +18,7 @@
 
 #include "base/files/file_util.h"
 
-#include <fstream>
+#include <QFile>
 
 namespace base {
 
@@ -26,75 +26,61 @@ namespace {
 
 //--------------------------------------------------------------------------------------------------
 template <class Container>
-bool readFileT(const std::filesystem::path& filename, Container* buffer)
+bool readFileT(const QString& filename, Container* buffer)
 {
     if (!buffer)
         return false;
 
-    std::ifstream stream;
-    stream.open(filename, std::ifstream::binary | std::ifstream::in);
-    if (!stream.is_open())
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly))
         return false;
 
-    stream.seekg(0, stream.end);
-    size_t size = static_cast<size_t>(stream.tellg());
-    stream.seekg(0);
-
+    qint64 size = file.size();
     buffer->clear();
 
-    if (!size)
+    if (size <= 0)
         return true;
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    if (size >= buffer->max_size())
-        return false;
-#endif
 
     buffer->resize(static_cast<Container::size_type>(size));
 
-    stream.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
-    return !stream.fail();
+    return file.read(reinterpret_cast<char*>(buffer->data()), buffer->size()) != -1;
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-bool writeFile(const std::filesystem::path& filename, const void* data, size_t size)
+bool writeFile(const QString& filename, const void* data, size_t size)
 {
     if (!data)
         return false;
 
-    std::ofstream stream;
-    stream.open(filename, std::ofstream::binary | std::ofstream::out | std::ofstream::trunc);
-    if (!stream.is_open())
+    QFile file(filename);
+    if (!file.open(QFile::ReadWrite | QFile::Truncate))
         return false;
 
-    stream.seekp(0);
-    stream.write(reinterpret_cast<const char*>(data), size);
-
-    return !stream.fail();
+    return file.write(reinterpret_cast<const char*>(data), size) != -1;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeFile(const std::filesystem::path& filename, const QByteArray& buffer)
+bool writeFile(const QString& filename, const QByteArray& buffer)
 {
     return writeFile(filename, buffer.data(), buffer.size());
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeFile(const std::filesystem::path& filename, std::string_view buffer)
+bool writeFile(const QString& filename, std::string_view buffer)
 {
     return writeFile(filename, buffer.data(), buffer.size());
 }
 
 //--------------------------------------------------------------------------------------------------
-bool readFile(const std::filesystem::path& filename, QByteArray* buffer)
+bool readFile(const QString& filename, QByteArray* buffer)
 {
     return readFileT<QByteArray>(filename, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool readFile(const std::filesystem::path& filename, std::string* buffer)
+bool readFile(const QString& filename, std::string* buffer)
 {
     return readFileT<std::string>(filename, buffer);
 }

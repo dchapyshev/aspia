@@ -59,7 +59,7 @@ public:
 
     int64_t entry_id = 0;
     QString name;
-    std::string group;
+    QString group;
     QByteArray salt;
     QByteArray verifier;
     uint32_t sessions = 0;

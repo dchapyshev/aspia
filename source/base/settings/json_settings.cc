@@ -270,7 +270,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
     }
 
     std::string buffer;
-    if (!base::readFile(file, &buffer))
+    if (!base::readFile(QString::fromStdU16String(file.u16string()), &buffer))
     {
         LOG(LS_ERROR) << "Failed to read config file: '" << file << "'";
         return false;
@@ -363,7 +363,7 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map)
 
     std::string_view source_buffer(buffer.GetString(), buffer.GetSize());
 
-    if (!base::writeFile(file, source_buffer))
+    if (!base::writeFile(QString::fromStdU16String(file.u16string()), source_buffer))
     {
         LOG(LS_ERROR) << "Failed to write config file";
         return false;

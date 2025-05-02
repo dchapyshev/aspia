@@ -20,18 +20,18 @@
 #define BASE_FILES_FILE_UTIL_H
 
 #include <QByteArray>
+#include <QString>
 
-#include <filesystem>
 #include <string_view>
 
 namespace base {
 
-bool writeFile(const std::filesystem::path& filename, const void* data, size_t size);
-bool writeFile(const std::filesystem::path& filename, const QByteArray& buffer);
-bool writeFile(const std::filesystem::path& filename, std::string_view buffer);
+bool writeFile(const QString& filename, const void* data, size_t size);
+bool writeFile(const QString& filename, const QByteArray& buffer);
+bool writeFile(const QString& filename, std::string_view buffer);
 
-bool readFile(const std::filesystem::path& filename, QByteArray* buffer);
-bool readFile(const std::filesystem::path& filename, std::string* buffer);
+bool readFile(const QString& filename, QByteArray* buffer);
+bool readFile(const QString& filename, std::string* buffer);
 
 } // namespace base
 

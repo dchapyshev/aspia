@@ -33,6 +33,10 @@
 #include "base/win/process_util.h"
 #endif // defined(OS_WIN)
 
+#include <QFileInfo>
+#include <QFile>
+#include <QStandardPaths>
+
 namespace host {
 
 namespace {
@@ -77,11 +81,10 @@ void Server::start()
 
     LOG(LS_INFO) << "Starting the host server";
 
-    std::filesystem::path settings_file = settings_.filePath();
+    QString settings_file = settings_.filePath();
     LOG(LS_INFO) << "Configuration file path: " << settings_file;
 
-    std::error_code ignored_code;
-    if (!std::filesystem::exists(settings_file, ignored_code))
+    if (!QFileInfo::exists(settings_file))
     {
         LOG(LS_ERROR) << "Configuration file does not exist";
     }
@@ -91,7 +94,7 @@ void Server::start()
     update_timer_->start(std::chrono::minutes(5));
 
     settings_watcher_ = new QFileSystemWatcher(this);
-    settings_watcher_->addPath(QString::fromStdU16String(settings_file.u16string()));
+    settings_watcher_->addPath(settings_file);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
 
     authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(this);
@@ -349,18 +352,17 @@ void Server::onFileDownloaderError(int error_code)
 void Server::onFileDownloaderCompleted()
 {
 #if defined(OS_WIN)
-    std::error_code error_code;
-    std::filesystem::path file_path = std::filesystem::temp_directory_path(error_code);
-    if (error_code)
+    QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    if (file_path.isEmpty())
     {
-        LOG(LS_ERROR) << "Unable to get temp directory: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get temp directory";
     }
     else
     {
-        QByteArray file_path_utf8 = "aspia_host_" + base::Random::byteArray(16).toHex() + ".msi";
+        QString file_name =
+            "/aspia_host_" + QString::fromLatin1(base::Random::byteArray(16).toHex()) + ".msi";
 
-        file_path.append(file_path_utf8.toStdString());
+        file_path.append(file_name);
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
@@ -371,7 +373,7 @@ void Server::onFileDownloaderCompleted()
             std::u16string arguments;
 
             arguments += u"/i "; // Normal install.
-            arguments += file_path.u16string(); // MSI package file.
+            arguments += file_path.toStdU16String(); // MSI package file.
             arguments += u" /qn"; // No UI during the installation process.
 
             if (base::win::createProcess(u"msiexec",
@@ -385,10 +387,9 @@ void Server::onFileDownloaderCompleted()
                 LOG(LS_ERROR) << "Unable to create update process (cmd: " << arguments << ")";
 
                 // If the update fails, delete the temporary file.
-                if (!std::filesystem::remove(file_path, error_code))
+                if (!QFile::remove(file_path))
                 {
-                    LOG(LS_ERROR) << "Unable to remove installer file: "
-                                  << base::utf16FromLocal8Bit(error_code.message());
+                    LOG(LS_ERROR) << "Unable to remove installer file";
                 }
             }
         }
@@ -482,12 +483,11 @@ void Server::updateConfiguration(const QString& path)
 {
     LOG(LS_INFO) << "Configuration file change detected";
 
-    std::filesystem::path settings_file_path = settings_.filePath();
-    std::error_code ignored_error;
+    QString settings_file_path = settings_.filePath();
 
     // While writing the configuration, the file may be empty for a short time. The configuration
     // monitor has time to detect this, but we must not load an empty configuration.
-    if (std::filesystem::file_size(settings_file_path, ignored_error) <= 0)
+    if (QFileInfo(settings_file_path).size() <= 0)
     {
         LOG(LS_INFO) << "Configuration file is empty. Configuration update skipped";
         return;

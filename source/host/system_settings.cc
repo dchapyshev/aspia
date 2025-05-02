@@ -18,10 +18,12 @@
 
 #include "host/system_settings.h"
 
+#include "base/xml_settings.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/peer/user_list.h"
+#include "build/build_config.h"
 
 namespace host {
 
@@ -33,7 +35,7 @@ const size_t kPasswordHashSaltSize = 256;
 
 //--------------------------------------------------------------------------------------------------
 SystemSettings::SystemSettings()
-    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
+    : settings_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "host")
 {
     // Nothing
 }
@@ -86,9 +88,9 @@ bool SystemSettings::isValidPassword(const QString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::filesystem::path& SystemSettings::filePath() const
+QString SystemSettings::filePath() const
 {
-    return settings_.filePath();
+    return settings_.fileName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -104,69 +106,63 @@ void SystemSettings::sync()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SystemSettings::flush()
-{
-    return settings_.flush();
-}
-
-//--------------------------------------------------------------------------------------------------
 quint16 SystemSettings::tcpPort() const
 {
-    return settings_.get<quint16>("TcpPort", DEFAULT_HOST_TCP_PORT);
+    return settings_.value("TcpPort", DEFAULT_HOST_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setTcpPort(quint16 port)
 {
-    settings_.set<quint16>("TcpPort", port);
+    settings_.setValue("TcpPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::isRouterEnabled() const
 {
-    return settings_.get<bool>("RouterEnabled", false);
+    return settings_.value("RouterEnabled", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setRouterEnabled(bool enable)
 {
-    settings_.set<bool>("RouterEnabled", enable);
+    settings_.setValue("RouterEnabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString SystemSettings::routerAddress() const
 {
-    return settings_.get<QString>("RouterAddress");
+    return settings_.value("RouterAddress").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setRouterAddress(const QString& address)
 {
-    settings_.set<QString>("RouterAddress", address);
+    settings_.setValue("RouterAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 SystemSettings::routerPort() const
 {
-    return settings_.get<quint16>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+    return settings_.value("RouterPort", DEFAULT_ROUTER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setRouterPort(quint16 port)
 {
-    settings_.set<quint16>("RouterPort", port);
+    settings_.setValue("RouterPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray SystemSettings::routerPublicKey() const
 {
-    return settings_.get<QByteArray>("RouterPublicKey");
+    return settings_.value("RouterPublicKey").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setRouterPublicKey(const QByteArray& key)
 {
-    settings_.set<QByteArray>("RouterPublicKey", key);
+    settings_.setValue("RouterPublicKey", key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,21 +170,24 @@ std::unique_ptr<base::UserList> SystemSettings::userList() const
 {
     std::unique_ptr<base::UserList> users = base::UserList::createEmpty();
 
-    for (const auto& item : settings_.getArray("Users"))
+    int count = settings_.beginReadArray("Users");
+    for (int i = 0; i < count; ++i)
     {
-        base::User user;
+        settings_.setArrayIndex(i);
 
-        user.name     = item.get<QString>("Name");
-        user.group    = item.get<std::string>("Group");
-        user.salt     = item.get<QByteArray>("Salt");
-        user.verifier = item.get<QByteArray>("Verifier");
-        user.sessions = item.get<uint32_t>("Sessions");
-        user.flags    = item.get<uint32_t>("Flags");
+        base::User user;
+        user.name     = settings_.value("Name").toString();
+        user.group    = settings_.value("Group").toString();
+        user.salt     = settings_.value("Salt").toByteArray();
+        user.verifier = settings_.value("Verifier").toByteArray();
+        user.sessions = settings_.value("Sessions").toUInt();
+        user.flags    = settings_.value("Flags").toUInt();
 
         users->add(user);
     }
+    settings_.endArray();
 
-    QByteArray seed_key = settings_.get<QByteArray>("SeedKey");
+    QByteArray seed_key = settings_.value("SeedKey").toByteArray();
     if (seed_key.isEmpty())
         seed_key = base::Random::byteArray(64);
 
@@ -202,99 +201,100 @@ void SystemSettings::setUserList(const base::UserList& users)
     // Clear the old list of users.
     settings_.remove("Users");
 
-    base::Settings::Array users_array;
+    QVector<base::User> list = users.list();
 
-    for (const auto& user : users.list())
+    settings_.beginWriteArray("Users");
+    for (int i = 0; i < list.size(); ++i)
     {
-        base::Settings item;
-        item.set("Name", user.name);
-        item.set("Group", user.group);
-        item.set("Salt", user.salt);
-        item.set("Verifier", user.verifier);
-        item.set("Sessions", user.sessions);
-        item.set("Flags", user.flags);
+        settings_.setArrayIndex(i);
 
-        users_array.emplace_back(std::move(item));
+        const base::User& user = list.at(i);
+        settings_.setValue("Name", user.name);
+        settings_.setValue("Group", user.group);
+        settings_.setValue("Salt", user.salt);
+        settings_.setValue("Verifier", user.verifier);
+        settings_.setValue("Sessions", user.sessions);
+        settings_.setValue("Flags", user.flags);
     }
+    settings_.endArray();
 
     QByteArray seed_key = users.seedKey();
     if (seed_key.isEmpty())
         seed_key = base::Random::byteArray(64);
 
-    settings_.setArray("Users", users_array);
-    settings_.set("SeedKey", seed_key);
+    settings_.setValue("SeedKey", seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString SystemSettings::updateServer() const
 {
-    return settings_.get<QString>("UpdateServer", QString(DEFAULT_UPDATE_SERVER));
+    return settings_.value("UpdateServer", QString(DEFAULT_UPDATE_SERVER)).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setUpdateServer(const QString& server)
 {
-    settings_.set("UpdateServer", server);
+    settings_.setValue("UpdateServer", server);
 }
 
 //--------------------------------------------------------------------------------------------------
 uint32_t SystemSettings::preferredVideoCapturer() const
 {
-    return settings_.get<uint32_t>("PreferredVideoCapturer", 0);
+    return settings_.value("PreferredVideoCapturer", 0).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setPreferredVideoCapturer(uint32_t type)
 {
-    settings_.set("PreferredVideoCapturer", type);
+    settings_.setValue("PreferredVideoCapturer", type);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::passwordProtection() const
 {
-    return settings_.get<bool>("PasswordProtection", false);
+    return settings_.value("PasswordProtection", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setPasswordProtection(bool enable)
 {
-    settings_.set("PasswordProtection", enable);
+    settings_.setValue("PasswordProtection", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray SystemSettings::passwordHash() const
 {
-    return settings_.get<QByteArray>("PasswordHash");
+    return settings_.value("PasswordHash").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setPasswordHash(const QByteArray& hash)
 {
-    settings_.set("PasswordHash", hash);
+    settings_.setValue("PasswordHash", hash);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray SystemSettings::passwordHashSalt() const
 {
-    return settings_.get<QByteArray>("PasswordHashSalt");
+    return settings_.value("PasswordHashSalt").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setPasswordHashSalt(const QByteArray& salt)
 {
-    settings_.set("PasswordHashSalt", salt);
+    settings_.setValue("PasswordHashSalt", salt);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::oneTimePassword() const
 {
-    return settings_.get<bool>("OneTimePassword", true);
+    return settings_.value("OneTimePassword", true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setOneTimePassword(bool enable)
 {
-    settings_.set("OneTimePassword", enable);
+    settings_.setValue("OneTimePassword", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
     static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
 
     std::chrono::milliseconds value(
-        settings_.get<int64_t>("OneTimePasswordExpire", kDefaultValue.count()));
+        settings_.value("OneTimePasswordExpire", kDefaultValue.count()).toLongLong());
 
     if (value < kMinValue)
         value = kMinValue;
@@ -318,7 +318,7 @@ std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
 {
-    settings_.set("OneTimePasswordExpire", interval.count());
+    settings_.setValue("OneTimePasswordExpire", interval.count());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,7 +328,7 @@ int SystemSettings::oneTimePasswordLength() const
     static const int kMinValue = 6;
     static const int kMaxValue = 16;
 
-    int value = settings_.get<int>("OneTimePasswordLength", kDefaultValue);
+    int value = settings_.value("OneTimePasswordLength", kDefaultValue).toInt();
 
     if (value < kMinValue)
         value = kMinValue;
@@ -341,7 +341,7 @@ int SystemSettings::oneTimePasswordLength() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setOneTimePasswordLength(int length)
 {
-    settings_.set("OneTimePasswordLength", length);
+    settings_.setValue("OneTimePasswordLength", length);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -350,7 +350,7 @@ uint32_t SystemSettings::oneTimePasswordCharacters() const
     uint32_t kDefaultValue = base::PasswordGenerator::DIGITS | base::PasswordGenerator::LOWER_CASE |
         base::PasswordGenerator::UPPER_CASE;
 
-    uint32_t value = settings_.get<uint32_t>("OneTimePasswordCharacters", kDefaultValue);
+    uint32_t value = settings_.value("OneTimePasswordCharacters", kDefaultValue).toUInt();
 
     if (!(value & base::PasswordGenerator::DIGITS) &&
         !(value & base::PasswordGenerator::LOWER_CASE) &&
@@ -365,32 +365,32 @@ uint32_t SystemSettings::oneTimePasswordCharacters() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setOneTimePasswordCharacters(uint32_t characters)
 {
-    settings_.set("OneTimePasswordCharacters", characters);
+    settings_.setValue("OneTimePasswordCharacters", characters);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::connConfirm() const
 {
-    return settings_.get<bool>("ConnConfirm", false);
+    return settings_.value("ConnConfirm", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setConnConfirm(bool enable)
 {
-    settings_.set("ConnConfirm", enable);
+    settings_.setValue("ConnConfirm", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 SystemSettings::NoUserAction SystemSettings::connConfirmNoUserAction() const
 {
     return static_cast<NoUserAction>(
-        settings_.get<int>("ConnConfirmNoUserAction", static_cast<int>(NoUserAction::ACCEPT)));
+        settings_.value("ConnConfirmNoUserAction", static_cast<int>(NoUserAction::ACCEPT)).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setConnConfirmNoUserAction(NoUserAction action)
 {
-    settings_.set("ConnConfirmNoUserAction", static_cast<int>(action));
+    settings_.setValue("ConnConfirmNoUserAction", static_cast<int>(action));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -401,7 +401,7 @@ std::chrono::milliseconds SystemSettings::autoConnConfirmInterval() const
     static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
 
     std::chrono::milliseconds value(
-        settings_.get<int64_t>("AutoConnConfirmInterval", kDefaultValue.count()));
+        settings_.value("AutoConnConfirmInterval", kDefaultValue.count()).toLongLong());
 
     if (value < kMinValue)
         value = kMinValue;
@@ -414,67 +414,67 @@ std::chrono::milliseconds SystemSettings::autoConnConfirmInterval() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setAutoConnConfirmInterval(const std::chrono::milliseconds& interval)
 {
-    settings_.set("AutoConnConfirmInterval", interval.count());
+    settings_.setValue("AutoConnConfirmInterval", interval.count());
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::isApplicationShutdownDisabled() const
 {
-    return settings_.get<bool>("ApplicationShutdownDisabled", false);
+    return settings_.value("ApplicationShutdownDisabled", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setApplicationShutdownDisabled(bool value)
 {
-    settings_.set("ApplicationShutdownDisabled", value);
+    settings_.setValue("ApplicationShutdownDisabled", value);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::isAutoUpdateEnabled() const
 {
-    return settings_.get<bool>("AutoUpdateEnabled", true);
+    return settings_.value("AutoUpdateEnabled", true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setAutoUpdateEnabled(bool enable)
 {
-    settings_.set("AutoUpdateEnabled", enable);
+    settings_.setValue("AutoUpdateEnabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 int SystemSettings::updateCheckFrequency() const
 {
-    return settings_.get<int>("UpdateCheckFrequency", 7);
+    return settings_.value("UpdateCheckFrequency", 7).toInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setUpdateCheckFrequency(int days)
 {
-    settings_.set("UpdateCheckFrequency", days);
+    settings_.setValue("UpdateCheckFrequency", days);
 }
 
 //--------------------------------------------------------------------------------------------------
 int64_t SystemSettings::lastUpdateCheck() const
 {
-    return settings_.get<int64_t>("LastUpdateCheck");
+    return settings_.value("LastUpdateCheck").toLongLong();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setLastUpdateCheck(int64_t timepoint)
 {
-    settings_.set("LastUpdateCheck", timepoint);
+    settings_.setValue("LastUpdateCheck", timepoint);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SystemSettings::isBootToSafeMode() const
 {
-    return settings_.get<bool>("BootToSafeMode");
+    return settings_.value("BootToSafeMode").toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setBootToSafeMode(bool enable)
 {
-    settings_.set("BootToSafeMode", enable);
+    settings_.setValue("BootToSafeMode", enable);
 }
 
 } // namespace host

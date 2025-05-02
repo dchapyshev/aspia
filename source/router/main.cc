@@ -192,7 +192,7 @@ void createConfig()
     std::cout << "Private and public keys have been successfully generated." << std::endl;
     std::cout << "Writing a public key to a file..." << std::endl;
 
-    if (!base::writeFile(public_key_file, public_key.toHex()))
+    if (!base::writeFile(QString::fromStdU16String(public_key_file.u16string()), public_key.toHex()))
     {
         std::cout << "Failed to write public key to file: " << public_key_file << std::endl;
         return;

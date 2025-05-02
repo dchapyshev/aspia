@@ -38,7 +38,7 @@ public:
     static std::filesystem::path filePath();
 
     // Database implementation.
-    std::vector<base::User> userList() const final;
+    QVector<base::User> userList() const final;
     bool addUser(const base::User& user) final;
     bool modifyUser(const base::User& user) final;
     bool removeUser(int64_t entry_id) final;

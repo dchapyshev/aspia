@@ -24,7 +24,7 @@ namespace base {
 UserList::UserList() = default;
 
 //--------------------------------------------------------------------------------------------------
-UserList::UserList(const std::vector<User>& list, const QByteArray& seed_key)
+UserList::UserList(const QVector<User>& list, const QByteArray& seed_key)
     : seed_key_(seed_key),
       list_(list)
 {
@@ -51,7 +51,7 @@ std::unique_ptr<UserList> UserList::duplicate() const
 void UserList::add(const User& user)
 {
     if (user.isValid())
-        list_.emplace_back(user);
+        list_.append(user);
 }
 
 //--------------------------------------------------------------------------------------------------

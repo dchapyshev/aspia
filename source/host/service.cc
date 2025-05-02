@@ -101,7 +101,7 @@ void Service::onStart()
     if (settings.isBootToSafeMode())
     {
         settings.setBootToSafeMode(false);
-        settings.flush();
+        settings.sync();
 
         if (!base::win::SafeModeUtil::setSafeMode(false))
         {

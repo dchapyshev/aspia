@@ -18,20 +18,22 @@
 
 #include "host/ui/settings_util.h"
 
-#include "base/settings/json_settings.h"
 #include "base/logging.h"
+#include "base/xml_settings.h"
 #include "host/system_settings.h"
 
 #include <QAbstractButton>
+#include <QFile>
+#include <QFileInfo>
 #include <QMessageBox>
 
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent, QWidget* parent)
+bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* parent)
 {
-    std::filesystem::path target_path = SystemSettings().filePath();
+    QString target_path = SystemSettings().filePath();
 
     LOG(LS_INFO) << "Import settings from '" << path << "' to '" << target_path << "'";
 
@@ -50,9 +52,9 @@ bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, QWidget* parent)
+bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* parent)
 {
-    std::filesystem::path source_path = SystemSettings().filePath();
+    QString source_path = SystemSettings().filePath();
 
     LOG(LS_INFO) << "Export settings from '" << source_path << "' to '" << path << "'";
 
@@ -71,16 +73,14 @@ bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, 
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
-                                const std::filesystem::path& target_path,
+bool SettingsUtil::copySettings(const QString& source_path,
+                                const QString& target_path,
                                 bool silent,
                                 QWidget* parent)
 {
-    std::error_code error_code;
-    if (!std::filesystem::exists(source_path, error_code))
+    if (!QFileInfo::exists(source_path))
     {
-        LOG(LS_ERROR) << "Source settings file does't exist ("
-                      << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        LOG(LS_ERROR) << "Source settings file does't exist";
 
         if (!silent)
         {
@@ -94,18 +94,28 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     }
     else
     {
-        uintmax_t file_size = std::filesystem::file_size(source_path, error_code);
-        if (error_code)
-        {
-            LOG(LS_ERROR) << "Failed to get settings file size ("
-                          << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        }
-
+        qint64 file_size = QFileInfo(source_path).size();
         LOG(LS_INFO) << "Source settings file exist (" << file_size << " bytes)";
     }
 
-    base::JsonSettings::Map settings_map;
-    if (!base::JsonSettings::readFile(source_path, settings_map))
+    QFile source_file(source_path);
+    if (!source_file.open(QFile::ReadOnly))
+    {
+        LOG(LS_ERROR) << "Unable to open source file: " << source_file.errorString();
+
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Unable to open the source file."),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    QSettings::SettingsMap settings_map;
+    if (!base::XmlSettings::readFunc(source_file, settings_map))
     {
         LOG(LS_ERROR) << "Failed to read source file: " << source_path;
 
@@ -125,7 +135,7 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         LOG(LS_INFO) << "File read successfully: " << source_path;
     }
 
-    if (std::filesystem::exists(target_path, error_code))
+    if (QFileInfo::exists(target_path))
     {
         if (!silent)
         {
@@ -151,7 +161,23 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         LOG(LS_INFO) << "Target settings file does't exist. New file will be created";
     }
 
-    if (!base::JsonSettings::writeFile(target_path, settings_map))
+    QFile target_file(target_path);
+    if (!target_file.open(QFile::ReadWrite))
+    {
+        LOG(LS_ERROR) << "Unable to open target file: " << target_file.errorString();
+
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Unable to open the target file."),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+
+    if (!base::XmlSettings::writeFunc(target_file, settings_map))
     {
         LOG(LS_ERROR) << "Failed to write destination file: " << target_path;
 

@@ -38,14 +38,14 @@ public:
     User find(const QString& username) const final;
     const QByteArray& seedKey() const final { return seed_key_; }
     void setSeedKey(const QByteArray& seed_key) final;
-    std::vector<User> list() const final { return list_; }
+    QVector<User> list() const final { return list_; }
 
 private:
     UserList();
-    UserList(const std::vector<User>& list, const QByteArray& seed_key);
+    UserList(const QVector<User>& list, const QByteArray& seed_key);
 
     QByteArray seed_key_;
-    std::vector<User> list_;
+    QVector<User> list_;
 
     DISALLOW_COPY_AND_ASSIGN(UserList);
 };

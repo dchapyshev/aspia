@@ -20,9 +20,8 @@
 #define HOST_SYSTEM_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "base/settings/json_settings.h"
 
-#include <filesystem>
+#include <QSettings>
 
 namespace base {
 class UserList;
@@ -39,10 +38,9 @@ public:
     static bool createPasswordHash(const QString& password, QByteArray* hash, QByteArray* salt);
     static bool isValidPassword(const QString& password);
 
-    const std::filesystem::path& filePath() const;
+    QString filePath() const;
     bool isWritable() const;
     void sync();
-    bool flush();
 
     quint16 tcpPort() const;
     void setTcpPort(quint16 port);
@@ -120,7 +118,7 @@ public:
     void setBootToSafeMode(bool enable);
 
 private:
-    base::JsonSettings settings_;
+    mutable QSettings settings_;
 
     DISALLOW_COPY_AND_ASSIGN(SystemSettings);
 };

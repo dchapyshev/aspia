@@ -567,7 +567,7 @@ void ConfigDialog::onImport()
         return;
     }
 
-    if (SettingsUtil::importFromFile(file_path.toStdU16String(), false, this))
+    if (SettingsUtil::importFromFile(file_path, false, this))
     {
         if (isServiceStarted())
         {
@@ -607,7 +607,7 @@ void ConfigDialog::onExport()
         return;
     }
 
-    SettingsUtil::exportToFile(file_path.toStdU16String(), false, this);
+    SettingsUtil::exportToFile(file_path, false, this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -722,7 +722,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setConnConfirmNoUserAction(static_cast<SystemSettings::NoUserAction>(
             ui.combobox_no_user_action->currentData().toInt()));
 
-        settings.flush();
+        settings.sync();
 
         setConfigChanged(FROM_HERE, false);
 

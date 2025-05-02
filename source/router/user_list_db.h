@@ -39,7 +39,7 @@ public:
     base::User find(const QString& username) const final;
     const QByteArray& seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
-    std::vector<base::User> list() const final;
+    QVector<base::User> list() const final;
 
 private:
     explicit UserListDb(std::unique_ptr<Database> db);

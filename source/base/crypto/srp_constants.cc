@@ -318,21 +318,21 @@ const SrpNgPair kSrpNgPair_8192 =
 };
 
 //--------------------------------------------------------------------------------------------------
-std::optional<SrpNgPair> pairByGroup(std::string_view group)
+std::optional<SrpNgPair> pairByGroup(const QString& group)
 {
-    if (group == "8192")
+    if (group == QLatin1String("8192"))
         return kSrpNgPair_8192;
-    else if (group == "6144")
+    else if (group == QLatin1String("6144"))
         return kSrpNgPair_6144;
-    else if (group == "4096")
+    else if (group == QLatin1String("4096"))
         return kSrpNgPair_4096;
-    else if (group == "3072")
+    else if (group == QLatin1String("3072"))
         return kSrpNgPair_3072;
-    else if (group == "2048")
+    else if (group == QLatin1String("2048"))
         return kSrpNgPair_2048;
-    else if (group == "1536")
+    else if (group == QLatin1String("1536"))
         return kSrpNgPair_1536;
-    else if (group == "1024")
+    else if (group == QLatin1String("1024"))
         return kSrpNgPair_1024;
     else
         return std::nullopt;

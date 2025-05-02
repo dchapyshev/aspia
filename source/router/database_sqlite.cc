@@ -56,10 +56,10 @@ const char* columnTypeToString(int type)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
+bool writeText(sqlite3_stmt* statement, const QString& text, int column)
 {
     int error_code = sqlite3_bind_text(
-        statement, column, text.c_str(), static_cast<int>(text.size()), SQLITE_STATIC);
+        statement, column, text.toUtf8().data(), static_cast<int>(text.size()), SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_bind_text failed: " << sqlite3_errstr(error_code)
@@ -160,7 +160,7 @@ std::optional<QByteArray> readBlob(sqlite3_stmt* statement, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::string> readText(sqlite3_stmt* statement, int column)
+std::optional<QString> readText(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_TEXT)
@@ -184,17 +184,7 @@ std::optional<std::string> readText(sqlite3_stmt* statement, int column)
         return std::nullopt;
     }
 
-    return std::string(reinterpret_cast<const char*>(string), static_cast<size_t>(string_size));
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QString> readText16(sqlite3_stmt* statement, int column)
-{
-    std::optional<std::string> str = readText(statement, column);
-    if (!str.has_value())
-        return std::nullopt;
-
-    return QString::fromStdString(*str);
+    return QString::fromUtf8(reinterpret_cast<const char*>(string), string_size);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,14 +197,14 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    std::optional<QString> name = readText16(statement, 1);
+    std::optional<QString> name = readText(statement, 1);
     if (!name.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'name'";
         return std::nullopt;
     }
 
-    std::optional<std::string> group = readText(statement, 2);
+    std::optional<QString> group = readText(statement, 2);
     if (!group.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'group'";
@@ -393,7 +383,7 @@ std::filesystem::path DatabaseSqlite::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<base::User> DatabaseSqlite::userList() const
+QVector<base::User> DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -410,7 +400,7 @@ std::vector<base::User> DatabaseSqlite::userList() const
         return {};
     }
 
-    std::vector<base::User> users;
+    QVector<base::User> users;
     for (;;)
     {
         error_code = sqlite3_step(statement);
@@ -419,7 +409,7 @@ std::vector<base::User> DatabaseSqlite::userList() const
 
         std::optional<base::User> user = readUser(statement);
         if (user.has_value())
-            users.emplace_back(std::move(*user));
+            users.append(std::move(*user));
     }
 
     sqlite3_finalize(statement);
@@ -452,12 +442,11 @@ bool DatabaseSqlite::addUser(const base::User& user)
         return false;
     }
 
-    std::string username = user.name.toStdString();
     bool result = false;
 
     do
     {
-        if (!writeText(statement, username, 1))
+        if (!writeText(statement, user.name, 1))
             break;
 
         if (!writeText(statement, user.group, 2))
@@ -517,12 +506,11 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
         return false;
     }
 
-    std::string username = user.name.toStdString();
     bool result = false;
 
     do
     {
-        if (!writeText(statement, username, 1))
+        if (!writeText(statement, user.name, 1))
             break;
 
         if (!writeText(statement, user.group, 2))
@@ -617,12 +605,11 @@ base::User DatabaseSqlite::findUser(const QString& username)
         return base::User::kInvalidUser;
     }
 
-    std::string username_utf8 = username.toStdString();
     std::optional<base::User> user;
 
     do
     {
-        if (!writeText(statement, username_utf8, 1))
+        if (!writeText(statement, username, 1))
             break;
 
         if (sqlite3_step(statement) != SQLITE_ROW)

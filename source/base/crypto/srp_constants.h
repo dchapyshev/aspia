@@ -19,9 +19,10 @@
 #ifndef BASE_CRYPTO_SRP_CONSTANTS_H
 #define BASE_CRYPTO_SRP_CONSTANTS_H
 
-#include <cstdint>
 #include <optional>
 #include <string_view>
+
+#include <QString>
 
 namespace base {
 
@@ -35,7 +36,7 @@ extern const SrpNgPair kSrpNgPair_4096;
 extern const SrpNgPair kSrpNgPair_6144;
 extern const SrpNgPair kSrpNgPair_8192;
 
-std::optional<SrpNgPair> pairByGroup(std::string_view group);
+std::optional<SrpNgPair> pairByGroup(const QString& group);
 
 } // namespace base
 

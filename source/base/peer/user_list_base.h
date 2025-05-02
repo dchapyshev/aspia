@@ -21,6 +21,8 @@
 
 #include "base/peer/user.h"
 
+#include <QVector>
+
 namespace base {
 
 class UserListBase
@@ -32,7 +34,7 @@ public:
     virtual User find(const QString& username) const = 0;
     virtual const QByteArray& seedKey() const = 0;
     virtual void setSeedKey(const QByteArray& seed_key) = 0;
-    virtual std::vector<User> list() const = 0;
+    virtual QVector<User> list() const = 0;
 };
 
 } // namespace base

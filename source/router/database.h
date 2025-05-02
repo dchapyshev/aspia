@@ -36,7 +36,7 @@ public:
         NO_HOST_FOUND = 2
     };
 
-    virtual std::vector<base::User> userList() const = 0;
+    virtual QVector<base::User> userList() const = 0;
     virtual bool addUser(const base::User& user) = 0;
     virtual bool modifyUser(const base::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;

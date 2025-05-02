@@ -22,9 +22,6 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
-#include "base/strings/unicode.h"
-
-#include <cwctype>
 
 namespace base {
 
@@ -155,7 +152,7 @@ User User::create(const QString& name, const QString& password)
 //--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
-    return !name.isEmpty() && !salt.isEmpty() && !group.empty() && !verifier.isEmpty();
+    return !name.isEmpty() && !salt.isEmpty() && !group.isEmpty() && !verifier.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,7 +163,7 @@ User User::parseFrom(const proto::User& serialized_user)
 
     user.entry_id = serialized_user.entry_id();
     user.name     = QString::fromStdString(serialized_user.name());
-    user.group    = serialized_user.group();
+    user.group    = QString::fromStdString(serialized_user.group());
     user.salt     = QByteArray::fromStdString(serialized_user.salt());
     user.verifier = QByteArray::fromStdString(serialized_user.verifier());
     user.sessions = serialized_user.sessions();
@@ -182,7 +179,7 @@ proto::User User::serialize() const
 
     user.set_entry_id(entry_id);
     user.set_name(name.toStdString());
-    user.set_group(group);
+    user.set_group(group.toStdString());
     user.set_salt(salt.toStdString());
     user.set_verifier(verifier.toStdString());
     user.set_sessions(sessions);

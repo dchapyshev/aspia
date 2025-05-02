@@ -21,8 +21,6 @@
 
 #include "base/macros_magic.h"
 
-#include <filesystem>
-
 #include <QCoreApplication>
 
 namespace host {
@@ -32,14 +30,12 @@ class SettingsUtil
     Q_DECLARE_TR_FUNCTIONS(SettingsUtil)
 
 public:
-    static bool importFromFile(
-        const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
-    static bool exportToFile(
-        const std::filesystem::path& path, bool silent, QWidget* parent = nullptr);
+    static bool importFromFile(const QString& path, bool silent, QWidget* parent = nullptr);
+    static bool exportToFile(const QString& path, bool silent, QWidget* parent = nullptr);
 
 private:
-    static bool copySettings(const std::filesystem::path& source_path,
-                             const std::filesystem::path& target_path,
+    static bool copySettings(const QString& source_path,
+                             const QString& target_path,
                              bool silent,
                              QWidget* parent);
 

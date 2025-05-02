@@ -73,7 +73,7 @@ void UserListDb::setSeedKey(const QByteArray& seed_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<base::User> UserListDb::list() const
+QVector<base::User> UserListDb::list() const
 {
     return db_->userList();
 }

@@ -262,16 +262,18 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"import"))
     {
-        if (!host::SettingsUtil::importFromFile(command_line.switchValuePath(u"import"),
-                                                command_line.hasSwitch(u"silent")))
+        if (!host::SettingsUtil::importFromFile(
+                QString::fromStdU16String(command_line.switchValuePath(u"import").u16string()),
+                command_line.hasSwitch(u"silent")))
         {
             return 1;
         }
     }
     else if (command_line.hasSwitch(u"export"))
     {
-        if (!host::SettingsUtil::exportToFile(command_line.switchValuePath(u"export"),
-                                              command_line.hasSwitch(u"silent")))
+        if (!host::SettingsUtil::exportToFile(
+                QString::fromStdU16String(command_line.switchValuePath(u"export").u16string()),
+                command_line.hasSwitch(u"silent")))
         {
             return 1;
         }

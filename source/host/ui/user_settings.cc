@@ -18,6 +18,7 @@
 
 #include "host/ui/user_settings.h"
 
+#include "base/xml_settings.h"
 #include "proto/common.h"
 
 #include <QLocale>
@@ -34,7 +35,7 @@ const QString kOneTimeSessionsParam = QStringLiteral("OneTimeSessions");
 
 //--------------------------------------------------------------------------------------------------
 UserSettings::UserSettings()
-    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host")
+    : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "host")
 {
     // Nothing
 }
