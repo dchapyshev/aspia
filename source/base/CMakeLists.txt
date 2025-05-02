@@ -72,7 +72,9 @@ list(APPEND SOURCE_BASE
     version_constants.cc
     version_constants.h
     waitable_event.cc
-    waitable_event.h)
+    waitable_event.h
+    xml_settings.cc
+    xml_settings.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE
