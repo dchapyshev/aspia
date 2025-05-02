@@ -89,7 +89,7 @@ int createConfig()
     router::Settings settings;
     QString settings_file_path = settings.filePath();
 
-    std::cout << "Settings file path: " << settings_file_path << std::endl;
+    std::cout << "Settings file path: " << settings_file_path.toStdString() << std::endl;
 
     if (!settings.isEmpty())
     {

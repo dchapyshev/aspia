@@ -19,18 +19,16 @@
 #ifndef BASE_SYSTEM_ERROR_H
 #define BASE_SYSTEM_ERROR_H
 
-#include "build/build_config.h"
-
-#include <string>
+#include <QString>
 
 namespace base {
 
 class SystemError
 {
 public:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     using Code = unsigned long;
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_POSIX)
     using Code = int;
 #else
 #error Platform support not implemented
@@ -50,9 +48,9 @@ public:
     Code code() const;
 
     // Returns a string description of the error in UTF-8 encoding.
-    std::string toString();
+    QString toString();
 
-    static std::string toString(Code code);
+    static QString toString(Code code);
 
 private:
     Code code_;

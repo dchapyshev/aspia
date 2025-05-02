@@ -166,7 +166,7 @@ Rect& Rect::operator=(const Rect& other)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& stream, const Rect& rect)
+QTextStream& operator<<(QTextStream& stream, const Rect& rect)
 {
     return stream << "Rect("
                   << rect.left() << ' ' << rect.top() << ' '
@@ -175,13 +175,13 @@ std::ostream& operator<<(std::ostream& stream, const Rect& rect)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& stream, const Point& point)
+QTextStream& operator<<(QTextStream& stream, const Point& point)
 {
     return stream << "Point(" << point.x() << ' ' << point.y() << ')';
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& stream, const Size& size)
+QTextStream& operator<<(QTextStream& stream, const Size& size)
 {
     return stream << "Size(" << size.width() << ' ' << size.height() << ')';
 }

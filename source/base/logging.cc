@@ -20,17 +20,12 @@
 
 #include "base/debug.h"
 #include "base/endian_util.h"
-#include "base/system_time.h"
-#include "base/strings/unicode.h"
-#include <iomanip>
 #include <mutex>
-#include <ostream>
-#include <thread>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/mini_dump_writer.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <Psapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -48,14 +43,15 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QThread>
 
 namespace base {
 
 namespace {
 
 const LoggingSeverity kDefaultLogLevel = LOG_LS_FATAL;
-const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
-const size_t kDefaultMaxLogFileAge = 14; // 14 days.
+const qint64 kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
+const qint64 kDefaultMaxLogFileAge = 14; // 14 days.
 
 LoggingSeverity g_min_log_level = LOG_LS_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
@@ -70,9 +66,9 @@ QFile g_log_file;
 std::mutex g_log_file_lock;
 
 //--------------------------------------------------------------------------------------------------
-const char* severityName(LoggingSeverity severity)
+const QString severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = { "🔵", "🔴", "⛔️" };
+    static const QString kLogSeverityNames[] = { "🔵", "🔴", "⛔️" };
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
@@ -85,9 +81,7 @@ const char* severityName(LoggingSeverity severity)
 //--------------------------------------------------------------------------------------------------
 void removeOldFiles(const QString& path, qint64 max_file_age)
 {
-    QDateTime time = QDateTime::currentDateTime();
-    time.addDays(-max_file_age);
-
+    QDateTime time = QDateTime::currentDateTime().addDays(-max_file_age);
     QDir current_dir(path);
 
     QFileInfoList files = current_dir.entryInfoList();
@@ -177,10 +171,9 @@ void qtMessageHandler(QtMsgType type, const QMessageLogContext& context, const Q
 
 } // namespace
 
-// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have
-// an object of the correct type on the LHS of the unused part of the ternary
-// operator.
-std::ostream* g_swallow_stream;
+// This is never instantiated, it's just used for EAT_STREAM_PARAMETERS to have an object of the
+// correct type on the LHS of the unused part of the ternary operator.
+QTextStream* g_swallow_stream;
 
 //--------------------------------------------------------------------------------------------------
 LoggingSettings::LoggingSettings()
@@ -369,31 +362,31 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
 }
 
 //--------------------------------------------------------------------------------------------------
-void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
+void makeCheckOpValueString(QTextStream* os, std::nullptr_t /* p */)
 {
     (*os) << "nullptr";
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const int& v1, const int& v2, const char* names)
+QString* makeCheckOpString(const int& v1, const int& v2, const char* names)
 {
     return makeCheckOpString<int, int>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names)
+QString* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names)
 {
     return makeCheckOpString<unsigned long, unsigned long>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names)
+QString* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names)
 {
     return makeCheckOpString<unsigned int, unsigned int>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const unsigned long long& v1,
+QString* makeCheckOpString(const unsigned long long& v1,
                                const unsigned long long& v2,
                                const char* names)
 {
@@ -401,21 +394,21 @@ std::string* makeCheckOpString(const unsigned long long& v1,
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names)
+QString* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names)
 {
     return makeCheckOpString<unsigned long, unsigned int>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names)
+QString* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names)
 {
     return makeCheckOpString<unsigned int, unsigned long>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string* makeCheckOpString(const std::string& v1, const std::string& v2, const char* names)
+QString* makeCheckOpString(const QString& v1, const QString& v2, const char* names)
 {
-    return makeCheckOpString<std::string, std::string>(v1, v2, names);
+    return makeCheckOpString<QString, QString>(v1, v2, names);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -423,7 +416,8 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        LoggingSeverity severity)
-    : severity_(severity)
+    : severity_(severity),
+      stream_(&string_)
 {
     init(file, line, function);
 }
@@ -443,12 +437,12 @@ LogMessage::LogMessage(std::string_view file,
 LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
-                       std::string* result)
+                       QString* result)
     : severity_(LOG_LS_FATAL)
 {
-    std::unique_ptr<std::string> result_deleter(result);
+    std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
-    stream_ << "Check failed: " << *result;
+    stream_ << "Check failed: " << result->data();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,20 +450,20 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        LoggingSeverity severity,
-                       std::string* result)
+                       QString* result)
     : severity_(severity)
 {
-    std::unique_ptr<std::string> result_deleter(result);
+    std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
-    stream_ << "Check failed: " << *result;
+    stream_ << "Check failed: " << result->data();
 }
 
 //--------------------------------------------------------------------------------------------------
 LogMessage::~LogMessage()
 {
-    stream_ << std::endl;
+    stream_ << Qt::endl;
 
-    std::string message(stream_.str());
+    QByteArray message = string_.toUtf8();
 
     if ((g_logging_destination & LOG_TO_STDOUT) != 0)
     {
@@ -492,14 +486,14 @@ LogMessage::~LogMessage()
     {
         std::scoped_lock lock(g_log_file_lock);
 
-        if (static_cast<size_t>(g_log_file.size()) >= g_max_log_file_size)
+        if (g_log_file.size() >= g_max_log_file_size)
         {
             // The maximum size of the log file has been exceeded. Close the current log file and
             // create a new one.
             initLoggingUnlocked(logFilePrefix());
         }
 
-        g_log_file.write(message.c_str(), message.size());
+        g_log_file.write(message.data(), message.size());
         g_log_file.flush();
     }
 
@@ -518,18 +512,12 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
     if (last_slash_pos != std::string_view::npos)
         file.remove_prefix(last_slash_pos + 1);
 
-    SystemTime time = SystemTime::now();
-
-    stream_ << std::setfill('0')
-            << severityName(severity_)            << ' '
-            << std::setw(2) << time.hour()        << ':'
-            << std::setw(2) << time.minute()      << ':'
-            << std::setw(2) << time.second()      << '.'
-            << std::setw(3) << time.millisecond() << ' '
-            << std::this_thread::get_id()         << ' '
-            << file.data() << ":" << line << " " << function.data() << "] ";
-
-    message_start_ = stream_.str().length();
+    stream_ << severityName(severity_) << QLatin1Char(' ')
+            << QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss.zzz")) << QLatin1Char(' ')
+            << reinterpret_cast<quint64>(QThread::currentThreadId()) << QLatin1Char(' ')
+            << file.data() << QLatin1Char(':')
+            << line << QLatin1Char(' ')
+            << function.data() << QLatin1String("] ");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -552,54 +540,37 @@ ErrorLogMessage::~ErrorLogMessage()
 
 } // namespace base
 
-namespace std {
-
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
+QTextStream& operator<<(QTextStream& out, const std::wstring& wstr)
 {
-    return out << base::utf8FromWide(wstr);
+    return out << QString::fromStdWString(wstr);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const wchar_t* wstr)
+QTextStream& operator<<(QTextStream& out, const wchar_t* wstr)
 {
-    return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
+    return out << (wstr ? QString::fromWCharArray(wstr) : "nullptr");
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const char8_t* ustr)
+QTextStream& operator<<(QTextStream& out, const char16_t* ustr)
 {
-    return out << (ustr ? reinterpret_cast<const char*>(ustr) : "nullptr");
-}
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const std::u8string& ustr)
-{
-    return out << reinterpret_cast<const char*>(ustr.data());
+    return out << (ustr ? QString::fromUtf16(ustr) : "nullptr");
 }
 
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
+QTextStream& operator<<(QTextStream& out, const std::u16string& ustr)
 {
-    return out << (ustr ? base::utf8FromUtf16(ustr) : "nullptr");
+    return out << QString::fromStdU16String(ustr);
+}
+
+QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path)
+{
+    return out << QString::fromStdU16String(path.u16string());
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
-{
-    return out << base::utf8FromUtf16(ustr);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QString& qstr)
-{
-    return out << qstr.toStdString();
-}
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist)
+QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist)
 {
     out << "QStringList(";
 
@@ -615,9 +586,28 @@ std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
+QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray)
 {
     return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
 }
 
-} // namespace std
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const QPoint& qpoint)
+{
+    return out << "QPoint(" << qpoint.x() << ' ' << qpoint.y() << ')';
+}
+
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const QRect& qrect)
+{
+    return out << "QRect("
+               << qrect.left()  << ' ' << qrect.top() << ' '
+               << qrect.width() << 'x' << qrect.height()
+               << ')';
+}
+
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const QSize& qsize)
+{
+    return out << "QSize(" << qsize.width() << ' ' << qsize.height() << ')';
+}

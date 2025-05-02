@@ -21,11 +21,4 @@
 
 #include "base/logging.h"
 
-#include <QRect>
-#include <QSize>
-
-std::ostream& operator<<(std::ostream& out, const QPoint& qpoint);
-std::ostream& operator<<(std::ostream& out, const QRect& qrect);
-std::ostream& operator<<(std::ostream& out, const QSize& qsize);
-
 #endif // BASE_GUI_LOGGING_H

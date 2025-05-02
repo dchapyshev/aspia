@@ -18,19 +18,12 @@
 
 #include "base/system_error.h"
 
-#if defined(OS_WIN)
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
-#endif // defined(OS_WIN)
-
-#if defined(OS_WIN)
-#include <fmt/format.h>
-#include <fmt/xchar.h>
+#if defined(Q_OS_WINDOWS)
 #include <Windows.h>
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_POSIX)
 #include <cstring>
 #include <cerrno>
-#endif // defined(OS_WIN)
+#endif
 
 namespace base {
 
@@ -45,9 +38,9 @@ SystemError::SystemError(Code code)
 // static
 SystemError SystemError::last()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return SystemError(GetLastError());
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_POSIX)
     return SystemError(errno);
 #else
 #error Platform support not implemented
@@ -61,29 +54,26 @@ SystemError::Code SystemError::code() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SystemError::toString()
+QString SystemError::toString()
 {
     return toString(code_);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string SystemError::toString(Code code)
+QString SystemError::toString(Code code)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     constexpr int kErrorMessageBufferSize = 256;
     wchar_t msgbuf[kErrorMessageBufferSize];
 
     DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
                                code, 0, msgbuf, static_cast<DWORD>(std::size(msgbuf)), nullptr);
     if (len)
-    {
-        std::wstring msg = collapseWhitespace(msgbuf, true) + fmt::format(L" (0x{:x})", code);
-        return utf8FromWide(msg);
-    }
+        return QString::fromWCharArray(msgbuf, len).trimmed() + ' ' + QString::number(code, 16);
 
-    return fmt::format("Error (0x{:x}) while retrieving error. (0x{:x})", GetLastError(), code);
-#elif defined(OS_POSIX)
+    return QString("Error (0x%1) while retrieving error. (0x%2)").arg(GetLastError()).arg(code);
+#elif defined(Q_OS_POSIX)
     return std::strerror(code);
 #else
 #error Platform support not implemented

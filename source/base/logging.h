@@ -22,13 +22,14 @@
 #include "base/scoped_clear_last_error.h"
 #include "base/system_error.h"
 
-#include <sstream>
-#include <string>
+#include <filesystem>
 #include <type_traits>
 #include <utility>
 
+#include <QRect>
 #include <QString>
 #include <QStringList>
+#include <QTextStream>
 
 // Instructions
 // ------------
@@ -209,7 +210,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 #define PLOG_IF(severity, condition) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity) && (condition))
 
-extern std::ostream* g_swallow_stream;
+extern QTextStream* g_swallow_stream;
 
 // Note that g_swallow_stream is used instead of an arbitrary LOG() stream to avoid the creation of
 // an object with a non-trivial destructor (LogMessage).
@@ -218,7 +219,7 @@ extern std::ostream* g_swallow_stream;
 // clearly never executed. Using a simpler object to be &'d with Voidify() avoids these extra
 // instructions.
 // Using a simpler POD object with a templated operator<< also works to avoid these instructions.
-// However, this causes warnings on statically defined implementations of operator<<(std::ostream, ...)
+// However, this causes warnings on statically defined implementations of operator<<(QTextStream, ...)
 // in some .cc files, because they become defined-but-unreferenced functions. A reinterpret_cast of
 // 0 to an ostream* also is not suitable, because some compilers warn of undefined behavior.
 #define EAT_STREAM_PARAMETERS \
@@ -229,7 +230,7 @@ class CheckOpResult
 {
 public:
     // |message| must be non-null if and only if the check failed.
-    constexpr CheckOpResult(std::string* message)
+    constexpr CheckOpResult(QString* message)
         : message_(message)
     {
         // Nothing
@@ -238,10 +239,10 @@ public:
     // Returns true if the check succeeded.
     constexpr operator bool() const { return !message_; }
     // Returns the message.
-    std::string* message() { return message_; }
+    QString* message() { return message_; }
 
 private:
-    std::string* message_;
+    QString* message_;
 };
 
 // CHECK dies with a fatal error if condition is not true.  It is *not* controlled by NDEBUG, so
@@ -275,7 +276,7 @@ struct SupportsOstreamOperator : std::false_type {};
 
 template <typename T>
 struct SupportsOstreamOperator<T, decltype(
-    void(std::declval<std::ostream&>() << std::declval<T>()))> : std::true_type {};
+    void(std::declval<QTextStream&>() << std::declval<T>()))> : std::true_type {};
 
 template<typename T>
 inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::value;
@@ -285,7 +286,7 @@ inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::va
 template <typename T>
 inline std::enable_if_t<
     SupportsOstreamOperator_v<const T&> && !std::is_function_v<std::remove_pointer_t<T>>, void>
-makeCheckOpValueString(std::ostream* os, const T& v)
+makeCheckOpValueString(QTextStream* os, const T& v)
 {
     (*os) << v;
 }
@@ -296,7 +297,7 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // pointers, so this is a no-op for MSVC.)
 template <typename T>
 inline std::enable_if_t<std::is_function_v<std::remove_pointer_t<T>>, void>
-makeCheckOpValueString(std::ostream* os, const T& v)
+makeCheckOpValueString(QTextStream* os, const T& v)
 {
     (*os) << reinterpret_cast<const void*>(v);
 }
@@ -305,52 +306,57 @@ makeCheckOpValueString(std::ostream* os, const T& v)
 // operator<< overload was declared).
 template <typename T>
 inline std::enable_if_t<!SupportsOstreamOperator_v<const T&> && std::is_enum_v<T>, void>
-makeCheckOpValueString(std::ostream* os, const T& v)
+makeCheckOpValueString(QTextStream* os, const T& v)
 {
     (*os) << static_cast<std::underlying_type_t<T>>(v);
 }
 
 // We need an explicit overload for std::nullptr_t.
-void makeCheckOpValueString(std::ostream* os, std::nullptr_t p);
+void makeCheckOpValueString(QTextStream* os, std::nullptr_t p);
 
 // Build the error message string.  This is separate from the "Impl" function template because it
 // is not performance critical and so can be out of line, while the "Impl" code should be inline.
 // Caller takes ownership of the returned string.
 template<class t1, class t2>
-std::string* makeCheckOpString(const t1& v1, const t2& v2, const char* names)
+QString* makeCheckOpString(const t1& v1, const t2& v2, const char* names)
 {
-    std::ostringstream ss;
-    ss << names << " (";
-    makeCheckOpValueString(&ss, v1);
-    ss << " vs. ";
-    makeCheckOpValueString(&ss, v2);
-    ss << ")";
-    std::string* msg = new std::string(ss.str());
+    QString string;
+
+    {
+        QTextStream ss(&string);
+        ss << names << " (";
+        makeCheckOpValueString(&ss, v1);
+        ss << " vs. ";
+        makeCheckOpValueString(&ss, v2);
+        ss << ")";
+    }
+
+    QString* msg = new QString(string);
     return msg;
 }
 
 // Commonly used instantiations of makeCheckOpString<>. Explicitly instantiated in logging.cc.
-std::string* makeCheckOpString(const int& v1, const int& v2, const char* names);
-std::string* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names);
-std::string* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names);
-std::string* makeCheckOpString(const unsigned long long& v1, const unsigned long long& v2, const char* names);
-std::string* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names);
-std::string* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names);
-std::string* makeCheckOpString(const std::string& v1, const std::string& v2, const char* names);
+QString* makeCheckOpString(const int& v1, const int& v2, const char* names);
+QString* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names);
+QString* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names);
+QString* makeCheckOpString(const unsigned long long& v1, const unsigned long long& v2, const char* names);
+QString* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names);
+QString* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names);
+QString* makeCheckOpString(const QString& v1, const QString& v2, const char* names);
 
 // Helper functions for CHECK_OP macro.
 // The (int, int) specialization works around the issue that the compiler will not instantiate the
 // template version of the function on values of unnamed enum type - see comment below.
 #define DEFINE_CHECK_OP_IMPL(name, op)                                                           \
     template <class t1, class t2>                                                                \
-    constexpr std::string* check##name##Impl(const t1& v1, const t2& v2, const char* names)      \
+    constexpr QString* check##name##Impl(const t1& v1, const t2& v2, const char* names)          \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
         else                                                                                     \
             return ::base::makeCheckOpString(v1, v2, names);                                     \
     }                                                                                            \
-    constexpr std::string* check##name##Impl(int v1, int v2, const char* names)                  \
+    constexpr QString* check##name##Impl(int v1, int v2, const char* names)                      \
     {                                                                                            \
         if ((v1 op v2))                                                                          \
             return nullptr;                                                                      \
@@ -492,34 +498,33 @@ class LogMessage
 {
 public:
     // Used for LOG(severity).
-    LogMessage(std::string_view file, int line, std::string_view function, LoggingSeverity severity);
+    LogMessage(std::string_view file, int line, std::string_view function,
+               LoggingSeverity severity);
 
     // Used for CHECK(). Implied severity = LOG_FATAL.
     LogMessage(std::string_view file, int line, std::string_view function, const char* condition);
 
     // Used for CHECK_EQ(), etc. Takes ownership of the given string.
     // Implied severity = LOG_FATAL.
-    LogMessage(std::string_view file, int line, std::string_view function, std::string* result);
+    LogMessage(std::string_view file, int line, std::string_view function, QString* result);
 
     // Used for DCHECK_EQ(), etc. Takes ownership of the given string.
-    LogMessage(std::string_view file, int line, std::string_view function, LoggingSeverity severity,
-               std::string* result);
+    LogMessage(std::string_view file, int line, std::string_view function,
+               LoggingSeverity severity, QString* result);
 
     ~LogMessage();
 
-    std::ostream& stream() { return stream_; }
+    QTextStream& stream() { return stream_; }
 
     LoggingSeverity severity() { return severity_; }
-    std::string str() { return stream_.str(); }
+    //std::string str() { return stream_.str(); }
 
 private:
     void init(std::string_view file, int line, std::string_view function);
 
     LoggingSeverity severity_;
-    std::ostringstream stream_;
-
-    // Offset of the start of the message (past prefix // info).
-    size_t message_start_;
+    QString string_;
+    QTextStream stream_;
 
     ScopedClearLastError last_error_;
 
@@ -533,7 +538,7 @@ class LogMessageVoidify
 public:
     LogMessageVoidify() = default;
     // This has to be an operator with a precedence lower than << but higher than ?:
-    void operator&(std::ostream&) { }
+    void operator&(QTextStream&) { }
 };
 
 // Appends a formatted system message of the GetLastError() type.
@@ -546,7 +551,7 @@ public:
     // Appends the error message before destructing the encapsulated class.
     ~ErrorLogMessage();
 
-    std::ostream& stream() { return log_message_.stream(); }
+    QTextStream& stream() { return log_message_.stream(); }
 
 private:
     SystemError error_;
@@ -575,35 +580,22 @@ private:
 
 } // namespace base
 
-// Note that "The behavior of a C++ program is undefined if it adds declarations or definitions to
-// namespace std or to a namespace within namespace std unless otherwise specified.
-//
-// We've checked that this particular definition has the intended behavior on our implementations,
-// but it's prone to breaking in the future, and please don't imitate this in your own definitions
-// without checking with some standard library experts.
-namespace std {
-
-// These functions are provided as a convenience for logging, which is where we use streams (it is
-// against Google style to use streams in other places). It is designed to allow you to emit
-// non-ASCII Unicode strings to the log file, which is normally ASCII. It is relatively slow, so
-// try not to use it for common cases. Non-ASCII characters will be converted to UTF-8 by these
-// operators.
 #if defined(Q_OS_WINDOWS)
-std::ostream& operator<<(std::ostream& out, const wchar_t* wstr);
-std::ostream& operator<<(std::ostream& out, const std::wstring& wstr);
+QTextStream& operator<<(QTextStream& out, const wchar_t* wstr);
+QTextStream& operator<<(QTextStream& out, const std::wstring& wstr);
 #endif // defined(Q_OS_WINDOWS)
 
-std::ostream& operator<<(std::ostream& out, const char8_t* ustr);
-std::ostream& operator<<(std::ostream& out, const std::u8string& ustr);
+QTextStream& operator<<(QTextStream& out, const char16_t* ustr);
+QTextStream& operator<<(QTextStream& out, const std::u16string& ustr);
 
-std::ostream& operator<<(std::ostream& out, const char16_t* ustr);
-std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
+QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path);
 
-std::ostream& operator<<(std::ostream& out, const QString& qstr);
-std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist);
-std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray);
+QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist);
+QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray);
 
-} // namespace std
+QTextStream& operator<<(QTextStream& out, const QPoint& qpoint);
+QTextStream& operator<<(QTextStream& out, const QRect& qrect);
+QTextStream& operator<<(QTextStream& out, const QSize& qsize);
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.

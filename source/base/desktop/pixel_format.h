@@ -19,9 +19,7 @@
 #ifndef BASE_DESKTOP_PIXEL_FORMAT_H
 #define BASE_DESKTOP_PIXEL_FORMAT_H
 
-#include <QtGlobal>
-
-#include <ostream>
+#include <QTextStream>
 
 namespace base {
 
@@ -117,7 +115,7 @@ private:
     uint8_t blue_shift_ = 0;
 };
 
-std::ostream& operator<<(std::ostream& stream, const PixelFormat& pixel_format);
+QTextStream& operator<<(QTextStream& stream, const PixelFormat& pixel_format);
 
 } // namespace base
 

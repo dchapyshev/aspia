@@ -200,7 +200,7 @@ bool PixelFormat::operator!=(const PixelFormat& other) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& stream, const PixelFormat& pixel_format)
+QTextStream& operator<<(QTextStream& stream, const PixelFormat& pixel_format)
 {
     return stream << "PixelFormat("
                   << "bpp=" << pixel_format.bitsPerPixel()

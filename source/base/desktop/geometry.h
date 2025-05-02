@@ -20,9 +20,9 @@
 #define BASE_DESKTOP_GEOMETRY_H
 
 #include <QMetaType>
+#include <QTextStream>
 
 #include <cstdint>
-#include <ostream>
 
 namespace base {
 
@@ -272,9 +272,9 @@ private:
     int32_t bottom_ = 0;
 };
 
-std::ostream& operator<<(std::ostream& stream, const Rect& rect);
-std::ostream& operator<<(std::ostream& stream, const Point& point);
-std::ostream& operator<<(std::ostream& stream, const Size& size);
+QTextStream& operator<<(QTextStream& stream, const Rect& rect);
+QTextStream& operator<<(QTextStream& stream, const Point& point);
+QTextStream& operator<<(QTextStream& stream, const Size& size);
 
 } // namespace base
 

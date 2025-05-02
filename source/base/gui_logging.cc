@@ -17,24 +17,3 @@
 //
 
 #include "base/gui_logging.h"
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QPoint& qpoint)
-{
-    return out << "QPoint(" << qpoint.x() << ' ' << qpoint.y() << ')';
-}
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QRect& qrect)
-{
-    return out << "QRect("
-               << qrect.left()  << ' ' << qrect.top() << ' '
-               << qrect.width() << 'x' << qrect.height()
-               << ')';
-}
-
-//--------------------------------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& out, const QSize& qsize)
-{
-    return out << "QSize(" << qsize.width() << ' ' << qsize.height() << ')';
-}
