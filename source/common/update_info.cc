@@ -20,9 +20,29 @@
 
 #include "base/logging.h"
 
-#include "third_party/rapidxml/rapidxml.hpp"
+#include <QXmlStreamReader>
 
 namespace common {
+
+namespace {
+
+static const int kMaxDescriptionLength = 4096;
+static const int kMinUrlLength = 10;
+static const int kMaxUrlLength = 256;
+
+//--------------------------------------------------------------------------------------------------
+QString parseElement(QXmlStreamReader& xml)
+{
+    if (xml.tokenType() != QXmlStreamReader::StartElement)
+        return QString();
+
+    if (xml.readNext() != QXmlStreamReader::Characters)
+        return QString();
+
+    return xml.text().toString();
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -42,83 +62,65 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         return UpdateInfo();
     }
 
-    rapidxml::xml_document<> xml;
-
-    try
-    {
-        xml.parse<rapidxml::parse_default>(const_cast<char*>(buffer.data()));
-    }
-    catch (const rapidxml::parse_error& error)
-    {
-        LOG(LS_ERROR) << "Invalid XML for update info: " << error.what() << " at "
-                      << error.where<char>();
-        return UpdateInfo();
-    }
-
-    rapidxml::xml_node<>* root_node = xml.first_node("update");
-    if (!root_node)
-    {
-        LOG(LS_ERROR) << "Node 'update' not found. No available updates";
-        return UpdateInfo();
-    }
-
     UpdateInfo update_info;
 
-    for (const rapidxml::xml_node<>* child_node = root_node->first_node();
-         child_node != nullptr;
-         child_node = child_node->next_sibling())
+    QXmlStreamReader xml(buffer);
+    while (!xml.atEnd() && !xml.hasError())
     {
-        if (child_node->type() != rapidxml::node_element)
+        QXmlStreamReader::TokenType token = xml.readNext();
+
+        if (token == QXmlStreamReader::StartDocument)
             continue;
 
-        std::string_view name(child_node->name(), child_node->name_size());
+        if (token != QXmlStreamReader::StartElement)
+            continue;
 
-        const rapidxml::xml_node<>* node = child_node->first_node();
-        if (node && node->type() == rapidxml::node_data)
+        if (xml.name() == QLatin1String("update"))
+            continue;
+
+        while (xml.tokenType() != QXmlStreamReader::EndElement)
         {
-            if (name == "version")
+            if (xml.tokenType() == QXmlStreamReader::StartElement)
             {
-                update_info.version_ = QVersionNumber::fromString(
-                    QString::fromUtf8(node->value(), static_cast<QString::size_type>(node->value_size())));
-                if (update_info.version_.isNull())
+                if (xml.name() == QLatin1String("version"))
                 {
-                    LOG(LS_ERROR) << "Invalid version: " << node->value();
-                    return UpdateInfo();
+                    update_info.version_ = QVersionNumber::fromString(parseElement(xml));
+                }
+                else if (xml.name() == QLatin1String("description"))
+                {
+                    update_info.description_ = parseElement(xml);
+                }
+                else if (xml.name() == QLatin1String("url"))
+                {
+                    update_info.url_ = parseElement(xml);
+                }
+                else
+                {
+                    // Unknown field. Ignore.
                 }
             }
-            else if (name == "description")
-            {
-                static const size_t kMaxDescriptionLength = 2048;
 
-                if (node->value_size() > kMaxDescriptionLength)
-                {
-                    LOG(LS_ERROR) << "Invalid description length: " << node->value_size()
-                                  << " (max: " << kMaxDescriptionLength << ")";
-                    return UpdateInfo();
-                }
-
-                update_info.description_ = QString::fromUtf8(
-                    node->value(), static_cast<QString::size_type>(node->value_size()));
-            }
-            else if (name == "url")
-            {
-                static const size_t kMinUrlLength = 10;
-                static const size_t kMaxUrlLength = 256;
-
-                if (node->value_size() < kMinUrlLength || node->value_size() > kMaxUrlLength)
-                {
-                    LOG(LS_ERROR) << "Invalid URL length: " << node->value_size()
-                                  << " (min: " << kMinUrlLength << " max: " << kMaxUrlLength << ")";
-                    return UpdateInfo();
-                }
-
-                update_info.url_ = QString::fromUtf8(
-                    node->value(), static_cast<QString::size_type>(node->value_size()));
-            }
+            xml.readNext();
         }
     }
 
-    update_info.valid_ = true;
+    if (xml.hasError())
+    {
+        LOG(LS_ERROR) << "Error parsing XML: " << xml.errorString();
+    }
+    else if (update_info.description_.size() > kMaxDescriptionLength)
+    {
+        LOG(LS_ERROR) << "Too many characters in description";
+    }
+    else if (update_info.url_.size() < kMinUrlLength || update_info.url_.size() > kMaxUrlLength)
+    {
+        LOG(LS_ERROR) << "Incorrect number of characters in URL";
+    }
+    else
+    {
+        update_info.valid_ = true;
+    }
+
     return update_info;
 }
 
