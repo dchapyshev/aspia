@@ -87,6 +87,11 @@ void Server::start()
     if (!QFileInfo::exists(settings_file))
     {
         LOG(LS_ERROR) << "Configuration file does not exist";
+
+        // For QFileSystemWatcher to be able to track configuration changes, the file must exist.
+        // We write the current TCP port to the config and synchronize.
+        settings_.setTcpPort(settings_.tcpPort());
+        settings_.sync();
     }
 
     update_timer_ = new QTimer(this);

@@ -18,11 +18,12 @@
 
 #include "host/service_main.h"
 
+#include "base/application.h"
 #include "base/logging.h"
-#include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/host_key_storage.h"
@@ -30,21 +31,22 @@
 #include "host/service_constants.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"
 #include "base/win/session_info.h"
 #include "base/win/session_enumerator.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <iostream>
 
+#include <QCommandLineParser>
 #include <QProcessEnvironment>
 
 namespace host {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void startService()
+int startService()
 {
     base::win::ServiceController controller =
         base::win::ServiceController::open(host::kHostServiceName);
@@ -52,24 +54,23 @@ void startService()
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
                   << std::endl;
+        return 1;
     }
-    else
-    {
-        if (!controller.start())
-        {
-            std::cout << "Failed to start the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service started successfully." << std::endl;
-        }
-    }
-}
-#endif // defined(OS_WIN)
 
-#if defined(OS_WIN)
+    if (!controller.start())
+    {
+        std::cout << "Failed to start the service." << std::endl;
+        return 1;
+    }
+
+    std::cout << "The service started successfully." << std::endl;
+    return 0;
+}
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void stopService()
+int stopService()
 {
     base::win::ServiceController controller =
         base::win::ServiceController::open(host::kHostServiceName);
@@ -77,72 +78,68 @@ void stopService()
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
                   << std::endl;
+        return 1;
     }
-    else
-    {
-        if (!controller.stop())
-        {
-            std::cout << "Failed to stop the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service has stopped successfully." << std::endl;
-        }
-    }
-}
-#endif // defined(OS_WIN)
 
-#if defined(OS_WIN)
+    if (!controller.stop())
+    {
+        std::cout << "Failed to stop the service." << std::endl;
+        return 1;
+    }
+
+    std::cout << "The service has stopped successfully." << std::endl;
+    return 0;
+}
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void installService()
+int installService()
 {
     std::filesystem::path file_path;
 
     if (!base::BasePaths::currentExecFile(&file_path))
     {
         std::cout << "Failed to get the path to the executable." << std::endl;
+        return 1;
     }
-    else
-    {
-        base::win::ServiceController controller = base::win::ServiceController::install(
-            host::kHostServiceName, host::kHostServiceDisplayName, file_path);
-        if (!controller.isValid())
-        {
-            std::cout << "Failed to install the service." << std::endl;
-        }
-        else
-        {
-            controller.setDescription(host::kHostServiceDescription);
-            std::cout << "The service has been successfully installed." << std::endl;
-        }
-    }
-}
-#endif // defined(OS_WIN)
 
-#if defined(OS_WIN)
+    base::win::ServiceController controller = base::win::ServiceController::install(
+        host::kHostServiceName, host::kHostServiceDisplayName, file_path);
+    if (!controller.isValid())
+    {
+        std::cout << "Failed to install the service." << std::endl;
+        return 1;
+    }
+
+    controller.setDescription(host::kHostServiceDescription);
+    std::cout << "The service has been successfully installed." << std::endl;
+    return 0;
+}
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void removeService()
+int removeService()
 {
     if (base::win::ServiceController::isRunning(host::kHostServiceName))
-    {
         stopService();
-    }
 
     if (!base::win::ServiceController::remove(host::kHostServiceName))
     {
         std::cout << "Failed to remove the service." << std::endl;
+        return 1;
     }
-    else
-    {
-        std::cout << "The service was successfully deleted." << std::endl;
-    }
+
+    std::cout << "The service was successfully deleted." << std::endl;
+    return 0;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 std::optional<QString> currentSessionName()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     DWORD process_session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &process_session_id))
         return std::nullopt;
@@ -207,19 +204,10 @@ std::optional<QString> currentSessionName()
 #endif
 }
 
-#if defined(OS_LINUX)
 //--------------------------------------------------------------------------------------------------
-int hostServiceMain(int& argc, char* argv[])
+void printDebugInfo()
 {
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
-
-    base::ScopedLogging scoped_logging(logging_settings);
-
-    base::CommandLine::init(argc, argv);
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
@@ -234,75 +222,11 @@ int hostServiceMain(int& argc, char* argv[])
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
-    LOG(LS_INFO) << "Environment variables";
-    LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
-    {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
-    }
-    LOG(LS_INFO) << "#####################################################";
+    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+    LOG(LS_INFO) << "Environment variables: "
+                 << QProcessEnvironment::systemEnvironment().toStringList();
 
-    if (command_line->hasSwitch(u"version"))
-    {
-        std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
-                  << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
-    }
-    else if (command_line->hasSwitch(u"host-id"))
-    {
-        std::optional<std::string> session_name = currentSessionName();
-        if (!session_name.has_value())
-            return 0;
-
-        HostKeyStorage storage;
-        std::cout << storage.lastHostId(*session_name) << std::endl;
-    }
-    else if (command_line->hasSwitch(u"help"))
-    {
-        std::cout << "aspia_host_service [switch]" << std::endl
-                  << "Available switches:" << std::endl
-                  << '\t' << "--host-id" << '\t' << "Get current host id" << std::endl
-                  << '\t' << "--version" << '\t' << "Show version information" << std::endl
-                  << '\t' << "--help" << '\t' << "Show help" << std::endl;
-    }
-    else
-    {
-        Service().exec(argc, argv);
-    }
-
-    return 0;
-}
-#endif // defined(OS_LINUX)
-
-#if defined(OS_WIN)
-//--------------------------------------------------------------------------------------------------
-int hostServiceMain(int& argc, char* argv[])
-{
-    (void)argc;
-    (void)argv;
-
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
-
-    base::ScopedLogging scoped_logging(logging_settings);
-
-    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
-#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
-#endif
-    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
-                 << " (version: " << base::SysInfo::operatingSystemVersion()
-                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
-                 << " (vendor: " << base::SysInfo::processorVendor()
-                 << " packages: " << base::SysInfo::processorPackages()
-                 << " cores: " << base::SysInfo::processorCores()
-                 << " threads: " << base::SysInfo::processorThreads() << ")";
-
+#if defined(Q_OS_WINDOWS)
     MEMORYSTATUSEX memory_status;
     memset(&memory_status, 0, sizeof(memory_status));
     memory_status.dwLength = sizeof(memory_status);
@@ -340,7 +264,7 @@ int hostServiceMain(int& argc, char* argv[])
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
         }
@@ -355,82 +279,102 @@ int hostServiceMain(int& argc, char* argv[])
 
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
-    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
 
     LOG(LS_INFO) << "Active sessions";
     LOG(LS_INFO) << "#####################################################";
     for (base::win::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         LOG(LS_INFO) << enumerator.sessionName() << " (id=" << enumerator.sessionId()
-                     << " host='" << enumerator.hostName() << "', user='" << enumerator.userName()
-                     << "', domain='" << enumerator.domainName() << "', locked="
-                     << enumerator.isUserLocked() << ")";
+        << " host='" << enumerator.hostName() << "', user='" << enumerator.userName()
+        << "', domain='" << enumerator.domainName() << "', locked="
+        << enumerator.isUserLocked() << ")";
     }
     LOG(LS_INFO) << "#####################################################";
+#endif // defined(Q_OS_WINDOWS)
+}
 
-    LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
+//--------------------------------------------------------------------------------------------------
+int hostServiceMain(int& argc, char* argv[])
+{
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
+
+    printDebugInfo();
 
     if (!integrityCheck())
     {
         LOG(LS_ERROR) << "Integrity check failed. Application stopped";
+        return 1;
+    }
+
+    LOG(LS_INFO) << "Integrity check passed successfully";
+
+    base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+    base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    base::Application application(argc, argv);
+    QCommandLineParser parser;
+
+#if defined(Q_OS_WINDOWS)
+    QCommandLineOption install_option("install",
+        base::Application::translate("ServiceMain", "Install service."));
+    QCommandLineOption remove_option("remove",
+        base::Application::translate("ServiceMain", "Remove service."));
+    QCommandLineOption start_option("start",
+        base::Application::translate("ServiceMain", "Start service."));
+    QCommandLineOption stop_option("stop",
+        base::Application::translate("ServiceMain", "Stop service."));
+
+    parser.addOption(install_option);
+    parser.addOption(remove_option);
+    parser.addOption(start_option);
+    parser.addOption(stop_option);
+#endif // defined(Q_OS_WINDOWS)
+
+    QCommandLineOption hostid_option("host-id",
+        base::Application::translate("ServiceMain", "Get current host id."));
+
+    parser.addOption(hostid_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
+
+    if (parser.isSet(hostid_option))
+    {
+        std::optional<QString> session_name = currentSessionName();
+        if (!session_name.has_value())
+            return 1;
+
+        HostKeyStorage storage;
+        std::cout << storage.lastHostId(*session_name) << std::endl;
+        return 0;
+    }
+    else if (parser.isSet(install_option))
+    {
+        return installService();
+    }
+    else if (parser.isSet(remove_option))
+    {
+        return removeService();
+    }
+    else if (parser.isSet(start_option))
+    {
+        return startService();
+    }
+    else if (parser.isSet(stop_option))
+    {
+        return stopService();
     }
     else
     {
-        LOG(LS_INFO) << "Integrity check passed successfully";
+        base::registerMetaTypes();
+        proto::registerMetaTypes();
 
-        if (command_line->hasSwitch(u"version"))
-        {
-            std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
-                      << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
-        }
-        else if (command_line->hasSwitch(u"host-id"))
-        {
-            std::optional<QString> session_name = currentSessionName();
-            if (!session_name.has_value())
-                return 0;
-
-            HostKeyStorage storage;
-            std::cout << storage.lastHostId(*session_name) << std::endl;
-        }
-        else if (command_line->hasSwitch(u"install"))
-        {
-            installService();
-        }
-        else if (command_line->hasSwitch(u"remove"))
-        {
-            removeService();
-        }
-        else if (command_line->hasSwitch(u"start"))
-        {
-            startService();
-        }
-        else if (command_line->hasSwitch(u"stop"))
-        {
-            stopService();
-        }
-        else if (command_line->hasSwitch(u"help"))
-        {
-            std::cout << "aspia_host_service [switch]" << std::endl
-                << "Available switches:" << std::endl
-                << '\t' << "--install" << '\t' << "Install service" << std::endl
-                << '\t' << "--remove" << '\t' << "Remove service" << std::endl
-                << '\t' << "--start" << '\t' << "Start service" << std::endl
-                << '\t' << "--stop" << '\t' << "Stop service" << std::endl
-                << '\t' << "--host-id" << '\t' << "Get current host id" << std::endl
-                << '\t' << "--version" << '\t' << "Show version information" << std::endl
-                << '\t' << "--help" << '\t' << "Show help" << std::endl;
-        }
-        else
-        {
-            base::registerMetaTypes();
-            proto::registerMetaTypes();
-
-            Service().exec(argc, argv);
-        }
+        return Service().exec(application);
     }
-
-    return 0;
 }
-#endif // defined(OS_WIN)
 
 } // namespace host

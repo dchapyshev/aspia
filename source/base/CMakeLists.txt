@@ -23,7 +23,6 @@ list(APPEND SOURCE_BASE
     command_line.cc
     command_line.h
     compiler_specific.h
-    converter.h
     cpuid_util.cc
     cpuid_util.h
     debug.cc
@@ -108,7 +107,6 @@ endif()
 
 list(APPEND SOURCE_BASE_TESTS
     bitset_unittest.cc
-    converter_unittest.cc
     scoped_clear_last_error_unittest.cc
     stl_util_unittest.cc
     tests_main.cc)

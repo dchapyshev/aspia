@@ -16,7 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
@@ -24,6 +23,7 @@
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "proto/meta_types.h"
 #include "router/database_factory_sqlite.h"
@@ -34,13 +34,12 @@
 #if defined(OS_WIN)
 #include "router/win/service_util.h"
 #else
-#include "base/crypto/scoped_crypto_initializer.h"
-#include "base/message_loop/message_loop.h"
 #include "router/server.h"
 #endif
 
 #include <iostream>
 
+#include <QCommandLineParser>
 #include <QFileInfo>
 
 namespace {
@@ -68,20 +67,22 @@ bool generateKeys(QByteArray* private_key, QByteArray* public_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-void generateAndPrintKeys()
+int generateAndPrintKeys()
 {
     QByteArray private_key;
     QByteArray public_key;
 
     if (!generateKeys(&private_key, &public_key))
-        return;
+        return 1;
 
     std::cout << "Private key: " << private_key.toHex().toStdString() << std::endl;
     std::cout << "Public key: " << public_key.toHex().toStdString() << std::endl;
+
+    return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-void createConfig()
+int createConfig()
 {
     std::cout << "Creation of initial configuration started." << std::endl;
 
@@ -93,7 +94,7 @@ void createConfig()
     if (!settings.isEmpty())
     {
         std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
-        return;
+        return 1;
     }
 
     std::cout << "Settings file does not exist yet." << std::endl;
@@ -102,7 +103,7 @@ void createConfig()
     if (!base::BasePaths::commonAppData(&public_key_dir))
     {
         std::cout << "Failed to get the path to the config directory." << std::endl;
-        return;
+        return 1;
     }
 
     public_key_dir.append("aspia");
@@ -119,7 +120,7 @@ void createConfig()
         {
             std::cout << "Failed to create directory for public key: "
                       << error_code.message() << std::endl;
-            return;
+            return 1;
         }
         else
         {
@@ -139,7 +140,7 @@ void createConfig()
     if (std::filesystem::exists(public_key_file, error_code))
     {
         std::cout << "Public key file already exists. Continuation is impossible." << std::endl;
-        return;
+        return 1;
     }
     else
     {
@@ -158,7 +159,7 @@ void createConfig()
         {
             std::cout << "Failed to create new database." << std::endl;
         }
-        return;
+        return 1;
     }
 
     std::cout << "Creating a user..." << std::endl;
@@ -170,7 +171,7 @@ void createConfig()
     if (!user.isValid())
     {
         std::cout << "Failed to create user." << std::endl;
-        return;
+        return 1;
     }
 
     std::cout << "User has been created. Adding a user to the database..." << std::endl;
@@ -181,7 +182,7 @@ void createConfig()
     if (!db->addUser(user))
     {
         std::cout << "Failed to add user to database." << std::endl;
-        return;
+        return 1;
     }
 
     std::cout << "User was successfully added to the database." << std::endl;
@@ -190,7 +191,7 @@ void createConfig()
     QByteArray private_key;
     QByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
-        return;
+        return 1;
 
     std::cout << "Private and public keys have been successfully generated." << std::endl;
     std::cout << "Writing a public key to a file..." << std::endl;
@@ -198,7 +199,7 @@ void createConfig()
     if (!base::writeFile(QString::fromStdU16String(public_key_file.u16string()), public_key.toHex()))
     {
         std::cout << "Failed to write public key to file: " << public_key_file << std::endl;
-        return;
+        return 1;
     }
 
     std::cout << "Generate seed key...";
@@ -220,111 +221,81 @@ void createConfig()
     std::cout << "User name: " << kUserName << std::endl;
     std::cout << "Password: " << kPassword << std::endl;
     std::cout << "Public key file: " << public_key_file << std::endl;
-}
 
-//--------------------------------------------------------------------------------------------------
-void showHelp()
-{
-    std::cout << "aspia_router [switch]" << std::endl
-        << "Available switches:" << std::endl
-#if defined(OS_WIN)
-        << '\t' << "--install" << '\t' << "Install service" << std::endl
-        << '\t' << "--remove" << '\t' << "Remove service" << std::endl
-        << '\t' << "--start" << '\t' << "Start service" << std::endl
-        << '\t' << "--stop" << '\t' << "Stop service" << std::endl
-#endif // defined(OS_WIN)
-        << '\t' << "--create-config" << '\t' << "Creates a configuration" << std::endl
-        << '\t' << "--keygen" << '\t' << "Generating public and private keys" << std::endl
-        << '\t' << "--help" << '\t' << "Show help" << std::endl;
+    return 0;
 }
 
 } // namespace
 
-#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
     base::ScopedLogging logging;
 
-    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+    base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+    base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    base::Application application(argc, argv);
+
+#if defined(Q_OS_WINDOWS)
+    QCommandLineOption install_option("install", "Install service.");
+    QCommandLineOption remove_option("remove", "Remove service.");
+    QCommandLineOption start_option("start", "Start service.");
+    QCommandLineOption stop_option("stop", "Stop service.");
+#endif // defined(Q_OS_WINDOWS)
+
+    QCommandLineOption keygen_option("keygen", "Generating public and private keys.");
+    QCommandLineOption create_config_option("create-config", "Creates a configuration.");
+
+    QCommandLineParser parser;
+
+#if defined(Q_OS_WINDOWS)
+    parser.addOption(install_option);
+    parser.addOption(remove_option);
+    parser.addOption(start_option);
+    parser.addOption(stop_option);
+#endif // defined(Q_OS_WINDOWS)
+    parser.addOption(keygen_option);
+    parser.addOption(create_config_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
-    if (command_line->hasSwitch(u"install"))
+    if (parser.isSet(keygen_option))
     {
-        router::installService();
+        return generateAndPrintKeys();
     }
-    else if (command_line->hasSwitch(u"remove"))
+    else if (parser.isSet(create_config_option))
     {
-        router::removeService();
+        return createConfig();
     }
-    else if (command_line->hasSwitch(u"start"))
+#if defined(Q_OS_WINDOWS)
+    else if (parser.isSet(install_option))
     {
-        router::startService();
+        return router::installService();
     }
-    else if (command_line->hasSwitch(u"stop"))
+    else if (parser.isSet(remove_option))
     {
-        router::stopService();
+        return router::removeService();
     }
-    else if (command_line->hasSwitch(u"keygen"))
+    else if (parser.isSet(start_option))
     {
-        generateAndPrintKeys();
+        return router::startService();
     }
-    else if (command_line->hasSwitch(u"create-config"))
+    else if (parser.isSet(stop_option))
     {
-        createConfig();
+        return router::stopService();
     }
-    else if (command_line->hasSwitch(u"help"))
-    {
-        showHelp();
-    }
+#endif // defined(Q_OS_WINDOWS)
     else
     {
         base::registerMetaTypes();
         proto::registerMetaTypes();
 
-        router::Service().exec(argc, argv);
-    }
-
-    return 0;
-}
-#else
-//--------------------------------------------------------------------------------------------------
-int main(int argc, const char* const* argv)
-{
-    base::ScopedLogging logging;
-
-    base::CommandLine::init(argc, argv);
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
-
-    std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
-        std::make_unique<base::ScopedCryptoInitializer>();
-
-    if (command_line->hasSwitch(u"keygen"))
-    {
-        generateAndPrintKeys();
-    }
-    else if (command_line->hasSwitch(u"create-config"))
-    {
-        createConfig();
-    }
-    else if (command_line->hasSwitch(u"help"))
-    {
-        showHelp();
-    }
-    else
-    {
-        LOG(LS_INFO) << "Starting router services";
-
-        base::registerMetaTypes();
-        proto::registerMetaTypes();
-
-        router::Service().exec();
+        return router::Service().exec(application);
     }
 }
-#endif

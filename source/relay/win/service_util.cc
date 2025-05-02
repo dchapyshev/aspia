@@ -28,7 +28,7 @@
 namespace relay {
 
 //--------------------------------------------------------------------------------------------------
-void startService()
+int startService()
 {
     base::win::ServiceController controller =
         base::win::ServiceController::open(relay::kServiceName);
@@ -36,22 +36,21 @@ void startService()
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
                   << std::endl;
+        return 1;
     }
-    else
+
+    if (!controller.start())
     {
-        if (!controller.start())
-        {
-            std::cout << "Failed to start the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service started successfully." << std::endl;
-        }
+        std::cout << "Failed to start the service." << std::endl;
+        return 1;
     }
+
+    std::cout << "The service started successfully." << std::endl;
+    return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-void stopService()
+int stopService()
 {
     base::win::ServiceController controller =
         base::win::ServiceController::open(relay::kServiceName);
@@ -59,61 +58,57 @@ void stopService()
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
                   << std::endl;
+        return 1;
     }
-    else
+
+    if (!controller.stop())
     {
-        if (!controller.stop())
-        {
-            std::cout << "Failed to stop the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service has stopped successfully." << std::endl;
-        }
+        std::cout << "Failed to stop the service." << std::endl;
+        return 1;
     }
+
+    std::cout << "The service has stopped successfully." << std::endl;
+    return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-void installService()
+int installService()
 {
     std::filesystem::path file_path;
 
     if (!base::BasePaths::currentExecFile(&file_path))
     {
         std::cout << "Failed to get the path to the executable." << std::endl;
+        return 1;
     }
-    else
+
+    base::win::ServiceController controller = base::win::ServiceController::install(
+        relay::kServiceName, relay::kServiceDisplayName, file_path);
+    if (!controller.isValid())
     {
-        base::win::ServiceController controller = base::win::ServiceController::install(
-            relay::kServiceName, relay::kServiceDisplayName, file_path);
-        if (!controller.isValid())
-        {
-            std::cout << "Failed to install the service." << std::endl;
-        }
-        else
-        {
-            controller.setDescription(relay::kServiceDescription);
-            std::cout << "The service has been successfully installed." << std::endl;
-        }
+        std::cout << "Failed to install the service." << std::endl;
+        return 1;
     }
+
+    controller.setDescription(relay::kServiceDescription);
+    std::cout << "The service has been successfully installed." << std::endl;
+    return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-void removeService()
+int removeService()
 {
     if (base::win::ServiceController::isRunning(relay::kServiceName))
-    {
         stopService();
-    }
 
     if (!base::win::ServiceController::remove(relay::kServiceName))
     {
         std::cout << "Failed to remove the service." << std::endl;
+        return 1;
     }
-    else
-    {
-        std::cout << "The service was successfully deleted." << std::endl;
-    }
+
+    std::cout << "The service was successfully deleted." << std::endl;
+    return 0;
 }
 
 } // namespace relay

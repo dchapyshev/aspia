@@ -42,7 +42,7 @@ public:
     explicit Service(const QString& name);
     virtual ~Service();
 
-    void exec(int& argc, char* argv[]);
+    int exec(Application& application);
 
     const QString& name() const { return name_; }
     std::shared_ptr<TaskRunner> taskRunner() const { return task_runner_; }
@@ -65,7 +65,6 @@ private:
 #endif // defined(OS_POSIX)
 
     QString name_;
-    std::unique_ptr<Application> application_;
     std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);

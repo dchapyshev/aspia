@@ -21,9 +21,6 @@
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
-#include "base/strings/string_number_conversions.h"
-#include "base/strings/string_util.h"
-#include "base/threading/asio_event_dispatcher.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 
@@ -60,7 +57,7 @@ const wchar_t kComProcessMandatoryLabel[] =
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
 //--------------------------------------------------------------------------------------------------
-std::string serviceStateToString(DWORD state)
+QString serviceStateToString(DWORD state)
 {
     switch (state)
     {
@@ -79,7 +76,7 @@ std::string serviceStateToString(DWORD state)
         case SERVICE_STOPPED:
             return "SERVICE_STOPPED";
         default:
-            return "Unknown State (" + numberToString(state) + ")";
+            return "Unknown State (" + QString::number(state) + ")";
     }
 }
 
@@ -369,7 +366,7 @@ Service::~Service()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::exec(int& argc, char* argv[])
+int Service::exec(Application& application)
 {
     LOG(LS_INFO) << "Begin";
 
@@ -383,9 +380,6 @@ void Service::exec(int& argc, char* argv[])
 
     win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    QCoreApplication::setEventDispatcher(new AsioEventDispatcher());
-
-    application_ = std::make_unique<Application>(argc, argv);
     task_runner_ = Application::taskRunner();
 
     std::unique_ptr<ServiceThread> service_thread = std::make_unique<ServiceThread>(this);
@@ -402,7 +396,7 @@ void Service::exec(int& argc, char* argv[])
             service_thread->startup_condition.wait(lock);
 
         if (service_thread->startup_state == ServiceThread::State::ERROR_OCCURRED)
-            return;
+            return 1;
     }
 
     // Now we can complete the registration of the service.
@@ -412,12 +406,11 @@ void Service::exec(int& argc, char* argv[])
         service_thread->startup_condition.notify_all();
     }
 
-    application_->exec();
-
+    int ret = application.exec();
     service_thread.reset();
-    application_.reset();
 
     LOG(LS_INFO) << "End";
+    return ret;
 }
 
 } // namespace base

@@ -21,10 +21,10 @@
 
 namespace relay {
 
-void startService();
-void stopService();
-void installService();
-void removeService();
+int startService();
+int stopService();
+int installService();
+int removeService();
 
 } // namespace relay
 

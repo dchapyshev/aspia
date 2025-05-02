@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "proto/meta_types.h"
 #include "relay/service.h"
@@ -27,24 +27,24 @@
 #if defined(OS_WIN)
 #include "relay/win/service_util.h"
 #else
-#include "base/crypto/scoped_crypto_initializer.h"
-#include "base/message_loop/message_loop.h"
 #include "relay/controller.h"
 #endif
 
 #include <iostream>
 
+#include <QCommandLineParser>
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-void createConfig()
+int createConfig()
 {
     relay::Settings settings;
 
     if (!settings.isEmpty())
     {
         std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
-        return;
+        return 1;
     }
 
     // Save the configuration file.
@@ -52,100 +52,73 @@ void createConfig()
     settings.sync();
 
     std::cout << "Configuration successfully created." << std::endl;
-}
-
-//--------------------------------------------------------------------------------------------------
-void showHelp()
-{
-    std::cout << "aspia_relay [switch]" << std::endl
-        << "Available switches:" << std::endl
-#if defined(OS_WIN)
-        << '\t' << "--install" << '\t' << "Install service" << std::endl
-        << '\t' << "--remove"  << '\t' << "Remove service"  << std::endl
-        << '\t' << "--start"   << '\t' << "Start service"   << std::endl
-        << '\t' << "--stop"    << '\t' << "Stop service"    << std::endl
-#endif // defined(OS_WIN)
-        << '\t' << "--create-config" << '\t' << "Creates a configuration" << std::endl
-        << '\t' << "--help"    << '\t' << "Show help"       << std::endl;
+    return 0;
 }
 
 } // namespace
 
-#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
     base::ScopedLogging logging;
 
-    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+    base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+    base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    base::Application application(argc, argv);
+
+    QCommandLineParser parser;
+
+#if defined(Q_OS_WINDOWS)
+    QCommandLineOption install_option("install", "Install service.");
+    QCommandLineOption remove_option("remove", "Remove service.");
+    QCommandLineOption start_option("start", "Start service.");
+    QCommandLineOption stop_option("stop", "Stop service.");
+
+    parser.addOption(install_option);
+    parser.addOption(remove_option);
+    parser.addOption(start_option);
+    parser.addOption(stop_option);
+#endif //defined(Q_OS_WINDOWS)
+
+    QCommandLineOption create_config_option("create-config", "Creates a configuration.");
+
+    parser.addOption(create_config_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
-    if (command_line->hasSwitch(u"install"))
+    if (parser.isSet(create_config_option))
     {
-        relay::installService();
+        return createConfig();
     }
-    else if (command_line->hasSwitch(u"remove"))
+#if defined(Q_OS_WINDOWS)
+    else if (parser.isSet(install_option))
     {
-        relay::removeService();
+        return relay::installService();
     }
-    else if (command_line->hasSwitch(u"start"))
+    else if (parser.isSet(remove_option))
     {
-        relay::startService();
+        return relay::removeService();
     }
-    else if (command_line->hasSwitch(u"stop"))
+    else if (parser.isSet(start_option))
     {
-        relay::stopService();
+        return relay::startService();
     }
-    else if (command_line->hasSwitch(u"create-config"))
+    else if (parser.isSet(stop_option))
     {
-        createConfig();
+        return relay::stopService();
     }
-    else if (command_line->hasSwitch(u"help"))
-    {
-        showHelp();
-    }
+#endif // defined(Q_OS_WINDOWS)
     else
     {
         base::registerMetaTypes();
         proto::registerMetaTypes();
 
-        relay::Service().exec(argc, argv);
-    }
-
-    return 0;
-}
-#else
-//--------------------------------------------------------------------------------------------------
-int main(int argc, const char* const* argv)
-{
-    base::ScopedLogging logging;
-
-    base::CommandLine::init(argc, argv);
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
-
-    std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
-        std::make_unique<base::ScopedCryptoInitializer>();
-
-    if (command_line->hasSwitch(u"create-config"))
-    {
-        createConfig();
-    }
-    else if (command_line->hasSwitch(u"help"))
-    {
-        showHelp();
-    }
-    else
-    {
-        base::registerMetaTypes();
-        proto::registerMetaTypes();
-
-        relay::Service().exec();
+        return relay::Service().exec(application);
     }
 }
-#endif
