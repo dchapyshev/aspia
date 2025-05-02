@@ -19,7 +19,6 @@
 #include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "build/version.h"
 #include "proto/meta_types.h"
 #include "relay/service.h"
@@ -40,19 +39,17 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 void createConfig()
 {
-    std::filesystem::path settings_file_path = relay::Settings::filePath();
+    relay::Settings settings;
 
-    std::error_code error_code;
-    if (std::filesystem::exists(settings_file_path, error_code))
+    if (!settings.isEmpty())
     {
         std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
         return;
     }
 
     // Save the configuration file.
-    relay::Settings settings;
     settings.reset();
-    settings.flush();
+    settings.sync();
 
     std::cout << "Configuration successfully created." << std::endl;
 }

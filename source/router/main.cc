@@ -41,6 +41,8 @@
 
 #include <iostream>
 
+#include <QFileInfo>
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -83,12 +85,12 @@ void createConfig()
 {
     std::cout << "Creation of initial configuration started." << std::endl;
 
-    std::filesystem::path settings_file_path = router::Settings::filePath();
+    router::Settings settings;
+    QString settings_file_path = settings.filePath();
 
     std::cout << "Settings file path: " << settings_file_path << std::endl;
 
-    std::error_code error_code;
-    if (std::filesystem::exists(settings_file_path, error_code))
+    if (!settings.isEmpty())
     {
         std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
         return;
@@ -107,6 +109,7 @@ void createConfig()
 
     std::cout << "Public key directory path: " << public_key_dir << std::endl;
 
+    std::error_code error_code;
     if (!std::filesystem::exists(public_key_dir, error_code))
     {
         std::cout << "Public key directory does not exist (" << error_code.message()
@@ -207,11 +210,10 @@ void createConfig()
     std::cout << "Seed key successfully generated";
 
     // Save the configuration file.
-    router::Settings settings;
     settings.reset();
     settings.setPrivateKey(private_key);
     settings.setSeedKey(seed_key);
-    settings.flush();
+    settings.sync();
 
     std::cout << "Configuration successfully created. Don't forget to change your password!"
               << std::endl;

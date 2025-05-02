@@ -19,8 +19,7 @@
 #ifndef RELAY_SETTINGS_H
 #define RELAY_SETTINGS_H
 
-#include "base/settings/json_settings.h"
-
+#include <QSettings>
 #include <chrono>
 
 namespace relay {
@@ -31,10 +30,11 @@ public:
     Settings();
     ~Settings();
 
-    static std::filesystem::path filePath();
+    QString filePath();
 
+    bool isEmpty() const;
     void reset();
-    void flush();
+    void sync();
 
     void setRouterAddress(const QString& address);
     QString routerAddress() const;
@@ -67,7 +67,7 @@ public:
     std::chrono::seconds statisticsInterval() const;
 
 private:
-    base::JsonSettings impl_;
+    QSettings impl_;
 };
 
 } // namespace relay

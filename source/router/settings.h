@@ -19,8 +19,7 @@
 #ifndef ROUTER_SETTINGS_H
 #define ROUTER_SETTINGS_H
 
-#include "base/settings/json_settings.h"
-
+#include <QSettings>
 #include <QStringList>
 
 namespace router {
@@ -31,10 +30,11 @@ public:
     Settings();
     ~Settings();
 
-    static std::filesystem::path filePath();
+    QString filePath();
 
+    bool isEmpty() const;
     void reset();
-    void flush();
+    void sync();
 
     void setListenInterface(const QString& interface);
     QString listenInterface() const;
@@ -63,10 +63,10 @@ public:
     QByteArray seedKey() const;
 
 private:
-    void setWhiteList(std::string_view key, const WhiteList& value);
-    WhiteList whiteList(std::string_view key) const;
+    void setWhiteList(const QString& key, const WhiteList& value);
+    WhiteList whiteList(const QString& key) const;
 
-    base::JsonSettings impl_;
+    QSettings impl_;
 };
 
 } // namespace router

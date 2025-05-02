@@ -19,33 +19,31 @@
 #include "router/settings.h"
 
 #include "base/logging.h"
+#include "base/xml_settings.h"
 #include "base/net/ip_util.h"
 
 namespace router {
 
-namespace {
-
-const base::JsonSettings::Scope kScope = base::JsonSettings::Scope::SYSTEM;
-const char kApplicationName[] = "aspia";
-const char kFileName[] = "router";
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(kScope, kApplicationName, kFileName)
+    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "router")
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isEmpty() const
+{
+    return impl_.allKeys().isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::~Settings() = default;
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::filesystem::path Settings::filePath()
+QString Settings::filePath()
 {
-    return base::JsonSettings::filePath(kScope, kApplicationName, kFileName);
+    return impl_.fileName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,45 +58,45 @@ void Settings::reset()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::flush()
+void Settings::sync()
 {
-    impl_.flush();
+    impl_.sync();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const QString& interface)
 {
-    impl_.set<QString>("ListenInterface", interface);
+    impl_.setValue("ListenInterface", interface);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::listenInterface() const
 {
-    return impl_.get<QString>("ListenInterface", QString());
+    return impl_.value("ListenInterface").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPort(quint16 port)
 {
-    impl_.set<quint16>("Port", port);
+    impl_.setValue("Port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::port() const
 {
-    return impl_.get<quint16>("Port", DEFAULT_ROUTER_TCP_PORT);
+    return impl_.value("Port", DEFAULT_ROUTER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPrivateKey(const QByteArray& private_key)
 {
-    impl_.set<std::string>("PrivateKey", private_key.toHex().toStdString());
+    impl_.setValue("PrivateKey", private_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::privateKey() const
 {
-    return QByteArray::fromHex(QByteArray::fromStdString(impl_.get<std::string>("PrivateKey")));
+    return impl_.value("PrivateKey").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,17 +150,17 @@ Settings::WhiteList Settings::relayWhiteList() const
 //--------------------------------------------------------------------------------------------------
 void Settings::setSeedKey(const QByteArray &seed_key)
 {
-    impl_.set<std::string>("SeedKey", seed_key.toHex().toStdString());
+    impl_.setValue("SeedKey", seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::seedKey() const
 {
-    return QByteArray::fromHex(QByteArray::fromStdString(impl_.get<std::string>("SeedKey")));
+    return impl_.value("SeedKey").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setWhiteList(std::string_view key, const WhiteList& value)
+void Settings::setWhiteList(const QString& key, const WhiteList& value)
 {
     QString result;
 
@@ -178,13 +176,13 @@ void Settings::setWhiteList(std::string_view key, const WhiteList& value)
         }
     }
 
-    impl_.set<QString>(key, result);
+    impl_.setValue(key, result);
 }
 
 //--------------------------------------------------------------------------------------------------
-Settings::WhiteList Settings::whiteList(std::string_view key) const
+Settings::WhiteList Settings::whiteList(const QString& key) const
 {
-    WhiteList result = impl_.get<QString>(key).split(';', Qt::SkipEmptyParts);
+    WhiteList result = impl_.value(key).toString().split(';', Qt::SkipEmptyParts);
 
     auto it = result.begin();
     while (it != result.end())

@@ -18,21 +18,14 @@
 
 #include "relay/settings.h"
 
+#include "base/xml_settings.h"
 #include "build/build_config.h"
 
 namespace relay {
 
-namespace {
-
-const base::JsonSettings::Scope kScope = base::JsonSettings::Scope::SYSTEM;
-const char kApplicationName[] = "aspia";
-const char kFileName[] = "relay";
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(kScope, kApplicationName, kFileName)
+    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "relay")
 {
     // Nothing
 }
@@ -41,10 +34,15 @@ Settings::Settings()
 Settings::~Settings() = default;
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::filesystem::path Settings::filePath()
+QString Settings::filePath()
 {
-    return base::JsonSettings::filePath(kScope, kApplicationName, kFileName);
+    return impl_.fileName();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isEmpty() const
+{
+    return impl_.allKeys().isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,129 +60,129 @@ void Settings::reset()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::flush()
+void Settings::sync()
 {
-    impl_.flush();
+    impl_.sync();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterAddress(const QString& address)
 {
-    impl_.set<QString>("RouterAddress", address);
+    impl_.setValue("RouterAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::routerAddress() const
 {
-    return impl_.get<QString>("RouterAddress");
+    return impl_.value("RouterAddress").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPort(quint16 port)
 {
-    impl_.set<quint16>("RouterPort", port);
+    impl_.setValue("RouterPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::routerPort() const
 {
-    return impl_.get<quint16>("RouterPort", DEFAULT_ROUTER_TCP_PORT);
+    return impl_.value("RouterPort", DEFAULT_ROUTER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPublicKey(const QByteArray& public_key)
 {
-    impl_.set<QByteArray>("RouterPublicKey", public_key);
+    impl_.setValue("RouterPublicKey", public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::routerPublicKey() const
 {
-    return impl_.get<QByteArray>("RouterPublicKey");
+    return impl_.value("RouterPublicKey").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const QString& interface)
 {
-    impl_.set<QString>("ListenInterface", interface);
+    impl_.setValue("ListenInterface", interface);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::listenInterface() const
 {
-    return impl_.get<QString>("ListenInterface", QString());
+    return impl_.value("ListenInterface").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerAddress(const QString& address)
 {
-    impl_.set<QString>("PeerAddress", address);
+    impl_.setValue("PeerAddress", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::peerAddress() const
 {
-    return impl_.get<QString>("PeerAddress");
+    return impl_.value("PeerAddress").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerPort(quint16 port)
 {
-    impl_.set<quint16>("PeerPort", port);
+    impl_.setValue("PeerPort", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::peerPort() const
 {
-    return impl_.get<quint16>("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT);
+    return impl_.value("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerIdleTimeout(const std::chrono::minutes& timeout)
 {
-    impl_.set<int>("PeerIdleTimeout", timeout.count());
+    impl_.setValue("PeerIdleTimeout", timeout.count());
 }
 
 //--------------------------------------------------------------------------------------------------
 std::chrono::minutes Settings::peerIdleTimeout() const
 {
-    return std::chrono::minutes(impl_.get<int>("PeerIdleTimeout", 5));
+    return std::chrono::minutes(impl_.value("PeerIdleTimeout", 5).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setMaxPeerCount(uint32_t count)
 {
-    impl_.set<uint32_t>("MaxPeerCount", count);
+    impl_.setValue("MaxPeerCount", count);
 }
 
 //--------------------------------------------------------------------------------------------------
 uint32_t Settings::maxPeerCount() const
 {
-    return impl_.get<uint32_t>("MaxPeerCount", 100);
+    return impl_.value("MaxPeerCount", 100).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsEnabled(bool enable)
 {
-    impl_.set<bool>("StatisticsEnabled", enable);
+    impl_.setValue("StatisticsEnabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Settings::isStatisticsEnabled() const
 {
-    return impl_.get<bool>("StatisticsEnabled", false);
+    return impl_.value("StatisticsEnabled", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsInterval(const std::chrono::seconds& interval)
 {
-    impl_.set<int>("StatisticsInterval", static_cast<int>(interval.count()));
+    impl_.setValue("StatisticsInterval", static_cast<int>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
 std::chrono::seconds Settings::statisticsInterval() const
 {
-    return std::chrono::seconds(impl_.get<int>("StatisticsInterval", 5));
+    return std::chrono::seconds(impl_.value("StatisticsInterval", 5).toInt());
 }
 
 } // namespace relay
