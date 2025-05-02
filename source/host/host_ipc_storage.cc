@@ -18,11 +18,13 @@
 
 #include "host/host_ipc_storage.h"
 
+#include "base/xml_settings.h"
+
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
 HostIpcStorage::HostIpcStorage()
-    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "host_ipc")
+    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "host_ipc")
 {
     // Nothing
 }
@@ -33,14 +35,14 @@ HostIpcStorage::~HostIpcStorage() = default;
 //--------------------------------------------------------------------------------------------------
 QString HostIpcStorage::channelIdForUI() const
 {
-    return impl_.get<QString>("ui_channel_id");
+    return impl_.value("ui_channel_id").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostIpcStorage::setChannelIdForUI(const QString& channel_id)
 {
-    impl_.set<QString>("ui_channel_id", channel_id);
-    impl_.flush();
+    impl_.setValue("ui_channel_id", channel_id);
+    impl_.sync();
 }
 
 } // namespace host

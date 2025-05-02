@@ -21,7 +21,8 @@
 
 #include "base/macros_magic.h"
 #include "base/peer/host_id.h"
-#include "base/settings/json_settings.h"
+
+#include <QSettings>
 
 namespace host {
 
@@ -37,7 +38,7 @@ public:
     void setLastHostId(const QString& session_name, base::HostId host_id);
 
 private:
-    base::JsonSettings impl_;
+    QSettings impl_;
 
     DISALLOW_COPY_AND_ASSIGN(HostKeyStorage);
 };

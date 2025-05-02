@@ -18,6 +18,7 @@
 
 #include "host/host_key_storage.h"
 
+#include "base/xml_settings.h"
 #include "base/crypto/generic_hash.h"
 
 namespace host {
@@ -25,26 +26,26 @@ namespace host {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::string sessionKey(const QString& session_name)
+QString sessionKey(const QString& session_name)
 {
     QByteArray key("session/");
     key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name.toUtf8()).toHex());
-    return key.toStdString();
+    return QString::fromLatin1(key);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string sessionKeyForHostId(const QString& session_name)
+QString sessionKeyForHostId(const QString& session_name)
 {
     QByteArray key("session_host_id/");
     key.append(base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name.toUtf8()).toHex());
-    return key.toStdString();
+    return QString::fromLatin1(key);
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 HostKeyStorage::HostKeyStorage()
-    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "host_key")
+    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "host_key")
 {
     // Nothing
 }
@@ -56,40 +57,40 @@ HostKeyStorage::~HostKeyStorage() = default;
 QByteArray HostKeyStorage::key(const QString& session_name) const
 {
     if (session_name.isEmpty())
-        return impl_.get<QByteArray>("console");
+        return impl_.value("console").toByteArray();
 
-    return impl_.get<QByteArray>(sessionKey(session_name));
+    return impl_.value(sessionKey(session_name)).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostKeyStorage::setKey(const QString& session_name, const QByteArray& key)
 {
     if (session_name.isEmpty())
-        impl_.set<QByteArray>("console", key);
+        impl_.setValue("console", key);
     else
-        impl_.set<QByteArray>(sessionKey(session_name), key);
+        impl_.setValue(sessionKey(session_name), key);
 
-    impl_.flush();
+    impl_.sync();
 }
 
 //--------------------------------------------------------------------------------------------------
 base::HostId HostKeyStorage::lastHostId(const QString& session_name) const
 {
     if (session_name.isEmpty())
-        return impl_.get<base::HostId>("console_host_id");
+        return impl_.value("console_host_id").toULongLong();
 
-    return impl_.get<base::HostId>(sessionKeyForHostId(session_name));
+    return impl_.value(sessionKeyForHostId(session_name)).toULongLong();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostKeyStorage::setLastHostId(const QString& session_name, base::HostId host_id)
 {
     if (session_name.isEmpty())
-        impl_.set<base::HostId>("console_host_id", host_id);
+        impl_.setValue("console_host_id", host_id);
     else
-        impl_.set<base::HostId>(sessionKeyForHostId(session_name), host_id);
+        impl_.setValue(sessionKeyForHostId(session_name), host_id);
 
-    impl_.flush();
+    impl_.sync();
 }
 
 } // namespace host

@@ -566,15 +566,6 @@ if (UNIX)
         posix/eintr_wrapper.h)
 endif()
 
-list(APPEND SOURCE_BASE_SETTINGS
-    settings/json_settings.cc
-    settings/json_settings.h
-    settings/settings.cc
-    settings/settings.h)
-
-list(APPEND SOURCE_BASE_SETTINGS_TESTS
-    settings/json_settings_unittest.cc)
-
 list(APPEND SOURCE_BASE_STRINGS
     strings/strcat.cc
     strings/strcat.h
@@ -718,7 +709,6 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
-source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_TESTS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 
@@ -759,7 +749,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
-    ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN}
@@ -800,7 +789,6 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
     ${SOURCE_BASE_MEMORY_TESTS}
     ${SOURCE_BASE_NET_TESTS}
-    ${SOURCE_BASE_SETTINGS_TESTS}
     ${SOURCE_BASE_STRINGS_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE

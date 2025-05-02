@@ -20,7 +20,8 @@
 #define HOST_HOST_IPC_STORAGE_H
 
 #include "base/macros_magic.h"
-#include "base/settings/json_settings.h"
+
+#include <QSettings>
 
 namespace host {
 
@@ -34,7 +35,7 @@ public:
     void setChannelIdForUI(const QString& channel_id);
 
 private:
-    base::JsonSettings impl_;
+    QSettings impl_;
 
     DISALLOW_COPY_AND_ASSIGN(HostIpcStorage);
 };
