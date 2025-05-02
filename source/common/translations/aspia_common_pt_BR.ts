@@ -329,82 +329,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="176"/>
+        <location filename="../ui/about_dialog.cc" line="175"/>
         <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="187"/>
+        <location filename="../ui/about_dialog.cc" line="185"/>
         <source>Display &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="188"/>
+        <location filename="../ui/about_dialog.cc" line="186"/>
         <source>Pixel ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="189"/>
+        <location filename="../ui/about_dialog.cc" line="187"/>
         <source>Logical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="192"/>
+        <location filename="../ui/about_dialog.cc" line="190"/>
         <source>Physical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="197"/>
+        <location filename="../ui/about_dialog.cc" line="195"/>
         <source>Size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="200"/>
+        <location filename="../ui/about_dialog.cc" line="198"/>
         <source>Available size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="204"/>
+        <location filename="../ui/about_dialog.cc" line="202"/>
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="207"/>
+        <location filename="../ui/about_dialog.cc" line="205"/>
         <source>Depth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="208"/>
+        <location filename="../ui/about_dialog.cc" line="206"/>
         <source>Refresh rate: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="213"/>
+        <location filename="../ui/about_dialog.cc" line="211"/>
         <source>%1 version: %2</source>
         <translation>%1 versão: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="272"/>
+        <location filename="../ui/about_dialog.cc" line="270"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="280"/>
+        <location filename="../ui/about_dialog.cc" line="278"/>
         <source>Save File</source>
         <translation type="unfinished">Salvar Arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="282"/>
+        <location filename="../ui/about_dialog.cc" line="280"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">Arquivos TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="297"/>
+        <location filename="../ui/about_dialog.cc" line="295"/>
         <source>Warning</source>
         <translation type="unfinished">Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="298"/>
+        <location filename="../ui/about_dialog.cc" line="296"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Não foi possível abrir o arquivo para gravação.</translation>
     </message>

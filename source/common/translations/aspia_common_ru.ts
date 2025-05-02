@@ -333,82 +333,82 @@
         <translation>Директория логов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="176"/>
+        <location filename="../ui/about_dialog.cc" line="175"/>
         <source>Logging file: %1</source>
         <translation>Файл лога: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="187"/>
+        <location filename="../ui/about_dialog.cc" line="185"/>
         <source>Display &apos;%1&apos;</source>
         <translation>Экран &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="188"/>
+        <location filename="../ui/about_dialog.cc" line="186"/>
         <source>Pixel ratio: %1</source>
         <translation>Соотношение пикселей: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="189"/>
+        <location filename="../ui/about_dialog.cc" line="187"/>
         <source>Logical DPI: %1x%2</source>
         <translation>Логический DPI: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="192"/>
+        <location filename="../ui/about_dialog.cc" line="190"/>
         <source>Physical DPI: %1x%2</source>
         <translation>Физический DPI: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="197"/>
+        <location filename="../ui/about_dialog.cc" line="195"/>
         <source>Size: %1x%2</source>
         <translation>Размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="200"/>
+        <location filename="../ui/about_dialog.cc" line="198"/>
         <source>Available size: %1x%2</source>
         <translation>Доступный размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="204"/>
+        <location filename="../ui/about_dialog.cc" line="202"/>
         <source>Virtual size: %1x%2</source>
         <translation>Виртуальный размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="207"/>
+        <location filename="../ui/about_dialog.cc" line="205"/>
         <source>Depth: %1</source>
         <translation>Глубина цвета: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="208"/>
+        <location filename="../ui/about_dialog.cc" line="206"/>
         <source>Refresh rate: %1</source>
         <translation>Частота обновления: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="213"/>
+        <location filename="../ui/about_dialog.cc" line="211"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="272"/>
+        <location filename="../ui/about_dialog.cc" line="270"/>
         <source>Save to file...</source>
         <translation>Сохранить в файл...</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="280"/>
+        <location filename="../ui/about_dialog.cc" line="278"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="282"/>
+        <location filename="../ui/about_dialog.cc" line="280"/>
         <source>TXT files (*.txt)</source>
         <translation>Файлы TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="297"/>
+        <location filename="../ui/about_dialog.cc" line="295"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="298"/>
+        <location filename="../ui/about_dialog.cc" line="296"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
