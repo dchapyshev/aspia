@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
-#include "base/files/base_paths.h"
 #include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
@@ -33,6 +32,7 @@
 #include "base/win/process_util.h"
 #endif // defined(OS_WIN)
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QFile>
@@ -42,8 +42,8 @@ namespace host {
 
 namespace {
 
-const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
-const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
+const char kFirewallRuleName[] = "Aspia Host Service";
+const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
 
@@ -435,15 +435,8 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
 //--------------------------------------------------------------------------------------------------
 void Server::addFirewallRules()
 {
-#if defined(OS_WIN)
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecFile failed";
-        return;
-    }
-
-    base::FirewallManager firewall(file_path);
+#if defined(Q_OS_WINDOWS)
+    base::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (!firewall.isValid())
     {
         LOG(LS_ERROR) << "Invalid firewall manager";
@@ -459,21 +452,14 @@ void Server::addFirewallRules()
     }
 
     LOG(LS_INFO) << "Rule is added to the firewall (TCP " << tcp_port << ")";
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::deleteFirewallRules()
 {
-#if defined(OS_WIN)
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecFile failed";
-        return;
-    }
-
-    base::FirewallManager firewall(file_path);
+#if defined(Q_OS_WINDOWS)
+    base::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (!firewall.isValid())
     {
         LOG(LS_ERROR) << "Invalid firewall manager";
@@ -482,7 +468,7 @@ void Server::deleteFirewallRules()
 
     LOG(LS_INFO) << "Delete firewall rule";
     firewall.deleteRuleByName(kFirewallRuleName);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
