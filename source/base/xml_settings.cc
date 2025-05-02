@@ -27,17 +27,17 @@ namespace base {
 namespace {
 
 const QString kExtension = QStringLiteral("conf");
-const QString kSettingsElement = QStringLiteral("Settings");
-const QString kGroupElement = QStringLiteral("Group");
-const QString kValueElement = QStringLiteral("Value");
-const QString kNameAttribute = QStringLiteral("Name");
-const QString kTypeAttribute = QStringLiteral("Type");
-const QString kInvalidType = QStringLiteral("Invalid");
-const QString kByteArrayType = QStringLiteral("ByteArray");
-const QString kRectType = QStringLiteral("Rect");
-const QString kSizeType = QStringLiteral("Size");
-const QString kPointType = QStringLiteral("Point");
-const QString kVariantType = QStringLiteral("Variant");
+const QString kSettingsElement = QStringLiteral("settings");
+const QString kGroupElement = QStringLiteral("group");
+const QString kValueElement = QStringLiteral("value");
+const QString kNameAttribute = QStringLiteral("name");
+const QString kTypeAttribute = QStringLiteral("type");
+const QString kInvalidType = QStringLiteral("invalid");
+const QString kByteArrayType = QStringLiteral("byteArray");
+const QString kRectType = QStringLiteral("rect");
+const QString kSizeType = QStringLiteral("size");
+const QString kPointType = QStringLiteral("point");
+const QString kVariantType = QStringLiteral("variant");
 
 QString variantToType(const QVariant& value)
 {

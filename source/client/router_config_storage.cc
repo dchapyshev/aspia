@@ -19,12 +19,13 @@
 #include "client/router_config_storage.h"
 
 #include "base/logging.h"
+#include "base/xml_settings.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
 RouterConfigStorage::RouterConfigStorage()
-    : storage_(base::JsonSettings::Scope::USER, "aspia", "router_config")
+    : storage_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "router_config")
 {
     // Nothing
 }
@@ -35,13 +36,13 @@ RouterConfigStorage::~RouterConfigStorage() = default;
 //--------------------------------------------------------------------------------------------------
 bool RouterConfigStorage::isEnabled() const
 {
-    return storage_.get<bool>("enabled", false);
+    return storage_.value("enabled", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterConfigStorage::setEnabled(bool enable)
 {
-    storage_.set("enabled", enable);
+    storage_.setValue("enabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,10 +50,10 @@ RouterConfig RouterConfigStorage::routerConfig() const
 {
     RouterConfig config;
 
-    config.address = storage_.get<QString>("address");
-    config.port = storage_.get<quint16>("port");
-    config.username = storage_.get<QString>("username");
-    config.password = storage_.get<QString>("password");
+    config.address = storage_.value("address").toString();
+    config.port = storage_.value("port").toUInt();
+    config.username = storage_.value("username").toString();
+    config.password = storage_.value("password").toString();
 
     return config;
 }
@@ -66,10 +67,10 @@ void RouterConfigStorage::setRouterConfig(const RouterConfig& config)
         return;
     }
 
-    storage_.set("address", config.address);
-    storage_.set("port", config.port);
-    storage_.set("username", config.username);
-    storage_.set("password", config.password);
+    storage_.setValue("address", config.address);
+    storage_.setValue("port", config.port);
+    storage_.setValue("username", config.username);
+    storage_.setValue("password", config.password);
 }
 
 } // namespace client

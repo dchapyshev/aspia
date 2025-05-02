@@ -18,6 +18,8 @@
 
 #include "client/ui/desktop/desktop_settings.h"
 
+#include "base/xml_settings.h"
+
 #include <QStandardPaths>
 
 namespace client {
@@ -38,7 +40,7 @@ const QString kWaitForHostParam = QStringLiteral("Desktop/WaitForHost");
 
 //--------------------------------------------------------------------------------------------------
 DesktopSettings::DesktopSettings()
-    : settings_(QSettings::IniFormat,
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("client"))

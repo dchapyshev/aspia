@@ -18,6 +18,7 @@
 
 #include "client/ui/client_settings.h"
 
+#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
 
@@ -43,7 +44,7 @@ const QString kDisplayNameParam = QStringLiteral("DisplayName");
 
 //--------------------------------------------------------------------------------------------------
 ClientSettings::ClientSettings()
-    : settings_(QSettings::IniFormat,
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("client"))

@@ -18,6 +18,7 @@
 
 #include "console/settings.h"
 
+#include "base/xml_settings.h"
 #include "build/build_config.h"
 
 #include <QDir>
@@ -52,7 +53,7 @@ const QString kAddressBookDialogGeometryParam = QStringLiteral("AddressBookDialo
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : settings_(QSettings::IniFormat,
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("console"))

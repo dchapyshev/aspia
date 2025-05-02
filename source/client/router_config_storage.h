@@ -20,8 +20,9 @@
 #define CLIENT_ROUTER_CONFIG_STORAGE_H
 
 #include "base/macros_magic.h"
-#include "base/settings/json_settings.h"
 #include "client/router_config.h"
+
+#include <QSettings>
 
 namespace client {
 
@@ -38,7 +39,7 @@ public:
     void setRouterConfig(const RouterConfig& config);
 
 private:
-    base::JsonSettings storage_;
+    QSettings storage_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterConfigStorage);
 };

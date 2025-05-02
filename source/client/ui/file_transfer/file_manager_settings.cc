@@ -18,6 +18,8 @@
 
 #include "client/ui/file_transfer/file_manager_settings.h"
 
+#include "base/xml_settings.h"
+
 namespace client {
 
 namespace {
@@ -29,7 +31,7 @@ const QString kWindowStateParam = QStringLiteral("FileManager/WindowState");
 
 //--------------------------------------------------------------------------------------------------
 FileManagerSettings::FileManagerSettings()
-    : settings_(QSettings::IniFormat,
+    : settings_(base::XmlSettings::format(),
                 QSettings::UserScope,
                 QStringLiteral("aspia"),
                 QStringLiteral("client"))
