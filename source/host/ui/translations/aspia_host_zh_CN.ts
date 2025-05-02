@@ -294,12 +294,12 @@
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="291"/>
+        <location filename="../host_main.cc" line="293"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="292"/>
+        <location filename="../host_main.cc" line="294"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -448,26 +448,28 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="43"/>
-        <location filename="../settings_util.cc" line="64"/>
+        <location filename="../settings_util.cc" line="45"/>
+        <location filename="../settings_util.cc" line="66"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="44"/>
+        <location filename="../settings_util.cc" line="46"/>
         <source>The configuration was successfully imported.</source>
         <translation>配置已成功导入。</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="65"/>
+        <location filename="../settings_util.cc" line="67"/>
         <source>The configuration was successfully exported.</source>
         <translation>配置已成功导出。</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="88"/>
-        <location filename="../settings_util.cc" line="116"/>
-        <location filename="../settings_util.cc" line="133"/>
-        <location filename="../settings_util.cc" line="161"/>
+        <location filename="../settings_util.cc" line="109"/>
+        <location filename="../settings_util.cc" line="126"/>
+        <location filename="../settings_util.cc" line="143"/>
+        <location filename="../settings_util.cc" line="172"/>
+        <location filename="../settings_util.cc" line="187"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -477,27 +479,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="117"/>
+        <location filename="../settings_util.cc" line="110"/>
+        <source>Unable to open the source file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="127"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>无法读取源文件：文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="134"/>
+        <location filename="../settings_util.cc" line="144"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="137"/>
+        <location filename="../settings_util.cc" line="147"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="138"/>
+        <location filename="../settings_util.cc" line="148"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="162"/>
+        <location filename="../settings_util.cc" line="173"/>
+        <source>Unable to open the target file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="188"/>
         <source>Unable to write the target file.</source>
         <translation>无法写入目标文件。</translation>
     </message>

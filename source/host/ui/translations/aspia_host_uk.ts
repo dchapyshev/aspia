@@ -294,12 +294,12 @@
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="291"/>
+        <location filename="../host_main.cc" line="293"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="292"/>
+        <location filename="../host_main.cc" line="294"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Версія додатку: %1.%2.%3.%4.</translation>
     </message>
@@ -449,26 +449,28 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="43"/>
-        <location filename="../settings_util.cc" line="64"/>
+        <location filename="../settings_util.cc" line="45"/>
+        <location filename="../settings_util.cc" line="66"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="44"/>
+        <location filename="../settings_util.cc" line="46"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="65"/>
+        <location filename="../settings_util.cc" line="67"/>
         <source>The configuration was successfully exported.</source>
         <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="88"/>
-        <location filename="../settings_util.cc" line="116"/>
-        <location filename="../settings_util.cc" line="133"/>
-        <location filename="../settings_util.cc" line="161"/>
+        <location filename="../settings_util.cc" line="109"/>
+        <location filename="../settings_util.cc" line="126"/>
+        <location filename="../settings_util.cc" line="143"/>
+        <location filename="../settings_util.cc" line="172"/>
+        <location filename="../settings_util.cc" line="187"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -478,27 +480,37 @@
         <translation>Вихідний файл налаштувань відсутній.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="117"/>
+        <location filename="../settings_util.cc" line="110"/>
+        <source>Unable to open the source file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="127"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="134"/>
+        <location filename="../settings_util.cc" line="144"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Поточні налаштування будуть перезаписані. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="137"/>
+        <location filename="../settings_util.cc" line="147"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="138"/>
+        <location filename="../settings_util.cc" line="148"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="162"/>
+        <location filename="../settings_util.cc" line="173"/>
+        <source>Unable to open the target file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="188"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>

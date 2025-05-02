@@ -274,12 +274,12 @@
         <translation>Parametri di esportazione e importazione non possono essere definiti insieme.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="291"/>
+        <location filename="../host_main.cc" line="293"/>
         <source>Aspia Host</source>
         <translation>Host Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="292"/>
+        <location filename="../host_main.cc" line="294"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Versione applicazione: %1.%2.%3.%4.</translation>
     </message>
@@ -428,36 +428,48 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="43"/>
-        <location filename="../settings_util.cc" line="64"/>
+        <location filename="../settings_util.cc" line="45"/>
+        <location filename="../settings_util.cc" line="66"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="44"/>
+        <location filename="../settings_util.cc" line="46"/>
         <source>The configuration was successfully imported.</source>
         <translation>La configurazione è stata importata con successo.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="65"/>
+        <location filename="../settings_util.cc" line="67"/>
         <source>The configuration was successfully exported.</source>
         <translation>La configurazione è stata esportata con successo.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="88"/>
-        <location filename="../settings_util.cc" line="116"/>
-        <location filename="../settings_util.cc" line="133"/>
-        <location filename="../settings_util.cc" line="161"/>
+        <location filename="../settings_util.cc" line="109"/>
+        <location filename="../settings_util.cc" line="126"/>
+        <location filename="../settings_util.cc" line="143"/>
+        <location filename="../settings_util.cc" line="172"/>
+        <location filename="../settings_util.cc" line="187"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="117"/>
+        <location filename="../settings_util.cc" line="110"/>
+        <source>Unable to open the source file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="127"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Lettura file origine fallita: il file è danneggiato o in un formato sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="162"/>
+        <location filename="../settings_util.cc" line="173"/>
+        <source>Unable to open the target file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="188"/>
         <source>Unable to write the target file.</source>
         <translation>Scrittura sul file di destinazione fallita.</translation>
     </message>
@@ -467,17 +479,17 @@
         <translation>File impostazioni di origine non esiste.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="134"/>
+        <location filename="../settings_util.cc" line="144"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Le impostazioni attive saranno sovrascritte. Continuo?</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="137"/>
+        <location filename="../settings_util.cc" line="147"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="138"/>
+        <location filename="../settings_util.cc" line="148"/>
         <source>No</source>
         <translation>No</translation>
     </message>
