@@ -332,7 +332,7 @@ void ClientDesktop::setAudioPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& file_path)
+void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
 {
     proto::VideoRecording video_recording;
 

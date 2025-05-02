@@ -19,18 +19,15 @@
 #include "base/codec/webm_file_writer.h"
 
 #include "base/logging.h"
-#include "base/system_time.h"
 #include "base/codec/webm_file_muxer.h"
-#include "base/strings/unicode.h"
-#include "build/build_config.h"
 
-#include <iomanip>
-#include <sstream>
+#include <QDateTime>
+#include <QDir>
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, const QString& name)
+WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)
     : path_(path),
       name_(name)
 {
@@ -160,19 +157,19 @@ void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
 //--------------------------------------------------------------------------------------------------
 bool WebmFileWriter::init()
 {
-    std::error_code error_code;
-    if (!std::filesystem::exists(path_, error_code))
+    QDir directory(path_);
+
+    if (!directory.exists())
     {
         LOG(LS_INFO) << "Path '" << path_ << "' not exists yet";
 
-        if (std::filesystem::create_directories(path_, error_code))
+        if (directory.mkpath(path_))
         {
             LOG(LS_INFO) << "Path created successfully";
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to create path: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to create path";
             return false;
         }
     }
@@ -181,32 +178,16 @@ bool WebmFileWriter::init()
         LOG(LS_INFO) << "Path '" << path_ << "' already exists";
     }
 
-    SystemTime time = SystemTime::now();
-    std::ostringstream file_name;
-
-    file_name << name_.toUtf8().data() << '-'
-              << std::setfill('0')
-              << std::setw(4) << time.year()
-              << std::setw(2) << time.month()
-              << std::setw(2) << time.day()
-              << '-'
-              << std::setw(2) << time.hour()
-              << std::setw(2) << time.minute()
-              << std::setw(2) << time.second()
-              << std::setw(3) << time.millisecond()
-              << '.'
-              << file_counter_
-              << ".webm";
-
-    std::filesystem::path file_path(path_);
-    file_path.append(base::utf16FromUtf8(file_name.str()));
+    QString time = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss.zzz"));
+    QString file_name = QString("/%1-%2.%3.webm").arg(name_, time).arg(file_counter_);
+    QString file_path = path_ + file_name;
 
     LOG(LS_INFO) << "New video file: " << file_path;
 
-#if defined(OS_WIN)
-    if (fopen_s(&file_, file_path.string().c_str(), "wb") != 0)
+#if defined(Q_OS_WINDOWS)
+    if (fopen_s(&file_, file_path.toLocal8Bit().data(), "wb") != 0)
 #else
-    file_ = fopen(file_path.string().c_str(), "wb");
+    file_ = fopen(file_path.toLocal8Bit().data(), "wb");
     if (!file_)
 #endif
     {

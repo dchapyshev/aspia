@@ -95,7 +95,7 @@ public slots:
     void setPreferredSize(int width, int height);
     void setVideoPause(bool enable);
     void setAudioPause(bool enable);
-    void setVideoRecording(bool enable, const std::filesystem::path& file_path);
+    void setVideoRecording(bool enable, const QString& file_path);
     void onKeyEvent(const proto::KeyEvent& event);
     void onTextEvent(const proto::TextEvent& event);
     void onMouseEvent(const proto::MouseEvent& event);

@@ -75,7 +75,7 @@ signals:
     void sig_preferredSizeChanged(int width, int height);
     void sig_videoPaused(bool enable);
     void sig_audioPaused(bool enable);
-    void sig_videoRecording(bool enable, const std::filesystem::path& file_path);
+    void sig_videoRecording(bool enable, const QString& file_path);
     void sig_keyEvent(const proto::KeyEvent& event);
     void sig_textEvent(const proto::TextEvent& event);
     void sig_mouseEvent(const proto::MouseEvent& event);

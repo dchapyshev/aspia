@@ -31,8 +31,6 @@ list(APPEND SOURCE_BASE
     endian_util.h
     gui_application.cc
     gui_application.h
-    gui_logging.cc
-    gui_logging.h
     license_reader.h
     location.cc
     location.h
@@ -60,8 +58,6 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
-    system_time.cc
-    system_time.h
     task_runner.cc
     task_runner.h
     translations_loader.cc

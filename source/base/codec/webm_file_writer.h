@@ -24,8 +24,6 @@
 #include "proto/desktop.h"
 
 #include <chrono>
-#include <filesystem>
-#include <fstream>
 #include <memory>
 #include <optional>
 
@@ -38,7 +36,7 @@ class WebmFileMuxer;
 class WebmFileWriter
 {
 public:
-    WebmFileWriter(const std::filesystem::path& path, const QString& name);
+    WebmFileWriter(const QString& path, const QString& name);
     ~WebmFileWriter();
 
     void addVideoPacket(const proto::VideoPacket& packet);
@@ -48,7 +46,7 @@ private:
     bool init();
     void close();
 
-    std::filesystem::path path_;
+    QString path_;
     QString name_;
     int file_counter_ = 0;
     FILE* file_ = nullptr;

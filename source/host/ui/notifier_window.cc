@@ -18,7 +18,7 @@
 
 #include "host/ui/notifier_window.h"
 
-#include "base/gui_logging.h"
+#include "base/logging.h"
 #include "build/build_config.h"
 
 #include <QHideEvent>

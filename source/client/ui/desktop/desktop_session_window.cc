@@ -18,7 +18,7 @@
 
 #include "client/ui/desktop/desktop_session_window.h"
 
-#include "base/gui_logging.h"
+#include "base/logging.h"
 #include "base/stl_util.h"
 #include "base/version_constants.h"
 #include "base/desktop/frame_qimage.h"
@@ -262,12 +262,12 @@ DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
 
     connect(toolbar_, &DesktopToolBar::sig_recordingStateChanged, this, [this](bool enable)
     {
-        std::filesystem::path file_path;
+        QString file_path;
 
         if (enable)
         {
             DesktopSettings settings;
-            file_path = settings.recordingPath().toStdU16String();
+            file_path = settings.recordingPath();
         }
 
         emit sig_videoRecording(enable, file_path);

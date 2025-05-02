@@ -357,7 +357,7 @@ void Server::onFileDownloaderError(int error_code)
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderCompleted()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     if (file_path.isEmpty())
     {
@@ -401,7 +401,7 @@ void Server::onFileDownloaderCompleted()
             }
         }
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     update_downloader_.release()->deleteLater();
 }
