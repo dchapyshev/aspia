@@ -278,30 +278,61 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="237"/>
-        <location filename="../host_main.cc" line="256"/>
+        <location filename="../host_main.cc" line="270"/>
+        <location filename="../host_main.cc" line="287"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="238"/>
+        <location filename="../host_main.cc" line="271"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="257"/>
+        <location filename="../host_main.cc" line="288"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="293"/>
         <source>Aspia Host</source>
-        <translation>Хост Aspia</translation>
+        <translation type="vanished">Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="294"/>
         <source>Application version: %1.%2.%3.%4.</source>
-        <translation>Версия приложения: %1.%2.%3.%4.</translation>
+        <translation type="vanished">Версия приложения: %1.%2.%3.%4.</translation>
+    </message>
+</context>
+<context>
+    <name>HostMain</name>
+    <message>
+        <location filename="../host_main.cc" line="237"/>
+        <source>Launch the application hidden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="239"/>
+        <source>Export parameters to file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="241"/>
+        <source>Import parameters to file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="243"/>
+        <source>Do not display any messages during import and export.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="245"/>
+        <source>Calling the update check dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="247"/>
+        <source>Calling the settings dialog.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
