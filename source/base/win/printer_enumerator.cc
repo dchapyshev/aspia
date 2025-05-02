@@ -18,9 +18,8 @@
 
 #include "base/win/printer_enumerator.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <winspool.h>
 
 namespace base::win {
@@ -93,48 +92,48 @@ bool PrinterEnumerator::isShared() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::name() const
+QString PrinterEnumerator::name() const
 {
     if (!info_[current_].pPrinterName)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pPrinterName);
+    return QString::fromWCharArray(info_[current_].pPrinterName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::shareName() const
+QString PrinterEnumerator::shareName() const
 {
     if (!info_[current_].pShareName)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pShareName);
+    return QString::fromWCharArray(info_[current_].pShareName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::portName() const
+QString PrinterEnumerator::portName() const
 {
     if (!info_[current_].pPortName)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pPortName);
+    return QString::fromWCharArray(info_[current_].pPortName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::driverName() const
+QString PrinterEnumerator::driverName() const
 {
     if (!info_[current_].pDriverName)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pDriverName);
+    return QString::fromWCharArray(info_[current_].pDriverName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::deviceName() const
+QString PrinterEnumerator::deviceName() const
 {
     if (!info_[current_].pDevMode)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pDevMode->dmDeviceName);
+    return QString::fromWCharArray(info_[current_].pDevMode->dmDeviceName);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,48 +164,48 @@ int PrinterEnumerator::printQuality() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::printProcessor() const
+QString PrinterEnumerator::printProcessor() const
 {
     if (!info_[current_].pPrintProcessor)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pPrintProcessor);
+    return QString::fromWCharArray(info_[current_].pPrintProcessor);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::dataType() const
+QString PrinterEnumerator::dataType() const
 {
     if (!info_[current_].pDatatype)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pDatatype);
+    return QString::fromWCharArray(info_[current_].pDatatype);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::serverName() const
+QString PrinterEnumerator::serverName() const
 {
     if (!info_[current_].pServerName)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pServerName);
+    return QString::fromWCharArray(info_[current_].pServerName);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::location() const
+QString PrinterEnumerator::location() const
 {
     if (!info_[current_].pLocation)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pLocation);
+    return QString::fromWCharArray(info_[current_].pLocation);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string PrinterEnumerator::comment() const
+QString PrinterEnumerator::comment() const
 {
     if (!info_[current_].pComment)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(info_[current_].pComment);
+    return QString::fromWCharArray(info_[current_].pComment);
 }
 
 //--------------------------------------------------------------------------------------------------

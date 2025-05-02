@@ -77,13 +77,13 @@ void fillPrinters(proto::system_info::SystemInfo* system_info)
         proto::system_info::Printers::Printer* printer =
             system_info->mutable_printers()->add_printer();
 
-        printer->set_name(enumerator.name());
+        printer->set_name(enumerator.name().toStdString());
         printer->set_default_(enumerator.isDefault());
         printer->set_shared(enumerator.isShared());
-        printer->set_port(enumerator.portName());
-        printer->set_driver(enumerator.driverName());
+        printer->set_port(enumerator.portName().toStdString());
+        printer->set_driver(enumerator.driverName().toStdString());
         printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
-        printer->set_share_name(enumerator.shareName());
+        printer->set_share_name(enumerator.shareName().toStdString());
     }
 }
 

@@ -21,10 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <memory>
-#include <string>
-
 #include <QByteArray>
+#include <QString>
 
 struct _PRINTER_INFO_2W;
 
@@ -41,19 +39,19 @@ public:
 
     bool isDefault() const;
     bool isShared() const;
-    std::string name() const;
-    std::string shareName() const;
-    std::string portName() const;
-    std::string driverName() const;
-    std::string deviceName() const;
+    QString name() const;
+    QString shareName() const;
+    QString portName() const;
+    QString driverName() const;
+    QString deviceName() const;
     int paperWidth() const;
     int paperHeight() const;
     int printQuality() const;
-    std::string printProcessor() const;
-    std::string dataType() const;
-    std::string serverName() const;
-    std::string location() const;
-    std::string comment() const;
+    QString printProcessor() const;
+    QString dataType() const;
+    QString serverName() const;
+    QString location() const;
+    QString comment() const;
     int jobsCount() const;
 
 private:
