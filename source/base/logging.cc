@@ -27,22 +27,22 @@
 #include <ostream>
 #include <thread>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/mini_dump_writer.h"
 
 #include <Windows.h>
 #include <Psapi.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include <linux/limits.h>
 #include <unistd.h>
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
 #include <mach-o/dyld.h>
 #include <sys/syslimits.h>
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
 #include <QDateTime>
 #include <QDebug>
@@ -261,27 +261,27 @@ LoggingSettings::LoggingSettings()
 //--------------------------------------------------------------------------------------------------
 QString applicationFilePath()
 {
-    QString exec_file_path;
+    QString file_path;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
-    exec_file_path = QString::fromWCharArray(buffer);
-#elif defined(OS_LINUX)
+    file_path = QString::fromWCharArray(buffer);
+#elif defined(Q_OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
     if (readlink("/proc/self/exe", buffer, std::size(buffer)) == -1)
         return QString();
-    exec_file_path = buffer;
-#elif defined(OS_MAC)
+    file_path = buffer;
+#elif defined(Q_OS_MACOS)
     char buffer[PATH_MAX] = { 0 };
     uint32_t buffer_size = std::size(buffer);
     _NSGetExecutablePath(buffer, &buffer_size);
-    exec_file_path = buffer;
+    file_path = buffer;
 #else
 #error Not implemented
 #endif
 
-    return exec_file_path;
+    return file_path;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -293,9 +293,9 @@ QString logFilePrefix()
 //--------------------------------------------------------------------------------------------------
 bool initLogging(const LoggingSettings& settings)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     installFailureHandler();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     {
         std::scoped_lock lock(g_log_file_lock);
