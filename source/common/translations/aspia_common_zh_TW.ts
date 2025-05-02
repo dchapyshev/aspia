@@ -567,18 +567,18 @@
         <translation>取消檢查更新。請稍候。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="216"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="217"/>
+        <location filename="../ui/update_dialog.cc" line="214"/>
         <source>Error retrieving update information.</source>
         <translation>擷取更新訊息時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="227"/>
-        <location filename="../ui/update_dialog.cc" line="250"/>
+        <location filename="../ui/update_dialog.cc" line="224"/>
+        <location filename="../ui/update_dialog.cc" line="247"/>
         <source>No updates available.</source>
         <translation>沒有可用的更新。</translation>
     </message>

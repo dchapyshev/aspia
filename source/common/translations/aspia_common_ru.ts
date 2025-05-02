@@ -590,18 +590,18 @@
         <translation>Отмена проверки обновлений. Пожалуйста, подождите.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="216"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="217"/>
+        <location filename="../ui/update_dialog.cc" line="214"/>
         <source>Error retrieving update information.</source>
         <translation>Ошибка при получении информации об обновлении.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="227"/>
-        <location filename="../ui/update_dialog.cc" line="250"/>
+        <location filename="../ui/update_dialog.cc" line="224"/>
+        <location filename="../ui/update_dialog.cc" line="247"/>
         <source>No updates available.</source>
         <translation>Нет доступных обновлений.</translation>
     </message>

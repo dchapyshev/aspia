@@ -438,18 +438,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="216"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="217"/>
+        <location filename="../ui/update_dialog.cc" line="214"/>
         <source>Error retrieving update information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="227"/>
-        <location filename="../ui/update_dialog.cc" line="250"/>
+        <location filename="../ui/update_dialog.cc" line="224"/>
+        <location filename="../ui/update_dialog.cc" line="247"/>
         <source>No updates available.</source>
         <translation type="unfinished"></translation>
     </message>

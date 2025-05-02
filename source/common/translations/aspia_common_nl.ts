@@ -496,18 +496,18 @@
         <translation>Annuleer update controle. Een ogenblik geduld aub.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="216"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="217"/>
+        <location filename="../ui/update_dialog.cc" line="214"/>
         <source>Error retrieving update information.</source>
         <translation>Er is een probleem opgetreden bij het downloaden van de update informatie.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="227"/>
-        <location filename="../ui/update_dialog.cc" line="250"/>
+        <location filename="../ui/update_dialog.cc" line="224"/>
+        <location filename="../ui/update_dialog.cc" line="247"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
