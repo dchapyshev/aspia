@@ -95,24 +95,24 @@ void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
         proto::system_info::NetworkAdapters::Adapter* adapter =
             system_info->mutable_network_adapters()->add_adapter();
 
-        adapter->set_adapter_name(enumerator.adapterName());
-        adapter->set_connection_name(enumerator.connectionName());
-        adapter->set_iface(enumerator.interfaceType());
+        adapter->set_adapter_name(enumerator.adapterName().toStdString());
+        adapter->set_connection_name(enumerator.connectionName().toStdString());
+        adapter->set_iface(enumerator.interfaceType().toStdString());
         adapter->set_speed(enumerator.speed());
-        adapter->set_mac(enumerator.macAddress());
+        adapter->set_mac(enumerator.macAddress().toStdString());
         adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
 
         if (enumerator.isDhcp4Enabled())
         {
-            std::string dhcp4_server = enumerator.dhcp4Server();
-            if (!dhcp4_server.empty())
-                adapter->add_dhcp()->append(dhcp4_server);
+            QString dhcp4_server = enumerator.dhcp4Server();
+            if (!dhcp4_server.isEmpty())
+                adapter->add_dhcp()->append(dhcp4_server.toStdString());
         }
 
         for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
              !gateway.isAtEnd(); gateway.advance())
         {
-            adapter->add_gateway()->assign(gateway.address());
+            adapter->add_gateway()->assign(gateway.address().toStdString());
         }
 
         for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
@@ -120,14 +120,14 @@ void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
         {
             proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
 
-            address->set_ip(ip.address());
-            address->set_mask(ip.mask());
+            address->set_ip(ip.address().toStdString());
+            address->set_mask(ip.mask().toStdString());
         }
 
         for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
              !dns.isAtEnd(); dns.advance())
         {
-            adapter->add_dns()->assign(dns.address());
+            adapter->add_dns()->assign(dns.address().toStdString());
         }
     }
 }

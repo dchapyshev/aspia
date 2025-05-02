@@ -19,25 +19,22 @@
 #include "base/net/adapter_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-#include <fmt/format.h>
-
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <WS2tcpip.h>
 #include <iphlpapi.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 namespace {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-std::string addressToString(const SOCKET_ADDRESS& address)
+QString addressToString(const SOCKET_ADDRESS& address)
 {
     if (!address.lpSockaddr || address.iSockaddrLength <= 0)
-        return std::string();
+        return QString();
 
     char buffer[64] = { 0 };
 
@@ -48,7 +45,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
             sockaddr_in* addr = reinterpret_cast<sockaddr_in*>(address.lpSockaddr);
 
             if (!inet_ntop(AF_INET, &addr->sin_addr, buffer, std::size(buffer)))
-                return std::string();
+                return QString();
         }
         break;
 
@@ -57,17 +54,17 @@ std::string addressToString(const SOCKET_ADDRESS& address)
             sockaddr_in6* addr = reinterpret_cast<sockaddr_in6*>(address.lpSockaddr);
 
             if (!inet_ntop(AF_INET6, &addr->sin6_addr, buffer, std::size(buffer)))
-                return std::string();
+                return QString();
         }
         break;
 
         default:
-            return std::string();
+            return QString();
     }
 
     return buffer;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -78,7 +75,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
 //--------------------------------------------------------------------------------------------------
 AdapterEnumerator::AdapterEnumerator()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     const ULONG flags = GAA_FLAG_INCLUDE_GATEWAYS | GAA_FLAG_SKIP_ANYCAST |
         GAA_FLAG_SKIP_MULTICAST;
 
@@ -121,7 +118,7 @@ AdapterEnumerator::~AdapterEnumerator() = default;
 //--------------------------------------------------------------------------------------------------
 bool AdapterEnumerator::isAtEnd() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return adapter_ == nullptr;
 #else
     NOTIMPLEMENTED();
@@ -132,7 +129,7 @@ bool AdapterEnumerator::isAtEnd() const
 //--------------------------------------------------------------------------------------------------
 void AdapterEnumerator::advance()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     adapter_ = adapter_->Next;
 #else
     NOTIMPLEMENTED();
@@ -140,37 +137,37 @@ void AdapterEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AdapterEnumerator::adapterName() const
+QString AdapterEnumerator::adapterName() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!adapter_->Description)
-        return std::string();
+        return QString();
 
-    return base::utf8FromWide(adapter_->Description);
+    return QString::fromWCharArray(adapter_->Description);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AdapterEnumerator::connectionName() const
+QString AdapterEnumerator::connectionName() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!adapter_->FriendlyName)
-        return std::string();
+        return QString();
 
-    return base::utf8FromWide(adapter_->FriendlyName);
+    return QString::fromWCharArray(adapter_->FriendlyName);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AdapterEnumerator::interfaceType() const
+QString AdapterEnumerator::interfaceType() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     switch (adapter_->IfType)
     {
         case IF_TYPE_OTHER:
@@ -201,18 +198,18 @@ std::string AdapterEnumerator::interfaceType() const
             return "IEEE 1394 Firewire";
 
         default:
-            return std::string();
+            return QString();
     }
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
 uint32_t AdapterEnumerator::mtu() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return adapter_->Mtu;
 #else
     NOTIMPLEMENTED();
@@ -223,7 +220,7 @@ uint32_t AdapterEnumerator::mtu() const
 //--------------------------------------------------------------------------------------------------
 quint64 AdapterEnumerator::speed() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (adapter_->TransmitLinkSpeed == std::numeric_limits<ULONG64>::max())
         return 0;
 
@@ -235,29 +232,29 @@ quint64 AdapterEnumerator::speed() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AdapterEnumerator::macAddress() const
+QString AdapterEnumerator::macAddress() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!adapter_->PhysicalAddressLength)
-        return std::string();
+        return QString();
 
-    return fmt::format("{:02x}-{:02x}-{:02x}-{:02x}-{:02x}-{:02x}",
-                       adapter_->PhysicalAddress[0],
-                       adapter_->PhysicalAddress[1],
-                       adapter_->PhysicalAddress[2],
-                       adapter_->PhysicalAddress[3],
-                       adapter_->PhysicalAddress[4],
-                       adapter_->PhysicalAddress[5]);
+    return QString("%1-%2-%3-%4-%5-%6")
+        .arg(adapter_->PhysicalAddress[0], 2, 16, QLatin1Char('0'))
+        .arg(adapter_->PhysicalAddress[1], 2, 16, QLatin1Char('0'))
+        .arg(adapter_->PhysicalAddress[2], 2, 16, QLatin1Char('0'))
+        .arg(adapter_->PhysicalAddress[3], 2, 16, QLatin1Char('0'))
+        .arg(adapter_->PhysicalAddress[4], 2, 16, QLatin1Char('0'))
+        .arg(adapter_->PhysicalAddress[5], 2, 16, QLatin1Char('0'));
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AdapterEnumerator::isDhcp4Enabled() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return !!adapter_->Dhcpv4Enabled;
 #else
     NOTIMPLEMENTED();
@@ -266,9 +263,9 @@ bool AdapterEnumerator::isDhcp4Enabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string AdapterEnumerator::dhcp4Server() const
+QString AdapterEnumerator::dhcp4Server() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return addressToString(adapter_->Dhcpv4Server);
 #else
     NOTIMPLEMENTED();
@@ -281,16 +278,16 @@ std::string AdapterEnumerator::dhcp4Server() const
 //
 
 AdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(const AdapterEnumerator& adapter)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     : address_(adapter.adapter_->FirstUnicastAddress)
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 {
     // Nothing
 }
 
 bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return address_ == nullptr;
 #else
     NOTIMPLEMENTED();
@@ -300,40 +297,40 @@ bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
 
 void AdapterEnumerator::IpAddressEnumerator::advance()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     address_ = address_->Next;
 #else
     NOTIMPLEMENTED();
 #endif
 }
 
-std::string AdapterEnumerator::IpAddressEnumerator::address() const
+QString AdapterEnumerator::IpAddressEnumerator::address() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return addressToString(address_->Address);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
-std::string AdapterEnumerator::IpAddressEnumerator::mask() const
+QString AdapterEnumerator::IpAddressEnumerator::mask() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     in_addr addr;
 
     if (ConvertLengthToIpv4Mask(address_->OnLinkPrefixLength, &addr.s_addr) != NO_ERROR)
-        return std::string();
+        return QString();
 
     char buffer[64] = { 0 };
 
     if (!inet_ntop(AF_INET, &addr, buffer, std::size(buffer)))
-        return std::string();
+        return QString();
 
     return buffer;
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
@@ -342,7 +339,7 @@ std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 //
 
 AdapterEnumerator::GatewayEnumerator::GatewayEnumerator(const AdapterEnumerator& adapter)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     : address_(adapter.adapter_->FirstGatewayAddress)
 #endif
 {
@@ -351,7 +348,7 @@ AdapterEnumerator::GatewayEnumerator::GatewayEnumerator(const AdapterEnumerator&
 
 bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return address_ == nullptr;
 #else
     NOTIMPLEMENTED();
@@ -361,20 +358,20 @@ bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
 
 void AdapterEnumerator::GatewayEnumerator::advance()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     address_ = address_->Next;
 #else
     NOTIMPLEMENTED();
 #endif
 }
 
-std::string AdapterEnumerator::GatewayEnumerator::address() const
+QString AdapterEnumerator::GatewayEnumerator::address() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return addressToString(address_->Address);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 
@@ -383,7 +380,7 @@ std::string AdapterEnumerator::GatewayEnumerator::address() const
 //
 
 AdapterEnumerator::DnsEnumerator::DnsEnumerator(const AdapterEnumerator& adapter)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     : address_(adapter.adapter_->FirstDnsServerAddress)
 #endif
 {
@@ -392,7 +389,7 @@ AdapterEnumerator::DnsEnumerator::DnsEnumerator(const AdapterEnumerator& adapter
 
 bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return address_ == nullptr;
 #else
     NOTIMPLEMENTED();
@@ -402,20 +399,20 @@ bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
 
 void AdapterEnumerator::DnsEnumerator::advance()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     address_ = address_->Next;
 #else
     NOTIMPLEMENTED();
 #endif
 }
 
-std::string AdapterEnumerator::DnsEnumerator::address() const
+QString AdapterEnumerator::DnsEnumerator::address() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return addressToString(address_->Address);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 

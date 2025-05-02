@@ -20,19 +20,16 @@
 #define BASE_NET_ADAPTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
-#include "build/build_config.h"
-
-#include <memory>
-#include <string>
 
 #include <QByteArray>
+#include <QString>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 struct _IP_ADAPTER_ADDRESSES_LH;
 struct _IP_ADAPTER_UNICAST_ADDRESS_LH;
 struct _IP_ADAPTER_DNS_SERVER_ADDRESS_XP;
 struct _IP_ADAPTER_GATEWAY_ADDRESS_LH;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -45,15 +42,15 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    std::string adapterName() const;
-    std::string connectionName() const;
-    std::string interfaceType() const;
+    QString adapterName() const;
+    QString connectionName() const;
+    QString interfaceType() const;
     uint32_t mtu() const;
     quint64 speed() const;
-    std::string macAddress() const;
+    QString macAddress() const;
 
     bool isDhcp4Enabled() const;
-    std::string dhcp4Server() const;
+    QString dhcp4Server() const;
 
     class IpAddressEnumerator
     {
@@ -63,11 +60,11 @@ public:
         bool isAtEnd() const;
         void advance();
 
-        std::string address() const;
-        std::string mask() const;
+        QString address() const;
+        QString mask() const;
 
     private:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         const _IP_ADAPTER_UNICAST_ADDRESS_LH* address_;
 #endif
 
@@ -81,10 +78,10 @@ public:
 
         bool isAtEnd() const;
         void advance();
-        std::string address() const;
+        QString address() const;
 
     private:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         const _IP_ADAPTER_GATEWAY_ADDRESS_LH* address_;
 #endif
 
@@ -98,10 +95,10 @@ public:
 
         bool isAtEnd() const;
         void advance();
-        std::string address() const;
+        QString address() const;
 
     private:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         const _IP_ADAPTER_DNS_SERVER_ADDRESS_XP* address_ = nullptr;
 #endif
 
@@ -109,7 +106,7 @@ public:
     };
 
 private:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QByteArray adapters_buffer_;
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
 #endif
