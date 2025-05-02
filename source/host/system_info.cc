@@ -506,13 +506,13 @@ void fillConnection(proto::system_info::SystemInfo* system_info)
         proto::system_info::Connections::Connection* connection =
             system_info->mutable_connections()->add_connection();
 
-        connection->set_protocol(enumerator.protocol());
-        connection->set_process_name(enumerator.processName());
-        connection->set_local_address(enumerator.localAddress());
-        connection->set_remote_address(enumerator.remoteAddress());
+        connection->set_protocol(enumerator.protocol().toStdString());
+        connection->set_process_name(enumerator.processName().toStdString());
+        connection->set_local_address(enumerator.localAddress().toStdString());
+        connection->set_remote_address(enumerator.remoteAddress().toStdString());
         connection->set_local_port(enumerator.localPort());
         connection->set_remote_port(enumerator.remotePort());
-        connection->set_state(enumerator.state());
+        connection->set_state(enumerator.state().toStdString());
     }
 
     for (base::ConnectEnumerator enumerator(base::ConnectEnumerator::Mode::UDP);
@@ -522,9 +522,9 @@ void fillConnection(proto::system_info::SystemInfo* system_info)
         proto::system_info::Connections::Connection* connection =
             system_info->mutable_connections()->add_connection();
 
-        connection->set_protocol(enumerator.protocol());
-        connection->set_process_name(enumerator.processName());
-        connection->set_local_address(enumerator.localAddress());
+        connection->set_protocol(enumerator.protocol().toStdString());
+        connection->set_process_name(enumerator.processName().toStdString());
+        connection->set_local_address(enumerator.localAddress().toStdString());
         connection->set_local_port(enumerator.localPort());
     }
 }
@@ -536,9 +536,9 @@ void fillRoutes(proto::system_info::SystemInfo* system_info)
     {
         proto::system_info::Routes::Route* route = system_info->mutable_routes()->add_route();
 
-        route->set_destonation(enumerator.destonation());
-        route->set_mask(enumerator.mask());
-        route->set_gateway(enumerator.gateway());
+        route->set_destonation(enumerator.destonation().toStdString());
+        route->set_mask(enumerator.mask().toStdString());
+        route->set_gateway(enumerator.gateway().toStdString());
         route->set_metric(enumerator.metric());
     }
 }
@@ -908,9 +908,9 @@ void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
             system_info->mutable_open_files()->add_open_file();
 
         open_file->set_id(enumerator.id());
-        open_file->set_user_name(enumerator.userName());
+        open_file->set_user_name(enumerator.userName().toStdString());
         open_file->set_lock_count(enumerator.lockCount());
-        open_file->set_file_path(enumerator.filePath());
+        open_file->set_file_path(enumerator.filePath().toStdString());
     }
 }
 

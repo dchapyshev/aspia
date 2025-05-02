@@ -20,9 +20,6 @@
 
 #include "base/endian_util.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
-
-#include <fmt/format.h>
 
 #include <iphlpapi.h>
 #include <TlHelp32.h>
@@ -81,7 +78,7 @@ std::unique_ptr<uint8_t[]> initializeUdpTable()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string processNameByPid(HANDLE process_snapshot, DWORD process_id)
+QString processNameByPid(HANDLE process_snapshot, DWORD process_id)
 {
     PROCESSENTRY32W process_entry;
     process_entry.dwSize = sizeof(process_entry);
@@ -91,27 +88,27 @@ std::string processNameByPid(HANDLE process_snapshot, DWORD process_id)
         do
         {
             if (process_entry.th32ProcessID == process_id)
-                return utf8FromWide(process_entry.szExeFile);
+                return QString::fromWCharArray(process_entry.szExeFile);
         } while (Process32NextW(process_snapshot, &process_entry));
     }
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string addressToString(uint32_t address)
+QString addressToString(uint32_t address)
 {
     address = base::EndianUtil::byteSwap(address);
 
-    return fmt::format("{}.{}.{}.{}",
-                       (address >> 24) & 0xFF,
-                       (address >> 16) & 0xFF,
-                       (address >> 8)  & 0xFF,
-                       (address)       & 0xFF);
+    return QString("%1.%2.%3.%4")
+        .arg((address >> 24) & 0xFF)
+        .arg((address >> 16) & 0xFF)
+        .arg((address >> 8)  & 0xFF)
+        .arg(address & 0xFF);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string stateToString(DWORD state)
+QString stateToString(DWORD state)
 {
     switch (state)
     {
@@ -176,20 +173,20 @@ void ConnectEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ConnectEnumerator::protocol() const
+QString ConnectEnumerator::protocol() const
 {
     return (mode_ == Mode::TCP) ? "TCP" : "UDP";
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ConnectEnumerator::processName() const
+QString ConnectEnumerator::processName() const
 {
     if (mode_ == Mode::TCP)
     {
         PMIB_TCPTABLE_OWNER_PID tcp_table =
             reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
         if (!tcp_table)
-            return std::string();
+            return QString();
 
         return processNameByPid(snapshot_.get(), tcp_table->table[pos_].dwOwningPid);
     }
@@ -198,21 +195,21 @@ std::string ConnectEnumerator::processName() const
         PMIB_UDPTABLE_OWNER_PID udp_table =
             reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
         if (!udp_table)
-            return std::string();
+            return QString();
 
         return processNameByPid(snapshot_.get(), udp_table->table[pos_].dwOwningPid);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ConnectEnumerator::localAddress() const
+QString ConnectEnumerator::localAddress() const
 {
     if (mode_ == Mode::TCP)
     {
         PMIB_TCPTABLE_OWNER_PID tcp_table =
             reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
         if (!tcp_table)
-            return std::string();
+            return QString();
 
         return addressToString(tcp_table->table[pos_].dwLocalAddr);
     }
@@ -221,27 +218,27 @@ std::string ConnectEnumerator::localAddress() const
         PMIB_UDPTABLE_OWNER_PID udp_table =
             reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
         if (!udp_table)
-            return std::string();
+            return QString();
 
         return addressToString(udp_table->table[pos_].dwLocalAddr);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ConnectEnumerator::remoteAddress() const
+QString ConnectEnumerator::remoteAddress() const
 {
     if (mode_ == Mode::TCP)
     {
         PMIB_TCPTABLE_OWNER_PID tcp_table =
             reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
         if (!tcp_table)
-            return std::string();
+            return QString();
 
         return addressToString(tcp_table->table[pos_].dwRemoteAddr);
     }
     else
     {
-        return std::string();
+        return QString();
     }
 }
 
@@ -287,20 +284,20 @@ quint16 ConnectEnumerator::remotePort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ConnectEnumerator::state() const
+QString ConnectEnumerator::state() const
 {
     if (mode_ == Mode::TCP)
     {
         PMIB_TCPTABLE_OWNER_PID tcp_table =
             reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
         if (!tcp_table)
-            return std::string();
+            return QString();
 
         return stateToString(tcp_table->table[pos_].dwState);
     }
     else
     {
-        return std::string();
+        return QString();
     }
 }
 

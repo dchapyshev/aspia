@@ -22,10 +22,9 @@
 #include "base/macros_magic.h"
 #include "base/win/scoped_object.h"
 
-#include <QtGlobal>
+#include <QString>
 
 #include <memory>
-#include <string>
 
 namespace base {
 
@@ -40,13 +39,13 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    std::string protocol() const;
-    std::string processName() const;
-    std::string localAddress() const;
-    std::string remoteAddress() const;
+    QString protocol() const;
+    QString processName() const;
+    QString localAddress() const;
+    QString remoteAddress() const;
     quint16 localPort() const;
     quint16 remotePort() const;
-    std::string state() const;
+    QString state() const;
 
 private:
     const Mode mode_;

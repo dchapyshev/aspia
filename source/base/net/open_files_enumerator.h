@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
-#include <string>
+#include <QString>
 
 struct _FILE_INFO_3;
 
@@ -38,9 +37,9 @@ public:
     void advance();
 
     uint32_t id() const;
-    std::string userName() const;
+    QString userName() const;
     uint32_t lockCount() const;
-    std::string filePath() const;
+    QString filePath() const;
 
 private:
     _FILE_INFO_3* file_info_ = nullptr;

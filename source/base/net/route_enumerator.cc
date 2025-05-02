@@ -18,7 +18,7 @@
 
 #include "base/net/route_enumerator.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <iphlpapi.h>
 #include <WS2tcpip.h>
 #include <WinSock2.h>
@@ -28,12 +28,12 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::string ipToString(DWORD ip)
+QString ipToString(DWORD ip)
 {
     char buffer[46 + 1];
 
     if (!inet_ntop(AF_INET, &ip, buffer, _countof(buffer)))
-        return std::string();
+        return QString();
 
     return buffer;
 }
@@ -86,34 +86,34 @@ void RouteEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string RouteEnumerator::destonation() const
+QString RouteEnumerator::destonation() const
 {
     PMIB_IPFORWARDTABLE forward_table =
         reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer_.get());
     if (!forward_table)
-        return std::string();
+        return QString();
 
     return ipToString(forward_table->table[pos_].dwForwardDest);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string RouteEnumerator::mask() const
+QString RouteEnumerator::mask() const
 {
     PMIB_IPFORWARDTABLE forward_table =
         reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer_.get());
     if (!forward_table)
-        return std::string();
+        return QString();
 
     return ipToString(forward_table->table[pos_].dwForwardMask);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string RouteEnumerator::gateway() const
+QString RouteEnumerator::gateway() const
 {
     PMIB_IPFORWARDTABLE forward_table =
         reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer_.get());
     if (!forward_table)
-        return std::string();
+        return QString();
 
     return ipToString(forward_table->table[pos_].dwForwardNextHop);
 }

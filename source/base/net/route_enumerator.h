@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
 #include <memory>
-#include <string>
+
+#include <QString>
 
 namespace base {
 
@@ -36,9 +36,9 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    std::string destonation() const;
-    std::string mask() const;
-    std::string gateway() const;
+    QString destonation() const;
+    QString mask() const;
+    QString gateway() const;
     uint32_t metric() const;
 
 private:

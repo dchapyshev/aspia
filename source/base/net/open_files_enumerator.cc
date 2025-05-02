@@ -19,9 +19,8 @@
 #include "base/net/open_files_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <LM.h>
 
 namespace base {
@@ -79,13 +78,13 @@ uint32_t OpenFilesEnumerator::id() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string OpenFilesEnumerator::userName() const
+QString OpenFilesEnumerator::userName() const
 {
     wchar_t* user_name = file_info_[current_pos_].fi3_username;
     if (!user_name)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(user_name);
+    return QString::fromWCharArray(user_name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -95,13 +94,13 @@ uint32_t OpenFilesEnumerator::lockCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string OpenFilesEnumerator::filePath() const
+QString OpenFilesEnumerator::filePath() const
 {
     wchar_t* file_path = file_info_[current_pos_].fi3_pathname;
     if (!file_path)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(file_path);
+    return QString::fromWCharArray(file_path);
 }
 
 } // namespace base
