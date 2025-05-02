@@ -21,6 +21,5 @@
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    desktopAgentMain(argc, argv);
-    return 0;
+    return desktopAgentMain(argc, argv);
 }

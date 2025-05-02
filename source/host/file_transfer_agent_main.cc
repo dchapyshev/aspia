@@ -20,7 +20,6 @@
 
 #include "build/build_config.h"
 #include "base/application.h"
-#include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
@@ -29,34 +28,29 @@
 #include "host/file_transfer_agent.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/session_info.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
+#include <QCommandLineParser>
 #include <QProcessEnvironment>
 
+namespace {
+
 //--------------------------------------------------------------------------------------------------
-void fileTransferAgentMain(int& argc, char* argv[])
+void printDebugInfo()
 {
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
-
-    base::ScopedLogging scoped_logging(logging_settings);
-
-    base::CommandLine::init(argc, argv);
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
     LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
                  << " (version: " << base::SysInfo::operatingSystemVersion()
                  <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     MEMORYSTATUSEX memory_status;
     memset(&memory_status, 0, sizeof(memory_status));
     memory_status.dwLength = sizeof(memory_status);
@@ -112,24 +106,47 @@ void fileTransferAgentMain(int& argc, char* argv[])
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
     LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
+}
 
-    if (command_line->hasSwitch(u"channel_id"))
-    {
-        base::registerMetaTypes();
-        proto::registerMetaTypes();
+} // namespace
 
-        base::Application::setEventDispatcher(new base::AsioEventDispatcher());
-        base::Application application(argc, argv);
+//--------------------------------------------------------------------------------------------------
+int fileTransferAgentMain(int& argc, char* argv[])
+{
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
 
-        std::unique_ptr<host::FileTransferAgent> file_transfer_agent =
-            std::make_unique<host::FileTransferAgent>();
+    base::ScopedLogging scoped_logging(logging_settings);
 
-        file_transfer_agent->start(QString::fromStdU16String(command_line->switchValue(u"channel_id")));
-        application.exec();
-    }
-    else
+    base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+    base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    base::Application application(argc, argv);
+
+    printDebugInfo();
+
+    QCommandLineOption channel_id_option("channel_id",
+        base::Application::translate("FileAgentMain", "IPC channel id."), "channel_id");
+
+    QCommandLineParser parser;
+    parser.addOption(channel_id_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
+
+    if (!parser.isSet(channel_id_option))
     {
         LOG(LS_ERROR) << "Parameter channel_id is not specified";
+        return 1;
     }
+
+    base::registerMetaTypes();
+    proto::registerMetaTypes();
+
+    host::FileTransferAgent file_transfer_agent;
+    file_transfer_agent.start(parser.value(channel_id_option));
+
+    return application.exec();
 }

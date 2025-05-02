@@ -19,9 +19,7 @@
 #include "host/client_session_file_transfer.h"
 
 #include "build/build_config.h"
-#include "base/command_line.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "proto/file_transfer.h"
 
 #if defined(OS_WIN)
@@ -38,16 +36,19 @@
 #include <spawn.h>
 #endif // defined(OS_LINUX)
 
+#include <QCoreApplication>
+#include <QDir>
+
 namespace host {
 
 namespace {
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 const char kFileTransferAgentFile[] = "aspia_file_transfer_agent";
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
-#if defined(OS_WIN)
-const char16_t kFileTransferAgentFile[] = u"aspia_file_transfer_agent.exe";
+#if defined(Q_OS_WINDOWS)
+const char kFileTransferAgentFile[] = "aspia_file_transfer_agent.exe";
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
@@ -108,7 +109,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 
 //--------------------------------------------------------------------------------------------------
 bool startProcessWithToken(HANDLE token,
-                           const base::CommandLine& command_line,
+                           const QString& command_line,
                            base::win::ScopedHandle* process,
                            base::win::ScopedHandle* thread)
 {
@@ -133,7 +134,7 @@ bool startProcessWithToken(HANDLE token,
     if (!CreateProcessAsUserW(token,
                               nullptr,
                               const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(
-                                  command_line.commandLineString().c_str())),
+                                  command_line.utf16())),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -161,19 +162,14 @@ bool startProcessWithToken(HANDLE token,
 
     return true;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-std::filesystem::path agentFilePath()
+QString agentFilePath()
 {
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecDir failed";
-        return std::filesystem::path();
-    }
-
+    QString file_path = QCoreApplication::applicationDirPath();
+    file_path.append(QLatin1Char('/'));
     file_path.append(kFileTransferAgentFile);
-    return file_path;
+    return QDir::toNativeSeparators(file_path);
 }
 
 } // namespace
@@ -223,10 +219,7 @@ void ClientSessionFileTransfer::onStarted()
 
     LOG(LS_INFO) << "IPC channel started";
 
-#if defined(OS_WIN)
-    base::CommandLine command_line(agentFilePath());
-    command_line.appendSwitch(u"channel_id", channel_id.toStdU16String());
-
+#if defined(Q_OS_WINDOWS)
     base::win::ScopedHandle session_token;
     if (!createLoggedOnUserToken(sessionId(), &session_token))
     {
@@ -247,6 +240,10 @@ void ClientSessionFileTransfer::onStarted()
         LOG(LS_ERROR) << "User session is locked";
         return;
     }
+
+    QString command_line = agentFilePath() + " --channel_id " + channel_id;
+
+    LOG(LS_INFO) << "Starting agent process with command line: " << command_line;
 
     base::win::ScopedHandle process_handle;
     base::win::ScopedHandle thread_handle;

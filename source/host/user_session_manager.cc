@@ -18,39 +18,38 @@
 
 #include "host/user_session_manager.h"
 
-#include "base/command_line.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/files/base_paths.h"
 #include "base/strings/string_util.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
 #include "host/user_session.h"
 
-#if defined(OS_WIN)
-#include "base/win/desktop.h"
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
-#include "base/win/window_station.h"
 
 #include <UserEnv.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <fmt/format.h>
+
+#include <QCoreApplication>
+#include <QDir>
 
 namespace host {
 
 namespace {
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_POSIX)
 const char kExecutableNameForUi[] = "aspia_host";
-#endif // defined(OS_POSIX)
+#endif // defined(Q_OS_POSIX)
 
-#if defined(OS_WIN)
-const wchar_t kExecutableNameForUi[] = L"aspia_host.exe";
+#if defined(Q_OS_WINDOWS)
+const char kExecutableNameForUi[] = "aspia_host.exe";
 
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
@@ -75,7 +74,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
+bool createProcessWithToken(HANDLE token, const QString& command_line)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -97,7 +96,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
     if (!CreateProcessAsUserW(token,
                               nullptr,
                               const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(
-                                  command_line.commandLineString().c_str())),
+                                  command_line.utf16())),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -602,29 +601,6 @@ void UserSessionManager::startSessionProcess(
     }
 
     LOG(LS_INFO) << "Starting user session";
-    LOG(LS_INFO) << "#####################################################";
-
-    LOG(LS_INFO) << "# Active console session id: " << WTSGetActiveConsoleSessionId();
-
-    for (const auto& window_station_name : base::WindowStation::windowStationList())
-    {
-        std::wstring desktops;
-
-        base::WindowStation window_station = base::WindowStation::open(window_station_name);
-        if (window_station.isValid())
-        {
-            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
-
-            for (size_t i = 0; i < list.size(); ++i)
-            {
-                desktops += list[i];
-                if ((i + 1) != list.size())
-                        desktops += L", ";
-            }
-        }
-
-        LOG(LS_INFO) << "# " << window_station_name << " (desktops: " << desktops << ")";
-    }
 
     base::win::SessionInfo session_info(session_id);
     if (!session_info.isValid())
@@ -671,22 +647,17 @@ void UserSessionManager::startSessionProcess(
         LOG(LS_INFO) << "Session has UNLOCKED user (sid=" << session_id << ")";
     }
 
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-    {
-        LOG(LS_ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
-        return;
-    }
+    QString file_path = QCoreApplication::applicationDirPath();
 
+    file_path.append(QLatin1Char('/'));
     file_path.append(kExecutableNameForUi);
 
-    base::CommandLine command_line(file_path);
-    command_line.appendSwitch(u"hidden");
+    QString command_line = file_path + " --hidden";
 
     if (!createProcessWithToken(user_token, command_line))
     {
         LOG(LS_ERROR) << "Failed to start process with user token (sid=" << session_id
-                        << " cmd=" << command_line.commandLineString() << ")";
+                        << " cmd=" << command_line << ")";
     }
 #elif defined(OS_LINUX)
     std::error_code ignored_error;

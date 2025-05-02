@@ -18,7 +18,6 @@
 
 #include "host/ui/host_main.h"
 
-#include "base/command_line.h"
 #include "base/logging.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
@@ -39,7 +38,9 @@
 #include "base/win/session_info.h"
 #endif // defined(OS_WIN)
 
+#include <QCommandLineParser>
 #include <QMessageBox>
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
 #include <QProcess>
 #else
@@ -84,27 +85,15 @@ bool waitForValidInputDesktop()
     return true;
 }
 
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-int hostMain(int argc, char* argv[])
+void printDebugInfo()
 {
-    Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
-
-    base::ScopedLogging scoped_logging(logging_settings);
-    base::CommandLine command_line(argc, argv);
-
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
-    LOG(LS_INFO) << "Command line: " << command_line.commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::GuiApplication::arguments();
     LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
                  << " (version: " << base::SysInfo::operatingSystemVersion()
                  <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
@@ -114,7 +103,7 @@ int hostMain(int argc, char* argv[])
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     MEMORYSTATUSEX memory_status;
     memset(&memory_status, 0, sizeof(memory_status));
     memory_status.dwLength = sizeof(memory_status);
@@ -152,7 +141,7 @@ int hostMain(int argc, char* argv[])
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
             LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
@@ -193,7 +182,7 @@ int hostMain(int argc, char* argv[])
     LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
-#endif
+#endif // defined(Q_OS_WINDOWS)
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
@@ -207,19 +196,33 @@ int hostMain(int argc, char* argv[])
         LOG(LS_INFO) << env[i];
     }
     LOG(LS_INFO) << "#####################################################";
+}
 
-    bool is_hidden = command_line.hasSwitch(u"hidden");
-    if (is_hidden)
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+int hostMain(int argc, char* argv[])
+{
+    Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
+
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
+
+    for (int i = 0; i < argc; ++i)
     {
-        LOG(LS_INFO) << "Has 'hidden' switch";
-
-        if (!waitForValidInputDesktop())
-            return 1;
+        if (qstrcmp(argv[i], "--hidden") == 0)
+        {
+            LOG(LS_INFO) << "Has 'hidden' switch";
+            if (!waitForValidInputDesktop())
+                return 1;
+            break;
+        }
     }
 
-    base::registerMetaTypes();
-    proto::registerMetaTypes();
-
+    host::Application::setApplicationVersion(ASPIA_VERSION_STRING);
     host::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     host::Application::setHighDpiScaleFactorRoundingPolicy(
@@ -227,6 +230,36 @@ int hostMain(int argc, char* argv[])
 
     host::Application application(argc, argv);
     host::Application::setQuitOnLastWindowClosed(false);
+
+    printDebugInfo();
+
+    QCommandLineOption hidden_option("hidden",
+        base::GuiApplication::translate("HostMain", "Launch the application hidden."));
+    QCommandLineOption export_option("export",
+        base::GuiApplication::translate("HostMain", "Export parameters to file."), "export");
+    QCommandLineOption import_option("import",
+        base::GuiApplication::translate("HostMain", "Import parameters to file."), "import");
+    QCommandLineOption silent_option("silent",
+        base::GuiApplication::translate("HostMain", "Do not display any messages during import and export."));
+    QCommandLineOption update_option("update",
+        base::GuiApplication::translate("HostMain", "Calling the update check dialog."));
+    QCommandLineOption config_option("config",
+        base::GuiApplication::translate("HostMain", "Calling the settings dialog."));
+
+    QCommandLineParser parser;
+    parser.addOption(hidden_option);
+    parser.addOption(export_option);
+    parser.addOption(import_option);
+    parser.addOption(silent_option);
+    parser.addOption(update_option);
+    parser.addOption(config_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
+
+    base::registerMetaTypes();
+    proto::registerMetaTypes();
 
     if (!host::integrityCheck())
     {
@@ -240,16 +273,14 @@ int hostMain(int argc, char* argv[])
             QMessageBox::Ok);
         return 1;
     }
-    else
-    {
-        LOG(LS_INFO) << "Integrity check passed successfully";
-    }
 
-    if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
+    LOG(LS_INFO) << "Integrity check passed successfully";
+
+    if (parser.isSet(import_option) && parser.isSet(export_option))
     {
         LOG(LS_ERROR) << "Import and export are specified at the same time";
 
-        if (!command_line.hasSwitch(u"silent"))
+        if (!parser.isSet(silent_option))
         {
             QMessageBox::warning(
                 nullptr,
@@ -260,25 +291,17 @@ int hostMain(int argc, char* argv[])
 
         return 1;
     }
-    else if (command_line.hasSwitch(u"import"))
+    else if (parser.isSet(import_option))
     {
-        if (!host::SettingsUtil::importFromFile(
-                QString::fromStdU16String(command_line.switchValuePath(u"import").u16string()),
-                command_line.hasSwitch(u"silent")))
-        {
+        if (!host::SettingsUtil::importFromFile(parser.value(import_option), parser.isSet(silent_option)))
             return 1;
-        }
     }
-    else if (command_line.hasSwitch(u"export"))
+    else if (parser.isSet(export_option))
     {
-        if (!host::SettingsUtil::exportToFile(
-                QString::fromStdU16String(command_line.switchValuePath(u"export").u16string()),
-                command_line.hasSwitch(u"silent")))
-        {
+        if (!host::SettingsUtil::exportToFile(parser.value(export_option), parser.isSet(silent_option)))
             return 1;
-        }
     }
-    else if (command_line.hasSwitch(u"update"))
+    else if (parser.isSet(update_option))
     {
         common::UpdateDialog dialog(host::SystemSettings().updateServer(), "host");
         dialog.show();
@@ -286,31 +309,15 @@ int hostMain(int argc, char* argv[])
 
         return application.exec();
     }
-    else if (command_line.hasSwitch(u"version"))
+    else if (parser.isSet(config_option))
     {
-        QMessageBox::information(
-            nullptr,
-            QApplication::translate("Host", "Aspia Host"),
-            QApplication::translate("Host", "Application version: %1.%2.%3.%4.")
-                .arg(ASPIA_VERSION_MAJOR)
-                .arg(ASPIA_VERSION_MINOR)
-                .arg(ASPIA_VERSION_PATCH)
-                .arg(GIT_COMMIT_COUNT),
-            QMessageBox::Ok);
-    }
-    else if (command_line.hasSwitch(u"help"))
-    {
-        // TODO
-    }
-    else if (command_line.hasSwitch(u"config"))
-    {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         if (!base::win::isProcessElevated())
         {
             LOG(LS_INFO) << "Process not eleavated";
         }
         else
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
         {
             host::SystemSettings settings;
             if (settings.passwordProtection())
@@ -342,7 +349,7 @@ int hostMain(int argc, char* argv[])
             QObject::connect(&application, &host::Application::sig_activated,
                              &window, &host::MainWindow::activateHost);
 
-            if (is_hidden)
+            if (parser.isSet(hidden_option))
             {
                 LOG(LS_INFO) << "Hide window to tray";
                 window.hideToTray();

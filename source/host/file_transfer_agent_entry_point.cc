@@ -21,6 +21,5 @@
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    fileTransferAgentMain(argc, argv);
-    return 0;
+    return fileTransferAgentMain(argc, argv);
 }

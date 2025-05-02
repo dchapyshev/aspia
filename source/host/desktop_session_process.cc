@@ -18,9 +18,7 @@
 
 #include "host/desktop_session_process.h"
 
-#include "base/command_line.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_impersonator.h"
@@ -33,18 +31,21 @@
 #include <fmt/format.h>
 #endif // defined(OS_LINUX)
 
+#include <QCoreApplication>
+#include <QDir>
+
 namespace host {
 
 namespace {
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent";
 #endif
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 // Name of the default session desktop.
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
-const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent.exe";
+const char kDesktopAgentFile[] = "aspia_desktop_agent.exe";
 
 //--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
@@ -159,7 +160,7 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
 
 //--------------------------------------------------------------------------------------------------
 bool startProcessWithToken(HANDLE token,
-                           const base::CommandLine& command_line,
+                           const QString& command_line,
                            base::win::ScopedHandle* process,
                            base::win::ScopedHandle* thread)
 {
@@ -184,7 +185,7 @@ bool startProcessWithToken(HANDLE token,
     if (!CreateProcessAsUserW(token,
                               nullptr,
                               const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(
-                                  command_line.commandLineString().c_str())),
+                                  command_line.utf16())),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -212,7 +213,7 @@ bool startProcessWithToken(HANDLE token,
 
     return true;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -256,16 +257,13 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session ("
                       << "session_id=" << session_id << " channel_id=" << channel_id << ")";
         return nullptr;
     }
-
-    base::CommandLine command_line(filePath());
-    command_line.appendSwitch(u"channel_id", channel_id.toStdU16String());
 
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
@@ -275,6 +273,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
+    QString command_line = filePath() + " --channel_id " + channel_id;
     base::win::ScopedHandle process_handle;
     base::win::ScopedHandle thread_handle;
 
@@ -287,7 +286,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     return std::unique_ptr<DesktopSessionProcess>(
         new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
@@ -369,17 +368,12 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::filesystem::path DesktopSessionProcess::filePath()
+QString DesktopSessionProcess::filePath()
 {
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecDir failed";
-        return std::filesystem::path();
-    }
-
+    QString file_path = QCoreApplication::applicationDirPath();
+    file_path.append(QLatin1Char('/'));
     file_path.append(kDesktopAgentFile);
-    return file_path;
+    return QDir::toNativeSeparators(file_path);
 }
 
 //--------------------------------------------------------------------------------------------------

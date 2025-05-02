@@ -301,8 +301,6 @@ int hostServiceMain(int& argc, char* argv[])
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    printDebugInfo();
-
     if (!integrityCheck())
     {
         LOG(LS_ERROR) << "Integrity check failed. Application stopped";
@@ -316,6 +314,8 @@ int hostServiceMain(int& argc, char* argv[])
 
     base::Application application(argc, argv);
     QCommandLineParser parser;
+
+    printDebugInfo();
 
 #if defined(Q_OS_WINDOWS)
     QCommandLineOption install_option("install",

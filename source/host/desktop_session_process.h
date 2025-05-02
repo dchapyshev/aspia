@@ -45,7 +45,7 @@ public:
 
     static std::unique_ptr<DesktopSessionProcess> create(
         base::SessionId session_id, const QString& channel_id);
-    static std::filesystem::path filePath();
+    static QString filePath();
 
     void kill();
 

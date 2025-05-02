@@ -20,7 +20,6 @@
 
 #include "build/build_config.h"
 #include "base/application.h"
-#include "base/command_line.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
@@ -39,25 +38,20 @@
 #include <wrl/client.h>
 #endif // defined(OS_WIN)
 
+#include <QCommandLineParser>
 #include <QProcessEnvironment>
 
+namespace {
+
 //--------------------------------------------------------------------------------------------------
-void desktopAgentMain(int& argc, char* argv[])
+void printDebugInfo()
 {
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
-
-    base::ScopedLogging scoped_logging(logging_settings);
-
-    base::CommandLine::init(argc, argv);
-    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
-
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
-    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
     LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
                  << " (version: " << base::SysInfo::operatingSystemVersion()
                  <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
@@ -67,7 +61,7 @@ void desktopAgentMain(int& argc, char* argv[])
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     MEMORYSTATUSEX memory_status;
     memset(&memory_status, 0, sizeof(memory_status));
     memory_status.dwLength = sizeof(memory_status);
@@ -144,7 +138,7 @@ void desktopAgentMain(int& argc, char* argv[])
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
             LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
@@ -186,22 +180,47 @@ void desktopAgentMain(int& argc, char* argv[])
     }
     LOG(LS_INFO) << "#####################################################";
     LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
+}
 
-    if (command_line->hasSwitch(u"channel_id"))
-    {
-        base::registerMetaTypes();
-        proto::registerMetaTypes();
+} // namespace
 
-        base::Application::setEventDispatcher(new base::AsioEventDispatcher());
-        base::Application application(argc, argv);
-        host::DesktopSessionAgent desktop_agent;
+//--------------------------------------------------------------------------------------------------
+int desktopAgentMain(int& argc, char* argv[])
+{
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
 
-        desktop_agent.start(QString::fromStdU16String(command_line->switchValue(u"channel_id")));
-        application.exec();
-    }
-    else
+    base::ScopedLogging scoped_logging(logging_settings);
+
+    base::Application::setEventDispatcher(new base::AsioEventDispatcher());
+    base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    base::Application application(argc, argv);
+
+    printDebugInfo();
+
+    QCommandLineOption channel_id_option("channel_id",
+        base::Application::translate("FileAgentMain", "IPC channel id."), "channel_id");
+
+    QCommandLineParser parser;
+    parser.addOption(channel_id_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
+
+    if (!parser.isSet(channel_id_option))
     {
         LOG(LS_ERROR) << "Parameter channel_id is not specified";
+        return 1;
     }
+
+    base::registerMetaTypes();
+    proto::registerMetaTypes();
+
+    host::DesktopSessionAgent desktop_agent;
+    desktop_agent.start(parser.value(channel_id_option));
+
+    return application.exec();
 }

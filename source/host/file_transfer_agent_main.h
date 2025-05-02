@@ -21,6 +21,6 @@
 
 #include "host/host_export.h"
 
-void HOST_EXPORT fileTransferAgentMain(int& argc, char* argv[]);
+int HOST_EXPORT fileTransferAgentMain(int& argc, char* argv[]);
 
 #endif // HOST_FILE_TRANSFER_AGENT_MAIN_H
