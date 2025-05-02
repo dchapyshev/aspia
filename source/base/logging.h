@@ -22,7 +22,6 @@
 #include "base/scoped_clear_last_error.h"
 #include "base/system_error.h"
 
-#include <filesystem>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -135,10 +134,10 @@ struct LoggingSettings
     LoggingDestination destination;
     LoggingSeverity min_log_level;
 
-    std::filesystem::path log_dir;
+    QString log_dir;
 
-    size_t max_log_file_size;
-    size_t max_log_file_age;
+    qint64 max_log_file_size;
+    qint64 max_log_file_age;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,
@@ -151,8 +150,8 @@ bool initLogging(const LoggingSettings& settings = LoggingSettings());
 //       guarantee that it will stay closed after this call.
 void shutdownLogging();
 
-std::filesystem::path loggingDirectory();
-std::filesystem::path loggingFile();
+QString loggingDirectory();
+QString loggingFile();
 
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool shouldCreateLogMessage(LoggingSeverity severity);

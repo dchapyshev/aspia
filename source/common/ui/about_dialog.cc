@@ -171,10 +171,8 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     list->addItem(tr("Git commit: %1").arg(GIT_COMMIT_HASH));
 #endif
 
-    list->addItem(tr("Logging directory: %1").arg(
-        QString::fromStdU16String(base::loggingDirectory().u16string())));
-    list->addItem(tr("Logging file: %1").arg(
-        QString::fromStdU16String(base::loggingFile().u16string())));
+    list->addItem(tr("Logging directory: %1").arg(base::loggingDirectory()));
+    list->addItem(tr("Logging file: %1").arg(base::loggingFile()));
 
     QList<QScreen*> screens = QApplication::screens();
     for (const auto& screen : std::as_const(screens))

@@ -22,7 +22,6 @@
 #include "base/endian_util.h"
 #include "base/system_time.h"
 #include "base/strings/unicode.h"
-#include <fstream>
 #include <iomanip>
 #include <mutex>
 #include <ostream>
@@ -45,7 +44,10 @@
 #include <sys/syslimits.h>
 #endif // defined(OS_MAC)
 
+#include <QDateTime>
 #include <QDebug>
+#include <QFile>
+#include <QDir>
 
 namespace base {
 
@@ -58,13 +60,13 @@ const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 LoggingSeverity g_min_log_level = LOG_LS_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
-size_t g_max_log_file_size = kDefaultMaxLogFileSize;
-size_t g_max_log_file_age = kDefaultMaxLogFileAge;
+qint64 g_max_log_file_size = kDefaultMaxLogFileSize;
+qint64 g_max_log_file_age = kDefaultMaxLogFileAge;
 int g_log_file_number = -1;
 
-std::filesystem::path g_log_dir_path;
-std::filesystem::path g_log_file_path;
-std::ofstream g_log_file;
+QString g_log_dir_path;
+QString g_log_file_path;
+QFile g_log_file;
 std::mutex g_log_file_lock;
 
 //--------------------------------------------------------------------------------------------------
@@ -81,38 +83,29 @@ const char* severityName(LoggingSeverity severity)
 }
 
 //--------------------------------------------------------------------------------------------------
-void removeOldFiles(const std::filesystem::path& path,
-                    const std::filesystem::file_time_type& current_time,
-                    size_t max_file_age)
+void removeOldFiles(const QString& path, qint64 max_file_age)
 {
-    std::filesystem::file_time_type time = current_time - std::chrono::hours(24U * max_file_age);
+    QDateTime time = QDateTime::currentDateTime();
+    time.addDays(-max_file_age);
 
-    std::error_code ignored_code;
-    for (const auto& item : std::filesystem::directory_iterator(path, ignored_code))
+    QDir current_dir(path);
+
+    QFileInfoList files = current_dir.entryInfoList();
+    for (const auto& file : std::as_const(files))
     {
-        if (item.is_directory())
-            continue;
-
-        if (item.last_write_time() < time)
-            std::filesystem::remove(item.path(), ignored_code);
+        if (file.birthTime() < time)
+            QFile::remove(file.filePath());
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path defaultLogFileDir()
+QString defaultLogFileDir()
 {
-    std::error_code error_code;
-
-    std::filesystem::path path = std::filesystem::temp_directory_path(error_code);
-    if (error_code)
-        return std::filesystem::path();
-
-    path.append("aspia");
-    return path;
+    return QDir::tempPath() + QLatin1String("/aspia");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool initLoggingUnlocked(const std::string& prefix)
+bool initLoggingUnlocked(const QString& prefix)
 {
     g_log_file.close();
 
@@ -122,55 +115,29 @@ bool initLoggingUnlocked(const std::string& prefix)
     // The next log file must have a number higher than the current one.
     ++g_log_file_number;
 
-    std::filesystem::path file_dir = g_log_dir_path;
-    if (file_dir.empty())
+    QString file_dir = g_log_dir_path;
+    if (file_dir.isEmpty())
         file_dir = defaultLogFileDir();
 
-    if (file_dir.empty())
+    if (file_dir.isEmpty())
         return false;
 
-    std::error_code error_code;
-    if (!std::filesystem::exists(file_dir, error_code))
+    QDir dir(file_dir);
+    if (!dir.exists())
     {
-        if (error_code)
-            return false;
-
-        if (!std::filesystem::create_directories(file_dir, error_code))
+        if (!dir.mkpath(file_dir))
             return false;
     }
 
-    SystemTime time = SystemTime::now();
+    QString time = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss.zzz"));
+    QString file_path = QString("%1/%2-%3.%4.log").arg(file_dir, prefix, time).arg(g_log_file_number);
 
-    std::ostringstream file_name_stream;
-    file_name_stream << prefix.c_str() << '-'
-                     << std::setfill('0')
-                     << std::setw(4) << time.year()
-                     << std::setw(2) << time.month()
-                     << std::setw(2) << time.day()
-                     << '-'
-                     << std::setw(2) << time.hour()
-                     << std::setw(2) << time.minute()
-                     << std::setw(2) << time.second()
-                     << '.'
-                     << std::setw(3) << time.millisecond()
-                     << '.'
-                     << g_log_file_number
-                     << ".log";
-
-    std::filesystem::path file_path(file_dir);
-    file_path.append(file_name_stream.str());
-
-    g_log_file.open(file_path);
-    if (!g_log_file.is_open())
+    g_log_file.setFileName(file_path);
+    if (!g_log_file.open(QFile::WriteOnly | QFile::Append | QFile::Text))
         return false;
 
     if (g_max_log_file_age != 0)
-    {
-        std::filesystem::file_time_type file_time =
-            std::filesystem::last_write_time(file_path, error_code);
-        if (!error_code)
-            removeOldFiles(file_dir, file_time, g_max_log_file_age);
-    }
+        removeOldFiles(file_dir, g_max_log_file_age);
 
     g_log_file_path = std::move(file_path);
     return true;
@@ -292,18 +259,18 @@ LoggingSettings::LoggingSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path execFilePath()
+QString applicationFilePath()
 {
-    std::filesystem::path exec_file_path;
+    QString exec_file_path;
 
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
-    exec_file_path = buffer;
+    exec_file_path = QString::fromWCharArray(buffer);
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
     if (readlink("/proc/self/exe", buffer, std::size(buffer)) == -1)
-        return std::filesystem::path();
+        return QString();
     exec_file_path = buffer;
 #elif defined(OS_MAC)
     char buffer[PATH_MAX] = { 0 };
@@ -318,12 +285,9 @@ std::filesystem::path execFilePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string logFilePrefix()
+QString logFilePrefix()
 {
-    std::filesystem::path exec_file_path = execFilePath();
-    std::filesystem::path exec_file_name = exec_file_path.filename();
-    exec_file_name.replace_extension();
-    return exec_file_name.string();
+    return QFileInfo(applicationFilePath()).completeBaseName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -348,7 +312,7 @@ bool initLogging(const LoggingSettings& settings)
 
     qInstallMessageHandler(qtMessageHandler);
 
-    LOG(LS_INFO) << "Executable file: " << execFilePath();
+    LOG(LS_INFO) << "Executable file: " << applicationFilePath();
     if (g_logging_destination & LOG_TO_FILE)
     {
         // If log output is enabled, then we output information about the file.
@@ -378,16 +342,16 @@ void shutdownLogging()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path loggingDirectory()
+QString loggingDirectory()
 {
-    if (g_log_dir_path.empty())
+    if (g_log_dir_path.isEmpty())
         return defaultLogFileDir();
 
     return g_log_dir_path;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path loggingFile()
+QString loggingFile()
 {
     return g_log_file_path;
 }
@@ -528,7 +492,7 @@ LogMessage::~LogMessage()
     {
         std::scoped_lock lock(g_log_file_lock);
 
-        if (static_cast<size_t>(g_log_file.tellp()) >= g_max_log_file_size)
+        if (static_cast<size_t>(g_log_file.size()) >= g_max_log_file_size)
         {
             // The maximum size of the log file has been exceeded. Close the current log file and
             // create a new one.
