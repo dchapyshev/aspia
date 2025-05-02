@@ -18,15 +18,14 @@
 
 #include "host/win/updater_launcher.h"
 
-#include "base/command_line.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "base/strings/string_util.h"
-#include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 
 #include <UserEnv.h>
 #include <WtsApi32.h>
+
+#include <QCoreApplication>
+#include <QDir>
 
 namespace host {
 
@@ -92,7 +91,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
+bool createProcessWithToken(HANDLE token, const QString& command_line)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -114,7 +113,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
     if (!CreateProcessAsUserW(token,
                               nullptr,
                               const_cast<wchar_t*>(
-                                  reinterpret_cast<const wchar_t*>(command_line.commandLineString().c_str())),
+                                  reinterpret_cast<const wchar_t*>(command_line.utf16())),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -158,64 +157,10 @@ bool launchUpdater(base::SessionId session_id)
         return false;
     }
 
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecDir failed";
-        return false;
-    }
-
-    file_path.append("aspia_host.exe");
-
-    base::CommandLine command_line(file_path);
-    command_line.appendSwitch(u"update");
+    QString file_dir = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
+    QString command_line = file_dir + "\\aspia_host.exe --update";
 
     return createProcessWithToken(user_token, command_line);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool launchSilentUpdater()
-{
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecDir(&file_path))
-    {
-        LOG(LS_ERROR) << "currentExecDir failed";
-        return false;
-    }
-
-    file_path.append("aspia_host.exe");
-
-    base::CommandLine command_line(file_path);
-    command_line.appendSwitch(u"silent-update");
-
-    STARTUPINFOW startup_info;
-    memset(&startup_info, 0, sizeof(startup_info));
-
-    startup_info.cb = sizeof(startup_info);
-    startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
-
-    PROCESS_INFORMATION process_info;
-    memset(&process_info, 0, sizeof(process_info));
-
-    if (!CreateProcessW(nullptr,
-                        const_cast<wchar_t*>(
-                            reinterpret_cast<const wchar_t*>(command_line.commandLineString().c_str())),
-                        nullptr,
-                        nullptr,
-                        FALSE,
-                        CREATE_UNICODE_ENVIRONMENT,
-                        nullptr,
-                        nullptr,
-                        &startup_info,
-                        &process_info))
-    {
-        PLOG(LS_ERROR) << "CreateProcessW failed";
-        return false;
-    }
-
-    base::win::ScopedHandle thread_deleter(process_info.hThread);
-    base::win::ScopedHandle process_deleter(process_info.hProcess);
-    return true;
 }
 
 } // namespace host

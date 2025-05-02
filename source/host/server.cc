@@ -33,6 +33,7 @@
 #include "base/win/process_util.h"
 #endif // defined(OS_WIN)
 
+#include <QDir>
 #include <QFileInfo>
 #include <QFile>
 #include <QStandardPaths>
@@ -364,10 +365,12 @@ void Server::onFileDownloaderCompleted()
     }
     else
     {
+        QDir().mkpath(file_path);
+
         QString file_name =
             "/aspia_host_" + QString::fromLatin1(base::Random::byteArray(16).toHex()) + ".msi";
 
-        file_path.append(file_name);
+        file_path = QDir::toNativeSeparators(file_path.append(file_name));
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
@@ -375,14 +378,13 @@ void Server::onFileDownloaderCompleted()
         }
         else
         {
-            std::u16string arguments;
+            QString arguments;
 
-            arguments += u"/i "; // Normal install.
-            arguments += file_path.toStdU16String(); // MSI package file.
-            arguments += u" /qn"; // No UI during the installation process.
+            arguments += "/i "; // Normal install.
+            arguments += file_path; // MSI package file.
+            arguments += " /qn"; // No UI during the installation process.
 
-            if (base::win::createProcess(u"msiexec",
-                                         arguments,
+            if (base::win::createProcess("msiexec", arguments,
                                          base::win::ProcessExecuteMode::ELEVATE))
             {
                 LOG(LS_INFO) << "Update process started (cmd: " << arguments << ")";

@@ -19,8 +19,9 @@
 #ifndef BASE_WIN_PROCESS_UTIL_H
 #define BASE_WIN_PROCESS_UTIL_H
 
-#include "base/command_line.h"
 #include "base/win/scoped_object.h"
+
+#include <QString>
 
 namespace base::win {
 
@@ -32,12 +33,7 @@ enum class ProcessExecuteMode
 };
 
 bool createProcess(
-    const CommandLine& command_line,
-    ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
-
-bool createProcess(
-    const std::filesystem::path& program,
-    std::u16string_view arguments,
+    const QString& program, const QString& arguments,
     ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
 
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);

@@ -167,22 +167,19 @@ void UpdateDialog::onUpdateNow()
             // If the download is successfully completed, then run the installer.
             if (result == DownloadDialog::Accepted)
             {
-                QString file_name(file.fileName());
-                file_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
-
-                std::u16string arguments;
+                QString file_name = QDir::toNativeSeparators(file.fileName());
+                QString arguments;
 
                 // Normal install.
-                arguments += u"/i ";
+                arguments += "/i ";
 
                 // MSI package file.
-                arguments += file_name.toStdU16String();
+                arguments += file_name;
 
                 // Basic UI with no modal dialog boxes.
-                arguments += u" /qb-!";
+                arguments += " /qb-!";
 
-                if (base::win::createProcess(u"msiexec",
-                                             arguments,
+                if (base::win::createProcess("msiexec", arguments,
                                              base::win::ProcessExecuteMode::ELEVATE))
                 {
                     LOG(LS_INFO) << "msiexec is started";

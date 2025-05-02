@@ -647,9 +647,9 @@ void UserSessionManager::startSessionProcess(
         LOG(LS_INFO) << "Session has UNLOCKED user (sid=" << session_id << ")";
     }
 
-    QString file_path = QCoreApplication::applicationDirPath();
+    QString file_path = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
 
-    file_path.append(QLatin1Char('/'));
+    file_path.append(QLatin1Char('\\'));
     file_path.append(kExecutableNameForUi);
 
     QString command_line = file_path + " --hidden";

@@ -50,22 +50,14 @@ bool isProcessElevated()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createProcess(const CommandLine& command_line, ProcessExecuteMode mode)
-{
-    return createProcess(command_line.program(), command_line.argumentsString(), mode);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool createProcess(const std::filesystem::path& program,
-                   std::u16string_view arguments,
-                   ProcessExecuteMode mode)
+bool createProcess(const QString& program, const QString& arguments, ProcessExecuteMode mode)
 {
     SHELLEXECUTEINFOW sei;
     memset(&sei, 0, sizeof(sei));
 
     sei.cbSize = sizeof(sei);
     sei.lpVerb = ((mode == ProcessExecuteMode::ELEVATE) ? L"runas" : L"open");
-    sei.lpFile = program.c_str();
+    sei.lpFile = reinterpret_cast<const wchar_t*>(program.utf16());
     sei.hwnd = nullptr;
     sei.nShow = SW_SHOW;
     sei.lpParameters = reinterpret_cast<const wchar_t*>(arguments.data());

@@ -20,8 +20,6 @@ list(APPEND SOURCE_BASE
     application.h
     applications_reader.h
     bitset.h
-    command_line.cc
-    command_line.h
     compiler_specific.h
     cpuid_util.cc
     cpuid_util.h
