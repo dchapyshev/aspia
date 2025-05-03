@@ -589,6 +589,7 @@ QTextStream& operator<<(QTextStream& out, const char16_t* ustr);
 QTextStream& operator<<(QTextStream& out, const std::u16string& ustr);
 
 QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path);
+QTextStream& operator<<(QTextStream& out, const std::error_code& error);
 
 QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist);
 QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray);

@@ -101,8 +101,7 @@ std::u16string peerAddress(const asio::ip::tcp::socket& socket)
         asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get endpoint for accepted connection: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to get endpoint for accepted connection: " << error_code;
         }
         else
         {
@@ -111,8 +110,7 @@ std::u16string peerAddress(const asio::ip::tcp::socket& socket)
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get address for pending session: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get address for pending session: " << error_code;
     }
 
     return std::u16string();
@@ -163,32 +161,28 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.open failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_.open failed: " << error_code;
         return;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.set_option failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_.set_option failed: " << error_code;
         return;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.bind failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_.bind failed: " << error_code;
         return;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.listen failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_.listen failed: " << error_code;
         return;
     }
 

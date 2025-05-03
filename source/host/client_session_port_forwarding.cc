@@ -265,8 +265,7 @@ void ClientSessionPortForwarding::onResolved(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to resolve: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to resolve: " << error_code;
         onError(FROM_HERE);
         return;
     }
@@ -295,8 +294,7 @@ void ClientSessionPortForwarding::onConnected(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to connect: " << error_code;
         onError(FROM_HERE);
         return;
     }
@@ -314,8 +312,7 @@ void ClientSessionPortForwarding::onWrite(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to write: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to write: " << error_code;
         onError(FROM_HERE);
         return;
     }
@@ -335,8 +332,7 @@ void ClientSessionPortForwarding::onRead(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to read: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to read: " << error_code;
         onError(FROM_HERE);
         return;
     }

@@ -65,8 +65,7 @@ bool integrityCheck()
         std::filesystem::file_status status = std::filesystem::status(file_path, error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Failed to get file status '" << file_path << "': "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Failed to get file status '" << file_path << "': " << error_code;
             return false;
         }
 

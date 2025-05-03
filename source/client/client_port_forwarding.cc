@@ -186,32 +186,28 @@ void ClientPortForwarding::onSessionMessageReceived(quint8 /* channel_id */, con
         acceptor_->open(endpoint.protocol(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->open failed: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
             return;
         }
 
         acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->set_option failed: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "acceptor_->set_option failed: " << error_code;
             return;
         }
 
         acceptor_->bind(endpoint, error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->bind failed: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
             return;
         }
 
         acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->listen failed: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
             return;
         }
 
@@ -238,8 +234,7 @@ void ClientPortForwarding::onAccept(const std::error_code& error_code, asio::ip:
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error while accepting connection: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
         return;
     }
 
@@ -258,8 +253,7 @@ void ClientPortForwarding::onWrite(const std::error_code& error_code, size_t byt
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to write: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to write: " << error_code << " (" << error_code.value() << ")";
         return;
     }
 
@@ -279,8 +273,7 @@ void ClientPortForwarding::onRead(const std::error_code& error_code, size_t byte
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to read: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to read: " << error_code;
         return;
     }
 

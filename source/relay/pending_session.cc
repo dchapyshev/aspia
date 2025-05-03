@@ -52,8 +52,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, Delegate* delegat
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get endpoint for pending session: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to get endpoint for pending session: " << error_code;
         }
         else
         {
@@ -62,8 +61,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, Delegate* delegat
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get address for pending session: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get address for pending session: " << error_code;
     }
 }
 
@@ -86,8 +84,7 @@ void PendingSession::start()
     socket_.set_option(option, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
     }
 
     timer_.start(kTimeout);
@@ -207,8 +204,7 @@ void PendingSession::doReadMessage(PendingSession* session)
 void PendingSession::onErrorOccurred(
     const base::Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Connection error: " << base::utf16FromLocal8Bit(error_code.message())
-                  << " (" << location.toString() << ")";
+    LOG(LS_ERROR) << "Connection error: " << error_code << " (" << location.toString() << ")";
     if (delegate_)
         delegate_->onPendingSessionFailed(this);
 

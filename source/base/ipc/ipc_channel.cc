@@ -21,7 +21,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel_proxy.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/thread.h"
 
@@ -269,7 +268,7 @@ bool IpcChannel::connect(const QString& channel_id)
     stream_.assign(handle.release(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to assign handle: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Failed to assign handle: " << error_code;
         return false;
     }
 
@@ -284,7 +283,7 @@ bool IpcChannel::connect(const QString& channel_id)
     stream_.connect(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to connect: " << error_code;
         return false;
     }
 
@@ -420,9 +419,8 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
         return;
     }
 
-    LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': "
-                  << utf16FromLocal8Bit(error_code.message())
-                  << " (code=" << error_code.value() << " location=" << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': " << error_code
+                  << " (location=" << location.toString() << ")";
 
     disconnect();
     emit sig_disconnected();

@@ -21,20 +21,19 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_POSIX)
 #include <asio/local/stream_protocol.hpp>
-#endif // defined(OS_POSIX)
+#endif // defined(Q_OS_POSIX)
 
 #include <random>
 
@@ -42,7 +41,7 @@ namespace base {
 
 namespace {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 const DWORD kAcceptTimeout = 5000; // ms
 const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 #endif
@@ -59,9 +58,9 @@ public:
 
     bool listen(asio::io_context& io_context, const QString& channel_name);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_POSIX)
     void onNewConnetion(const std::error_code& error_code,
                         asio::local::stream_protocol::socket socket);
 #endif
@@ -70,10 +69,10 @@ private:
     IpcServer* server_;
     const size_t index_;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     std::unique_ptr<asio::windows::stream_handle> handle_;
     std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_POSIX)
     std::unique_ptr<asio::local::stream_protocol::acceptor> acceptor_;
     std::unique_ptr<asio::local::stream_protocol::socket> handle_;
 #endif
@@ -95,7 +94,7 @@ IpcServer::Listener::~Listener() = default;
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_name)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QString user_sid;
 
     if (!userSidString(&user_sid))
@@ -179,16 +178,14 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     acceptor_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->open failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
         return false;
     }
 
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->bind failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
         return false;
     }
 
@@ -200,8 +197,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->listen failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
         return false;
     }
 
@@ -213,7 +209,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
 #endif
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
@@ -226,7 +222,7 @@ void IpcServer::Listener::onNewConnetion(
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error code: " << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -236,9 +232,9 @@ void IpcServer::Listener::onNewConnetion(
 
     server_->onNewConnection(index_, std::move(channel));
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_POSIX)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, asio::local::stream_protocol::socket socket)
@@ -251,7 +247,7 @@ void IpcServer::Listener::onNewConnetion(
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error code: " << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -261,7 +257,7 @@ void IpcServer::Listener::onNewConnetion(
 
     server_->onNewConnection(index_, std::move(channel));
 }
-#endif // defined(OS_POSIX)
+#endif // defined(Q_OS_POSIX)
 
 //--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer(QObject* parent)
@@ -290,7 +286,7 @@ QString IpcServer::createUniqueId()
 
     quint32 process_id;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     process_id = GetCurrentProcessId();
 #elif defined(OS_POSIX)
     process_id = getpid();

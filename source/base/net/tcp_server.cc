@@ -91,7 +91,7 @@ void TcpServer::Impl::start(const QString& listen_interface, quint16 port, TcpSe
         if (error_code)
         {
             LOG(LS_ERROR) << "Invalid listen address: " << listen_interface_
-                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+                          << " (" << error_code << ")";
             return;
         }
     }
@@ -106,32 +106,28 @@ void TcpServer::Impl::start(const QString& listen_interface, quint16 port, TcpSe
     acceptor_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->open failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
         return;
     }
 
     acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->set_option failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->set_option failed: " << error_code;
         return;
     }
 
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->bind failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
         return;
     }
 
     acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->listen failed: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
         return;
     }
 
@@ -172,8 +168,7 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error while accepting connection: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
 
         static const int kMaxErrorCount = 500;
 
@@ -268,8 +263,7 @@ bool TcpServer::isValidListenInterface(const QString& interface)
     asio::ip::make_address(interface.toLocal8Bit().toStdString(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Invalid interface address: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Invalid interface address: " << error_code;
         return false;
     }
 

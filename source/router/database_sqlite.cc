@@ -293,8 +293,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     {
         if (!std::filesystem::create_directories(dir_path, error_code))
         {
-            LOG(LS_ERROR) << "Unable to create directory for database: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to create directory for database: " << error_code;
             return nullptr;
         }
     }

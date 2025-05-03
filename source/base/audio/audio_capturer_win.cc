@@ -20,11 +20,9 @@
 
 #include "base/logging.h"
 #include "base/audio/win/default_audio_device_change_detector.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <utility>
 
 #include <avrt.h>
@@ -371,7 +369,7 @@ void AudioCapturerWin::onCaptureTimeout(const std::error_code& error_code)
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Timer error: " << utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Timer error: " << error_code;
         return;
     }
 

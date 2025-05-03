@@ -202,8 +202,7 @@ void RelayPeer::onConnected()
 //--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Failed to connect to relay server: "
-                  << utf16FromLocal8Bit(error_code.message()) << " ("
+    LOG(LS_ERROR) << "Failed to connect to relay server: " << error_code << " ("
                   << location.toString() << ")";
     is_finished_ = true;
     emit sig_connectionError();

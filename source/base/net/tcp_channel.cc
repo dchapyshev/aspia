@@ -232,8 +232,7 @@ QString TcpChannel::peerAddress() const
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get peer address: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to get peer address: " << error_code;
             return QString();
         }
 
@@ -260,8 +259,7 @@ QString TcpChannel::peerAddress() const
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get peer address: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get peer address: " << error_code;
         return QString();
     }
 }
@@ -346,8 +344,7 @@ bool TcpChannel::setNoDelay(bool enable)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
         return false;
     }
 
@@ -429,8 +426,7 @@ bool TcpChannel::setReadBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set read buffer size: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Failed to set read buffer size: " << error_code;
         return false;
     }
 
@@ -447,8 +443,7 @@ bool TcpChannel::setWriteBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set write buffer size: "
-                      << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Failed to set write buffer size: " << error_code;
         return false;
     }
 
@@ -511,8 +506,7 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(LS_ERROR) << "Asio error: " << utf16FromLocal8Bit(error_code.message())
-                  << " (" << error_code.value() << ")";
+    LOG(LS_ERROR) << "Asio error: " << error_code;
     onErrorOccurred(location, error);
 }
 
@@ -1005,7 +999,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Keep alive timer error: " << utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Keep alive timer error: " << error_code;
 
         // Restarting the timer.
         keep_alive_timer_->cancel();
@@ -1038,7 +1032,7 @@ void TcpChannel::onKeepAliveTimeout(const std::error_code& error_code)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Keep alive timer error: " << utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Keep alive timer error: " << error_code;
     }
 
     // No response came within the specified period of time. We forcibly terminate the connection.

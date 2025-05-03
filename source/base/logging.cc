@@ -554,19 +554,31 @@ QTextStream& operator<<(QTextStream& out, const wchar_t* wstr)
 }
 #endif // defined(Q_OS_WINDOWS)
 
+//--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const char16_t* ustr)
 {
     return out << (ustr ? QString::fromUtf16(ustr) : "nullptr");
 }
 
+//--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const std::u16string& ustr)
 {
     return out << QString::fromStdU16String(ustr);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path)
 {
     return out << QString::fromStdU16String(path.u16string());
+}
+
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const std::error_code& error)
+{
+    std::string message = error.message();
+    int value  = error.value();
+
+    return out << QString::fromLocal8Bit(message.c_str(), message.size()) << " (" << value << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
