@@ -77,7 +77,7 @@
 // Windows and errno on POSIX).
 //
 // The supported severity levels for macros that allow you to specify one are (in increasing order
-// of severity) LS_INFO, LS_ERROR, and LS_FATAL.
+// of severity) LS_INFO, LS_WARNING, LS_ERROR, and LS_FATAL.
 //
 // Very important: logging a message at the LS_FATAL severity level causes the program to terminate
 // (after the message is logged).
@@ -116,9 +116,10 @@ enum LoggingDestination
 using LoggingSeverity = int;
 
 [[maybe_unused]] const LoggingSeverity LOG_LS_INFO = 0;
-[[maybe_unused]] const LoggingSeverity LOG_LS_ERROR = 1;
-[[maybe_unused]] const LoggingSeverity LOG_LS_FATAL = 2;
-[[maybe_unused]] const LoggingSeverity LOG_LS_NUMBER = 3;
+[[maybe_unused]] const LoggingSeverity LOG_LS_WARNING = 1;
+[[maybe_unused]] const LoggingSeverity LOG_LS_ERROR = 2;
+[[maybe_unused]] const LoggingSeverity LOG_LS_FATAL = 3;
+[[maybe_unused]] const LoggingSeverity LOG_LS_NUMBER = 4;
 [[maybe_unused]] const LoggingSeverity LOG_LS_DFATAL = LOG_LS_FATAL;
 [[maybe_unused]] const LoggingSeverity LOG_LS_DCHECK = LOG_LS_FATAL;
 
@@ -161,6 +162,8 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
 #define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
     ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_INFO, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_WARNING, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
     ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_ERROR, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
@@ -171,6 +174,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
     ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DCHECK, ##__VA_ARGS__)
 
 #define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
+#define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
 #define COMPACT_LOG_LS_ERROR   COMPACT_LOG_EX_LS_ERROR(LogMessage)
 #define COMPACT_LOG_LS_FATAL   COMPACT_LOG_EX_LS_FATAL(LogMessage)
 #define COMPACT_LOG_LS_DFATAL  COMPACT_LOG_EX_LS_DFATAL(LogMessage)
