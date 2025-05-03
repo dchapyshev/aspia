@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base::win {
 

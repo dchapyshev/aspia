@@ -136,91 +136,91 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::companyName()
+QString FileVersionInfo::companyName()
 {
     return stringValue(L"CompanyName");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::companyShortName()
+QString FileVersionInfo::companyShortName()
 {
     return stringValue(L"CompanyShortName");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::internalName()
+QString FileVersionInfo::internalName()
 {
     return stringValue(L"InternalName");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::productName()
+QString FileVersionInfo::productName()
 {
     return stringValue(L"ProductName");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::productShortName()
+QString FileVersionInfo::productShortName()
 {
     return stringValue(L"ProductShortName");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::comments()
+QString FileVersionInfo::comments()
 {
     return stringValue(L"Comments");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::legalCopyright()
+QString FileVersionInfo::legalCopyright()
 {
     return stringValue(L"LegalCopyright");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::productVersion()
+QString FileVersionInfo::productVersion()
 {
     return stringValue(L"ProductVersion");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::fileDescription()
+QString FileVersionInfo::fileDescription()
 {
     return stringValue(L"FileDescription");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::legalTrademarks()
+QString FileVersionInfo::legalTrademarks()
 {
     return stringValue(L"LegalTrademarks");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::privateBuild()
+QString FileVersionInfo::privateBuild()
 {
     return stringValue(L"PrivateBuild");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::fileVersion()
+QString FileVersionInfo::fileVersion()
 {
     return stringValue(L"FileVersion");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::originalFilename()
+QString FileVersionInfo::originalFilename()
 {
     return stringValue(L"OriginalFilename");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::specialBuild()
+QString FileVersionInfo::specialBuild()
 {
     return stringValue(L"SpecialBuild");
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::lastChange()
+QString FileVersionInfo::lastChange()
 {
     return stringValue(L"LastChange");
 }
@@ -232,7 +232,7 @@ bool FileVersionInfo::isOfficialBuild()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
+bool FileVersionInfo::value(const wchar_t* name, QString* value_str)
 {
     WORD lang_codepage[8];
     size_t i = 0;
@@ -267,7 +267,7 @@ bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
         BOOL r = VerQueryValueW(data_, sub_block, &value, &size);
         if (r && value)
         {
-            value_str->assign(static_cast<wchar_t*>(value));
+            *value_str = QString::fromWCharArray(static_cast<wchar_t*>(value));
             return true;
         }
     }
@@ -276,14 +276,14 @@ bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::wstring FileVersionInfo::stringValue(const wchar_t* name)
+QString FileVersionInfo::stringValue(const wchar_t* name)
 {
-    std::wstring str;
+    QString str;
 
     if (value(name, &str))
         return str;
     else
-        return L"";
+        return "";
 }
 
 } // namespace base::win

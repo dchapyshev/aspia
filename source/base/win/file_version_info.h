@@ -22,10 +22,10 @@
 #include "base/macros_magic.h"
 
 #include <filesystem>
-#include <string>
 #include <vector>
 
-#include <Windows.h>
+#include <QString>
+#include <qt_windows.h>
 
 struct tagVS_FIXEDFILEINFO;
 typedef tagVS_FIXEDFILEINFO VS_FIXEDFILEINFO;
@@ -49,29 +49,29 @@ public:
 
     // Accessors to the different version properties.
     // Returns an empty string if the property is not found.
-    std::wstring companyName();
-    std::wstring companyShortName();
-    std::wstring productName();
-    std::wstring productShortName();
-    std::wstring internalName();
-    std::wstring productVersion();
-    std::wstring privateBuild();
-    std::wstring specialBuild();
-    std::wstring comments();
-    std::wstring originalFilename();
-    std::wstring fileDescription();
-    std::wstring fileVersion();
-    std::wstring legalCopyright();
-    std::wstring legalTrademarks();
-    std::wstring lastChange();
+    QString companyName();
+    QString companyShortName();
+    QString productName();
+    QString productShortName();
+    QString internalName();
+    QString productVersion();
+    QString privateBuild();
+    QString specialBuild();
+    QString comments();
+    QString originalFilename();
+    QString fileDescription();
+    QString fileVersion();
+    QString legalCopyright();
+    QString legalTrademarks();
+    QString lastChange();
     bool isOfficialBuild();
 
     // Lets you access other properties not covered above.
-    bool value(const wchar_t* name, std::wstring* value);
+    bool value(const wchar_t* name, QString* value);
 
     // Similar to GetValue but returns a wstring (empty string if the property
     // does not exist).
-    std::wstring stringValue(const wchar_t* name);
+    QString stringValue(const wchar_t* name);
 
     // Get the fixed file info if it exists. Otherwise NULL
     const VS_FIXEDFILEINFO* fixed_file_info() const { return fixed_file_info_; }
