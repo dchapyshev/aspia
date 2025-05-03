@@ -627,8 +627,6 @@ if (WIN32)
         win/power_info.h
         win/printer_enumerator.cc
         win/printer_enumerator.h
-        win/process.cc
-        win/process.h
         win/process_util.cc
         win/process_util.h
         win/registry.cc
