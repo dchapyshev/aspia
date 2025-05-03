@@ -36,7 +36,7 @@ QString SysInfo::processorName()
     CpuidUtil cpuidUtil;
     cpuidUtil.get(static_cast<int>(0x80000000));
 
-    uint32_t max_leaf = cpuidUtil.eax();
+    quint32 max_leaf = cpuidUtil.eax();
     if (max_leaf < 0x80000002)
         return QString();
 
@@ -45,14 +45,14 @@ QString SysInfo::processorName()
     char buffer[49];
     memset(&buffer[0], 0, sizeof(buffer));
 
-    for (uint32_t leaf = 0x80000002, offset = 0; leaf <= max_leaf; ++leaf, offset += 16)
+    for (quint32 leaf = 0x80000002, offset = 0; leaf <= max_leaf; ++leaf, offset += 16)
     {
         cpuidUtil.get(static_cast<int>(leaf));
 
-        uint32_t eax = cpuidUtil.eax();
-        uint32_t ebx = cpuidUtil.ebx();
-        uint32_t ecx = cpuidUtil.ecx();
-        uint32_t edx = cpuidUtil.edx();
+        quint32 eax = cpuidUtil.eax();
+        quint32 ebx = cpuidUtil.ebx();
+        quint32 ecx = cpuidUtil.ecx();
+        quint32 edx = cpuidUtil.edx();
 
         memcpy(&buffer[offset + 0], &eax, sizeof(eax));
         memcpy(&buffer[offset + 4], &ebx, sizeof(ebx));
@@ -85,9 +85,9 @@ QString SysInfo::processorVendor()
     CpuidUtil cpuidUtil;
     cpuidUtil.get(0x00000000);
 
-    uint32_t ebx = cpuidUtil.ebx();
-    uint32_t ecx = cpuidUtil.ecx();
-    uint32_t edx = cpuidUtil.edx();
+    quint32 ebx = cpuidUtil.ebx();
+    quint32 ecx = cpuidUtil.ecx();
+    quint32 edx = cpuidUtil.edx();
 
     char buffer[13];
     memset(&buffer[0], 0, sizeof(buffer));

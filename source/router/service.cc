@@ -69,7 +69,7 @@ void Service::onSessionEvent(base::SessionStatus /* event */, base::SessionId /*
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onPowerEvent(uint32_t /* event */)
+void Service::onPowerEvent(quint32 /* event */)
 {
     // Nothing
 }

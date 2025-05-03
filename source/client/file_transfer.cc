@@ -32,7 +32,7 @@ auto g_actionType = qRegisterMetaType<client::FileTransfer::Error::Action>();
 struct ActionsMap
 {
     FileTransfer::Error::Type type;
-    uint32_t available_actions;
+    quint32 available_actions;
     FileTransfer::Error::Action default_action;
 } static const kActions[] =
 {
@@ -81,10 +81,10 @@ struct ActionsMap
 };
 
 //--------------------------------------------------------------------------------------------------
-int64_t calculateSpeed(int64_t last_speed, const FileTransfer::Milliseconds& duration, int64_t bytes)
+qint64 calculateSpeed(qint64 last_speed, const FileTransfer::Milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.9;
-    return static_cast<int64_t>(
+    return static_cast<qint64>(
         (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
         ((1.0 - kAlpha) * static_cast<double>(last_speed)));
 }
@@ -293,10 +293,10 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             return;
         }
 
-        const int64_t full_task_size = frontTask().size();
+        const qint64 full_task_size = frontTask().size();
         if (full_task_size && total_size_)
         {
-            int64_t packet_size = common::kMaxFilePacketSize;
+            qint64 packet_size = common::kMaxFilePacketSize;
 
             task_transfered_size_ += packet_size;
 
@@ -329,7 +329,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             return;
         }
 
-        uint32_t flags = proto::FilePacketRequest::NO_FLAGS;
+        quint32 flags = proto::FilePacketRequest::NO_FLAGS;
         if (is_canceled_)
             flags = proto::FilePacketRequest::CANCEL;
 
@@ -501,7 +501,7 @@ void FileTransfer::onFinished(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t FileTransfer::Error::availableActions() const
+quint32 FileTransfer::Error::availableActions() const
 {
     for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
     {
@@ -526,7 +526,7 @@ FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
 
 //--------------------------------------------------------------------------------------------------
 FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
-                         bool is_directory, int64_t size)
+                         bool is_directory, qint64 size)
     : source_path_(std::move(source_path)),
       target_path_(std::move(target_path)),
       is_directory_(is_directory),

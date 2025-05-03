@@ -75,19 +75,19 @@ TEST(BitSetTest, Range64)
 
 TEST(BitSetTest, Range32)
 {
-    EXPECT_EQ(BitSet<uint32_t>(0).range(0, 31), 0);
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(12, 15), 0);
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(0, 15), 192);
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(0, 31), 0x404400C0);
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(6, 7), 3);
+    EXPECT_EQ(BitSet<quint32>(0).range(0, 31), 0);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(12, 15), 0);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(0, 15), 192);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(0, 31), 0x404400C0);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(6, 7), 3);
 
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(30, 30), 1);
-    EXPECT_EQ(BitSet<uint32_t>(0x404400C0).range(6, 6), 1);
-    EXPECT_EQ(BitSet<uint32_t>(1).range(0, 0), 1);
-    EXPECT_EQ(BitSet<uint32_t>(3).range(1, 1), 1);
-    EXPECT_EQ(BitSet<uint32_t>(0x80000000).range(31, 31), 1);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(30, 30), 1);
+    EXPECT_EQ(BitSet<quint32>(0x404400C0).range(6, 6), 1);
+    EXPECT_EQ(BitSet<quint32>(1).range(0, 0), 1);
+    EXPECT_EQ(BitSet<quint32>(3).range(1, 1), 1);
+    EXPECT_EQ(BitSet<quint32>(0x80000000).range(31, 31), 1);
 
-    const BitSet<uint32_t> set1(0xFFFFFFFF);
+    const BitSet<quint32> set1(0xFFFFFFFF);
 
     for (size_t i = 0; i < set1.size(); ++i)
     {
@@ -95,7 +95,7 @@ TEST(BitSetTest, Range32)
         EXPECT_TRUE(set1.test(i));
     }
 
-    const BitSet<uint32_t> set2(0x00000000);
+    const BitSet<quint32> set2(0x00000000);
 
     for (size_t i = 0; i < set2.size(); ++i)
     {
@@ -103,7 +103,7 @@ TEST(BitSetTest, Range32)
         EXPECT_FALSE(set2.test(i));
     }
 
-    const BitSet<uint32_t> set3(0xAAAAAAAA);
+    const BitSet<quint32> set3(0xAAAAAAAA);
 
     for (size_t i = 0; i < set3.size(); ++i)
     {
@@ -169,17 +169,17 @@ TEST(BitSetTest, Range16)
 
 TEST(BitSetTest, Range8)
 {
-    EXPECT_EQ(BitSet<uint8_t>(0).range(0, 7), 0);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(0, 2), 2);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(0, 3), 10);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(0, 7), 106);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(6, 7), 1);
+    EXPECT_EQ(BitSet<quint8>(0).range(0, 7), 0);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(0, 2), 2);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(0, 3), 10);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(0, 7), 106);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(6, 7), 1);
 
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(6, 6), 1);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(0, 0), 0);
-    EXPECT_EQ(BitSet<uint8_t>(0x6A).range(4, 4), 0);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(6, 6), 1);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(0, 0), 0);
+    EXPECT_EQ(BitSet<quint8>(0x6A).range(4, 4), 0);
 
-    const BitSet<uint8_t> set1(0xFF);
+    const BitSet<quint8> set1(0xFF);
 
     for (size_t i = 0; i < set1.size(); ++i)
     {
@@ -187,7 +187,7 @@ TEST(BitSetTest, Range8)
         EXPECT_TRUE(set1.test(i));
     }
 
-    const BitSet<uint8_t> set2(0x00);
+    const BitSet<quint8> set2(0x00);
 
     for (size_t i = 0; i < set2.size(); ++i)
     {
@@ -195,7 +195,7 @@ TEST(BitSetTest, Range8)
         EXPECT_FALSE(set2.test(i));
     }
 
-    const BitSet<uint8_t> set3(0xAA);
+    const BitSet<quint8> set3(0xAA);
 
     for (size_t i = 0; i < set3.size(); ++i)
     {

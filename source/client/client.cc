@@ -214,7 +214,7 @@ const char* Client::statusToString(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
+void Client::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
     if (!channel_)
     {
@@ -226,7 +226,7 @@ void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t Client::totalRx() const
+qint64 Client::totalRx() const
 {
     if (!channel_)
     {
@@ -238,7 +238,7 @@ int64_t Client::totalRx() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t Client::totalTx() const
+qint64 Client::totalTx() const
 {
     if (!channel_)
     {
@@ -318,7 +318,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
+void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -335,7 +335,7 @@ void Client::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
+void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -425,7 +425,7 @@ void Client::startAuthentication()
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(session_state_->hostUserName());
     authenticator_->setPassword(session_state_->hostPassword());
-    authenticator_->setSessionType(static_cast<uint32_t>(session_state_->sessionType()));
+    authenticator_->setSessionType(static_cast<quint32>(session_state_->sessionType()));
     authenticator_->setDisplayName(session_state_->displayName());
 
     connect(authenticator_, &base::Authenticator::sig_finished,

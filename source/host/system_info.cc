@@ -82,7 +82,7 @@ void fillPrinters(proto::system_info::SystemInfo* system_info)
         printer->set_shared(enumerator.isShared());
         printer->set_port(enumerator.portName().toStdString());
         printer->set_driver(enumerator.driverName().toStdString());
-        printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
+        printer->set_jobs_count(static_cast<quint32>(enumerator.jobsCount()));
         printer->set_share_name(enumerator.shareName().toStdString());
     }
 }
@@ -400,7 +400,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
                 break;
         }
 
-        uint8_t supported_features = edid->featureSupport();
+        quint8 supported_features = edid->featureSupport();
 
         if (supported_features & base::Edid::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
             monitor->set_default_gtf_supported(true);
@@ -429,7 +429,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
             timing->set_frequency(freq);
         };
 
-        uint8_t estabilished_timings1 = edid->estabilishedTimings1();
+        quint8 estabilished_timings1 = edid->estabilishedTimings1();
 
         if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_800X600_60HZ)
             add_timing(800, 600, 60);
@@ -455,7 +455,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_720X400_70HZ)
             add_timing(720, 400, 70);
 
-        uint8_t estabilished_timings2 = edid->estabilishedTimings2();
+        quint8 estabilished_timings2 = edid->estabilishedTimings2();
 
         if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
             add_timing(1280, 1024, 75);
@@ -481,7 +481,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_800X600_72HZ)
             add_timing(800, 600, 72);
 
-        uint8_t manufacturer_timings = edid->manufacturersTimings();
+        quint8 manufacturer_timings = edid->manufacturersTimings();
 
         if (manufacturer_timings & base::Edid::MANUFACTURERS_TIMINGS_1152X870_75HZ)
             add_timing(1152, 870, 75);
@@ -649,10 +649,10 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 
         auto append_state = [&](proto::system_info::PowerOptions::Battery::State state)
         {
-            battery->set_state(battery->state() | static_cast<uint32_t>(state));
+            battery->set_state(battery->state() | static_cast<quint32>(state));
         };
 
-        uint32_t state = enumerator.state();
+        quint32 state = enumerator.state();
 
         if (state & base::BatteryEnumerator::CHARGING)
             append_state(proto::system_info::PowerOptions::Battery::STATE_CHARGING);
@@ -695,9 +695,9 @@ void fillProcessor(proto::system_info::SystemInfo* system_info)
     proto::system_info::Processor* processor = system_info->mutable_processor();
     processor->set_vendor(base::SysInfo::processorVendor().toStdString());
     processor->set_model(base::SysInfo::processorName().toStdString());
-    processor->set_packages(static_cast<uint32_t>(base::SysInfo::processorPackages()));
-    processor->set_cores(static_cast<uint32_t>(base::SysInfo::processorCores()));
-    processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));
+    processor->set_packages(static_cast<quint32>(base::SysInfo::processorPackages()));
+    processor->set_cores(static_cast<quint32>(base::SysInfo::processorCores()));
+    processor->set_threads(static_cast<quint32>(base::SysInfo::processorThreads()));
 }
 
 //--------------------------------------------------------------------------------------------------

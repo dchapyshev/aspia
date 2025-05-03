@@ -137,7 +137,7 @@ void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode erro
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::RouterToPeer message;
     if (!base::parse(buffer, &message))

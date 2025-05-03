@@ -85,8 +85,8 @@ Point dpiByRect(const Rect& rect)
             }
             else
             {
-                result.setX(static_cast<int32_t>(dpi_x));
-                result.setY(static_cast<int32_t>(dpi_y));
+                result.setX(static_cast<qint32>(dpi_x));
+                result.setY(static_cast<qint32>(dpi_y));
             }
         }
         else
@@ -142,8 +142,8 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
         std::string device_name = utf8FromWide(device.DeviceName);
         bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
         Rect rect = Rect::makeXYWH(device_mode.dmPosition.x, device_mode.dmPosition.y,
-            static_cast<int32_t>(device_mode.dmPelsWidth),
-            static_cast<int32_t>(device_mode.dmPelsHeight));
+            static_cast<qint32>(device_mode.dmPelsWidth),
+            static_cast<qint32>(device_mode.dmPelsHeight));
         Point dpi = dpiByRect(rect);
 
         screen_list->screens.push_back(
@@ -224,8 +224,8 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 
     return Rect::makeXYWH(device_mode.dmPosition.x,
                           device_mode.dmPosition.y,
-                          static_cast<int32_t>(device_mode.dmPelsWidth),
-                          static_cast<int32_t>(device_mode.dmPelsHeight));
+                          static_cast<qint32>(device_mode.dmPelsWidth),
+                          static_cast<qint32>(device_mode.dmPelsHeight));
 }
 
 //--------------------------------------------------------------------------------------------------

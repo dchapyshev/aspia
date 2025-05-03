@@ -24,7 +24,7 @@
 
 namespace base {
 
-void largeNumberIncrement(uint8_t* buffer, size_t buffer_size);
+void largeNumberIncrement(quint8* buffer, size_t buffer_size);
 void largeNumberIncrement(QByteArray* buffer);
 
 } // namespace base

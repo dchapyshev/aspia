@@ -306,7 +306,7 @@ bool ComputerGroupDialog::saveChanges()
         }
     }
 
-    int64_t current_time = QDateTime::currentSecsSinceEpoch();
+    qint64 current_time = QDateTime::currentSecsSinceEpoch();
 
     if (mode_ == CreateComputerGroup)
         computer_group_->set_create_time(current_time);

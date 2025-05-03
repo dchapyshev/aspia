@@ -33,7 +33,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPoolKeyExpired(uint32_t key_id) = 0;
+        virtual void onPoolKeyExpired(quint32 key_id) = 0;
     };
 
     using Key = std::pair<QByteArray, QByteArray>;
@@ -43,10 +43,10 @@ public:
 
     std::unique_ptr<SharedPool> share();
 
-    uint32_t addKey(SessionKey&& session_key);
-    bool removeKey(uint32_t key_id);
-    void setKeyExpired(uint32_t key_id);
-    std::optional<Key> key(uint32_t key_id, const std::string& peer_public_key) const;
+    quint32 addKey(SessionKey&& session_key);
+    bool removeKey(quint32 key_id);
+    void setKeyExpired(quint32 key_id);
+    std::optional<Key> key(quint32 key_id, const std::string& peer_public_key) const;
     void clear();
 
 private:

@@ -56,7 +56,7 @@ public:
 
 protected:
     // SharedKeyPool::Delegate implementation.
-    void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) final;
+    void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id) final;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;

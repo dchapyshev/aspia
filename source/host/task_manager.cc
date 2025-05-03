@@ -168,7 +168,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManager::sendProcessList(uint32_t flags)
+void TaskManager::sendProcessList(quint32 flags)
 {
     proto::task_manager::HostToClient message;
 

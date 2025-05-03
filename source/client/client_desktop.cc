@@ -36,7 +36,7 @@ namespace client {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_t count)
+int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
 {
     static const double kAlpha = 0.1;
     return static_cast<int>(
@@ -144,7 +144,7 @@ void ClientDesktop::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientDesktop::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -190,7 +190,7 @@ void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const QBy
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageWritten(uint8_t /* channel_id */, size_t pending)
+void ClientDesktop::onSessionMessageWritten(quint8 /* channel_id */, size_t pending)
 {
     if (pending >= 2)
         input_event_filter_.setNetworkOverflow(true);
@@ -548,7 +548,7 @@ void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilit
     emit sig_capabilities(capabilities);
 
     // If current video encoding not supported.
-    if (!(capabilities.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
+    if (!(capabilities.video_encodings() & static_cast<quint32>(desktop_config_.video_encoding())))
     {
         LOG(LS_ERROR) << "Current video encoding not supported";
 

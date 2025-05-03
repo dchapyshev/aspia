@@ -45,8 +45,8 @@ RouteEnumerator::RouteEnumerator()
 {
     ULONG buffer_size = sizeof(MIB_IPFORWARDTABLE);
 
-    std::unique_ptr<uint8_t[]> forward_table_buffer =
-        std::make_unique<uint8_t[]>(buffer_size);
+    std::unique_ptr<quint8[]> forward_table_buffer =
+        std::make_unique<quint8[]>(buffer_size);
 
     PMIB_IPFORWARDTABLE forward_table =
         reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer.get());
@@ -56,7 +56,7 @@ RouteEnumerator::RouteEnumerator()
     {
         if (error_code == ERROR_INSUFFICIENT_BUFFER)
         {
-            forward_table_buffer = std::make_unique<uint8_t[]>(buffer_size);
+            forward_table_buffer = std::make_unique<quint8[]>(buffer_size);
             forward_table = reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer.get());
 
             error_code = GetIpForwardTable(forward_table, &buffer_size, 0);
@@ -119,7 +119,7 @@ QString RouteEnumerator::gateway() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t RouteEnumerator::metric() const
+quint32 RouteEnumerator::metric() const
 {
     PMIB_IPFORWARDTABLE forward_table =
         reinterpret_cast<PMIB_IPFORWARDTABLE>(forward_table_buffer_.get());

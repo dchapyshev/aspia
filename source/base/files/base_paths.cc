@@ -308,7 +308,7 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
     return true;
 #elif defined(OS_MAC)
     char buffer[PATH_MAX] = { 0 };
-    uint32_t buffer_size = std::size(buffer);
+    quint32 buffer_size = std::size(buffer);
 
     if (_NSGetExecutablePath(buffer, &buffer_size) != 0)
         return false;

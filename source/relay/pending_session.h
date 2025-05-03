@@ -70,7 +70,7 @@ public:
     void stop();
 
     // Sets session credentials.
-    void setIdentify(uint32_t key_id, const QByteArray& secret);
+    void setIdentify(quint32 key_id, const QByteArray& secret);
 
     // Returns true if the other session is a pair and false otherwise.
     bool isPeerFor(const PendingSession& other) const;
@@ -80,7 +80,7 @@ public:
 
     const std::string& address() const;
     std::chrono::seconds duration(const TimePoint& now) const;
-    uint32_t keyId() const;
+    quint32 keyId() const;
 
 private:
     static void doReadMessage(PendingSession* pending_session);
@@ -94,11 +94,11 @@ private:
     QTimer timer_;
     asio::ip::tcp::socket socket_;
 
-    uint32_t buffer_size_ = 0;
+    quint32 buffer_size_ = 0;
     QByteArray buffer_;
 
     QByteArray secret_;
-    uint32_t key_id_ = static_cast<uint32_t>(-1);
+    quint32 key_id_ = static_cast<quint32>(-1);
 
     DISALLOW_COPY_AND_ASSIGN(PendingSession);
 };

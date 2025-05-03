@@ -40,8 +40,8 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onUnconfirmedSessionAccept(uint32_t id) = 0;
-        virtual void onUnconfirmedSessionReject(uint32_t id) = 0;
+        virtual void onUnconfirmedSessionAccept(quint32 id) = 0;
+        virtual void onUnconfirmedSessionReject(quint32 id) = 0;
     };
 
     UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
@@ -52,13 +52,13 @@ public:
     void setTimeout(const std::chrono::milliseconds& timeout);
 
     std::unique_ptr<ClientSession> takeClientSession();
-    uint32_t id() const;
+    quint32 id() const;
 
 private:
     Delegate* delegate_;
     std::unique_ptr<ClientSession> client_session_;
     std::unique_ptr<QTimer> timer_;
-    uint32_t id_;
+    quint32 id_;
 
     DISALLOW_COPY_AND_ASSIGN(UnconfirmedClientSession);
 };

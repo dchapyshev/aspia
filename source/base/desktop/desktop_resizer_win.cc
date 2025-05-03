@@ -42,7 +42,7 @@ bool isModeValid(const DEVMODEW& mode)
 Size resolutionFromMode(const DEVMODEW& mode)
 {
     DCHECK(isModeValid(mode));
-    return Size(static_cast<int32_t>(mode.dmPelsWidth), static_cast<int32_t>(mode.dmPelsHeight));
+    return Size(static_cast<qint32>(mode.dmPelsWidth), static_cast<qint32>(mode.dmPelsHeight));
 }
 
 } // namespace
@@ -100,8 +100,8 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     }
 
     name_ = device.DeviceName;
-    current_resolution_.set(static_cast<int32_t>(current_mode.dmPelsWidth),
-                            static_cast<int32_t>(current_mode.dmPelsHeight));
+    current_resolution_.set(static_cast<qint32>(current_mode.dmPelsWidth),
+                            static_cast<qint32>(current_mode.dmPelsHeight));
 
     for (DWORD i = 0; ; ++i)
     {

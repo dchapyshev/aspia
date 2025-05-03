@@ -38,7 +38,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) = 0;
+        virtual void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id) = 0;
     };
 
     explicit SharedKeyPool(Delegate* delegate);

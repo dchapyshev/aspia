@@ -30,7 +30,7 @@ namespace {
 class EventItem final : public QTreeWidgetItem
 {
 public:
-    explicit EventItem(int64_t time)
+    explicit EventItem(qint64 time)
         : time_(time)
     {
         // Nothing
@@ -49,7 +49,7 @@ public:
     }
 
 private:
-    int64_t time_;
+    qint64 time_;
 };
 
 } // namespace
@@ -65,11 +65,11 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     ui.tree->setColumnHidden(5, true);
 
     ui.combobox_type->addItem(tr("Application"),
-        static_cast<uint32_t>(proto::system_info::EventLogs::Event::TYPE_APPLICATION));
+        static_cast<quint32>(proto::system_info::EventLogs::Event::TYPE_APPLICATION));
     ui.combobox_type->addItem(tr("Security"),
-        static_cast<uint32_t>(proto::system_info::EventLogs::Event::TYPE_SECURITY));
+        static_cast<quint32>(proto::system_info::EventLogs::Event::TYPE_SECURITY));
     ui.combobox_type->addItem(tr("System"),
-        static_cast<uint32_t>(proto::system_info::EventLogs::Event::TYPE_SYSTEM));
+        static_cast<quint32>(proto::system_info::EventLogs::Event::TYPE_SYSTEM));
 
     ui.combobox_type->setCurrentIndex(2);
 
@@ -190,8 +190,8 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
     ui.combobox_page->clear();
     ui.combobox_page->setEnabled(true);
 
-    uint32_t page_count = std::max(total_records_ / kRecordsPerPage, 1U);
-    for (uint32_t i = 1; i <= page_count; ++i)
+    quint32 page_count = std::max(total_records_ / kRecordsPerPage, 1U);
+    for (quint32 i = 1; i <= page_count; ++i)
         ui.combobox_page->addItem(tr("Page %1/%2").arg(i).arg(page_count));
 
     int current_page = std::max(0, static_cast<int>(start_record_ / kRecordsPerPage));
@@ -275,14 +275,14 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetEventLogs::onPageActivated(int index)
 {
-    start_record_ = static_cast<uint32_t>(index) * kRecordsPerPage;
+    start_record_ = static_cast<quint32>(index) * kRecordsPerPage;
     LOG(LS_INFO) << "Page activated: " << index << " (start: " << start_record_ << ")";
     emit sig_systemInfoRequest(request());
 }
 
 //--------------------------------------------------------------------------------------------------
 proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
-    proto::system_info::EventLogs::Event::Type type, uint32_t start) const
+    proto::system_info::EventLogs::Event::Type type, quint32 start) const
 {
     ui.button_next->setEnabled(false);
     ui.button_prev->setEnabled(false);

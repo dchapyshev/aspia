@@ -33,9 +33,9 @@ public:
     void start();
     void stop();
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void setOneTimeSessions(uint32_t sessions);
-    void killClient(uint32_t id);
-    void connectConfirmation(uint32_t id, bool accept);
+    void setOneTimeSessions(quint32 sessions);
+    void killClient(quint32 id);
+    void connectConfirmation(quint32 id, bool accept);
     void setVoiceChat(bool enable);
     void setMouseLock(bool enable);
     void setKeyboardLock(bool enable);
@@ -107,7 +107,7 @@ void UserSessionAgentProxy::Impl::updateCredentials(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::Impl::setOneTimeSessions(uint32_t sessions)
+void UserSessionAgentProxy::Impl::setOneTimeSessions(quint32 sessions)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -121,7 +121,7 @@ void UserSessionAgentProxy::Impl::setOneTimeSessions(uint32_t sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::Impl::killClient(uint32_t id)
+void UserSessionAgentProxy::Impl::killClient(quint32 id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -134,7 +134,7 @@ void UserSessionAgentProxy::Impl::killClient(uint32_t id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::Impl::connectConfirmation(uint32_t id, bool accept)
+void UserSessionAgentProxy::Impl::connectConfirmation(quint32 id, bool accept)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
@@ -246,19 +246,19 @@ void UserSessionAgentProxy::updateCredentials(proto::internal::CredentialsReques
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::setOneTimeSessions(uint32_t sessions)
+void UserSessionAgentProxy::setOneTimeSessions(quint32 sessions)
 {
     impl_->setOneTimeSessions(sessions);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::killClient(uint32_t id)
+void UserSessionAgentProxy::killClient(quint32 id)
 {
     impl_->killClient(id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::connectConfirmation(uint32_t id, bool accept)
+void UserSessionAgentProxy::connectConfirmation(quint32 id, bool accept)
 {
     impl_->connectConfirmation(id, accept);
 }

@@ -179,7 +179,7 @@ bool WebmFileMuxer::writeFrame(std::string_view frame,
                                const std::chrono::nanoseconds& timestamp,
                                quint64 track_num, bool is_key)
 {
-    if (!segment_->AddFrame(reinterpret_cast<const uint8_t*>(frame.data()), frame.size(),
+    if (!segment_->AddFrame(reinterpret_cast<const quint8*>(frame.data()), frame.size(),
                             track_num, static_cast<quint64>(timestamp.count()), is_key))
     {
         LOG(LS_ERROR) << "AddFrame failed";

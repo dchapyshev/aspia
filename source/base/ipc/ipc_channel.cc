@@ -39,7 +39,7 @@ namespace base {
 
 namespace {
 
-const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(OS_POSIX)
 const char16_t kLocalSocketPrefix[] = u"/tmp/aspia_";
@@ -431,7 +431,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWriteSize()
 {
-    write_size_ = static_cast<uint32_t>(write_queue_.front().size());
+    write_size_ = static_cast<quint32>(write_queue_.front().size());
 
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {

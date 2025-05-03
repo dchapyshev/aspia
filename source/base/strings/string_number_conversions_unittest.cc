@@ -139,12 +139,12 @@ TEST(StringNumberConversionsTest, NumberToString)
         { std::numeric_limits<int>::min(), "-2147483648", "2147483648" },
     };
 
-    static const NumberToStringTest<int64_t> int64_tests[] =
+    static const NumberToStringTest<qint64> qint64ests[] =
     {
         { 0, "0", "0" },
         { -1, "-1", "18446744073709551615" },
-        { std::numeric_limits<int64_t>::max(), "9223372036854775807", "9223372036854775807", },
-        { std::numeric_limits<int64_t>::min(), "-9223372036854775808", "9223372036854775808" },
+        { std::numeric_limits<qint64>::max(), "9223372036854775807", "9223372036854775807", },
+        { std::numeric_limits<qint64>::min(), "-9223372036854775808", "9223372036854775808" },
     };
 
     for (const auto& test : int_tests)
@@ -152,7 +152,7 @@ TEST(StringNumberConversionsTest, NumberToString)
         EXPECT_EQ(numberToString(test.num), test.sexpected);
         EXPECT_EQ(numberToString(static_cast<unsigned>(test.num)), test.uexpected);
     }
-    for (const auto& test : int64_tests)
+    for (const auto& test : qint64ests)
     {
         EXPECT_EQ(numberToString(test.num), test.sexpected);
         EXPECT_EQ(numberToString(static_cast<quint64>(test.num)), test.uexpected);
@@ -323,7 +323,7 @@ TEST(StringNumberConversionsTest, StringToInt64)
     static const struct
     {
         std::string input;
-        int64_t output;
+        qint64 output;
         bool success;
     } cases[] =
     {
@@ -335,8 +335,8 @@ TEST(StringNumberConversionsTest, StringToInt64)
         { "-99999999999", INT64_C(-99999999999), true },
         { "2147483648", INT64_C(2147483648), true },
         { "99999999999", INT64_C(99999999999), true },
-        { "9223372036854775807", std::numeric_limits<int64_t>::max(), true },
-        { "-9223372036854775808", std::numeric_limits<int64_t>::min(), true },
+        { "9223372036854775807", std::numeric_limits<qint64>::max(), true },
+        { "-9223372036854775808", std::numeric_limits<qint64>::min(), true },
         { "09", 9, true },
         { "-09", -9, true },
         { "", 0, false },
@@ -354,15 +354,15 @@ TEST(StringNumberConversionsTest, StringToInt64)
         { "-+123", 0, false },
         { "+-123", 0, false },
         { "-", 0, false },
-        { "-9223372036854775809", std::numeric_limits<int64_t>::min(), false },
-        { "-99999999999999999999", std::numeric_limits<int64_t>::min(), false },
-        { "9223372036854775808", std::numeric_limits<int64_t>::max(), false },
-        { "99999999999999999999", std::numeric_limits<int64_t>::max(), false },
+        { "-9223372036854775809", std::numeric_limits<qint64>::min(), false },
+        { "-99999999999999999999", std::numeric_limits<qint64>::min(), false },
+        { "9223372036854775808", std::numeric_limits<qint64>::max(), false },
+        { "99999999999999999999", std::numeric_limits<qint64>::max(), false },
     };
 
     for (const auto& i : cases)
     {
-        int64_t output = 0;
+        qint64 output = 0;
 
         int ret = stringToInt64(i.input, &output);
         EXPECT_EQ(i.success, ret);
@@ -378,7 +378,7 @@ TEST(StringNumberConversionsTest, StringToInt64)
     // interpreted as junk after the number.
     const char input[] = "6\06";
     std::string input_string(input, std::size(input) - 1);
-    int64_t output;
+    qint64 output;
     EXPECT_FALSE(stringToInt64(input_string, &output));
 }
 
@@ -399,7 +399,7 @@ TEST(StringNumberConversionsTest, StringToUint64)
         { "-99999999999", 0, false },
         { "2147483648", UINT64_C(2147483648), true },
         { "99999999999", UINT64_C(99999999999), true },
-        { "9223372036854775807", std::numeric_limits<int64_t>::max(), true },
+        { "9223372036854775807", std::numeric_limits<qint64>::max(), true },
         { "-9223372036854775808", 0, false },
         { "09", 9, true },
         { "-09", 0, false },

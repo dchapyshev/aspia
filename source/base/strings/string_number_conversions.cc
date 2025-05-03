@@ -104,11 +104,11 @@ class BaseCharToDigit
 template<typename CHAR, int BASE> class BaseCharToDigit<CHAR, BASE, true>
 {
 public:
-    static bool Convert(CHAR c, uint8_t* digit)
+    static bool Convert(CHAR c, quint8* digit)
     {
         if (c >= '0' && c < '0' + BASE)
         {
-            *digit = static_cast<uint8_t>(c - '0');
+            *digit = static_cast<quint8>(c - '0');
             return true;
         }
         return false;
@@ -119,7 +119,7 @@ public:
 template<typename CHAR, int BASE> class BaseCharToDigit<CHAR, BASE, false>
 {
 public:
-    static bool Convert(CHAR c, uint8_t* digit)
+    static bool Convert(CHAR c, quint8* digit)
     {
         if (c >= '0' && c <= '9')
         {
@@ -143,7 +143,7 @@ public:
 
 //--------------------------------------------------------------------------------------------------
 template <int BASE, typename CHAR>
-bool CharToDigit(CHAR c, uint8_t* digit)
+bool CharToDigit(CHAR c, quint8* digit)
 {
     return BaseCharToDigit<CHAR, BASE, BASE <= 10>::Convert(c, digit);
 }
@@ -264,7 +264,7 @@ private:
 
             for (const_iterator current = begin; current != end; ++current)
             {
-                uint8_t new_digit = 0;
+                quint8 new_digit = 0;
 
                 if (!CharToDigit<traits::kBase>(*current, &new_digit))
                 {
@@ -289,7 +289,7 @@ private:
     class Positive : public Base<Positive>
     {
     public:
-        static bool CheckBounds(value_type* output, uint8_t new_digit)
+        static bool CheckBounds(value_type* output, quint8 new_digit)
         {
             if (*output > static_cast<value_type>(traits::max() / traits::kBase) ||
                 (*output == static_cast<value_type>(traits::max() / traits::kBase) &&
@@ -300,7 +300,7 @@ private:
             }
             return true;
         }
-        static void Increment(uint8_t increment, value_type* output)
+        static void Increment(quint8 increment, value_type* output)
         {
             *output += increment;
         }
@@ -309,7 +309,7 @@ private:
     class Negative : public Base<Negative>
     {
     public:
-        static bool CheckBounds(value_type* output, uint8_t new_digit)
+        static bool CheckBounds(value_type* output, quint8 new_digit)
         {
             if (*output < traits::min() / traits::kBase ||
                 (*output == traits::min() / traits::kBase &&
@@ -320,7 +320,7 @@ private:
             }
             return true;
         }
-        static void Increment(uint8_t increment, value_type* output)
+        static void Increment(quint8 increment, value_type* output)
         {
             *output -= increment;
         }
@@ -462,13 +462,13 @@ bool stringToULong(std::u16string_view input, unsigned long* output)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool stringToInt64(std::string_view input, int64_t* output)
+bool stringToInt64(std::string_view input, qint64* output)
 {
     return stringToIntImpl(input, output);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool stringToInt64(std::u16string_view input, int64_t* output)
+bool stringToInt64(std::u16string_view input, qint64* output)
 {
     return string16ToIntImpl(input, output);
 }

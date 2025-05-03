@@ -265,7 +265,7 @@ bool eventLogMessage(const QString& log_name, EVENTLOGRECORD* record, QString* m
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumerator::EventEnumerator(const QString& log_name, uint32_t start, uint32_t count)
+EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32 count)
     : log_name_(log_name)
 {
     if (!count)
@@ -302,7 +302,7 @@ EventEnumerator::EventEnumerator(const QString& log_name, uint32_t start, uint32
 EventEnumerator::~EventEnumerator() = default;
 
 //--------------------------------------------------------------------------------------------------
-uint32_t EventEnumerator::count() const
+quint32 EventEnumerator::count() const
 {
     return records_count_;
 }
@@ -318,7 +318,7 @@ bool EventEnumerator::isAtEnd() const
         if (current_pos_ < end_record_)
             return true;
 
-        if (eventLogRecord(event_log_.get(), static_cast<uint32_t>(current_pos_), &record_buffer_))
+        if (eventLogRecord(event_log_.get(), static_cast<quint32>(current_pos_), &record_buffer_))
             return false;
 
         record_buffer_.clear();
@@ -362,7 +362,7 @@ EventEnumerator::Type EventEnumerator::type() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t EventEnumerator::time() const
+qint64 EventEnumerator::time() const
 {
     return record()->TimeGenerated;
 }
@@ -374,7 +374,7 @@ QString EventEnumerator::category() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t EventEnumerator::eventId() const
+quint32 EventEnumerator::eventId() const
 {
     return record()->EventID & 0xFFFF;
 }

@@ -356,7 +356,7 @@ bool AudioOutputWin::handleDataRequest()
 
     // Request all available space in the rendering endpoint buffer into which the client can later
     // write an audio packet.
-    uint8_t* audio_data;
+    quint8* audio_data;
     hr = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
     if (FAILED(hr))
     {
@@ -366,7 +366,7 @@ bool AudioOutputWin::handleDataRequest()
 
     // Get audio data and write it to the allocated buffer in |audio_data|. The playout latency is
     // not updated for each callback.
-    onDataRequest(reinterpret_cast<int16_t*>(audio_data), num_requested_frames * kChannels);
+    onDataRequest(reinterpret_cast<qint16*>(audio_data), num_requested_frames * kChannels);
 
     // Release the buffer space acquired in IAudioRenderClient::GetBuffer.
     hr = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);

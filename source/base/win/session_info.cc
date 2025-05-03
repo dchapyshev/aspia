@@ -155,7 +155,7 @@ QString SessionInfo::clientName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SessionInfo::connectTime() const
+qint64 SessionInfo::connectTime() const
 {
     if (!isValid())
         return 0;
@@ -164,7 +164,7 @@ int64_t SessionInfo::connectTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SessionInfo::disconnectTime() const
+qint64 SessionInfo::disconnectTime() const
 {
     if (!isValid())
         return 0;
@@ -173,7 +173,7 @@ int64_t SessionInfo::disconnectTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SessionInfo::lastInputTime() const
+qint64 SessionInfo::lastInputTime() const
 {
     if (!isValid())
         return 0;
@@ -182,7 +182,7 @@ int64_t SessionInfo::lastInputTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SessionInfo::logonTime() const
+qint64 SessionInfo::logonTime() const
 {
     if (!isValid())
         return 0;
@@ -191,7 +191,7 @@ int64_t SessionInfo::logonTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SessionInfo::currentTime() const
+qint64 SessionInfo::currentTime() const
 {
     if (!isValid())
         return 0;

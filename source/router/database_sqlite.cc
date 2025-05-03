@@ -103,7 +103,7 @@ bool writeInt(sqlite3_stmt* statement, int number, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeInt64(sqlite3_stmt* statement, int64_t number, int column)
+bool writeInt64(sqlite3_stmt* statement, qint64 number, int column)
 {
     int error_code = sqlite3_bind_int64(statement, column, number);
     if (error_code != SQLITE_OK)
@@ -177,7 +177,7 @@ std::optional<QString> readText(sqlite3_stmt* statement, int column)
         return std::nullopt;
     }
 
-    const uint8_t* string = sqlite3_column_text(statement, column);
+    const quint8* string = sqlite3_column_text(statement, column);
     if (!string)
     {
         LOG(LS_ERROR) << "Failed to get the pointer to the field";
@@ -190,7 +190,7 @@ std::optional<QString> readText(sqlite3_stmt* statement, int column)
 //--------------------------------------------------------------------------------------------------
 std::optional<base::User> readUser(sqlite3_stmt* statement)
 {
-    std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
+    std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
     if (!entry_id.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'id'";
@@ -225,14 +225,14 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
         return std::nullopt;
     }
 
-    std::optional<uint32_t> sessions = readInteger<uint32_t>(statement, 5);
+    std::optional<quint32> sessions = readInteger<quint32>(statement, 5);
     if (!sessions.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'sessions'";
         return std::nullopt;
     }
 
-    std::optional<uint32_t> flags = readInteger<uint32_t>(statement, 6);
+    std::optional<quint32> flags = readInteger<quint32>(statement, 6);
     if (!flags.has_value())
     {
         LOG(LS_ERROR) << "Failed to get field 'flags'";
@@ -548,7 +548,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::removeUser(int64_t entry_id)
+bool DatabaseSqlite::removeUser(qint64 entry_id)
 {
     static const char kQuery[] = "DELETE FROM users WHERE id=?";
 
@@ -672,7 +672,7 @@ Database::ErrorCode DatabaseSqlite::hostId(
             break;
         }
 
-        std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
+        std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
         if (!entry_id.has_value())
         {
             LOG(LS_ERROR) << "Failed to get field 'id'";

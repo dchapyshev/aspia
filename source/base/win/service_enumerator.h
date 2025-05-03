@@ -78,11 +78,11 @@ private:
 
     mutable ScopedScHandle manager_handle_;
 
-    std::unique_ptr<uint8_t[]> services_buffer_;
+    std::unique_ptr<quint8[]> services_buffer_;
     DWORD services_count_ = 0;
 
     mutable ScopedScHandle current_service_handle_;
-    mutable std::unique_ptr<uint8_t[]> current_service_config_;
+    mutable std::unique_ptr<quint8[]> current_service_config_;
     DWORD current_service_index_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ServiceEnumerator);

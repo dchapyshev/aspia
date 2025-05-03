@@ -544,7 +544,7 @@ Size DxgiOutputDuplicator::desktopSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t DxgiOutputDuplicator::numFramesCaptured() const
+qint64 DxgiOutputDuplicator::numFramesCaptured() const
 {
 #if !defined(NDEBUG)
     DCHECK_EQ(!!last_frame_, num_frames_captured_ > 0);

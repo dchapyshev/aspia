@@ -28,7 +28,7 @@ namespace host {
 
 namespace {
 
-const uint32_t kMaxSimultaneousTouchCount = 10;
+const quint32 kMaxSimultaneousTouchCount = 10;
 
 // This is used to reinject all points that have not changed as "move"ed points, even if they have
 // not actually moved.
@@ -36,7 +36,7 @@ const uint32_t kMaxSimultaneousTouchCount = 10;
 // won't work without reinjecting the points, even though the user moved only one finger and held
 // the other finger in place.
 void appendMapValuesToVector(
-    std::map<uint32_t, OWN_POINTER_TOUCH_INFO>* touches_in_contact,
+    std::map<quint32, OWN_POINTER_TOUCH_INFO>* touches_in_contact,
     std::vector<OWN_POINTER_TOUCH_INFO>* output_vector)
 {
     for (auto& id_and_pointer_touch_info : *touches_in_contact)

@@ -81,7 +81,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
-    static const uint32_t kDefaultFlags =
+    static const quint32 kDefaultFlags =
         proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
         proto::DISABLE_DESKTOP_WALLPAPER | proto::CLEAR_CLIPBOARD;
 
@@ -100,7 +100,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
-    static const uint32_t kDefaultFlags =
+    static const quint32 kDefaultFlags =
         proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);

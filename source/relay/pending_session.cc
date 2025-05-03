@@ -30,7 +30,7 @@ namespace relay {
 namespace {
 
 constexpr std::chrono::seconds kTimeout{ 30 };
-constexpr uint32_t kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
+constexpr quint32 kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
 
 } // namespace
 
@@ -109,7 +109,7 @@ void PendingSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PendingSession::setIdentify(uint32_t key_id, const QByteArray& secret)
+void PendingSession::setIdentify(quint32 key_id, const QByteArray& secret)
 {
     secret_ = secret;
     key_id_ = key_id;
@@ -146,7 +146,7 @@ std::chrono::seconds PendingSession::duration(const TimePoint& now) const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t PendingSession::keyId() const
+quint32 PendingSession::keyId() const
 {
     return key_id_;
 }
@@ -156,7 +156,7 @@ uint32_t PendingSession::keyId() const
 void PendingSession::doReadMessage(PendingSession* session)
 {
     asio::async_read(session->socket_,
-                     asio::buffer(&session->buffer_size_, sizeof(uint32_t)),
+                     asio::buffer(&session->buffer_size_, sizeof(quint32)),
                      [session](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -166,7 +166,7 @@ void PendingSession::doReadMessage(PendingSession* session)
             return;
         }
 
-        if (bytes_transferred != sizeof(uint32_t))
+        if (bytes_transferred != sizeof(quint32))
         {
             session->onErrorOccurred(FROM_HERE, std::error_code());
             return;

@@ -86,7 +86,7 @@ public:
     }
 
     proto::SessionType sessionType() const { return session_type_; }
-    uint32_t id() const { return id_; }
+    quint32 id() const { return id_; }
 
     void switchName()
     {
@@ -103,7 +103,7 @@ public:
 
 private:
     const proto::SessionType session_type_;
-    const uint32_t id_;
+    const quint32 id_;
     const QString display_name_;
     const QString computer_name_;
     bool is_display_name_ = true;
@@ -209,9 +209,9 @@ NotifierWindow::~NotifierWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<uint32_t> NotifierWindow::sessions(proto::SessionType session_type)
+std::vector<quint32> NotifierWindow::sessions(proto::SessionType session_type)
 {
-    std::vector<uint32_t> result;
+    std::vector<quint32> result;
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -253,7 +253,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
             QToolButton* stop_button =
                 createSessionButton(ui.tree, ":/img/control-stop.png", tr("Disconnect"));
-            uint32_t tree_item_id = tree_item->id();
+            quint32 tree_item_id = tree_item->id();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
             {

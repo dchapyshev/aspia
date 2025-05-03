@@ -107,9 +107,9 @@ private:
     bool is_paused_ = true;
 
     std::queue<QByteArray> write_queue_;
-    uint32_t write_size_ = 0;
+    quint32 write_size_ = 0;
 
-    uint32_t read_size_ = 0;
+    quint32 read_size_ = 0;
     QByteArray read_buffer_;
 
     ProcessId peer_process_id_ = kNullProcessId;

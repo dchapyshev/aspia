@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
 #define BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
 
-#include <cstdint>
+#include <QtGlobal>
 
 #include <Audioclient.h>
 #include <audiopolicy.h>
@@ -39,7 +39,7 @@ bool sharedModeInitialize(IAudioClient* client,
                           HANDLE event_handle,
                           REFERENCE_TIME buffer_duration,
                           bool auto_convert_pcm,
-                          uint32_t* endpoint_buffer_size);
+                          quint32* endpoint_buffer_size);
 
 bool isFormatSupported(IAudioClient* client,
                        AUDCLNT_SHAREMODE share_mode,

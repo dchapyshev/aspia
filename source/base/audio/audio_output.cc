@@ -57,11 +57,11 @@ std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioOutput::onDataRequest(int16_t* audio_samples, size_t audio_samples_count)
+void AudioOutput::onDataRequest(qint16* audio_samples, size_t audio_samples_count)
 {
     static const size_t kSamplesPerChannel10ms = kSampleRate * 10 / 1000;
     static const size_t kSamplesPer10ms = kChannels * kSamplesPerChannel10ms;
-    static const size_t kBytesPer10ms = kSamplesPer10ms * sizeof(int16_t);
+    static const size_t kBytesPer10ms = kSamplesPer10ms * sizeof(qint16);
 
     const size_t rounds = audio_samples_count / kSamplesPer10ms;
     for (size_t i = 0; i < rounds; ++i)
@@ -70,7 +70,7 @@ void AudioOutput::onDataRequest(int16_t* audio_samples, size_t audio_samples_cou
         size_t num_bytes = need_more_data_cb_(audio_samples + (i * kSamplesPer10ms), kBytesPer10ms);
         if (!num_bytes)
         {
-            memset(audio_samples, 0, audio_samples_count * sizeof(int16_t));
+            memset(audio_samples, 0, audio_samples_count * sizeof(qint16));
             return;
         }
     }

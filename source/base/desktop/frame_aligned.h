@@ -34,7 +34,7 @@ public:
         const Size& size, const PixelFormat& format, size_t alignment);
 
 private:
-    FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data);
+    FrameAligned(const Size& size, const PixelFormat& format, quint8* data);
 
     DISALLOW_COPY_AND_ASSIGN(FrameAligned);
 };

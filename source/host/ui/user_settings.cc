@@ -94,13 +94,13 @@ void UserSettings::setShowIconsInMenus(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t UserSettings::oneTimeSessions() const
+quint32 UserSettings::oneTimeSessions() const
 {
     return settings_.value(kOneTimeSessionsParam, proto::SESSION_TYPE_ALL).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSettings::setOneTimeSessions(uint32_t sessions)
+void UserSettings::setOneTimeSessions(quint32 sessions)
 {
     settings_.setValue(kOneTimeSessionsParam, sessions);
 }

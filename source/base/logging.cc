@@ -267,7 +267,7 @@ QString applicationFilePath()
     file_path = buffer;
 #elif defined(Q_OS_MACOS)
     char buffer[PATH_MAX] = { 0 };
-    uint32_t buffer_size = std::size(buffer);
+    quint32 buffer_size = std::size(buffer);
     _NSGetExecutablePath(buffer, &buffer_size);
     file_path = buffer;
 #else

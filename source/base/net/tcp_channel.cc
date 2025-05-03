@@ -331,7 +331,7 @@ void TcpChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(uint8_t channel_id, QByteArray&& buffer)
+void TcpChannel::send(quint8 channel_id, QByteArray&& buffer)
 {
     addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
 }
@@ -395,7 +395,7 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
         keep_alive_interval_ = interval;
         keep_alive_timeout_ = timeout;
 
-        keep_alive_counter_.resize(sizeof(uint32_t));
+        keep_alive_counter_.resize(sizeof(quint32));
         memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 
         keep_alive_timer_ = std::make_unique<asio::steady_timer>(io_context_);
@@ -569,7 +569,7 @@ void TcpChannel::onConnected(const std::error_code &error_code, const asio::ip::
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageWritten(uint8_t channel_id)
+void TcpChannel::onMessageWritten(quint8 channel_id)
 {
     emit sig_messageWritten(channel_id, write_queue_.size());
 }
@@ -618,7 +618,7 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, QByteArray&& data)
+void TcpChannel::addWriteTask(WriteTask::Type type, quint8 channel_id, QByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
 
@@ -634,7 +634,7 @@ void TcpChannel::doWrite()
 {
     const WriteTask& task = write_queue_.front();
     const QByteArray& source_buffer = task.data();
-    const uint8_t channel_id = task.channelId();
+    const quint8 channel_id = task.channelId();
 
     if (source_buffer.isEmpty())
     {
@@ -717,7 +717,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
 
     const WriteTask& task = write_queue_.front();
     WriteTask::Type task_type = task.type();
-    uint8_t channel_id = task.channelId();
+    quint8 channel_id = task.channelId();
 
     // Delete the sent message from the queue.
     write_queue_.pop();
@@ -1046,24 +1046,24 @@ void TcpChannel::onKeepAliveTimeout(const std::error_code& error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
+void TcpChannel::sendKeepAlive(quint8 flags, const void* data, size_t size)
 {
     ServiceHeader header;
     memset(&header, 0, sizeof(header));
 
     header.type   = KEEP_ALIVE;
     header.flags  = flags;
-    header.length = static_cast<uint32_t>(size);
+    header.length = static_cast<quint32>(size);
 
     QByteArray buffer;
-    buffer.resize(static_cast<QByteArray::size_type>(sizeof(uint8_t) + sizeof(header) + size));
+    buffer.resize(static_cast<QByteArray::size_type>(sizeof(quint8) + sizeof(header) + size));
 
     // The first byte set to 0 indicates that this is a service message.
     buffer[0] = 0;
 
     // Now copy the header and data to the buffer.
-    memcpy(buffer.data() + sizeof(uint8_t), &header, sizeof(header));
-    memcpy(buffer.data() + sizeof(uint8_t) + sizeof(header), data, size);
+    memcpy(buffer.data() + sizeof(quint8), &header, sizeof(header));
+    memcpy(buffer.data() + sizeof(quint8) + sizeof(header), data, size);
 
     // Add a task to the queue.
     addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));

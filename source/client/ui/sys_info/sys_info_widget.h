@@ -38,7 +38,7 @@ public:
     virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     virtual QTreeWidget* treeWidget() = 0;
 
-    static QString sizeToString(int64_t size);
+    static QString sizeToString(qint64 size);
     static QString delayToString(quint64 delay);
     static QString speedToString(quint64 speed);
     static QString timeToString(time_t time);

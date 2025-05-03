@@ -335,14 +335,14 @@ void GuiApplication::onNewConnection()
         if (socket->state() == QLocalSocket::UnconnectedState)
             return;
 
-        if (socket->bytesAvailable() >= static_cast<int>(sizeof(uint32_t)))
+        if (socket->bytesAvailable() >= static_cast<int>(sizeof(quint32)))
             break;
 
         socket->waitForReadyRead();
     }
 
     QDataStream stream(socket.get());
-    uint32_t remaining;
+    quint32 remaining;
 
     stream >> remaining;
 
@@ -367,7 +367,7 @@ void GuiApplication::onNewConnection()
         }
 
         buffer += read_bytes;
-        remaining -= static_cast<uint32_t>(read_bytes);
+        remaining -= static_cast<quint32>(read_bytes);
     }
     while (remaining && socket->waitForReadyRead(kReadTimeoutMs));
 

@@ -50,7 +50,7 @@ public:
             // Nothing
         }
 
-        uint32_t id;
+        quint32 id;
         std::string computer_name;
         std::string display_name;
         proto::SessionType session_type;
@@ -72,9 +72,9 @@ private:
     friend class UserSessionAgentProxy;
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void setOneTimeSessions(uint32_t sessions);
-    void killClient(uint32_t id);
-    void connectConfirmation(uint32_t id, bool accept);
+    void setOneTimeSessions(quint32 sessions);
+    void killClient(quint32 id);
+    void connectConfirmation(quint32 id, bool accept);
     void setVoiceChat(bool enable);
     void setMouseLock(bool enable);
     void setKeyboardLock(bool enable);

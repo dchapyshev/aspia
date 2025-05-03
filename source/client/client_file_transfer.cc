@@ -55,7 +55,7 @@ void ClientFileTransfer::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientFileTransfer::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
 
@@ -88,7 +88,7 @@ void ClientFileTransfer::onSessionMessageReceived(uint8_t /* channel_id */, cons
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void ClientFileTransfer::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

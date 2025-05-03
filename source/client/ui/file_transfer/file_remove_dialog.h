@@ -46,7 +46,7 @@ public slots:
     void setCurrentProgress(const std::string& name, int percentage);
     void errorOccurred(const std::string& path,
                        proto::FileError error_code,
-                       uint32_t available_actions);
+                       quint32 available_actions);
 
 signals:
     void sig_stop();

@@ -330,7 +330,7 @@ void AudioCapturerWin::doCapture()
         if (FAILED(hr.Error()))
             break;
 
-        if (volume_filter_.apply(reinterpret_cast<int16_t*>(data), frames))
+        if (volume_filter_.apply(reinterpret_cast<qint16*>(data), frames))
         {
             std::unique_ptr<proto::AudioPacket> packet(new proto::AudioPacket());
             packet->add_data(data, frames * wave_format_ex_->nBlockAlign);

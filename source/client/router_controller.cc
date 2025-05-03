@@ -146,7 +146,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     Error error;
     error.type = ErrorType::ROUTER;

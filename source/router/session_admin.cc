@@ -47,7 +47,7 @@ void SessionAdmin::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::AdminToRouter> message = std::make_unique<proto::AdminToRouter>();
 
@@ -84,7 +84,7 @@ void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void SessionAdmin::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -276,7 +276,7 @@ proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
         return proto::UserResult::INTERNAL_ERROR;
     }
 
-    int64_t entry_id = user.entry_id();
+    qint64 entry_id = user.entry_id();
 
     LOG(LS_INFO) << "User remove request: " << entry_id;
 

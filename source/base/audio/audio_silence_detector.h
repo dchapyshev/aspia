@@ -19,8 +19,9 @@
 #ifndef BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
 #define BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
 
+#include <QtGlobal>
+
 #include <cstddef>
-#include <cstdint>
 
 namespace base {
 
@@ -37,7 +38,7 @@ public:
 
     // Must be called for each new chunk of data. Return true the given packet is silence should be
     // dropped.
-    bool isSilence(const int16_t* samples, size_t frames);
+    bool isSilence(const qint16* samples, size_t frames);
 
     // The count of channels received from last Reset().
     int channels() const;

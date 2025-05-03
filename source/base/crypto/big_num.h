@@ -93,7 +93,7 @@ private:
         // Nothing
     }
 
-    BigNum(const uint8_t* buffer, size_t buffer_size);
+    BigNum(const quint8* buffer, size_t buffer_size);
 
     BIGNUM_ptr num_;
 

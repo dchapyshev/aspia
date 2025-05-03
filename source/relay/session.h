@@ -61,7 +61,7 @@ public:
     base::HostId hostId() const { return host_id_; }
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration(const TimePoint& current_time) const;
-    int64_t bytesTransferred() const { return bytes_transferred_; }
+    qint64 bytesTransferred() const { return bytes_transferred_; }
 
 private:
     static void doReadSome(Session* session, int source);
@@ -75,13 +75,13 @@ private:
 
     TimePoint start_time_;
     mutable TimePoint start_idle_time_;
-    int64_t bytes_transferred_ = 0;
+    qint64 bytes_transferred_ = 0;
 
     static const int kNumberOfSides = 2;
     static const int kBufferSize = 8192;
 
     asio::ip::tcp::socket socket_[kNumberOfSides];
-    std::array<uint8_t, kBufferSize> buffer_[kNumberOfSides];
+    std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
 
     Delegate* delegate_ = nullptr;
 

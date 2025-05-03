@@ -70,8 +70,8 @@ EVP_CIPHER_CTX_ptr createCipher(std::string_view key, const char* iv, int type)
     }
 
     if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr,
-                          reinterpret_cast<const uint8_t*>(key.data()),
-                          reinterpret_cast<const uint8_t*>(iv),
+                          reinterpret_cast<const quint8*>(key.data()),
+                          reinterpret_cast<const quint8*>(iv),
                           type) != 1)
     {
         LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
@@ -123,9 +123,9 @@ bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
     int length;
 
     if (EVP_EncryptUpdate(cipher.get(),
-                          reinterpret_cast<uint8_t*>(out->data()) + kHeaderSize,
+                          reinterpret_cast<quint8*>(out->data()) + kHeaderSize,
                           &length,
-                          reinterpret_cast<const uint8_t*>(in.data()),
+                          reinterpret_cast<const quint8*>(in.data()),
                           static_cast<int>(in.size())) != 1)
     {
         LOG(LS_ERROR) << "EVP_EncryptUpdate failed";
@@ -133,7 +133,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
     }
 
     if (EVP_EncryptFinal_ex(cipher.get(),
-                            reinterpret_cast<uint8_t*>(out->data()) + kHeaderSize + length,
+                            reinterpret_cast<quint8*>(out->data()) + kHeaderSize + length,
                             &length) != 1)
     {
         LOG(LS_ERROR) << "EVP_EncryptFinal_ex failed";
@@ -143,7 +143,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
     if (EVP_CIPHER_CTX_ctrl(cipher.get(),
                             EVP_CTRL_AEAD_GET_TAG,
                             kTagSize,
-                            reinterpret_cast<uint8_t*>(out->data()) + kIVSize) != 1)
+                            reinterpret_cast<quint8*>(out->data()) + kIVSize) != 1)
     {
         LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
@@ -173,9 +173,9 @@ bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
     int length;
 
     if (EVP_DecryptUpdate(cipher.get(),
-                          reinterpret_cast<uint8_t*>(out->data()),
+                          reinterpret_cast<quint8*>(out->data()),
                           &length,
-                          reinterpret_cast<const uint8_t*>(in.data()) + kHeaderSize,
+                          reinterpret_cast<const quint8*>(in.data()) + kHeaderSize,
                           static_cast<int>(in.size() - kHeaderSize)) != 1)
     {
         LOG(LS_ERROR) << "EVP_DecryptUpdate failed";
@@ -185,7 +185,7 @@ bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
     if (EVP_CIPHER_CTX_ctrl(cipher.get(),
                             EVP_CTRL_AEAD_SET_TAG,
                             kTagSize,
-                            reinterpret_cast<uint8_t*>(
+                            reinterpret_cast<quint8*>(
                                 const_cast<char*>(in.data())) + kIVSize) != 1)
     {
         LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
@@ -193,7 +193,7 @@ bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
     }
 
     if (EVP_DecryptFinal_ex(cipher.get(),
-                            reinterpret_cast<uint8_t*>(out->data()) + length,
+                            reinterpret_cast<quint8*>(out->data()) + length,
                             &length) <= 0)
     {
         LOG(LS_ERROR) << "EVP_DecryptFinal_ex failed";

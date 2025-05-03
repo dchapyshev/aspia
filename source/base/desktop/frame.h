@@ -36,15 +36,15 @@ public:
 
     SharedMemoryBase* sharedMemory() const { return shared_memory_; }
 
-    uint8_t* frameDataAtPos(const Point& pos) const;
-    uint8_t* frameDataAtPos(int x, int y) const;
-    uint8_t* frameData() const { return data_; }
+    quint8* frameDataAtPos(const Point& pos) const;
+    quint8* frameDataAtPos(int x, int y) const;
+    quint8* frameData() const { return data_; }
     const Size& size() const { return size_; }
     const PixelFormat& format() const { return format_; }
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
-    void copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect);
+    void copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect& dest_rect);
     void copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect);
 
     const Region& constUpdatedRegion() const { return updated_region_; }
@@ -59,8 +59,8 @@ public:
     float scaleFactor() const;
     Rect rect() const;
 
-    void setCapturerType(uint32_t capturer_type) { capturer_type_ = capturer_type; }
-    uint32_t capturerType() const { return capturer_type_; }
+    void setCapturerType(quint32 capturer_type) { capturer_type_ = capturer_type; }
+    quint32 capturerType() const { return capturer_type_; }
 
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
@@ -71,14 +71,14 @@ protected:
     Frame(const Size& size,
           const PixelFormat& format,
           int stride,
-          uint8_t* data,
+          quint8* data,
           SharedMemoryBase* shared_memory);
 
     static size_t calcMemorySize(const Size& size, int bytes_per_pixel);
 
     // Ownership of the buffers is defined by the classes that inherit from this class. They must
     // guarantee that the buffer is not deleted before the frame is deleted.
-    uint8_t* const data_;
+    quint8* const data_;
     SharedMemoryBase* const shared_memory_;
 
 private:
@@ -89,7 +89,7 @@ private:
     Region updated_region_;
     Point top_left_;
     Point dpi_;
-    uint32_t capturer_type_ = 0;
+    quint32 capturer_type_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Frame);
 };

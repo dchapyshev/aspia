@@ -31,7 +31,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
+std::string digitalProductIdToString(quint8* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
     constexpr int kKeyMapSize = 24;
@@ -46,7 +46,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
     // The keys starting with Windows 8 / Office 2013 can contain the symbol N.
     int containsN = (product_id[kStartIndex + 14] >> 3) & 1;
     product_id[kStartIndex + 14] =
-        static_cast<uint8_t>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
+        static_cast<quint8>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
 
     std::string key;
 
@@ -57,7 +57,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
         for (int j = kDecodeStringLength - 1; j >= 0; --j)
         {
             key_map_index = (key_map_index << 8) | product_id[kStartIndex + j];
-            product_id[kStartIndex + j] = static_cast<uint8_t>(key_map_index / kKeyMapSize);
+            product_id[kStartIndex + j] = static_cast<quint8>(key_map_index / kKeyMapSize);
             key_map_index %= kKeyMapSize;
         }
 
@@ -115,7 +115,7 @@ void addMsProduct(proto::system_info::Licenses* message,
             return;
     }
 
-    std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
+    std::unique_ptr<quint8[]> product_id = std::make_unique<quint8[]>(product_id_size);
 
     status = key.readValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)

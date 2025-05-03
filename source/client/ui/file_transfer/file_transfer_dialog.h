@@ -45,7 +45,7 @@ public slots:
     void stop();
     void setCurrentItem(const std::string& source_path, const std::string& target_path);
     void setCurrentProgress(int total, int current);
-    void setCurrentSpeed(int64_t speed);
+    void setCurrentSpeed(qint64 speed);
     void errorOccurred(const client::FileTransfer::Error& error);
 
 signals:
@@ -60,7 +60,7 @@ protected:
 
 private:
     QString errorToMessage(const FileTransfer::Error& error);
-    QString speedToString(int64_t speed);
+    QString speedToString(qint64 speed);
 
     Ui::FileTransferDialog ui;
     std::unique_ptr<QFontMetrics> label_metrics_;

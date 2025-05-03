@@ -46,7 +46,7 @@ public:
     base::local_shared_ptr<FileTask> remove(const std::string& path);
     base::local_shared_ptr<FileTask> download(const std::string& file_path);
     base::local_shared_ptr<FileTask> upload(const std::string& file_path, bool overwrite);
-    base::local_shared_ptr<FileTask> packetRequest(uint32_t flags);
+    base::local_shared_ptr<FileTask> packetRequest(quint32 flags);
     base::local_shared_ptr<FileTask> packet(const proto::FilePacket& packet);
     base::local_shared_ptr<FileTask> packet(std::unique_ptr<proto::FilePacket> packet);
 

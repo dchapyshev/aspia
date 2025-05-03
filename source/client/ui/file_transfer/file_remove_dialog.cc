@@ -118,7 +118,7 @@ void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentag
 //--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::errorOccurred(const std::string& path,
                                      proto::FileError error_code,
-                                     uint32_t available_actions)
+                                     quint32 available_actions)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(OS_WIN)

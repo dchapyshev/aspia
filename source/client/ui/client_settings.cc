@@ -86,7 +86,7 @@ proto::SessionType ClientSettings::sessionType() const
 //--------------------------------------------------------------------------------------------------
 void ClientSettings::setSessionType(proto::SessionType session_type)
 {
-    settings_.setValue(kSessionTypeParam, static_cast<uint32_t>(session_type));
+    settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ void ClientSettings::setDesktopManageConfig(const proto::DesktopConfig& config)
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));
 
-    config.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     settings_.setValue(kDesktopManageConfigParam, buffer);
 }
 
@@ -133,7 +133,7 @@ void ClientSettings::setDesktopViewConfig(const proto::DesktopConfig& config)
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));
 
-    config.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     settings_.setValue(kDesktopViewConfigParam, buffer);
 }
 

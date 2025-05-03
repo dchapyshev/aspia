@@ -23,7 +23,7 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-StatCounter::StatCounter(uint32_t client_session_id, QObject* parent)
+StatCounter::StatCounter(quint32 client_session_id, QObject* parent)
     : QObject(parent),
       client_session_id_(client_session_id)
 {

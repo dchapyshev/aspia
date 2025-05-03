@@ -50,8 +50,8 @@ public:
     QString localPath() const;
     QString description() const;
     Type type() const;
-    uint32_t currentUses() const;
-    uint32_t maxUses() const;
+    quint32 currentUses() const;
+    quint32 maxUses() const;
 
 private:
     PSHARE_INFO_502 share_info_ = nullptr;

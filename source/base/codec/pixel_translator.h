@@ -33,9 +33,9 @@ public:
     static std::unique_ptr<PixelTranslator> create(const PixelFormat& source_format,
                                                    const PixelFormat& target_format);
 
-    virtual void translate(const uint8_t* src,
+    virtual void translate(const quint8* src,
                            int src_stride,
-                           uint8_t* dst,
+                           quint8* dst,
                            int dst_stride,
                            int width,
                            int height) = 0;

@@ -80,7 +80,7 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
         return false;
     }
 
-    desktop_size_.set(static_cast<int32_t>(desc.Width), static_cast<int32_t>(desc.Height));
+    desktop_size_.set(static_cast<qint32>(desc.Width), static_cast<qint32>(desc.Height));
 
     return copyFromTexture(frame_info, texture.Get());
 }

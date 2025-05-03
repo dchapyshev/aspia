@@ -57,12 +57,12 @@ std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::Mouse
     if (network_overflow_)
         return std::nullopt;
 
-    int32_t delta_x = std::abs(event.x() - last_pos_x_);
-    int32_t delta_y = std::abs(event.y() - last_pos_y_);
+    qint32 delta_x = std::abs(event.x() - last_pos_x_);
+    qint32 delta_y = std::abs(event.y() - last_pos_y_);
 
     if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
     {
-        static const uint32_t kWheelMask =
+        static const quint32 kWheelMask =
             proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
         last_pos_x_ = event.x();

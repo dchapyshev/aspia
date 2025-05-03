@@ -38,7 +38,7 @@ protected:
 
 #if defined(OS_WIN)
     void onSessionEvent(base::SessionStatus event, base::SessionId session_id) final;
-    void onPowerEvent(uint32_t event) final;
+    void onPowerEvent(quint32 event) final;
 #endif // defined(OS_WIN)
 
 private:

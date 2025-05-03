@@ -57,7 +57,7 @@ void printDebugInfo()
 
     if (GlobalMemoryStatusEx(&memory_status))
     {
-        static const uint32_t kMB = 1024 * 1024;
+        static const quint32 kMB = 1024 * 1024;
 
         LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
                      << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";

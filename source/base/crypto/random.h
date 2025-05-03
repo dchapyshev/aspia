@@ -37,7 +37,7 @@ public:
     static std::string string(size_t size);
 
     // Generates a random number.
-    static uint32_t number32();
+    static quint32 number32();
     static quint64 number64();
 
 private:

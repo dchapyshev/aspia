@@ -48,14 +48,14 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
 
     DWORD type;
     DWORD size = 128;
-    std::unique_ptr<uint8_t[]> data = std::make_unique<uint8_t[]>(size);
+    std::unique_ptr<quint8[]> data = std::make_unique<quint8[]>(size);
 
     status = key.readValue(L"EDID", data.get(), &size, &type);
     if (status != ERROR_SUCCESS)
     {
         if (status == ERROR_MORE_DATA)
         {
-            data = std::make_unique<uint8_t[]>(size);
+            data = std::make_unique<quint8[]>(size);
             status = key.readValue(L"EDID", data.get(), &size, &type);
         }
 

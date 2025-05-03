@@ -33,7 +33,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool ipv4FromString(const QString& str, uint32_t* ip)
+bool ipv4FromString(const QString& str, quint32* ip)
 {
     struct sockaddr_in sa;
     if (inet_pton(AF_INET, str.toLocal8Bit().data(), &(sa.sin_addr)) != 1)
@@ -68,20 +68,20 @@ bool isValidIpV6Address(const QString& address)
 //--------------------------------------------------------------------------------------------------
 bool isIpInRange(const QString& ip, const QString& network, const QString& mask)
 {
-    uint32_t ip_addr = 0;
+    quint32 ip_addr = 0;
     if (!ipv4FromString(ip, &ip_addr))
         return false;
 
-    uint32_t network_addr = 0;
+    quint32 network_addr = 0;
     if (!ipv4FromString(network, &network_addr))
         return false;
 
-    uint32_t mask_addr = 0;
+    quint32 mask_addr = 0;
     if (!ipv4FromString(mask, &mask_addr))
         return false;
 
-    uint32_t lower_addr = (network_addr & mask_addr);
-    uint32_t upper_addr = (lower_addr | (~mask_addr));
+    quint32 lower_addr = (network_addr & mask_addr);
+    quint32 upper_addr = (lower_addr | (~mask_addr));
 
     if (ip_addr >= lower_addr && ip_addr <= upper_addr)
         return true;

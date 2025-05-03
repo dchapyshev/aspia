@@ -19,7 +19,6 @@
 #include "base/desktop/win/dfmirage_helper.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
 #include "base/desktop/frame.h"
 
 namespace base {
@@ -128,14 +127,14 @@ void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) cons
 {
     DCHECK(frame);
 
-    const uint8_t* source_buffer = get_changes_buffer_.user_buffer;
+    const quint8* source_buffer = get_changes_buffer_.user_buffer;
     const int source_stride = kBytesPerPixel * screen_rect_.width();
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
         const Rect& rect = it.rect();
         const int source_offset =
-            source_stride * rect.y() + static_cast<int>(sizeof(uint32_t)) * rect.x();
+            source_stride * rect.y() + static_cast<int>(sizeof(quint32)) * rect.x();
         frame->copyPixelsFrom(source_buffer + source_offset, source_stride, rect);
     }
 }

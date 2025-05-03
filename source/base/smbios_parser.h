@@ -38,21 +38,21 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    uint8_t majorVersion() const;
-    uint8_t minorVersion() const;
-    uint32_t length() const;
+    quint8 majorVersion() const;
+    quint8 minorVersion() const;
+    quint32 length() const;
 
 private:
     SmbiosDump smbios_;
 
-    uint8_t* start_ = nullptr;
-    uint8_t* end_ = nullptr;
-    uint8_t* pos_ = nullptr;
+    quint8* start_ = nullptr;
+    quint8* end_ = nullptr;
+    quint8* pos_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(SmbiosTableEnumerator);
 };
 
-QString smbiosString(const SmbiosTable* table, uint8_t number);
+QString smbiosString(const SmbiosTable* table, quint8 number);
 
 class SmbiosBios
 {
@@ -95,7 +95,7 @@ public:
     QString type() const;
     QString formFactor() const;
     QString partNumber() const;
-    uint32_t speed() const;
+    quint32 speed() const;
 
 private:
     const SmbiosMemoryDeviceTable* table_;

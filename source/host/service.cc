@@ -36,7 +36,7 @@ namespace {
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-std::string powerEventToString(uint32_t event)
+std::string powerEventToString(quint32 event)
 {
     const char* name;
 
@@ -153,7 +153,7 @@ void Service::onSessionEvent(base::SessionStatus status, base::SessionId session
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onPowerEvent(uint32_t event)
+void Service::onPowerEvent(quint32 event)
 {
     LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);
 

@@ -58,7 +58,7 @@ private:
     // When removing points from the vector, just swap it with the last element
     // and resize the vector.
     // All the POINTER_TOUCH_INFOs are stored as "move" points.
-    std::map<uint32_t, OWN_POINTER_TOUCH_INFO> touches_in_contact_;
+    std::map<quint32, OWN_POINTER_TOUCH_INFO> touches_in_contact_;
 
     DISALLOW_COPY_AND_ASSIGN(TouchInjector);
 };

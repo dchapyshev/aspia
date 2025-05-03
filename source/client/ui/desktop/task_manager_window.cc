@@ -159,7 +159,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    static QString sizeToString(int64_t size)
+    static QString sizeToString(qint64 size)
     {
         return QStringLiteral("%1 K").arg(size / 1024LL);
     }
@@ -279,7 +279,7 @@ public:
         setText(USER_COL_SESSION_NAME, QString::fromStdString(user.session_name()));
     }
 
-    uint32_t sessionId() const { return session_id_; }
+    quint32 sessionId() const { return session_id_; }
 
     // QTreeWidgetItem implementation.
     bool operator<(const QTreeWidgetItem& other) const final
@@ -338,7 +338,7 @@ private:
         }
     }
 
-    const uint32_t session_id_;
+    const quint32 session_id_;
 };
 
 class ColumnAction final : public QAction
@@ -802,7 +802,7 @@ void TaskManagerWindow::onLogoffUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManagerWindow::sendProcessListRequest(uint32_t flags)
+void TaskManagerWindow::sendProcessListRequest(quint32 flags)
 {
     proto::task_manager::ClientToHost message;
     message.mutable_process_list_request()->set_flags(flags);
@@ -848,7 +848,7 @@ void TaskManagerWindow::sendUserListRequest()
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendUserRequest(
-    uint32_t session_id, proto::task_manager::UserRequest::Command command)
+    quint32 session_id, proto::task_manager::UserRequest::Command command)
 {
     proto::task_manager::ClientToHost message;
 

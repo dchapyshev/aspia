@@ -32,7 +32,7 @@ class StatCounter final : public QObject
     Q_OBJECT
 
 public:
-    explicit StatCounter(uint32_t client_session_id, QObject* parent = nullptr);
+    explicit StatCounter(quint32 client_session_id, QObject* parent = nullptr);
     ~StatCounter();
 
     void addVideoPacket();
@@ -50,7 +50,7 @@ private slots:
     void onTimeout();
 
 private:
-    const uint32_t client_session_id_;
+    const quint32 client_session_id_;
 
     QTimer timer_;
 

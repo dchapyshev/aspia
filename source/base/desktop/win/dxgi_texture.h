@@ -42,7 +42,7 @@ public:
     bool copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResource* resource);
 
     const Size& desktopSize() const { return desktop_size_; }
-    uint8_t* bits() const { return static_cast<uint8_t*>(rect_.pBits); }
+    quint8* bits() const { return static_cast<quint8*>(rect_.pBits); }
     int pitch() const { return static_cast<int>(rect_.Pitch); }
 
     // Releases the resource currently holds by this instance. Returns false if

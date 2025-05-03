@@ -36,15 +36,15 @@ public:
     bool isAtEnd() const;
     void advance();
 
-    uint32_t id() const;
+    quint32 id() const;
     QString userName() const;
-    uint32_t lockCount() const;
+    quint32 lockCount() const;
     QString filePath() const;
 
 private:
     _FILE_INFO_3* file_info_ = nullptr;
-    uint32_t total_entries_ = 0;
-    uint32_t current_pos_ = 0;
+    quint32 total_entries_ = 0;
+    quint32 current_pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(OpenFilesEnumerator);
 };

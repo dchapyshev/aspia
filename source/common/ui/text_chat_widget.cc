@@ -253,7 +253,7 @@ void TextChatWidget::onSendMessage()
         return;
     }
 
-    int64_t timestamp = QDateTime::currentSecsSinceEpoch();
+    qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     addOutgoingMessage(timestamp, message);
     edit_message->clear();

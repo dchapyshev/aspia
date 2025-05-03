@@ -42,10 +42,10 @@ public:
 
     bool encode(const Frame* frame, proto::VideoPacket* packet) final;
 
-    bool setMinQuantizer(uint32_t min_quantizer);
-    uint32_t minQuantizer() const;
-    bool setMaxQuantizer(uint32_t max_quantizer);
-    uint32_t maxQuantizer() const;
+    bool setMinQuantizer(quint32 min_quantizer);
+    quint32 minQuantizer() const;
+    bool setMaxQuantizer(quint32 max_quantizer);
+    quint32 maxQuantizer() const;
 
 private:
     explicit VideoEncoderVPX(proto::VideoEncoding encoding);

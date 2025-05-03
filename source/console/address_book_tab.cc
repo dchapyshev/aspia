@@ -1248,12 +1248,12 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     QByteArray buffer = base::serialize(file_);
 
-    int64_t bytes_written = file.write(
+    qint64 bytes_written = file.write(
         reinterpret_cast<const char*>(buffer.data()), static_cast<qint64>(buffer.size()));
 
     base::memZero(buffer.data(), buffer.size());
 
-    if (bytes_written != static_cast<int64_t>(buffer.size()))
+    if (bytes_written != static_cast<qint64>(buffer.size()))
     {
         LOG(LS_ERROR) << "Unable to write file: " << file.errorString().toStdString();
         showSaveError(this, tr("Unable to write address book file."));

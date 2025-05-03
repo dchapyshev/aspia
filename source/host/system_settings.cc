@@ -238,13 +238,13 @@ void SystemSettings::setUpdateServer(const QString& server)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SystemSettings::preferredVideoCapturer() const
+quint32 SystemSettings::preferredVideoCapturer() const
 {
     return settings_.value("PreferredVideoCapturer", 0).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setPreferredVideoCapturer(uint32_t type)
+void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue("PreferredVideoCapturer", type);
 }
@@ -345,12 +345,12 @@ void SystemSettings::setOneTimePasswordLength(int length)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SystemSettings::oneTimePasswordCharacters() const
+quint32 SystemSettings::oneTimePasswordCharacters() const
 {
-    uint32_t kDefaultValue = base::PasswordGenerator::DIGITS | base::PasswordGenerator::LOWER_CASE |
+    quint32 kDefaultValue = base::PasswordGenerator::DIGITS | base::PasswordGenerator::LOWER_CASE |
         base::PasswordGenerator::UPPER_CASE;
 
-    uint32_t value = settings_.value("OneTimePasswordCharacters", kDefaultValue).toUInt();
+    quint32 value = settings_.value("OneTimePasswordCharacters", kDefaultValue).toUInt();
 
     if (!(value & base::PasswordGenerator::DIGITS) &&
         !(value & base::PasswordGenerator::LOWER_CASE) &&
@@ -363,7 +363,7 @@ uint32_t SystemSettings::oneTimePasswordCharacters() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setOneTimePasswordCharacters(uint32_t characters)
+void SystemSettings::setOneTimePasswordCharacters(quint32 characters)
 {
     settings_.setValue("OneTimePasswordCharacters", characters);
 }
@@ -454,13 +454,13 @@ void SystemSettings::setUpdateCheckFrequency(int days)
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t SystemSettings::lastUpdateCheck() const
+qint64 SystemSettings::lastUpdateCheck() const
 {
     return settings_.value("LastUpdateCheck").toLongLong();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setLastUpdateCheck(int64_t timepoint)
+void SystemSettings::setLastUpdateCheck(qint64 timepoint)
 {
     settings_.setValue("LastUpdateCheck", timepoint);
 }

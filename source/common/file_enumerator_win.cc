@@ -71,12 +71,12 @@ std::string FileEnumerator::FileInfo::u8name() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t FileEnumerator::FileInfo::size() const
+qint64 FileEnumerator::FileInfo::size() const
 {
     ULARGE_INTEGER size;
     size.HighPart = find_data_.nFileSizeHigh;
     size.LowPart = find_data_.nFileSizeLow;
-    return static_cast<int64_t>(size.QuadPart);
+    return static_cast<qint64>(size.QuadPart);
 }
 
 //--------------------------------------------------------------------------------------------------

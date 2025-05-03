@@ -65,18 +65,18 @@ public slots:
     void onUserResult(std::shared_ptr<proto::UserResult> user_result);
 
     static QString delayToString(quint64 delay);
-    static QString sizeToString(int64_t size);
+    static QString sizeToString(qint64 size);
 
 signals:
     void sig_connectToRouter(const QString& address, quint16 port);
     void sig_disconnectFromRouter();
     void sig_refreshSessionList();
-    void sig_stopSession(int64_t session_id);
+    void sig_stopSession(qint64 session_id);
     void sig_refreshUserList();
     void sig_addUser(const proto::User& user);
     void sig_modifyUser(const proto::User& user);
-    void sig_deleteUser(int64_t entry_id);
-    void sig_disconnectPeerSession(int64_t relay_session_id, quint64 peer_session_id);
+    void sig_deleteUser(qint64 entry_id);
+    void sig_disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id);
 
 protected:
     // QMainWindow implementation.

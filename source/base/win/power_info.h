@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <cstdint>
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -38,9 +37,9 @@ public:
 
     PowerSource powerSource() const;
     BatteryStatus batteryStatus() const;
-    uint32_t batteryLifePercent() const;
-    uint32_t batteryFullLifeTime() const;
-    uint32_t batteryRemainingLifeTime() const;
+    quint32 batteryLifePercent() const;
+    quint32 batteryFullLifeTime() const;
+    quint32 batteryRemainingLifeTime() const;
 
 private:
     SYSTEM_POWER_STATUS power_status_;

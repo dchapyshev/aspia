@@ -316,7 +316,7 @@ void ClientSessionFileTransfer::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientSessionFileTransfer::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
@@ -339,7 +339,7 @@ void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onWritten(uint8_t /* channel_id */, size_t /* pending */)
+void ClientSessionFileTransfer::onWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

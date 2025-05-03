@@ -39,11 +39,11 @@ public:
         DIGITS     = 4
     };
 
-    static const uint32_t kDefaultCharacters;
+    static const quint32 kDefaultCharacters;
     static const QString::size_type kDefaultLength;
 
-    void setCharacters(uint32_t value);
-    uint32_t characters() const { return characters_; }
+    void setCharacters(quint32 value);
+    quint32 characters() const { return characters_; }
 
     void setLength(QString::size_type value);
     QString::size_type length() const { return length_; }
@@ -51,7 +51,7 @@ public:
     QString result() const;
 
 private:
-    uint32_t characters_ = kDefaultCharacters;
+    quint32 characters_ = kDefaultCharacters;
     QString::size_type length_ = kDefaultLength;
 
     DISALLOW_COPY_AND_ASSIGN(PasswordGenerator);

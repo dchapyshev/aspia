@@ -21,7 +21,7 @@
 
 #include "build/build_config.h"
 
-#include <cstdint>
+#include <QtGlobal>
 
 namespace base {
 
@@ -81,24 +81,24 @@ typedef struct
 
 typedef struct
 {
-    uint32_t type;
+    quint32 type;
     DfmRect rect;
     DfmRect origrect;
     DfmPoint point;
-    uint32_t color;
-    uint32_t refcolor;
+    quint32 color;
+    quint32 refcolor;
 } DfmChangesRecord;
 
 typedef struct
 {
-    uint32_t counter;
+    quint32 counter;
     DfmChangesRecord records[kDfmMaxChanges];
 } DfmChangesBuffer;
 
 typedef struct
 {
     DfmChangesBuffer* changes_buffer;
-    uint8_t* user_buffer;
+    quint8* user_buffer;
 } DfmGetChangesBuffer;
 
 } // base

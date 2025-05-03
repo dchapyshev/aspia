@@ -31,7 +31,7 @@ AudioVolumeFilter::AudioVolumeFilter(int silence_threshold)
 AudioVolumeFilter::~AudioVolumeFilter() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool AudioVolumeFilter::apply(int16_t* data, size_t frames)
+bool AudioVolumeFilter::apply(qint16* data, size_t frames)
 {
     if (frames == 0)
         return false;
@@ -47,11 +47,11 @@ bool AudioVolumeFilter::apply(int16_t* data, size_t frames)
         return true;
 
     const int sample_count = static_cast<int>(frames) * silence_detector_.channels();
-    const int32_t level_int = static_cast<int32_t>(level * 65536);
+    const qint32 level_int = static_cast<qint32>(level * 65536);
 
     for (int i = 0; i < sample_count; i++)
     {
-        data[i] = (static_cast<int32_t>(data[i]) * level_int) >> 16;
+        data[i] = (static_cast<qint32>(data[i]) * level_int) >> 16;
     }
 
     return true;

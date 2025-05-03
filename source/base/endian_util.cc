@@ -50,7 +50,7 @@ quint16 EndianUtil::byteSwap(quint16 value)
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint32_t EndianUtil::byteSwap(uint32_t value)
+quint32 EndianUtil::byteSwap(quint32 value)
 {
 #if defined(CC_MSVC)
     return _byteswap_ulong(value);

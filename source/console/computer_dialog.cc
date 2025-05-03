@@ -265,7 +265,7 @@ bool ComputerDialog::saveChanges()
         }
     }
 
-    int64_t current_time = QDateTime::currentSecsSinceEpoch();
+    qint64 current_time = QDateTime::currentSecsSinceEpoch();
 
     if (mode_ == Mode::CREATE || mode_ == Mode::COPY)
         computer_.set_create_time(current_time);

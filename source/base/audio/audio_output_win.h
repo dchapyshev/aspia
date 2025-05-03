@@ -92,7 +92,7 @@ private:
     ScopedHandle stop_event_;
     ScopedHandle restart_event_;
 
-    uint32_t endpoint_buffer_size_frames_ = 0;
+    quint32 endpoint_buffer_size_frames_ = 0;
     quint64 num_frames_written_ = 0;
 
     // Used by the IAudioSessionEvents implementations.

@@ -39,7 +39,7 @@ SessionRelay::~SessionRelay()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::sendKeyUsed(uint32_t key_id)
+void SessionRelay::sendKeyUsed(quint32 key_id)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_key_used()->set_key_id(key_id);
@@ -61,7 +61,7 @@ void SessionRelay::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -86,7 +86,7 @@ void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

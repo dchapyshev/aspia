@@ -45,7 +45,7 @@ private:
     FrameDib(const Size& size,
              const PixelFormat& format,
              int stride,
-             uint8_t* data,
+             quint8* data,
              std::unique_ptr<SharedMemory> shared_memory,
              HBITMAP bitmap);
 

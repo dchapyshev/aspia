@@ -288,7 +288,7 @@ QString IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
 
-    uint32_t process_id;
+    quint32 process_id;
 
 #if defined(OS_WIN)
     process_id = GetCurrentProcessId();
@@ -301,10 +301,10 @@ QString IpcServer::createUniqueId()
     std::random_device device;
     std::mt19937 engine(device());
 
-    std::uniform_int_distribution<uint32_t> distance(0, std::numeric_limits<uint32_t>::max());
+    std::uniform_int_distribution<quint32> distance(0, std::numeric_limits<quint32>::max());
 
-    uint32_t random_number = distance(engine);
-    uint32_t channel_id = last_channel_id++;
+    quint32 random_number = distance(engine);
+    quint32 channel_id = last_channel_id++;
 
     return QString("%1.%2.%3").arg(process_id).arg(channel_id).arg(random_number);
 }

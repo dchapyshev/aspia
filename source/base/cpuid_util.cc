@@ -66,10 +66,10 @@ void CpuidUtil::get(int leaf, int subleaf)
     __get_cpuid_count(leaf, subleaf, &cpu_info[0], &cpu_info[1], &cpu_info[2], &cpu_info[3]);
 #endif
 
-    eax_ = static_cast<uint32_t>(cpu_info[0]);
-    ebx_ = static_cast<uint32_t>(cpu_info[1]);
-    ecx_ = static_cast<uint32_t>(cpu_info[2]);
-    edx_ = static_cast<uint32_t>(cpu_info[3]);
+    eax_ = static_cast<quint32>(cpu_info[0]);
+    ebx_ = static_cast<quint32>(cpu_info[1]);
+    ecx_ = static_cast<quint32>(cpu_info[2]);
+    edx_ = static_cast<quint32>(cpu_info[3]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ bool CpuidUtil::hasAesNi()
         return false;
 
     // Bit 25 of register ECX set to 1 indicates the support of AES instructions.
-    return BitSet<uint32_t>(CpuidUtil(1).ecx()).test(25);
+    return BitSet<quint32>(CpuidUtil(1).ecx()).test(25);
 }
 
 } // namespace base

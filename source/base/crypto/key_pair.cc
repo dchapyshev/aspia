@@ -93,7 +93,7 @@ KeyPair KeyPair::fromPrivateKey(const QByteArray& private_key)
     }
 
     return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(EVP_PKEY_X25519, nullptr,
-        reinterpret_cast<const uint8_t*>(private_key.data()), private_key.size())));
+        reinterpret_cast<const quint8*>(private_key.data()), private_key.size())));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ QByteArray KeyPair::privateKey() const
     QByteArray private_key;
     private_key.resize(static_cast<QByteArray::size_type>(private_key_length));
 
-    if (EVP_PKEY_get_raw_private_key(pkey_.get(), reinterpret_cast<uint8_t*>(private_key.data()),
+    if (EVP_PKEY_get_raw_private_key(pkey_.get(), reinterpret_cast<quint8*>(private_key.data()),
         &private_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_private_key failed";
@@ -158,7 +158,7 @@ QByteArray KeyPair::publicKey() const
     QByteArray public_key;
     public_key.resize(static_cast<QByteArray::size_type>(public_key_length));
 
-    if (EVP_PKEY_get_raw_public_key(pkey_.get(), reinterpret_cast<uint8_t*>(public_key.data()),
+    if (EVP_PKEY_get_raw_public_key(pkey_.get(), reinterpret_cast<quint8*>(public_key.data()),
         &public_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_get_raw_public_key failed";
@@ -184,7 +184,7 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     }
 
     EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(EVP_PKEY_X25519, nullptr,
-        reinterpret_cast<const uint8_t*>(peer_public_key.data()), peer_public_key.size()));
+        reinterpret_cast<const quint8*>(peer_public_key.data()), peer_public_key.size()));
     if (!public_key)
     {
         LOG(LS_ERROR) << "EVP_PKEY_new_raw_public_key failed";
@@ -227,7 +227,7 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     QByteArray session_key;
     session_key.resize(static_cast<QByteArray::size_type>(session_key_length));
 
-    if (EVP_PKEY_derive(ctx.get(), reinterpret_cast<uint8_t*>(session_key.data()),
+    if (EVP_PKEY_derive(ctx.get(), reinterpret_cast<quint8*>(session_key.data()),
         &session_key_length) != 1)
     {
         LOG(LS_ERROR) << "EVP_PKEY_derive failed";

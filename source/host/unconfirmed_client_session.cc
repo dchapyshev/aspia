@@ -90,7 +90,7 @@ std::unique_ptr<ClientSession> UnconfirmedClientSession::takeClientSession()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t UnconfirmedClientSession::id() const
+quint32 UnconfirmedClientSession::id() const
 {
     return id_;
 }

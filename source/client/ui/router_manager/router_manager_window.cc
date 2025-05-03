@@ -665,7 +665,7 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     int host_count = 0;
     int relay_count = 0;
 
-    auto has_session_with_id = [](const proto::SessionList& session_list, int64_t session_id)
+    auto has_session_with_id = [](const proto::SessionList& session_list, qint64 session_id)
     {
         for (int i = 0; i < session_list.session_size(); ++i)
         {
@@ -1424,7 +1424,7 @@ void RouterManagerWindow::deleteUser()
         return;
     }
 
-    int64_t entry_id = tree_item->user.entry_id;
+    qint64 entry_id = tree_item->user.entry_id;
     if (entry_id == 1)
     {
         LOG(LS_INFO) << "Unable to delete built-in user";
@@ -1557,7 +1557,7 @@ void RouterManagerWindow::saveHostsToFile()
     QJsonObject root_object;
     root_object.insert("hosts", root_array);
 
-    int64_t written = file.write(QJsonDocument(root_object).toJson());
+    qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
         LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
@@ -1656,7 +1656,7 @@ void RouterManagerWindow::saveRelaysToFile()
     QJsonObject root_object;
     root_object.insert("relays", root_array);
 
-    int64_t written = file.write(QJsonDocument(root_object).toJson());
+    qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
         LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
@@ -1778,15 +1778,15 @@ QString RouterManagerWindow::delayToString(quint64 delay)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString RouterManagerWindow::sizeToString(int64_t size)
+QString RouterManagerWindow::sizeToString(qint64 size)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (size >= kTB)
     {

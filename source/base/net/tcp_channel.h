@@ -75,7 +75,7 @@ public:
     void resume();
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
-    void send(uint8_t channel_id, QByteArray&& buffer);
+    void send(quint8 channel_id, QByteArray&& buffer);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -99,8 +99,8 @@ public:
 signals:
     void sig_connected();
     void sig_disconnected(ErrorCode error_code);
-    void sig_messageReceived(uint8_t channel_id, const QByteArray& buffer);
-    void sig_messageWritten(uint8_t channel_id, size_t pending);
+    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
+    void sig_messageWritten(quint8 channel_id, size_t pending);
 
 protected:
     friend class TcpServer;
@@ -128,8 +128,8 @@ private:
 
     struct UserDataHeader
     {
-        uint8_t channel_id;
-        uint8_t reserved;
+        quint8 channel_id;
+        quint8 reserved;
     };
 
     enum ServiceMessageType
@@ -145,11 +145,11 @@ private:
 
     struct ServiceHeader
     {
-        uint8_t type;      // Type of service packet (see ServiceDataType).
-        uint8_t flags;     // Flags bitmask (depends on the type).
-        uint8_t reserved1; // Reserved.
-        uint8_t reserved2; // Reserved.
-        uint32_t length;   // Additional data size.
+        quint8 type;      // Type of service packet (see ServiceDataType).
+        quint8 flags;     // Flags bitmask (depends on the type).
+        quint8 reserved1; // Reserved.
+        quint8 reserved2; // Reserved.
+        quint32 length;   // Additional data size.
     };
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
@@ -159,10 +159,10 @@ private:
                     const asio::ip::tcp::resolver::results_type& endpoints);
     void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
 
-    void onMessageWritten(uint8_t channel_id);
+    void onMessageWritten(quint8 channel_id);
     void onMessageReceived();
 
-    void addWriteTask(WriteTask::Type type, uint8_t channel_id, QByteArray&& data);
+    void addWriteTask(WriteTask::Type type, quint8 channel_id, QByteArray&& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
@@ -181,7 +181,7 @@ private:
 
     void onKeepAliveInterval(const std::error_code& error_code);
     void onKeepAliveTimeout(const std::error_code& error_code);
-    void sendKeepAlive(uint8_t flags, const void* data, size_t size);
+    void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
     std::shared_ptr<TcpChannelProxy> proxy_;
     asio::io_context& io_context_;

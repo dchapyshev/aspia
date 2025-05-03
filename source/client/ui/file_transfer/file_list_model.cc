@@ -140,7 +140,7 @@ void FileListModel::setFileList(const proto::FileList& list)
             File file;
             file.name       = QString::fromStdString(item.name());
             file.last_write = item.modification_time();
-            file.size       = static_cast<int64_t>(item.size());
+            file.size       = static_cast<qint64>(item.size());
 
             std::pair<QIcon, QString> file_info = common::FilePlatformUtil::fileTypeInfo(file.name);
             file.icon = file_info.first;
@@ -192,7 +192,7 @@ QString FileListModel::nameAt(const QModelIndex& index) const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t FileListModel::sizeAt(const QModelIndex& index) const
+qint64 FileListModel::sizeAt(const QModelIndex& index) const
 {
     if (isFolder(index))
         return 0;
@@ -543,15 +543,15 @@ void FileListModel::sortItems(int column, Qt::SortOrder order)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString FileListModel::sizeToString(int64_t size)
+QString FileListModel::sizeToString(qint64 size)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (size >= kTB)
     {

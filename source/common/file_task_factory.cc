@@ -100,7 +100,7 @@ base::local_shared_ptr<FileTask> FileTaskFactory::upload(const std::string& file
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::packetRequest(uint32_t flags)
+base::local_shared_ptr<FileTask> FileTaskFactory::packetRequest(quint32 flags)
 {
     auto request = std::make_unique<proto::FileRequest>();
     request->mutable_packet_request()->set_flags(flags);

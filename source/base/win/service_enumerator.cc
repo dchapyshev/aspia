@@ -51,7 +51,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
         return;
     }
 
-    services_buffer_ = std::make_unique<uint8_t[]>(bytes_needed);
+    services_buffer_ = std::make_unique<quint8[]>(bytes_needed);
 
     if (!EnumServicesStatusExW(manager_handle_,
                                SC_ENUM_PROCESS_INFO,
@@ -134,7 +134,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
             return nullptr;
         }
 
-        current_service_config_ = std::make_unique<uint8_t[]>(bytes_needed);
+        current_service_config_ = std::make_unique<quint8[]>(bytes_needed);
 
         if (!QueryServiceConfigW(service_handle,
                                  reinterpret_cast<LPQUERY_SERVICE_CONFIG>(
@@ -190,7 +190,7 @@ QString ServiceEnumerator::description() const
         return QString();
     }
 
-    std::unique_ptr<uint8_t[]> result = std::make_unique<uint8_t[]>(bytes_needed);
+    std::unique_ptr<quint8[]> result = std::make_unique<quint8[]>(bytes_needed);
 
     if (!QueryServiceConfig2W(service_handle,
                               SERVICE_CONFIG_DESCRIPTION,

@@ -65,7 +65,7 @@ QByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shap
     QByteArray image;
     image.resize(static_cast<size_t>(cursor_shape.width()) *
                  static_cast<size_t>(cursor_shape.height()) *
-                 sizeof(uint32_t));
+                 sizeof(quint32));
 
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
@@ -115,8 +115,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
         Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
         Point dpi(cursor_shape.dpi_x(), cursor_shape.dpi_y());
 
-        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
-            size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
+        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
+            size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
         {
             LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
                           << size.width() << "x" << size.height();
@@ -130,8 +130,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
             return nullptr;
         }
 
-        if (dpi.x() <= 0 || dpi.x() > std::numeric_limits<int16_t>::max() ||
-            dpi.y() <= 0 || dpi.y() > std::numeric_limits<int16_t>::max())
+        if (dpi.x() <= 0 || dpi.x() > std::numeric_limits<qint16>::max() ||
+            dpi.y() <= 0 || dpi.y() > std::numeric_limits<qint16>::max())
         {
             dpi = Point(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
         }

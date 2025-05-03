@@ -28,13 +28,13 @@ class PixelFormat
 public:
     PixelFormat() = default;
     PixelFormat(const PixelFormat& other);
-    PixelFormat(uint8_t bits_per_pixel,
+    PixelFormat(quint8 bits_per_pixel,
                 quint16 red_max,
                 quint16 green_max,
                 quint16 blue_max,
-                uint8_t red_shift,
-                uint8_t green_shift,
-                uint8_t blue_shift);
+                quint8 red_shift,
+                quint8 green_shift,
+                quint8 blue_shift);
     ~PixelFormat() = default;
 
     // True color (32 bits per pixel)
@@ -70,10 +70,10 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    uint8_t bitsPerPixel() const { return bits_per_pixel_; }
-    void setBitsPerPixel(uint8_t bits_per_pixel) { bits_per_pixel_ = bits_per_pixel; }
+    quint8 bitsPerPixel() const { return bits_per_pixel_; }
+    void setBitsPerPixel(quint8 bits_per_pixel) { bits_per_pixel_ = bits_per_pixel; }
 
-    uint8_t bytesPerPixel() const { return bytes_per_pixel_; }
+    quint8 bytesPerPixel() const { return bytes_per_pixel_; }
 
     quint16 redMax() const { return red_max_; }
     void setRedMax(quint16 red_max) { red_max_ = red_max; }
@@ -84,14 +84,14 @@ public:
     quint16 blueMax() const { return blue_max_; }
     void setBlueMax(quint16 blue_max) { blue_max_ = blue_max; }
 
-    uint8_t redShift() const { return red_shift_; }
-    void setRedShift(uint8_t red_shift) { red_shift_ = red_shift; }
+    quint8 redShift() const { return red_shift_; }
+    void setRedShift(quint8 red_shift) { red_shift_ = red_shift; }
 
-    uint8_t greenShift() const { return green_shift_; }
-    void setGreenShift(uint8_t green_shift) { green_shift_ = green_shift; }
+    quint8 greenShift() const { return green_shift_; }
+    void setGreenShift(quint8 green_shift) { green_shift_ = green_shift; }
 
-    uint8_t blueShift() const { return blue_shift_; }
-    void setBlueShift(uint8_t blue_shift) { blue_shift_ = blue_shift; }
+    quint8 blueShift() const { return blue_shift_; }
+    void setBlueShift(quint8 blue_shift) { blue_shift_ = blue_shift; }
 
     bool isValid() const;
     void clear();
@@ -103,16 +103,16 @@ public:
     bool operator!=(const PixelFormat& other) const;
 
 private:
-    uint8_t bits_per_pixel_ = 0;
-    uint8_t bytes_per_pixel_ = 0;
+    quint8 bits_per_pixel_ = 0;
+    quint8 bytes_per_pixel_ = 0;
 
     quint16 red_max_ = 0;
     quint16 green_max_ = 0;
     quint16 blue_max_ = 0;
 
-    uint8_t red_shift_ = 0;
-    uint8_t green_shift_ = 0;
-    uint8_t blue_shift_ = 0;
+    quint8 red_shift_ = 0;
+    quint8 green_shift_ = 0;
+    quint8 blue_shift_ = 0;
 };
 
 QTextStream& operator<<(QTextStream& stream, const PixelFormat& pixel_format);

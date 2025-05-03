@@ -114,7 +114,7 @@ private:
     const proto::SessionType session_type_;
     proto::DesktopConfig desktop_config_;
 
-    uint32_t video_encodings_ = 0;
+    quint32 video_encodings_ = 0;
 
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;

@@ -79,7 +79,7 @@ public:
     void unregister(const Context* const context);
 
     // How many frames have been captured by this DxigOutputDuplicator.
-    int64_t numFramesCaptured() const;
+    qint64 numFramesCaptured() const;
 
     // Moves |desktop_rect_|. See DxgiDuplicatorController::translateRect().
     void translateRect(const Point& position);
@@ -118,7 +118,7 @@ private:
     Rect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;
     DXGI_OUTDUPL_DESC desc_;
-    std::vector<uint8_t> metadata_;
+    std::vector<quint8> metadata_;
     std::unique_ptr<DxgiTexture> texture_;
     Rotation rotation_ = Rotation::CLOCK_WISE_0;
     Size unrotated_size_;
@@ -133,7 +133,7 @@ private:
     std::unique_ptr<SharedFrame> last_frame_;
     Point last_frame_offset_;
 
-    int64_t num_frames_captured_ = 0;
+    qint64 num_frames_captured_ = 0;
     Desktop desktop_;
 };
 

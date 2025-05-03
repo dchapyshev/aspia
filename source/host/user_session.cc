@@ -295,7 +295,7 @@ std::optional<QString> UserSession::sessionName() const
         return std::nullopt;
     }
 
-    using TimeInfo = std::pair<base::SessionId, int64_t>;
+    using TimeInfo = std::pair<base::SessionId, qint64>;
     using TimeInfoList = std::vector<TimeInfo>;
 
     // Enumarate all user sessions.
@@ -422,7 +422,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             request->set_session_type(client_session->sessionType());
             request->set_computer_name(client_session->computerName().toStdString());
             request->set_user_name(client_session->userName().toStdString());
-            request->set_timeout(static_cast<uint32_t>(auto_confirmation_interval_.count()));
+            request->set_timeout(static_cast<quint32>(auto_confirmation_interval_.count()));
 
             std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
                 std::make_unique<UnconfirmedClientSession>(std::move(client_session), this);
@@ -602,7 +602,7 @@ void UserSession::onSettingsChanged()
     SystemSettings settings;
 
     bool password_enabled = settings.oneTimePassword();
-    uint32_t password_characters = settings.oneTimePasswordCharacters();
+    quint32 password_characters = settings.oneTimePasswordCharacters();
     int password_length = settings.oneTimePasswordLength();
     std::chrono::milliseconds password_expire_interval = settings.oneTimePasswordExpire();
 
@@ -743,7 +743,7 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onUnconfirmedSessionAccept(uint32_t id)
+void UserSession::onUnconfirmedSessionAccept(quint32 id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid=" << session_id_ << ")";
 
@@ -764,7 +764,7 @@ void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onUnconfirmedSessionReject(uint32_t id)
+void UserSession::onUnconfirmedSessionReject(quint32 id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid=" << session_id_ << ")";
 
@@ -860,7 +860,7 @@ void UserSession::onClientSessionVideoRecording(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat)
+void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat)
 {
     if (!channel_)
     {
@@ -922,7 +922,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_.has_one_time_sessions())
     {
-        uint32_t one_time_sessions = incoming_message_.one_time_sessions().sessions();
+        quint32 one_time_sessions = incoming_message_.one_time_sessions().sessions();
         if (one_time_sessions != one_time_sessions_)
         {
             LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
@@ -961,7 +961,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
             LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
                          << control.unsigned_integer() << ")";
-            killClientSession(static_cast<uint32_t>(control.unsigned_integer()));
+            killClientSession(static_cast<quint32>(control.unsigned_integer()));
         }
         break;
 
@@ -1169,7 +1169,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::sendDisconnectEvent(uint32_t session_id)
+void UserSession::sendDisconnectEvent(quint32 session_id)
 {
     if (!channel_)
     {
@@ -1246,9 +1246,9 @@ void UserSession::sendCredentials(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::killClientSession(uint32_t id)
+void UserSession::killClientSession(quint32 id)
 {
-    auto stop_by_id = [](ClientSessionList* list, uint32_t id)
+    auto stop_by_id = [](ClientSessionList* list, quint32 id)
     {
         for (const auto& client_session : *list)
         {
@@ -1435,7 +1435,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onTextChatSessionStarted(uint32_t id)
+void UserSession::onTextChatSessionStarted(quint32 id)
 {
     LOG(LS_INFO) << "Text chat session started: " << id << " (sid=" << session_id_ << ")";
 
@@ -1491,7 +1491,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onTextChatSessionFinished(uint32_t id)
+void UserSession::onTextChatSessionFinished(quint32 id)
 {
     LOG(LS_INFO) << "Text chat session finished: " << id << " (sid=" << session_id_ << ")";
 

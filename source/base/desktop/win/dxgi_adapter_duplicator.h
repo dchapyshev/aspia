@@ -81,7 +81,7 @@ public:
     void unregister(const Context* const context);
 
     // The minimum num_frames_captured() returned by |duplicators_|.
-    int64_t numFramesCaptured() const;
+    qint64 numFramesCaptured() const;
 
     // Moves |desktop_rect_| and all underlying |duplicators_|. See
     // DxgiDuplicatorController::translateRect().

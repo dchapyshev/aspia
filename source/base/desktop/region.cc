@@ -194,7 +194,7 @@ void Region::subtract(const Rect& rect)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Region::translate(int32_t dx, int32_t dy)
+void Region::translate(qint32 dx, qint32 dy)
 {
     miTranslateRegion(&x11reg_, dx, dy);
 }

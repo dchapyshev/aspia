@@ -23,7 +23,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
+void largeNumberIncrement(quint8* buffer, size_t buffer_size)
 {
     DCHECK(buffer);
     DCHECK(buffer_size);
@@ -36,14 +36,14 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 
     if (is_endian.little || (reinterpret_cast<size_t>(buffer) % sizeof(size_t)) != 0)
     {
-        uint32_t n = static_cast<uint32_t>(buffer_size);
-        uint32_t c = 1;
+        quint32 n = static_cast<quint32>(buffer_size);
+        quint32 c = 1;
 
         do
         {
             --n;
             c += buffer[n];
-            buffer[n] = static_cast<uint8_t>(c);
+            buffer[n] = static_cast<quint8>(c);
             c >>= 8;
         }
         while (n);
@@ -68,7 +68,7 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 void largeNumberIncrement(QByteArray* buffer)
 {
     DCHECK(buffer);
-    largeNumberIncrement(reinterpret_cast<uint8_t*>(buffer->data()), buffer->size());
+    largeNumberIncrement(reinterpret_cast<quint8*>(buffer->data()), buffer->size());
 }
 
 } // namespace base

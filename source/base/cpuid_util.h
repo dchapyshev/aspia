@@ -21,9 +21,10 @@
 
 #include "build/build_config.h"
 
+#include <QtGlobal>
+
 #if defined(ARCH_CPU_X86_FAMILY)
 
-#include <cstdint>
 #if !defined(CC_MSVC)
 #include <climits>
 #endif
@@ -42,18 +43,18 @@ public:
 
     void get(int leaf, int subleaf = 0);
 
-    uint32_t eax() const { return eax_; }
-    uint32_t ebx() const { return ebx_; }
-    uint32_t ecx() const { return ecx_; }
-    uint32_t edx() const { return edx_; }
+    quint32 eax() const { return eax_; }
+    quint32 ebx() const { return ebx_; }
+    quint32 ecx() const { return ecx_; }
+    quint32 edx() const { return edx_; }
 
     static bool hasAesNi();
 
 private:
-    uint32_t eax_ = 0;
-    uint32_t ebx_ = 0;
-    uint32_t ecx_ = 0;
-    uint32_t edx_ = 0;
+    quint32 eax_ = 0;
+    quint32 ebx_ = 0;
+    quint32 ecx_ = 0;
+    quint32 edx_ = 0;
 };
 
 } // namespace base

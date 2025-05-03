@@ -207,7 +207,7 @@ QString AdapterEnumerator::interfaceType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t AdapterEnumerator::mtu() const
+quint32 AdapterEnumerator::mtu() const
 {
 #if defined(Q_OS_WINDOWS)
     return adapter_->Mtu;

@@ -86,7 +86,7 @@ PowerInfo::BatteryStatus PowerInfo::batteryStatus() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t PowerInfo::batteryLifePercent() const
+quint32 PowerInfo::batteryLifePercent() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)
         return 0;
@@ -95,7 +95,7 @@ uint32_t PowerInfo::batteryLifePercent() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t PowerInfo::batteryFullLifeTime() const
+quint32 PowerInfo::batteryFullLifeTime() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)
         return 0;
@@ -107,7 +107,7 @@ uint32_t PowerInfo::batteryFullLifeTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t PowerInfo::batteryRemainingLifeTime() const
+quint32 PowerInfo::batteryRemainingLifeTime() const
 {
     if (!initialized_ || power_status_.BatteryFlag == 128)
         return 0;

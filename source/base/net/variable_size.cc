@@ -33,7 +33,7 @@ asio::mutable_buffer VariableSizeReader::buffer()
 {
     DCHECK_LT(pos_, std::size(buffer_));
 
-    return asio::mutable_buffer(&buffer_[pos_], sizeof(uint8_t));
+    return asio::mutable_buffer(&buffer_[pos_], sizeof(quint8));
 }
 
 //--------------------------------------------------------------------------------------------------

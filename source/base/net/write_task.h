@@ -30,7 +30,7 @@ class WriteTask
 public:
     enum class Type { SERVICE_DATA, USER_DATA };
 
-    WriteTask(Type type, uint8_t channel_id, QByteArray&& data)
+    WriteTask(Type type, quint8 channel_id, QByteArray&& data)
         : type_(type),
           channel_id_(channel_id),
           data_(std::move(data))
@@ -42,13 +42,13 @@ public:
     WriteTask& operator=(const WriteTask& other) = default;
 
     Type type() const { return type_; }
-    uint8_t channelId() const { return channel_id_; }
+    quint8 channelId() const { return channel_id_; }
     const QByteArray& data() const { return data_; }
     QByteArray& data() { return data_; }
 
 private:
     Type type_;
-    uint8_t channel_id_;
+    quint8 channel_id_;
     QByteArray data_;
 };
 

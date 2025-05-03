@@ -82,7 +82,7 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
             return false;
         }
 
-        frame->setCapturerType(static_cast<uint32_t>(ScreenCapturer::Type::WIN_DXGI));
+        frame->setCapturerType(static_cast<quint32>(ScreenCapturer::Type::WIN_DXGI));
 
         const Size& frame_size = frame->size();
 

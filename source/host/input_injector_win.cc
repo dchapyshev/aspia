@@ -31,11 +31,11 @@ namespace host {
 
 namespace {
 
-const uint32_t kUsbCodeDelete = 0x07004c;
-const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
-const uint32_t kUsbCodeRightCtrl = 0x0700e4;
-const uint32_t kUsbCodeLeftAlt = 0x0700e2;
-const uint32_t kUsbCodeRightAlt = 0x0700e6;
+const quint32 kUsbCodeDelete = 0x07004c;
+const quint32 kUsbCodeLeftCtrl = 0x0700e0;
+const quint32 kUsbCodeRightCtrl = 0x0700e4;
+const quint32 kUsbCodeLeftAlt = 0x0700e2;
+const quint32 kUsbCodeRightAlt = 0x0700e6;
 
 //--------------------------------------------------------------------------------------------------
 void sendKeyboardScancode(WORD scancode, DWORD flags)
@@ -249,7 +249,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
         last_mouse_pos_ = pos;
     }
 
-    uint32_t mask = event.mask();
+    quint32 mask = event.mask();
 
     // If the host is configured to swap left & right buttons.
     bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);

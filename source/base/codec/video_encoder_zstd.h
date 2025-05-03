@@ -45,14 +45,14 @@ public:
 
 private:
     VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio);
-    bool compressPacket(const uint8_t* input_data, size_t input_size, std::string* output_buffer);
+    bool compressPacket(const quint8* input_data, size_t input_size, std::string* output_buffer);
 
     Region updated_region_;
     PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;
     std::unique_ptr<PixelTranslator> translator_;
-    std::unique_ptr<uint8_t[], base::AlignedFreeDeleter> translate_buffer_;
+    std::unique_ptr<quint8[], base::AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);

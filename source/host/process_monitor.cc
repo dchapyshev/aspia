@@ -167,7 +167,7 @@ std::string userNameByHandle(HANDLE process)
         return std::string();
     }
 
-    std::unique_ptr<uint8_t[]> token_user_buffer;
+    std::unique_ptr<quint8[]> token_user_buffer;
     TOKEN_USER* token_user = nullptr;
     DWORD length = 0;
 
@@ -179,7 +179,7 @@ std::string userNameByHandle(HANDLE process)
             return std::string();
         }
 
-        token_user_buffer = std::make_unique<uint8_t[]>(length);
+        token_user_buffer = std::make_unique<quint8[]>(length);
         memset(token_user_buffer.get(), 0, sizeof(length));
 
         token_user = reinterpret_cast<TOKEN_USER*>(token_user_buffer.get());
@@ -231,21 +231,21 @@ std::string filePathByHandle(HANDLE process)
 }
 
 //--------------------------------------------------------------------------------------------------
-int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
+qint32 calcCpuRatio(qint64 cpu_time_delta, qint64 total_time)
 {
-    int64_t cpu_ratio =
+    qint64 cpu_ratio =
         (((cpu_time_delta / ((total_time / 1000LL) ? (total_time / 1000LL) : 1) + 5LL)) / 10LL);
     if (cpu_ratio > 99)
         cpu_ratio = 99;
-    return static_cast<int32_t>(cpu_ratio);
+    return static_cast<qint32>(cpu_ratio);
 }
 
 //--------------------------------------------------------------------------------------------------
 void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS_INFORMATION& info,
-                   int64_t total_time, bool update_only)
+                   qint64 total_time, bool update_only)
 {
-    int64_t time = info.KernelTime + info.UserTime;
-    int64_t time_delta = time - entry->cpu_time;
+    qint64 time = info.KernelTime + info.UserTime;
+    qint64 time_delta = time - entry->cpu_time;
 
     if (time_delta)
         entry->cpu_time = time;
@@ -270,7 +270,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
             entry->process_name_changed = true;
         }
 
-        uint32_t process_id = PtrToUlong(info.UniqueProcessId);
+        quint32 process_id = PtrToUlong(info.UniqueProcessId);
         if (process_id != 0)
         {
             base::ScopedHandle process(OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
@@ -327,7 +327,7 @@ ProcessMonitor::ProcessMonitor()
     }
     else
     {
-        processor_count_ = static_cast<uint32_t>(basic_info.NumberOfProcessors);
+        processor_count_ = static_cast<quint32>(basic_info.NumberOfProcessors);
         if (processor_count_ > kMaxCpuCount)
             processor_count_ = kMaxCpuCount;
 
@@ -343,7 +343,7 @@ ProcessMonitor::ProcessMonitor()
         }
         else
         {
-            for (uint32_t i = 0; i < processor_count_; ++i)
+            for (quint32 i = 0; i < processor_count_; ++i)
             {
                 const SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION& current = processor_info[i];
 
@@ -399,21 +399,21 @@ int ProcessMonitor::calcCpuUsage()
         return 0;
     }
 
-    int64_t cpu_idle_time[kMaxCpuCount];
-    int64_t cpu_total_time[kMaxCpuCount];
+    qint64 cpu_idle_time[kMaxCpuCount];
+    qint64 cpu_total_time[kMaxCpuCount];
 
-    int64_t summary_idle_time = 0;
-    int64_t summary_total_time = 0;
+    qint64 summary_idle_time = 0;
+    qint64 summary_total_time = 0;
 
-    for (uint32_t i = 0; i < processor_count_; ++i)
+    for (quint32 i = 0; i < processor_count_; ++i)
     {
         const SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION& current = processor_info[i];
 
         cpu_idle_time[i] = current.IdleTime.QuadPart;
         cpu_total_time[i] = current.KernelTime.QuadPart + current.UserTime.QuadPart;
 
-        int64_t delta_cpu_idle_time = cpu_idle_time[i] - prev_cpu_idle_time_[i];
-        int64_t delta_cpu_total_time = cpu_total_time[i] - prev_cpu_total_time_[i];
+        qint64 delta_cpu_idle_time = cpu_idle_time[i] - prev_cpu_idle_time_[i];
+        qint64 delta_cpu_total_time = cpu_total_time[i] - prev_cpu_total_time_[i];
 
         summary_idle_time += delta_cpu_idle_time;
         summary_total_time += delta_cpu_total_time;
@@ -520,8 +520,8 @@ bool ProcessMonitor::updateSnapshot()
 void ProcessMonitor::updateTable()
 {
     OWN_SYSTEM_PROCESS_INFORMATION* current;
-    int64_t last_total_time = 0;
-    int64_t total_time = 0;
+    qint64 last_total_time = 0;
+    qint64 total_time = 0;
 
     // Calculate CPU times.
     size_t offset = 0;
@@ -556,7 +556,7 @@ void ProcessMonitor::updateTable()
     }
     while (current->NextEntryOffset);
 
-    int64_t time_delta = total_time - last_total_time;
+    qint64 time_delta = total_time - last_total_time;
     std::set<ProcessId> active_pids;
 
     // Update process list.

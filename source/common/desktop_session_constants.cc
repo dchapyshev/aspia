@@ -33,7 +33,7 @@ const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 const char kSupportedExtensionsForManage[] =
     "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;"
     "task_manager;video_pause;audio_pause;screen_type";
@@ -48,9 +48,9 @@ const char kSupportedExtensionsForView[] =
     "select_screen;preferred_size;video_recording;video_pause;audio_pause";
 #endif
 
-const uint32_t kSupportedVideoEncodings =
+const quint32 kSupportedVideoEncodings =
     proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
-const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
+const quint32 kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
 
 const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
 const char kFlagDisableAudio[] = "disable_audio";

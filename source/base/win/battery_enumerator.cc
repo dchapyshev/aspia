@@ -130,7 +130,7 @@ bool BatteryEnumerator::isAtEnd() const
         return true;
     }
 
-    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(required_size);
+    std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(required_size);
     PSP_DEVICE_INTERFACE_DETAIL_DATA_W detail_data =
         reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA_W>(buffer.get());
 
@@ -241,7 +241,7 @@ QString BatteryEnumerator::temperature() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::designCapacity() const
+quint32 BatteryEnumerator::designCapacity() const
 {
     BATTERY_INFORMATION battery_info;
 
@@ -287,7 +287,7 @@ QString BatteryEnumerator::type() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::fullChargedCapacity() const
+quint32 BatteryEnumerator::fullChargedCapacity() const
 {
     BATTERY_INFORMATION battery_info;
     memset(&battery_info, 0, sizeof(battery_info));
@@ -300,7 +300,7 @@ uint32_t BatteryEnumerator::fullChargedCapacity() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::depreciation() const
+quint32 BatteryEnumerator::depreciation() const
 {
     BATTERY_INFORMATION battery_info;
     memset(&battery_info, 0, sizeof(battery_info));
@@ -315,11 +315,11 @@ uint32_t BatteryEnumerator::depreciation() const
     const int percent = 100 - (static_cast<int>(battery_info.FullChargedCapacity) * 100) /
         static_cast<int>(battery_info.DesignedCapacity);
 
-    return (percent > 0) ? static_cast<uint32_t>(percent) : 0;
+    return (percent > 0) ? static_cast<quint32>(percent) : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::currentCapacity() const
+quint32 BatteryEnumerator::currentCapacity() const
 {
     BATTERY_STATUS battery_status;
     if (!batteryStatus(battery_, battery_tag_, &battery_status))
@@ -329,7 +329,7 @@ uint32_t BatteryEnumerator::currentCapacity() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::voltage() const
+quint32 BatteryEnumerator::voltage() const
 {
     BATTERY_STATUS battery_status;
     if (!batteryStatus(battery_, battery_tag_, &battery_status))
@@ -339,13 +339,13 @@ uint32_t BatteryEnumerator::voltage() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t BatteryEnumerator::state() const
+quint32 BatteryEnumerator::state() const
 {
     BATTERY_STATUS battery_status;
     if (!batteryStatus(battery_, battery_tag_, &battery_status))
         return 0;
 
-    uint32_t result = 0;
+    quint32 result = 0;
 
     if (battery_status.PowerState & BATTERY_CHARGING)
         result |= CHARGING;

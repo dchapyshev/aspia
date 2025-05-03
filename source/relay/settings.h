@@ -57,8 +57,8 @@ public:
     void setPeerIdleTimeout(const std::chrono::minutes& timeout);
     std::chrono::minutes peerIdleTimeout() const;
 
-    void setMaxPeerCount(uint32_t count);
-    uint32_t maxPeerCount() const;
+    void setMaxPeerCount(quint32 count);
+    quint32 maxPeerCount() const;
 
     void setStatisticsEnabled(bool enable);
     bool isStatisticsEnabled() const;

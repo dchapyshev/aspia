@@ -63,8 +63,8 @@ public:
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 
-    uint32_t preferredVideoCapturer() const;
-    void setPreferredVideoCapturer(uint32_t type);
+    quint32 preferredVideoCapturer() const;
+    void setPreferredVideoCapturer(quint32 type);
 
     bool passwordProtection() const;
     void setPasswordProtection(bool enable);
@@ -84,8 +84,8 @@ public:
     int oneTimePasswordLength() const;
     void setOneTimePasswordLength(int length);
 
-    uint32_t oneTimePasswordCharacters() const;
-    void setOneTimePasswordCharacters(uint32_t characters);
+    quint32 oneTimePasswordCharacters() const;
+    void setOneTimePasswordCharacters(quint32 characters);
 
     bool connConfirm() const;
     void setConnConfirm(bool enable);
@@ -111,8 +111,8 @@ public:
     int updateCheckFrequency() const;
     void setUpdateCheckFrequency(int days);
 
-    int64_t lastUpdateCheck() const;
-    void setLastUpdateCheck(int64_t timepoint);
+    qint64 lastUpdateCheck() const;
+    void setLastUpdateCheck(qint64 timepoint);
 
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);

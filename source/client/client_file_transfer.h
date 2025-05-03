@@ -62,8 +62,8 @@ signals:
 protected:
     // Client implementation.
     void onSessionStarted() final;
-    void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
+    void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
 
 private slots:
     void onTaskDone(base::local_shared_ptr<common::FileTask> task);

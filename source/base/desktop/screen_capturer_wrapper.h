@@ -81,7 +81,7 @@ private:
     ScreenCapturer::ScreenType last_screen_type_ = ScreenCapturer::ScreenType::UNKNOWN;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;
-    uint32_t capture_counter_ = 0;
+    quint32 capture_counter_ = 0;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;

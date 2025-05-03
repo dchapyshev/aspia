@@ -33,18 +33,18 @@ public:
 
     void dettach();
 
-    uint32_t addKey(SessionKey&& session_key);
-    bool removeKey(uint32_t key_id);
-    void setKeyExpired(uint32_t key_id);
-    std::optional<Key> key(uint32_t key_id, const std::string& peer_public_key) const;
+    quint32 addKey(SessionKey&& session_key);
+    bool removeKey(quint32 key_id);
+    void setKeyExpired(quint32 key_id);
+    std::optional<Key> key(quint32 key_id, const std::string& peer_public_key) const;
     void clear();
 
 private:
     Delegate* delegate_;
 
     mutable std::mutex pool_lock_;
-    std::map<uint32_t, SessionKey> map_;
-    uint32_t current_key_id_ = 0;
+    std::map<quint32, SessionKey> map_;
+    quint32 current_key_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Pool);
 };
@@ -70,11 +70,11 @@ void SharedPool::Pool::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
+quint32 SharedPool::Pool::addKey(SessionKey&& session_key)
 {
     std::scoped_lock lock(pool_lock_);
 
-    uint32_t key_id = current_key_id_++;
+    quint32 key_id = current_key_id_++;
     map_.emplace(key_id, std::move(session_key));
 
     LOG(LS_INFO) << "Key with id " << key_id << " added to pool";
@@ -82,7 +82,7 @@ uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SharedPool::Pool::removeKey(uint32_t key_id)
+bool SharedPool::Pool::removeKey(quint32 key_id)
 {
     std::scoped_lock lock(pool_lock_);
 
@@ -99,7 +99,7 @@ bool SharedPool::Pool::removeKey(uint32_t key_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SharedPool::Pool::setKeyExpired(uint32_t key_id)
+void SharedPool::Pool::setKeyExpired(quint32 key_id)
 {
     if (removeKey(key_id))
     {
@@ -112,7 +112,7 @@ void SharedPool::Pool::setKeyExpired(uint32_t key_id)
 
 //--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::Pool::key(
-    uint32_t key_id, const std::string& peer_public_key) const
+    quint32 key_id, const std::string& peer_public_key) const
 {
     std::scoped_lock lock(pool_lock_);
 
@@ -163,26 +163,26 @@ std::unique_ptr<SharedPool> SharedPool::share()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SharedPool::addKey(SessionKey&& session_key)
+quint32 SharedPool::addKey(SessionKey&& session_key)
 {
     return pool_->addKey(std::move(session_key));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SharedPool::removeKey(uint32_t key_id)
+bool SharedPool::removeKey(quint32 key_id)
 {
     return pool_->removeKey(key_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SharedPool::setKeyExpired(uint32_t key_id)
+void SharedPool::setKeyExpired(quint32 key_id)
 {
     return pool_->setKeyExpired(key_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<SharedPool::Key> SharedPool::key(
-    uint32_t key_id, const std::string& peer_public_key) const
+    quint32 key_id, const std::string& peer_public_key) const
 {
     return pool_->key(key_id, peer_public_key);
 }

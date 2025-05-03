@@ -33,7 +33,7 @@ public:
     static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
 
 private:
-    FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data);
+    FrameSimple(const Size& size, const PixelFormat& format, quint8* data);
 
     DISALLOW_COPY_AND_ASSIGN(FrameSimple);
 };

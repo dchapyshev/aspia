@@ -52,7 +52,7 @@ public:
         virtual void onClientSessionFinished() = 0;
         virtual void onClientSessionVideoRecording(
             const QString& computer_name, const QString& user_name, bool started) = 0;
-        virtual void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) = 0;
+        virtual void onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat) = 0;
     };
 
     enum class State
@@ -70,7 +70,7 @@ public:
     void stop();
 
     State state() const { return state_; }
-    uint32_t id() const { return id_; }
+    quint32 id() const { return id_; }
 
     void setClientVersion(const QVersionNumber& version);
     const QVersionNumber& clientVersion() const { return version_; }
@@ -99,12 +99,12 @@ protected:
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
     virtual void onStarted() = 0;
-    virtual void onReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
-    virtual void onWritten(uint8_t channel_id, size_t pending) = 0;
+    virtual void onReceived(quint8 channel_id, const QByteArray& buffer) = 0;
+    virtual void onWritten(quint8 channel_id, size_t pending) = 0;
 
     std::shared_ptr<base::TcpChannelProxy> channelProxy();
-    void sendMessage(uint8_t channel_id, QByteArray&& buffer);
-    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(quint8 channel_id, QByteArray&& buffer);
+    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
 
     size_t pendingMessages() const;
 
@@ -112,13 +112,13 @@ protected:
 
 private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
-    uint32_t id_;
+    quint32 id_;
     proto::SessionType session_type_;
     QVersionNumber version_;
     QString username_;

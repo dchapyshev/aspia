@@ -31,7 +31,7 @@ class NetworkChannel : public QObject
     Q_OBJECT
 
 public:
-    static const uint32_t kMaxMessageSize;
+    static const quint32 kMaxMessageSize;
 
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -81,8 +81,8 @@ public:
     }
     virtual ~NetworkChannel() = default;
 
-    int64_t totalRx() const { return total_rx_; }
-    int64_t totalTx() const { return total_tx_; }
+    qint64 totalRx() const { return total_rx_; }
+    qint64 totalTx() const { return total_tx_; }
     int speedRx();
     int speedTx();
 
@@ -97,15 +97,15 @@ protected:
     static void resizeBuffer(QByteArray* buffer, size_t new_size);
 
 private:
-    int64_t total_tx_ = 0;
-    int64_t total_rx_ = 0;
+    qint64 total_tx_ = 0;
+    qint64 total_rx_ = 0;
 
     TimePoint begin_time_tx_;
-    int64_t bytes_tx_ = 0;
+    qint64 bytes_tx_ = 0;
     int speed_tx_ = 0;
 
     TimePoint begin_time_rx_;
-    int64_t bytes_rx_ = 0;
+    qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
 };
 

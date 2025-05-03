@@ -99,7 +99,7 @@ size_t MessageDecryptorOpenssl::decryptedDataSize(size_t in_size)
 bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
-        reinterpret_cast<const uint8_t*>(iv_.data())) != 1)
+        reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {
         LOG(LS_ERROR) << "EVP_DecryptInit_ex failed";
         return false;
@@ -108,8 +108,8 @@ bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
     int length;
 
     if (EVP_DecryptUpdate(ctx_.get(),
-                          reinterpret_cast<uint8_t*>(out), &length,
-                          reinterpret_cast<const uint8_t*>(in) + kTagSize,
+                          reinterpret_cast<quint8*>(out), &length,
+                          reinterpret_cast<const quint8*>(in) + kTagSize,
                           static_cast<int>(in_size) - kTagSize) != 1)
     {
         LOG(LS_ERROR) << "EVP_DecryptUpdate failed";
@@ -123,7 +123,7 @@ bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
         return false;
     }
 
-    if (EVP_DecryptFinal_ex(ctx_.get(), reinterpret_cast<uint8_t*>(out) + length, &length) <= 0)
+    if (EVP_DecryptFinal_ex(ctx_.get(), reinterpret_cast<quint8*>(out) + length, &length) <= 0)
     {
         LOG(LS_ERROR) << "EVP_DecryptFinal_ex failed";
         return false;

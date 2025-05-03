@@ -95,7 +95,7 @@ void AudioEncoderOpus::initEncoder()
     leftover_samples_ = 0;
     leftover_buffer_size_ = frame_size_ + SincResampler::kDefaultRequestSize;
     leftover_buffer_.reset(
-        new int16_t[size_t(leftover_buffer_size_) * size_t(channels_)]);
+        new qint16[size_t(leftover_buffer_size_) * size_t(channels_)]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ void AudioEncoderOpus::fetchBytesToResample(int /* resampler_frame_delay */, Aud
     DCHECK_LE(audio_bus->frames(), samples_left);
 
     audio_bus->FromInterleaved<SignedInt16SampleTypeTraits>(
-        reinterpret_cast<const int16_t*>(resampling_data_ + resampling_data_pos_),
+        reinterpret_cast<const qint16*>(resampling_data_ + resampling_data_pos_),
         audio_bus->frames());
 
     resampling_data_pos_ += audio_bus->frames() * kBytesPerSample * channels_;
@@ -199,8 +199,8 @@ bool AudioEncoderOpus::encode(
     }
 
     int samples_in_packet =
-        static_cast<int>(input_packet.data(0).size() / kBytesPerSample / uint32_t(channels_));
-    const int16_t* next_sample = reinterpret_cast<const int16_t*>(input_packet.data(0).data());
+        static_cast<int>(input_packet.data(0).size() / kBytesPerSample / quint32(channels_));
+    const qint16* next_sample = reinterpret_cast<const qint16*>(input_packet.data(0).data());
 
     // Create a new packet of encoded data.
     output_packet->set_encoding(proto::AUDIO_ENCODING_OPUS);
@@ -212,7 +212,7 @@ bool AudioEncoderOpus::encode(
 
     while (leftover_samples_ + samples_in_packet >= samples_wanted)
     {
-        const int16_t* pcm_buffer = nullptr;
+        const qint16* pcm_buffer = nullptr;
 
         // Combine the packet with the leftover samples, if any.
         if (leftover_samples_ > 0)
@@ -240,8 +240,8 @@ bool AudioEncoderOpus::encode(
             samples_consumed = resampling_data_pos_ / channels_ / kBytesPerSample;
 
             resampler_bus_->ToInterleaved<SignedInt16SampleTypeTraits>(
-                kFrameSamples, reinterpret_cast<int16_t*>(resample_buffer_.get()));
-            pcm_buffer = reinterpret_cast<int16_t*>(resample_buffer_.get());
+                kFrameSamples, reinterpret_cast<qint16*>(resample_buffer_.get()));
+            pcm_buffer = reinterpret_cast<qint16*>(resample_buffer_.get());
         }
         else
         {

@@ -50,10 +50,10 @@ public:
 private:
     const Mode mode_;
     base::ScopedHandle snapshot_;
-    std::unique_ptr<uint8_t[]> table_buffer_;
+    std::unique_ptr<quint8[]> table_buffer_;
 
-    uint32_t num_entries_ = 0;
-    uint32_t pos_ = 0;
+    quint32 num_entries_ = 0;
+    quint32 pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ConnectEnumerator);
 };

@@ -68,7 +68,7 @@ void SessionHost::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
     if (!base::parse(buffer, message.get()))
@@ -92,7 +92,7 @@ void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void SessionHost::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

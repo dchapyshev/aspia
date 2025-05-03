@@ -115,13 +115,13 @@ NetShareEnumerator::Type NetShareEnumerator::type() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t NetShareEnumerator::currentUses() const
+quint32 NetShareEnumerator::currentUses() const
 {
     return share_info_[current_pos_].shi502_current_uses;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t NetShareEnumerator::maxUses() const
+quint32 NetShareEnumerator::maxUses() const
 {
     return share_info_[current_pos_].shi502_max_uses;
 }

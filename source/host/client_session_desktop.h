@@ -76,8 +76,8 @@ public:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onWritten(uint8_t channel_id, size_t pending) final;
+    void onReceived(quint8 channel_id, const QByteArray& buffer) final;
+    void onWritten(quint8 channel_id, size_t pending) final;
 
 #if defined(OS_WIN)
     // TaskManager::Delegate implementation.

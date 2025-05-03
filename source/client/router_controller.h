@@ -82,7 +82,7 @@ signals:
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRelayConnectionReady();
     void onRelayConnectionError();
 

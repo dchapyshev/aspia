@@ -19,7 +19,7 @@
 #ifndef BASE_STRINGS_STRING_NUMBER_CONVERSIONS_H
 #define BASE_STRINGS_STRING_NUMBER_CONVERSIONS_H
 
-#include <cstdint>
+#include <QtGlobal>
 #include <string>
 
 // DO NOT use these functions in any UI unless it's NOT localized on purpose.
@@ -55,8 +55,8 @@ bool stringToUShort(std::u16string_view input, unsigned short* output);
 bool stringToULong(std::string_view input, unsigned long* output);
 bool stringToULong(std::u16string_view input, unsigned long* output);
 
-bool stringToInt64(std::string_view input, int64_t* output);
-bool stringToInt64(std::u16string_view input, int64_t* output);
+bool stringToInt64(std::string_view input, qint64* output);
+bool stringToInt64(std::u16string_view input, qint64* output);
 
 bool stringToUint64(std::string_view input, unsigned long int* output);
 bool stringToUint64(std::u16string_view input, unsigned long int* output);

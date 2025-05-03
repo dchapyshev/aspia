@@ -109,15 +109,15 @@ protected:
     void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
     // UnconfirmedClientSession::Delegate implementation.
-    void onUnconfirmedSessionAccept(uint32_t id) final;
-    void onUnconfirmedSessionReject(uint32_t id) final;
+    void onUnconfirmedSessionAccept(quint32 id) final;
+    void onUnconfirmedSessionReject(quint32 id) final;
 
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() final;
     void onClientSessionFinished() final;
     void onClientSessionVideoRecording(
         const QString& computer_name, const QString& user_name, bool started) final;
-    void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) final;
+    void onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat) final;
 
 private slots:
     void onIpcDisconnected();
@@ -126,17 +126,17 @@ private slots:
 private:
     void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
-    void sendDisconnectEvent(uint32_t session_id);
+    void sendDisconnectEvent(quint32 session_id);
     void updateCredentials(const base::Location& location);
     void sendCredentials(const base::Location& location);
-    void killClientSession(uint32_t id);
+    void killClientSession(quint32 id);
     void sendRouterState(const base::Location& location);
     void sendHostIdRequest(const base::Location& location);
     void addNewClientSession(std::unique_ptr<ClientSession> client_session);
     void setState(const base::Location& location, State state);
     void onTextChatHasUser(const base::Location& location, bool has_user);
-    void onTextChatSessionStarted(uint32_t id);
-    void onTextChatSessionFinished(uint32_t id);
+    void onTextChatSessionStarted(quint32 id);
+    void onTextChatSessionFinished(quint32 id);
     void mergeAndSendConfiguration();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
@@ -152,12 +152,12 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
 
     bool password_enabled_ = false;
-    uint32_t password_characters_ = 0;
+    quint32 password_characters_ = 0;
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
     QTimer password_expire_timer_;
     QString one_time_password_;
-    uint32_t one_time_sessions_ = 0;
+    quint32 one_time_sessions_ = 0;
 
     bool connection_confirmation_ = false;
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;

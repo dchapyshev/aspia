@@ -113,9 +113,9 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
 
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
-    uint8_t* y_data = image_->planes[0];
-    uint8_t* u_data = image_->planes[1];
-    uint8_t* v_data = image_->planes[2];
+    quint8* y_data = image_->planes[0];
+    quint8* u_data = image_->planes[1];
+    quint8* v_data = image_->planes[2];
 
     libyuv::ARGBToI420(frame.frameData(),
                        frame.stride(),
@@ -193,7 +193,7 @@ void WebmVideoEncoder::createImage()
     memset(image_buffer_.data(), 128, image_buffer_.size());
 
     // Fill in the information.
-    image_->planes[0] = reinterpret_cast<uint8_t*>(image_buffer_.data());
+    image_->planes[0] = reinterpret_cast<quint8*>(image_buffer_.data());
     image_->planes[1] = image_->planes[0] + y_stride * y_rows;
     image_->planes[2] = image_->planes[1] + uv_stride * uv_rows;
 

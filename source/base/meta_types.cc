@@ -31,14 +31,14 @@ void registerMetaTypes()
     qRegisterMetaType<std::filesystem::path>("std::filesystem::path");
     qRegisterMetaType<std::string>("std::string");
     qRegisterMetaType<std::u16string>("std::u16string");
-    qRegisterMetaType<uint8_t>("uint8_t");
+    qRegisterMetaType<quint8>("quint8");
     qRegisterMetaType<quint16>("quint16");
-    qRegisterMetaType<uint32_t>("uint32_t");
+    qRegisterMetaType<quint32>("quint32");
     qRegisterMetaType<quint64>("quint64");
     qRegisterMetaType<int8_t>("int8_t");
-    qRegisterMetaType<int16_t>("int16_t");
-    qRegisterMetaType<int32_t>("int32_t");
-    qRegisterMetaType<int64_t>("int64_t");
+    qRegisterMetaType<qint16>("qint16");
+    qRegisterMetaType<qint32>("qint32");
+    qRegisterMetaType<qint64>("qint64");
     qRegisterMetaType<size_t>("size_t");
 }
 

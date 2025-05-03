@@ -28,7 +28,7 @@ namespace base {
 FrameDib::FrameDib(const Size& size,
                    const PixelFormat& format,
                    int stride,
-                   uint8_t* data,
+                   quint8* data,
                    std::unique_ptr<SharedMemory> shared_memory,
                    HBITMAP bitmap)
     : Frame(size, format, stride, data, shared_memory.get()),
@@ -70,15 +70,15 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
     {
         bmi.header.biCompression = BI_RGB;
 
-        for (uint32_t i = 0; i < 256; ++i)
+        for (quint32 i = 0; i < 256; ++i)
         {
-            const uint32_t red   = (i >> format.redShift())   & format.redMax();
-            const uint32_t green = (i >> format.greenShift()) & format.greenMax();
-            const uint32_t blue  = (i >> format.blueShift())  & format.blueMax();
+            const quint32 red   = (i >> format.redShift())   & format.redMax();
+            const quint32 green = (i >> format.greenShift()) & format.greenMax();
+            const quint32 blue  = (i >> format.blueShift())  & format.blueMax();
 
-            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.redMax());
-            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.greenMax());
-            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.blueMax());
+            bmi.u.color[i].rgbRed   = static_cast<quint8>(red   * 0xFF / format.redMax());
+            bmi.u.color[i].rgbGreen = static_cast<quint8>(green * 0xFF / format.greenMax());
+            bmi.u.color[i].rgbBlue  = static_cast<quint8>(blue  * 0xFF / format.blueMax());
         }
     }
 
@@ -106,7 +106,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
     }
 
     return std::unique_ptr<FrameDib>(new FrameDib(
-        size, format, bytes_per_row, reinterpret_cast<uint8_t*>(data),
+        size, format, bytes_per_row, reinterpret_cast<quint8*>(data),
         std::move(shared_memory), bitmap));
 }
 

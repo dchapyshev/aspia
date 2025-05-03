@@ -265,7 +265,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
                     group << mk(tr("Manufacturer"), module.manufacturer());
 
                 if (module.size())
-                    group << mk(tr("Size"), sizeToString(static_cast<int64_t>(module.size())));
+                    group << mk(tr("Size"), sizeToString(static_cast<qint64>(module.size())));
 
                 if (module.speed())
                     group << mk(tr("Speed"), tr("%1 MHz").arg(module.speed()));
@@ -321,8 +321,8 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             if (drive.total_size() && drive.total_size() != static_cast<quint64>(-1))
             {
                 value = tr("%1 (%2 free)")
-                    .arg(sizeToString(static_cast<int64_t>(drive.total_size())),
-                         sizeToString(static_cast<int64_t>(drive.free_size())));
+                    .arg(sizeToString(static_cast<qint64>(drive.total_size())),
+                         sizeToString(static_cast<qint64>(drive.free_size())));
             }
 
             items << mk(param, value);

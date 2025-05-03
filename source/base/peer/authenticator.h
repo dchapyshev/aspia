@@ -66,7 +66,7 @@ public:
     [[nodiscard]] const QString& peerComputerName() const { return peer_computer_name_; }
     [[nodiscard]] const QString& peerArch() const { return peer_arch_; }
     [[nodiscard]] const QString& peerDisplayName() const { return peer_display_name_; }
-    [[nodiscard]] uint32_t sessionType() const { return session_type_; }
+    [[nodiscard]] quint32 sessionType() const { return session_type_; }
     [[nodiscard]] const QString& userName() const { return user_name_; }
 
     // Returns the current state.
@@ -100,13 +100,13 @@ protected:
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
 
-    uint32_t session_type_ = 0; // Selected session type.
+    quint32 session_type_ = 0; // Selected session type.
     QString user_name_;
 
 private slots:
     void onTcpDisconnected(NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
     QPointer<QTimer> timer_;

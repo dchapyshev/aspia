@@ -53,7 +53,7 @@ public:
     // |session_types] allowed session types for anonymous access.
     // The private key must be set up for anonymous access.
     // By default, anonymous access is disabled.
-    [[nodiscard]] bool setAnonymousAccess(AnonymousAccess anonymous_access, uint32_t session_types);
+    [[nodiscard]] bool setAnonymousAccess(AnonymousAccess anonymous_access, quint32 session_types);
 
 protected:
     // Authenticator implementation.
@@ -86,7 +86,7 @@ private:
     InternalState internal_state_ = InternalState::READ_CLIENT_HELLO;
 
     // Bitmask of allowed session types.
-    uint32_t session_types_ = 0;
+    quint32 session_types_ = 0;
 
     KeyPair key_pair_;
     BigNum N_;

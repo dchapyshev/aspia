@@ -84,7 +84,7 @@ signals:
     void sig_progressChanged(const std::string& name, int percentage);
     void sig_errorOccurred(const std::string& path,
                            proto::FileError error_code,
-                           uint32_t available_actions);
+                           quint32 available_actions);
     void sig_doTask(base::local_shared_ptr<common::FileTask> task);
 
 private slots:

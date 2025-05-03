@@ -109,7 +109,7 @@ TEST_F(RegistryTest, ValueTest)
         const wchar_t kInt64ValueName[] = L"Int64Value";
         const wchar_t kStringData[] = L"string data";
         const DWORD kDWORDData = 0xdeadbabe;
-        const int64_t kInt64Data = 0xdeadbabedeadbabeLL;
+        const qint64 kInt64Data = 0xdeadbabedeadbabeLL;
 
         // Test value creation
         ASSERT_EQ(ERROR_SUCCESS, key.writeValue(kStringValueName, kStringData));
@@ -124,7 +124,7 @@ TEST_F(RegistryTest, ValueTest)
         // Test Read
         std::wstring string_value;
         DWORD dword_value = 0;
-        int64_t int64_value = 0;
+        qint64 int64_value = 0;
         ASSERT_EQ(ERROR_SUCCESS, key.readValue(kStringValueName, &string_value));
         ASSERT_EQ(ERROR_SUCCESS, key.readValueDW(kDWORDValueName, &dword_value));
         ASSERT_EQ(ERROR_SUCCESS, key.readInt64(kInt64ValueName, &int64_value));
@@ -189,7 +189,7 @@ TEST_F(RegistryTest, TruncatedCharTest)
 
     const wchar_t kName[] = L"name";
     // kData size is not a multiple of sizeof(wchar_t).
-    const uint8_t kData[] = { 1, 2, 3, 4, 5 };
+    const quint8 kData[] = { 1, 2, 3, 4, 5 };
     EXPECT_EQ(5u, std::size(kData));
     ASSERT_EQ(ERROR_SUCCESS,
         key.writeValue(kName, kData, static_cast<DWORD>(std::size(kData)), REG_BINARY));

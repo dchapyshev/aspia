@@ -35,14 +35,14 @@ public:
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::RelayStat>& relayStat() const { return relay_stat_; }
-    void sendKeyUsed(uint32_t key_id);
+    void sendKeyUsed(quint32 key_id);
     void disconnectPeerSession(const proto::PeerConnectionRequest& request);
 
 protected:
     // Session implementation.
     void onSessionReady() final;
-    void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) final;
-    void onSessionMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
+    void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
 
 private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);

@@ -89,7 +89,7 @@ public:
         proto::FileError code() const { return code_; }
         const std::string& path() const { return path_; }
 
-        uint32_t availableActions() const;
+        quint32 availableActions() const;
         Action defaultAction() const;
 
     private:
@@ -100,7 +100,7 @@ public:
 
     struct Item
     {
-        Item(const std::string& name, int64_t size, bool is_directory)
+        Item(const std::string& name, qint64 size, bool is_directory)
             : name(name),
               is_directory(is_directory),
               size(size)
@@ -108,7 +108,7 @@ public:
             // Nothing
         }
 
-        Item(std::string&& name, int64_t size, bool is_directory)
+        Item(std::string&& name, qint64 size, bool is_directory)
             : name(std::move(name)),
               is_directory(is_directory),
               size(size)
@@ -118,14 +118,14 @@ public:
 
         std::string name;
         bool is_directory;
-        int64_t size;
+        qint64 size;
     };
 
     class Task
     {
     public:
         Task(std::string&& source_path, std::string&& target_path,
-             bool is_directory, int64_t size);
+             bool is_directory, qint64 size);
 
         Task(const Task& other) = default;
         Task& operator=(const Task& other) = default;
@@ -138,7 +138,7 @@ public:
         const std::string& sourcePath() const { return source_path_; }
         const std::string& targetPath() const { return target_path_; }
         bool isDirectory() const { return is_directory_; }
-        int64_t size() const { return size_; }
+        qint64 size() const { return size_; }
 
         bool overwrite() const { return overwrite_; }
         void setOverwrite(bool value) { overwrite_ = value; }
@@ -148,7 +148,7 @@ public:
         std::string target_path_;
         bool is_directory_;
         bool overwrite_ = false;
-        int64_t size_;
+        qint64 size_;
     };
 
     using TaskList = std::deque<Task>;
@@ -174,7 +174,7 @@ signals:
     void sig_finished();
     void sig_progressChanged(int total, int current);
     void sig_currentItemChanged(const std::string& source_path, const std::string& target_path);
-    void sig_currentSpeedChanged(int64_t speed);
+    void sig_currentSpeedChanged(qint64 speed);
     void sig_errorOccurred(const client::FileTransfer::Error& error);
     void sig_doTask(base::local_shared_ptr<common::FileTask> task);
 
@@ -207,9 +207,9 @@ private:
     QPointer<FileTransferQueueBuilder> queue_builder_;
     TaskList tasks_;
 
-    int64_t total_size_ = 0;
-    int64_t total_transfered_size_ = 0;
-    int64_t task_transfered_size_ = 0;
+    qint64 total_size_ = 0;
+    qint64 total_transfered_size_ = 0;
+    qint64 task_transfered_size_ = 0;
 
     int total_percentage_ = 0;
     int task_percentage_ = 0;
@@ -218,8 +218,8 @@ private:
 
     QPointer<QTimer> speed_update_timer_;
     TimePoint begin_time_;
-    int64_t bytes_per_time_ = 0;
-    int64_t speed_ = 0;
+    qint64 bytes_per_time_ = 0;
+    qint64 speed_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };

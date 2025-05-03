@@ -45,7 +45,7 @@ public:
     QString adapterName() const;
     QString connectionName() const;
     QString interfaceType() const;
-    uint32_t mtu() const;
+    quint32 mtu() const;
     quint64 speed() const;
     QString macAddress() const;
 

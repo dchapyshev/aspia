@@ -117,7 +117,7 @@ private:
     bool is_remote_update_enabled_ = false;
 
     QSize current_resolution_;
-    int64_t current_screen_id_ = -1;
+    qint64 current_screen_id_ = -1;
     int screen_count_ = 0;
 
     std::unique_ptr<QMenu> power_menu_;

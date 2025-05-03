@@ -57,7 +57,7 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
 //--------------------------------------------------------------------------------------------------
 int MouseCursor::stride() const
 {
-    return size_.width() * static_cast<int>(sizeof(uint32_t));
+    return size_.width() * static_cast<int>(sizeof(quint32));
 }
 
 //--------------------------------------------------------------------------------------------------

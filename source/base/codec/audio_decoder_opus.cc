@@ -133,7 +133,7 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
 
     for (int i = 0; i < packet.data_size(); ++i)
     {
-        int16_t* pcm_buffer = reinterpret_cast<int16_t*>(std::data(*decoded_data) + buffer_pos);
+        qint16* pcm_buffer = reinterpret_cast<qint16*>(std::data(*decoded_data) + buffer_pos);
         CHECK_LE(buffer_pos + max_frame_bytes, static_cast<int>(decoded_data->size()));
         const std::string& frame = packet.data(i);
         const unsigned char* frame_data = reinterpret_cast<const unsigned char*>(frame.data());

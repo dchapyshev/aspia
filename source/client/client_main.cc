@@ -126,7 +126,7 @@ bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        uint32_t compress_ratio = value.toUInt();
+        quint32 compress_ratio = value.toUInt();
         if (compress_ratio >= 1 && compress_ratio <= 22)
         {
             config.set_compress_ratio(compress_ratio);
@@ -171,7 +171,7 @@ bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CURSOR_SHAPE));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::ENABLE_CURSOR_SHAPE));
         }
         else if (value == "1")
         {
@@ -194,7 +194,7 @@ bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CURSOR_POSITION));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::CURSOR_POSITION));
         }
         else if (value == "1")
         {
@@ -217,7 +217,7 @@ bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CLIPBOARD));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::ENABLE_CLIPBOARD));
         }
         else if (value == "1")
         {
@@ -244,7 +244,7 @@ bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_EFFECTS));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::DISABLE_DESKTOP_EFFECTS));
         }
         else
         {
@@ -267,7 +267,7 @@ bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& conf
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_WALLPAPER));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::DISABLE_DESKTOP_WALLPAPER));
         }
         else
         {
@@ -290,7 +290,7 @@ bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_FONT_SMOOTHING));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::DISABLE_FONT_SMOOTHING));
         }
         else
         {
@@ -309,7 +309,7 @@ bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CLEAR_CLIPBOARD));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::CLEAR_CLIPBOARD));
         }
         else if (value == "1")
         {
@@ -332,7 +332,7 @@ bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& conf
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::LOCK_AT_DISCONNECT));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::LOCK_AT_DISCONNECT));
         }
         else if (value == "1")
         {
@@ -355,7 +355,7 @@ bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& conf
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::BLOCK_REMOTE_INPUT));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::BLOCK_REMOTE_INPUT));
         }
         else if (value == "1")
         {

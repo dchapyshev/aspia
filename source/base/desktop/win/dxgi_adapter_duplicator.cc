@@ -217,9 +217,9 @@ int DxgiAdapterDuplicator::screenCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t DxgiAdapterDuplicator::numFramesCaptured() const
+qint64 DxgiAdapterDuplicator::numFramesCaptured() const
 {
-    int64_t min = std::numeric_limits<int64_t>::max();
+    qint64 min = std::numeric_limits<qint64>::max();
 
     for (const auto& duplicator : duplicators_)
         min = std::min(min, duplicator.numFramesCaptured());

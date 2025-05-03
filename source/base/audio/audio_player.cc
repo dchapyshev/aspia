@@ -81,7 +81,7 @@ size_t AudioPlayer::onMoreDataRequired(void* data, size_t size)
         size_t target_size = size - target_pos;
         size_t num_bytes = std::min(target_size, source_size);
 
-        memcpy(reinterpret_cast<uint8_t*>(data) + target_pos,
+        memcpy(reinterpret_cast<quint8*>(data) + target_pos,
                packet_data.data() + source_pos_,
                num_bytes);
         target_pos += num_bytes;

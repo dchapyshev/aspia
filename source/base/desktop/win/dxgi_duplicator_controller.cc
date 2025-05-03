@@ -393,9 +393,9 @@ bool DxgiDuplicatorController::doDuplicateOne(
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t DxgiDuplicatorController::numFramesCaptured() const
+qint64 DxgiDuplicatorController::numFramesCaptured() const
 {
-    int64_t min = std::numeric_limits<int64_t>::max();
+    qint64 min = std::numeric_limits<qint64>::max();
 
     for (const auto& duplicator : duplicators_)
         min = std::min(min, duplicator.numFramesCaptured());
@@ -459,7 +459,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
     // Skips the first frame to ensure a full frame refresh has happened before
     // this function returns.
-    const int64_t frames_to_skip = 1;
+    const qint64 frames_to_skip = 1;
 
     // The total time out milliseconds for this function. If we cannot get enough
     // frames during this time interval, this function returns false, and cause

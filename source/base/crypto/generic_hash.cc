@@ -130,7 +130,7 @@ QByteArray GenericHash::result() const
     QByteArray result;
     result.resize(static_cast<QByteArray::size_type>(len));
 
-    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<uint8_t*>(result.data()), nullptr);
+    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<quint8*>(result.data()), nullptr);
     CHECK_EQ(ret, 1);
 
     return result;

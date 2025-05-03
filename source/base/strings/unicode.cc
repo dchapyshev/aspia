@@ -158,7 +158,7 @@ bool utf16ToUtf8Impl(std::u16string_view in, std::string* out)
         return true;
 
     UErrorCode error_code = U_ZERO_ERROR;
-    int32_t out_len = 0;
+    qint32 out_len = 0;
     u_strToUTF8(nullptr, 0, &out_len, in.data(), in.length(), &error_code);
     if (error_code != U_BUFFER_OVERFLOW_ERROR || out_len <= 0)
         return false;
@@ -182,7 +182,7 @@ bool utf8ToUtf16Impl(std::string_view in, std::u16string* out)
         return true;
 
     UErrorCode error_code = U_ZERO_ERROR;
-    int32_t out_len = 0;
+    qint32 out_len = 0;
     u_strFromUTF8(nullptr, 0, &out_len, in.data(), in.length(), &error_code);
     if (error_code != U_BUFFER_OVERFLOW_ERROR || out_len <= 0)
         return false;

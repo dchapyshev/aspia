@@ -79,23 +79,23 @@ protected:
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;
-    virtual void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
-    virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
+    virtual void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
+    virtual void onSessionMessageWritten(quint8 channel_id, size_t pending) = 0;
 
     // Sends outgoing message.
-    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
 
     // Methods for obtaining network metrics.
-    int64_t totalRx() const;
-    int64_t totalTx() const;
+    qint64 totalRx() const;
+    qint64 totalTx() const;
     int speedRx();
     int speedTx();
 
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(quint8 channel_id, size_t pending);
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
     void onHostConnected();

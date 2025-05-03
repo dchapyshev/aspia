@@ -142,7 +142,7 @@ void RelayPeer::onConnected()
         return;
     }
 
-    message_size_ = base::EndianUtil::toBig(static_cast<uint32_t>(message_.size()));
+    message_size_ = base::EndianUtil::toBig(static_cast<quint32>(message_.size()));
 
     asio::async_write(socket_, asio::const_buffer(&message_size_, sizeof(message_size_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)

@@ -32,8 +32,8 @@ namespace {
 
 const size_t kMinEdidSize = 0x80; // 128 bytes
 const quint64 kEdidHeader = 0x00FFFFFFFFFFFF00;
-const uint8_t kMinWeekOfManufacture = 1;
-const uint8_t kMaxWeekOfManufacture = 53;
+const quint8 kMinWeekOfManufacture = 1;
+const quint8 kMaxWeekOfManufacture = 53;
 const int kUnknownDescriptor = -1;
 const int kDetailedTimingDescriptor = -2;
 
@@ -107,9 +107,9 @@ struct Manufacturers
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-static int GetDataType(uint8_t* descriptor)
+static int GetDataType(quint8* descriptor)
 {
-    const uint8_t kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
+    const quint8 kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
 
     if (memcmp(descriptor, kEdidV1DescriptorFlag, 2) == 0)
     {
@@ -124,7 +124,7 @@ static int GetDataType(uint8_t* descriptor)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_size)
+std::unique_ptr<Edid> Edid::create(std::unique_ptr<quint8[]> data, size_t data_size)
 {
     static_assert(sizeof(Data) == kMinEdidSize);
 
@@ -134,7 +134,7 @@ std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_
 
         if (edid->header == kEdidHeader)
         {
-            uint8_t checksum = 0;
+            quint8 checksum = 0;
 
             for (size_t index = 0; index < kMinEdidSize; ++index)
                 checksum += data[index];
@@ -161,7 +161,7 @@ std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_
 }
 
 //--------------------------------------------------------------------------------------------------
-Edid::Edid(std::unique_ptr<uint8_t[]> data, size_t data_size)
+Edid::Edid(std::unique_ptr<quint8[]> data, size_t data_size)
     : data_(std::move(data)),
       data_size_(data_size)
 {
@@ -171,7 +171,7 @@ Edid::Edid(std::unique_ptr<uint8_t[]> data, size_t data_size)
 //--------------------------------------------------------------------------------------------------
 int Edid::weekOfManufacture() const
 {
-    uint8_t week = edid_->week_of_manufacture;
+    quint8 week = edid_->week_of_manufacture;
 
     if (week < kMinWeekOfManufacture || week > kMaxWeekOfManufacture)
     {
@@ -226,8 +226,8 @@ int Edid::horizontalResolution() const
     if (!descriptor)
         return 0;
 
-    uint32_t lo = static_cast<uint32_t>(descriptor->horizontal_active);
-    uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->horizontal_active_blanking)) >> 4);
+    quint32 lo = static_cast<quint32>(descriptor->horizontal_active);
+    quint32 hi = ((0xF0 & static_cast<quint32>(descriptor->horizontal_active_blanking)) >> 4);
 
     return static_cast<int>((hi << 8) | lo);
 }
@@ -241,8 +241,8 @@ int Edid::verticalResolution() const
     if (!descriptor)
         return 0;
 
-    uint32_t lo = static_cast<uint32_t>(descriptor->vertical_active);
-    uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->vertical_active_blanking)) >> 4);
+    quint32 lo = static_cast<quint32>(descriptor->vertical_active);
+    quint32 hi = ((0xF0 & static_cast<quint32>(descriptor->vertical_active_blanking)) >> 4);
 
     return static_cast<int>((hi << 8) | lo);
 }
@@ -250,7 +250,7 @@ int Edid::verticalResolution() const
 //--------------------------------------------------------------------------------------------------
 double Edid::gamma() const
 {
-    const uint8_t gamma = edid_->gamma;
+    const quint8 gamma = edid_->gamma;
 
     if (gamma == 0xFF)
         return 0.0;
@@ -259,7 +259,7 @@ double Edid::gamma() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t Edid::featureSupport() const
+quint8 Edid::featureSupport() const
 {
     return edid_->feature_support;
 }
@@ -316,14 +316,14 @@ std::string Edid::serialNumber() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t* Edid::getDescriptor(int type) const
+quint8* Edid::getDescriptor(int type) const
 {
     size_t count = sizeof(Data::detailed_timing_description) /
         sizeof(Data::detailed_timing_description[0]);
 
     for (size_t index = 0; index < count; ++index)
     {
-        uint8_t* descriptor = &edid_->detailed_timing_description[index][0];
+        quint8* descriptor = &edid_->detailed_timing_description[index][0];
 
         if (GetDataType(descriptor) == type)
             return descriptor;
@@ -455,19 +455,19 @@ Edid::InputSignalType Edid::inputSignalType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t Edid::estabilishedTimings1() const
+quint8 Edid::estabilishedTimings1() const
 {
     return edid_->established_timings[0];
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t Edid::estabilishedTimings2() const
+quint8 Edid::estabilishedTimings2() const
 {
     return edid_->established_timings[1];
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t Edid::manufacturersTimings() const
+quint8 Edid::manufacturersTimings() const
 {
     return edid_->manufacturers_reserved_timings;
 }
@@ -483,8 +483,8 @@ int Edid::standardTimingsCount() const
 //--------------------------------------------------------------------------------------------------
 bool Edid::standardTimings(int index, int* width, int* height, int* frequency)
 {
-    uint8_t byte1 = edid_->standard_timing_identification[index][0];
-    uint8_t byte2 = edid_->standard_timing_identification[index][1];
+    quint8 byte1 = edid_->standard_timing_identification[index][0];
+    quint8 byte2 = edid_->standard_timing_identification[index][1];
 
     if (byte1 == 0x01 && byte2 == 0x01)
         return false;

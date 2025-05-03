@@ -147,7 +147,7 @@ void FileTransferDialog::setCurrentProgress(int total, int current)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferDialog::setCurrentSpeed(int64_t speed)
+void FileTransferDialog::setCurrentSpeed(qint64 speed)
 {
     ui.label_speed->setText(tr("Speed: %1").arg(speedToString(speed)));
 }
@@ -173,7 +173,7 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
     QAbstractButton* replace_button = nullptr;
     QAbstractButton* replace_all_button = nullptr;
 
-    const uint32_t available_actions = error.availableActions();
+    const quint32 available_actions = error.availableActions();
 
     if (available_actions & FileTransfer::Error::ACTION_SKIP)
         skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
@@ -324,15 +324,15 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString FileTransferDialog::speedToString(int64_t speed)
+QString FileTransferDialog::speedToString(qint64 speed)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (speed >= kTB)
     {

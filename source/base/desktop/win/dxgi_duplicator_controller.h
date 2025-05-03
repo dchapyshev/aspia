@@ -150,7 +150,7 @@ private:
     bool doDuplicateOne(Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor);
 
     // The minimum numFramesCaptured() returned by |duplicators_|.
-    int64_t numFramesCaptured() const;
+    qint64 numFramesCaptured() const;
 
     // Returns a Size to cover entire |desktop_rect_|.
     Size desktopSize() const;
@@ -187,7 +187,7 @@ private:
     D3dInfo d3d_info_;
     DisplayConfigurationMonitor display_configuration_monitor_;
     // A number to indicate how many succeeded duplications have been performed.
-    uint32_t succeeded_duplications_ = 0;
+    quint32 succeeded_duplications_ = 0;
 };
 
 } // namespace base

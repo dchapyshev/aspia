@@ -60,7 +60,7 @@ bool Random::fillBuffer(void* buffer, size_t size)
     if (!buffer || !size)
         return false;
 
-    return RAND_bytes(reinterpret_cast<uint8_t*>(buffer), static_cast<int>(size)) > 0;
+    return RAND_bytes(reinterpret_cast<quint8*>(buffer), static_cast<int>(size)) > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,9 +79,9 @@ std::string Random::string(size_t size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-uint32_t Random::number32()
+quint32 Random::number32()
 {
-    return generateNumber<uint32_t>();
+    return generateNumber<quint32>();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -41,9 +41,9 @@ namespace client {
 
 namespace {
 
-constexpr uint32_t kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
+constexpr quint32 kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
-std::set<uint32_t> g_local_pressed_keys;
+std::set<quint32> g_local_pressed_keys;
 
 //--------------------------------------------------------------------------------------------------
 bool isNumLockActivated()
@@ -262,7 +262,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     if (!frame_)
         return;
 
-    uint32_t mask;
+    quint32 mask;
 
     if (event_type == QMouseEvent::MouseMove)
     {
@@ -339,12 +339,12 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     if (!enable_key_sequenses_ && isModifierKey(key))
         return;
 
-    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::KeyEvent::PRESSED : 0);
+    quint32 flags = ((event->type() == QEvent::KeyPress) ? proto::KeyEvent::PRESSED : 0);
 
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-    uint32_t usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
+    quint32 usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
 
 #if !defined(OS_MAC)
     usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
@@ -365,17 +365,17 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::executeKeyCombination(int key_sequence)
 {
-    const uint32_t kUsbCodeLeftAlt = 0x0700e2;
-    const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
-    const uint32_t kUsbCodeLeftShift = 0x0700e1;
-    const uint32_t kUsbCodeLeftMeta = 0x0700e3;
+    const quint32 kUsbCodeLeftAlt = 0x0700e2;
+    const quint32 kUsbCodeLeftCtrl = 0x0700e0;
+    const quint32 kUsbCodeLeftShift = 0x0700e1;
+    const quint32 kUsbCodeLeftMeta = 0x0700e3;
 
-    uint32_t flags = 0;
+    quint32 flags = 0;
 
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-    uint32_t key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
+    quint32 key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
         key_sequence & ~Qt::KeyboardModifierMask);
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
@@ -617,7 +617,7 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
+void DesktopWidget::executeKeyEvent(quint32 usb_keycode, quint32 flags)
 {
     if (flags & proto::KeyEvent::PRESSED)
         remote_pressed_keys_.insert(usb_keycode);
@@ -693,7 +693,7 @@ void DesktopWidget::releaseKeyboardButtons()
     if (remote_pressed_keys_.empty())
         return;
 
-    uint32_t flags = 0;
+    quint32 flags = 0;
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
@@ -719,14 +719,14 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
         KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
         if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
         {
-            uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
+            quint32 flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
                 proto::KeyEvent::PRESSED : 0);
-            uint32_t scan_code = hook->scanCode;
+            quint32 scan_code = hook->scanCode;
 
             if (hook->flags & LLKHF_EXTENDED)
                 scan_code |= 0x100;
 
-            uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+            quint32 usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
                 static_cast<int>(scan_code));
             if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
             {
@@ -780,13 +780,13 @@ CGEventRef DesktopWidget::keyboardFilterProc(
     if (self_widget && focus_widget && self_widget == focus_widget &&
         self_widget->enable_key_sequenses_)
     {
-        uint32_t flags = ((type == kCGEventKeyDown) ? proto::KeyEvent::PRESSED : 0);
+        quint32 flags = ((type == kCGEventKeyDown) ? proto::KeyEvent::PRESSED : 0);
         flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
         flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
         CGKeyCode key_code = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-        uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+        quint32 usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
             static_cast<int>(key_code));
         if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
         {

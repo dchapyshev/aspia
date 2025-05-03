@@ -41,7 +41,7 @@ public:
     explicit Session(proto::RouterSession session_type, QObject* parent = nullptr);
     virtual ~Session() override;
 
-    using SessionId = int64_t;
+    using SessionId = qint64;
 
     class Delegate
     {
@@ -77,12 +77,12 @@ public:
     std::chrono::seconds duration() const;
 
 protected:
-    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
     std::unique_ptr<Database> openDatabase() const;
 
     virtual void onSessionReady() = 0;
-    virtual void onSessionMessageReceived(uint8_t channel_id, const QByteArray& buffer) = 0;
-    virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
+    virtual void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
+    virtual void onSessionMessageWritten(quint8 channel_id, size_t pending) = 0;
 
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }
@@ -92,8 +92,8 @@ protected:
 
 private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(uint8_t channel_id, size_t pending);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
     const proto::RouterSession session_type_;

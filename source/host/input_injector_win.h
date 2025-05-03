@@ -48,11 +48,11 @@ private:
     void setBlockInputImpl(bool enable);
 
     bool block_input_ = false;
-    std::set<uint32_t> pressed_keys_;
+    std::set<quint32> pressed_keys_;
 
     base::Point screen_offset_;
     base::Point last_mouse_pos_;
-    uint32_t last_mouse_mask_ = 0;
+    quint32 last_mouse_mask_ = 0;
 
     std::unique_ptr<TouchInjector> touch_injector_;
 

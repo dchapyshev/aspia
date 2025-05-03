@@ -115,7 +115,7 @@ void Router::refreshSessionList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::stopSession(int64_t session_id)
+void Router::stopSession(qint64 session_id)
 {
     LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
 
@@ -193,7 +193,7 @@ void Router::modifyUser(const proto::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::deleteUser(int64_t entry_id)
+void Router::deleteUser(qint64 entry_id)
 {
     LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
 
@@ -213,7 +213,7 @@ void Router::deleteUser(int64_t entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::disconnectPeerSession(int64_t relay_session_id, quint64 peer_session_id)
+void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id)
 {
     LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
                  << " (relay: " << relay_session_id << ")";
@@ -327,7 +327,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::RouterToAdmin message;
 

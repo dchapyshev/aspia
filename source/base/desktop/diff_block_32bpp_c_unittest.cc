@@ -25,14 +25,14 @@ namespace base {
 
 namespace {
 
-using AlignedBuffer = std::unique_ptr<uint8_t, AlignedFreeDeleter>;
+using AlignedBuffer = std::unique_ptr<quint8, AlignedFreeDeleter>;
 
 // Run 900 times to mimic 1280x720.
 const int kTimesToRun = 900;
 const int kBytesPerPixel = 4;
 const int kAlignment = 16;
 
-void generateData(uint8_t* data, int size)
+void generateData(quint8* data, int size)
 {
     for (int i = 0; i < size; ++i)
         data[i] = i;
@@ -47,8 +47,8 @@ void prepareBuffers(AlignedBuffer* block1, AlignedBuffer* block2, int block_size
 {
     int full_block_size = fullBlockSize(block_size);
 
-    block1->reset(reinterpret_cast<uint8_t*>(alignedAlloc(full_block_size, alignment)));
-    block2->reset(reinterpret_cast<uint8_t*>(alignedAlloc(full_block_size, alignment)));
+    block1->reset(reinterpret_cast<quint8*>(alignedAlloc(full_block_size, alignment)));
+    block2->reset(reinterpret_cast<quint8*>(alignedAlloc(full_block_size, alignment)));
 
     generateData(block1->get(), full_block_size);
 

@@ -53,10 +53,10 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
     QByteArray xy;
     xy.resize(static_cast<QByteArray::size_type>(xy_size));
 
-    if (BN_bn2binpad(x, reinterpret_cast<uint8_t*>(xy.data()), N_bytes) < 0)
+    if (BN_bn2binpad(x, reinterpret_cast<quint8*>(xy.data()), N_bytes) < 0)
         return BigNum();
 
-    if (BN_bn2binpad(y, reinterpret_cast<uint8_t*>(xy.data()) + N_bytes, N_bytes) < 0)
+    if (BN_bn2binpad(y, reinterpret_cast<quint8*>(xy.data()) + N_bytes, N_bytes) < 0)
         return BigNum();
 
     return BigNum::fromByteArray(

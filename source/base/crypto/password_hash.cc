@@ -51,9 +51,9 @@ OutputT hashT(PasswordHash::Type type, const QString& password, InputT salt)
     QByteArray password_utf8 = password.toUtf8();
 
     int ret = EVP_PBE_scrypt(password_utf8.data(), password_utf8.size(),
-                             reinterpret_cast<const uint8_t*>(salt.data()), salt.size(),
+                             reinterpret_cast<const quint8*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
-                             reinterpret_cast<uint8_t*>(result.data()), result.size());
+                             reinterpret_cast<quint8*>(result.data()), result.size());
     CHECK_EQ(ret, 1) << "EVP_PBE_scrypt failed";
 
     return result;

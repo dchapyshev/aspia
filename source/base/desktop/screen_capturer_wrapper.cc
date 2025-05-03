@@ -248,8 +248,8 @@ void ScreenCapturerWrapper::captureFrame()
         {
             Point cursor_pos = screen_capturer_->cursorPosition();
 
-            int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
-            int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+            qint32 delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+            qint32 delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
 
             if (delta_x > 1 || delta_y > 1)
             {

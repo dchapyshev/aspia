@@ -150,13 +150,13 @@ std::chrono::minutes Settings::peerIdleTimeout() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setMaxPeerCount(uint32_t count)
+void Settings::setMaxPeerCount(quint32 count)
 {
     impl_.setValue("MaxPeerCount", count);
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t Settings::maxPeerCount() const
+quint32 Settings::maxPeerCount() const
 {
     return impl_.value("MaxPeerCount", 100).toUInt();
 }

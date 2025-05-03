@@ -182,15 +182,15 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString StatisticsDialog::sizeToString(int64_t size)
+QString StatisticsDialog::sizeToString(qint64 size)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (size >= kTB)
     {
@@ -225,15 +225,15 @@ QString StatisticsDialog::sizeToString(int64_t size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString StatisticsDialog::speedToString(int64_t speed)
+QString StatisticsDialog::speedToString(qint64 speed)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (speed >= kTB)
     {

@@ -32,7 +32,7 @@ QByteArray serialize(const google::protobuf::MessageLite& message)
     QByteArray buffer;
     buffer.resize(static_cast<QByteArray::size_type>(size));
 
-    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     return buffer;
 }
 
@@ -46,9 +46,9 @@ proto::Version serialize(const QVersionNumber& version)
     }
 
     proto::Version proto_version;
-    proto_version.set_major(static_cast<uint32_t>(version.majorVersion()));
-    proto_version.set_minor(static_cast<uint32_t>(version.minorVersion()));
-    proto_version.set_patch(static_cast<uint32_t>(version.microVersion()));
+    proto_version.set_major(static_cast<quint32>(version.majorVersion()));
+    proto_version.set_minor(static_cast<quint32>(version.minorVersion()));
+    proto_version.set_patch(static_cast<quint32>(version.microVersion()));
 
     return proto_version;
 }

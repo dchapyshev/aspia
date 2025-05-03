@@ -144,7 +144,7 @@ void Server::setSessionEvent(base::SessionStatus status, base::SessionId session
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::setPowerEvent(uint32_t power_event)
+void Server::setPowerEvent(quint32 power_event)
 {
 #if defined(OS_WIN)
     LOG(LS_INFO) << "Power event: " << power_event;
@@ -610,23 +610,23 @@ void Server::checkForUpdates()
     if (!settings_.isAutoUpdateEnabled())
         return;
 
-    int64_t last_timepoint = settings_.lastUpdateCheck();
-    int64_t current_timepoint = std::time(nullptr);
+    qint64 last_timepoint = settings_.lastUpdateCheck();
+    qint64 current_timepoint = std::time(nullptr);
 
     LOG(LS_INFO) << "Last timepoint: " << last_timepoint << ", current: " << current_timepoint;
 
-    int64_t time_diff = current_timepoint - last_timepoint;
+    qint64 time_diff = current_timepoint - last_timepoint;
     if (time_diff <= 0)
     {
         settings_.setLastUpdateCheck(current_timepoint);
         return;
     }
 
-    static const int64_t kSecondsPerMinute = 60;
-    static const int64_t kMinutesPerHour = 60;
-    static const int64_t kHoursPerDay = 24;
+    static const qint64 kSecondsPerMinute = 60;
+    static const qint64 kMinutesPerHour = 60;
+    static const qint64 kHoursPerDay = 24;
 
-    int64_t days = time_diff / kSecondsPerMinute / kMinutesPerHour / kHoursPerDay;
+    qint64 days = time_diff / kSecondsPerMinute / kMinutesPerHour / kHoursPerDay;
     if (days < 1)
         return;
 

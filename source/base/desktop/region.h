@@ -98,7 +98,7 @@ public:
     void subtract(const Rect& rect);
 
     // Adds (dx, dy) to the position of the region.
-    void translate(int32_t dx, int32_t dy);
+    void translate(qint32 dx, qint32 dy);
 
     void swap(Region* region);
 

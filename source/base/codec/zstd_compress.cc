@@ -26,13 +26,13 @@ namespace base {
 
 namespace {
 
-const uint32_t kMaxDataSize = 64 * 1024 * 1024; // 64 MB
+const quint32 kMaxDataSize = 64 * 1024 * 1024; // 64 MB
 
 //--------------------------------------------------------------------------------------------------
 template <class T>
 T compressT(const T& source, int compress_level)
 {
-    uint32_t source_data_size = static_cast<uint32_t>(source.size());
+    quint32 source_data_size = static_cast<quint32>(source.size());
     if (!source_data_size || source_data_size > kMaxDataSize)
     {
         LOG(LS_ERROR) << "Invalid source data size: " << source_data_size;
@@ -49,17 +49,17 @@ T compressT(const T& source, int compress_level)
     }
 
     const size_t input_size = source.size();
-    const uint8_t* input_data = reinterpret_cast<const uint8_t*>(source.data());
+    const quint8* input_data = reinterpret_cast<const quint8*>(source.data());
 
     const size_t output_size = ZSTD_compressBound(input_size);
 
     T target;
-    target.resize(static_cast<T::size_type>(output_size + sizeof(uint32_t)));
+    target.resize(static_cast<T::size_type>(output_size + sizeof(quint32)));
 
     source_data_size = EndianUtil::toBig(source_data_size);
-    memcpy(target.data(), &source_data_size, sizeof(uint32_t));
+    memcpy(target.data(), &source_data_size, sizeof(quint32));
 
-    uint8_t* output_data = reinterpret_cast<uint8_t*>(target.data() + sizeof(uint32_t));
+    quint8* output_data = reinterpret_cast<quint8*>(target.data() + sizeof(quint32));
 
     ZSTD_inBuffer input = { input_data, input_size, 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
@@ -89,12 +89,12 @@ T compressT(const T& source, int compress_level)
 template <class T>
 T decompressT(const T& source)
 {
-    if (source.size() < sizeof(uint32_t) + 1)
+    if (source.size() < sizeof(quint32) + 1)
         return T();
 
-    uint32_t target_data_size;
+    quint32 target_data_size;
 
-    memcpy(&target_data_size, source.data(), sizeof(uint32_t));
+    memcpy(&target_data_size, source.data(), sizeof(quint32));
     target_data_size = EndianUtil::fromBig(target_data_size);
 
     if (!target_data_size || target_data_size > kMaxDataSize)
@@ -115,7 +115,7 @@ T decompressT(const T& source)
         return T();
     }
 
-    ZSTD_inBuffer input = { source.data() + sizeof(uint32_t), source.size() - sizeof(uint32_t), 0 };
+    ZSTD_inBuffer input = { source.data() + sizeof(quint32), source.size() - sizeof(quint32), 0 };
     ZSTD_outBuffer output = { target.data(), static_cast<size_t>(target.size()), 0 };
 
     while (input.pos < input.size)

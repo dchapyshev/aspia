@@ -48,7 +48,7 @@ void Rect::setSize(const Size& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Rect::contains(int32_t x, int32_t y) const
+bool Rect::contains(qint32 x, qint32 y) const
 {
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
@@ -67,7 +67,7 @@ bool Rect::containsRect(const Rect& rect) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Rect::translate(int32_t dx, int32_t dy)
+void Rect::translate(qint32 dx, qint32 dy)
 {
     left_   += dx;
     right_  += dx;
@@ -76,7 +76,7 @@ void Rect::translate(int32_t dx, int32_t dy)
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect Rect::translated(int32_t dx, int32_t dy) const
+Rect Rect::translated(qint32 dx, qint32 dy) const
 {
     Rect result(*this);
     result.translate(dx, dy);
@@ -119,10 +119,10 @@ void Rect::unionWith(const Rect& rect)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Rect::extend(int32_t left_offset,
-                         int32_t top_offset,
-                         int32_t right_offset,
-                         int32_t bottom_offset)
+void Rect::extend(qint32 left_offset,
+                         qint32 top_offset,
+                         qint32 right_offset,
+                         qint32 bottom_offset)
 {
     left_   -= left_offset;
     top_    -= top_offset;
@@ -133,12 +133,12 @@ void Rect::extend(int32_t left_offset,
 //--------------------------------------------------------------------------------------------------
 void Rect::scale(double horizontal, double vertical)
 {
-    right_ += static_cast<int32_t>(std::round(width() * (horizontal - 1)));
-    bottom_ += static_cast<int32_t>(std::round(height() * (vertical - 1)));
+    right_ += static_cast<qint32>(std::round(width() * (horizontal - 1)));
+    bottom_ += static_cast<qint32>(std::round(height() * (vertical - 1)));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Rect::move(int32_t x, int32_t y)
+void Rect::move(qint32 x, qint32 y)
 {
     right_  += x - left_;
     bottom_ += y - top_;
@@ -147,7 +147,7 @@ void Rect::move(int32_t x, int32_t y)
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect Rect::moved(int32_t x, int32_t y) const
+Rect Rect::moved(qint32 x, qint32 y) const
 {
     Rect moved_rect(*this);
     moved_rect.move(x, y);

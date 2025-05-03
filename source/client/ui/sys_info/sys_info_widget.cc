@@ -90,15 +90,15 @@ proto::system_info::SystemInfoRequest SysInfoWidget::request() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString SysInfoWidget::sizeToString(int64_t size)
+QString SysInfoWidget::sizeToString(qint64 size)
 {
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
+    static const qint64 kKB = 1024LL;
+    static const qint64 kMB = kKB * 1024LL;
+    static const qint64 kGB = kMB * 1024LL;
+    static const qint64 kTB = kGB * 1024LL;
 
     QString units;
-    int64_t divider;
+    qint64 divider;
 
     if (size >= kTB)
     {

@@ -44,13 +44,13 @@ public:
     void connectToRouter(const QString& address, quint16 port);
 
     void refreshSessionList();
-    void stopSession(int64_t session_id);
+    void stopSession(qint64 session_id);
 
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
-    void deleteUser(int64_t entry_id);
-    void disconnectPeerSession(int64_t relay_session_id, quint64 peer_session_id);
+    void deleteUser(qint64 entry_id);
+    void disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id);
 
 signals:
     void sig_connecting();
@@ -68,7 +68,7 @@ signals:
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     QTimer* timeout_timer_ = nullptr;

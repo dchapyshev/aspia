@@ -28,7 +28,7 @@ namespace base {
 
 namespace {
 
-constexpr uint8_t kChannelIdAuthenticator = 0;
+constexpr quint8 kChannelIdAuthenticator = 0;
 constexpr std::chrono::minutes kTimeout{ 1 };
 
 auto g_errorCodeType = qRegisterMetaType<base::Authenticator::ErrorCode>();
@@ -263,7 +263,7 @@ void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void Authenticator::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     if (state() != State::PENDING)
         return;
@@ -272,7 +272,7 @@ void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const QByteAr
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Authenticator::onTcpMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     if (state() != State::PENDING)
         return;

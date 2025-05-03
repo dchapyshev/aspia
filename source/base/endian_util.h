@@ -32,7 +32,7 @@ public:
     static bool isBig() { return !isLittle(); }
 
     static quint16 byteSwap(quint16 value);
-    static uint32_t byteSwap(uint32_t value);
+    static quint32 byteSwap(quint32 value);
     static quint64 byteSwap(quint64 value);
 
     template <typename T>

@@ -36,7 +36,7 @@ public:
     void setIdentify(proto::Identify identify);
     void setUserName(const QString& username);
     void setPassword(const QString& password);
-    void setSessionType(uint32_t session_type);
+    void setSessionType(quint32 session_type);
     void setDisplayName(const QString& display_name);
 
 protected:

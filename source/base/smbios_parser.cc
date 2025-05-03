@@ -73,7 +73,7 @@ void SmbiosTableEnumerator::advance()
 
     pos_ += header->length;
 
-    while (static_cast<uint32_t>(pos_ - start_ + 1) < smbios_.length && (pos_[0] || pos_[1]))
+    while (static_cast<quint32>(pos_ - start_ + 1) < smbios_.length && (pos_[0] || pos_[1]))
         ++pos_;
 
     // Points to the next table thas after two null bytes at the end of the strings.
@@ -81,25 +81,25 @@ void SmbiosTableEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t SmbiosTableEnumerator::majorVersion() const
+quint8 SmbiosTableEnumerator::majorVersion() const
 {
     return smbios_.smbios_major_version;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t SmbiosTableEnumerator::minorVersion() const
+quint8 SmbiosTableEnumerator::minorVersion() const
 {
     return smbios_.smbios_minor_version;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SmbiosTableEnumerator::length() const
+quint32 SmbiosTableEnumerator::length() const
 {
     return smbios_.length;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString smbiosString(const SmbiosTable* table, uint8_t number)
+QString smbiosString(const SmbiosTable* table, quint8 number)
 {
     if (!number)
         return QString();
@@ -214,7 +214,7 @@ quint64 SmbiosMemoryDevice::size() const
 {
     if (table_->length >= 0x20 && table_->module_size == 0x7FFF)
     {
-        uint32_t ext_size = table_->ext_size & 0x7FFFFFFFUL;
+        quint32 ext_size = table_->ext_size & 0x7FFFFFFFUL;
 
         if (ext_size & 0x3FFUL)
         {
@@ -350,7 +350,7 @@ QString SmbiosMemoryDevice::partNumber() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t SmbiosMemoryDevice::speed() const
+quint32 SmbiosMemoryDevice::speed() const
 {
     if (table_->length < 0x17)
         return 0;

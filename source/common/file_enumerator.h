@@ -43,7 +43,7 @@ public:
         bool isDirectory() const;
         std::filesystem::path name() const;
         std::string u8name() const;
-        int64_t size() const;
+        qint64 size() const;
         time_t lastWriteTime() const;
 
     private:

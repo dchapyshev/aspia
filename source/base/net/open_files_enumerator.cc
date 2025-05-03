@@ -72,7 +72,7 @@ void OpenFilesEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t OpenFilesEnumerator::id() const
+quint32 OpenFilesEnumerator::id() const
 {
     return file_info_[current_pos_].fi3_id;
 }
@@ -88,7 +88,7 @@ QString OpenFilesEnumerator::userName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t OpenFilesEnumerator::lockCount() const
+quint32 OpenFilesEnumerator::lockCount() const
 {
     return file_info_[current_pos_].fi3_num_locks;
 }

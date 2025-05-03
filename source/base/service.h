@@ -55,7 +55,7 @@ protected:
 
 #if defined(OS_WIN)
     virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
-    virtual void onPowerEvent(uint32_t event) = 0;
+    virtual void onPowerEvent(quint32 event) = 0;
 #endif // defined(OS_WIN)
 
 private:

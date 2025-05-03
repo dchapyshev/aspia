@@ -36,7 +36,7 @@ const std::chrono::seconds kReconnectTimeout{ 15 };
 class KeyDeleter
 {
 public:
-    KeyDeleter(std::unique_ptr<SharedPool> pool, uint32_t key_id)
+    KeyDeleter(std::unique_ptr<SharedPool> pool, quint32 key_id)
         : pool_(std::move(pool)),
           key_id_(key_id)
     {
@@ -52,7 +52,7 @@ public:
 
 private:
     std::unique_ptr<SharedPool> pool_;
-    const uint32_t key_id_;
+    const quint32 key_id_;
 
     DISALLOW_COPY_AND_ASSIGN(KeyDeleter);
 };
@@ -203,7 +203,7 @@ void Controller::onTcpConnected()
             // Now the session will receive incoming messages.
             channel_->resume();
 
-            sendKeyPool(max_peer_count_ - static_cast<uint32_t>(session_count_));
+            sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
         }
         else
         {
@@ -233,7 +233,7 @@ void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -308,7 +308,7 @@ void Controller::onSessionFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onPoolKeyExpired(uint32_t key_id)
+void Controller::onPoolKeyExpired(quint32 key_id)
 {
     // The key has expired and has been removed from the pool.
     // Add a new key to the pool and send it to the router.
@@ -338,7 +338,7 @@ void Controller::delayedConnectToRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::sendKeyPool(uint32_t key_count)
+void Controller::sendKeyPool(quint32 key_count)
 {
     outgoing_message_.Clear();
 
@@ -348,7 +348,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     relay_key_pool->set_peer_port(peer_port_);
 
     // Add the requested number of keys to the pool.
-    for (uint32_t i = 0; i < key_count; ++i)
+    for (quint32 i = 0; i < key_count; ++i)
     {
         SessionKey session_key = SessionKey::create();
         if (!session_key.isValid())

@@ -41,7 +41,7 @@ public:
     QVector<base::User> userList() const final;
     bool addUser(const base::User& user) final;
     bool modifyUser(const base::User& user) final;
-    bool removeUser(int64_t entry_id) final;
+    bool removeUser(qint64 entry_id) final;
     base::User findUser(const QString& username) final;
     ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const final;
     bool addHost(const QByteArray& key_hash) final;

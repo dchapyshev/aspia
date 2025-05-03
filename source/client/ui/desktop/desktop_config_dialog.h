@@ -40,7 +40,7 @@ class DesktopConfigDialog final : public QDialog
 public:
     DesktopConfigDialog(proto::SessionType session_type,
                         const proto::DesktopConfig& config,
-                        uint32_t video_encodings,
+                        quint32 video_encodings,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog() final;
 

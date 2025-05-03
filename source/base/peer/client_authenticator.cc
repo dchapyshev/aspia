@@ -110,7 +110,7 @@ void ClientAuthenticator::setPassword(const QString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setSessionType(uint32_t session_type)
+void ClientAuthenticator::setSessionType(quint32 session_type)
 {
     session_type_ = session_type;
 }
@@ -234,7 +234,7 @@ void ClientAuthenticator::sendClientHello()
 
     std::unique_ptr<proto::ClientHello> client_hello = std::make_unique<proto::ClientHello>();
 
-    uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
+    quint32 encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
 #if defined(ARCH_CPU_X86_FAMILY)
     if (CpuidUtil::hasAesNi())
@@ -523,7 +523,7 @@ void ClientAuthenticator::sendSessionResponse()
 
     response->set_os_name(SysInfo::operatingSystemName().toStdString());
     response->set_computer_name(SysInfo::computerName().toStdString());
-    response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
+    response->set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
     response->set_display_name(display_name_.toStdString());
 
 #if defined(ARCH_CPU_X86)

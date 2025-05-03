@@ -50,13 +50,13 @@ public:
     QString uniqueId() const;
     QString serialNumber() const;
     QString temperature() const;
-    uint32_t designCapacity() const;
+    quint32 designCapacity() const;
     QString type() const;
-    uint32_t fullChargedCapacity() const;
-    uint32_t depreciation() const;
-    uint32_t currentCapacity() const;
-    uint32_t voltage() const;
-    uint32_t state() const;
+    quint32 fullChargedCapacity() const;
+    quint32 depreciation() const;
+    quint32 currentCapacity() const;
+    quint32 voltage() const;
+    quint32 state() const;
 
 private:
     ScopedDeviceInfo device_info_;

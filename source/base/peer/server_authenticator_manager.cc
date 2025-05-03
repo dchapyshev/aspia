@@ -53,7 +53,7 @@ void ServerAuthenticatorManager::setPrivateKey(const QByteArray& private_key)
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::setAnonymousAccess(
-    ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types)
+    ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types)
 {
     anonymous_access_ = anonymous_access;
     anonymous_session_types_ = session_types;

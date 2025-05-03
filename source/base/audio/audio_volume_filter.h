@@ -36,7 +36,7 @@ public:
     // Adjusts audio samples in |data|. If the samples are silent before applying the volume level
     // or the audioLevel() returns 0, this function returns false. If |frames| is 0, this
     // function also returns false.
-    bool apply(int16_t* data, size_t frames);
+    bool apply(qint16* data, size_t frames);
 
     // Updates the sampling rate and channels.
     void initialize(int sampling_rate, int channels);

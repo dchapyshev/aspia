@@ -40,7 +40,7 @@ public:
     void clear();
     bool isFolder(const QModelIndex& index) const;
     QString nameAt(const QModelIndex& index) const;
-    int64_t sizeAt(const QModelIndex& index) const;
+    qint64 sizeAt(const QModelIndex& index) const;
     QModelIndex createFolder();
 
     // QAbstractItemModel implementation.
@@ -69,13 +69,13 @@ signals:
 
 protected:
     void sortItems(int column, Qt::SortOrder order);
-    static QString sizeToString(int64_t size);
+    static QString sizeToString(qint64 size);
     static QString timeToString(time_t time);
 
 private:
     struct File
     {
-        int64_t size = 0;
+        qint64 size = 0;
         time_t last_write = 0;
         QIcon icon;
         QString name;

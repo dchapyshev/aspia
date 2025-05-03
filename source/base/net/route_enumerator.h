@@ -39,12 +39,12 @@ public:
     QString destonation() const;
     QString mask() const;
     QString gateway() const;
-    uint32_t metric() const;
+    quint32 metric() const;
 
 private:
-    std::unique_ptr<uint8_t[]> forward_table_buffer_;
-    uint32_t num_entries_ = 0;
-    uint32_t pos_ = 0;
+    std::unique_ptr<quint8[]> forward_table_buffer_;
+    quint32 num_entries_ = 0;
+    quint32 pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(RouteEnumerator);
 };

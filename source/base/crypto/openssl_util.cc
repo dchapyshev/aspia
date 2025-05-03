@@ -123,7 +123,7 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArr
         return nullptr;
     }
 
-    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const uint8_t*>(key.data()),
+    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const quint8*>(key.data()),
                           nullptr, cipherMode(mode)) != 1)
     {
         LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";

@@ -49,7 +49,7 @@ void ClientSystemInfo::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientSystemInfo::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::system_info::SystemInfo system_info;
 
@@ -63,7 +63,7 @@ void ClientSystemInfo::onSessionMessageReceived(uint8_t /* channel_id */, const 
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void ClientSystemInfo::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -55,9 +55,9 @@ private:
     bool clipboard_enabled_ = false;
     bool network_overflow_ = false;
 
-    int32_t last_pos_x_ = 0;
-    int32_t last_pos_y_ = 0;
-    uint32_t last_mask_ = 0;
+    qint32 last_pos_x_ = 0;
+    qint32 last_pos_y_ = 0;
+    quint32 last_mask_ = 0;
 
     int send_mouse_count_ = 0;
     int drop_mouse_count_ = 0;

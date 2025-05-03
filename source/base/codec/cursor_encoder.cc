@@ -29,19 +29,19 @@ namespace base {
 namespace {
 
 // Cache size can be in the range from 2 to 30.
-constexpr size_t kCacheSize = 30;
+constexpr int kCacheSize = 30;
 
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 12;
 
 // Recommended seed value for a hash.
-constexpr uint32_t kHashingSeed = 5381;
+constexpr quint32 kHashingSeed = 5381;
 
 //--------------------------------------------------------------------------------------------------
-uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
+quint8* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
-    return reinterpret_cast<uint8_t*>(cursor_shape->mutable_data()->data());
+    return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
 }
 
 } // namespace
@@ -98,10 +98,10 @@ bool CursorEncoder::compressCursor(
     }
 
     const size_t input_size = image.size();
-    const uint8_t* input_data = reinterpret_cast<const uint8_t*>(image.data());
+    const quint8* input_data = reinterpret_cast<const quint8*>(image.data());
 
     const size_t output_size = ZSTD_compressBound(input_size);
-    uint8_t* output_data = outputBuffer(cursor_shape, output_size);
+    quint8* output_data = outputBuffer(cursor_shape, output_size);
 
     ZSTD_inBuffer input = { input_data, input_size, 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
@@ -133,7 +133,7 @@ bool CursorEncoder::compressCursor(
 bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
     const Size& size = mouse_cursor.size();
-    const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
+    const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
 
     // Check the correctness of the cursor size.
     if (size.width() <= 0 || size.width() > kMaxSize ||
@@ -144,12 +144,12 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* 
     }
 
     // Calculate the hash of the cursor to search in the cache.
-    uint32_t hash = libyuv::HashDjb2(reinterpret_cast<const uint8_t*>(mouse_cursor.constImage().data()),
+    quint32 hash = libyuv::HashDjb2(reinterpret_cast<const quint8*>(mouse_cursor.constImage().data()),
                                      mouse_cursor.constImage().size(),
                                      kHashingSeed);
 
     // Trying to find cursor in cache.
-    for (size_t index = 0; index < cache_.size(); ++index)
+    for (int index = 0; index < cache_.size(); ++index)
     {
         if (cache_[index] == hash)
         {
@@ -188,7 +188,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* 
     }
 
     // Add the cursor to the cache.
-    cache_.emplace_back(hash);
+    cache_.push_back(hash);
 
     // If the current cache size exceeds the maximum cache size.
     if (cache_.size() > kCacheSize)

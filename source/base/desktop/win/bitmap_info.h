@@ -32,9 +32,9 @@ struct BitmapInfo
     {
         struct
         {
-            uint32_t red;
-            uint32_t green;
-            uint32_t blue;
+            quint32 red;
+            quint32 green;
+            quint32 blue;
         } mask;
         RGBQUAD color[256];
     } u;

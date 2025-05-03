@@ -43,13 +43,13 @@ enum ColorDepth
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
-        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<quint8>(format.bits_per_pixel()),
         static_cast<quint16>(format.red_max()),
         static_cast<quint16>(format.green_max()),
         static_cast<quint16>(format.blue_max()),
-        static_cast<uint8_t>(format.red_shift()),
-        static_cast<uint8_t>(format.green_shift()),
-        static_cast<uint8_t>(format.blue_shift()));
+        static_cast<quint8>(format.red_shift()),
+        static_cast<quint8>(format.green_shift()),
+        static_cast<quint8>(format.blue_shift()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ const char* videoEncodingToString(proto::VideoEncoding encoding)
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
                                          const proto::DesktopConfig& config,
-                                         uint32_t video_encodings,
+                                         quint32 video_encodings,
                                          QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
@@ -349,7 +349,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
             serializePixelFormat(pixel_format, config_.mutable_pixel_format());
 
-            config_.set_compress_ratio(static_cast<uint32_t>(ui->slider_compress_ratio->value()));
+            config_.set_compress_ratio(static_cast<quint32>(ui->slider_compress_ratio->value()));
         }
 
         if (ui->checkbox_audio->isChecked())
@@ -357,7 +357,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         else
             config_.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
 
-        uint32_t flags = 0;
+        quint32 flags = 0;
 
         if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
             flags |= proto::ENABLE_CURSOR_SHAPE;

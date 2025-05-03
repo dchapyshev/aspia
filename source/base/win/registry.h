@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -67,13 +68,13 @@ public:
     // Reads raw data into |data|. If |name| is null or empty, reads the key's default value, if any.
     LONG readValue(const wchar_t* name, void* data, DWORD* dsize, DWORD* dtype) const;
 
-    // Reads a REG_DWORD (uint32_t) into |out_value|. If |name| is null or empty, reads the key's
+    // Reads a REG_DWORD (quint32) into |out_value|. If |name| is null or empty, reads the key's
     // default value, if any.
     LONG readValueDW(const wchar_t* name, DWORD* out_value) const;
 
-    // Reads a REG_QWORD (int64_t) into |out_value|. If |name| is null or empty, reads the key's
+    // Reads a REG_QWORD (qint64) into |out_value|. If |name| is null or empty, reads the key's
     // default value, if any.
-    LONG readInt64(const wchar_t* name, int64_t* out_value) const;
+    LONG readInt64(const wchar_t* name, qint64* out_value) const;
 
     // Reads a REG_BINARY (array of chars) into |out_value|. If |name| is null or empty,
     // reads the key's default value, if any.
@@ -86,7 +87,7 @@ public:
     // Sets raw data, including type.
     LONG writeValue(const wchar_t* name, const void* data, DWORD dsize, DWORD dtype);
 
-    // Sets an int32_t value.
+    // Sets an qint32 value.
     LONG writeValue(const wchar_t* name, DWORD in_value);
 
     // Sets a string value.

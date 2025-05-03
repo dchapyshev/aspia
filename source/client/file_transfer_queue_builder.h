@@ -38,7 +38,7 @@ public:
                const std::vector<FileTransfer::Item>& items);
 
     FileTransfer::TaskList takeQueue();
-    int64_t totalSize() const;
+    qint64 totalSize() const;
 
 signals:
     void sig_finished(proto::FileError error_code);
@@ -52,14 +52,14 @@ private:
                         const std::string& target_dir,
                         const std::string& item_name,
                         bool is_directory,
-                        int64_t size);
+                        qint64 size);
     void doPendingTasks();
     void onAborted(proto::FileError error_code);
 
     std::unique_ptr<common::FileTaskFactory> task_factory_;
     FileTransfer::TaskList pending_tasks_;
     FileTransfer::TaskList tasks_;
-    int64_t total_size_ = 0;
+    qint64 total_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferQueueBuilder);
 };

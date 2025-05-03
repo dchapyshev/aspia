@@ -178,13 +178,13 @@ bool UserEnumerator::isLockout() const
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t UserEnumerator::numberLogons() const
+quint32 UserEnumerator::numberLogons() const
 {
     return user_info_[current_entry_].usri3_num_logons;
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t UserEnumerator::badPasswordCount() const
+quint32 UserEnumerator::badPasswordCount() const
 {
     return user_info_[current_entry_].usri3_bad_pw_count;
 }

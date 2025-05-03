@@ -45,7 +45,7 @@ public:
     void readMessage(const proto::task_manager::ClientToHost& message);
 
 private:
-    void sendProcessList(uint32_t flags);
+    void sendProcessList(quint32 flags);
     void sendServiceList();
     void sendUserList();
 

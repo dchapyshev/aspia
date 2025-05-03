@@ -63,7 +63,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
 
         if (user.isValid())
         {
-            if (user.sessions & static_cast<uint32_t>(session_type))
+            if (user.sessions & static_cast<quint32>(session_type))
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -242,7 +242,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        uint32_t sessions = 0;
+        quint32 sessions = 0;
         for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         {
             QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
@@ -250,7 +250,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 sessions |= item->data(0, Qt::UserRole).toUInt();
         }
 
-        uint32_t flags = 0;
+        quint32 flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
             flags |= base::User::ENABLED;
 

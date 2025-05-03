@@ -130,7 +130,7 @@ void FileRemover::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 
     if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
     {
-        uint32_t actions;
+        quint32 actions;
 
         switch (reply.error_code())
         {

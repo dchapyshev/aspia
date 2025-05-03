@@ -51,13 +51,13 @@ namespace {
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
-        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<quint8>(format.bits_per_pixel()),
         static_cast<quint16>(format.red_max()),
         static_cast<quint16>(format.green_max()),
         static_cast<quint16>(format.blue_max()),
-        static_cast<uint8_t>(format.red_shift()),
-        static_cast<uint8_t>(format.green_shift()),
-        static_cast<uint8_t>(format.blue_shift()));
+        static_cast<quint8>(format.red_shift()),
+        static_cast<quint8>(format.green_shift()),
+        static_cast<quint8>(format.blue_shift()));
 }
 
 } // namespace
@@ -166,7 +166,7 @@ void ClientSessionDesktop::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -269,7 +269,7 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::onWritten(uint8_t /* channel_id */, size_t /* pending */)
+void ClientSessionDesktop::onWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -642,7 +642,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
         return;
     }
 
-    static const int kMaxScreenSize = std::numeric_limits<int16_t>::max();
+    static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
 
     if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
         preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)

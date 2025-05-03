@@ -19,9 +19,7 @@
 #ifndef COMMON_DESKTOP_SESSION_CONSTANTS_H
 #define COMMON_DESKTOP_SESSION_CONSTANTS_H
 
-#include "build/build_config.h"
-
-#include <cstdint>
+#include <QtGlobal>
 
 namespace common {
 
@@ -39,8 +37,8 @@ extern const char kScreenTypeExtension[];
 extern const char kSupportedExtensionsForManage[];
 extern const char kSupportedExtensionsForView[];
 
-extern const uint32_t kSupportedVideoEncodings;
-extern const uint32_t kSupportedAudioEncodings;
+extern const quint32 kSupportedVideoEncodings;
+extern const quint32 kSupportedAudioEncodings;
 
 extern const char kFlagDisablePasteAsKeystrokes[];
 extern const char kFlagDisableAudio[];

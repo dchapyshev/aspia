@@ -47,8 +47,8 @@ public:
     bool isPasswordExpired() const;
     bool isDontExpirePassword() const;
     bool isLockout() const;
-    uint32_t numberLogons() const;
-    uint32_t badPasswordCount() const;
+    quint32 numberLogons() const;
+    quint32 badPasswordCount() const;
     quint64 lastLogonTime() const;
 
 private:

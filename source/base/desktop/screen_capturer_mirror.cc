@@ -327,7 +327,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
             return Error::PERMANENT;
         }
 
-        frame_->setCapturerType(static_cast<uint32_t>(type()));
+        frame_->setCapturerType(static_cast<quint32>(type()));
     }
 
     return Error::SUCCEEDED;

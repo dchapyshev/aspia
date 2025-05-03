@@ -21,8 +21,8 @@
 
 #include "base/macros_magic.h"
 
+#include <QtGlobal>
 #include <algorithm>
-#include <cstdint>
 
 namespace base {
 
@@ -47,7 +47,7 @@ public:
         : length_(length)
     {
         if (length_ != 0)
-            buffer_ = reinterpret_cast<T*>(new uint8_t[length_]);
+            buffer_ = reinterpret_cast<T*>(new quint8[length_]);
     }
 
     TypedBuffer(TypedBuffer&& rvalue) noexcept
@@ -60,7 +60,7 @@ public:
     {
         if (buffer_)
         {
-            delete[] reinterpret_cast<uint8_t*>(buffer_);
+            delete[] reinterpret_cast<quint8*>(buffer_);
             buffer_ = nullptr;
         }
     }
@@ -90,9 +90,9 @@ public:
 
     // Helper returning a pointer to the structure starting at a specified byte
     // offset.
-    T* getAtOffset(uint32_t offset)
+    T* getAtOffset(quint32 offset)
     {
-        return reinterpret_cast<T*>(reinterpret_cast<uint8_t*>(buffer_) + offset);
+        return reinterpret_cast<T*>(reinterpret_cast<quint8*>(buffer_) + offset);
     }
 
     // Allow TypedBuffer<T> to be used in boolean expressions.

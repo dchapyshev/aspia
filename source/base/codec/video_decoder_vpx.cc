@@ -42,9 +42,9 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 
     Rect frame_rect = Rect::makeSize(frame->size());
 
-    uint8_t* y_data = image->planes[0];
-    uint8_t* u_data = image->planes[1];
-    uint8_t* v_data = image->planes[2];
+    quint8* y_data = image->planes[0];
+    quint8* u_data = image->planes[1];
+    quint8* v_data = image->planes[2];
 
     int y_stride = image->stride[0];
     int uv_stride = image->stride[1];
@@ -95,7 +95,7 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 //--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
-    uint32_t thread_count = std::thread::hardware_concurrency();
+    quint32 thread_count = std::thread::hardware_concurrency();
     if (thread_count >= 8)
         thread_count = 4;
     else if (thread_count >= 4)
@@ -144,7 +144,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
     // Do the actual decoding.
     vpx_codec_err_t ret =
         vpx_codec_decode(codec_.get(),
-                         reinterpret_cast<const uint8_t*>(packet.data().data()),
+                         reinterpret_cast<const quint8*>(packet.data().data()),
                          static_cast<unsigned int>(packet.data().size()),
                          nullptr,
                          0);
@@ -168,7 +168,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
         return false;
     }
 
-    if (base::Size(static_cast<int32_t>(image->d_w), static_cast<int32_t>(image->d_h)) != frame->size())
+    if (base::Size(static_cast<qint32>(image->d_w), static_cast<qint32>(image->d_h)) != frame->size())
     {
         LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;

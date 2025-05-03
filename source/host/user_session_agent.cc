@@ -178,7 +178,7 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setOneTimeSessions(uint32_t sessions)
+void UserSessionAgent::setOneTimeSessions(quint32 sessions)
 {
     LOG(LS_INFO) << "One-time sessions changed: " << sessions;
 
@@ -192,7 +192,7 @@ void UserSessionAgent::setOneTimeSessions(uint32_t sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::killClient(uint32_t id)
+void UserSessionAgent::killClient(quint32 id)
 {
     LOG(LS_INFO) << "Kill client request: " << id;
 
@@ -206,7 +206,7 @@ void UserSessionAgent::killClient(uint32_t id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
+void UserSessionAgent::connectConfirmation(quint32 id, bool accept)
 {
     LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
 

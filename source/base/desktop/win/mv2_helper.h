@@ -53,9 +53,9 @@ private:
     base::ScopedCreateDC driver_dc_;
     const Rect screen_rect_;
 
-    uint8_t* shared_buffer_ = nullptr;
+    quint8* shared_buffer_ = nullptr;
 
-    uint8_t* screen_buffer_ = nullptr;
+    quint8* screen_buffer_ = nullptr;
     Mv2ChangesBuffer* changes_buffer_ = nullptr;
 
     mutable int last_update_ = 0;

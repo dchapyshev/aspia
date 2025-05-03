@@ -24,7 +24,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
+BigNum::BigNum(const quint8* buffer, size_t buffer_size)
 {
     if (!buffer || !buffer_size)
         return;
@@ -73,7 +73,7 @@ std::string BigNum::toStdString() const
     std::string result;
     result.resize(static_cast<std::string::size_type>(length));
 
-    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
+    BN_bn2bin(num_.get(), reinterpret_cast<quint8*>(result.data()));
     return result;
 }
 
@@ -90,7 +90,7 @@ QByteArray BigNum::toByteArray() const
     QByteArray result;
     result.resize(static_cast<std::string::size_type>(length));
 
-    BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
+    BN_bn2bin(num_.get(), reinterpret_cast<quint8*>(result.data()));
     return result;
 }
 
@@ -105,14 +105,14 @@ BigNum BigNum::create()
 // static
 BigNum BigNum::fromStdString(std::string_view string)
 {
-    return BigNum(reinterpret_cast<const uint8_t*>(string.data()), string.size());
+    return BigNum(reinterpret_cast<const quint8*>(string.data()), string.size());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 BigNum BigNum::fromByteArray(const QByteArray& array)
 {
-    return BigNum(reinterpret_cast<const uint8_t*>(array.data()), array.size());
+    return BigNum(reinterpret_cast<const quint8*>(array.data()), array.size());
 }
 
 //--------------------------------------------------------------------------------------------------

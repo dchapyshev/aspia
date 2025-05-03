@@ -347,7 +347,7 @@ Session* Server::sessionById(Session::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
+void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 {
     for (const auto& session : sessions_)
     {

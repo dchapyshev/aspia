@@ -27,7 +27,7 @@ namespace {
 auto g_errorCodeType = qRegisterMetaType<base::NetworkChannel::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration, int64_t bytes)
+int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
     return static_cast<int>(
@@ -37,7 +37,7 @@ int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration,
 
 } // namespace
 
-const uint32_t NetworkChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+const quint32 NetworkChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
 int NetworkChannel::speedRx()

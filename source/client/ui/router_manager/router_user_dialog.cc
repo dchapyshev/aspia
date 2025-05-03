@@ -62,7 +62,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
 
         if (user_.isValid())
         {
-            if (user_.sessions & static_cast<uint32_t>(session_type))
+            if (user_.sessions & static_cast<quint32>(session_type))
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -223,7 +223,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         // Save entry ID.
-        int64_t entry_id = user_.entry_id;
+        qint64 entry_id = user_.entry_id;
 
         // Create new user.
         user_ = base::User::create(username, password);
@@ -242,7 +242,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    uint32_t sessions = 0;
+    quint32 sessions = 0;
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
     {
         QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
@@ -250,7 +250,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             sessions |= item->data(0, Qt::UserRole).toUInt();
     }
 
-    uint32_t flags = 0;
+    quint32 flags = 0;
     if (!ui.checkbox_disable->isChecked())
         flags |= base::User::ENABLED;
 

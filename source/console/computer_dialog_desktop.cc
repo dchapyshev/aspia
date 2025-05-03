@@ -38,13 +38,13 @@ enum ColorDepth
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
-        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<quint8>(format.bits_per_pixel()),
         static_cast<quint16>(format.red_max()),
         static_cast<quint16>(format.green_max()),
         static_cast<quint16>(format.blue_max()),
-        static_cast<uint8_t>(format.red_shift()),
-        static_cast<uint8_t>(format.green_shift()),
-        static_cast<uint8_t>(format.blue_shift()));
+        static_cast<quint8>(format.red_shift()),
+        static_cast<quint8>(format.green_shift()),
+        static_cast<quint8>(format.blue_shift()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -257,10 +257,10 @@ void ComputerDialogDesktop::saveSettings(
 
         serializePixelFormat(pixel_format, desktop_config->mutable_pixel_format());
 
-        desktop_config->set_compress_ratio(static_cast<uint32_t>(ui.slider_compress_ratio->value()));
+        desktop_config->set_compress_ratio(static_cast<quint32>(ui.slider_compress_ratio->value()));
     }
 
-    uint32_t flags = 0;
+    quint32 flags = 0;
 
     if (ui.checkbox_audio->isChecked())
         desktop_config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);

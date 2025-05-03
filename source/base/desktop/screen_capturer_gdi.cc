@@ -155,7 +155,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
             return nullptr;
         }
 
-        frame->setCapturerType(static_cast<uint32_t>(type()));
+        frame->setCapturerType(static_cast<quint32>(type()));
         queue_.replaceCurrentFrame(std::move(frame));
     }
 

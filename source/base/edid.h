@@ -31,7 +31,7 @@ namespace base {
 class Edid
 {
 public:
-    static std::unique_ptr<Edid> create(std::unique_ptr<uint8_t[]> data, size_t data_size);
+    static std::unique_ptr<Edid> create(std::unique_ptr<quint8[]> data, size_t data_size);
 
     ~Edid() = default;
 
@@ -41,7 +41,7 @@ public:
         INPUT_SIGNAL_TYPE_DIGITAL = 1
     };
 
-    enum DataTypeTag : uint8_t
+    enum DataTypeTag : quint8
     {
         // 0Fh - 00h: Descriptor defined by manufacturer.
         // 10h: Dummy descriptor, used to indicate that the descriptor space is unused.
@@ -72,47 +72,47 @@ public:
         quint16 flag;
 
         // Reserved = 00h when block used as descriptor.
-        uint8_t reserved1;
+        quint8 reserved1;
 
         // Data Type Tag (Binary coded).
         DataTypeTag data_type_tag;
 
         // 00h when block used as descriptor.
-        uint8_t reserved2;
+        quint8 reserved2;
 
         // Definition dependent on data type tag chosen.
-        uint8_t descriptor_data[13];
+        quint8 descriptor_data[13];
     };
 
     struct DetailedTimingDescriptor
     {
         quint16 pixel_clock;
-        uint8_t horizontal_active;
-        uint8_t horizontal_blanking;
-        uint8_t horizontal_active_blanking;
-        uint8_t vertical_active;
-        uint8_t vertical_blanking;
-        uint8_t vertical_active_blanking;
-        uint8_t horizontal_sync_offset;
-        uint8_t horizontal_sync_pulse_width;
-        uint8_t vertical_sync_offset;
-        uint8_t vertical_sync_pulse_width;
+        quint8 horizontal_active;
+        quint8 horizontal_blanking;
+        quint8 horizontal_active_blanking;
+        quint8 vertical_active;
+        quint8 vertical_blanking;
+        quint8 vertical_active_blanking;
+        quint8 horizontal_sync_offset;
+        quint8 horizontal_sync_pulse_width;
+        quint8 vertical_sync_offset;
+        quint8 vertical_sync_pulse_width;
 
         // mm, lower 8 bits
-        uint8_t horizontal_image_size;
+        quint8 horizontal_image_size;
 
         // mm, lower 8 bits
-        uint8_t vertical_image_size;
+        quint8 vertical_image_size;
 
         // Upper nibble : upper 4 bits of Horizontal Image Size
         // Lower nibble : upper 4 bits of Vertical Image Size
-        uint8_t horizontal_vertical_image_size;
+        quint8 horizontal_vertical_image_size;
 
         // Pixels
-        uint8_t horizontal_border;
-        uint8_t vertical_border;
+        quint8 horizontal_border;
+        quint8 vertical_border;
 
-        uint8_t flags;
+        quint8 flags;
     };
 
     struct Data
@@ -123,49 +123,49 @@ public:
         // Vendor / Product Identification (10 bytes)
         quint16 id_manufacturer_name;              // 08h-09h
         quint16 id_product_code;                   // 0Ah-0Bh
-        uint32_t id_serial_number;                  // 0Ch-0Fh
-        uint8_t week_of_manufacture;                // 10h
-        uint8_t year_of_manufacture;                // 11h
+        quint32 id_serial_number;                  // 0Ch-0Fh
+        quint8 week_of_manufacture;                // 10h
+        quint8 year_of_manufacture;                // 11h
 
         // EDID Structure Version / Revision (2 bytes)
-        uint8_t structure_version;                  // 12h
-        uint8_t structure_revision;                 // 13h
+        quint8 structure_version;                  // 12h
+        quint8 structure_revision;                 // 13h
 
         // Basic Display Parameters / Features (5 bytes)
-        uint8_t video_input_definition;             // 14h
-        uint8_t max_horizontal_image_size;          // 15h
-        uint8_t max_vertical_image_size;            // 16h
-        uint8_t gamma;                              // 17h
-        uint8_t feature_support;                    // 18h
+        quint8 video_input_definition;             // 14h
+        quint8 max_horizontal_image_size;          // 15h
+        quint8 max_vertical_image_size;            // 16h
+        quint8 gamma;                              // 17h
+        quint8 feature_support;                    // 18h
 
         // Color Characteristics (10 bytes)
-        uint8_t red_green_low_bits;                 // 19h
-        uint8_t blue_white_low_bits;                // 1Ah
-        uint8_t red_x;                              // 1Bh
-        uint8_t red_y;                              // 1Ch
-        uint8_t green_x;                            // 1Dh
-        uint8_t green_y;                            // 1Eh
-        uint8_t blue_x;                             // 1Fh
-        uint8_t blue_y;                             // 20h
-        uint8_t white_x;                            // 21h
-        uint8_t white_y;                            // 22h
+        quint8 red_green_low_bits;                 // 19h
+        quint8 blue_white_low_bits;                // 1Ah
+        quint8 red_x;                              // 1Bh
+        quint8 red_y;                              // 1Ch
+        quint8 green_x;                            // 1Dh
+        quint8 green_y;                            // 1Eh
+        quint8 blue_x;                             // 1Fh
+        quint8 blue_y;                             // 20h
+        quint8 white_x;                            // 21h
+        quint8 white_y;                            // 22h
 
         // 23h-24h: Established Timings (3 bytes)
-        uint8_t established_timings[2];
-        uint8_t manufacturers_reserved_timings;     // 25h
+        quint8 established_timings[2];
+        quint8 manufacturers_reserved_timings;     // 25h
 
         // 26h-35h: Standard Timing Identification (16 bytes)
-        uint8_t standard_timing_identification[8][2];
+        quint8 standard_timing_identification[8][2];
 
         // 36h-7Dh: Detailed Timing Descriptions (72 bytes)
-        uint8_t detailed_timing_description[4][18];
+        quint8 detailed_timing_description[4][18];
 
         // 7Eh: Indicates the number of (optional) Extension EDID blocks to follow.
-        uint8_t extension_flag;
+        quint8 extension_flag;
 
         // 7Fh: This byte should be programmed such that a one - byte checksum of the
         // entire 128 - byte EDID equals 00h.
-        uint8_t checksum;
+        quint8 checksum;
     };
 
     enum FeatureSupport
@@ -221,7 +221,7 @@ public:
     int horizontalResolution() const;
     int verticalResolution() const;
     double gamma() const;
-    uint8_t featureSupport() const;
+    quint8 featureSupport() const;
     int minVerticalRate() const; // Hz
     int maxVerticalRate() const; // Hz
     int minHorizontalRate() const; // kHz
@@ -230,19 +230,19 @@ public:
     int maxSupportedPixelClock() const; // MHz
 
     InputSignalType inputSignalType() const;
-    uint8_t estabilishedTimings1() const;
-    uint8_t estabilishedTimings2() const;
-    uint8_t manufacturersTimings() const;
+    quint8 estabilishedTimings1() const;
+    quint8 estabilishedTimings2() const;
+    quint8 manufacturersTimings() const;
     int standardTimingsCount() const;
     bool standardTimings(int index, int* width, int* height, int* frequency);
 
 private:
-    Edid(std::unique_ptr<uint8_t[]> data, size_t data_size);
+    Edid(std::unique_ptr<quint8[]> data, size_t data_size);
 
     std::string getManufacturerSignature() const;
-    uint8_t* getDescriptor(int type) const;
+    quint8* getDescriptor(int type) const;
 
-    std::unique_ptr<uint8_t[]> data_;
+    std::unique_ptr<quint8[]> data_;
     const size_t data_size_;
     Data* edid_;
 

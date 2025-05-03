@@ -116,7 +116,7 @@ void createImage(const Size& size,
     memset(image_buffer.data(), 128, image_buffer.size());
 
     // Fill in the information.
-    image->planes[0] = reinterpret_cast<uint8_t*>(image_buffer.data());
+    image->planes[0] = reinterpret_cast<quint8*>(image_buffer.data());
     image->planes[1] = image->planes[0] + y_stride * y_rows;
     image->planes[2] = image->planes[1] + uv_stride * uv_rows;
 
@@ -278,7 +278,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
+bool VideoEncoderVPX::setMinQuantizer(quint32 min_quantizer)
 {
     if (min_quantizer < 10 || min_quantizer > 50)
     {
@@ -305,13 +305,13 @@ bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t VideoEncoderVPX::minQuantizer() const
+quint32 VideoEncoderVPX::minQuantizer() const
 {
     return config_.rc_min_quantizer;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
+bool VideoEncoderVPX::setMaxQuantizer(quint32 max_quantizer)
 {
     if (max_quantizer < 10 || max_quantizer > 60)
     {
@@ -338,7 +338,7 @@ bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t VideoEncoderVPX::maxQuantizer() const
+quint32 VideoEncoderVPX::maxQuantizer() const
 {
     return config_.rc_max_quantizer;
 }
@@ -352,7 +352,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
         (size.height() + kMacroBlockSize - 1) / kMacroBlockSize);
 
     active_map_buffer_.resize(active_map_.cols * active_map_.rows);
-    active_map_.active_map = reinterpret_cast<uint8_t*>(active_map_buffer_.data());
+    active_map_.active_map = reinterpret_cast<quint8*>(active_map_buffer_.data());
 
     clearActiveMap();
 }
@@ -501,7 +501,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
 void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
 {
-    Rect image_rect = Rect::makeWH(static_cast<int32_t>(image_->w), static_cast<int32_t>(image_->h));
+    Rect image_rect = Rect::makeWH(static_cast<qint32>(image_->w), static_cast<qint32>(image_->h));
     Region updated_region;
 
     if (!is_key_frame)
@@ -538,9 +538,9 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
-    uint8_t* y_data = image_->planes[0];
-    uint8_t* u_data = image_->planes[1];
-    uint8_t* v_data = image_->planes[2];
+    quint8* y_data = image_->planes[0];
+    quint8* u_data = image_->planes[1];
+    quint8* v_data = image_->planes[2];
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
@@ -577,7 +577,7 @@ void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
     int right = (rect.right() - 1) / kMacroBlockSize;
     int bottom = (rect.bottom() - 1) / kMacroBlockSize;
 
-    uint8_t* map = active_map_.active_map + static_cast<uint32_t>(top) * active_map_.cols;
+    quint8* map = active_map_.active_map + static_cast<quint32>(top) * active_map_.cols;
 
     for (int y = top; y <= bottom; ++y)
     {

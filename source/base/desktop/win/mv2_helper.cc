@@ -119,14 +119,14 @@ void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
 {
     DCHECK(frame);
 
-    const uint8_t* source_buffer = screen_buffer_;
+    const quint8* source_buffer = screen_buffer_;
     const int source_stride = kBytesPerPixel * screen_rect_.width();
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
         const Rect& rect = it.rect();
         const int source_offset =
-            source_stride * rect.y() + static_cast<int>(sizeof(uint32_t)) * rect.x();
+            source_stride * rect.y() + static_cast<int>(sizeof(quint32)) * rect.x();
         frame->copyPixelsFrom(source_buffer + source_offset, source_stride, rect);
     }
 }
@@ -225,7 +225,7 @@ bool Mv2Helper::mapMemory(bool map)
             return false;
         }
 
-        shared_buffer_ = reinterpret_cast<uint8_t*>(
+        shared_buffer_ = reinterpret_cast<quint8*>(
             MapViewOfFile(file_map, FILE_MAP_READ, 0, 0, 0));
         if (!shared_buffer_)
         {

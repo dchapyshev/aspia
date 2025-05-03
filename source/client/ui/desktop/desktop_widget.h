@@ -91,7 +91,7 @@ protected:
     void focusOutEvent(QFocusEvent* event) final;
 
 private:
-    void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
+    void executeKeyEvent(quint32 usb_keycode, quint32 flags);
     void enableKeyHooks(bool enable);
     void releaseMouseButtons();
     void releaseKeyboardButtons();
@@ -123,9 +123,9 @@ private:
     QPoint remote_cursor_hotspot_;
 
     QPoint prev_pos_;
-    uint32_t prev_mask_ = 0;
+    quint32 prev_mask_ = 0;
 
-    std::set<uint32_t> remote_pressed_keys_;
+    std::set<quint32> remote_pressed_keys_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
 };

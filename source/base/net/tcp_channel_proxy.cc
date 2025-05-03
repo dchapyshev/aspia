@@ -35,7 +35,7 @@ TcpChannelProxy::TcpChannelProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelProxy::send(uint8_t channel_id, QByteArray&& buffer)
+void TcpChannelProxy::send(quint8 channel_id, QByteArray&& buffer)
 {
     bool schedule_write;
 

@@ -58,11 +58,11 @@ public:
     QString userName() const;
     QString clientName() const;
 
-    int64_t connectTime() const;
-    int64_t disconnectTime() const;
-    int64_t lastInputTime() const;
-    int64_t logonTime() const;
-    int64_t currentTime() const;
+    qint64 connectTime() const;
+    qint64 disconnectTime() const;
+    qint64 lastInputTime() const;
+    qint64 logonTime() const;
+    qint64 currentTime() const;
 
     bool isUserLocked() const;
 

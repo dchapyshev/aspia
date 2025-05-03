@@ -243,28 +243,28 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     //---------------------------------------------------------------------------------------------
 
     ui.combo_video_capturer->addItem(
-        tr("Default"), static_cast<uint32_t>(base::ScreenCapturer::Type::DEFAULT));
+        tr("Default"), static_cast<quint32>(base::ScreenCapturer::Type::DEFAULT));
 
 #if defined(Q_OS_WINDOWS)
     ui.combo_video_capturer->addItem(
-        "DXGI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
+        "DXGI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_DXGI));
 
     ui.combo_video_capturer->addItem(
-        "GDI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
+        "GDI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_GDI));
 
     // Mirror screen capture is available only in Windows 7/2008 R2.
     if (base::windowsVersion() == base::VERSION_WIN7)
     {
         ui.combo_video_capturer->addItem(
-            "MIRROR", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
+            "MIRROR", static_cast<quint32>(base::ScreenCapturer::Type::WIN_MIRROR));
     }
 
 #elif defined(Q_OS_LINUX)
     ui.combo_video_capturer->addItem(
-        "X11", static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
+        "X11", static_cast<quint32>(base::ScreenCapturer::Type::LINUX_X11));
 #elif defined(Q_OS_MACOS)
     ui.combo_video_capturer->addItem(
-        "MACOSX", static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
+        "MACOSX", static_cast<quint32>(base::ScreenCapturer::Type::MACOSX));
 #else
 #error Platform support not implemented
 #endif
@@ -796,7 +796,7 @@ void ConfigDialog::reloadAll()
     if (item_index != -1)
         ui.combobox_onetime_pass_change->setCurrentIndex(item_index);
 
-    uint32_t onetime_pass_chars = settings.oneTimePasswordCharacters();
+    quint32 onetime_pass_chars = settings.oneTimePasswordCharacters();
     item_index = ui.combobox_onetime_pass_chars->findData(onetime_pass_chars);
     if (item_index != -1)
         ui.combobox_onetime_pass_chars->setCurrentIndex(item_index);

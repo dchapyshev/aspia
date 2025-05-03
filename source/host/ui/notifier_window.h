@@ -32,7 +32,7 @@ public:
     explicit NotifierWindow(QWidget* parent = nullptr);
     ~NotifierWindow() final;
 
-    std::vector<uint32_t> sessions(proto::SessionType session_type);
+    std::vector<quint32> sessions(proto::SessionType session_type);
 
 public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
@@ -46,7 +46,7 @@ public slots:
     void closeNotifier();
 
 signals:
-    void sig_killSession(uint32_t id);
+    void sig_killSession(quint32 id);
     void sig_voiceChat(bool enable);
     void sig_textChat();
     void sig_lockMouse(bool enable);

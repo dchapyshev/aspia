@@ -290,12 +290,12 @@ LONG RegistryKey::readValueDW(const wchar_t* name, DWORD* out_value) const
 }
 
 //--------------------------------------------------------------------------------------------------
-LONG RegistryKey::readInt64(const wchar_t* name, int64_t* out_value) const
+LONG RegistryKey::readInt64(const wchar_t* name, qint64* out_value) const
 {
     DCHECK(out_value);
 
     DWORD type = REG_QWORD;
-    int64_t local_value = 0;
+    qint64 local_value = 0;
     DWORD size = sizeof(local_value);
 
     LONG result = readValue(name, &local_value, &size, &type);

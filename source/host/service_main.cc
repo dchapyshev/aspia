@@ -157,7 +157,7 @@ std::optional<QString> currentSessionName()
     if (user_name.isEmpty())
         return std::nullopt;
 
-    using TimeInfo = std::pair<base::SessionId, int64_t>;
+    using TimeInfo = std::pair<base::SessionId, qint64>;
     using TimeInfoList = std::vector<TimeInfo>;
 
     // Enumarate all user sessions.
@@ -232,7 +232,7 @@ void printDebugInfo()
 
     if (GlobalMemoryStatusEx(&memory_status))
     {
-        static const uint32_t kMB = 1024 * 1024;
+        static const quint32 kMB = 1024 * 1024;
 
         LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
                      << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";

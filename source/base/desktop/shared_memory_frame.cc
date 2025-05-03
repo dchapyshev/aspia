@@ -28,7 +28,7 @@ SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                                      const PixelFormat& format,
                                      SharedMemoryBase* shared_memory)
     : Frame(size, format, size.width() * format.bytesPerPixel(),
-      reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
+      reinterpret_cast<quint8*>(shared_memory->data()), shared_memory)
 {
     // Nothing
 }

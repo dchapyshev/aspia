@@ -69,11 +69,11 @@ bool convertToMouseShapeAndCompare(unsigned left, unsigned right)
 
     // Get the pixels from |scoped_color|.
     int size = width * height;
-    std::unique_ptr<uint32_t[]> data(new uint32_t[size]);
-    EXPECT_TRUE(GetBitmapBits(scoped_color, size * sizeof(uint32_t), data.get()));
+    std::unique_ptr<quint32[]> data(new quint32[size]);
+    EXPECT_TRUE(GetBitmapBits(scoped_color, size * sizeof(quint32), data.get()));
 
     // Compare the 32bpp image in |mouse_shape| with the one loaded from |right|.
-    return memcmp(data.get(), mouse_shape->constImage().data(), size * sizeof(uint32_t)) == 0;
+    return memcmp(data.get(), mouse_shape->constImage().data(), size * sizeof(quint32)) == 0;
 }
 
 } // namespace

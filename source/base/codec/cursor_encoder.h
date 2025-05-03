@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
 
-#include <vector>
+#include <QVector>
 
 namespace proto {
 class CursorShape;
@@ -44,7 +44,7 @@ private:
     bool compressCursor(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const;
 
     ScopedZstdCStream stream_;
-    std::vector<uint32_t> cache_;
+    QVector<quint32> cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };

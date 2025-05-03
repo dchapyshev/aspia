@@ -57,13 +57,13 @@ public:
 
     static const User kInvalidUser;
 
-    int64_t entry_id = 0;
+    qint64 entry_id = 0;
     QString name;
     QString group;
     QByteArray salt;
     QByteArray verifier;
-    uint32_t sessions = 0;
-    uint32_t flags = 0;
+    quint32 sessions = 0;
+    quint32 flags = 0;
 };
 
 } // namespace base

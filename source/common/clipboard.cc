@@ -36,10 +36,10 @@ const int kCompressionRatio = 8;
 const size_t kMinSizeToCompress = 512;
 
 //--------------------------------------------------------------------------------------------------
-uint8_t* outputBuffer(std::string* out, size_t size)
+quint8* outputBuffer(std::string* out, size_t size)
 {
     out->resize(size);
-    return reinterpret_cast<uint8_t*>(out->data());
+    return reinterpret_cast<quint8*>(out->data());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,10 +49,10 @@ bool compress(const std::string& in, std::string* out)
         return false;
 
     const size_t input_size = in.size();
-    const uint8_t* input_data = reinterpret_cast<const uint8_t*>(in.data());
+    const quint8* input_data = reinterpret_cast<const quint8*>(in.data());
 
     size_t output_size = ZSTD_compressBound(in.size());
-    uint8_t* output_data = outputBuffer(out, output_size);
+    quint8* output_data = outputBuffer(out, output_size);
 
     size_t ret = ZSTD_compress(
         output_data, output_size, input_data, input_size, kCompressionRatio);
@@ -88,7 +88,7 @@ bool decompress(const std::string& in, std::string* out)
     if (!output_size)
         return false;
 
-    uint8_t* output_data = outputBuffer(out, static_cast<size_t>(output_size));
+    quint8* output_data = outputBuffer(out, static_cast<size_t>(output_size));
 
     size_t ret = ZSTD_decompress(
         output_data, static_cast<size_t>(output_size), in.data(), in.size());

@@ -62,12 +62,12 @@ private slots:
     void onLogoffUser();
 
 private:
-    void sendProcessListRequest(uint32_t flags);
+    void sendProcessListRequest(quint32 flags);
     void sendEndProcessRequest(quint64 process_id);
     void sendServiceListRequest();
     void sendServiceRequest(const std::string& name, proto::task_manager::ServiceRequest::Command command);
     void sendUserListRequest();
-    void sendUserRequest(uint32_t session_id, proto::task_manager::UserRequest::Command command);
+    void sendUserRequest(quint32 session_id, proto::task_manager::UserRequest::Command command);
     void readProcessList(const proto::task_manager::ProcessList& process_list);
     void readServiceList(const proto::task_manager::ServiceList& service_list);
     void readUserList(const proto::task_manager::UserList& user_list);

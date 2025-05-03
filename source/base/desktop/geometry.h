@@ -31,7 +31,7 @@ class Point
 public:
     Point() = default;
 
-    Point(int32_t x, int32_t y)
+    Point(qint32 x, qint32 y)
         : x_(x),
           y_(y)
     {
@@ -47,13 +47,13 @@ public:
 
     ~Point() = default;
 
-    int32_t x() const { return x_; }
-    int32_t y() const { return y_; }
+    qint32 x() const { return x_; }
+    qint32 y() const { return y_; }
 
-    void setX(int32_t x) { x_ = x; }
-    void setY(int32_t y) { y_ = y; }
+    void setX(qint32 x) { x_ = x; }
+    void setY(qint32 y) { y_ = y; }
 
-    void set(int32_t x, int32_t y)
+    void set(qint32 x, qint32 y)
     {
         x_ = x;
         y_ = y;
@@ -74,7 +74,7 @@ public:
         return (x_ == other.x_ && y_ == other.y_);
     }
 
-    void translate(int32_t x_offset, int32_t y_offset)
+    void translate(qint32 x_offset, qint32 y_offset)
     {
         x_ += x_offset;
         y_ += y_offset;
@@ -93,8 +93,8 @@ public:
     bool operator==(const Point& other) const { return equals(other); }
 
 private:
-    int32_t x_ = 0;
-    int32_t y_ = 0;
+    qint32 x_ = 0;
+    qint32 y_ = 0;
 };
 
 class Size
@@ -102,7 +102,7 @@ class Size
 public:
     Size() = default;
 
-    Size(int32_t width, int32_t height)
+    Size(qint32 width, qint32 height)
         : width_(width),
           height_(height)
     {
@@ -118,10 +118,10 @@ public:
 
     ~Size() = default;
 
-    int32_t width() const { return width_; }
-    int32_t height() const { return height_; }
+    qint32 width() const { return width_; }
+    qint32 height() const { return height_; }
 
-    void set(int32_t width, int32_t height)
+    void set(qint32 width, qint32 height)
     {
         width_ = width;
         height_ = height;
@@ -154,8 +154,8 @@ public:
     bool operator==(const Size& other) const { return equals(other); }
 
 private:
-    int32_t width_ = 0;
-    int32_t height_ = 0;
+    qint32 width_ = 0;
+    qint32 height_ = 0;
 };
 
 class Rect
@@ -165,7 +165,7 @@ public:
     Rect(const Rect& other);
     ~Rect() = default;
 
-    static Rect makeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
+    static Rect makeXYWH(qint32 x, qint32 y, qint32 width, qint32 height)
     {
         return Rect(x, y, x + width, y + height);
     }
@@ -175,12 +175,12 @@ public:
         return Rect::makeXYWH(left_top.x(), left_top.y(), size.width(), size.height());
     }
 
-    static Rect makeWH(int32_t width, int32_t height)
+    static Rect makeWH(qint32 width, qint32 height)
     {
         return Rect(0, 0, width, height);
     }
 
-    static Rect makeLTRB(int32_t left, int32_t top, int32_t right, int32_t bottom)
+    static Rect makeLTRB(qint32 left, qint32 top, qint32 right, qint32 bottom)
     {
         return Rect(left, top, right, bottom);
     }
@@ -190,15 +190,15 @@ public:
         return Rect(0, 0, size.width(), size.height());
     }
 
-    int32_t left() const { return left_; }
-    int32_t top() const { return top_; }
-    int32_t right() const { return right_; }
-    int32_t bottom() const { return bottom_; }
+    qint32 left() const { return left_; }
+    qint32 top() const { return top_; }
+    qint32 right() const { return right_; }
+    qint32 bottom() const { return bottom_; }
 
-    int32_t x() const { return left_; }
-    int32_t y() const { return top_; }
-    int32_t width() const { return right_ - left_; }
-    int32_t height() const { return bottom_ - top_; }
+    qint32 x() const { return left_; }
+    qint32 y() const { return top_; }
+    qint32 width() const { return right_ - left_; }
+    qint32 height() const { return bottom_ - top_; }
 
     Point topLeft() const { return Point(left(), top()); }
     void setTopLeft(const Point& top_left);
@@ -215,16 +215,16 @@ public:
     }
 
     // Returns true if point lies within the rectangle boundaries.
-    bool contains(int32_t x, int32_t y) const;
+    bool contains(qint32 x, qint32 y) const;
     bool contains(const Point& pos) const;
 
     // Returns true if |rect| lies within the boundaries of this rectangle.
     bool containsRect(const Rect& rect) const;
 
-    void translate(int32_t dx, int32_t dy);
+    void translate(qint32 dx, qint32 dy);
     void translate(const Point& pt) { translate(pt.x(), pt.y()); }
 
-    Rect translated(int32_t dx, int32_t dy) const;
+    Rect translated(qint32 dx, qint32 dy) const;
     Rect translated(const Point& pt) const { return translated(pt.x(), pt.y()); }
 
     // Finds intersection with |rect|.
@@ -239,17 +239,17 @@ public:
     // |right_| and |bottom_|. This function does not normalize the result, so
     // |left_| and |top_| may be less than zero or larger than |right_| and
     // |bottom_|.
-    void extend(int32_t left_offset, int32_t top_offset,
-                int32_t right_offset, int32_t bottom_offset);
+    void extend(qint32 left_offset, qint32 top_offset,
+                qint32 right_offset, qint32 bottom_offset);
 
     // Scales current Rect. This function does not impact the |top_| and |left_|.
     void scale(double horizontal, double vertical);
 
     void move(const Point& pt) { move(pt.x(), pt.y()); }
-    void move(int32_t x, int32_t y);
+    void move(qint32 x, qint32 y);
 
     Rect moved(const Point& pt) const { return moved(pt.x(), pt.y()); }
-    Rect moved(int32_t x, int32_t y) const;
+    Rect moved(qint32 x, qint32 y) const;
 
     Rect& operator=(const Rect& other);
 
@@ -257,7 +257,7 @@ public:
     bool operator==(const Rect& other) const { return equals(other); }
 
 private:
-    Rect(int32_t left, int32_t top, int32_t right, int32_t bottom)
+    Rect(qint32 left, qint32 top, qint32 right, qint32 bottom)
         : left_(left),
           top_(top),
           right_(right),
@@ -266,10 +266,10 @@ private:
         // Nothing
     }
 
-    int32_t left_   = 0;
-    int32_t top_    = 0;
-    int32_t right_  = 0;
-    int32_t bottom_ = 0;
+    qint32 left_   = 0;
+    qint32 top_    = 0;
+    qint32 right_  = 0;
+    qint32 bottom_ = 0;
 };
 
 QTextStream& operator<<(QTextStream& stream, const Rect& rect);

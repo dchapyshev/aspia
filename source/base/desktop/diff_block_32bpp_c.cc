@@ -29,8 +29,8 @@ const int kBytesPerPixel = 4;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-uint8_t diffFullBlock_32bpp_32x32_C(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_32bpp_32x32_C(
+    const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     static const int kBlockSize = 32;
 
@@ -49,8 +49,8 @@ uint8_t diffFullBlock_32bpp_32x32_C(
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t diffFullBlock_32bpp_16x16_C(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_32bpp_16x16_C(
+    const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     static const int kBlockSize = 16;
 

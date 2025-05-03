@@ -23,7 +23,7 @@
 
 #include <asio/buffer.hpp>
 
-#include <cstdint>
+#include <QtGlobal>
 #include <optional>
 
 namespace base {
@@ -38,7 +38,7 @@ public:
     std::optional<size_t> messageSize();
 
 private:
-    uint8_t buffer_[4] = { 0 };
+    quint8 buffer_[4] = { 0 };
     size_t pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(VariableSizeReader);
@@ -53,7 +53,7 @@ public:
     asio::const_buffer variableSize(size_t size);
 
 private:
-    uint8_t buffer_[4];
+    quint8 buffer_[4];
 
     DISALLOW_COPY_AND_ASSIGN(VariableSizeWriter);
 };

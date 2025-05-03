@@ -32,8 +32,8 @@ namespace base {
 #if defined(ARCH_CPU_X86_FAMILY)
 
 //--------------------------------------------------------------------------------------------------
-uint8_t diffFullBlock_32bpp_32x32_SSE2(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_32bpp_32x32_SSE2(
+    const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;
@@ -83,8 +83,8 @@ uint8_t diffFullBlock_32bpp_32x32_SSE2(
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t diffFullBlock_32bpp_16x16_SSE2(
-    const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_32bpp_16x16_SSE2(
+    const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;

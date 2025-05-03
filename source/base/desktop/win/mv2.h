@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_WIN_MV2_H
 #define BASE_DESKTOP_WIN_MV2_H
 
-#include <cstdint>
+#include <QtGlobal>
 
 namespace base {
 
@@ -41,14 +41,14 @@ typedef struct
 
 typedef struct
 {
-    uint32_t type;
+    quint32 type;
     Mv2Rect rect;
     Mv2Point point;
 } Mv2ChangesRecord;
 
 typedef struct
 {
-    uint32_t counter;
+    quint32 counter;
     Mv2ChangesRecord records[kMv2MaxChanges];
 } Mv2ChangesBuffer;
 

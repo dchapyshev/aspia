@@ -41,8 +41,8 @@ public:
     bool showIconsInMenus() const;
     void setShowIconsInMenus(bool enable);
 
-    uint32_t oneTimeSessions() const;
-    void setOneTimeSessions(uint32_t sessions);
+    quint32 oneTimeSessions() const;
+    void setOneTimeSessions(quint32 sessions);
 
 private:
     QSettings settings_;

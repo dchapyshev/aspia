@@ -45,7 +45,7 @@ public:
         QString display_name;
         QString architecture;
         QString user_name;
-        uint32_t session_type = 0;
+        quint32 session_type = 0;
     };
 
     class Delegate
@@ -65,7 +65,7 @@ public:
     void setPrivateKey(const QByteArray& private_key);
 
     void setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types);
+        ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
 
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
@@ -90,7 +90,7 @@ private:
     ServerAuthenticator::AnonymousAccess anonymous_access_ =
         ServerAuthenticator::AnonymousAccess::DISABLE;
 
-    uint32_t anonymous_session_types_ = 0;
+    quint32 anonymous_session_types_ = 0;
 
     Delegate* delegate_;
 

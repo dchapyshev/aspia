@@ -29,13 +29,13 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* outputBuffer(std::string* data, size_t size)
+quint8* outputBuffer(std::string* data, size_t size)
 {
     if (data->capacity() < size)
         data->reserve(size);
 
     data->resize(size);
-    return reinterpret_cast<uint8_t*>(data->data());
+    return reinterpret_cast<quint8*>(data->data());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
 
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderZstd::compressPacket(
-    const uint8_t* input_data, size_t input_size, std::string* output_buffer)
+    const quint8* input_data, size_t input_size, std::string* output_buffer)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
     if (ZSTD_isError(ret))
@@ -102,7 +102,7 @@ bool VideoEncoderZstd::compressPacket(
     }
 
     const size_t output_size = ZSTD_compressBound(input_size);
-    uint8_t* output_data = outputBuffer(output_buffer, output_size);
+    quint8* output_data = outputBuffer(output_buffer, output_size);
 
     ZSTD_inBuffer input = { input_data, input_size, 0 };
     ZSTD_outBuffer output = { output_data, output_size, 0 };
@@ -178,11 +178,11 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
         LOG(LS_INFO) << "Translate buffer too small. Resize from " << translate_buffer_size_
                      << " to " << data_size;
 
-        translate_buffer_.reset(static_cast<uint8_t*>(base::alignedAlloc(data_size, 32)));
+        translate_buffer_.reset(static_cast<quint8*>(base::alignedAlloc(data_size, 32)));
         translate_buffer_size_ = data_size;
     }
 
-    uint8_t* translate_pos = translate_buffer_.get();
+    quint8* translate_pos = translate_buffer_.get();
 
     for (Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
     {

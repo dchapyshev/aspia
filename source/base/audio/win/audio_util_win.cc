@@ -150,7 +150,7 @@ bool sharedModeInitialize(IAudioClient* client,
                           HANDLE event_handle,
                           REFERENCE_TIME buffer_duration,
                           bool auto_convert_pcm,
-                          uint32_t* endpoint_buffer_size)
+                          quint32* endpoint_buffer_size)
 {
     DCHECK(client);
     DCHECK_GE(buffer_duration, 0);

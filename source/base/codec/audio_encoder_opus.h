@@ -63,7 +63,7 @@ private:
     int resampling_data_pos_ = 0;
 
     // Left-over unencoded samples from the previous AudioPacket.
-    std::unique_ptr<int16_t[]> leftover_buffer_;
+    std::unique_ptr<qint16[]> leftover_buffer_;
     int leftover_buffer_size_ = 0;
     int leftover_samples_ = 0;
 

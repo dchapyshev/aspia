@@ -603,8 +603,8 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
         QScreen* current_screen = current_window->screen();
         if (current_screen)
         {
-            local_dpi.setX(static_cast<int32_t>(current_screen->logicalDotsPerInchX()));
-            local_dpi.setY(static_cast<int32_t>(current_screen->logicalDotsPerInchY()));
+            local_dpi.setX(static_cast<qint32>(current_screen->logicalDotsPerInchX()));
+            local_dpi.setY(static_cast<qint32>(current_screen->logicalDotsPerInchY()));
         }
     }
 

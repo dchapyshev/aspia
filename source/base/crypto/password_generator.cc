@@ -23,11 +23,11 @@
 
 namespace base {
 
-const uint32_t PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
+const quint32 PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
 const QString::size_type PasswordGenerator::kDefaultLength = 8;
 
 //--------------------------------------------------------------------------------------------------
-void PasswordGenerator::setCharacters(uint32_t value)
+void PasswordGenerator::setCharacters(quint32 value)
 {
     if (value)
         characters_ = value;

@@ -19,8 +19,9 @@
 #ifndef BASE_CODEC_AUDIO_SAMPLE_TYPES_H
 #define BASE_CODEC_AUDIO_SAMPLE_TYPES_H
 
+#include <QtGlobal>
+
 #include <cmath>
-#include <cstdint>
 #include <limits>
 #include <type_traits>
 
@@ -84,7 +85,7 @@ private:
     static FloatType To(SampleType source_value) { return static_cast<FloatType>(source_value); }
 };
 
-// For uint8_t, int16_t, int32_t...
+// For quint8, qint16, qint32...
 // See also the aliases for commonly used types at the bottom of this file.
 template <typename SampleType>
 class FixedSampleTypeTraits
@@ -130,10 +131,10 @@ private:
 
         // Note: In the below expression, it is important that we cast kMinValue to
         // FloatType _before_ taking the negative of it. For example, for SampleType
-        // int32_t, the expression (- kMinValue) would evaluate to
-        // -numeric_limits<int32_t>::min(), which falls outside the numeric
+        // qint32, the expression (- kMinValue) would evaluate to
+        // -numeric_limits<qint32>::min(), which falls outside the numeric
         // range, wraps around, and ends up being the same as
-        // +numeric_limits<int32_t>::min().
+        // +numeric_limits<qint32>::min().
         static constexpr FloatType kForNegativeInput =
             static_cast<FloatType>(kZeroPointValue) -
             static_cast<FloatType>(kMinValue);
@@ -159,7 +160,7 @@ private:
         //
         // Inlining the computation formula for multiplication with the scaling
         // factor and addition of |kZeroPointValue| results in better performance
-        // for the int16_t case on Arm when compared to storing the scaling factor
+        // for the qint16 case on Arm when compared to storing the scaling factor
         // in a temporary variable and applying it outside of the if-else block.
         //
         // It is important to have the cast to SampleType take place _after_
@@ -205,9 +206,9 @@ private:
 // Aliases for commonly used sample formats.
 using Float32SampleTypeTraits = FloatSampleTypeTraits<float>;
 using Float64SampleTypeTraits = FloatSampleTypeTraits<double>;
-using UnsignedInt8SampleTypeTraits = FixedSampleTypeTraits<uint8_t>;
-using SignedInt16SampleTypeTraits = FixedSampleTypeTraits<int16_t>;
-using SignedInt32SampleTypeTraits = FixedSampleTypeTraits<int32_t>;
+using UnsignedInt8SampleTypeTraits = FixedSampleTypeTraits<quint8>;
+using SignedInt16SampleTypeTraits = FixedSampleTypeTraits<qint16>;
+using SignedInt32SampleTypeTraits = FixedSampleTypeTraits<qint32>;
 
 } // namespace base
 

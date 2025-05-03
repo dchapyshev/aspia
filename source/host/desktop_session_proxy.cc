@@ -90,7 +90,7 @@ DesktopSessionProxy::DesktopSessionProxy()
 
     if (!max_fps_from_env)
     {
-        uint32_t threads = std::thread::hardware_concurrency();
+        quint32 threads = std::thread::hardware_concurrency();
         if (threads <= 2)
         {
             LOG(LS_INFO) << "Low-end CPU detected. Maximum capture FPS: " << kMaxScreenCaptureFpsLowEnd;

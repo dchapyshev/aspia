@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget* parent)
     tray_tooltip_timer->setInterval(std::chrono::seconds(30));
     tray_tooltip_timer->start();
 
-    uint32_t one_time_sessions = user_settings.oneTimeSessions();
+    quint32 one_time_sessions = user_settings.oneTimeSessions();
 
     ui.action_desktop_manage->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_MANAGE);
     ui.action_desktop_view->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_VIEW);
@@ -376,7 +376,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
             {
-                std::vector<uint32_t> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
+                std::vector<quint32> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
                 for (const auto& session : sessions)
                     onKillSession(session);
             });
@@ -787,7 +787,7 @@ void MainWindow::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onKillSession(uint32_t session_id)
+void MainWindow::onKillSession(quint32 session_id)
 {
     if (agent_proxy_)
     {
@@ -805,7 +805,7 @@ void MainWindow::onOneTimeSessionsChanged()
 {
     LOG(LS_INFO) << "[ACTION] One-time sessions changed";
 
-    uint32_t sessions = calcOneTimeSessions();
+    quint32 sessions = calcOneTimeSessions();
 
     UserSettings user_settings;
     user_settings.setOneTimeSessions(sessions);
@@ -928,9 +928,9 @@ void MainWindow::updateTrayIconTooltip()
 }
 
 //--------------------------------------------------------------------------------------------------
-uint32_t MainWindow::calcOneTimeSessions()
+quint32 MainWindow::calcOneTimeSessions()
 {
-    uint32_t sessions = 0;
+    quint32 sessions = 0;
 
     if (ui.action_desktop_manage->isChecked())
         sessions |= proto::SESSION_TYPE_DESKTOP_MANAGE;

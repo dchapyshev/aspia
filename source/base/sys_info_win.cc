@@ -51,7 +51,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
         return 0;
     }
 
-    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(returned_length);
+    std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(returned_length);
 
     PSYSTEM_LOGICAL_PROCESSOR_INFORMATION info =
         reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION>(buffer.get());
@@ -74,7 +74,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
+QString digitalProductIdToString(quint8* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
     constexpr int kKeyMapSize = 24;
@@ -89,7 +89,7 @@ QString digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
     // The keys starting with Windows 8 / Office 2013 can contain the symbol N.
     int containsN = (product_id[kStartIndex + 14] >> 3) & 1;
     product_id[kStartIndex + 14] =
-        static_cast<uint8_t>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
+        static_cast<quint8>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
 
     std::u16string key;
 
@@ -100,7 +100,7 @@ QString digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
         for (int j = kDecodeStringLength - 1; j >= 0; --j)
         {
             key_map_index = (key_map_index << 8) | product_id[kStartIndex + j];
-            product_id[kStartIndex + j] = static_cast<uint8_t>(key_map_index / kKeyMapSize);
+            product_id[kStartIndex + j] = static_cast<quint8>(key_map_index / kKeyMapSize);
             key_map_index %= kKeyMapSize;
         }
 
@@ -258,7 +258,7 @@ QString SysInfo::operatingSystemKey()
             return QString();
     }
 
-    std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
+    std::unique_ptr<quint8[]> product_id = std::make_unique<quint8[]>(product_id_size);
 
     status = key.readValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
@@ -273,7 +273,7 @@ QString SysInfo::operatingSystemKey()
 
 //--------------------------------------------------------------------------------------------------
 // static
-int64_t SysInfo::operatingSystemInstallDate()
+qint64 SysInfo::operatingSystemInstallDate()
 {
     RegistryKey key;
 
@@ -293,7 +293,7 @@ int64_t SysInfo::operatingSystemInstallDate()
 
         status = key.readValueDW(L"InstallDate", &install_date);
         if (status == ERROR_SUCCESS)
-            return static_cast<int64_t>(install_date);
+            return static_cast<qint64>(install_date);
     }
 
     return 0;

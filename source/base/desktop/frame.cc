@@ -32,7 +32,7 @@ const float Frame::kStandardDPI = 96.0;
 Frame::Frame(const Size& size,
              const PixelFormat& format,
              int stride,
-             uint8_t* data,
+             quint8* data,
              SharedMemoryBase* shared_memory)
     : data_(data),
       shared_memory_(shared_memory),
@@ -51,11 +51,11 @@ bool Frame::contains(int x, int y) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect)
+void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect& dest_rect)
 {
     DCHECK(Rect::makeSize(size()).containsRect(dest_rect));
 
-    uint8_t* dest = frameDataAtPos(dest_rect.topLeft());
+    quint8* dest = frameDataAtPos(dest_rect.topLeft());
     size_t bytes_per_row = static_cast<size_t>(format_.bytesPerPixel() * dest_rect.width());
 
     for (int y = 0; y < dest_rect.height(); ++y)
@@ -98,18 +98,18 @@ Rect Frame::rect() const
     // Only scale the size.
     return Rect::makeXYWH(frame_top_left.x(),
                           frame_top_left.y(),
-                          int32_t(float(frame_size.width()) / scale),
-                          int32_t(float(frame_size.height()) / scale));
+                          qint32(float(frame_size.width()) / scale),
+                          qint32(float(frame_size.height()) / scale));
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t* Frame::frameDataAtPos(const Point& pos) const
+quint8* Frame::frameDataAtPos(const Point& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
 }
 
 //--------------------------------------------------------------------------------------------------
-uint8_t* Frame::frameDataAtPos(int x, int y) const
+quint8* Frame::frameDataAtPos(int x, int y) const
 {
     return frameData() + stride() * y + format_.bytesPerPixel() * x;
 }

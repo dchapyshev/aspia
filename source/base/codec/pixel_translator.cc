@@ -38,23 +38,23 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        red_table_ = std::make_unique<uint32_t[]>(source_format_.redMax() + 1);
-        green_table_ = std::make_unique<uint32_t[]>(source_format_.greenMax() + 1);
-        blue_table_ = std::make_unique<uint32_t[]>(source_format_.blueMax() + 1);
+        red_table_ = std::make_unique<quint32[]>(source_format_.redMax() + 1);
+        green_table_ = std::make_unique<quint32[]>(source_format_.greenMax() + 1);
+        blue_table_ = std::make_unique<quint32[]>(source_format_.blueMax() + 1);
 
-        for (uint32_t i = 0; i <= source_format_.redMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.redMax(); ++i)
         {
             red_table_[i] = ((i * target_format_.redMax() + source_format_.redMax() / 2) /
                              source_format_.redMax()) << target_format_.redShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.greenMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.greenMax(); ++i)
         {
             green_table_[i] = ((i * target_format_.greenMax() + source_format_.greenMax() / 2) /
                                source_format_.greenMax()) << target_format_.greenShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.blueMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.blueMax(); ++i)
         {
             blue_table_[i] = ((i * target_format_.blueMax() + source_format_.blueMax() / 2) /
                               source_format_.blueMax()) << target_format_.blueShift();
@@ -65,18 +65,18 @@ public:
 
     void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
     {
-        const uint32_t red = red_table_[
+        const quint32 red = red_table_[
             *src_ptr >> source_format_.redShift() & source_format_.redMax()];
-        const uint32_t green = green_table_[
+        const quint32 green = green_table_[
             *src_ptr >> source_format_.greenShift() & source_format_.greenMax()];
-        const uint32_t blue = blue_table_[
+        const quint32 blue = blue_table_[
             *src_ptr >> source_format_.blueShift() & source_format_.blueMax()];
 
         *dst_ptr = static_cast<TargetT>(red | green | blue | 0xFF000000);
     }
 
-    void translate(const uint8_t* src, int src_stride,
-                   uint8_t* dst, int dst_stride,
+    void translate(const quint8* src, int src_stride,
+                   quint8* dst, int dst_stride,
                    int width, int height) final
     {
         const int block_count = width / kBlockSize;
@@ -116,9 +116,9 @@ public:
     }
 
 private:
-    std::unique_ptr<uint32_t[]> red_table_;
-    std::unique_ptr<uint32_t[]> green_table_;
-    std::unique_ptr<uint32_t[]> blue_table_;
+    std::unique_ptr<quint32[]> red_table_;
+    std::unique_ptr<quint32[]> green_table_;
+    std::unique_ptr<quint32[]> blue_table_;
 
     PixelFormat source_format_;
     PixelFormat target_format_;
@@ -135,26 +135,26 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        static_assert(sizeof(SourceT) == sizeof(uint8_t) || sizeof(SourceT) == sizeof(quint16));
+        static_assert(sizeof(SourceT) == sizeof(quint8) || sizeof(SourceT) == sizeof(quint16));
 
         const size_t table_size = std::numeric_limits<SourceT>::max() + 1;
-        table_ = std::make_unique<uint32_t[]>(table_size);
+        table_ = std::make_unique<quint32[]>(table_size);
 
-        uint32_t source_red_mask = source_format.redMax() << source_format.redShift();
-        uint32_t source_green_mask = source_format.greenMax() << source_format.greenShift();
-        uint32_t source_blue_mask = source_format.blueMax() << source_format.blueShift();
+        quint32 source_red_mask = source_format.redMax() << source_format.redShift();
+        quint32 source_green_mask = source_format.greenMax() << source_format.greenShift();
+        quint32 source_blue_mask = source_format.blueMax() << source_format.blueShift();
 
-        for (uint32_t i = 0; i < table_size; ++i)
+        for (quint32 i = 0; i < table_size; ++i)
         {
-            uint32_t source_red = (i & source_red_mask) >> source_format.redShift();
-            uint32_t source_green = (i & source_green_mask) >> source_format.greenShift();
-            uint32_t source_blue = (i & source_blue_mask) >> source_format.blueShift();
+            quint32 source_red = (i & source_red_mask) >> source_format.redShift();
+            quint32 source_green = (i & source_green_mask) >> source_format.greenShift();
+            quint32 source_blue = (i & source_blue_mask) >> source_format.blueShift();
 
-            uint32_t target_red =
+            quint32 target_red =
                 (source_red * target_format.redMax() / source_format.redMax()) << target_format.redShift();
-            uint32_t target_green =
+            quint32 target_green =
                 (source_green * target_format.greenMax() / source_format.greenMax()) << target_format.greenShift();
-            uint32_t target_blue =
+            quint32 target_blue =
                 (source_blue * target_format.blueMax() / source_format.blueMax()) << target_format.blueShift();
 
             table_[i] = target_red | target_green | target_blue | 0xFF000000;
@@ -163,8 +163,8 @@ public:
 
     ~PixelTranslatorFrom8_16bppT() final = default;
 
-    void translate(const uint8_t* src, int src_stride,
-                   uint8_t* dst, int dst_stride,
+    void translate(const quint8* src, int src_stride,
+                   quint8* dst, int dst_stride,
                    int width, int height) final
     {
         const int block_count = width / kBlockSize;
@@ -204,7 +204,7 @@ public:
     }
 
 private:
-    std::unique_ptr<uint32_t[]> table_;
+    std::unique_ptr<quint32[]> table_;
 
     PixelFormat source_format_;
     PixelFormat target_format_;
@@ -226,15 +226,15 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<uint32_t, uint32_t>>(
+                    return std::make_unique<PixelTranslatorT<quint32, quint32>>(
                         source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, uint32_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, quint32>>(
                         source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint32_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint32>>(
                         source_format, target_format);
 
                 default:
@@ -248,7 +248,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<uint32_t, quint16>>(
+                    return std::make_unique<PixelTranslatorT<quint32, quint16>>(
                         source_format, target_format);
 
                 case 2:
@@ -256,7 +256,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                         source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, quint16>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint16>>(
                         source_format, target_format);
 
                 default:
@@ -270,15 +270,15 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
             switch (source_format.bytesPerPixel())
             {
                 case 4:
-                    return std::make_unique<PixelTranslatorT<uint32_t, uint8_t>>(
+                    return std::make_unique<PixelTranslatorT<quint32, quint8>>(
                         source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, uint8_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint16, quint8>>(
                         source_format, target_format);
 
                 case 1:
-                    return std::make_unique<PixelTranslatorFrom8_16bppT<uint8_t, uint8_t>>(
+                    return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint8>>(
                         source_format, target_format);
 
                 default:

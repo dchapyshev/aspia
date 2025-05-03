@@ -60,7 +60,7 @@ FileTransfer::TaskList FileTransferQueueBuilder::takeQueue()
 }
 
 //--------------------------------------------------------------------------------------------------
-int64_t FileTransferQueueBuilder::totalSize() const
+qint64 FileTransferQueueBuilder::totalSize() const
 {
     return total_size_;
 }
@@ -97,7 +97,7 @@ void FileTransferQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTas
                        last_task.targetPath(),
                        item.name(),
                        item.is_directory(),
-                       static_cast<int64_t>(item.size()));
+                       static_cast<qint64>(item.size()));
     }
 
     doPendingTasks();
@@ -108,7 +108,7 @@ void FileTransferQueueBuilder::addPendingTask(const std::string& source_dir,
                                               const std::string& target_dir,
                                               const std::string& item_name,
                                               bool is_directory,
-                                              int64_t size)
+                                              qint64 size)
 {
     total_size_ += size;
 

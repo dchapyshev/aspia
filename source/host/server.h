@@ -51,7 +51,7 @@ public:
 
     void start();
     void setSessionEvent(base::SessionStatus status, base::SessionId session_id);
-    void setPowerEvent(uint32_t power_event);
+    void setPowerEvent(quint32 power_event);
 
 protected:
     // base::AuthenticatorManager::Delegate implementation.

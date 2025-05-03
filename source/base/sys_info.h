@@ -35,7 +35,7 @@ public:
     static QString operatingSystemArchitecture();
     static QString operatingSystemDir();
     static QString operatingSystemKey();
-    static int64_t operatingSystemInstallDate();
+    static qint64 operatingSystemInstallDate();
 
     static quint64 uptime();
 

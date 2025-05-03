@@ -50,7 +50,7 @@ public:
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 protected:
     // SessionManager::Delegate implementation.
@@ -59,12 +59,12 @@ protected:
     void onSessionFinished() final;
 
     // SharedPool::Delegate implementation.
-    void onPoolKeyExpired(uint32_t key_id) final;
+    void onPoolKeyExpired(quint32 key_id) final;
 
 private:
     void connectToRouter();
     void delayedConnectToRouter();
-    void sendKeyPool(uint32_t key_count);
+    void sendKeyPool(quint32 key_count);
 
     // Router settings.
     QString router_address_;
@@ -76,7 +76,7 @@ private:
     QString peer_address_;
     quint16 peer_port_ = 0;
     std::chrono::minutes peer_idle_timeout_;
-    uint32_t max_peer_count_ = 0;
+    quint32 max_peer_count_ = 0;
     bool statistics_enabled_ = false;
     std::chrono::seconds statistics_interval_;
 

@@ -166,7 +166,7 @@ std::chrono::seconds Session::duration() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
+void Session::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
     if (channel_)
         channel_->send(channel_id, base::serialize(message));
@@ -182,7 +182,7 @@ void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
+void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {
@@ -195,7 +195,7 @@ void Session::onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
+void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {

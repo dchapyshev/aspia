@@ -45,7 +45,7 @@ public:
 
 protected:
     explicit AudioOutput(const NeedMoreDataCB& need_more_data_cb);
-    void onDataRequest(int16_t* audio_samples, size_t audio_samples_count);
+    void onDataRequest(qint16* audio_samples, size_t audio_samples_count);
 
 private:
     NeedMoreDataCB need_more_data_cb_;

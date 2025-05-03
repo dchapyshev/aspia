@@ -62,7 +62,7 @@ private:
     proto::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
-    uint32_t message_size_ = 0;
+    quint32 message_size_ = 0;
     QByteArray message_;
 
     asio::io_context& io_context_;

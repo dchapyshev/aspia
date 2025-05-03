@@ -30,18 +30,18 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<uint8_t[]> initializeTcpTable()
+std::unique_ptr<quint8[]> initializeTcpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_TCPTABLE);
 
-    std::unique_ptr<uint8_t[]> table_buffer = std::make_unique<uint8_t[]>(table_buffer_size);
+    std::unique_ptr<quint8[]> table_buffer = std::make_unique<quint8[]>(table_buffer_size);
 
     DWORD ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.get()),
                                     &table_buffer_size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
     if (ret == ERROR_INSUFFICIENT_BUFFER)
     {
-        table_buffer = std::make_unique<uint8_t[]>(table_buffer_size);
+        table_buffer = std::make_unique<quint8[]>(table_buffer_size);
 
         ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.get()),
                                   &table_buffer_size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
@@ -54,18 +54,18 @@ std::unique_ptr<uint8_t[]> initializeTcpTable()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<uint8_t[]> initializeUdpTable()
+std::unique_ptr<quint8[]> initializeUdpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_UDPTABLE);
 
-    std::unique_ptr<uint8_t[]> table_buffer = std::make_unique<uint8_t[]>(table_buffer_size);
+    std::unique_ptr<quint8[]> table_buffer = std::make_unique<quint8[]>(table_buffer_size);
 
     DWORD ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.get()),
                                     &table_buffer_size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
 
     if (ret == ERROR_INSUFFICIENT_BUFFER)
     {
-        table_buffer = std::make_unique<uint8_t[]>(table_buffer_size);
+        table_buffer = std::make_unique<quint8[]>(table_buffer_size);
 
         ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.get()),
                                   &table_buffer_size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
@@ -96,7 +96,7 @@ QString processNameByPid(HANDLE process_snapshot, DWORD process_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString addressToString(uint32_t address)
+QString addressToString(quint32 address)
 {
     address = base::EndianUtil::byteSwap(address);
 

@@ -125,7 +125,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         ComputerFactory::setDefaultDesktopViewConfig(
             computer->mutable_session_config()->mutable_desktop_view());
 
-        int64_t current_time = QDateTime::currentSecsSinceEpoch();
+        qint64 current_time = QDateTime::currentSecsSinceEpoch();
         computer->set_create_time(current_time);
         computer->set_modify_time(current_time);
 
@@ -160,7 +160,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         ComputerFactory::setDefaultDesktopViewConfig(
             computer->mutable_session_config()->mutable_desktop_view());
 
-        int64_t current_time = QDateTime::currentSecsSinceEpoch();
+        qint64 current_time = QDateTime::currentSecsSinceEpoch();
         computer->set_create_time(current_time);
         computer->set_modify_time(current_time);
 
@@ -349,7 +349,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     QJsonObject json_inherit = json_computer["inherit"].toObject();
     proto::address_book::InheritConfig inherit = readInheritConfig(json_inherit);
 
-    int64_t current_time = QDateTime::currentSecsSinceEpoch();
+    qint64 current_time = QDateTime::currentSecsSinceEpoch();
 
     proto::address_book::Computer* computer = parent_group->add_computer();
     computer->set_create_time(current_time);

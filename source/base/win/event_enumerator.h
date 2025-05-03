@@ -32,19 +32,19 @@ namespace base {
 class EventEnumerator
 {
 public:
-    EventEnumerator(const QString& log_name, uint32_t start, uint32_t count);
+    EventEnumerator(const QString& log_name, quint32 start, quint32 count);
     ~EventEnumerator();
 
-    uint32_t count() const;
+    quint32 count() const;
     bool isAtEnd() const;
     void advance();
 
     enum class Type { UNKNOWN, ERR, WARN, INFO, AUDIT_SUCCESS, AUDIT_FAILURE, SUCCESS };
 
     Type type() const;
-    int64_t time() const;
+    qint64 time() const;
     QString category() const;
-    uint32_t eventId() const;
+    quint32 eventId() const;
     QString source() const;
     QString description() const;
 
@@ -53,7 +53,7 @@ private:
 
     QString log_name_;
     ScopedEventLog event_log_;
-    uint32_t records_count_ = 0;
+    quint32 records_count_ = 0;
     int end_record_ = 0;
 
     mutable int current_pos_ = 0;

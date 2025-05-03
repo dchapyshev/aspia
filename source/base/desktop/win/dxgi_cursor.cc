@@ -60,13 +60,13 @@ MouseCursor* DxgiCursor::mouseCursor()
 
         image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
 
-        uint8_t* mask_and = reinterpret_cast<uint8_t*>(pointer_shape_.data());
-        uint8_t* mask_xor = reinterpret_cast<uint8_t*>(pointer_shape_.data()) + (pitch * height);
+        quint8* mask_and = reinterpret_cast<quint8*>(pointer_shape_.data());
+        quint8* mask_xor = reinterpret_cast<quint8*>(pointer_shape_.data()) + (pitch * height);
         int width_bytes = ((width + 15) / 16) * 2;
 
-        auto check_bit = [](uint8_t byte, int index)
+        auto check_bit = [](quint8 byte, int index)
         {
-            uint8_t temp = 128 >> index;
+            quint8 temp = 128 >> index;
             return (temp & byte) != 0;
         };
 
@@ -74,7 +74,7 @@ MouseCursor* DxgiCursor::mouseCursor()
         {
             for (int x = 0; x < width; ++x)
             {
-                uint32_t* pixel = reinterpret_cast<uint32_t*>(
+                quint32* pixel = reinterpret_cast<quint32*>(
                     image.data() + (y * width + x) * kBytesPerPixel);
                 int offset = y * width_bytes + x / 8;
 

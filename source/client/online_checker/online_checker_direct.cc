@@ -49,7 +49,7 @@ public:
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
-    void onTcpMessageReceived(uint8_t channel_id, const QByteArray& buffer);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     void onFinished(const base::Location& location, bool online);
@@ -139,7 +139,7 @@ void OnlineCheckerDirect::Instance::onTcpDisconnected(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::ServerHello message;
 

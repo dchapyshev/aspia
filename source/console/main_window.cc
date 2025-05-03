@@ -684,7 +684,7 @@ void MainWindow::onExportComputers()
 
     QJsonDocument json = exportComputersToJson(*computer_group);
 
-    int64_t written = file.write(json.toJson());
+    qint64 written = file.write(json.toJson());
     if (written <= 0)
     {
         LOG(LS_ERROR) << "Unable to write file: " << file.errorString().toStdString();

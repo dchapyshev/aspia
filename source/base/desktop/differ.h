@@ -33,16 +33,16 @@ public:
     explicit Differ(const Size& size);
     ~Differ() = default;
 
-    void calcDirtyRegion(const uint8_t* prev_image,
-                         const uint8_t* curr_image,
+    void calcDirtyRegion(const quint8* prev_image,
+                         const quint8* curr_image,
                          Region* changed_region);
 
 private:
-    typedef uint8_t(*DiffFullBlockFunc)(const uint8_t*, const uint8_t*, int);
+    typedef quint8(*DiffFullBlockFunc)(const quint8*, const quint8*, int);
 
     static DiffFullBlockFunc diffFunction();
 
-    void markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
+    void markDirtyBlocks(const quint8* prev_image, const quint8* curr_image);
     void mergeBlocks(Region* dirty_region);
 
     const Rect screen_rect_;
@@ -56,7 +56,7 @@ private:
     int partial_row_height_;
     int block_stride_y_;
 
-    std::unique_ptr<uint8_t[]> diff_info_;
+    std::unique_ptr<quint8[]> diff_info_;
     DiffFullBlockFunc diff_full_block_func_;
 
     DISALLOW_COPY_AND_ASSIGN(Differ);

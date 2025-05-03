@@ -1,41 +1,41 @@
 #include "sha256.h"
 
-static inline uint32_t rotr(uint32_t x, int n){
+static inline quint32 rotr(quint32 x, int n){
     return (x >> n) | (x << (32 - n));
 }
 
-static inline uint32_t step1(uint32_t e, uint32_t f, uint32_t g){
+static inline quint32 step1(quint32 e, quint32 f, quint32 g){
     return (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ ((~ e) & g));
 }
 
-static inline uint32_t step2(uint32_t a, uint32_t b, uint32_t c){
+static inline quint32 step2(quint32 a, quint32 b, quint32 c){
     return (rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c));
 }
 
-static inline void update_w(uint32_t *w, int i, const uint8_t *buffer){
+static inline void update_w(quint32 *w, int i, const quint8 *buffer){
     int j;
     for (j = 0; j < 16; j++){
         if (i < 16){
             w[j] =
-                ((uint32_t)buffer[0] << 24) |
-                ((uint32_t)buffer[1] << 16) |
-                ((uint32_t)buffer[2] <<  8) |
-                ((uint32_t)buffer[3]);
+                ((quint32)buffer[0] << 24) |
+                ((quint32)buffer[1] << 16) |
+                ((quint32)buffer[2] <<  8) |
+                ((quint32)buffer[3]);
             buffer += 4;
         }else{
-            uint32_t a = w[(j + 1) & 15];
-            uint32_t b = w[(j + 14) & 15];
-            uint32_t s0 = (rotr(a,  7) ^ rotr(a, 18) ^ (a >>  3));
-            uint32_t s1 = (rotr(b, 17) ^ rotr(b, 19) ^ (b >> 10));
+            quint32 a = w[(j + 1) & 15];
+            quint32 b = w[(j + 14) & 15];
+            quint32 s0 = (rotr(a,  7) ^ rotr(a, 18) ^ (a >>  3));
+            quint32 s1 = (rotr(b, 17) ^ rotr(b, 19) ^ (b >> 10));
             w[j] += w[(j + 9) & 15] + s0 + s1;
         }
     }
 }
 
 static void sha256_block(struct sha256 *sha){
-    uint32_t *state = sha->state;
+    quint32 *state = sha->state;
 
-    static const uint32_t k[8 * 8] = {
+    static const quint32 k[8 * 8] = {
         0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
         0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
@@ -54,23 +54,23 @@ static void sha256_block(struct sha256 *sha){
         0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
     };
 
-    uint32_t a = state[0];
-    uint32_t b = state[1];
-    uint32_t c = state[2];
-    uint32_t d = state[3];
-    uint32_t e = state[4];
-    uint32_t f = state[5];
-    uint32_t g = state[6];
-    uint32_t h = state[7];
+    quint32 a = state[0];
+    quint32 b = state[1];
+    quint32 c = state[2];
+    quint32 d = state[3];
+    quint32 e = state[4];
+    quint32 f = state[5];
+    quint32 g = state[6];
+    quint32 h = state[7];
 
-    uint32_t w[16];
+    quint32 w[16];
 
     int i, j;
     for (i = 0; i < 64; i += 16){
         update_w(w, i, sha->buffer);
 
         for (j = 0; j < 16; j += 4){
-            uint32_t temp;
+            quint32 temp;
             temp = h + step1(e, f, g) + k[i + j + 0] + w[j + 0];
             h = temp + d;
             d = temp + step2(a, b, c);
@@ -109,7 +109,7 @@ void sha256_init(struct sha256 *sha){
     sha->buffer_counter = 0;
 }
 
-void sha256_append_byte(struct sha256 *sha, uint8_t byte){
+void sha256_append_byte(struct sha256 *sha, quint8 byte){
     sha->buffer[sha->buffer_counter++] = byte;
     sha->n_bits += 8;
 
@@ -120,7 +120,7 @@ void sha256_append_byte(struct sha256 *sha, uint8_t byte){
 }
 
 void sha256_append(struct sha256 *sha, const void *src, size_t n_bytes){
-    const uint8_t *bytes = (const uint8_t*)src;
+    const quint8 *bytes = (const quint8*)src;
     size_t i;
 
     for (i = 0; i < n_bytes; i++){
@@ -139,7 +139,7 @@ void sha256_finalize(struct sha256 *sha){
     }
 
     for (i = 7; i >= 0; i--){
-        uint8_t byte = (n_bits >> 8 * i) & 0xff;
+        quint8 byte = (n_bits >> 8 * i) & 0xff;
         sha256_append_byte(sha, byte);
     }
 }
@@ -150,7 +150,7 @@ void sha256_finalize_hex(struct sha256 *sha, char *dst_hex65){
 
     for (i = 0; i < 8; i++){
         for (j = 7; j >= 0; j--){
-            uint8_t nibble = (sha->state[i] >> j * 4) & 0xf;
+            quint8 nibble = (sha->state[i] >> j * 4) & 0xf;
             *dst_hex65++ = "0123456789abcdef"[nibble];
         }
     }
@@ -159,7 +159,7 @@ void sha256_finalize_hex(struct sha256 *sha, char *dst_hex65){
 }
 
 void sha256_finalize_bytes(struct sha256 *sha, void *dst_bytes32){
-    uint8_t *ptr = (uint8_t*)dst_bytes32;
+    quint8 *ptr = (quint8*)dst_bytes32;
     int i, j;
     sha256_finalize(sha);
 

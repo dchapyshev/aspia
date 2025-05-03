@@ -110,7 +110,7 @@ bool ServerAuthenticator::setPrivateKey(const QByteArray& private_key)
 
 //--------------------------------------------------------------------------------------------------
 bool ServerAuthenticator::setAnonymousAccess(
-    AnonymousAccess anonymous_access, uint32_t session_types)
+    AnonymousAccess anonymous_access, quint32 session_types)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
@@ -309,7 +309,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         }
     }
 
-    const uint32_t encryption = client_hello->encryption();
+    const quint32 encryption = client_hello->encryption();
 
     LOG(LS_INFO) << "Supported by client:";
 
@@ -606,7 +606,7 @@ void ServerAuthenticator::doSessionChallenge()
 
     session_challenge->set_os_name(SysInfo::operatingSystemName().toStdString());
     session_challenge->set_computer_name(SysInfo::computerName().toStdString());
-    session_challenge->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
+    session_challenge->set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
 
 #if defined(ARCH_CPU_X86)
     session_challenge->set_arch("x86");
@@ -675,7 +675,7 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
                  << " arch=" << response->arch() << " display_name=" << response->display_name()
                  << ")";
 
-    BitSet<uint32_t> session_type = response->session_type();
+    BitSet<quint32> session_type = response->session_type();
     if (session_type.count() != 1)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);

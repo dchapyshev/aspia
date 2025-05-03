@@ -49,7 +49,7 @@ void ClientTextChat::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionMessageReceived(uint8_t /* channel_id */, const QByteArray& buffer)
+void ClientTextChat::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::TextChat text_chat;
     if (!base::parse(buffer, &text_chat))
@@ -62,7 +62,7 @@ void ClientTextChat::onSessionMessageReceived(uint8_t /* channel_id */, const QB
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void ClientTextChat::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
