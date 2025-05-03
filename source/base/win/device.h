@@ -21,7 +21,7 @@
 
 #include "base/win/scoped_object.h"
 
-#include <filesystem>
+#include <QString>
 
 namespace base {
 
@@ -31,10 +31,10 @@ public:
     Device() = default;
     virtual ~Device();
 
-    bool open(const std::filesystem::path& device_path,
+    bool open(const QString& device_path,
               DWORD desired_access,
               DWORD share_mode);
-    bool open(const std::filesystem::path& device_path);
+    bool open(const QString& device_path);
     void close();
     bool ioControl(DWORD io_control_code,
                    LPVOID input_buffer,

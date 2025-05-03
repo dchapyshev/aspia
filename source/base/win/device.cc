@@ -18,8 +18,6 @@
 
 #include "base/win/device.h"
 
-#include "base/logging.h"
-
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
@@ -29,11 +27,11 @@ Device::~Device()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Device::open(const std::filesystem::path& device_path,
+bool Device::open(const QString& device_path,
                   DWORD desired_access,
                   DWORD share_mode)
 {
-    device_.reset(CreateFileW(device_path.c_str(),
+    device_.reset(CreateFileW(reinterpret_cast<const wchar_t*>(device_path.utf16()),
                               desired_access,
                               share_mode,
                               nullptr,
@@ -44,7 +42,7 @@ bool Device::open(const std::filesystem::path& device_path,
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Device::open(const std::filesystem::path& device_path)
+bool Device::open(const QString& device_path)
 {
     return open(device_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE);
 }

@@ -147,7 +147,7 @@ bool BatteryEnumerator::isAtEnd() const
         return true;
     }
 
-    if (!battery_.open(detail_data->DevicePath))
+    if (!battery_.open(QString::fromWCharArray(detail_data->DevicePath)))
         return true;
 
     ULONG bytes_returned;
