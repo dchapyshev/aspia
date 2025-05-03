@@ -33,10 +33,10 @@
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"
 #include "base/win/windows_version.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QFileDialog>
 #include <QMenu>
@@ -64,10 +64,10 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // General Tab
     //---------------------------------------------------------------------------------------------
 
-#if defined(OS_LINUX) || defined(OS_MACOS)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     ui.widget_service->setVisible(false);
     ui.groupbox_update_server->setVisible(false);
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);

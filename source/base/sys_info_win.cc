@@ -19,7 +19,6 @@
 #include "base/sys_info.h"
 
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
 #include "build/build_config.h"
@@ -220,12 +219,7 @@ QString SysInfo::operatingSystemArchitecture()
 // static
 QString SysInfo::operatingSystemDir()
 {
-    std::filesystem::path dir;
-
-    if (!BasePaths::windowsDir(&dir))
-        return QString();
-
-    return QString::fromStdU16String(dir.u16string());
+    return qEnvironmentVariable("WINDIR");
 }
 
 //--------------------------------------------------------------------------------------------------
