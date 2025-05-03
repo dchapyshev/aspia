@@ -23,7 +23,6 @@
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
-#include "base/net/tcp_channel_proxy.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/thread.h"
 
@@ -163,7 +162,6 @@ void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(QObject* parent)
     : NetworkChannel(parent),
-      proxy_(new TcpChannelProxy(base::Thread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -177,7 +175,6 @@ TcpChannel::TcpChannel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
     : NetworkChannel(parent),
-      proxy_(new TcpChannelProxy(base::Thread::currentTaskRunner(), this)),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket)),
       connected_(true),
@@ -193,18 +190,8 @@ TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
 TcpChannel::~TcpChannel()
 {
     LOG(LS_INFO) << "Dtor (start)";
-
-    proxy_->willDestroyCurrentChannel();
-    proxy_ = nullptr;
-
     disconnect();
     LOG(LS_INFO) << "Dtor (end)";
-}
-
-//--------------------------------------------------------------------------------------------------
-std::shared_ptr<TcpChannelProxy> TcpChannel::channelProxy()
-{
-    return proxy_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -716,7 +703,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     write_queue_.pop();
 
     // If the queue is not empty, then we send the following message.
-    bool schedule_write = !write_queue_.empty() || proxy_->reloadWriteQueue(&write_queue_);
+    bool schedule_write = !write_queue_.empty();
 
     if (task_type == WriteTask::Type::USER_DATA)
         onMessageWritten(channel_id);

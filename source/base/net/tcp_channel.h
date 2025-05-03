@@ -30,7 +30,6 @@
 
 namespace base {
 
-class TcpChannelProxy;
 class Location;
 class MessageEncryptor;
 class MessageDecryptor;
@@ -44,8 +43,6 @@ public:
     // Constructor available for client.
     explicit TcpChannel(QObject* parent = nullptr);
     ~TcpChannel() final;
-
-    std::shared_ptr<TcpChannelProxy> channelProxy();
 
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.

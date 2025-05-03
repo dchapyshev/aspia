@@ -504,8 +504,6 @@ list(APPEND SOURCE_BASE_NET
     net/network_channel.h
     net/tcp_channel.cc
     net/tcp_channel.h
-    net/tcp_channel_proxy.cc
-    net/tcp_channel_proxy.h
     net/tcp_server.cc
     net/tcp_server.h
     net/variable_size.cc

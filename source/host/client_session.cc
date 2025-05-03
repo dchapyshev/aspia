@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/net/tcp_channel_proxy.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/client_session_port_forwarding.h"
@@ -163,12 +162,6 @@ const QString& ClientSession::displayName() const
 void ClientSession::setSessionId(base::SessionId session_id)
 {
     session_id_ = session_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::shared_ptr<base::TcpChannelProxy> ClientSession::channelProxy()
-{
-    return channel_->channelProxy();
 }
 
 //--------------------------------------------------------------------------------------------------

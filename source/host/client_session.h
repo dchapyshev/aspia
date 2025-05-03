@@ -102,7 +102,6 @@ protected:
     virtual void onReceived(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onWritten(quint8 channel_id, size_t pending) = 0;
 
-    std::shared_ptr<base::TcpChannelProxy> channelProxy();
     void sendMessage(quint8 channel_id, QByteArray&& buffer);
     void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
 
