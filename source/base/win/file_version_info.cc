@@ -109,11 +109,10 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfoForModule
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
-    const std::filesystem::path& file_path)
+std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(const QString& file_path)
 {
     DWORD dummy;
-    const wchar_t* path = file_path.c_str();
+    const wchar_t* path = reinterpret_cast<const wchar_t*>(file_path.utf16());
 
     const DWORD length = GetFileVersionInfoSizeW(path, &dummy);
     if (length == 0)

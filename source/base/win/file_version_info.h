@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <filesystem>
+#include <memory>
 #include <vector>
 
 #include <QString>
@@ -40,8 +40,7 @@ public:
     // Creates a FileVersionInfo for the specified path. Returns NULL if something
     // goes wrong (typically the file does not exit or cannot be opened). The
     // returned object should be deleted when you are done with it.
-    static std::unique_ptr<FileVersionInfo> createFileVersionInfo(
-        const std::filesystem::path& file_path);
+    static std::unique_ptr<FileVersionInfo> createFileVersionInfo(const QString& file_path);
 
     // Creates a FileVersionInfo for the specified module. Returns NULL in case of error.
     // The returned object should be deleted when you are done with it.
