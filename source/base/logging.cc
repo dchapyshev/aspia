@@ -20,7 +20,6 @@
 
 #include "base/debug.h"
 #include "base/endian_util.h"
-#include <mutex>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/mini_dump_writer.h"
@@ -43,6 +42,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QMutex>
 #include <QThread>
 
 namespace base {
@@ -63,7 +63,7 @@ int g_log_file_number = -1;
 QString g_log_dir_path;
 QString g_log_file_path;
 QFile g_log_file;
-std::mutex g_log_file_lock;
+QMutex g_log_file_lock;
 
 //--------------------------------------------------------------------------------------------------
 const QString severityName(LoggingSeverity severity)
@@ -291,7 +291,7 @@ bool initLogging(const LoggingSettings& settings)
 #endif // defined(Q_OS_WINDOWS)
 
     {
-        std::scoped_lock lock(g_log_file_lock);
+        QMutexLocker lock(&g_log_file_lock);
 
         g_logging_destination = settings.destination;
         g_min_log_level = settings.min_log_level;
@@ -330,7 +330,7 @@ void shutdownLogging()
 {
     LOG(LS_INFO) << "Logging finished";
 
-    std::scoped_lock lock(g_log_file_lock);
+    QMutexLocker lock(&g_log_file_lock);
     g_log_file.close();
 }
 
@@ -484,7 +484,7 @@ LogMessage::~LogMessage()
     // Write to log file.
     if ((g_logging_destination & LOG_TO_FILE) != 0)
     {
-        std::scoped_lock lock(g_log_file_lock);
+        QMutexLocker lock(&g_log_file_lock);
 
         if (g_log_file.size() >= g_max_log_file_size)
         {
@@ -514,7 +514,7 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
 
     stream_ << severityName(severity_) << QLatin1Char(' ')
             << QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss.zzz")) << QLatin1Char(' ')
-            << reinterpret_cast<quint64>(QThread::currentThreadId()) << QLatin1Char(' ')
+            << QThread::currentThreadId() << QLatin1Char(' ')
             << file.data() << QLatin1Char(':')
             << line << QLatin1Char(' ')
             << function.data() << QLatin1String("] ");
@@ -550,14 +550,27 @@ QTextStream& operator<<(QTextStream& out, const std::wstring& wstr)
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const wchar_t* wstr)
 {
-    return out << (wstr ? QString::fromWCharArray(wstr) : "nullptr");
+    return out << (wstr ? QString::fromWCharArray(wstr) : QLatin1String("nullptr"));
 }
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const char8_t* ustr)
+{
+    return out << (ustr ? QString::fromUtf8(reinterpret_cast<const char*>(ustr)) : QLatin1String("nullptr"));
+}
+
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, const std::u8string& ustr)
+{
+    return out << QString::fromUtf8(reinterpret_cast<const char*>(ustr.c_str()),
+                                    static_cast<QString::size_type>(ustr.size()));
+}
+
+//--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const char16_t* ustr)
 {
-    return out << (ustr ? QString::fromUtf16(ustr) : "nullptr");
+    return out << (ustr ? QString::fromUtf16(ustr) : QLatin1String("nullptr"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -569,57 +582,73 @@ QTextStream& operator<<(QTextStream& out, const std::u16string& ustr)
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path)
 {
-    return out << QString::fromStdU16String(path.u16string());
+#if defined(Q_OS_WINDOWS)
+    return out << QString::fromWCharArray(path.c_str());
+#else
+    return out << QString::fromLocal8Bit(path.c_str());
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const std::error_code& error)
 {
-    std::string message = error.message();
-    int value  = error.value();
+    const std::string message = error.message();
+    const int value  = error.value();
 
-    return out << QString::fromLocal8Bit(message.c_str(), message.size()) << " (" << value << ")";
+    return out << QString::fromLocal8Bit(message.c_str(), static_cast<QString::size_type>(message.size()))
+               << QLatin1String(" (") << value << QLatin1Char(')');
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist)
 {
-    out << "QStringList(";
+    out << QLatin1String("QStringList(");
 
-    for (int i = 0; i < qstrlist.size(); ++i)
+    for (QStringList::size_type i = 0; i < qstrlist.size(); ++i)
     {
-        out << '"' << qstrlist.at(i) << '"';
+        out << QLatin1Char('"') << qstrlist.at(i) << QLatin1Char('"');
 
         if (i != qstrlist.size() - 1)
-            out << ", ";
+            out << QLatin1String(", ");
     }
 
-    return out << ")";
+    return out << QLatin1Char(')');
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray)
 {
-    return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
+    return out << QLatin1String("QByteArray(")
+               << QString::fromLatin1(qbytearray.toHex())
+               << QLatin1Char(')');
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QPoint& qpoint)
 {
-    return out << "QPoint(" << qpoint.x() << ' ' << qpoint.y() << ')';
+    return out << QLatin1String("QPoint(")
+               << qpoint.x() << QLatin1Char(' ')
+               << qpoint.y() << QLatin1Char(')');
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QRect& qrect)
 {
-    return out << "QRect("
-               << qrect.left()  << ' ' << qrect.top() << ' '
-               << qrect.width() << 'x' << qrect.height()
-               << ')';
+    return out << QLatin1String("QRect(")
+               << qrect.left()  << QLatin1Char(' ') << qrect.top() << QLatin1Char(' ')
+               << qrect.width() << QLatin1Char('x') << qrect.height() << QLatin1Char(')');
 }
 
 //--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QSize& qsize)
 {
-    return out << "QSize(" << qsize.width() << ' ' << qsize.height() << ')';
+    return out << QLatin1String("QSize(")
+               << qsize.width() << QLatin1Char(' ')
+               << qsize.height() << QLatin1Char(')');
+}
+
+//--------------------------------------------------------------------------------------------------
+QTextStream& operator<<(QTextStream& out, Qt::HANDLE handle)
+{
+    return out << reinterpret_cast<quint64>(handle);
 }

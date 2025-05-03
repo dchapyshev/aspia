@@ -517,7 +517,6 @@ public:
     QTextStream& stream() { return stream_; }
 
     LoggingSeverity severity() { return severity_; }
-    //std::string str() { return stream_.str(); }
 
 private:
     void init(std::string_view file, int line, std::string_view function);
@@ -585,6 +584,9 @@ QTextStream& operator<<(QTextStream& out, const wchar_t* wstr);
 QTextStream& operator<<(QTextStream& out, const std::wstring& wstr);
 #endif // defined(Q_OS_WINDOWS)
 
+QTextStream& operator<<(QTextStream& out, const char8_t* ustr);
+QTextStream& operator<<(QTextStream& out, const std::u8string& ustr);
+
 QTextStream& operator<<(QTextStream& out, const char16_t* ustr);
 QTextStream& operator<<(QTextStream& out, const std::u16string& ustr);
 
@@ -597,6 +599,8 @@ QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray);
 QTextStream& operator<<(QTextStream& out, const QPoint& qpoint);
 QTextStream& operator<<(QTextStream& out, const QRect& qrect);
 QTextStream& operator<<(QTextStream& out, const QSize& qsize);
+
+QTextStream& operator<<(QTextStream& out, Qt::HANDLE handle);
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.

@@ -19,10 +19,9 @@
 #include "base/desktop/desktop_resizer_win.h"
 
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "base/desktop/win/screen_capture_utils.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base {
 
@@ -188,7 +187,7 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     if (!isModeValid(candidate_mode))
     {
         LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                     << candidate_mode.dmPelsHeight << ": invalid fields " << std::hex
+                     << candidate_mode.dmPelsHeight << ": invalid fields " << Qt::hex
                      << candidate_mode.dmFields;
         return;
     }
