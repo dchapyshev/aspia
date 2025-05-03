@@ -2765,22 +2765,22 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="131"/>
+        <location filename="../ui/client_settings_dialog.cc" line="130"/>
         <source>An invalid router address was entered.</source>
         <translation>輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="150"/>
+        <location filename="../ui/client_settings_dialog.cc" line="149"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>使用者名稱不能為空，只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="167"/>
+        <location filename="../ui/client_settings_dialog.cc" line="166"/>
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="196"/>
+        <location filename="../ui/client_settings_dialog.cc" line="195"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -2818,18 +2818,18 @@
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="332"/>
-        <location filename="../ui/client_window.cc" line="350"/>
+        <location filename="../ui/client_window.cc" line="330"/>
+        <location filename="../ui/client_window.cc" line="348"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="333"/>
+        <location filename="../ui/client_window.cc" line="331"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="351"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
@@ -2930,34 +2930,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="376"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="385"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="377"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">沒有支援的視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="386"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1106"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1103"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Could not save image</source>
         <translation type="unfinished">無法儲存影像</translation>
     </message>

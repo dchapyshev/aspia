@@ -939,101 +939,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="413"/>
+        <location filename="../main_window.cc" line="412"/>
         <source>Not available</source>
         <translation>Non disponibile</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="540"/>
-        <location filename="../main_window.cc" line="734"/>
-        <location filename="../main_window.cc" line="923"/>
+        <location filename="../main_window.cc" line="539"/>
+        <location filename="../main_window.cc" line="733"/>
+        <location filename="../main_window.cc" line="922"/>
         <source>Aspia Host</source>
         <translation>Host Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="193"/>
-        <location filename="../main_window.cc" line="713"/>
+        <location filename="../main_window.cc" line="192"/>
+        <location filename="../main_window.cc" line="712"/>
         <source>Show</source>
         <translation>Visualizza</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="718"/>
+        <location filename="../main_window.cc" line="717"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="751"/>
+        <location filename="../main_window.cc" line="750"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="752"/>
+        <location filename="../main_window.cc" line="751"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Se esci da Aspia, non sarà possibile connettersi al computer fino a quando non riavvierai il computer o Aspia manualmente. Vuoi veramente uscire dall&apos;applicazione?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="467"/>
-        <location filename="../main_window.cc" line="855"/>
+        <location filename="../main_window.cc" line="466"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Router is disabled</source>
         <translation>Router disabilitato</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="860"/>
+        <location filename="../main_window.cc" line="859"/>
         <source>Connecting to a router...</source>
         <translation>Connession al router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="865"/>
+        <location filename="../main_window.cc" line="864"/>
         <source>Connected to a router</source>
         <translation>Connesso al router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="870"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Connection error</source>
         <translation>Errore connessione</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="475"/>
+        <location filename="../main_window.cc" line="474"/>
         <source>Connected to a router %1</source>
         <translation>Connesso al router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="479"/>
+        <location filename="../main_window.cc" line="478"/>
         <source>Failed to connect to router %1</source>
         <translation>Connession al router %1 fallita</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="471"/>
+        <location filename="../main_window.cc" line="470"/>
         <source>Connecting to a router %1...</source>
         <translation>Connessione al router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="531"/>
+        <location filename="../main_window.cc" line="530"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha avviato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="536"/>
+        <location filename="../main_window.cc" line="535"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha arrestato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="757"/>
+        <location filename="../main_window.cc" line="756"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="758"/>
+        <location filename="../main_window.cc" line="757"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="924"/>
+        <location filename="../main_window.cc" line="923"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="920"/>
+        <location filename="../main_window.cc" line="919"/>
         <source>IP addresses:</source>
         <translation>Indirizzi IP:</translation>
     </message>

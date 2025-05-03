@@ -972,37 +972,37 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="115"/>
+        <location filename="../address_book_dialog.cc" line="114"/>
         <source>Without Encryption</source>
         <translation>Без шифрування</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="117"/>
+        <location filename="../address_book_dialog.cc" line="116"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="146"/>
+        <location filename="../address_book_dialog.cc" line="145"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="129"/>
+        <location filename="../address_book_dialog.cc" line="128"/>
         <source>Address Book</source>
         <translation>Адресна книга</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="102"/>
+        <location filename="../address_book_dialog.cc" line="101"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="228"/>
+        <location filename="../address_book_dialog.cc" line="227"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="231"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
@@ -1015,12 +1015,12 @@
         <translation type="vanished">Перегляд</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="247"/>
+        <location filename="../address_book_dialog.cc" line="246"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="466"/>
+        <location filename="../address_book_dialog.cc" line="465"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символ.</numerusform>
@@ -1029,12 +1029,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="472"/>
+        <location filename="../address_book_dialog.cc" line="471"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="479"/>
+        <location filename="../address_book_dialog.cc" line="478"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символ.</numerusform>
@@ -1043,7 +1043,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="487"/>
+        <location filename="../address_book_dialog.cc" line="486"/>
         <source>Too long display name. The maximum length of the display name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1052,12 +1052,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="513"/>
+        <location filename="../address_book_dialog.cc" line="512"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="519"/>
+        <location filename="../address_book_dialog.cc" line="518"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -1066,12 +1066,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="527"/>
+        <location filename="../address_book_dialog.cc" line="526"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="530"/>
+        <location filename="../address_book_dialog.cc" line="529"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -1080,48 +1080,48 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="534"/>
+        <location filename="../address_book_dialog.cc" line="533"/>
         <source>Do you want to enter a different password?</source>
         <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="444"/>
-        <location filename="../address_book_dialog.cc" line="537"/>
+        <location filename="../address_book_dialog.cc" line="443"/>
+        <location filename="../address_book_dialog.cc" line="536"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="239"/>
+        <location filename="../address_book_dialog.cc" line="238"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="243"/>
+        <location filename="../address_book_dialog.cc" line="242"/>
         <source>Desktop View</source>
         <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="541"/>
+        <location filename="../address_book_dialog.cc" line="540"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="542"/>
+        <location filename="../address_book_dialog.cc" line="541"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="575"/>
+        <location filename="../address_book_dialog.cc" line="574"/>
         <source>An invalid router address was entered.</source>
         <translation>Введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="586"/>
+        <location filename="../address_book_dialog.cc" line="585"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="595"/>
+        <location filename="../address_book_dialog.cc" line="594"/>
         <source>Router password cannot be empty.</source>
         <translation>Пароль маршрутизатора не може бути порожнім.</translation>
     </message>
@@ -1320,7 +1320,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="135"/>
+        <location filename="../computer_dialog_general.cc" line="118"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
@@ -1329,17 +1329,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="144"/>
+        <location filename="../computer_dialog_general.cc" line="127"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="155"/>
+        <location filename="../computer_dialog_general.cc" line="138"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="166"/>
+        <location filename="../computer_dialog_general.cc" line="149"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
@@ -1348,12 +1348,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="184"/>
+        <location filename="../computer_dialog_general.cc" line="167"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введено невірну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="224"/>
+        <location filename="../computer_dialog_general.cc" line="207"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1543,7 +1543,7 @@
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="251"/>
-        <location filename="../fast_connect_dialog.cc" line="272"/>
+        <location filename="../fast_connect_dialog.cc" line="270"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1553,7 +1553,7 @@
         <translation>Було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="273"/>
+        <location filename="../fast_connect_dialog.cc" line="271"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введено невірну адресу комп&apos;ютера.</translation>
     </message>

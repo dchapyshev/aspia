@@ -2780,22 +2780,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="131"/>
+        <location filename="../ui/client_settings_dialog.cc" line="130"/>
         <source>An invalid router address was entered.</source>
         <translation>Um endereço inválido foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="150"/>
+        <location filename="../ui/client_settings_dialog.cc" line="149"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>O Usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,. .</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="167"/>
+        <location filename="../ui/client_settings_dialog.cc" line="166"/>
         <source>Password cannot be empty.</source>
         <translation>Senha não pode ficar em branco.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="196"/>
+        <location filename="../ui/client_settings_dialog.cc" line="195"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -2828,18 +2828,18 @@
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="332"/>
-        <location filename="../ui/client_window.cc" line="350"/>
+        <location filename="../ui/client_window.cc" line="330"/>
+        <location filename="../ui/client_window.cc" line="348"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="333"/>
+        <location filename="../ui/client_window.cc" line="331"/>
         <source>An invalid computer address was entered.</source>
         <translation>Um endereço inválido do computador foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="351"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -2936,34 +2936,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="376"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="385"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Warning</source>
         <translation type="unfinished">Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="377"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="386"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>Save File</source>
         <translation type="unfinished">Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1106"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1103"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Could not save image</source>
         <translation type="unfinished">Não foi possível salvar a imagem</translation>
     </message>

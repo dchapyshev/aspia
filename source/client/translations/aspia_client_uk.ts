@@ -2926,22 +2926,22 @@
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="131"/>
+        <location filename="../ui/client_settings_dialog.cc" line="130"/>
         <source>An invalid router address was entered.</source>
         <translation>Було введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="150"/>
+        <location filename="../ui/client_settings_dialog.cc" line="149"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки символи алфавіту, цифри і знаки _, , .</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="167"/>
+        <location filename="../ui/client_settings_dialog.cc" line="166"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="196"/>
+        <location filename="../ui/client_settings_dialog.cc" line="195"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -2974,18 +2974,18 @@
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="332"/>
-        <location filename="../ui/client_window.cc" line="350"/>
+        <location filename="../ui/client_window.cc" line="330"/>
+        <location filename="../ui/client_window.cc" line="348"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="333"/>
+        <location filename="../ui/client_window.cc" line="331"/>
         <source>An invalid computer address was entered.</source>
         <translation>Було введено не коректну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="351"/>
+        <location filename="../ui/client_window.cc" line="349"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
@@ -3098,34 +3098,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="376"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="385"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="377"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Немає підтримуваних типів кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="386"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1106"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1103"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1137"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
         <source>Could not save image</source>
         <translation type="unfinished">Неможливо зберегти зображення</translation>
     </message>
