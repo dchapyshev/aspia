@@ -660,7 +660,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui.checkbox_enable_router->isChecked())
         {
             base::Address router_address = base::Address::fromString(
-                ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+                ui.edit_router_address->text(), DEFAULT_ROUTER_TCP_PORT);
             if (!router_address.isValid())
             {
                 QMessageBox::warning(this,
@@ -685,7 +685,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            settings.setRouterAddress(QString::fromStdU16String(router_address.host()));
+            settings.setRouterAddress(router_address.host());
             settings.setRouterPort(router_address.port());
             settings.setRouterPublicKey(router_public_key);
         }
@@ -821,11 +821,11 @@ void ConfigDialog::reloadAll()
     bool is_router_enabled = settings.isRouterEnabled();
 
     base::Address router_address(DEFAULT_ROUTER_TCP_PORT);
-    router_address.setHost(settings.routerAddress().toStdU16String());
+    router_address.setHost(settings.routerAddress());
     router_address.setPort(settings.routerPort());
 
     ui.checkbox_enable_router->setChecked(is_router_enabled);
-    ui.edit_router_address->setText(QString::fromStdU16String(router_address.toString()));
+    ui.edit_router_address->setText(router_address.toString());
     ui.edit_router_public_key->setPlainText(
         QString::fromUtf8(settings.routerPublicKey().toHex()));
 

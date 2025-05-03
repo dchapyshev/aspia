@@ -324,7 +324,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     if (!address.isEmpty() && !isHostId(address))
     {
         base::Address addr(DEFAULT_HOST_TCP_PORT);
-        addr.setHost(address.toStdU16String());
+        addr.setHost(address);
         addr.setPort(port);
 
         if (!addr.isValid())

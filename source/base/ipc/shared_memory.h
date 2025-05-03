@@ -24,9 +24,9 @@
 #include "base/memory/local_memory.h"
 #include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <cstddef>
 #include <memory>
@@ -46,7 +46,7 @@ public:
         READ_WRITE
     };
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     using PlatformHandle = HANDLE;
     using ScopedPlatformHandle = ScopedHandle;
 #else

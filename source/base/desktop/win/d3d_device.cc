@@ -19,10 +19,8 @@
 #include "base/desktop/win/d3d_device.h"
 
 #include "base/logging.h"
-#include "base/strings/string_number_conversions.h"
 
 #include <utility>
-
 #include <comdef.h>
 
 namespace base {
@@ -30,7 +28,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::string featureLevelToString(D3D_FEATURE_LEVEL feature_level)
+QString featureLevelToString(D3D_FEATURE_LEVEL feature_level)
 {
     switch (feature_level)
     {
@@ -65,7 +63,7 @@ std::string featureLevelToString(D3D_FEATURE_LEVEL feature_level)
             return "D3D_FEATURE_LEVEL_12_1";
 
         default:
-            return numberToString(feature_level);
+            return QString::number(feature_level);
     }
 }
 

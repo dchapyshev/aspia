@@ -21,8 +21,7 @@
 
 #include "build/build_config.h"
 
-#include <QtGlobal>
-#include <string>
+#include <QString>
 
 namespace base {
 
@@ -39,12 +38,12 @@ public:
 
     ~Address() = default;
 
-    static Address fromString(std::u16string_view str, quint16 default_port);
+    static Address fromString(const QString& str, quint16 default_port);
 
-    std::u16string toString() const;
+    QString toString() const;
 
-    void setHost(std::u16string_view host);
-    std::u16string host() const;
+    void setHost(const QString& host);
+    QString host() const;
 
     void setPort(quint16 port);
     quint16 port() const;
@@ -57,9 +56,9 @@ public:
     bool operator!=(const Address& other);
 
 private:
-    Address(std::u16string&& host, quint16 port, quint16 default_port);
+    Address(QString&& host, quint16 port, quint16 default_port);
 
-    std::u16string host_;
+    QString host_;
     quint16 port_ = 0;
     quint16 default_port_;
 };

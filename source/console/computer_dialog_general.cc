@@ -108,10 +108,10 @@ void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
     else
     {
         base::Address address(DEFAULT_HOST_TCP_PORT);
-        address.setHost(base::utf16FromUtf8(computer.address()));
+        address.setHost(QString::fromStdString(computer.address()));
         address.setPort(static_cast<quint16>(computer.port()));
 
-        ui.edit_address->setText(QString::fromStdU16String(address.toString()));
+        ui.edit_address->setText(address.toString());
     }
 
     ui.edit_parent_name->setText(parent_name);
@@ -177,7 +177,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     else
     {
         base::Address address = base::Address::fromString(
-            ui.edit_address->text().toStdU16String(), DEFAULT_HOST_TCP_PORT);
+            ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
             LOG(LS_ERROR) << "Invalid address: " << ui.edit_address->text().toStdString();
@@ -187,7 +187,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
             return false;
         }
 
-        computer->set_address(base::utf8FromUtf16(address.host()));
+        computer->set_address(address.host().toStdString());
         computer->set_port(address.port());
     }
 

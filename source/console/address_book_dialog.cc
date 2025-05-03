@@ -23,7 +23,6 @@
 #include "base/crypto/random.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "base/strings/unicode.h"
 #include "console/computer_factory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
@@ -172,7 +171,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     const proto::address_book::Router& router = data_->router();
 
     base::Address address(DEFAULT_ROUTER_TCP_PORT);
-    address.setHost(base::utf16FromUtf8(router.address()));
+    address.setHost(QString::fromStdString(router.address()));
     address.setPort(static_cast<quint16>(router.port()));
 
     bool enable_router = data_->enable_router();
@@ -186,7 +185,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.edit_router_password->setEnabled(enable_router);
     ui.button_show_password->setEnabled(enable_router);
 
-    ui.edit_router_address->setText(QString::fromStdU16String(address.toString()));
+    ui.edit_router_address->setText(address.toString());
     ui.edit_router_username->setText(QString::fromStdString(router.username()));
     ui.edit_router_password->setText(QString::fromStdString(router.password()));
 
@@ -569,7 +568,7 @@ bool AddressBookDialog::saveChanges()
     if (ui.checkbox_use_router->isChecked())
     {
         base::Address address = base::Address::fromString(
-            ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+            ui.edit_router_address->text(), DEFAULT_ROUTER_TCP_PORT);
         if (!address.isValid())
         {
             showError(tr("An invalid router address was entered."));
@@ -599,7 +598,7 @@ bool AddressBookDialog::saveChanges()
         }
 
         proto::address_book::Router* router = data_->mutable_router();
-        router->set_address(base::utf8FromUtf16(address.host()));
+        router->set_address(address.host().toStdString());
         router->set_port(address.port());
         router->set_username(username.toStdString());
         router->set_password(password.toStdString());

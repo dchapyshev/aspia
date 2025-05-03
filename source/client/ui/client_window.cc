@@ -322,9 +322,7 @@ void ClientWindow::connectToHost()
     {
         LOG(LS_INFO) << "Direct connection selected";
 
-        base::Address address = base::Address::fromString(
-            current_address.toStdU16String(), DEFAULT_HOST_TCP_PORT);
-
+        base::Address address = base::Address::fromString(current_address, DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
             LOG(LS_ERROR) << "Invalid computer address";
@@ -336,7 +334,7 @@ void ClientWindow::connectToHost()
             return;
         }
 
-        config.address_or_id = QString::fromStdU16String(address.host());
+        config.address_or_id = address.host();
         config.port = address.port();
     }
     else

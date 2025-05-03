@@ -249,11 +249,11 @@ bool UserSessionManager::start(Delegate* delegate)
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    std::string status_str;
+    QString status_str;
 #if defined(OS_WIN)
     status_str = base::sessionStatusToString(status);
 #else
-    status_str = base::numberToString(static_cast<int>(status));
+    status_str = QString::number(static_cast<int>(status));
 #endif
 
     LOG(LS_INFO) << "User session event (status=" << status_str << " session_id=" << session_id << ")";

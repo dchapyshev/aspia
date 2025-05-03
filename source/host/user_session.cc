@@ -452,11 +452,11 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    std::string status_str;
+    QString status_str;
 #if defined(OS_WIN)
     status_str = base::sessionStatusToString(status);
 #else
-    status_str = base::numberToString(static_cast<int>(status));
+    status_str = QString::number(static_cast<int>(status));
 #endif
 
     LOG(LS_INFO) << "Session event: " << status_str

@@ -434,10 +434,10 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     if (state.state() != proto::internal::RouterState::DISABLED)
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(base::utf16FromUtf8(state.host_name()));
+        address.setHost(QString::fromStdString(state.host_name()));
         address.setPort(static_cast<quint16>(state.host_port()));
 
-        router = QString::fromStdU16String(address.toString());
+        router = address.toString();
     }
 
     if (state.state() == proto::internal::RouterState::DISABLED)

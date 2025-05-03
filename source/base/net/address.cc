@@ -19,20 +19,17 @@
 #include "base/net/address.h"
 
 #include "base/net/ip_util.h"
-#include "base/strings/string_number_conversions.h"
-
-#include <cwctype>
 
 namespace base {
 
 namespace {
 
-const size_t kMaxHostNameLength = 64;
+const int kMaxHostNameLength = 64;
 
 //--------------------------------------------------------------------------------------------------
-bool isValidHostNameChar(const char16_t c)
+bool isValidHostNameChar(const QChar c)
 {
-    if (std::iswalnum(c))
+    if (c.isLetterOrNumber())
         return true;
 
     if (c == '.' || c == '_' || c == '-')
@@ -42,24 +39,24 @@ bool isValidHostNameChar(const char16_t c)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isValidHostName(std::u16string_view host)
+bool isValidHostName(const QString& host)
 {
-    if (host.empty())
+    if (host.isEmpty())
         return false;
 
-    size_t length = host.length();
+    int length = host.length();
     if (length > kMaxHostNameLength)
         return false;
 
     size_t letter_count = 0;
     size_t digit_count = 0;
 
-    for (size_t i = 0; i < length; ++i)
+    for (int i = 0; i < length; ++i)
     {
-        if (std::iswdigit(host[i]))
+        if (host[i].isDigit())
             ++digit_count;
 
-        if (std::iswalpha(host[i]))
+        if (host[i].isLetter())
             ++letter_count;
 
         if (!isValidHostNameChar(host[i]))
@@ -79,11 +76,11 @@ bool isValidPort(quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isValidPort(std::u16string_view str)
+bool isValidPort(const QString& str)
 {
-    quint16 value;
-
-    if (!stringToUShort(str, &value))
+    bool ok = false;
+    quint16 value = str.toUShort(&ok);
+    if (!ok)
         return false;
 
     return isValidPort(value);
@@ -91,27 +88,33 @@ bool isValidPort(std::u16string_view str)
 
 struct AddressParts
 {
-    std::u16string host;
-    std::u16string port;
+    QString host;
+    QString port;
 };
 
 //--------------------------------------------------------------------------------------------------
-bool setHostAndPort(std::u16string_view::const_iterator first,
-                    std::u16string_view::const_iterator last,
-                    std::u16string_view::const_iterator last_colon,
+QString fromIterators(QString::const_iterator start, QString::const_iterator end)
+{
+    return QString(start, end - start);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool setHostAndPort(QString::const_iterator first,
+                    QString::const_iterator last,
+                    QString::const_iterator last_colon,
                     AddressParts* parts)
 {
     if (first >= last_colon)
     {
-        parts->host = std::u16string(first, last);
+        parts->host = fromIterators(first, last);
     }
     else
     {
         auto port_start = last_colon;
         ++port_start;
 
-        parts->host = std::u16string(first, last_colon);
-        parts->port = std::u16string(port_start, last);
+        parts->host = fromIterators(first, last_colon);
+        parts->port = fromIterators(port_start, last);
 
         if (!isValidPort(parts->port))
             return false;
@@ -121,9 +124,7 @@ bool setHostAndPort(std::u16string_view::const_iterator first,
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parse(std::u16string_view::const_iterator& it,
-           std::u16string_view::const_iterator last,
-           AddressParts* parts)
+bool parse(QString::const_iterator& it, QString::const_iterator last, AddressParts* parts)
 {
     enum class ParseState { HOST, HOST_IPV6, PORT };
 
@@ -150,7 +151,7 @@ bool parse(std::u16string_view::const_iterator& it,
 
             if (*it == ':')
             {
-                parts->host = std::u16string(first, it);
+                parts->host = fromIterators(first, it);
                 state = ParseState::PORT;
                 ++it;
                 first = it;
@@ -172,7 +173,7 @@ bool parse(std::u16string_view::const_iterator& it,
                 }
                 else if (*it == ':')
                 {
-                    parts->host = std::u16string(first + 1, it - 1);
+                    parts->host = fromIterators(first + 1, it - 1);
                     state = ParseState::PORT;
                     ++it;
                     first = it;
@@ -186,7 +187,7 @@ bool parse(std::u16string_view::const_iterator& it,
             if (it == last)
                 return false;
 
-            if (!std::iswdigit(*it))
+            if (!it->isDigit())
                 return false;
         }
 
@@ -208,7 +209,7 @@ bool parse(std::u16string_view::const_iterator& it,
     }
     else if (state == ParseState::PORT)
     {
-        parts->port = std::u16string(first, last);
+        parts->port = fromIterators(first, last);
         if (!isValidPort(parts->port))
             return false;
     }
@@ -226,7 +227,7 @@ Address::Address(quint16 default_port)
 }
 
 //--------------------------------------------------------------------------------------------------
-Address::Address(std::u16string&& host, quint16 port, quint16 default_port)
+Address::Address(QString&& host, quint16 port, quint16 default_port)
     : host_(std::move(host)),
       port_(port),
       default_port_(default_port)
@@ -280,22 +281,21 @@ Address& Address::operator=(Address&& other) noexcept
 
 //--------------------------------------------------------------------------------------------------
 // static
-Address Address::fromString(std::u16string_view str, quint16 default_port)
+Address Address::fromString(const QString& str, quint16 default_port)
 {
     auto begin = str.cbegin();
     auto end = str.cend();
 
     AddressParts parts;
-
     if (parse(begin, end, &parts))
     {
-        if (isValidIpV4Address(QString::fromStdU16String(parts.host)) ||
-            isValidIpV6Address(QString::fromStdU16String(parts.host)) ||
+        if (isValidIpV4Address(parts.host) || isValidIpV6Address(parts.host) ||
             isValidHostName(parts.host))
         {
-            quint16 port;
+            bool ok = false;
+            quint16 port = parts.port.toUShort(&ok);
 
-            if (!stringToUShort(parts.port, &port))
+            if (!ok)
                 port = default_port;
 
             return Address(std::move(parts.host), port, default_port);
@@ -306,42 +306,38 @@ Address Address::fromString(std::u16string_view str, quint16 default_port)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Address::toString() const
+QString Address::toString() const
 {
     if (!isValidPort(port_))
-        return std::u16string();
+        return QString();
 
-    if (isValidIpV6Address(QString::fromStdU16String(host_)))
+    if (isValidIpV6Address(host_))
     {
         if (port_ == default_port_)
-        {
-            return u"[" + host_ + u"]";
-        }
+            return "[" + host_ + "]";
         else
-        {
-            return u"[" + host_ + u"]:" + numberToString16(port_);
-        }
+            return "[" + host_ + "]:" + QString::number(port_);
     }
     else
     {
-        if (!isValidIpV4Address(QString::fromStdU16String(host_)) && !isValidHostName(host_))
-            return std::u16string();
+        if (!isValidIpV4Address(host_) && !isValidHostName(host_))
+            return QString();
 
         if (port_ == default_port_)
             return host();
 
-        return host_ + u":" + numberToString16(port_);
+        return host_ + ":" + QString::number(port_);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Address::setHost(std::u16string_view host)
+void Address::setHost(const QString& host)
 {
     host_ = host;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string Address::host() const
+QString Address::host() const
 {
     return host_;
 }
@@ -364,14 +360,8 @@ bool Address::isValid() const
     if (!isValidPort(port_))
         return false;
 
-    QString host = QString::fromStdU16String(host_);
-
-    if (!isValidIpV4Address(host) &&
-        !isValidIpV6Address(host) &&
-        !isValidHostName(host_))
-    {
+    if (!isValidIpV4Address(host_) && !isValidIpV6Address(host_) && !isValidHostName(host_))
         return false;
-    }
 
     return true;
 }

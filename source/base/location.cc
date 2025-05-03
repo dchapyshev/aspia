@@ -19,7 +19,6 @@
 #include "base/location.h"
 
 #include "base/compiler_specific.h"
-#include "base/strings/string_number_conversions.h"
 
 namespace base {
 
@@ -64,7 +63,7 @@ std::string Location::toString(PathType path_type) const
 
     return std::string(function_name_) + "@" +
            std::string(file_name) + ":" +
-           numberToString(line_number_);
+           std::to_string(line_number_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@
 #include "console/computer_item.h"
 
 #include "base/net/address.h"
-#include "base/strings/unicode.h"
 #include "console/computer_group_item.h"
 
 #include <QCollator>
@@ -59,10 +58,10 @@ void ComputerItem::updateItem()
     if (!host_id_entered)
     {
         base::Address address(DEFAULT_HOST_TCP_PORT);
-        address.setHost(base::utf16FromUtf8(computer_->address()));
+        address.setHost(QString::fromStdString(computer_->address()));
         address.setPort(static_cast<quint16>(computer_->port()));
 
-        address_title = QString::fromStdU16String(address.toString());
+        address_title = address.toString();
     }
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));

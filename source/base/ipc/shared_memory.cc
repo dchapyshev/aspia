@@ -19,24 +19,21 @@
 #include "base/ipc/shared_memory.h"
 
 #include "base/ipc/shared_memory_factory_proxy.h"
-#include "base/strings/string_number_conversions.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
 #include <atomic>
 #include <cstring>
 #include <random>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <AclAPI.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 namespace base {
 
@@ -60,17 +57,17 @@ int createUniqueId()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string createFilePath(int id)
+QString createFilePath(int id)
 {
-#if defined(OS_WIN)
-    static const char16_t kPrefix[] = u"Global\\aspia_";
+#if defined(Q_OS_WINDOWS)
+    static const char kPrefix[] = "Global\\aspia_";
 #else
-    static const char16_t kPrefix[] = u"/aspia_shm_";
+    static const char kPrefix[] = "/aspia_shm_";
 #endif
-    return kPrefix + numberToString16(id);
+    return kPrefix + QString::number(id);
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
@@ -114,10 +111,10 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
     const DWORD low = size & 0xFFFFFFFF;
     const DWORD high = static_cast<DWORD64>(size) >> 32 & 0xFFFFFFFF;
 
-    std::u16string path = createFilePath(id);
+    QString path = createFilePath(id);
 
-    ScopedHandle file(CreateFileMappingW(
-        INVALID_HANDLE_VALUE, nullptr, protect, high, low, asWide(path)));
+    ScopedHandle file(CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, protect, high, low,
+                                         reinterpret_cast<const wchar_t*>(path.utf16())));
     if (!file.isValid())
     {
         PLOG(LS_ERROR) << "CreateFileMappingW failed";
@@ -149,7 +146,8 @@ bool openFileMapping(SharedMemory::Mode mode, int id, ScopedHandle* out)
     if (!modeToDesiredAccess(mode, &desired_access))
         return false;
 
-    ScopedHandle file(OpenFileMappingW(desired_access, FALSE, asWide(createFilePath(id))));
+    ScopedHandle file(OpenFileMappingW(desired_access, FALSE,
+        reinterpret_cast<const wchar_t*>(createFilePath(id).utf16())));
     if (!file.isValid())
     {
         PLOG(LS_ERROR) << "OpenFileMappingW failed";
@@ -177,11 +175,11 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
     return true;
 }
 
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 const SharedMemory::PlatformHandle kInvalidHandle = nullptr;
 #else
 const SharedMemory::PlatformHandle kInvalidHandle = -1;
@@ -207,11 +205,11 @@ SharedMemory::~SharedMemory()
     if (factory_proxy_)
         factory_proxy_->onSharedMemoryDestroy(id_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     UnmapViewOfFile(data_);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
     struct stat info;
     if (fstat(handle_.get(), &info) != 0)
     {
@@ -227,7 +225,7 @@ SharedMemory::~SharedMemory()
     {
         PLOG(LS_ERROR) << "shm_unlink failed";
     }
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -237,7 +235,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 {
     static const int kRetryCount = 10;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ScopedPlatformHandle file;
     int id = -1;
 
@@ -259,7 +257,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
     return std::unique_ptr<SharedMemory>(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     int id = -1;
     int fd = -1;
 
@@ -328,7 +326,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 std::unique_ptr<SharedMemory> SharedMemory::open(
     Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ScopedPlatformHandle file;
     if (!openFileMapping(mode, id, &file))
         return nullptr;
@@ -339,7 +337,7 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
 
     return std::unique_ptr<SharedMemory>(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     std::string name = base::local8BitFromUtf16(createFilePath(id));
     int open_flags = 0;
 

@@ -45,11 +45,11 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     RouterConfig config = config_storage.routerConfig();
 
     base::Address address(DEFAULT_ROUTER_TCP_PORT);
-    address.setHost(config.address.toStdU16String());
+    address.setHost(config.address);
     address.setPort(config.port);
 
     ui.checkbox_enable_router->setChecked(true);
-    ui.edit_address->setText(QString::fromStdU16String(address.toString()));
+    ui.edit_address->setText(address.toString());
     ui.edit_username->setText(config.username);
     ui.edit_password->setText(config.password);
 
@@ -117,8 +117,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         bool enable_router = ui.checkbox_enable_router->isChecked();
 
         QString address_text = ui.edit_address->text();
-        base::Address address = base::Address::fromString(
-            address_text.toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+        base::Address address = base::Address::fromString(address_text, DEFAULT_ROUTER_TCP_PORT);
         if (!address.isValid())
         {
             if (!enable_router && address_text.isEmpty())
@@ -172,7 +171,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         RouterConfig config;
-        config.address = QString::fromStdU16String(address.host());
+        config.address = address.host();
         config.port = address.port();
         config.username = std::move(username);
         config.password = std::move(password);
