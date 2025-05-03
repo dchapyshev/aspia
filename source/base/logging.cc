@@ -427,7 +427,8 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        const char* condition)
-    : severity_(LOG_LS_FATAL)
+    : severity_(LOG_LS_FATAL),
+      stream_(&string_)
 {
     init(file, line, function);
     stream_ << "Check failed: " << condition << ". ";
@@ -438,7 +439,8 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        QString* result)
-    : severity_(LOG_LS_FATAL)
+    : severity_(LOG_LS_FATAL),
+      stream_(&string_)
 {
     std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
@@ -451,7 +453,8 @@ LogMessage::LogMessage(std::string_view file,
                        std::string_view function,
                        LoggingSeverity severity,
                        QString* result)
-    : severity_(severity)
+    : severity_(severity),
+      stream_(&string_)
 {
     std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
@@ -515,8 +518,7 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
     stream_ << severityName(severity_) << ' '
             << QDateTime::currentDateTime().toString("hh:mm:ss.zzz") << ' '
             << QThread::currentThreadId() << ' '
-            << file.data() << ':' << line << ' '
-            << function.data() << "] ";
+            << file.data() << ':' << line << ' ' << function.data() << "] ";
 }
 
 //--------------------------------------------------------------------------------------------------
