@@ -20,8 +20,8 @@
 
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/peer/host_id.h"
 #include "base/peer/user.h"
-#include "base/strings/unicode.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -33,23 +33,6 @@ namespace {
 constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
-
-//--------------------------------------------------------------------------------------------------
-bool isHostId(const QString& str)
-{
-    bool host_id_entered = true;
-
-    for (int i = 0; i < str.length(); ++i)
-    {
-        if (!str[i].isDigit())
-        {
-            host_id_entered = false;
-            break;
-        }
-    }
-
-    return host_id_entered;
-}
 
 } // namespace
 
@@ -101,7 +84,7 @@ void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
         }
     });
 
-    if (isHostId(QString::fromStdString(computer.address())))
+    if (base::isHostId(QString::fromStdString(computer.address())))
     {
         ui.edit_address->setText(QString::fromStdString(computer.address()));
     }
@@ -170,7 +153,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    if (isHostId(ui.edit_address->text()))
+    if (base::isHostId(ui.edit_address->text()))
     {
         computer->set_address(ui.edit_address->text().toStdString());
     }

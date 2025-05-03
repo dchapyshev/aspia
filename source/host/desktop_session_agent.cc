@@ -182,7 +182,7 @@ void DesktopSessionAgent::onScreenListChanged(
     {
         proto::Screen* screen = screen_list->add_screen();
         screen->set_id(screen_item.id);
-        screen->set_title(screen_item.title);
+        screen->set_title(screen_item.title.toStdString());
 
         proto::Point* position = screen->mutable_position();
         position->set_x(screen_item.position.x());
@@ -305,12 +305,12 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenTypeChanged(
-    base::ScreenCapturer::ScreenType type, const std::string& name)
+    base::ScreenCapturer::ScreenType type, const QString& name)
 {
     outgoing_message_.Clear();
 
     proto::ScreenType* screen_type = outgoing_message_.mutable_screen_type();
-    screen_type->set_name(name);
+    screen_type->set_name(name.toStdString());
 
     switch (type)
     {

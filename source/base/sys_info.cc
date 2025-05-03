@@ -20,8 +20,6 @@
 
 #include "base/cpuid_util.h"
 #include "base/logging.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
 #include <algorithm>
 #include <cstring>

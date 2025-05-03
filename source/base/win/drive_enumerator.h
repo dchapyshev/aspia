@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 
-#include <filesystem>
 #include <vector>
 
 #include <QString>
@@ -49,7 +48,7 @@ public:
             RAM        // RAM drives.
         };
 
-        const std::filesystem::path& path() const { return path_; }
+        const QString& path() const { return path_; }
         Type type() const;
         quint64 totalSpace() const;
         quint64 freeSpace() const;
@@ -61,7 +60,7 @@ public:
         friend class DriveEnumerator;
         DriveInfo() = default;
 
-        std::filesystem::path path_;
+        QString path_;
     };
 
     const DriveInfo& driveInfo() const;

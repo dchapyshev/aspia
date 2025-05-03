@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/stl_util.h"
-#include "base/strings/unicode.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
 #include "host/win/touch_injector.h"
@@ -202,13 +201,13 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
 {
-    std::u16string text = base::utf16FromUtf8(event.text());
-    if (text.empty())
+    QString text = QString::fromStdString(event.text());
+    if (text.isEmpty())
         return;
 
     beforeInput();
 
-    for (auto it = text.begin(); it != text.end(); ++it)
+    for (auto it = text.cbegin(); it != text.cend(); ++it)
     {
         if (*it == '\n')
         {
@@ -218,8 +217,8 @@ void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
             sendKeyboardVirtualKey(VK_RETURN, KEYEVENTF_KEYUP);
         }
 
-        sendKeyboardUnicodeChar(*it, 0);
-        sendKeyboardUnicodeChar(*it, KEYEVENTF_KEYUP);
+        sendKeyboardUnicodeChar(it->unicode(), 0);
+        sendKeyboardUnicodeChar(it->unicode(), KEYEVENTF_KEYUP);
     }
 }
 

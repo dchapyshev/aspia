@@ -24,8 +24,8 @@
 
 namespace base {
 
-std::string utf8FromFilePath(const std::filesystem::path& path);
-std::filesystem::path filePathFromUtf8(std::string_view str);
+//std::string utf8FromFilePath(const std::filesystem::path& path);
+//std::filesystem::path filePathFromUtf8(std::string_view str);
 
 } // namespace base
 

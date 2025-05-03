@@ -21,8 +21,6 @@
 #include "base/logging.h"
 #include "base/stl_util.h"
 #include "base/win/scoped_object.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
 #include <memory>
 
@@ -158,13 +156,13 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-std::string userNameByHandle(HANDLE process)
+QString userNameByHandle(HANDLE process)
 {
     base::ScopedHandle token;
     if (!OpenProcessToken(process, TOKEN_QUERY, token.recieve()))
     {
         PLOG(LS_ERROR) << "OpenProcessToken failed";
-        return std::string();
+        return QString();
     }
 
     std::unique_ptr<quint8[]> token_user_buffer;
@@ -176,7 +174,7 @@ std::string userNameByHandle(HANDLE process)
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
             PLOG(LS_ERROR) << "GetTokenInformation failed";
-            return std::string();
+            return QString();
         }
 
         token_user_buffer = std::make_unique<quint8[]>(length);
@@ -188,13 +186,13 @@ std::string userNameByHandle(HANDLE process)
     if (!token_user)
     {
         LOG(LS_ERROR) << "Invalid user token buffer";
-        return std::string();
+        return QString();
     }
 
     if (!GetTokenInformation(token, TokenUser, token_user, length, &length))
     {
         PLOG(LS_ERROR) << "GetTokenInformation failed";
-        return std::string();
+        return QString();
     }
 
     wchar_t domain_buffer[128] = {0};
@@ -209,14 +207,14 @@ std::string userNameByHandle(HANDLE process)
                            &sid_type))
     {
         PLOG(LS_ERROR) << "LookupAccountSidW failed";
-        return std::string();
+        return QString();
     }
 
-    return base::utf8FromWide(user_buffer);
+    return QString::fromWCharArray(user_buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string filePathByHandle(HANDLE process)
+QString filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
     DWORD buffer_size = static_cast<DWORD>(std::size(buffer));
@@ -224,10 +222,10 @@ std::string filePathByHandle(HANDLE process)
     if (!QueryFullProcessImageNameW(process, 0, buffer, &buffer_size))
     {
         LOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
-        return std::string();
+        return QString();
     }
 
-    return base::utf8FromWide(buffer);
+    return QString::fromWCharArray(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,7 +264,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
     {
         if (info.ImageName.Buffer)
         {
-            entry->process_name = base::utf8FromWide(info.ImageName.Buffer);
+            entry->process_name = QString::fromWCharArray(info.ImageName.Buffer);
             entry->process_name_changed = true;
         }
 
@@ -457,14 +455,12 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
         return false;
     }
 
-    static const char16_t* kBlackList[] =
-        { u"services.exe", u"lsass.exe", u"smss.exe", u"winlogon.exe", u"csrss.exe" };
-
-    std::u16string process_name = base::utf16FromUtf8(result->second.process_name);
+    static const char* kBlackList[] =
+        { "services.exe", "lsass.exe", "smss.exe", "winlogon.exe", "csrss.exe" };
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
-        if (base::compareCaseInsensitive(process_name, kBlackList[i]) == 0)
+        if (result->second.process_name.compare(kBlackList[i], Qt::CaseInsensitive) == 0)
         {
             LOG(LS_ERROR) << "Unable to end system process";
             return false;

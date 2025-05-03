@@ -182,9 +182,7 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
     if (enable)
     {
         RegistryKey key;
-        LONG status = key.create(HKEY_LOCAL_MACHINE,
-                                 reinterpret_cast<const wchar_t*>(key_path.utf16()),
-                                 KEY_READ | KEY_WRITE);
+        LONG status = key.create(HKEY_LOCAL_MACHINE, key_path, KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
             LOG(LS_ERROR) << "create failed: "
@@ -192,7 +190,7 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
             return false;
         }
 
-        status = key.writeValue(L"", L"Service");
+        status = key.writeValue("", "Service");
         if (status != ERROR_SUCCESS)
         {
             LOG(LS_ERROR) << "writeValue failed: "

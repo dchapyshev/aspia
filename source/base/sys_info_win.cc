@@ -166,7 +166,7 @@ QString SysInfo::operatingSystemName()
 #endif // (ARCH_CPU_X86 == 1)
 
     LONG status = key.open(HKEY_LOCAL_MACHINE,
-                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access);
     if (status != ERROR_SUCCESS)
     {
@@ -174,16 +174,16 @@ QString SysInfo::operatingSystemName()
         return QString();
     }
 
-    std::wstring value;
+    QString value;
 
-    status = key.readValue(L"ProductName", &value);
+    status = key.readValue("ProductName", &value);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to read registry key: " << SystemError::toString(status);
         return QString();
     }
 
-    return QString::fromStdWString(value);
+    return value;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,27 +243,27 @@ QString SysInfo::operatingSystemKey()
 
     // Read MS Windows Key.
     LONG status = key.open(HKEY_LOCAL_MACHINE,
-                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access | KEY_READ);
     if (status != ERROR_SUCCESS)
         return QString();
 
     DWORD product_id_size = 0;
 
-    status = key.readValue(L"DigitalProductId", nullptr, &product_id_size, nullptr);
+    status = key.readValue("DigitalProductId", nullptr, &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        status = key.readValue(L"DPID", nullptr, &product_id_size, nullptr);
+        status = key.readValue("DPID", nullptr, &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
             return QString();
     }
 
     std::unique_ptr<quint8[]> product_id = std::make_unique<quint8[]>(product_id_size);
 
-    status = key.readValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
+    status = key.readValue("DigitalProductId", product_id.get(), &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        status = key.readValue(L"DPID", product_id.get(), &product_id_size, nullptr);
+        status = key.readValue("DPID", product_id.get(), &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
             return QString();
     }
@@ -285,13 +285,13 @@ qint64 SysInfo::operatingSystemInstallDate()
 #endif
 
     LONG status = key.open(HKEY_LOCAL_MACHINE,
-                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access);
     if (status == ERROR_SUCCESS)
     {
         DWORD install_date;
 
-        status = key.readValueDW(L"InstallDate", &install_date);
+        status = key.readValueDW("InstallDate", &install_date);
         if (status == ERROR_SUCCESS)
             return static_cast<qint64>(install_date);
     }

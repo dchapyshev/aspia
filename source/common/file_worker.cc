@@ -19,14 +19,18 @@
 #include "common/file_worker.h"
 
 #include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "base/files/file_path.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
-#include "common/file_enumerator.h"
+
+#include <QDateTime>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/drive_enumerator.h"
+#include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace common {
@@ -141,34 +145,28 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
                 break;
         }
 
-        item->set_path(base::utf8FromFilePath(drive_info.path()));
+        item->set_path(drive_info.path().toStdString());
     }
-#elif (Q_OS_POSIX)
+#else
     proto::DriveList::Item* root_directory = drive_list->add_item();
     root_directory->set_type(proto::DriveList::Item::TYPE_ROOT_DIRECTORY);
     root_directory->set_path("/");
 #endif
 
-    std::filesystem::path desktop_path;
-    if (base::BasePaths::userDesktop(&desktop_path))
+    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    if (!desktop_path.isEmpty())
     {
-        LOG(LS_INFO) << "User desktop path: " << desktop_path.u8string();
-
         proto::DriveList::Item* item = drive_list->add_item();
-
         item->set_type(proto::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(base::utf8FromFilePath(desktop_path));
+        item->set_path(desktop_path.toStdString());
     }
 
-    std::filesystem::path home_path;
-    if (base::BasePaths::userHome(&home_path))
+    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (!home_path.isEmpty())
     {
-        LOG(LS_INFO) << "Home path: " << home_path.u8string();
-
         proto::DriveList::Item* item = drive_list->add_item();
-
         item->set_type(proto::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(base::utf8FromFilePath(home_path));
+        item->set_path(home_path.toStdString());
     }
 
     if (drive_list->item_size() == 0)
@@ -180,57 +178,59 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path path = base::filePathFromUtf8(request.path());
-
-    std::error_code ignored_code;
-    std::filesystem::file_status status = std::filesystem::status(path, ignored_code);
-
-    if (!std::filesystem::exists(status))
+    QString path = QString::fromStdString(request.path());
+    if (!QFileInfo::exists(path))
     {
+        LOG(LS_WARNING) << "Requested directory not exists: " << path;
         reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
         return;
     }
 
-    if (!std::filesystem::is_directory(status))
+    QFileInfo dir_info(path);
+    if (!dir_info.isDir())
     {
+        LOG(LS_WARNING) << "Requested directory is not directory: " << path;
         reply->set_error_code(proto::FILE_ERROR_INVALID_PATH_NAME);
         return;
     }
 
     proto::FileList* file_list = reply->mutable_file_list();
-    FileEnumerator enumerator(path);
 
-    while (!enumerator.isAtEnd())
+    QDir dir(path);
+    QFileInfoList dir_items = dir.entryInfoList(
+        QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+
+    for (const auto& dir_item : std::as_const(dir_items))
     {
-        const FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
-
         proto::FileList::Item* item = file_list->add_item();
-        item->set_name(file_info.u8name());
-        item->set_size(static_cast<quint64>(file_info.size()));
-        item->set_modification_time(file_info.lastWriteTime());
-        item->set_is_directory(file_info.isDirectory());
 
-        enumerator.advance();
+        LOG(LS_INFO) << "ITEM: " << dir_item.fileName();
+
+        item->set_name(dir_item.fileName().toStdString());
+        item->set_size(dir_item.size());
+        item->set_modification_time(dir_item.lastModified().toTime_t());
+        item->set_is_directory(dir_item.isDir());
     }
 
-    reply->set_error_code(enumerator.errorCode());
+    reply->set_error_code(proto::FILE_ERROR_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path directory_path = base::filePathFromUtf8(request.path());
+    QString directory_path = QString::fromStdString(request.path());
 
-    std::error_code ignored_code;
-    if (std::filesystem::exists(directory_path, ignored_code))
+    if (QFileInfo::exists(directory_path))
     {
+        LOG(LS_WARNING) << "Directory already exists: " << directory_path;
         reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
         return;
     }
 
-    if (!std::filesystem::create_directory(directory_path, ignored_code))
+    if (!QDir().mkdir(directory_path))
     {
+        LOG(LS_WARNING) << "Unable to create directory: " << directory_path;
         reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
         return;
     }
@@ -241,43 +241,33 @@ void FileWorker::doCreateDirectoryRequest(
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doRenameRequest(const proto::RenameRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path old_name = base::filePathFromUtf8(request.old_name());
-    std::filesystem::path new_name = base::filePathFromUtf8(request.new_name());
+    QString old_name = QString::fromStdString(request.old_name());
+    QString new_name = QString::fromStdString(request.new_name());
 
     if (old_name == new_name)
     {
+        LOG(LS_WARNING) << "Name of new and old element is equal: " << old_name;
         reply->set_error_code(proto::FILE_ERROR_SUCCESS);
         return;
     }
 
-    std::error_code error_code;
-    if (!std::filesystem::exists(old_name, error_code))
+    if (!QFileInfo::exists(old_name))
     {
-        if (error_code)
-            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
-        else
-            reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
-
+        LOG(LS_WARNING) << "File being renamed does not exist or cannot be accessed: " << old_name;
+        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
         return;
     }
 
-    if (std::filesystem::exists(new_name, error_code))
+    if (QFileInfo::exists(new_name))
     {
+        LOG(LS_WARNING) << "File with the new name already exists: " << new_name;
         reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
         return;
     }
-    else
-    {
-        if (error_code)
-        {
-            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
-            return;
-        }
-    }
 
-    std::filesystem::rename(old_name, new_name, error_code);
-    if (error_code)
+    if (!QFile::rename(old_name, new_name))
     {
+        LOG(LS_WARNING) << "Failed to rename file from " << old_name << " to " << new_name;
         reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
         return;
     }
@@ -289,30 +279,38 @@ void FileWorker::doRenameRequest(const proto::RenameRequest& request, proto::Fil
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path path = base::filePathFromUtf8(request.path());
+    QString path = QString::fromStdString(request.path());
 
-    std::error_code error_code;
-    if (!std::filesystem::exists(path, error_code))
+    QFileInfo path_info(path);
+    if (!path_info.exists(path))
     {
-        if (error_code)
-            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
-        else
-            reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
-
+        LOG(LS_WARNING) << "Path to be deleted was not found or could not be accessed: " << path;
+        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
         return;
     }
 
-    std::error_code ignored_code;
-    std::filesystem::permissions(
-        path,
-        std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
-        std::filesystem::perm_options::add,
-        ignored_code);
-
-    if (!std::filesystem::remove(path, ignored_code))
+    if (path_info.isDir())
     {
-        reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
-        return;
+        if (!QDir().rmdir(path))
+        {
+            LOG(LS_WARNING) << "Unable to remove direcotry: " << path;
+            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+            return;
+        }
+    }
+    else
+    {
+        QFile::Permissions permissions = path_info.permissions();
+        permissions |= QFile::WriteGroup | QFile::WriteOther | QFile::WriteUser | QFile::WriteOwner;
+
+        QFile::setPermissions(path, permissions);
+
+        if (!QFile::remove(path))
+        {
+            LOG(LS_WARNING) << "Unable to remove file: " << path;
+            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+            return;
+        }
     }
 
     reply->set_error_code(proto::FILE_ERROR_SUCCESS);
@@ -321,25 +319,30 @@ void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::Fil
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doDownloadRequest(const proto::DownloadRequest& request, proto::FileReply* reply)
 {
-    packetizer_ = FilePacketizer::create(base::filePathFromUtf8(request.path()));
+    packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
     if (!packetizer_)
+    {
+        LOG(LS_WARNING) << "Unable to open file: " << request.path();
         reply->set_error_code(proto::FILE_ERROR_FILE_OPEN_ERROR);
+    }
     else
+    {
         reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::FileReply* reply)
 {
-    std::filesystem::path file_path = base::filePathFromUtf8(request.path());
+    QString file_path = QString::fromStdString(request.path());
 
     do
     {
         if (!request.overwrite())
         {
-            std::error_code ignored_code;
-            if (std::filesystem::exists(file_path, ignored_code))
+            if (QFileInfo::exists(file_path))
             {
+                LOG(LS_WARNING) << "File already exists: " << file_path;
                 reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
                 break;
             }
@@ -348,6 +351,7 @@ void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::Fil
         depacketizer_ = FileDepacketizer::create(file_path, request.overwrite());
         if (!depacketizer_)
         {
+            LOG(LS_WARNING) << "Unable to create file: " << file_path;
             reply->set_error_code(proto::FILE_ERROR_FILE_CREATE_ERROR);
             break;
         }

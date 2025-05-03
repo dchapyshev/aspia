@@ -21,29 +21,18 @@
 
 #include "base/macros_magic.h"
 
-#include <string>
+#include <QString>
 
 namespace base {
 
 class OSCrypt
 {
 public:
-    // Encrypt a std::u16string_view. The output (second argument) is really an array of bytes, but
-    // we're passing it back as a std::string.
-    static bool encryptString16(std::u16string_view plaintext, std::string* ciphertext);
+    // Encrypt a QString.
+    static bool encryptString(const QString& plaintext, QByteArray* ciphertext);
 
-    // Decrypt an array of bytes obtained with encryptString16 back into a std::u16string. Note
-    // that the input (first argument) is a std::string, so you need to first get your (binary)
-    // data into a string.
-    static bool decryptString16(std::string_view ciphertext, std::u16string* plaintext);
-
-    // Encrypt a string.
-    static bool encryptString(std::string_view plaintext, std::string* ciphertext);
-
-    // Decrypt an array of bytes obtained with EnctryptString back into a string. Note that the
-    // input (first argument) is a std::string, so you need to first get your (binary) data into a
-    // string.
-    static bool decryptString(std::string_view ciphertext, std::string* plaintext);
+    // Decrypt an array of bytes obtained into a QString.
+    static bool decryptString(const QByteArray& ciphertext, QString* plaintext);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(OSCrypt);

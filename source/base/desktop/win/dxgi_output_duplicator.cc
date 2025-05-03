@@ -80,7 +80,7 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
                                            const DXGI_OUTPUT_DESC& desc)
     : device_(device),
       output_(output),
-      device_name_(desc.DeviceName),
+      device_name_(QString::fromWCharArray(desc.DeviceName)),
       initial_desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates)),
       desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates))
 {

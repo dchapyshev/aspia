@@ -189,13 +189,13 @@ void TaskManager::sendProcessList(quint32 flags)
         const ProcessMonitor::ProcessEntry& process_info = process.second;
 
         if (process_info.process_name_changed)
-            item->set_process_name(process_info.process_name);
+            item->set_process_name(process_info.process_name.toStdString());
 
         if (process_info.user_name_changed)
-            item->set_user_name(process_info.user_name);
+            item->set_user_name(process_info.user_name.toStdString());
 
         if (process_info.file_path_changed)
-            item->set_file_path(process_info.file_path);
+            item->set_file_path(process_info.file_path.toStdString());
 
         item->set_session_id(process_info.session_id);
         item->set_process_id(process_id);

@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/ip/address.hpp>
@@ -113,10 +112,10 @@ ClientPortForwarding::~ClientPortForwarding()
 //--------------------------------------------------------------------------------------------------
 void ClientPortForwarding::setPortForwardingConfig(const proto::port_forwarding::Config& config)
 {
-    remote_host_ = config.remote_host();
+    remote_host_ = QString::fromStdString(config.remote_host());
     remote_port_ = config.remote_port();
     local_port_ = config.local_port();
-    command_line_ = config.command_line();
+    command_line_ = QString::fromStdString(config.command_line());
 
     LOG(LS_INFO) << "Session config received (remote host: " << remote_host_ << " remote port: "
                  << remote_port_ << " local port: " << local_port_ << " command line: "
@@ -352,11 +351,11 @@ void ClientPortForwarding::sendPortForwardingData(const char* buffer, size_t len
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ClientPortForwarding::startCommandLine(std::string_view command_line)
+void ClientPortForwarding::startCommandLine(const QString& command_line)
 {
     LOG(LS_INFO) << "Starting command line: " << command_line.data();
 
-    if (command_line.empty())
+    if (command_line.isEmpty())
     {
         LOG(LS_INFO) << "Empty command line";
         return;
@@ -371,7 +370,7 @@ void ClientPortForwarding::startCommandLine(std::string_view command_line)
     startup_info.cb = sizeof(startup_info);
 
     if (!CreateProcessW(nullptr,
-                        const_cast<wchar_t*>(base::wideFromUtf8(command_line).c_str()),
+                        const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(command_line.utf16())),
                         nullptr,
                         nullptr,
                         FALSE,

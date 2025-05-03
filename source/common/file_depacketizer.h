@@ -22,9 +22,9 @@
 #include "base/macros_magic.h"
 #include "proto/file_transfer.h"
 
-#include <filesystem>
-#include <fstream>
 #include <memory>
+
+#include <QFile>
 
 namespace common {
 
@@ -33,17 +33,16 @@ class FileDepacketizer
 public:
     ~FileDepacketizer();
 
-    static std::unique_ptr<FileDepacketizer> create(const std::filesystem::path& file_path,
-                                                    bool overwrite);
+    static std::unique_ptr<FileDepacketizer> create(const QString& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
     bool writeNextPacket(const proto::FilePacket& packet);
 
 private:
-    FileDepacketizer(const std::filesystem::path& file_path, std::ofstream&& file_stream);
+    FileDepacketizer(const QString& file_path, std::unique_ptr<QFile> file);
 
-    std::filesystem::path file_path_;
-    std::ofstream file_stream_;
+    QString file_path_;
+    std::unique_ptr<QFile> file_;
 
     quint64 file_size_ = 0;
     quint64 left_size_ = 0;

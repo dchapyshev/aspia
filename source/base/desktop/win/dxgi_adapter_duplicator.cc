@@ -202,7 +202,7 @@ Rect DxgiAdapterDuplicator::screenRect(int id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
+const QString& DxgiAdapterDuplicator::deviceName(int id) const
 {
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));

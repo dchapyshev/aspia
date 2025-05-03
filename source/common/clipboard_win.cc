@@ -19,8 +19,6 @@
 #include "common/clipboard_win.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/win/message_window.h"
 #include "base/win/scoped_clipboard.h"
 #include "base/win/scoped_hglobal.h"
@@ -77,7 +75,7 @@ void ClipboardWin::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardWin::setData(const std::string& data)
+void ClipboardWin::setData(const QString& data)
 {
     if (!window_)
     {
@@ -85,12 +83,8 @@ void ClipboardWin::setData(const std::string& data)
         return;
     }
 
-    std::wstring text;
-    if (!base::utf8ToWide(base::replaceLfByCrLf(data), &text))
-    {
-        LOG(LS_ERROR) << "Couldn't convert data to unicode";
-        return;
-    }
+    QString text = data;
+    text.replace("\n", "\r\n");
 
     base::ScopedClipboard clipboard;
     if (!clipboard.init(window_->hwnd()))
@@ -101,7 +95,7 @@ void ClipboardWin::setData(const std::string& data)
 
     clipboard.empty();
 
-    if (data.empty())
+    if (text.isEmpty())
         return;
 
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
@@ -119,7 +113,7 @@ void ClipboardWin::setData(const std::string& data)
         return;
     }
 
-    memcpy(text_global_locked, text.data(), text.size() * sizeof(wchar_t));
+    memcpy(text_global_locked, text.utf16(), text.size() * sizeof(wchar_t));
     text_global_locked[text.size()] = 0;
 
     GlobalUnlock(text_global);
@@ -150,7 +144,7 @@ void ClipboardWin::onClipboardUpdate()
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
         return;
 
-    std::string data;
+    QString data;
 
     // Add a scope, so that we keep the clipboard open for as short a time as possible.
     {
@@ -177,16 +171,15 @@ void ClipboardWin::onClipboardUpdate()
                 return;
             }
 
-            if (!base::wideToUtf8(text_lock.get(), &data))
-            {
-                LOG(LS_ERROR) << "Couldn't convert data to utf8";
-                return;
-            }
+            data = QString::fromWCharArray(text_lock.get());
         }
     }
 
-    if (!data.empty())
-        onData(base::replaceCrLfByLf(data));
+    if (!data.isEmpty())
+    {
+        data.replace("\r\n", "\n");
+        onData(data);
+    }
 }
 
 } // namespace common

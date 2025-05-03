@@ -135,7 +135,7 @@ int DxgiDuplicatorController::screenCount()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiDuplicatorController::deviceNames(std::vector<std::wstring>* output)
+bool DxgiDuplicatorController::deviceNames(QStringList* output)
 {
     DCHECK(output);
 

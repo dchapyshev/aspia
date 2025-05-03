@@ -19,7 +19,6 @@
 #include "base/win/service_controller.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
 
 #include <memory>
 
@@ -256,7 +255,7 @@ bool ServiceController::setDescription(const QString& description)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::u16string ServiceController::description() const
+QString ServiceController::description() const
 {
     DWORD bytes_needed = 0;
 
@@ -264,11 +263,11 @@ std::u16string ServiceController::description() const
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         LOG(LS_FATAL) << "QueryServiceConfig2W: unexpected result";
-        return std::u16string();
+        return QString();
     }
 
     if (!bytes_needed)
-        return std::u16string();
+        return QString();
 
     std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(bytes_needed);
 
@@ -276,15 +275,15 @@ std::u16string ServiceController::description() const
                              &bytes_needed))
     {
         PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
-        return std::u16string();
+        return QString();
     }
 
     SERVICE_DESCRIPTION* service_description =
         reinterpret_cast<SERVICE_DESCRIPTION*>(buffer.get());
     if (!service_description->lpDescription)
-        return std::u16string();
+        return QString();
 
-    return asUtf16(service_description->lpDescription);
+    return QString::fromWCharArray(service_description->lpDescription);
 }
 
 //--------------------------------------------------------------------------------------------------

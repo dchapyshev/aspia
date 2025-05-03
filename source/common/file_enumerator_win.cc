@@ -19,7 +19,6 @@
 #include "common/file_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 namespace common {
 
@@ -59,15 +58,9 @@ bool FileEnumerator::FileInfo::isDirectory() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path FileEnumerator::FileInfo::name() const
+QString FileEnumerator::FileInfo::name() const
 {
-    return std::filesystem::path(find_data_.cFileName);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string FileEnumerator::FileInfo::u8name() const
-{
-    return base::utf8FromWide(find_data_.cFileName);
+    return QString::fromWCharArray(find_data_.cFileName);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,13 +81,13 @@ time_t FileEnumerator::FileInfo::lastWriteTime() const
 // FileEnumerator --------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------
-FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
+FileEnumerator::FileEnumerator(const QString& root_path)
 {
-    std::filesystem::path filter(root_path);
-    filter.append(L"*");
+    QString filter(root_path);
+    filter.append("*");
 
     // Start a new find operation.
-    find_handle_ = FindFirstFileExW(filter.c_str(),
+    find_handle_ = FindFirstFileExW(reinterpret_cast<const wchar_t*>(filter.utf16()),
                                     FindExInfoBasic, // Omit short name.
                                     &file_info_.find_data_,
                                     FindExSearchNameMatch,

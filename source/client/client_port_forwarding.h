@@ -67,7 +67,7 @@ private:
     void sendPortForwardingStart();
     void sendPortForwardingData(const char* buffer, size_t length);
 
-    static void startCommandLine(std::string_view command_line);
+    static void startCommandLine(const QString& command_line);
 
     enum class State
     {
@@ -79,10 +79,10 @@ private:
     State state_ = State::DISCONNECED;
     bool is_started_ = false;
 
-    std::string remote_host_;
+    QString remote_host_;
     quint16 remote_port_ = 0;
     quint16 local_port_ = 0;
-    std::string command_line_;
+    QString command_line_;
 
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     std::unique_ptr<asio::ip::tcp::socket> socket_;

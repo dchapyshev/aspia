@@ -23,10 +23,9 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
-                                   std::ofstream&& file_stream)
+FileDepacketizer::FileDepacketizer(const QString& file_path, std::unique_ptr<QFile> file)
     : file_path_(file_path),
-      file_stream_(std::move(file_stream))
+      file_(std::move(file))
 {
     // Nothing
 }
@@ -35,40 +34,35 @@ FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
 FileDepacketizer::~FileDepacketizer()
 {
     // If the file is opened, it was not completely written.
-    if (file_stream_.is_open())
+    if (file_->isOpen())
     {
-        file_stream_.close();
+        file_->close();
 
         // The transfer of files was canceled. Delete the file.
-        std::error_code ignored_error;
-        std::filesystem::remove(file_path_, ignored_error);
+        QFile::remove(file_path_);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
-    const std::filesystem::path& file_path, bool overwrite)
+std::unique_ptr<FileDepacketizer> FileDepacketizer::create(const QString& file_path, bool overwrite)
 {
-    std::ofstream::openmode mode = std::ofstream::binary;
+    QFile::OpenMode mode = QFile::WriteOnly;
 
     if (overwrite)
-        mode |= std::ofstream::trunc;
+        mode |= QFile::Truncate;
 
-    std::ofstream file_stream;
-
-    file_stream.open(file_path, mode);
-    if (!file_stream.is_open())
+    std::unique_ptr<QFile> file = std::make_unique<QFile>(file_path);
+    if (!file->open(mode))
         return nullptr;
 
-    return std::unique_ptr<FileDepacketizer>(
-        new FileDepacketizer(file_path, std::move(file_stream)));
+    return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(file_path, std::move(file)));
 }
 
 //--------------------------------------------------------------------------------------------------
 bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
 {
-    DCHECK(file_stream_.is_open());
+    DCHECK(file_->isOpen());
 
     const size_t packet_size = packet.data().size();
     if (!packet_size)
@@ -79,7 +73,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
             {
                 // Zero-length file received.
                 file_size_ = 0;
-                file_stream_.close();
+                file_->close();
             }
             else
             {
@@ -101,9 +95,13 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
         left_size_ = file_size_;
     }
 
-    file_stream_.seekp(static_cast<std::streamoff>(file_size_ - left_size_));
-    file_stream_.write(packet.data().data(), packet_size);
-    if (file_stream_.fail())
+    if (!file_->seek(file_size_ - left_size_))
+    {
+        LOG(LS_ERROR) << "seek failed";
+        return false;
+    }
+
+    if (file_->write(packet.data().data(), packet_size) == -1)
     {
         LOG(LS_ERROR) << "Unable to write file";
         return false;
@@ -114,7 +112,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
     if (packet.flags() & proto::FilePacket::LAST_PACKET)
     {
         file_size_ = 0;
-        file_stream_.close();
+        file_->close();
     }
 
     return true;

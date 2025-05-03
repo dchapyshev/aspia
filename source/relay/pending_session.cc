@@ -21,7 +21,6 @@
 #include "base/endian_util.h"
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 #include <asio/read.hpp>
 

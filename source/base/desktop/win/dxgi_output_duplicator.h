@@ -31,7 +31,6 @@
 #include <dxgi1_2.h>
 #include <wrl/client.h>
 
-#include <string>
 #include <vector>
 
 namespace base {
@@ -72,7 +71,7 @@ public:
     const Rect& desktopRect() const { return desktop_rect_; }
 
     // Returns the device name from DXGI_OUTPUT_DESC.
-    const std::wstring& deviceName() const { return device_name_; }
+    const QString& deviceName() const { return device_name_; }
 
     void setup(Context* context);
 
@@ -113,7 +112,7 @@ private:
 
     const D3dDevice device_;
     const Microsoft::WRL::ComPtr<IDXGIOutput1> output_;
-    const std::wstring device_name_;
+    const QString device_name_;
     const Rect initial_desktop_rect_;
     Rect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;

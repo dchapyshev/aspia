@@ -18,7 +18,6 @@
 
 #include "base/files/file_path.h"
 
-#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 namespace base {
@@ -26,18 +25,18 @@ namespace base {
 std::string utf8FromFilePath(const std::filesystem::path& path)
 {
 #if defined(OS_WIN)
-    return base::utf8FromWide(path.c_str());
+    //return base::utf8FromWide(path.c_str());
 #else
-    return path.c_str();
+    //return path.c_str();
 #endif
 }
 
 std::filesystem::path filePathFromUtf8(std::string_view str)
 {
 #if defined(OS_WIN)
-    return std::filesystem::path(base::wideFromUtf8(str));
+    //return std::filesystem::path(base::wideFromUtf8(str));
 #else
-    return std::filesystem::path(std::string(str));
+    //return std::filesystem::path(std::string(str));
 #endif
 }
 

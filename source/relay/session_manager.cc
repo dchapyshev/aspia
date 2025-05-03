@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/crypto/message_decryptor_openssl.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 namespace relay {
@@ -93,7 +92,7 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
     return nullptr;
 }
 
-std::u16string peerAddress(const asio::ip::tcp::socket& socket)
+QString peerAddress(const asio::ip::tcp::socket& socket)
 {
     try
     {
@@ -105,7 +104,8 @@ std::u16string peerAddress(const asio::ip::tcp::socket& socket)
         }
         else
         {
-            return base::utf16FromLocal8Bit(endpoint.address().to_string());
+            std::string address = endpoint.address().to_string();
+            return QString::fromLocal8Bit(address.c_str(), static_cast<int>(address.size()));
         }
     }
     catch (const std::error_code& error_code)
@@ -113,7 +113,7 @@ std::u16string peerAddress(const asio::ip::tcp::socket& socket)
         LOG(LS_ERROR) << "Unable to get address for pending session: " << error_code;
     }
 
-    return std::u16string();
+    return QString();
 }
 
 } // namespace
@@ -314,8 +314,7 @@ void SessionManager::doAccept(SessionManager* self)
             if (error_code == asio::error::operation_aborted)
                 return;
 
-            LOG(LS_ERROR) << "Error while accepting connection: "
-                          << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
         }
 
         // Waiting for the next connection.
@@ -362,7 +361,7 @@ void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
     }
     else
     {
-        LOG(LS_ERROR) << "Error in idle timer: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error in idle timer: " << error_code;
     }
 
     idle_timer_.expires_after(kIdleTimerInterval);
@@ -391,7 +390,7 @@ void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
     }
     else
     {
-        LOG(LS_ERROR) << "Error in stat timer: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Error in stat timer: " << error_code;
     }
 
     stat_timer_.expires_after(statistics_interval_);

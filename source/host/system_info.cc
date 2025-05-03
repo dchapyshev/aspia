@@ -24,7 +24,6 @@
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
-#include "base/files/file_path.h"
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/route_enumerator.h"
@@ -805,7 +804,7 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
         proto::system_info::LogicalDrives::Drive* drive =
             system_info->mutable_logical_drives()->add_drive();
 
-        drive->set_path(base::utf8FromFilePath(drive_info.path()));
+        drive->set_path(drive_info.path().toStdString());
         drive->set_file_system(drive_info.fileSystem().toStdString());
         drive->set_total_size(drive_info.totalSpace());
         drive->set_free_size(drive_info.freeSpace());
@@ -974,11 +973,11 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
         proto::system_info::Processes::Process* process_item =
             system_info->mutable_processes()->add_process();
 
-        process_item->set_name(process.second.process_name);
+        process_item->set_name(process.second.process_name.toStdString());
         process_item->set_pid(process.first);
         process_item->set_sid(process.second.session_id);
-        process_item->set_user(process.second.user_name);
-        process_item->set_path(process.second.file_path);
+        process_item->set_user(process.second.user_name.toStdString());
+        process_item->set_path(process.second.file_path.toStdString());
         process_item->set_cpu(process.second.cpu_ratio);
         process_item->set_memory(process.second.mem_private_working_set);
     }

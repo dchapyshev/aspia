@@ -38,7 +38,7 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
     QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters").arg(deviceID());
 
     RegistryKey key;
-    LONG status = key.open(HKEY_LOCAL_MACHINE, reinterpret_cast<const wchar_t*>(key_path.utf16()), KEY_READ);
+    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "Unable to open registry key: "
@@ -50,13 +50,13 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
     DWORD size = 128;
     std::unique_ptr<quint8[]> data = std::make_unique<quint8[]>(size);
 
-    status = key.readValue(L"EDID", data.get(), &size, &type);
+    status = key.readValue("EDID", data.get(), &size, &type);
     if (status != ERROR_SUCCESS)
     {
         if (status == ERROR_MORE_DATA)
         {
             data = std::make_unique<quint8[]>(size);
-            status = key.readValue(L"EDID", data.get(), &size, &type);
+            status = key.readValue("EDID", data.get(), &size, &type);
         }
 
         if (status != ERROR_SUCCESS)

@@ -56,7 +56,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 {
     std::unique_ptr<Mv2Helper> helper(new Mv2Helper(screen_rect));
 
-    if (!MirrorHelper::findDisplayDevice(L"mv video hook driver2",
+    if (!MirrorHelper::findDisplayDevice("mv video hook driver2",
                                          &helper->device_name_,
                                          &helper->device_key_))
     {
@@ -150,10 +150,11 @@ bool Mv2Helper::update(bool load)
     }
 
     wcsncpy_s(device_mode.dmDeviceName, std::size(device_mode.dmDeviceName),
-              device_name_.c_str(), device_name_.length());
+              reinterpret_cast<const wchar_t*>(device_name_.utf16()), device_name_.length());
 
     LONG status = ChangeDisplaySettingsExW(
-        device_name_.c_str(), &device_mode, nullptr, CDS_UPDATEREGISTRY, nullptr);
+        reinterpret_cast<const wchar_t*>(device_name_.utf16()), &device_mode, nullptr,
+        CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
         LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed: " << status;
@@ -168,7 +169,8 @@ bool Mv2Helper::mapMemory(bool map)
 {
     if (map)
     {
-        driver_dc_.reset(CreateDCW(device_name_.c_str(), nullptr, nullptr, nullptr));
+        driver_dc_.reset(CreateDCW(reinterpret_cast<const wchar_t*>(device_name_.utf16()), nullptr,
+                                   nullptr, nullptr));
         if (!driver_dc_.isValid())
         {
             PLOG(LS_ERROR) << "CreateDCW failed";

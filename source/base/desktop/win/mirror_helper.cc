@@ -19,16 +19,15 @@
 #include "base/desktop/win/mirror_helper.h"
 
 #include "base/logging.h"
-#include "base/strings/string_util.h"
 #include "base/win/registry.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
-                                     std::wstring* device_name,
-                                     std::wstring* device_key)
+bool MirrorHelper::findDisplayDevice(const QString& device_string,
+                                     QString* device_name,
+                                     QString* device_key)
 {
     DCHECK(device_name);
     DCHECK(device_key);
@@ -44,16 +43,13 @@ bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
     {
         if (device_string == device_info.DeviceString)
         {
-            std::wstring_view device_key_view(device_info.DeviceKey);
-            std::wstring_view prefix(L"\\Registry\\Machine\\");
+            QString prefix = "\\Registry\\Machine\\";
 
-            if (device_key_view.starts_with(prefix))
-            {
-                device_key_view.remove_prefix(prefix.size());
-                device_key->assign(device_key_view);
-            }
+            *device_key = QString::fromWCharArray(device_info.DeviceKey);
+            if (device_key->startsWith(prefix))
+                device_key->remove(0, prefix.size());
 
-            device_name->assign(device_info.DeviceName);
+            *device_name = QString::fromWCharArray(device_info.DeviceName);
             return true;
         }
 
@@ -65,12 +61,12 @@ bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
+bool MirrorHelper::attachToDesktop(const QString& key_path, bool attach)
 {
     base::RegistryKey device_key;
 
     LONG status = device_key.open(HKEY_LOCAL_MACHINE,
-                                  key_path.data(),
+                                  key_path,
                                   KEY_ALL_ACCESS | KEY_WOW64_64KEY);
     if (status != ERROR_SUCCESS)
     {
@@ -79,7 +75,7 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
         return false;
     }
 
-    static const wchar_t kAttachToDesktop[] = L"Attach.ToDesktop";
+    static const char kAttachToDesktop[] = "Attach.ToDesktop";
 
     if (attach)
     {

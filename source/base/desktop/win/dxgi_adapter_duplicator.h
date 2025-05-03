@@ -70,7 +70,7 @@ public:
 
     // Returns the device name of one screen owned by this DxgiAdapterDuplicator. |id| should be
     // between [0, screenCount()).
-    const std::wstring& deviceName(int id) const;
+    const QString& deviceName(int id) const;
 
     // Returns the count of screens owned by this DxgiAdapterDuplicator. These screens can be
     // retrieved by an interger in the range of [0, screenCount()).

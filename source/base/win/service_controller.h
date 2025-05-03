@@ -48,7 +48,7 @@ public:
     void close();
 
     bool setDescription(const QString& description);
-    std::u16string description() const;
+    QString description() const;
 
     bool setDependencies(const QStringList& dependencies);
     QStringList dependencies() const;

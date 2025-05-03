@@ -21,10 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <string>
 #include <vector>
 
-#include <QtGlobal>
+#include <QString>
 #include <qt_windows.h>
 
 namespace base {
@@ -34,7 +33,7 @@ class RegistryKey
 public:
     RegistryKey() = default;
     explicit RegistryKey(HKEY key);
-    RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access);
+    RegistryKey(HKEY rootkey, const QString& subkey, REGSAM access);
 
     RegistryKey(RegistryKey&& other) noexcept;
     RegistryKey& operator=(RegistryKey&& other) noexcept;
@@ -44,70 +43,74 @@ public:
     // True while the key is valid.
     bool isValid() const;
 
-    LONG create(HKEY rootkey, const wchar_t* subkey, REGSAM access);
+    LONG create(HKEY rootkey, const QString& subkey, REGSAM access);
 
-    LONG createWithDisposition(HKEY rootkey, const wchar_t* subkey,
+    LONG createWithDisposition(HKEY rootkey, const QString& subkey,
                                DWORD *disposition, REGSAM access);
 
     // Creates a subkey or open it if it already exists.
-    LONG createKey(const wchar_t* name, REGSAM access);
+    LONG createKey(const QString& name, REGSAM access);
 
     // Opens an existing reg key.
-    LONG open(HKEY rootkey, const wchar_t* subkey, REGSAM access);
+    LONG open(HKEY rootkey, const QString& subkey, REGSAM access);
 
     // Opens an existing reg key, given the relative key name.
-    LONG openKey(const wchar_t* relative_key_name, REGSAM access);
+    LONG openKey(const QString& relative_key_name, REGSAM access);
 
     // Returns false if this key does not have the specified value, or if an error
     // occurrs while attempting to access it.
-    bool hasValue(const wchar_t* name) const;
+    bool hasValue(const QString& name) const;
 
     // Returns the number of values for this key, or 0 if the number cannot be determined.
     DWORD valueCount() const;
 
     // Reads raw data into |data|. If |name| is null or empty, reads the key's default value, if any.
-    LONG readValue(const wchar_t* name, void* data, DWORD* dsize, DWORD* dtype) const;
+    LONG readValue(const QString& name, void* data, DWORD* dsize, DWORD* dtype) const;
 
     // Reads a REG_DWORD (quint32) into |out_value|. If |name| is null or empty, reads the key's
     // default value, if any.
-    LONG readValueDW(const wchar_t* name, DWORD* out_value) const;
+    LONG readValueDW(const QString& name, DWORD* out_value) const;
 
     // Reads a REG_QWORD (qint64) into |out_value|. If |name| is null or empty, reads the key's
     // default value, if any.
-    LONG readInt64(const wchar_t* name, qint64* out_value) const;
+    LONG readInt64(const QString& name, qint64* out_value) const;
 
     // Reads a REG_BINARY (array of chars) into |out_value|. If |name| is null or empty,
     // reads the key's default value, if any.
-    LONG readValueBIN(const wchar_t* name, std::string* out_value) const;
+    LONG readValueBIN(const QString& name, QByteArray* out_value) const;
 
     // Reads a string into |out_value|. If |name| is null or empty, reads
     // the key's default value, if any.
-    LONG readValue(const wchar_t* name, std::wstring* out_value) const;
+    LONG readValue(const QString& name, QString* out_value) const;
+
+    // Reads a string into |out_value|. If |name| is null or empty, reads
+    // the key's default value, if any.
+    LONG readValue(const QString& name, std::wstring* out_value) const;
 
     // Sets raw data, including type.
-    LONG writeValue(const wchar_t* name, const void* data, DWORD dsize, DWORD dtype);
+    LONG writeValue(const QString& name, const void* data, DWORD dsize, DWORD dtype);
 
     // Sets an qint32 value.
-    LONG writeValue(const wchar_t* name, DWORD in_value);
+    LONG writeValue(const QString& name, DWORD in_value);
 
     // Sets a string value.
-    LONG writeValue(const wchar_t* name, const wchar_t* in_value);
+    LONG writeValue(const QString& name, const QString& in_value);
 
     // Kills a key and everything that lives below it; please be careful when using it.
-    LONG deleteKey(const wchar_t* name);
+    LONG deleteKey(const QString& name);
 
     // Deletes an empty subkey.  If the subkey has subkeys or values then this will fail.
-    LONG deleteEmptyKey(const wchar_t* name);
+    LONG deleteEmptyKey(const QString& name);
 
     // Deletes a single value within the key.
-    LONG deleteValue(const wchar_t* name);
+    LONG deleteValue(const QString& name);
 
     // Closes this reg key.
     void close();
 
 private:
     // Recursively deletes a key and all of its subkeys.
-    static LONG deleteKeyRecurse(HKEY root_key, const std::wstring& name, REGSAM access);
+    static LONG deleteKeyRecurse(HKEY root_key, const QString& name, REGSAM access);
 
     HKEY key_ = nullptr;
     REGSAM wow64access_ = 0;
@@ -120,7 +123,7 @@ class RegistryValueIterator
 {
 public:
     // Constructs a Registry Value Iterator with default WOW64 access.
-    RegistryValueIterator(HKEY root_key, const wchar_t* folder_key);
+    RegistryValueIterator(HKEY root_key, const QString& folder_key);
 
     // Constructs a Registry Key Iterator with specific WOW64 access, one of
     // KEY_WOW64_32KEY or KEY_WOW64_64KEY, or 0.
@@ -128,7 +131,7 @@ public:
     // previously, or a predefined key (e.g. HKEY_LOCAL_MACHINE).
     // See http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129.aspx.
     RegistryValueIterator(HKEY root_key,
-                          const wchar_t* folder_key,
+                          const QString& folder_key,
                           REGSAM wow64access);
 
     ~RegistryValueIterator();
@@ -141,8 +144,8 @@ public:
     // Advances to the next registry entry.
     void operator++();
 
-    const wchar_t* name() const { return name_.c_str(); }
-    const wchar_t* value() const { return value_.data(); }
+    QString name() const { return QString::fromStdWString(name_); }
+    QString value() const { return QString::fromWCharArray(value_.data()); }
     // ValueSize() is in bytes.
     DWORD valueSize() const { return value_size_; }
     DWORD type() const { return type_; }
@@ -153,7 +156,7 @@ private:
     // Reads in the current values.
     bool read();
 
-    void initialize(HKEY root_key, const wchar_t* folder_key, REGSAM wow64access);
+    void initialize(HKEY root_key, const QString& folder_key, REGSAM wow64access);
 
     // The registry key being iterated.
     HKEY key_ = nullptr;
@@ -174,14 +177,14 @@ class RegistryKeyIterator
 {
 public:
     // Constructs a Registry Key Iterator with default WOW64 access.
-    RegistryKeyIterator(HKEY root_key, const wchar_t* folder_key);
+    RegistryKeyIterator(HKEY root_key, const QString& folder_key);
 
     // Constructs a Registry Value Iterator with specific WOW64 access, one of
     // KEY_WOW64_32KEY or KEY_WOW64_64KEY, or 0.
     // Note: |wow64access| should be the same access used to open |root_key|
     // previously, or a predefined key (e.g. HKEY_LOCAL_MACHINE).
     // See http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129.aspx.
-    RegistryKeyIterator(HKEY root_key, const wchar_t* folder_key, REGSAM wow64access);
+    RegistryKeyIterator(HKEY root_key, const QString& folder_key, REGSAM wow64access);
 
     ~RegistryKeyIterator();
 
@@ -193,7 +196,7 @@ public:
     // Advances to the next entry in the folder.
     void operator++();
 
-    const wchar_t* name() const { return name_; }
+    QString name() const { return QString::fromWCharArray(name_); }
 
     int index() const { return index_; }
 
@@ -201,7 +204,7 @@ private:
     // Reads in the current values.
     bool read();
 
-    void initialize(HKEY root_key, const wchar_t* folder_key, REGSAM wow64access);
+    void initialize(HKEY root_key, const QString& folder_key, REGSAM wow64access);
 
     // The registry key being iterated.
     HKEY key_ = nullptr;

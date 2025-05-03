@@ -19,40 +19,21 @@
 #include "base/crypto/os_crypt.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <wincrypt.h>
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::encryptString16(std::u16string_view plaintext, std::string* ciphertext)
+bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
 {
-    return encryptString(utf8FromUtf16(plaintext), ciphertext);
-}
+    QByteArray plaintext_utf8 = plaintext.toUtf8();
 
-//--------------------------------------------------------------------------------------------------
-// static
-bool OSCrypt::decryptString16(std::string_view ciphertext, std::u16string* plaintext)
-{
-    std::string utf8;
-
-    if (!decryptString(ciphertext, &utf8))
-        return false;
-
-    *plaintext = utf16FromUtf8(utf8);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool OSCrypt::encryptString(std::string_view plaintext, std::string* ciphertext)
-{
     DATA_BLOB input;
-    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(plaintext.data()));
-    input.cbData = static_cast<DWORD>(plaintext.length());
+    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(plaintext_utf8.data()));
+    input.cbData = static_cast<DWORD>(plaintext_utf8.length());
 
     DATA_BLOB output;
     BOOL result = CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output);
@@ -62,14 +43,15 @@ bool OSCrypt::encryptString(std::string_view plaintext, std::string* ciphertext)
         return false;
     }
 
-    ciphertext->assign(reinterpret_cast<std::string::value_type*>(output.pbData), output.cbData);
+    *ciphertext = QByteArray(reinterpret_cast<const char*>(output.pbData),
+                             static_cast<int>(output.cbData));
     LocalFree(output.pbData);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::decryptString(std::string_view ciphertext, std::string* plaintext)
+bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
 {
     DATA_BLOB input;
     input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(ciphertext.data()));
@@ -83,7 +65,10 @@ bool OSCrypt::decryptString(std::string_view ciphertext, std::string* plaintext)
         return false;
     }
 
-    plaintext->assign(reinterpret_cast<char*>(output.pbData), output.cbData);
+    QByteArray plaintext_utf8 =
+        QByteArray::fromRawData(reinterpret_cast<char*>(output.pbData), output.cbData);
+
+    *plaintext = QString::fromUtf8(plaintext_utf8);
     LocalFree(output.pbData);
     return true;
 }

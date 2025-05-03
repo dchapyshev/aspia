@@ -22,7 +22,6 @@
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
-#include "base/strings/unicode.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"

@@ -26,7 +26,6 @@
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/net/tcp_channel.h"
 #include "base/serialization.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.pb.h"
 
@@ -81,9 +80,11 @@ void RelayPeer::start(const proto::ConnectionOffer& offer)
 
     message_ = authenticationMessage(credentials.key(), credentials.secret());
 
-    LOG(LS_INFO) << "Start resolving for " << credentials.host() << ":" << credentials.port();
+    QString host = QString::fromStdString(credentials.host());
 
-    resolver_.async_resolve(local8BitFromUtf16(utf16FromUtf8(credentials.host())),
+    LOG(LS_INFO) << "Start resolving for " << host << ":" << credentials.port();
+
+    resolver_.async_resolve(host.toLocal8Bit().data(),
                             std::to_string(credentials.port()),
         [this](const std::error_code& error_code,
                const asio::ip::tcp::resolver::results_type& endpoints)

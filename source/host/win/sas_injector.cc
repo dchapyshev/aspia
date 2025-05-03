@@ -27,10 +27,10 @@ namespace host {
 
 namespace {
 
-const wchar_t kSoftwareSASGenerationPath[] =
-    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+const char kSoftwareSASGenerationPath[] =
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 
-const wchar_t kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
+const char kSoftwareSASGeneration[] = "SoftwareSASGeneration";
 
 class ScopedSasPolicy
 {

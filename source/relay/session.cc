@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/write.hpp>

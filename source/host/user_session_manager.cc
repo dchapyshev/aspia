@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/strings/string_util.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
 #include "host/user_session.h"

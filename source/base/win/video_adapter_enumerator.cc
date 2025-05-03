@@ -32,31 +32,31 @@ VideoAdapterEnumarator::VideoAdapterEnumarator()
 //--------------------------------------------------------------------------------------------------
 QString VideoAdapterEnumarator::adapterString() const
 {
-    return driverRegistryString(L"HardwareInformation.AdapterString");
+    return driverRegistryString("HardwareInformation.AdapterString");
 }
 
 //--------------------------------------------------------------------------------------------------
 QString VideoAdapterEnumarator::biosString() const
 {
-    return driverRegistryString(L"HardwareInformation.BiosString");
+    return driverRegistryString("HardwareInformation.BiosString");
 }
 
 //--------------------------------------------------------------------------------------------------
 QString VideoAdapterEnumarator::chipString() const
 {
-    return driverRegistryString(L"HardwareInformation.ChipType");
+    return driverRegistryString("HardwareInformation.ChipType");
 }
 
 //--------------------------------------------------------------------------------------------------
 QString VideoAdapterEnumarator::dacType() const
 {
-    return driverRegistryString(L"HardwareInformation.DacType");
+    return driverRegistryString("HardwareInformation.DacType");
 }
 
 //--------------------------------------------------------------------------------------------------
 quint64 VideoAdapterEnumarator::memorySize() const
 {
-    return driverRegistryDW(L"HardwareInformation.MemorySize");
+    return driverRegistryDW("HardwareInformation.MemorySize");
 }
 
 } // namespace base

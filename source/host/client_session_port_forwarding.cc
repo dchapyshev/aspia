@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/connect.hpp>

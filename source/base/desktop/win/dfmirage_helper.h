@@ -46,8 +46,8 @@ private:
     bool is_updated_ = false;
     bool is_mapped_ = false;
 
-    std::wstring device_key_;
-    std::wstring device_name_;
+    QString device_key_;
+    QString device_name_;
 
     base::ScopedCreateDC driver_dc_;
     const Rect screen_rect_;

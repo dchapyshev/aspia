@@ -19,12 +19,13 @@
 #include "router/database_sqlite.h"
 
 #include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "base/files/file_path.h"
-#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 #include <optional>
+
+#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 namespace router {
 
@@ -271,18 +272,18 @@ DatabaseSqlite::~DatabaseSqlite()
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 {
-    std::filesystem::path dir_path = databaseDirectory();
-    if (dir_path.empty())
+    QString dir_path = databaseDirectory();
+    if (dir_path.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid directory path";
         return nullptr;
     }
 
-    std::error_code error_code;
-    std::filesystem::file_status dir_status = std::filesystem::status(dir_path, error_code);
-    if (std::filesystem::exists(dir_status))
+    QFileInfo dir_info(dir_path);
+
+    if (dir_info.exists())
     {
-        if (!std::filesystem::is_directory(dir_status))
+        if (!dir_info.isDir())
         {
             LOG(LS_ERROR) << "Unable to create directory for database. Need to delete file '"
                           << dir_path << "'";
@@ -291,21 +292,21 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     }
     else
     {
-        if (!std::filesystem::create_directories(dir_path, error_code))
+        if (!QDir().mkpath(dir_path))
         {
-            LOG(LS_ERROR) << "Unable to create directory for database: " << error_code;
+            LOG(LS_ERROR) << "Unable to create directory for database";
             return nullptr;
         }
     }
 
-    std::filesystem::path file_path = filePath();
-    if (file_path.empty())
+    QString file_path = filePath();
+    if (file_path.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid file path";
         return nullptr;
     }
 
-    if (std::filesystem::exists(file_path, error_code))
+    if (QFileInfo::exists(file_path))
     {
         LOG(LS_ERROR) << "Database file already exists";
         return nullptr;
@@ -346,19 +347,19 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 {
-    std::filesystem::path file_path = filePath();
-    if (file_path.empty())
+    QString file_path = filePath();
+    if (file_path.isEmpty())
     {
         LOG(LS_ERROR) << "Invalid file path";
         return nullptr;
     }
 
-    std::string file_path_utf8 = base::utf8FromFilePath(file_path);
-    LOG(LS_INFO) << "Opening database: " << file_path_utf8;
+    QByteArray file_path_utf8 = file_path.toUtf8();
+    LOG(LS_INFO) << "Opening database: " << file_path;
 
     sqlite3* db = nullptr;
 
-    int error_code = sqlite3_open(file_path_utf8.c_str(), &db);
+    int error_code = sqlite3_open(file_path_utf8.data(), &db);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_open failed: " << sqlite3_errstr(error_code)
@@ -371,13 +372,13 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::filesystem::path DatabaseSqlite::filePath()
+QString DatabaseSqlite::filePath()
 {
-    std::filesystem::path file_path = databaseDirectory();
-    if (file_path.empty())
-        return std::filesystem::path();
+    QString file_path = databaseDirectory();
+    if (file_path.isEmpty())
+        return QString();
 
-    file_path.append(u"router.db3");
+    file_path.append("/router.db3");
     return file_path;
 }
 
@@ -736,16 +737,14 @@ bool DatabaseSqlite::addHost(const QByteArray& keyHash)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::filesystem::path DatabaseSqlite::databaseDirectory()
+QString DatabaseSqlite::databaseDirectory()
 {
-    std::filesystem::path dir_path;
+    QString dir_path;
 
-#if defined(OS_WIN)
-    if (!base::BasePaths::commonAppData(&dir_path))
-        return std::filesystem::path();
-
-    dir_path.append(u"aspia");
-#elif (OS_LINUX)
+#if defined(Q_OS_WINDOWS)
+    dir_path = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    dir_path.append("/aspia");
+#elif (Q_OS_LINUX)
     dir_path.append("/var/lib/aspia");
 #else
     NOTIMPLEMENTED();

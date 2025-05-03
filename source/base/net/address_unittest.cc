@@ -25,161 +25,161 @@ namespace base {
 
 TEST(AddressTest, Port)
 {
-    Address addr1 = Address::fromString(u"192.168.0.1:0", 8050);
+    Address addr1 = Address::fromString("192.168.0.1:0", 8050);
     EXPECT_FALSE(addr1.isValid());
-    EXPECT_TRUE(addr1.host().empty());
+    EXPECT_TRUE(addr1.host().isEmpty());
     EXPECT_EQ(addr1.port(), 0);
 
-    Address addr2 = Address::fromString(u"192.168.0.1:08051", 8050);
+    Address addr2 = Address::fromString("192.168.0.1:08051", 8050);
     EXPECT_TRUE(addr2.isValid());
-    EXPECT_EQ(addr2.host(), u"192.168.0.1");
+    EXPECT_EQ(addr2.host(), "192.168.0.1");
     EXPECT_EQ(addr2.port(), 8051);
 
-    Address addr3 = Address::fromString(u"192.168.0.1:FFFF", 8050);
+    Address addr3 = Address::fromString("192.168.0.1:FFFF", 8050);
     EXPECT_FALSE(addr3.isValid());
-    EXPECT_TRUE(addr3.host().empty());
+    EXPECT_TRUE(addr3.host().isEmpty());
     EXPECT_EQ(addr3.port(), 0);
 
-    Address addr4 = Address::fromString(u"192.168.0.1:", 8060);
+    Address addr4 = Address::fromString("192.168.0.1:", 8060);
     EXPECT_FALSE(addr4.isValid());
-    EXPECT_TRUE(addr4.host().empty());
+    EXPECT_TRUE(addr4.host().isEmpty());
     EXPECT_EQ(addr4.port(), 0);
 
-    Address addr5 = Address::fromString(u"192.168.0.1:83572576", 8050);
+    Address addr5 = Address::fromString("192.168.0.1:83572576", 8050);
     EXPECT_FALSE(addr5.isValid());
-    EXPECT_TRUE(addr5.host().empty());
+    EXPECT_TRUE(addr5.host().isEmpty());
     EXPECT_EQ(addr5.port(), 0);
 
-    Address addr6 = Address::fromString(u"192.168.0.1:65535", 8050);
+    Address addr6 = Address::fromString("192.168.0.1:65535", 8050);
     EXPECT_TRUE(addr6.isValid());
-    EXPECT_EQ(addr6.host(), u"192.168.0.1");
+    EXPECT_EQ(addr6.host(), "192.168.0.1");
     EXPECT_EQ(addr6.port(), 65535);
 }
 
 TEST(AddressTest, InvalidAddress)
 {
-    Address addr1 = Address::fromString(u"http://test.com", 8050);
+    Address addr1 = Address::fromString("http://test.com", 8050);
     EXPECT_FALSE(addr1.isValid());
-    EXPECT_TRUE(addr1.host().empty());
+    EXPECT_TRUE(addr1.host().isEmpty());
     EXPECT_EQ(addr1.port(), 0);
 
-    EXPECT_FALSE(Address::fromString(u"https://test1.org", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"ftp://test2.net", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"te%st2", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"//", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"..", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u".", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"\\", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"/", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u":", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"^", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"#", 8050).isValid());
-    EXPECT_FALSE(Address::fromString(u"2001:db8:1f70::999:de8:7648:6e8", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("https://test1.org", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("ftp://test2.net", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("te%st2", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("//", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("..", 8050).isValid());
+    EXPECT_FALSE(Address::fromString(".", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("\\", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("/", 8050).isValid());
+    EXPECT_FALSE(Address::fromString(":", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("^", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("#", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("2001:db8:1f70::999:de8:7648:6e8", 8050).isValid());
 }
 
 TEST(AddressTest, ValidAddress)
 {
-    Address addr1 = Address::fromString(u"192.168.1.1", 8050);
+    Address addr1 = Address::fromString("192.168.1.1", 8050);
     EXPECT_TRUE(addr1.isValid());
-    EXPECT_EQ(addr1.host(), u"192.168.1.1");
+    EXPECT_EQ(addr1.host(), "192.168.1.1");
     EXPECT_EQ(addr1.port(), DEFAULT_HOST_TCP_PORT);
-    EXPECT_EQ(addr1.toString(), u"192.168.1.1");
+    EXPECT_EQ(addr1.toString(), "192.168.1.1");
 
-    Address addr2 = Address::fromString(u"192.168.1.1:8080", 8050);
+    Address addr2 = Address::fromString("192.168.1.1:8080", 8050);
     EXPECT_TRUE(addr2.isValid());
-    EXPECT_EQ(addr2.host(), u"192.168.1.1");
+    EXPECT_EQ(addr2.host(), "192.168.1.1");
     EXPECT_EQ(addr2.port(), 8080);
-    EXPECT_EQ(addr2.toString(), u"192.168.1.1:8080");
+    EXPECT_EQ(addr2.toString(), "192.168.1.1:8080");
 
-    Address addr3 = Address::fromString(u"test.com", 8050);
+    Address addr3 = Address::fromString("test.com", 8050);
     EXPECT_TRUE(addr3.isValid());
-    EXPECT_EQ(addr3.host(), u"test.com");
+    EXPECT_EQ(addr3.host(), "test.com");
     EXPECT_EQ(addr3.port(), DEFAULT_HOST_TCP_PORT);
-    EXPECT_EQ(addr3.toString(), u"test.com");
+    EXPECT_EQ(addr3.toString(), "test.com");
 
-    Address addr4 = Address::fromString(u"test.com:8080", 8050);
+    Address addr4 = Address::fromString("test.com:8080", 8050);
     EXPECT_TRUE(addr4.isValid());
-    EXPECT_EQ(addr4.host(), u"test.com");
+    EXPECT_EQ(addr4.host(), "test.com");
     EXPECT_EQ(addr4.port(), 8080);
-    EXPECT_EQ(addr4.toString(), u"test.com:8080");
+    EXPECT_EQ(addr4.toString(), "test.com:8080");
 
-    Address addr5 = Address::fromString(u"test", 8050);
+    Address addr5 = Address::fromString("test", 8050);
     EXPECT_TRUE(addr5.isValid());
-    EXPECT_EQ(addr5.host(), u"test");
+    EXPECT_EQ(addr5.host(), "test");
     EXPECT_EQ(addr5.port(), DEFAULT_HOST_TCP_PORT);
-    EXPECT_EQ(addr5.toString(), u"test");
+    EXPECT_EQ(addr5.toString(), "test");
 
-    Address addr6 = Address::fromString(u"test:8080", 8050);
+    Address addr6 = Address::fromString("test:8080", 8050);
     EXPECT_TRUE(addr6.isValid());
-    EXPECT_EQ(addr6.host(), u"test");
+    EXPECT_EQ(addr6.host(), "test");
     EXPECT_EQ(addr6.port(), 8080);
-    EXPECT_EQ(addr6.toString(), u"test:8080");
+    EXPECT_EQ(addr6.toString(), "test:8080");
 
-    Address addr7 = Address::fromString(u"[2001:db8:1f70::999:de8:7648:6e8]", 8050);
+    Address addr7 = Address::fromString("[2001:db8:1f70::999:de8:7648:6e8]", 8050);
     EXPECT_TRUE(addr7.isValid());
-    EXPECT_EQ(addr7.host(), u"2001:db8:1f70::999:de8:7648:6e8");
+    EXPECT_EQ(addr7.host(), "2001:db8:1f70::999:de8:7648:6e8");
     EXPECT_EQ(addr7.port(), DEFAULT_HOST_TCP_PORT);
-    EXPECT_EQ(addr7.toString(), u"[2001:db8:1f70::999:de8:7648:6e8]");
+    EXPECT_EQ(addr7.toString(), "[2001:db8:1f70::999:de8:7648:6e8]");
 
-    Address addr8 = Address::fromString(u"[2001:db8:1f70::999:de8:7648:6e8]:8080", 8050);
+    Address addr8 = Address::fromString("[2001:db8:1f70::999:de8:7648:6e8]:8080", 8050);
     EXPECT_TRUE(addr8.isValid());
-    EXPECT_EQ(addr8.host(), u"2001:db8:1f70::999:de8:7648:6e8");
+    EXPECT_EQ(addr8.host(), "2001:db8:1f70::999:de8:7648:6e8");
     EXPECT_EQ(addr8.port(), 8080);
-    EXPECT_EQ(addr8.toString(), u"[2001:db8:1f70::999:de8:7648:6e8]:8080");
+    EXPECT_EQ(addr8.toString(), "[2001:db8:1f70::999:de8:7648:6e8]:8080");
 
-    Address addr9 = Address::fromString(u"[::ffff:192.0.2.1]", 8050);
+    Address addr9 = Address::fromString("[::ffff:192.0.2.1]", 8050);
     EXPECT_TRUE(addr9.isValid());
-    EXPECT_EQ(addr9.host(), u"::ffff:192.0.2.1");
+    EXPECT_EQ(addr9.host(), "::ffff:192.0.2.1");
     EXPECT_EQ(addr9.port(), DEFAULT_HOST_TCP_PORT);
-    EXPECT_EQ(addr9.toString(), u"[::ffff:192.0.2.1]");
+    EXPECT_EQ(addr9.toString(), "[::ffff:192.0.2.1]");
 
-    Address addr10 = Address::fromString(u"[::ffff:192.0.2.1]:8080", 8050);
+    Address addr10 = Address::fromString("[::ffff:192.0.2.1]:8080", 8050);
     EXPECT_TRUE(addr10.isValid());
-    EXPECT_EQ(addr10.host(), u"::ffff:192.0.2.1");
+    EXPECT_EQ(addr10.host(), "::ffff:192.0.2.1");
     EXPECT_EQ(addr10.port(), 8080);
-    EXPECT_EQ(addr10.toString(), u"[::ffff:192.0.2.1]:8080");
+    EXPECT_EQ(addr10.toString(), "[::ffff:192.0.2.1]:8080");
 }
 
 TEST(AddressTest, TestVector)
 {
     static_assert(DEFAULT_HOST_TCP_PORT == 8050);
 
-    Address addr = Address::fromString(u"192.168.1.1:8050", 8050);
+    Address addr = Address::fromString("192.168.1.1:8050", 8050);
 
     EXPECT_TRUE(addr.isValid());
-    EXPECT_EQ(addr.host(), u"192.168.1.1");
+    EXPECT_EQ(addr.host(), "192.168.1.1");
     EXPECT_EQ(addr.port(), 8050);
-    EXPECT_EQ(addr.toString(), u"192.168.1.1");
+    EXPECT_EQ(addr.toString(), "192.168.1.1");
 
     addr.setPort(8051);
 
-    EXPECT_EQ(addr.toString(), u"192.168.1.1:8051");
+    EXPECT_EQ(addr.toString(), "192.168.1.1:8051");
 
-    addr.setHost(u"::ffff:192.0.2.1");
+    addr.setHost("::ffff:192.0.2.1");
 
-    EXPECT_EQ(addr.toString(), u"[::ffff:192.0.2.1]:8051");
+    EXPECT_EQ(addr.toString(), "[::ffff:192.0.2.1]:8051");
 
     addr.setPort(8050);
 
-    EXPECT_EQ(addr.toString(), u"[::ffff:192.0.2.1]");
+    EXPECT_EQ(addr.toString(), "[::ffff:192.0.2.1]");
 
     addr.setPort(0);
     EXPECT_FALSE(addr.isValid());
-    EXPECT_TRUE(addr.toString().empty());
+    EXPECT_TRUE(addr.toString().isEmpty());
 
-    addr.setHost(u"..");
+    addr.setHost("..");
     EXPECT_FALSE(addr.isValid());
-    EXPECT_TRUE(addr.toString().empty());
+    EXPECT_TRUE(addr.toString().isEmpty());
 
     addr.setPort(8050);
     EXPECT_FALSE(addr.isValid());
-    EXPECT_TRUE(addr.toString().empty());
+    EXPECT_TRUE(addr.toString().isEmpty());
 
-    addr.setHost(u"192.168.1.1");
+    addr.setHost("192.168.1.1");
     EXPECT_TRUE(addr.isValid());
-    EXPECT_EQ(addr.host(), u"192.168.1.1");
+    EXPECT_EQ(addr.host(), "192.168.1.1");
     EXPECT_EQ(addr.port(), 8050);
-    EXPECT_EQ(addr.toString(), u"192.168.1.1");
+    EXPECT_EQ(addr.toString(), "192.168.1.1");
 }
 
 } // namespace base

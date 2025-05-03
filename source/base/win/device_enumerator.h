@@ -44,8 +44,8 @@ public:
 protected:
     DeviceEnumerator(const GUID* class_guid, DWORD flags);
 
-    QString driverRegistryString(const wchar_t* key_name) const;
-    DWORD driverRegistryDW(const wchar_t* key_name) const;
+    QString driverRegistryString(const QString& key_name) const;
+    DWORD driverRegistryDW(const QString& key_name) const;
 
 private:
     QString driverKeyPath() const;

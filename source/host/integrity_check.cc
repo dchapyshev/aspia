@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "base/strings/unicode.h"
 
 namespace host {
 

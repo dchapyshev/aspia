@@ -24,7 +24,6 @@
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
 #include "base/net/tcp_channel_proxy.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/thread.h"
 

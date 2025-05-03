@@ -35,32 +35,29 @@ char* outputBuffer(proto::FilePacket* packet, size_t size)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
-    : file_stream_(std::move(file_stream))
+FilePacketizer::FilePacketizer(std::unique_ptr<QFile> file)
+    : file_(std::move(file))
 {
-    file_stream_.seekg(0, file_stream_.end);
-    file_size_ = static_cast<quint64>(file_stream_.tellg());
-    file_stream_.seekg(0);
+    file_size_ = file_->size();
     left_size_ = file_size_;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::path& file_path)
+std::unique_ptr<FilePacketizer> FilePacketizer::create(const QString& file_path)
 {
-    std::ifstream file_stream;
+    std::unique_ptr<QFile> file = std::make_unique<QFile>(file_path);
 
-    file_stream.open(file_path, std::ifstream::binary);
-    if (!file_stream.is_open())
+    if (!file->open(QFile::ReadOnly))
         return nullptr;
 
-    return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
+    return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file)));
 }
 
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     const proto::FilePacketRequest& request)
 {
-    DCHECK(file_stream_.is_open());
+    DCHECK(file_->isOpen());
 
     // Create a new file packet.
     std::unique_ptr<proto::FilePacket> packet = std::make_unique<proto::FilePacket>();
@@ -79,10 +76,13 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     char* packet_buffer = outputBuffer(packet.get(), packet_buffer_size);
 
     // Moving to a new position in file.
-    file_stream_.seekg(static_cast<std::streamoff>(file_size_ - left_size_));
+    if (!file_->seek(file_size_ - left_size_))
+    {
+        LOG(LS_ERROR) << "Unable to seek file";
+        return nullptr;
+    }
 
-    file_stream_.read(packet_buffer, packet_buffer_size);
-    if (file_stream_.fail())
+    if (file_->read(packet_buffer, packet_buffer_size) == -1)
     {
         LOG(LS_ERROR) << "Unable to read file";
         return nullptr;
@@ -101,7 +101,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     if (!left_size_)
     {
         file_size_ = 0;
-        file_stream_.close();
+        file_->close();
 
         packet->set_flags(packet->flags() | proto::FilePacket::LAST_PACKET);
     }

@@ -43,19 +43,19 @@ protected:
     void SetUp() final
     {
         // Create a temporary key.
-        RegistryKey key(HKEY_CURRENT_USER, L"", KEY_ALL_ACCESS);
+        RegistryKey key(HKEY_CURRENT_USER, "", KEY_ALL_ACCESS);
         key.deleteKey(kRootKey);
         ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_READ));
         ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, kRootKey, KEY_READ));
-        foo_software_key_ = L"Software\\";
+        foo_software_key_ = "Software\\";
         foo_software_key_ += kRootKey;
-        foo_software_key_ += L"\\Foo";
+        foo_software_key_ += "\\Foo";
     }
 
     void TearDown() final
     {
         // Clean up the temporary key.
-        RegistryKey key(HKEY_CURRENT_USER, L"", KEY_SET_VALUE);
+        RegistryKey key(HKEY_CURRENT_USER, "", KEY_SET_VALUE);
         ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(kRootKey));
         ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_READ));
     }
@@ -80,8 +80,8 @@ protected:
 #endif
     }
 
-    const wchar_t* const kRootKey = L"Base_Registry_Unittest";
-    std::wstring foo_software_key_;
+    const char* const kRootKey = "Base_Registry_Unittest";
+    QString foo_software_key_;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RegistryTest);
@@ -95,19 +95,19 @@ TEST_F(RegistryTest, ValueTest)
 {
     RegistryKey key;
 
-    std::wstring foo_key(kRootKey);
-    foo_key += L"\\Foo";
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
 
     {
-        ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(),
+        ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key,
                                           KEY_READ | KEY_SET_VALUE));
         ASSERT_TRUE(key.isValid());
 
-        const wchar_t kStringValueName[] = L"StringValue";
-        const wchar_t kDWORDValueName[] = L"DWORDValue";
-        const wchar_t kInt64ValueName[] = L"Int64Value";
-        const wchar_t kStringData[] = L"string data";
+        const char kStringValueName[] = "StringValue";
+        const char kDWORDValueName[] = "DWORDValue";
+        const char kInt64ValueName[] = "Int64Value";
+        const char kStringData[] = "string data";
         const DWORD kDWORDData = 0xdeadbabe;
         const qint64 kInt64Data = 0xdeadbabedeadbabeLL;
 
@@ -122,22 +122,22 @@ TEST_F(RegistryTest, ValueTest)
         EXPECT_TRUE(key.hasValue(kInt64ValueName));
 
         // Test Read
-        std::wstring string_value;
+        QString string_value;
         DWORD dword_value = 0;
         qint64 int64_value = 0;
         ASSERT_EQ(ERROR_SUCCESS, key.readValue(kStringValueName, &string_value));
         ASSERT_EQ(ERROR_SUCCESS, key.readValueDW(kDWORDValueName, &dword_value));
         ASSERT_EQ(ERROR_SUCCESS, key.readInt64(kInt64ValueName, &int64_value));
-        EXPECT_STREQ(kStringData, string_value.c_str());
+        EXPECT_EQ(kStringData, string_value);
         EXPECT_EQ(kDWORDData, dword_value);
         EXPECT_EQ(kInt64Data, int64_value);
 
         // Make sure out args are not touched if ReadValue fails
-        const wchar_t* kNonExistent = L"NonExistent";
+        const char* kNonExistent = "NonExistent";
         ASSERT_NE(ERROR_SUCCESS, key.readValue(kNonExistent, &string_value));
         ASSERT_NE(ERROR_SUCCESS, key.readValueDW(kNonExistent, &dword_value));
         ASSERT_NE(ERROR_SUCCESS, key.readInt64(kNonExistent, &int64_value));
-        EXPECT_STREQ(kStringData, string_value.c_str());
+        EXPECT_EQ(kStringData, string_value);
         EXPECT_EQ(kDWORDData, dword_value);
         EXPECT_EQ(kInt64Data, int64_value);
 
@@ -155,22 +155,22 @@ TEST_F(RegistryTest, ValueTest)
 TEST_F(RegistryTest, BigValueIteratorTest)
 {
     RegistryKey key;
-    std::wstring foo_key(kRootKey);
-    foo_key += L"\\Foo";
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(),
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key,
                                       KEY_READ | KEY_SET_VALUE));
     ASSERT_TRUE(key.isValid());
 
     // Create a test value that is larger than MAX_PATH.
-    std::wstring data(MAX_PATH * 2, L'a');
+    QString data(MAX_PATH * 2, QChar('a'));
 
-    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(data.c_str(), data.c_str()));
+    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(data, data));
 
-    RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key.c_str());
+    RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key);
     ASSERT_TRUE(iterator.valid());
-    EXPECT_STREQ(data.c_str(), iterator.name());
-    EXPECT_STREQ(data.c_str(), iterator.value());
+    EXPECT_STREQ(data.toStdString().c_str(), iterator.name().toStdString().c_str());
+    EXPECT_STREQ(data.toStdString().c_str(), iterator.value().toStdString().c_str());
     // ValueSize() is in bytes, including NUL.
     EXPECT_EQ((MAX_PATH * 2 + 1) * sizeof(wchar_t), iterator.valueSize());
     ++iterator;
@@ -180,30 +180,29 @@ TEST_F(RegistryTest, BigValueIteratorTest)
 TEST_F(RegistryTest, TruncatedCharTest)
 {
     RegistryKey key;
-    std::wstring foo_key(kRootKey);
-    foo_key += L"\\Foo";
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(),
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key,
                                       KEY_READ | KEY_SET_VALUE));
     ASSERT_TRUE(key.isValid());
 
-    const wchar_t kName[] = L"name";
+    const char kName[] = "name";
     // kData size is not a multiple of sizeof(wchar_t).
     const quint8 kData[] = { 1, 2, 3, 4, 5 };
     EXPECT_EQ(5u, std::size(kData));
     ASSERT_EQ(ERROR_SUCCESS,
         key.writeValue(kName, kData, static_cast<DWORD>(std::size(kData)), REG_BINARY));
 
-    RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key.c_str());
+    RegistryValueIterator iterator(HKEY_CURRENT_USER, foo_key);
     ASSERT_TRUE(iterator.valid());
-    EXPECT_STREQ(kName, iterator.name());
+    EXPECT_STREQ(kName, iterator.name().toStdString().c_str());
     // ValueSize() is in bytes.
     ASSERT_EQ(std::size(kData), iterator.valueSize());
     // Value() is NUL terminated.
     int end = (iterator.valueSize() + sizeof(wchar_t) - 1) / sizeof(wchar_t);
     EXPECT_NE(L'\0', iterator.value()[end - 1]);
     EXPECT_EQ(L'\0', iterator.value()[end]);
-    EXPECT_EQ(0, std::memcmp(kData, iterator.value(), std::size(kData)));
     ++iterator;
     EXPECT_FALSE(iterator.valid());
 }
@@ -219,40 +218,40 @@ TEST_F(RegistryTest, RecursiveDelete)
     //                  \->Moo
     //                  \->Foo
     // and delete kRootKey->Foo
-    std::wstring foo_key(kRootKey);
-    foo_key += L"\\Foo";
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Bar", KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(L"TestValue", L"TestData"));
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Moo", KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Foo", KEY_WRITE));
-    foo_key += L"\\Bar";
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    foo_key += L"\\Foo";
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Foo", KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.writeValue(L"TestValue", L"TestData"));
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Bar", KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.writeValue("TestValue", "TestData"));
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Moo", KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Foo", KEY_WRITE));
+    foo_key += "\\Bar";
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Foo", KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.writeValue("TestValue", "TestData"));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ));
 
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_WRITE));
-    ASSERT_NE(ERROR_SUCCESS, key.deleteKey(L"Bar"));
-    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey(L"Foo"));
-    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey(L"Foo\\Bar\\Foo"));
-    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey(L"Foo\\Bar"));
-    ASSERT_EQ(ERROR_SUCCESS, key.deleteEmptyKey(L"Foo\\Foo"));
+    ASSERT_NE(ERROR_SUCCESS, key.deleteKey("Bar"));
+    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey("Foo"));
+    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey("Foo\\Bar\\Foo"));
+    ASSERT_NE(ERROR_SUCCESS, key.deleteEmptyKey("Foo\\Bar"));
+    ASSERT_EQ(ERROR_SUCCESS, key.deleteEmptyKey("Foo\\Foo"));
 
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Bar", KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"Foo", KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(L""));
-    ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Bar", KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("Foo", KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_WRITE));
+    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(""));
+    ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ));
 
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(L"Foo"));
-    ASSERT_NE(ERROR_SUCCESS, key.deleteKey(L"Foo"));
-    ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey("Foo"));
+    ASSERT_NE(ERROR_SUCCESS, key.deleteKey("Foo"));
+    ASSERT_NE(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ));
 }
 
 // This test requires running as an Administrator as it tests redirected
@@ -269,24 +268,24 @@ TEST_F(RegistryTest, DISABLED_Wow64RedirectedFromNative)
     // Test redirected key access from non-redirected.
     ASSERT_EQ(ERROR_SUCCESS,
               key.create(HKEY_LOCAL_MACHINE,
-                         foo_software_key_.c_str(),
+                         foo_software_key_,
                          KEY_WRITE | kRedirectedViewMask));
     ASSERT_NE(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, foo_software_key_.c_str(), KEY_READ));
+              key.open(HKEY_LOCAL_MACHINE, foo_software_key_, KEY_READ));
     ASSERT_NE(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, foo_software_key_.c_str(), KEY_READ | kNativeViewMask));
+              key.open(HKEY_LOCAL_MACHINE, foo_software_key_, KEY_READ | kNativeViewMask));
 
     // Open the non-redirected view of the parent and try to delete the test key.
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_SET_VALUE));
+              key.open(HKEY_LOCAL_MACHINE, "Software", KEY_SET_VALUE));
     ASSERT_NE(ERROR_SUCCESS, key.deleteKey(kRootKey));
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_SET_VALUE | kNativeViewMask));
+              key.open(HKEY_LOCAL_MACHINE, "Software", KEY_SET_VALUE | kNativeViewMask));
     ASSERT_NE(ERROR_SUCCESS, key.deleteKey(kRootKey));
 
     // Open the redirected view and delete the key created above.
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_SET_VALUE | kRedirectedViewMask));
+              key.open(HKEY_LOCAL_MACHINE, "Software", KEY_SET_VALUE | kRedirectedViewMask));
     ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(kRootKey));
 }
 
@@ -297,9 +296,9 @@ TEST_F(RegistryTest, SameWowFlags)
 {
     RegistryKey key;
 
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_READ | KEY_WOW64_64KEY));
-    ASSERT_EQ(ERROR_SUCCESS, key.openKey(L"Microsoft", KEY_READ | KEY_WOW64_64KEY));
-    ASSERT_EQ(ERROR_SUCCESS, key.openKey(L"Windows", KEY_READ | KEY_WOW64_64KEY));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_LOCAL_MACHINE, "Software", KEY_READ | KEY_WOW64_64KEY));
+    ASSERT_EQ(ERROR_SUCCESS, key.openKey("Microsoft", KEY_READ | KEY_WOW64_64KEY));
+    ASSERT_EQ(ERROR_SUCCESS, key.openKey("Windows", KEY_READ | KEY_WOW64_64KEY));
 }
 
 // TODO(wfh): flaky test on Vista.  See http://crbug.com/377917
@@ -313,23 +312,23 @@ TEST_F(RegistryTest, DISABLED_Wow64NativeFromRedirected)
     // Test non-redirected key access from redirected.
     ASSERT_EQ(ERROR_SUCCESS,
               key.create(HKEY_LOCAL_MACHINE,
-                         foo_software_key_.c_str(),
+                         foo_software_key_,
                          KEY_WRITE | kNativeViewMask));
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, foo_software_key_.c_str(), KEY_READ));
+              key.open(HKEY_LOCAL_MACHINE, foo_software_key_, KEY_READ));
     ASSERT_NE(ERROR_SUCCESS,
               key.open(HKEY_LOCAL_MACHINE,
-                       foo_software_key_.c_str(),
+                       foo_software_key_,
                        KEY_READ | kRedirectedViewMask));
 
     // Open the redirected view of the parent and try to delete the test key
     // from the non-redirected view.
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_SET_VALUE | kRedirectedViewMask));
+              key.open(HKEY_LOCAL_MACHINE, "Software", KEY_SET_VALUE | kRedirectedViewMask));
     ASSERT_NE(ERROR_SUCCESS, key.deleteKey(kRootKey));
 
     ASSERT_EQ(ERROR_SUCCESS,
-              key.open(HKEY_LOCAL_MACHINE, L"Software", KEY_SET_VALUE | kNativeViewMask));
+              key.open(HKEY_LOCAL_MACHINE, "Software", KEY_SET_VALUE | kNativeViewMask));
     ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(kRootKey));
 }
 
@@ -339,17 +338,17 @@ TEST_F(RegistryTest, OpenSubKey)
     ASSERT_EQ(ERROR_SUCCESS,
               key.open(HKEY_CURRENT_USER, kRootKey, KEY_READ | KEY_CREATE_SUB_KEY));
 
-    ASSERT_NE(ERROR_SUCCESS, key.openKey(L"foo", KEY_READ));
-    ASSERT_EQ(ERROR_SUCCESS, key.createKey(L"foo", KEY_READ));
+    ASSERT_NE(ERROR_SUCCESS, key.openKey("foo", KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.createKey("foo", KEY_READ));
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_READ));
-    ASSERT_EQ(ERROR_SUCCESS, key.openKey(L"foo", KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.openKey("foo", KEY_READ));
 
-    std::wstring foo_key(kRootKey);
-    foo_key += L"\\Foo";
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
 
-    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key.c_str(), KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ));
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_WRITE));
-    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey(L"foo"));
+    ASSERT_EQ(ERROR_SUCCESS, key.deleteKey("foo"));
 }
 
 } // namespace

@@ -43,11 +43,11 @@ signals:
 
 protected:
     virtual void init() = 0;
-    virtual void setData(const std::string& data) = 0;
-    void onData(const std::string& data);
+    virtual void setData(const QString& data) = 0;
+    void onData(const QString& data);
 
 private:
-    std::string last_data_;
+    QString last_data_;
 };
 
 } // namespace common

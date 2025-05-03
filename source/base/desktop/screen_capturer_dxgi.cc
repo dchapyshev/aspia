@@ -22,7 +22,6 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -31,7 +30,7 @@ namespace {
 const int kMaxTemporaryErrorCount = 3;
 
 //--------------------------------------------------------------------------------------------------
-bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
+bool screenListFromDeviceNames(const QStringList& device_names,
                                ScreenCapturer::ScreenList* screen_list)
 {
     DCHECK(screen_list->screens.empty());
@@ -52,16 +51,14 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
                  << ", GDI count: " << gdi_screens.screens.size()
                  << ", max screen id: " << max_screen_id;
 
-    for (size_t device_index = 0; device_index < device_names.size(); ++device_index)
+    for (int device_index = 0; device_index < device_names.size(); ++device_index)
     {
-        const std::wstring& device_name = device_names[device_index];
+        const QString& device_name = device_names[device_index];
         bool device_found = false;
 
         for (const auto& gdi_screen : gdi_screens.screens)
         {
-            std::string device_name_utf8 = utf8FromWide(device_name);
-
-            if (gdi_screen.title == device_name_utf8)
+            if (gdi_screen.title == device_name)
             {
                 screen_list->screens.push_back(gdi_screen);
                 device_found = true;
@@ -77,7 +74,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
             screen_list->screens.push_back(
-                { max_screen_id, std::string(), Point(), Size(), Point(), false });
+                { max_screen_id, QString(), Point(), Size(), Point(), false });
         }
         else
         {
@@ -89,7 +86,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 }
 
 //--------------------------------------------------------------------------------------------------
-int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
+int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_names)
 {
     ScreenCapturer::ScreenList screen_list;
     if (!screenListFromDeviceNames(device_names, &screen_list))
@@ -154,7 +151,7 @@ int ScreenCapturerDxgi::screenCount()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 {
-    std::vector<std::wstring> device_names;
+    QStringList device_names;
 
     if (!controller_->deviceNames(&device_names))
     {
@@ -187,7 +184,7 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
         return true;
     }
 
-    std::vector<std::wstring> device_names;
+    QStringList device_names;
     if (!controller_->deviceNames(&device_names))
     {
         LOG(LS_ERROR) << "deviceNames failed";

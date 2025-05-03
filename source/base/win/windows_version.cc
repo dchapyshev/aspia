@@ -107,15 +107,15 @@ int readUBR()
 {
     // The values under the CurrentVersion registry hive are mirrored under
     // the corresponding Wow6432 hive.
-    static constexpr wchar_t kRegKeyWindowsNTCurrentVersion[] =
-        L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
+    static constexpr char kRegKeyWindowsNTCurrentVersion[] =
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
 
     RegistryKey key;
     if (key.open(HKEY_LOCAL_MACHINE, kRegKeyWindowsNTCurrentVersion, KEY_QUERY_VALUE) != ERROR_SUCCESS)
         return 0;
 
     DWORD ubr = 0;
-    key.readValueDW(L"UBR", &ubr);
+    key.readValueDW("UBR", &ubr);
 
     return static_cast<int>(ubr);
 }
@@ -351,15 +351,15 @@ QString OSInfo::processorModelName()
 {
     if (processor_model_name_.isEmpty())
     {
-        const wchar_t kProcessorNameString[] =
-            L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0";
+        const char kProcessorNameString[] =
+            "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0";
 
         RegistryKey key(HKEY_LOCAL_MACHINE, kProcessorNameString, KEY_READ);
 
-        std::wstring value;
-        key.readValue(L"ProcessorNameString", &value);
+        QString value;
+        key.readValue("ProcessorNameString", &value);
 
-        processor_model_name_ = QString::fromStdWString(value);
+        processor_model_name_ = value;
     }
 
     return processor_model_name_;

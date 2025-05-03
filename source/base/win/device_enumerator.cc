@@ -27,9 +27,9 @@ namespace base {
 namespace {
 
 constexpr char kClassRootPath[] = "SYSTEM\\CurrentControlSet\\Control\\Class\\";
-constexpr wchar_t kDriverVersionKey[] = L"DriverVersion";
-constexpr wchar_t kDriverDateKey[] = L"DriverDate";
-constexpr wchar_t kProviderNameKey[] = L"ProviderName";
+constexpr char kDriverVersionKey[] = "DriverVersion";
+constexpr char kDriverDateKey[] = "DriverDate";
+constexpr char kProviderNameKey[] = "ProviderName";
 
 } // namespace
 
@@ -142,13 +142,11 @@ QString DeviceEnumerator::driverKeyPath() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
+QString DeviceEnumerator::driverRegistryString(const QString& key_name) const
 {
     QString driver_key_path = driverKeyPath();
 
-    RegistryKey driver_key(HKEY_LOCAL_MACHINE,
-                           reinterpret_cast<const wchar_t*>(driver_key_path.utf16()),
-                           KEY_READ);
+    RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path, KEY_READ);
     if (!driver_key.isValid())
     {
         PLOG(LS_ERROR) << "Unable to open registry key";
@@ -170,13 +168,11 @@ QString DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
 }
 
 //--------------------------------------------------------------------------------------------------
-DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
+DWORD DeviceEnumerator::driverRegistryDW(const QString& key_name) const
 {
     QString driver_key_path = driverKeyPath();
 
-    RegistryKey driver_key(HKEY_LOCAL_MACHINE,
-                           reinterpret_cast<const wchar_t*>(driver_key_path.utf16()),
-                           KEY_READ);
+    RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path, KEY_READ);
     if (!driver_key.isValid())
     {
         DPLOG(LS_ERROR) << "Unable to open registry key";

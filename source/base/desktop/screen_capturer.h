@@ -71,7 +71,7 @@ public:
     struct Screen
     {
         ScreenId id = kInvalidScreenId;
-        std::string title;
+        QString title;
         Point position;
         Size resolution;
         Point dpi;

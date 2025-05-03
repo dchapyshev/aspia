@@ -27,9 +27,6 @@
 
 #include <d3dcommon.h>
 
-#include <string>
-#include <vector>
-
 namespace base {
 
 // A controller for all the objects we need to call Windows DirectX capture APIs It's a singleton
@@ -109,7 +106,7 @@ public:
     // Returns the device names of all screens on the system. These screens can be retrieved by an
     // integer in the range of [0, output->size()). If system does not support DXGI based capturer,
     // this function returns false.
-    bool deviceNames(std::vector<std::wstring>* output);
+    bool deviceNames(QStringList* output);
 
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().

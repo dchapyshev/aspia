@@ -35,7 +35,7 @@ public:
 
     static std::unique_ptr<DatabaseSqlite> create();
     static std::unique_ptr<DatabaseSqlite> open();
-    static std::filesystem::path filePath();
+    static QString filePath();
 
     // Database implementation.
     QVector<base::User> userList() const final;
@@ -48,7 +48,7 @@ public:
 
 private:
     explicit DatabaseSqlite(sqlite3* db);
-    static std::filesystem::path databaseDirectory();
+    static QString databaseDirectory();
 
     sqlite3* db_;
 

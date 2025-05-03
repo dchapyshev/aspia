@@ -41,7 +41,7 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const std::string& data) final;
+    void setData(const QString& data) final;
 
 private:
     void onClipboardUpdate();

@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/win/bitmap_info.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/win/desktop.h"
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/session_info.h"
@@ -139,7 +137,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
             return false;
         }
 
-        std::string device_name = utf8FromWide(device.DeviceName);
+        QString device_name = QString::fromWCharArray(device.DeviceName);
         bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
         Rect rect = Rect::makeXYWH(device_mode.dmPosition.x, device_mode.dmPosition.y,
             static_cast<qint32>(device_mode.dmPelsWidth),

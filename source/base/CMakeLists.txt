@@ -438,9 +438,7 @@ list(APPEND SOURCE_BASE_FILES
     files/file_path.cc
     files/file_path.h
     files/file_util.cc
-    files/file_util.h
-    files/scoped_temp_file.cc
-    files/scoped_temp_file.h)
+    files/file_util.h)
 
 if (APPLE)
     list(APPEND SOURCE_BASE_FILES
@@ -558,29 +556,6 @@ if (UNIX)
         posix/eintr_wrapper.h)
 endif()
 
-list(APPEND SOURCE_BASE_STRINGS
-    strings/strcat.cc
-    strings/strcat.h
-    strings/string_util.cc
-    strings/string_util.h
-    strings/string_util_constants.cc
-    strings/string_util_constants.h
-    strings/unicode.cc
-    strings/unicode.h)
-
-if (WIN32)
-    list(APPEND SOURCE_BASE_STRINGS
-        strings/string_util_win.cc)
-endif()
-
-if (UNIX)
-    list(APPEND SOURCE_BASE_STRINGS
-        strings/string_util_icu.cc)
-endif()
-
-list(APPEND SOURCE_BASE_STRINGS_TESTS
-    strings/string_util_unittest.cc)
-
 list(APPEND SOURCE_BASE_THREADING
     threading/asio_event_dispatcher.cc
     threading/asio_event_dispatcher.h
@@ -693,7 +668,6 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
-source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 
 if (WIN32)
@@ -733,7 +707,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
-    ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
@@ -773,7 +746,6 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
     ${SOURCE_BASE_MEMORY_TESTS}
     ${SOURCE_BASE_NET_TESTS}
-    ${SOURCE_BASE_STRINGS_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
     aspia_base

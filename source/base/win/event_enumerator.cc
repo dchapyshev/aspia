@@ -115,8 +115,7 @@ bool eventLogMessageFileDLL(
 
     RegistryKey key;
 
-    LONG status = key.open(HKEY_LOCAL_MACHINE, reinterpret_cast<const wchar_t*>(key_path.utf16()),
-                           KEY_READ);
+    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_ERROR) << "key.open failed: "
@@ -124,7 +123,7 @@ bool eventLogMessageFileDLL(
         return false;
     }
 
-    status = key.readValue(L"EventMessageFile", message_file);
+    status = key.readValue("EventMessageFile", message_file);
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_INFO) << "key.readValue failed: "

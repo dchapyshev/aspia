@@ -23,11 +23,12 @@
 #include "build/build_config.h"
 #include "proto/file_transfer.h"
 
+#include <QString>
 #include <filesystem>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <Windows.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace common {
 
@@ -41,8 +42,7 @@ public:
         ~FileInfo() = default;
 
         bool isDirectory() const;
-        std::filesystem::path name() const;
-        std::string u8name() const;
+        QString name() const;
         qint64 size() const;
         time_t lastWriteTime() const;
 
@@ -57,7 +57,7 @@ public:
 #endif // defined(OS_POSIX)
     };
 
-    explicit FileEnumerator(const std::filesystem::path& root_path);
+    explicit FileEnumerator(const QString& root_path);
     ~FileEnumerator();
 
     const FileInfo& fileInfo() const { return file_info_; }
@@ -70,9 +70,9 @@ private:
     proto::FileError error_code_ = proto::FILE_ERROR_SUCCESS;
     FileInfo file_info_;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     DISALLOW_COPY_AND_ASSIGN(FileEnumerator);
 };

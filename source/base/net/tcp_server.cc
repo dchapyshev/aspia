@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
-#include "base/strings/unicode.h"
 #include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/ip/address.hpp>

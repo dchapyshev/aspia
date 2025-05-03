@@ -21,9 +21,8 @@
 
 #include "base/macros_magic.h"
 
-#include <QtGlobal>
+#include <QString>
 
-#include <string>
 #include <map>
 #include <vector>
 
@@ -38,13 +37,13 @@ public:
     struct ProcessEntry
     {
         bool process_name_changed = false;
-        std::string process_name;
+        QString process_name;
 
         bool user_name_changed = false;
-        std::string user_name;
+        QString user_name;
 
         bool file_path_changed = false;
-        std::string file_path;
+        QString file_path;
 
         qint64 cpu_time = 0;
         qint32 cpu_ratio = 0;

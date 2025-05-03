@@ -21,7 +21,7 @@
 
 #include "base/desktop/geometry.h"
 
-#include <string>
+#include <QString>
 
 namespace base {
 
@@ -38,10 +38,10 @@ public:
     virtual void copyRegion(Frame* frame, const Region& updated_region) const = 0;
 
 protected:
-    static bool findDisplayDevice(std::wstring_view device_string,
-                                  std::wstring* device_name,
-                                  std::wstring* device_key);
-    static bool attachToDesktop(std::wstring_view key_path, bool attach);
+    static bool findDisplayDevice(const QString& device_string,
+                                  QString* device_name,
+                                  QString* device_key);
+    static bool attachToDesktop(const QString& key_path, bool attach);
 };
 
 } // namespace base

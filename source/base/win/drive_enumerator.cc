@@ -48,7 +48,7 @@ DriveEnumerator::DriveEnumerator()
 //--------------------------------------------------------------------------------------------------
 const DriveEnumerator::DriveInfo& DriveEnumerator::driveInfo() const
 {
-    drive_info_.path_.assign(current_);
+    drive_info_.path_ = QString::fromWCharArray(current_);
     return drive_info_;
 }
 
@@ -67,7 +67,7 @@ void DriveEnumerator::advance()
 //--------------------------------------------------------------------------------------------------
 DriveEnumerator::DriveInfo::Type DriveEnumerator::DriveInfo::type() const
 {
-    switch (GetDriveTypeW(path_.c_str()))
+    switch (GetDriveTypeW(reinterpret_cast<const wchar_t*>(path_.utf16())))
     {
         case DRIVE_REMOVABLE:
             return Type::REMOVABLE;
@@ -94,7 +94,7 @@ quint64 DriveEnumerator::DriveInfo::totalSpace() const
 {
     ULARGE_INTEGER total_space;
 
-    if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, &total_space, nullptr))
+    if (!GetDiskFreeSpaceExW(reinterpret_cast<const wchar_t*>(path_.utf16()), nullptr, &total_space, nullptr))
     {
         PLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
         return 0;
@@ -108,7 +108,7 @@ quint64 DriveEnumerator::DriveInfo::freeSpace() const
 {
     ULARGE_INTEGER free_space;
 
-    if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, nullptr, &free_space))
+    if (!GetDiskFreeSpaceExW(reinterpret_cast<const wchar_t*>(path_.utf16()), nullptr, nullptr, &free_space))
     {
         PLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
         return 0;
@@ -122,7 +122,7 @@ QString DriveEnumerator::DriveInfo::fileSystem() const
 {
     wchar_t fs[MAX_PATH];
 
-    if (!GetVolumeInformationW(path_.c_str(), nullptr,
+    if (!GetVolumeInformationW(reinterpret_cast<const wchar_t*>(path_.utf16()), nullptr,
                                0,
                                nullptr, nullptr, nullptr,
                                fs, static_cast<DWORD>(std::size(fs))))
@@ -139,7 +139,7 @@ QString DriveEnumerator::DriveInfo::volumeName() const
 {
     wchar_t name[MAX_PATH];
 
-    if (!GetVolumeInformationW(path_.c_str(), name,
+    if (!GetVolumeInformationW(reinterpret_cast<const wchar_t*>(path_.utf16()), name,
                                static_cast<DWORD>(std::size(name)),
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
@@ -156,7 +156,7 @@ QString DriveEnumerator::DriveInfo::volumeSerial() const
 {
     DWORD serial;
 
-    if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
+    if (!GetVolumeInformationW(reinterpret_cast<const wchar_t*>(path_.utf16()), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
     {
         PLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return QString();

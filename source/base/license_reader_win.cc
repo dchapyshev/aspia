@@ -19,12 +19,8 @@
 #include "base/license_reader.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
-
-#include <fmt/format.h>
-#include <fmt/xchar.h>
 
 namespace base {
 
@@ -83,17 +79,16 @@ std::string digitalProductIdToString(quint8* product_id, size_t product_id_size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
+bool msProductName(const QString& id, QString* product_name, REGSAM access)
 {
-    std::wstring key_path =
-        fmt::format(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{}", id);
+    QString key_path = QString("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\%1").arg(id);
 
     RegistryKey key;
-    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
+    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, access | KEY_READ);
     if (status != ERROR_SUCCESS)
         return false;
 
-    status = key.readValue(L"DisplayName", product_name);
+    status = key.readValue("DisplayName", product_name);
     if (status != ERROR_SUCCESS)
         return false;
 
@@ -102,65 +97,65 @@ bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
 
 //--------------------------------------------------------------------------------------------------
 void addMsProduct(proto::system_info::Licenses* message,
-                  const std::wstring& product_name,
+                  const QString& product_name,
                   const RegistryKey& key)
 {
     DWORD product_id_size = 0;
 
-    LONG status = key.readValue(L"DigitalProductId", nullptr, &product_id_size, nullptr);
+    LONG status = key.readValue("DigitalProductId", nullptr, &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        status = key.readValue(L"DPID", nullptr, &product_id_size, nullptr);
+        status = key.readValue("DPID", nullptr, &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
             return;
     }
 
     std::unique_ptr<quint8[]> product_id = std::make_unique<quint8[]>(product_id_size);
 
-    status = key.readValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
+    status = key.readValue("DigitalProductId", product_id.get(), &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        status = key.readValue(L"DPID", product_id.get(), &product_id_size, nullptr);
+        status = key.readValue("DPID", product_id.get(), &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
             return;
     }
 
     proto::system_info::Licenses::License* item = message->add_license();
 
-    item->set_product_name(utf8FromWide(product_name));
+    item->set_product_name(product_name.toStdString());
 
     proto::system_info::Licenses::License::Field* product_key = item->add_field();
 
     product_key->set_type(proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY);
     product_key->set_value(digitalProductIdToString(product_id.get(), product_id_size));
 
-    std::wstring value;
+    QString value;
 
-    status = key.readValue(L"ProductId", &value);
+    status = key.readValue("ProductId", &value);
     if (status == ERROR_SUCCESS)
     {
         proto::system_info::Licenses::License::Field* id = item->add_field();
 
         id->set_type(proto::system_info::Licenses::License::Field::TYPE_PRODUCT_ID);
-        id->set_value(utf8FromWide(value));
+        id->set_value(value.toStdString());
     }
 
-    status = key.readValue(L"RegisteredOrganization", &value);
+    status = key.readValue("RegisteredOrganization", &value);
     if (status == ERROR_SUCCESS)
     {
         proto::system_info::Licenses::License::Field* organization = item->add_field();
 
         organization->set_type(proto::system_info::Licenses::License::Field::TYPE_ORGANIZATION);
-        organization->set_value(utf8FromWide(value));
+        organization->set_value(value.toStdString());
     }
 
-    status = key.readValue(L"RegisteredOwner", &value);
+    status = key.readValue("RegisteredOwner", &value);
     if (status == ERROR_SUCCESS)
     {
         proto::system_info::Licenses::License::Field* owner = item->add_field();
 
         owner->set_type(proto::system_info::Licenses::License::Field::TYPE_OWNER);
-        owner->set_value(utf8FromWide(value));
+        owner->set_value(value.toStdString());
     }
 }
 
@@ -171,12 +166,12 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
 
     // Read MS Windows Key.
     LONG status = key.open(HKEY_LOCAL_MACHINE,
-                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
                            access | KEY_READ);
     if (status == ERROR_SUCCESS)
     {
         base::OSInfo* os_info = base::OSInfo::instance();
-        std::wstring product_name;
+        QString product_name;
 
         if (os_info->version() >= base::VERSION_WIN11)
         {
@@ -185,48 +180,48 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
             switch (os_info->versionType())
             {
                 case base::SUITE_HOME:
-                    product_name = L"Windows 11 Home";
+                    product_name = "Windows 11 Home";
                     break;
 
                 case base::SUITE_PROFESSIONAL:
-                    product_name = L"Windows 11 Pro";
+                    product_name = "Windows 11 Pro";
                     break;
 
                 case base::SUITE_SERVER:
-                    product_name = L"Windows 11 Server";
+                    product_name = "Windows 11 Server";
                     break;
 
                 case base::SUITE_ENTERPRISE:
-                    product_name = L"Windows 11 Enterprise";
+                    product_name = "Windows 11 Enterprise";
                     break;
 
                 case base::SUITE_EDUCATION:
-                    product_name = L"Windows 11 Education";
+                    product_name = "Windows 11 Education";
                     break;
 
                 case base::SUITE_EDUCATION_PRO:
-                    product_name = L"Windows 11 Education Pro";
+                    product_name = "Windows 11 Education Pro";
                     break;
 
                 default:
-                    product_name = L"Windows 11";
+                    product_name = "Windows 11";
                     break;
             }
         }
         else
         {
-            key.readValue(L"ProductName", &product_name);
+            key.readValue("ProductName", &product_name);
         }
 
-        if (!product_name.empty())
+        if (!product_name.isEmpty())
             addMsProduct(message, product_name, key);
     }
 
-    static const wchar_t* kMsProducts[] =
+    static const char* kMsProducts[] =
     {
-        L"SOFTWARE\\Microsoft\\Microsoft SQL Server",
-        L"SOFTWARE\\Microsoft\\MSDN",
-        L"SOFTWARE\\Microsoft\\Office"
+        "SOFTWARE\\Microsoft\\Microsoft SQL Server",
+        "SOFTWARE\\Microsoft\\MSDN",
+        "SOFTWARE\\Microsoft\\Office"
     };
 
     // Enumerate product family.
@@ -237,22 +232,22 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
         // Enumerate product type.
         while (key_iterator.valid())
         {
-            std::wstring key_path =
-                fmt::format(L"{}\\{}\\Registration", kMsProducts[i], key_iterator.name());
+            QString key_path =
+                QString("%1\\%2\\Registration").arg(kMsProducts[i]).arg(key_iterator.name());
 
-            RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
+            RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path, access);
 
             // Enumerate product version.
             while (sub_key_iterator.valid())
             {
-                std::wstring product_name;
+                QString product_name;
 
                 if (msProductName(sub_key_iterator.name(), &product_name, access))
                 {
-                    std::wstring sub_key_path =
-                        fmt::format(L"{}\\{}", key_path, sub_key_iterator.name());
+                    QString sub_key_path =
+                        QString("%1\\%2").arg(key_path, sub_key_iterator.name());
 
-                    status = key.open(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access | KEY_READ);
+                    status = key.open(HKEY_LOCAL_MACHINE, sub_key_path, access | KEY_READ);
                     if (status == ERROR_SUCCESS)
                         addMsProduct(message, product_name, key);
                 }
@@ -268,7 +263,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
 //--------------------------------------------------------------------------------------------------
 void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
 {
-    static const wchar_t kVisualStudioPath[] = L"SOFTWARE\\Microsoft\\VisualStudio";
+    static const char kVisualStudioPath[] = "SOFTWARE\\Microsoft\\VisualStudio";
     static const int kProductKeyLength = 25;
     static const int kGroupLength = 5;
 
@@ -276,28 +271,28 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
 
     while (key_iterator.valid())
     {
-        std::wstring key_path =
-            fmt::format(L"{}\\{}\\Registration", kVisualStudioPath, key_iterator.name());
+        QString key_path =
+            QString("%1\\%2\\Registration").arg(kVisualStudioPath).arg(key_iterator.name());
 
-        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path, access);
 
         while (sub_key_iterator.valid())
         {
-            std::wstring sub_key_path = fmt::format(L"{}\\{}", key_path, sub_key_iterator.name());
+            QString sub_key_path = QString("%1\\%2").arg(key_path, sub_key_iterator.name());
             RegistryKey key;
 
-            LONG status = key.open(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access | KEY_READ);
+            LONG status = key.open(HKEY_LOCAL_MACHINE, sub_key_path, access | KEY_READ);
             if (status == ERROR_SUCCESS)
             {
-                std::wstring value;
+                QString value;
 
-                status = key.readValue(L"PIDKEY", &value);
+                status = key.readValue("PIDKEY", &value);
                 if (status == ERROR_SUCCESS && value.length() == kProductKeyLength)
                 {
-                    for (size_t i = kGroupLength; i < value.length(); i += kGroupLength + 1)
+                    for (int i = kGroupLength; i < value.length(); i += kGroupLength + 1)
                     {
                         // Insert group separators.
-                        value.insert(i, 1, '-');
+                        value.insert(i, '-');
                     }
 
                     proto::system_info::Licenses::License* item = message->add_license();
@@ -307,15 +302,15 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
                     proto::system_info::Licenses::License::Field* product_key = item->add_field();
 
                     product_key->set_type(proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY);
-                    product_key->set_value(utf8FromWide(value));
+                    product_key->set_value(value.toStdString());
 
-                    status = key.readValue(L"UserName", &value);
+                    status = key.readValue("UserName", &value);
                     if (status == ERROR_SUCCESS)
                     {
                         proto::system_info::Licenses::License::Field* owner = item->add_field();
 
                         owner->set_type(proto::system_info::Licenses::License::Field::TYPE_OWNER);
-                        owner->set_value(utf8FromWide(value));
+                        owner->set_value(value.toStdString());
                     }
                 }
             }
@@ -330,71 +325,69 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
 //--------------------------------------------------------------------------------------------------
 void addVMWareProduct(proto::system_info::Licenses* message, const RegistryKey& key)
 {
-    std::wstring product_id;
+    QString product_id;
 
-    LONG status = key.readValue(L"ProductID", &product_id);
+    LONG status = key.readValue("ProductID", &product_id);
     if (status != ERROR_SUCCESS)
         return;
 
-    std::wstring value;
+    QString value;
 
-    status = key.readValue(L"Serial", &value);
+    status = key.readValue("Serial", &value);
     if (status != ERROR_SUCCESS)
         return;
 
     proto::system_info::Licenses::License* item = message->add_license();
 
-    item->set_product_name(utf8FromWide(product_id));
+    item->set_product_name(product_id.toStdString());
 
     proto::system_info::Licenses::License::Field* serial_field = item->add_field();
     serial_field->set_type(proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY);
-    serial_field->set_value(utf8FromWide(value));
+    serial_field->set_value(value.toStdString());
 
-    status = key.readValue(L"LicenseVersion", &value);
+    status = key.readValue("LicenseVersion", &value);
     if (status == ERROR_SUCCESS)
     {
         proto::system_info::Licenses::License::Field* field = item->add_field();
 
         field->set_type(proto::system_info::Licenses::License::Field::TYPE_LICENSE_VERSION);
-        field->set_value(utf8FromWide(value));
+        field->set_value(value.toStdString());
     }
 
-    status = key.readValue(L"LicenseType", &value);
+    status = key.readValue("LicenseType", &value);
     if (status == ERROR_SUCCESS)
     {
         proto::system_info::Licenses::License::Field* field = item->add_field();
 
         field->set_type(proto::system_info::Licenses::License::Field::TYPE_LICENSE_TYPE);
-        field->set_value(utf8FromWide(value));
+        field->set_value(value.toStdString());
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 {
-    static const wchar_t kKeyPath[] = L"Software\\VMware, Inc.";
+    static const char kKeyPath[] = "Software\\VMware, Inc.";
 
     RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kKeyPath, access);
 
     // Enumerate products types (Workstation, Server, etc).
     while (key_iterator.valid())
     {
-        std::wstring sub_key_path = fmt::format(L"{}\\{}", kKeyPath, key_iterator.name());
+        QString sub_key_path = QString("%1\\%2").arg(kKeyPath).arg(key_iterator.name());
 
-        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access);
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path, access);
 
         while (sub_key_iterator.valid())
         {
-            if (wcsncmp(sub_key_iterator.name(), L"License.ws", 10) == 0)
+            if (sub_key_iterator.name().startsWith("License.ws"))
             {
-                std::wstring license_key_path =
-                    fmt::format(L"{}\\{}", sub_key_path, sub_key_iterator.name());
+                QString license_key_path =
+                    QString("%1\\%2").arg(sub_key_path, sub_key_iterator.name());
 
                 RegistryKey key;
 
-                LONG status = key.open(HKEY_LOCAL_MACHINE,
-                                       license_key_path.c_str(),
-                                       access | KEY_READ);
+                LONG status = key.open(HKEY_LOCAL_MACHINE, license_key_path, access | KEY_READ);
                 if (status == ERROR_SUCCESS)
                     addVMWareProduct(message, key);
             }

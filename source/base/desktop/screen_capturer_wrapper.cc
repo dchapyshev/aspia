@@ -24,16 +24,15 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "base/strings/unicode.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/screen_capturer_mirror.h"
 #include "base/win/windows_version.h"
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
 #include "base/desktop/screen_capturer_x11.h"
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
 // TODO
 #else
 #error Platform support not implemented
@@ -484,7 +483,7 @@ void ScreenCapturerWrapper::checkScreenType()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!screen_capturer_)
         return;
 
@@ -500,8 +499,8 @@ void ScreenCapturerWrapper::checkScreenType()
         wchar_t name[128] = { 0 };
         desktop.name(name, sizeof(name));
 
-        std::string screen_name = base::utf8FromWide(name);
-        if (screen_name.empty())
+        QString screen_name = QString::fromWCharArray(name);
+        if (screen_name.isEmpty())
             screen_name = "unknown";
 
         delegate_->onScreenTypeChanged(screen_type, screen_name);
@@ -512,7 +511,7 @@ void ScreenCapturerWrapper::checkScreenType()
         LOG(LS_INFO) << "Screen type not changed: "
                      << ScreenCapturer::screenTypeToString(last_screen_type_);
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace base
