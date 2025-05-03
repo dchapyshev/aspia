@@ -19,18 +19,17 @@
 #ifndef HOST_DESKTOP_SESSION_PROCESS_H
 #define HOST_DESKTOP_SESSION_PROCESS_H
 
+#include <QString>
+
 #include "build/build_config.h"
 #include "base/macros_magic.h"
 #include "base/session_id.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#include <filesystem>
 #include <memory>
-
-#include <QString>
 
 namespace ipc {
 class Channel;
@@ -50,22 +49,22 @@ public:
     void kill();
 
 private:
-#if defined(OS_WIN)
-    DesktopSessionProcess(base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread);
-#elif defined(OS_LINUX)
+#if defined(Q_OS_WINDOWS)
+    DesktopSessionProcess(base::ScopedHandle&& process, base::ScopedHandle&& thread);
+#elif defined(Q_OS_LINUX)
     explicit DesktopSessionProcess(pid_t pid);
 #else
     DesktopSessionProcess();
 #endif
 
-#if defined(OS_WIN)
-    base::win::ScopedHandle process_;
-    base::win::ScopedHandle thread_;
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+    base::ScopedHandle process_;
+    base::ScopedHandle thread_;
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
     const pid_t pid_;
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProcess);
 };

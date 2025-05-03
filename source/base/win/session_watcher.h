@@ -27,7 +27,7 @@
 
 #include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class MessageWindow;
 
@@ -57,6 +57,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionWatcher);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SESSION_WATCHER_H

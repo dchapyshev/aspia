@@ -30,7 +30,7 @@
 struct tagVS_FIXEDFILEINFO;
 typedef tagVS_FIXEDFILEINFO VS_FIXEDFILEINFO;
 
-namespace base::win {
+namespace base {
 
 class FileVersionInfo
 {
@@ -93,6 +93,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FileVersionInfo);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_FILE_VERSION_INFO_H

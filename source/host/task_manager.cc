@@ -73,7 +73,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
         {
             case proto::task_manager::ServiceRequest::COMMAND_START:
             {
-                base::win::ServiceController controller = base::win::ServiceController::open(
+                base::ServiceController controller = base::ServiceController::open(
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
@@ -93,7 +93,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             case proto::task_manager::ServiceRequest::COMMAND_STOP:
             {
-                base::win::ServiceController controller = base::win::ServiceController::open(
+                base::ServiceController controller = base::ServiceController::open(
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
@@ -217,7 +217,7 @@ void TaskManager::sendServiceList()
     proto::task_manager::HostToClient message;
     proto::task_manager::ServiceList* service_list = message.mutable_service_list();
 
-    for (base::win::ServiceEnumerator enumerator(base::win::ServiceEnumerator::Type::SERVICES);
+    for (base::ServiceEnumerator enumerator(base::ServiceEnumerator::Type::SERVICES);
          !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::task_manager::Service* item = service_list->add_service();
@@ -228,23 +228,23 @@ void TaskManager::sendServiceList()
 
         switch (enumerator.startupType())
         {
-            case base::win::ServiceEnumerator::StartupType::AUTO_START:
+            case base::ServiceEnumerator::StartupType::AUTO_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_AUTO_START);
                 break;
 
-            case base::win::ServiceEnumerator::StartupType::DEMAND_START:
+            case base::ServiceEnumerator::StartupType::DEMAND_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_DEMAND_START);
                 break;
 
-            case base::win::ServiceEnumerator::StartupType::DISABLED:
+            case base::ServiceEnumerator::StartupType::DISABLED:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_DISABLED);
                 break;
 
-            case base::win::ServiceEnumerator::StartupType::BOOT_START:
+            case base::ServiceEnumerator::StartupType::BOOT_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_BOOT_START);
                 break;
 
-            case base::win::ServiceEnumerator::StartupType::SYSTEM_START:
+            case base::ServiceEnumerator::StartupType::SYSTEM_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_SYSTEM_START);
                 break;
 
@@ -255,31 +255,31 @@ void TaskManager::sendServiceList()
 
         switch (enumerator.status())
         {
-            case base::win::ServiceEnumerator::Status::CONTINUE_PENDING:
+            case base::ServiceEnumerator::Status::CONTINUE_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_CONTINUE_PENDING);
                 break;
 
-            case base::win::ServiceEnumerator::Status::PAUSE_PENDING:
+            case base::ServiceEnumerator::Status::PAUSE_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_PAUSE_PENDING);
                 break;
 
-            case base::win::ServiceEnumerator::Status::PAUSED:
+            case base::ServiceEnumerator::Status::PAUSED:
                 item->set_status(proto::task_manager::Service::STATUS_PAUSED);
                 break;
 
-            case base::win::ServiceEnumerator::Status::RUNNING:
+            case base::ServiceEnumerator::Status::RUNNING:
                 item->set_status(proto::task_manager::Service::STATUS_RUNNING);
                 break;
 
-            case base::win::ServiceEnumerator::Status::START_PENDING:
+            case base::ServiceEnumerator::Status::START_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_START_PENDING);
                 break;
 
-            case base::win::ServiceEnumerator::Status::STOP_PENDING:
+            case base::ServiceEnumerator::Status::STOP_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_STOP_PENDING);
                 break;
 
-            case base::win::ServiceEnumerator::Status::STOPPED:
+            case base::ServiceEnumerator::Status::STOPPED:
                 item->set_status(proto::task_manager::Service::STATUS_STOPPED);
                 break;
 
@@ -298,13 +298,13 @@ void TaskManager::sendUserList()
     proto::task_manager::HostToClient message;
     proto::task_manager::UserList* user_list = message.mutable_user_list();
 
-    for (base::win::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         // Skip services.
         if (enumerator.sessionId() == 0)
             continue;
 
-        base::win::SessionInfo session_info(enumerator.sessionId());
+        base::SessionInfo session_info(enumerator.sessionId());
         if (!session_info.isValid())
             continue;
 
@@ -317,43 +317,43 @@ void TaskManager::sendUserList()
 
         switch (session_info.connectState())
         {
-            case base::win::SessionInfo::ConnectState::ACTIVE:
+            case base::SessionInfo::ConnectState::ACTIVE:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_ACTIVE);
                 break;
 
-            case base::win::SessionInfo::ConnectState::CONNECTED:
+            case base::SessionInfo::ConnectState::CONNECTED:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_CONNECTED);
                 break;
 
-            case base::win::SessionInfo::ConnectState::CONNECT_QUERY:
+            case base::SessionInfo::ConnectState::CONNECT_QUERY:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_CONNECT_QUERY);
                 break;
 
-            case base::win::SessionInfo::ConnectState::SHADOW:
+            case base::SessionInfo::ConnectState::SHADOW:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_SHADOW);
                 break;
 
-            case base::win::SessionInfo::ConnectState::DISCONNECTED:
+            case base::SessionInfo::ConnectState::DISCONNECTED:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_DISCONNECTED);
                 break;
 
-            case base::win::SessionInfo::ConnectState::IDLE:
+            case base::SessionInfo::ConnectState::IDLE:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_IDLE);
                 break;
 
-            case base::win::SessionInfo::ConnectState::LISTEN:
+            case base::SessionInfo::ConnectState::LISTEN:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_LISTEN);
                 break;
 
-            case base::win::SessionInfo::ConnectState::RESET:
+            case base::SessionInfo::ConnectState::RESET:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_RESET);
                 break;
 
-            case base::win::SessionInfo::ConnectState::DOWN:
+            case base::SessionInfo::ConnectState::DOWN:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_DOWN);
                 break;
 
-            case base::win::SessionInfo::ConnectState::INIT:
+            case base::SessionInfo::ConnectState::INIT:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_INIT);
                 break;
 

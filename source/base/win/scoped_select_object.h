@@ -21,9 +21,9 @@
 
 #include "base/logging.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 // Helper class for deselecting object from DC.
 class ScopedSelectObject
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedSelectObject);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_SELECT_OBJECT_H

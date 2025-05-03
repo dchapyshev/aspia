@@ -25,7 +25,7 @@
 
 struct _LOCALGROUP_INFO_1;
 
-namespace base::win {
+namespace base {
 
 class UserGroupEnumerator
 {
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserGroupEnumerator);
 };
 
-} // base::win
+} // base
 
 #endif // BASE_WIN_USER_GROUP_ENUMERATOR_H

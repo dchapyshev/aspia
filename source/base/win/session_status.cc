@@ -18,9 +18,9 @@
 
 #include "base/win/session_status.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -87,4 +87,4 @@ const char* sessionStatusToString(SessionStatus status)
     }
 }
 
-} // namespace base::win
+} // namespace base

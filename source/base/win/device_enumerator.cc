@@ -22,7 +22,7 @@
 #include "base/system_error.h"
 #include "base/win/registry.h"
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -232,4 +232,4 @@ QString DeviceEnumerator::deviceID() const
     return QString::fromWCharArray(device_id);
 }
 
-} // namespace base::win
+} // namespace base

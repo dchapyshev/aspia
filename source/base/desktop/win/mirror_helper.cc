@@ -67,7 +67,7 @@ bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
 // static
 bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
 {
-    base::win::RegistryKey device_key;
+    base::RegistryKey device_key;
 
     LONG status = device_key.open(HKEY_LOCAL_MACHINE,
                                   key_path.data(),

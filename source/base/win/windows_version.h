@@ -27,7 +27,7 @@
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;
 
-namespace base::win {
+namespace base {
 
 // The running version of Windows.
 // This is declared outside OSInfo for syntactic sugar reasons; see the declaration of
@@ -168,6 +168,6 @@ private:
 
 Version windowsVersion();
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_WINDOWS_VERSION_H

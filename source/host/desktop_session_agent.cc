@@ -344,7 +344,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
     LOG(LS_INFO) << "UI thread starting";
 
 #if defined(OS_WIN)
-    message_window_ = std::make_unique<base::win::MessageWindow>();
+    message_window_ = std::make_unique<base::MessageWindow>();
     if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
                                            this,
                                            std::placeholders::_1, std::placeholders::_2,

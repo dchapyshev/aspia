@@ -26,7 +26,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class DriveEnumerator
 {
@@ -77,6 +77,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DriveEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_DRIVE_ENUMERATOR_H

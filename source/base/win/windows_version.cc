@@ -22,7 +22,7 @@
 #include "base/win/file_version_info.h"
 #include "base/win/registry.h"
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -110,7 +110,7 @@ int readUBR()
     static constexpr wchar_t kRegKeyWindowsNTCurrentVersion[] =
         L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
 
-    base::win::RegistryKey key;
+    RegistryKey key;
     if (key.open(HKEY_LOCAL_MACHINE, kRegKeyWindowsNTCurrentVersion, KEY_QUERY_VALUE) != ERROR_SUCCESS)
         return 0;
 
@@ -354,7 +354,7 @@ QString OSInfo::processorModelName()
         const wchar_t kProcessorNameString[] =
             L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0";
 
-        base::win::RegistryKey key(HKEY_LOCAL_MACHINE, kProcessorNameString, KEY_READ);
+        RegistryKey key(HKEY_LOCAL_MACHINE, kProcessorNameString, KEY_READ);
 
         std::wstring value;
         key.readValue(L"ProcessorNameString", &value);
@@ -371,4 +371,4 @@ Version windowsVersion()
     return OSInfo::instance()->version();
 }
 
-} // namespace base::win
+} // namespace base

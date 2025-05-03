@@ -34,9 +34,9 @@ namespace {
 const DWORD kActionDelayInSeconds = 0;
 
 //--------------------------------------------------------------------------------------------------
-bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
+bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 {
-    win::ScopedHandle process_token;
+    ScopedHandle process_token;
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
@@ -61,12 +61,12 @@ bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 
 //--------------------------------------------------------------------------------------------------
 // Creates a copy of the current process with SE_SHUTDOWN_NAME privilege enabled.
-bool createPrivilegedToken(win::ScopedHandle* token_out)
+bool createPrivilegedToken(ScopedHandle* token_out)
 {
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    win::ScopedHandle privileged_token;
+    ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
     {
         LOG(LS_ERROR) << "copyProcessToken failed";
@@ -104,21 +104,21 @@ bool PowerController::shutdown()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    win::ScopedHandle process_token;
+    ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
         LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
-    win::ScopedHandle privileged_token;
+    ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
         LOG(LS_ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
-    win::ScopedImpersonator impersonator;
+    ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
         LOG(LS_ERROR) << "loggedOnUser failed";
@@ -148,21 +148,21 @@ bool PowerController::reboot()
     const DWORD desired_access =
         TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    win::ScopedHandle process_token;
+    ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
         LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
-    win::ScopedHandle privileged_token;
+    ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
         LOG(LS_ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
-    win::ScopedImpersonator impersonator;
+    ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
         LOG(LS_ERROR) << "loggedOnUser failed";
@@ -197,8 +197,8 @@ bool PowerController::logoff()
 
     if (session_id != kInvalidSessionId)
     {
-        base::win::SessionInfo session_info(session_id);
-        if (session_info.connectState() != base::win::SessionInfo::ConnectState::ACTIVE)
+        SessionInfo session_info(session_id);
+        if (session_info.connectState() != SessionInfo::ConnectState::ACTIVE)
         {
             LOG(LS_INFO) << "User session not in active state. Logoff not required";
             return true;

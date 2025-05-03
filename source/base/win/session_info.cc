@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/win/windows_version.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 SessionInfo::SessionInfo(SessionId session_id)
@@ -205,7 +205,7 @@ bool SessionInfo::isUserLocked() const
     if (!isValid())
         return false;
 
-    if (base::win::OSInfo::instance()->version() <= VERSION_WIN7)
+    if (base::OSInfo::instance()->version() <= VERSION_WIN7)
     {
         // Due to a code defect, the usage of the WTS_SESSIONSTATE_LOCK and WTS_SESSIONSTATE_UNLOCK
         // flags is reversed. That is, WTS_SESSIONSTATE_LOCK indicates that the session is unlocked,
@@ -218,4 +218,4 @@ bool SessionInfo::isUserLocked() const
     }
 }
 
-} // namespace base::win
+} // namespace base

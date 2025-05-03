@@ -22,11 +22,11 @@
 #include "base/macros_magic.h"
 #include "common/clipboard.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 class MessageWindow;
-} // namespace base::win
+} // namespace base
 
 namespace common {
 
@@ -50,7 +50,7 @@ private:
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
-    std::unique_ptr<base::win::MessageWindow> window_;
+    std::unique_ptr<base::MessageWindow> window_;
 
     DISALLOW_COPY_AND_ASSIGN(ClipboardWin);
 };

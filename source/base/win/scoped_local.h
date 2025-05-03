@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 template <typename T>
 class ScopedLocal
@@ -100,6 +100,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_LOCAL_H

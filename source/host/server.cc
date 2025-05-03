@@ -128,7 +128,7 @@ void Server::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
+void Server::setSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
                  << " session_id: " << session_id << ")";
@@ -384,8 +384,7 @@ void Server::onFileDownloaderCompleted()
             arguments += file_path; // MSI package file.
             arguments += " /qn"; // No UI during the installation process.
 
-            if (base::win::createProcess("msiexec", arguments,
-                                         base::win::ProcessExecuteMode::ELEVATE))
+            if (base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
             {
                 LOG(LS_INFO) << "Update process started (cmd: " << arguments << ")";
             }

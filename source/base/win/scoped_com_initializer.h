@@ -23,7 +23,7 @@
 
 #include <objbase.h>
 
-namespace base::win {
+namespace base {
 
 // Initializes COM in the constructor (STA or MTA), and uninitializes COM in the
 // destructor.
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_COM_INITIALIZER_H

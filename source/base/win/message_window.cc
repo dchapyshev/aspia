@@ -22,7 +22,7 @@
 
 #include <atomic>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -174,4 +174,4 @@ bool MessageWindow::registerWindowClass(HINSTANCE instance)
     return true;
 }
 
-} // namespace base::win
+} // namespace base

@@ -48,8 +48,8 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 int startService()
 {
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(host::kHostServiceName);
+    base::ServiceController controller =
+        base::ServiceController::open(host::kHostServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -72,8 +72,7 @@ int startService()
 //--------------------------------------------------------------------------------------------------
 int stopService()
 {
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(host::kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(host::kHostServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -104,7 +103,7 @@ int installService()
         return 1;
     }
 
-    base::win::ServiceController controller = base::win::ServiceController::install(
+    base::ServiceController controller = base::ServiceController::install(
         host::kHostServiceName, host::kHostServiceDisplayName, file_path);
     if (!controller.isValid())
     {
@@ -122,10 +121,10 @@ int installService()
 //--------------------------------------------------------------------------------------------------
 int removeService()
 {
-    if (base::win::ServiceController::isRunning(host::kHostServiceName))
+    if (base::ServiceController::isRunning(host::kHostServiceName))
         stopService();
 
-    if (!base::win::ServiceController::remove(host::kHostServiceName))
+    if (!base::ServiceController::remove(host::kHostServiceName))
     {
         std::cout << "Failed to remove the service." << std::endl;
         return 1;
@@ -148,7 +147,7 @@ std::optional<QString> currentSessionName()
     if (console_session_id == process_session_id)
         return QString();
 
-    base::win::SessionInfo current_session_info(process_session_id);
+    base::SessionInfo current_session_info(process_session_id);
     if (!current_session_info.isValid())
         return std::nullopt;
 
@@ -163,12 +162,12 @@ std::optional<QString> currentSessionName()
 
     // Enumarate all user sessions.
     TimeInfoList times;
-    for (base::win::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
         if (user_name != it.userName().toLower())
             continue;
 
-        base::win::SessionInfo session_info(it.sessionId());
+        base::SessionInfo session_info(it.sessionId());
         if (!session_info.isValid())
             continue;
 
@@ -254,7 +253,7 @@ void printDebugInfo()
     }
     else
     {
-        base::win::SessionInfo session_info(session_id);
+        base::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
             LOG(LS_ERROR) << "Unable to get session info";
@@ -264,7 +263,7 @@ void printDebugInfo()
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
         }
@@ -282,7 +281,7 @@ void printDebugInfo()
 
     LOG(LS_INFO) << "Active sessions";
     LOG(LS_INFO) << "#####################################################";
-    for (base::win::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (base::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         LOG(LS_INFO) << enumerator.sessionName() << " (id=" << enumerator.sessionId()
         << " host='" << enumerator.hostName() << "', user='" << enumerator.userName()

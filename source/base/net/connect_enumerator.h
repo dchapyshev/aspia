@@ -49,7 +49,7 @@ public:
 
 private:
     const Mode mode_;
-    base::win::ScopedHandle snapshot_;
+    base::ScopedHandle snapshot_;
     std::unique_ptr<uint8_t[]> table_buffer_;
 
     uint32_t num_entries_ = 0;

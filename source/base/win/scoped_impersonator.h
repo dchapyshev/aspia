@@ -22,9 +22,9 @@
 #include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class ScopedImpersonator
 {
@@ -47,6 +47,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedImpersonator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_IMPERSONATOR_H

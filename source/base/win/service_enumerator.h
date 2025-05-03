@@ -26,7 +26,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class ServiceEnumerator
 {
@@ -88,6 +88,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServiceEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SERVICE_ENUMERATOR_H

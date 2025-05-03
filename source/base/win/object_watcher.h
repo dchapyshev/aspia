@@ -24,13 +24,13 @@
 
 #include <memory>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace base::win {
+namespace base {
 
 // A class that provides a means to asynchronously wait for a Windows object to become signaled.
 // It is an abstraction around RegisterWaitForSingleObject that provides a notification callback,
@@ -109,6 +109,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ObjectWatcher);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_OBJECT_WATCHER_H

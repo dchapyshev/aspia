@@ -56,7 +56,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
     if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
     {
-        base::win::ScopedHICON icon(icon_info.hIcon);
+        base::ScopedHICON icon(icon_info.hIcon);
         if (icon.isValid())
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             return QtWin::fromHICON(icon);
@@ -83,7 +83,7 @@ std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_nam
                    sizeof(file_info),
                    SHGFI_USEFILEATTRIBUTES | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_TYPENAME);
 
-    base::win::ScopedHICON icon(file_info.hIcon);
+    base::ScopedHICON icon(file_info.hIcon);
     if (icon.isValid())
     {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

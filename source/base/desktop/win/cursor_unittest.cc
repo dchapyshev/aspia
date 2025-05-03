@@ -16,7 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/cursor.h"
 #include "base/desktop/win/cursor_unittest_resources.h"
@@ -37,7 +36,7 @@ bool convertToMouseShapeAndCompare(unsigned left, unsigned right)
     HMODULE instance = GetModuleHandleW(nullptr);
 
     // Load |left| from the EXE module's resources.
-    win::ScopedHCURSOR cursor(reinterpret_cast<HCURSOR>(
+    ScopedHCURSOR cursor(reinterpret_cast<HCURSOR>(
         LoadImageW(instance, MAKEINTRESOURCEW(left), IMAGE_CURSOR, 0, 0, 0)));
     EXPECT_TRUE(cursor != nullptr);
 
@@ -57,8 +56,8 @@ bool convertToMouseShapeAndCompare(unsigned left, unsigned right)
     EXPECT_TRUE(iinfo.hbmColor);
 
     // Make sure the bitmaps will be freed.
-    win::ScopedHBITMAP scoped_mask(iinfo.hbmMask);
-    win::ScopedHBITMAP scoped_color(iinfo.hbmColor);
+    ScopedHBITMAP scoped_mask(iinfo.hbmMask);
+    ScopedHBITMAP scoped_color(iinfo.hbmColor);
 
     // Get |scoped_color| dimensions.
     BITMAP bitmap_info;

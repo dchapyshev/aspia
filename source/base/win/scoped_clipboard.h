@@ -23,7 +23,7 @@
 
 #include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class ScopedClipboard
 {
@@ -48,6 +48,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedClipboard);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_CLIPBOARD_H

@@ -19,7 +19,7 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/logging.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 ScopedImpersonator::ScopedImpersonator() = default;
@@ -89,4 +89,4 @@ void ScopedImpersonator::revertToSelf()
     impersonated_ = false;
 }
 
-} // namespace base::win
+} // namespace base

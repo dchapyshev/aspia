@@ -24,7 +24,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class BatteryEnumerator
 {
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(BatteryEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_BATTERY_ENUMERATOR_H

@@ -24,9 +24,9 @@
 
 #include <functional>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class MessageWindow
 {
@@ -60,6 +60,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(MessageWindow);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_MESSAGE_WINDOW_H

@@ -23,7 +23,7 @@
 
 #include <devguid.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 MonitorEnumerator::MonitorEnumerator()
@@ -76,4 +76,4 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
     return Edid::create(std::move(data), size);
 }
 
-} // namespace base::win
+} // namespace base

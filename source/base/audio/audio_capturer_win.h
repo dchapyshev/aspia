@@ -75,7 +75,7 @@ private:
     std::chrono::milliseconds audio_device_period_;
     AudioVolumeFilterWin volume_filter_;
 
-    base::win::ScopedCoMem<WAVEFORMATEX> wave_format_ex_;
+    base::ScopedCoMem<WAVEFORMATEX> wave_format_ex_;
     Microsoft::WRL::ComPtr<IAudioCaptureClient> audio_capture_client_;
     Microsoft::WRL::ComPtr<IAudioClient> audio_client_;
     Microsoft::WRL::ComPtr<IMMDevice> mm_device_;

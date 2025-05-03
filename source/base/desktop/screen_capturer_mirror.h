@@ -62,7 +62,7 @@ private:
     Rect desktop_rect_;
     Region exclude_region_;
 
-    win::ScopedGetDC desktop_dc_;
+    ScopedGetDC desktop_dc_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;

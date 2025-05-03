@@ -23,7 +23,7 @@
 
 #include <filesystem>
 
-namespace base::win {
+namespace base {
 
 class Device
 {
@@ -49,6 +49,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Device);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_DEVICE_H

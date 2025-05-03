@@ -19,9 +19,8 @@
 #include "base/win/service_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 ServiceEnumerator::ServiceEnumerator(Type type)
@@ -298,4 +297,4 @@ QString ServiceEnumerator::startName() const
     return QString::fromWCharArray(config->lpServiceStartName);
 }
 
-} // namespace base::win
+} // namespace base

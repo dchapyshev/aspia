@@ -52,7 +52,7 @@ public:
     };
 
     bool start(Delegate* delegate);
-    void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(const QString& session_name, base::HostId host_id);
     void onSettingsChanged();

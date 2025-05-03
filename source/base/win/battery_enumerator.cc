@@ -26,7 +26,7 @@
 #include <winioctl.h>
 #include <devguid.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -362,4 +362,4 @@ uint32_t BatteryEnumerator::state() const
     return result;
 }
 
-} // namespace base::win
+} // namespace base

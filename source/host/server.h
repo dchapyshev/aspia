@@ -50,7 +50,7 @@ public:
     ~Server() final;
 
     void start();
-    void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void setPowerEvent(uint32_t power_event);
 
 protected:

@@ -24,7 +24,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class SessionInfo
 {
@@ -72,6 +72,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionInfo);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SESSION_INFO_H

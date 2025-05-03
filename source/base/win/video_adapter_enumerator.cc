@@ -20,7 +20,7 @@
 
 #include <devguid.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 VideoAdapterEnumarator::VideoAdapterEnumarator()
@@ -59,4 +59,4 @@ quint64 VideoAdapterEnumarator::memorySize() const
     return driverRegistryDW(L"HardwareInformation.MemorySize");
 }
 
-} // namespace base::win
+} // namespace base

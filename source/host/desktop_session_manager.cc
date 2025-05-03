@@ -92,7 +92,7 @@ void DesktopSessionManager::attachSession(
     LOG(LS_INFO) << "#####################################################";
 
 #if defined(OS_WIN)
-    base::win::SessionInfo session_info(session_id);
+    base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
         LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
@@ -101,7 +101,7 @@ void DesktopSessionManager::attachSession(
 
     LOG(LS_INFO) << "# Session info (sid=" << session_id
                  << " username='" << session_info.userName() << "'"
-                 << " connect_state=" << base::win::SessionInfo::connectStateToString(session_info.connectState())
+                 << " connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
                  << " win_station='" << session_info.winStationName() << "'"
                  << " domain='" << session_info.domain() << "'"
                  << " locked=" << session_info.isUserLocked() << ")";

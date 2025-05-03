@@ -42,7 +42,7 @@ public:
     static const DWORD kApplications = 2;
 
 private:
-    base::win::RegistryKey key_;
+    base::RegistryKey key_;
     DWORD old_state_ = kNone;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedSasPolicy);

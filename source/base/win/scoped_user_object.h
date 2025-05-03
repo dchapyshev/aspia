@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 // Like ScopedGDIObject but for User objects.
 template<class T, class Traits>
@@ -160,6 +160,6 @@ using ScopedHCURSOR = ScopedUserObject<HCURSOR, DestroyCursorTraits>;
 using ScopedHACCEL = ScopedUserObject<HACCEL, DestroyAccelTraits>;
 using ScopedHHOOK = ScopedUserObject<HHOOK, DestroyHookTraits>;
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_USER_OBJECT_H

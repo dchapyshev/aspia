@@ -23,7 +23,7 @@
 
 #include <memory>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController() = default;
@@ -59,16 +59,16 @@ ServiceController::~ServiceController() = default;
 // static
 ServiceController ServiceController::open(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             reinterpret_cast<const wchar_t*>(name.utf16()),
-                                             SERVICE_ALL_ACCESS));
+    ScopedScHandle service(OpenServiceW(sc_manager,
+                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -84,26 +84,26 @@ ServiceController ServiceController::install(const QString& name,
                                              const QString& display_name,
                                              const std::filesystem::path& file_path)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return ServiceController();
     }
 
-    win::ScopedScHandle service(CreateServiceW(sc_manager,
-                                               reinterpret_cast<const wchar_t*>(name.utf16()),
-                                               reinterpret_cast<const wchar_t*>(display_name.utf16()),
-                                               SERVICE_ALL_ACCESS,
-                                               SERVICE_WIN32_OWN_PROCESS,
-                                               SERVICE_AUTO_START,
-                                               SERVICE_ERROR_NORMAL,
-                                               file_path.c_str(),
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr));
+    ScopedScHandle service(CreateServiceW(sc_manager,
+                                          reinterpret_cast<const wchar_t*>(name.utf16()),
+                                          reinterpret_cast<const wchar_t*>(display_name.utf16()),
+                                          SERVICE_ALL_ACCESS,
+                                          SERVICE_WIN32_OWN_PROCESS,
+                                          SERVICE_AUTO_START,
+                                          SERVICE_ERROR_NORMAL,
+                                          file_path.c_str(),
+                                          nullptr,
+                                          nullptr,
+                                          nullptr,
+                                          nullptr,
+                                          nullptr));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "CreateServiceW failed";
@@ -134,16 +134,16 @@ ServiceController ServiceController::install(const QString& name,
 // static
 bool ServiceController::remove(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             reinterpret_cast<const wchar_t*>(name.utf16()),
-                                             SERVICE_ALL_ACCESS));
+    ScopedScHandle service(OpenServiceW(sc_manager,
+                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -177,16 +177,16 @@ bool ServiceController::remove(const QString& name)
 // static
 bool ServiceController::isInstalled(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             reinterpret_cast<const wchar_t*>(name.utf16()),
-                                             SERVICE_QUERY_CONFIG));
+    ScopedScHandle service(OpenServiceW(sc_manager,
+                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -204,16 +204,16 @@ bool ServiceController::isInstalled(const QString& name)
 // static
 bool ServiceController::isRunning(const QString& name)
 {
-    win::ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
-    win::ScopedScHandle service(OpenServiceW(sc_manager,
-                                             reinterpret_cast<const wchar_t*>(name.utf16()),
-                                             SERVICE_QUERY_STATUS));
+    ScopedScHandle service(OpenServiceW(sc_manager,
+                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -489,4 +489,4 @@ bool ServiceController::stop()
     return is_stopped;
 }
 
-} // namespace base::win
+} // namespace base

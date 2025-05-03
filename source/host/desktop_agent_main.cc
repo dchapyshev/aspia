@@ -128,7 +128,7 @@ void printDebugInfo()
     }
     else
     {
-        base::win::SessionInfo session_info(session_id);
+        base::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
             LOG(LS_ERROR) << "Unable to get session info";
@@ -138,7 +138,7 @@ void printDebugInfo()
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
             LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();

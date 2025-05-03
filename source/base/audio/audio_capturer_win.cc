@@ -143,7 +143,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to create IMMDeviceEnumerator. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -154,7 +154,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to get IMMDevice. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -163,7 +163,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to get an IAudioClient. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -172,7 +172,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "IAudioClient::GetDevicePeriod failed. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -187,7 +187,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to get WAVEFORMATEX. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -254,7 +254,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to initialize IAudioClient. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
 
         if (hr.Error() == E_INVALIDARG)
         {
@@ -269,7 +269,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to get an IAudioCaptureClient. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -278,7 +278,7 @@ bool AudioCapturerWin::initialize()
     if (FAILED(hr.Error()))
     {
         LOG(LS_ERROR) << "Failed to start IAudioClient. Error " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error();
+                      << " with code " << Qt::hex << hr.Error();
         return false;
     }
 
@@ -362,7 +362,7 @@ void AudioCapturerWin::doCapture()
     {
         last_capture_error_ = hr.Error();
         LOG(LS_ERROR) << "Failed to capture an audio packet: " << hr.ErrorMessage()
-                      << " with code " << std::hex << hr.Error() << ".";
+                      << " with code " << Qt::hex << hr.Error() << ".";
     }
 }
 

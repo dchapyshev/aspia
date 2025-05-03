@@ -493,18 +493,18 @@
         <translation>Annulation de la vérification des mises à jour. Veuillez patienter.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="213"/>
+        <location filename="../ui/update_dialog.cc" line="212"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="214"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Error retrieving update information.</source>
         <translation>Erreur de récupération des informations de mise à jour.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="224"/>
-        <location filename="../ui/update_dialog.cc" line="247"/>
+        <location filename="../ui/update_dialog.cc" line="223"/>
+        <location filename="../ui/update_dialog.cc" line="246"/>
         <source>No updates available.</source>
         <translation>Aucune mise à jour n est disponible.</translation>
     </message>

@@ -23,7 +23,7 @@
 
 #include <WtsApi32.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 SessionWatcher::SessionWatcher() = default;
@@ -94,4 +94,4 @@ bool SessionWatcher::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESU
     return false;
 }
 
-} // namespace base::win
+} // namespace base

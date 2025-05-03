@@ -746,14 +746,14 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 #if defined(OS_WIN)
             LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
 
-            if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
+            if (base::SafeModeUtil::setSafeModeService(kHostServiceName, true))
             {
                 LOG(LS_INFO) << "Service added successfully to start in safe mode";
 
                 SystemSettings settings;
                 settings.setBootToSafeMode(true);
 
-                if (base::win::SafeModeUtil::setSafeMode(true))
+                if (base::SafeModeUtil::setSafeMode(true))
                 {
                     LOG(LS_INFO) << "Safe Mode boot enabled successfully";
 

@@ -92,7 +92,7 @@ bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::ScopedHandle* out)
+bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandle* out)
 {
     DWORD protect;
 
@@ -116,7 +116,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
 
     std::u16string path = createFilePath(id);
 
-    win::ScopedHandle file(CreateFileMappingW(
+    ScopedHandle file(CreateFileMappingW(
         INVALID_HANDLE_VALUE, nullptr, protect, high, low, asWide(path)));
     if (!file.isValid())
     {
@@ -143,13 +143,13 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
 }
 
 //--------------------------------------------------------------------------------------------------
-bool openFileMapping(SharedMemory::Mode mode, int id, win::ScopedHandle* out)
+bool openFileMapping(SharedMemory::Mode mode, int id, ScopedHandle* out)
 {
     DWORD desired_access;
     if (!modeToDesiredAccess(mode, &desired_access))
         return false;
 
-    win::ScopedHandle file(OpenFileMappingW(desired_access, FALSE, asWide(createFilePath(id))));
+    ScopedHandle file(OpenFileMappingW(desired_access, FALSE, asWide(createFilePath(id))));
     if (!file.isValid())
     {
         PLOG(LS_ERROR) << "OpenFileMappingW failed";

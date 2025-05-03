@@ -131,32 +131,32 @@ QString digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
 //static
 QString SysInfo::operatingSystemName()
 {
-    base::win::OSInfo* os_info = base::win::OSInfo::instance();
+    base::OSInfo* os_info = base::OSInfo::instance();
 
-    if (os_info->version() >= base::win::VERSION_WIN11)
+    if (os_info->version() >= base::VERSION_WIN11)
     {
         // Key ProductName in the Windows 11 registry says it's Windows 10.
         // We can't rely on this value.
         switch (os_info->versionType())
         {
-            case base::win::SUITE_HOME:
+            case base::SUITE_HOME:
                 return "Windows 11 Home";
-            case base::win::SUITE_PROFESSIONAL:
+            case base::SUITE_PROFESSIONAL:
                 return "Windows 11 Pro";
-            case base::win::SUITE_SERVER:
+            case base::SUITE_SERVER:
                 return "Windows 11 Server";
-            case base::win::SUITE_ENTERPRISE:
+            case base::SUITE_ENTERPRISE:
                 return "Windows 11 Enterprise";
-            case base::win::SUITE_EDUCATION:
+            case base::SUITE_EDUCATION:
                 return "Windows 11 Education";
-            case base::win::SUITE_EDUCATION_PRO:
+            case base::SUITE_EDUCATION_PRO:
                 return "Windows 11 Education Pro";
             default:
                 return "Windows 11";
         }
     }
 
-    win::RegistryKey key;
+    RegistryKey key;
 
     REGSAM access = KEY_READ;
 
@@ -190,25 +190,25 @@ QString SysInfo::operatingSystemName()
 // static
 QString SysInfo::operatingSystemVersion()
 {
-    return win::OSInfo::instance()->kernel32BaseVersion().toString();
+    return OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 QString SysInfo::operatingSystemArchitecture()
 {
-    switch (win::OSInfo::instance()->architecture())
+    switch (OSInfo::instance()->architecture())
     {
-        case win::OSInfo::X64_ARCHITECTURE:
+        case OSInfo::X64_ARCHITECTURE:
             return "AMD64";
 
-        case win::OSInfo::X86_ARCHITECTURE:
+        case OSInfo::X86_ARCHITECTURE:
             return "X86";
 
-        case win::OSInfo::IA64_ARCHITECTURE:
+        case OSInfo::IA64_ARCHITECTURE:
             return "IA64";
 
-        case win::OSInfo::ARM_ARCHITECTURE:
+        case OSInfo::ARM_ARCHITECTURE:
             return "ARM";
 
         default:
@@ -232,7 +232,7 @@ QString SysInfo::operatingSystemDir()
 // static
 QString SysInfo::operatingSystemKey()
 {
-    win::RegistryKey key;
+    RegistryKey key;
 
     REGSAM access = KEY_READ;
 
@@ -275,7 +275,7 @@ QString SysInfo::operatingSystemKey()
 // static
 int64_t SysInfo::operatingSystemInstallDate()
 {
-    win::RegistryKey key;
+    RegistryKey key;
 
     REGSAM access = KEY_READ;
 

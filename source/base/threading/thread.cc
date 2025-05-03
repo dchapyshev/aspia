@@ -71,7 +71,7 @@ void Thread::run()
     task_runner_ = std::make_shared<TaskRunner>();
 
 #if defined(Q_OS_WINDOWS)
-    win::ScopedCOMInitializer com_initializer;
+    ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.isSucceeded());
 #endif // defined(Q_OS_WINDOWS)
 

@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class RegistryKey
 {
@@ -213,6 +213,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RegistryKeyIterator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_REGISTRY_H

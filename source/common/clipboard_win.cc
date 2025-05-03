@@ -58,7 +58,7 @@ void ClipboardWin::init()
         return;
     }
 
-    window_ = std::make_unique<base::win::MessageWindow>();
+    window_ = std::make_unique<base::MessageWindow>();
 
     if (!window_->create(std::bind(&ClipboardWin::onMessage,
                                    this,
@@ -92,7 +92,7 @@ void ClipboardWin::setData(const std::string& data)
         return;
     }
 
-    base::win::ScopedClipboard clipboard;
+    base::ScopedClipboard clipboard;
     if (!clipboard.init(window_->hwnd()))
     {
         PLOG(LS_ERROR) << "Couldn't open the clipboard";
@@ -154,7 +154,7 @@ void ClipboardWin::onClipboardUpdate()
 
     // Add a scope, so that we keep the clipboard open for as short a time as possible.
     {
-        base::win::ScopedClipboard clipboard;
+        base::ScopedClipboard clipboard;
 
         if (!clipboard.init(window_->hwnd()))
         {
@@ -170,7 +170,7 @@ void ClipboardWin::onClipboardUpdate()
         }
 
         {
-            base::win::ScopedHGLOBAL<wchar_t> text_lock(text_global);
+            base::ScopedHGLOBAL<wchar_t> text_lock(text_global);
             if (!text_lock.get())
             {
                 PLOG(LS_ERROR) << "Couldn't lock clipboard data";

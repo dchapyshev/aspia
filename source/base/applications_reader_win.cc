@@ -43,7 +43,7 @@ bool addApplication(
     proto::system_info::Applications* message, const wchar_t* key_name, REGSAM access)
 {
     std::wstring key_path = fmt::format(L"{}\\{}", kUninstallKeyPath, key_name);
-    win::RegistryKey key;
+    RegistryKey key;
 
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
     if (status != ERROR_SUCCESS)
@@ -97,7 +97,7 @@ bool addApplication(
 //--------------------------------------------------------------------------------------------------
 void readApplicationsInformation(proto::system_info::Applications* applications)
 {
-    win::RegistryKeyIterator machine_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath);
+    RegistryKeyIterator machine_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath);
 
     while (machine_key_iterator.valid())
     {
@@ -105,7 +105,7 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
         ++machine_key_iterator;
     }
 
-    win::RegistryKeyIterator user_key_iterator(HKEY_CURRENT_USER, kUninstallKeyPath);
+    RegistryKeyIterator user_key_iterator(HKEY_CURRENT_USER, kUninstallKeyPath);
 
     while (user_key_iterator.valid())
     {
@@ -120,9 +120,9 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
     // If the x86 application is running in a x64 system.
     if (IsWow64Process(GetCurrentProcess(), &is_wow64) && is_wow64)
     {
-        win::RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE,
-                                                        kUninstallKeyPath,
-                                                        KEY_WOW64_64KEY);
+        RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE,
+                                                   kUninstallKeyPath,
+                                                   KEY_WOW64_64KEY);
 
         while (machine64_key_iterator.valid())
         {
@@ -130,9 +130,9 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
             ++machine64_key_iterator;
         }
 
-        win::RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER,
-                                                     kUninstallKeyPath,
-                                                     KEY_WOW64_64KEY);
+        RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER,
+                                                kUninstallKeyPath,
+                                                KEY_WOW64_64KEY);
 
         while (user64_key_iterator.valid())
         {
@@ -143,9 +143,9 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
 
 #elif (ARCH_CPU_X86_64 == 1)
 
-    win::RegistryKeyIterator machine32_key_iterator(HKEY_LOCAL_MACHINE,
-                                                    kUninstallKeyPath,
-                                                    KEY_WOW64_32KEY);
+    RegistryKeyIterator machine32_key_iterator(HKEY_LOCAL_MACHINE,
+                                               kUninstallKeyPath,
+                                               KEY_WOW64_32KEY);
 
     while (machine32_key_iterator.valid())
     {
@@ -153,9 +153,9 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
         ++machine32_key_iterator;
     }
 
-    win::RegistryKeyIterator user32_key_iterator(HKEY_CURRENT_USER,
-                                                 kUninstallKeyPath,
-                                                 KEY_WOW64_32KEY);
+    RegistryKeyIterator user32_key_iterator(HKEY_CURRENT_USER,
+                                            kUninstallKeyPath,
+                                            KEY_WOW64_32KEY);
 
     while (user32_key_iterator.valid())
     {

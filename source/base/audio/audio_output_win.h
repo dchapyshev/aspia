@@ -88,9 +88,9 @@ private:
 
     std::unique_ptr<SimpleThread> audio_thread_;
 
-    win::ScopedHandle audio_samples_event_;
-    win::ScopedHandle stop_event_;
-    win::ScopedHandle restart_event_;
+    ScopedHandle audio_samples_event_;
+    ScopedHandle stop_event_;
+    ScopedHandle restart_event_;
 
     uint32_t endpoint_buffer_size_frames_ = 0;
     quint64 num_frames_written_ = 0;

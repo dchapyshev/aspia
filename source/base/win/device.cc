@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 Device::~Device()
@@ -69,4 +69,4 @@ bool Device::ioControl(DWORD io_control_code,
                              bytes_returned, nullptr);
 }
 
-} // namespace base::win
+} // namespace base

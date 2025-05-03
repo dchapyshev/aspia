@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SESSION_STATUS_H
 #define BASE_WIN_SESSION_STATUS_H
 
-namespace base::win {
+namespace base {
 
 enum class SessionStatus
 {
@@ -39,6 +39,6 @@ enum class SessionStatus
 
 const char* sessionStatusToString(SessionStatus status);
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SESSION_STATUS_H

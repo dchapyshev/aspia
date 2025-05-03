@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 template<class T, class Traits>
 class ScopedObject
@@ -155,6 +155,6 @@ using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;
 using ScopedScHandle = ScopedObject<SC_HANDLE, ScHandleObjectTraits>;
 using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_HANDLE_H

@@ -25,7 +25,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class SessionEnumerator
 {
@@ -64,13 +64,13 @@ public:
     bool isUserLocked() const;
 
 private:
-    base::win::ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
+    ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
     DWORD count_ = 0;
     DWORD current_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(SessionEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SESSION_ENUMERATOR_H

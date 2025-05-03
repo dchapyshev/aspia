@@ -23,9 +23,9 @@
 
 #include <cstdint>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 class PowerInfo
 {
@@ -49,6 +49,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PowerInfo);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_POWER_INFO_H

@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 #include <string>
 #include <vector>

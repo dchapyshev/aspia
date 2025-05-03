@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 PowerInfo::PowerInfo()
@@ -118,4 +118,4 @@ uint32_t PowerInfo::batteryRemainingLifeTime() const
     return power_status_.BatteryLifeTime;
 }
 
-} // namespace base::win
+} // namespace base

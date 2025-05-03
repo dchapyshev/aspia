@@ -54,7 +54,7 @@ protected:
     virtual void onStop() = 0;
 
 #if defined(OS_WIN)
-    virtual void onSessionEvent(win::SessionStatus event, SessionId session_id) = 0;
+    virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
     virtual void onPowerEvent(uint32_t event) = 0;
 #endif // defined(OS_WIN)
 

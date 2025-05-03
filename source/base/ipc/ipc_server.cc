@@ -36,9 +36,6 @@
 #include <asio/local/stream_protocol.hpp>
 #endif // defined(OS_POSIX)
 
-#include <fmt/format.h>
-#include <fmt/xchar.h>
-
 #include <random>
 
 namespace base {
@@ -99,9 +96,9 @@ IpcServer::Listener::~Listener() = default;
 bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_name)
 {
 #if defined(OS_WIN)
-    std::wstring user_sid;
+    QString user_sid;
 
-    if (!win::userSidString(&user_sid))
+    if (!userSidString(&user_sid))
     {
         LOG(LS_ERROR) << "Failed to query the current user SID";
         return false;
@@ -109,10 +106,10 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
 
     // Create a security descriptor that gives full access to the caller and authenticated users
     // and denies access by anyone else.
-    std::wstring security_descriptor =
-        fmt::format(L"O:{0}G:{0}D:(A;;GA;;;{0})(A;;GA;;;AU)", user_sid);
+    QString security_descriptor =
+        QString("O:%1G:%1D:(A;;GA;;;%1)(A;;GA;;;AU)").arg(user_sid);
 
-    win::ScopedSd sd = win::convertSddlToSd(security_descriptor);
+    ScopedSd sd = convertSddlToSd(security_descriptor);
     if (!sd.get())
     {
         LOG(LS_ERROR) << "Failed to create a security descriptor";
@@ -126,7 +123,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     security_attributes.lpSecurityDescriptor = sd.get();
     security_attributes.bInheritHandle = FALSE;
 
-    win::ScopedHandle handle(
+    ScopedHandle handle(
         CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.utf16()),
                          FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
                          PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,

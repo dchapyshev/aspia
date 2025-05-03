@@ -24,7 +24,7 @@
 #include <qt_windows.h>
 #include <SetupAPI.h>
 
-namespace base::win {
+namespace base {
 
 class ScopedDeviceInfo
 {
@@ -85,6 +85,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedDeviceInfo);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_DEVICE_INFO_H

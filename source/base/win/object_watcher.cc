@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 
-namespace base::win {
+namespace base {
 
 class ObjectWatcher::Impl : public base::enable_shared_from_this<Impl>
 {
@@ -233,4 +233,4 @@ HANDLE ObjectWatcher::watchedObject() const
     return impl_->watchedObject();
 }
 
-} // namespace base::win
+} // namespace base

@@ -358,7 +358,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     auto try_mirror_capturer = [this]()
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
-        if (win::windowsVersion() == base::win::VERSION_WIN7)
+        if (windowsVersion() == base::VERSION_WIN7)
         {
             LOG(LS_INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
 
@@ -389,7 +389,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
              preferred_type_ == ScreenCapturer::Type::DEFAULT)
     {
-        if (win::windowsVersion() >= win::VERSION_WIN8)
+        if (windowsVersion() >= VERSION_WIN8)
         {
             // Desktop Duplication API is available in Windows 8+.
             std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi =

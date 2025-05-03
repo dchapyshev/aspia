@@ -36,7 +36,7 @@ public:
 
 private:
 #if defined(OS_WIN)
-    win::ScopedHandle handle_;
+    ScopedHandle handle_;
 #endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(PowerSaveBlocker);

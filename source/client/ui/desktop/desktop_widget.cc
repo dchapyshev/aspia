@@ -25,17 +25,17 @@
 #include <QApplication>
 #include <QWheelEvent>
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include <X11/XKBlib.h>
 #if defined(KeyPress)
 #undef KeyPress
 #endif // defined(KeyPress)
 #endif // defined(OS_LINUX)
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
 #include <Carbon/Carbon.h>
 #include <CoreGraphics/CGEventSource.h>
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
 namespace client {
 
@@ -48,9 +48,9 @@ std::set<uint32_t> g_local_pressed_keys;
 //--------------------------------------------------------------------------------------------------
 bool isNumLockActivated()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return GetKeyState(VK_NUMLOCK) != 0;
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     Display* display = XOpenDisplay(nullptr);
     if (!display)
     {
@@ -63,21 +63,21 @@ bool isNumLockActivated()
     XCloseDisplay(display);
 
     return (state & 2) != 0;
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     // Without NumLock.
     return true;
 #else
 #warning Platform support not implemented
     return false;
-#endif // defined(OS_WIN)
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 bool isCapsLockActivated()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return GetKeyState(VK_CAPITAL) != 0;
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     Display* display = XOpenDisplay(nullptr);
     if (!display)
     {
@@ -90,13 +90,13 @@ bool isCapsLockActivated()
     XCloseDisplay(display);
 
     return (state & 1) != 0;
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     CGEventFlags event_flags = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
     return (event_flags & kCGEventFlagMaskAlphaShift) != 0;
 #else
 #warning Platform support not implemented
     return false;
-#endif // defined(OS_WIN)
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

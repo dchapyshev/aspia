@@ -24,12 +24,9 @@
 #include <QString>
 #include <QVector>
 
-#include <cstdint>
-#include <vector>
-
 struct _USER_INFO_3;
 
-namespace base::win {
+namespace base {
 
 class UserEnumerator
 {
@@ -62,6 +59,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserEnumerator);
 };
 
-} // base::win
+} // base
 
 #endif // BASE_WIN_USER_ENUMERATOR_H

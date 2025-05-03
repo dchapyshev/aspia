@@ -233,7 +233,7 @@ bool IpcChannel::connect(const QString& channel_id)
 #if defined(OS_WIN)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
 
-    win::ScopedHandle handle;
+    ScopedHandle handle;
 
     while (true)
     {
@@ -373,7 +373,7 @@ void IpcChannel::send(QByteArray&& buffer)
 std::filesystem::path IpcChannel::peerFilePath() const
 {
 #if defined(OS_WIN)
-    win::ScopedHandle process(
+    ScopedHandle process(
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
     {

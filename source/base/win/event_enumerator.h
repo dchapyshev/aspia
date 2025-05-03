@@ -27,7 +27,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class EventEnumerator
 {
@@ -62,6 +62,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(EventEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_EVENT_ENUMERATOR_H

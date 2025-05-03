@@ -20,9 +20,9 @@
 
 #include "base/logging.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 DriveEnumerator::DriveEnumerator()
@@ -167,4 +167,4 @@ QString DriveEnumerator::DriveInfo::volumeSerial() const
         .arg(LOWORD(serial), 4, 16, QLatin1Char('0')).toUpper();
 }
 
-} // namespace base::win
+} // namespace base

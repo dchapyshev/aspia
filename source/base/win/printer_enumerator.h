@@ -26,7 +26,7 @@
 
 struct _PRINTER_INFO_2W;
 
-namespace base::win {
+namespace base {
 
 class PrinterEnumerator
 {
@@ -65,6 +65,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(PrinterEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_PRINTER_ENUMERATOR_H

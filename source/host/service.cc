@@ -103,7 +103,7 @@ void Service::onStart()
         settings.setBootToSafeMode(false);
         settings.sync();
 
-        if (!base::win::SafeModeUtil::setSafeMode(false))
+        if (!base::SafeModeUtil::setSafeMode(false))
         {
             LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
         }
@@ -112,7 +112,7 @@ void Service::onStart()
             LOG(LS_INFO) << "Safe mode is disabled";
         }
 
-        if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
+        if (!base::SafeModeUtil::setSafeModeService(kHostServiceName, false))
         {
             LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
         }
@@ -137,9 +137,9 @@ void Service::onStop()
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
+void Service::onSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event detected (status: " << base::win::sessionStatusToString(status)
+    LOG(LS_INFO) << "Session event detected (status: " << base::sessionStatusToString(status)
                  << ", session_id: " << session_id << ")";
 
     if (server_)

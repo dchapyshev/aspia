@@ -497,18 +497,18 @@
         <translation>Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="213"/>
+        <location filename="../ui/update_dialog.cc" line="212"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="214"/>
+        <location filename="../ui/update_dialog.cc" line="213"/>
         <source>Error retrieving update information.</source>
         <translation>Виникла помилка під час отримання інформації про оновлення.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="224"/>
-        <location filename="../ui/update_dialog.cc" line="247"/>
+        <location filename="../ui/update_dialog.cc" line="223"/>
+        <location filename="../ui/update_dialog.cc" line="246"/>
         <source>No updates available.</source>
         <translation>Немає доступних оновлень.</translation>
     </message>

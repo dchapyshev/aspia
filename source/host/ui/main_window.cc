@@ -612,7 +612,7 @@ void MainWindow::onSettings()
     LOG(LS_INFO) << "[ACTION] Settings";
 
 #if defined(OS_WIN)
-    if (!base::win::isProcessElevated())
+    if (!base::isProcessElevated())
     {
         LOG(LS_INFO) << "Process not elevated";
 

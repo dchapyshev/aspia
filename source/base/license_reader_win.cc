@@ -88,7 +88,7 @@ bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
     std::wstring key_path =
         fmt::format(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{}", id);
 
-    win::RegistryKey key;
+    RegistryKey key;
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
     if (status != ERROR_SUCCESS)
         return false;
@@ -103,7 +103,7 @@ bool msProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
 //--------------------------------------------------------------------------------------------------
 void addMsProduct(proto::system_info::Licenses* message,
                   const std::wstring& product_name,
-                  const win::RegistryKey& key)
+                  const RegistryKey& key)
 {
     DWORD product_id_size = 0;
 
@@ -167,7 +167,7 @@ void addMsProduct(proto::system_info::Licenses* message,
 //--------------------------------------------------------------------------------------------------
 void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
 {
-    win::RegistryKey key;
+    RegistryKey key;
 
     // Read MS Windows Key.
     LONG status = key.open(HKEY_LOCAL_MACHINE,
@@ -175,36 +175,36 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
                            access | KEY_READ);
     if (status == ERROR_SUCCESS)
     {
-        base::win::OSInfo* os_info = base::win::OSInfo::instance();
+        base::OSInfo* os_info = base::OSInfo::instance();
         std::wstring product_name;
 
-        if (os_info->version() >= base::win::VERSION_WIN11)
+        if (os_info->version() >= base::VERSION_WIN11)
         {
             // Key ProductName in the Windows 11 registry says it's Windows 10.
             // We can't rely on this value.
             switch (os_info->versionType())
             {
-                case base::win::SUITE_HOME:
+                case base::SUITE_HOME:
                     product_name = L"Windows 11 Home";
                     break;
 
-                case base::win::SUITE_PROFESSIONAL:
+                case base::SUITE_PROFESSIONAL:
                     product_name = L"Windows 11 Pro";
                     break;
 
-                case base::win::SUITE_SERVER:
+                case base::SUITE_SERVER:
                     product_name = L"Windows 11 Server";
                     break;
 
-                case base::win::SUITE_ENTERPRISE:
+                case base::SUITE_ENTERPRISE:
                     product_name = L"Windows 11 Enterprise";
                     break;
 
-                case base::win::SUITE_EDUCATION:
+                case base::SUITE_EDUCATION:
                     product_name = L"Windows 11 Education";
                     break;
 
-                case base::win::SUITE_EDUCATION_PRO:
+                case base::SUITE_EDUCATION_PRO:
                     product_name = L"Windows 11 Education Pro";
                     break;
 
@@ -232,7 +232,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
     // Enumerate product family.
     for (size_t i = 0; i < _countof(kMsProducts); ++i)
     {
-        win::RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kMsProducts[i], access);
+        RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kMsProducts[i], access);
 
         // Enumerate product type.
         while (key_iterator.valid())
@@ -240,7 +240,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
             std::wstring key_path =
                 fmt::format(L"{}\\{}\\Registration", kMsProducts[i], key_iterator.name());
 
-            win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
+            RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
 
             // Enumerate product version.
             while (sub_key_iterator.valid())
@@ -272,19 +272,19 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
     static const int kProductKeyLength = 25;
     static const int kGroupLength = 5;
 
-    win::RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kVisualStudioPath, access);
+    RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kVisualStudioPath, access);
 
     while (key_iterator.valid())
     {
         std::wstring key_path =
             fmt::format(L"{}\\{}\\Registration", kVisualStudioPath, key_iterator.name());
 
-        win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
 
         while (sub_key_iterator.valid())
         {
             std::wstring sub_key_path = fmt::format(L"{}\\{}", key_path, sub_key_iterator.name());
-            win::RegistryKey key;
+            RegistryKey key;
 
             LONG status = key.open(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access | KEY_READ);
             if (status == ERROR_SUCCESS)
@@ -328,7 +328,7 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
 }
 
 //--------------------------------------------------------------------------------------------------
-void addVMWareProduct(proto::system_info::Licenses* message, const win::RegistryKey& key)
+void addVMWareProduct(proto::system_info::Licenses* message, const RegistryKey& key)
 {
     std::wstring product_id;
 
@@ -374,14 +374,14 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 {
     static const wchar_t kKeyPath[] = L"Software\\VMware, Inc.";
 
-    win::RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kKeyPath, access);
+    RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kKeyPath, access);
 
     // Enumerate products types (Workstation, Server, etc).
     while (key_iterator.valid())
     {
         std::wstring sub_key_path = fmt::format(L"{}\\{}", kKeyPath, key_iterator.name());
 
-        win::RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access);
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access);
 
         while (sub_key_iterator.valid())
         {
@@ -390,7 +390,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
                 std::wstring license_key_path =
                     fmt::format(L"{}\\{}", sub_key_path, sub_key_iterator.name());
 
-                win::RegistryKey key;
+                RegistryKey key;
 
                 LONG status = key.open(HKEY_LOCAL_MACHINE,
                                        license_key_path.c_str(),

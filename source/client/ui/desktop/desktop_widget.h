@@ -98,16 +98,16 @@ private:
 
     QPainter painter_;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
-    base::win::ScopedHHOOK keyboard_hook_;
-#endif // defined(OS_WIN)
+    base::ScopedHHOOK keyboard_hook_;
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     static CGEventRef keyboardFilterProc(
         CGEventTapProxy proxy, CGEventType type, CGEventRef event, void* user_info);
     base::ScopedCFTypeRef<CFMachPortRef> event_tap_;
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
     QPointer<QTimer> error_timer_;
     proto::VideoErrorCode last_error_code_ = proto::VIDEO_ERROR_CODE_OK;

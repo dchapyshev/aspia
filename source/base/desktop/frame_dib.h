@@ -49,7 +49,7 @@ private:
              std::unique_ptr<SharedMemory> shared_memory,
              HBITMAP bitmap);
 
-    win::ScopedHBITMAP bitmap_;
+    ScopedHBITMAP bitmap_;
     std::unique_ptr<SharedMemory> owned_shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(FrameDib);

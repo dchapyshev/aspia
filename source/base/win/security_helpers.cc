@@ -25,7 +25,7 @@
 #include <ObjIdl.h>
 #include <sddl.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -101,10 +101,10 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
                            const wchar_t* mandatory_label,
                            bool activate_as_activator)
 {
-    std::wstring sddl;
+    QString sddl;
 
-    sddl.append(security_descriptor);
-    sddl.append(mandatory_label);
+    sddl.append(QString::fromWCharArray(security_descriptor));
+    sddl.append(QString::fromWCharArray(mandatory_label));
 
     // Convert the SDDL description into a security descriptor in absolute format.
     ScopedSd relative_sd = convertSddlToSd(sddl);
@@ -154,12 +154,13 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
 }
 
 //--------------------------------------------------------------------------------------------------
-ScopedSd convertSddlToSd(const std::wstring& sddl)
+ScopedSd convertSddlToSd(const QString& sddl)
 {
     ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
     ULONG length = 0;
 
-    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
+            reinterpret_cast<const wchar_t*>(sddl.utf16()), SDDL_REVISION_1,
         raw_sd.recieve(), &length))
     {
         PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
@@ -173,7 +174,7 @@ ScopedSd convertSddlToSd(const std::wstring& sddl)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool userSidString(std::wstring* user_sid)
+bool userSidString(QString* user_sid)
 {
     // Get the current token.
     ScopedHandle token;
@@ -206,7 +207,7 @@ bool userSidString(std::wstring* user_sid)
         return false;
     }
 
-    user_sid->assign(sid_string);
+    *user_sid = QString::fromWCharArray(sid_string);
     return true;
 }
 

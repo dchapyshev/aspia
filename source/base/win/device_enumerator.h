@@ -23,7 +23,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class DeviceEnumerator
 {
@@ -57,6 +57,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DeviceEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_DEVICE_ENUMERATOR_H

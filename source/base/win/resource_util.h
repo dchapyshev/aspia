@@ -24,9 +24,9 @@
 
 #include <cstddef>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 // Function for getting a data resource of the specified |resource_type| from a dll.
 // Some resources are optional, especially in unit tests, so this returns false but doesn't raise
@@ -45,6 +45,6 @@ bool dataResourceFromModule(HMODULE module,
                             void** data,
                             size_t* length);
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_RESOURCE_UTIL_H

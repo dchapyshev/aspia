@@ -19,12 +19,12 @@
 #ifndef BASE_WIN_NET_SHARE_ENUMERATOR_H
 #define BASE_WIN_NET_SHARE_ENUMERATOR_H
 
-#include <string>
+#include <QString>
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <LM.h>
 
-namespace base::win {
+namespace base {
 
 class NetShareEnumerator
 {
@@ -46,9 +46,9 @@ public:
         TEMPORARY = 6
     };
 
-    std::string name() const;
-    std::string localPath() const;
-    std::string description() const;
+    QString name() const;
+    QString localPath() const;
+    QString description() const;
     Type type() const;
     uint32_t currentUses() const;
     uint32_t maxUses() const;
@@ -59,6 +59,6 @@ private:
     DWORD current_pos_ = 0;
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_NET_SHARE_ENUMERATOR_H

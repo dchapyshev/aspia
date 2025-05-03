@@ -131,7 +131,7 @@ void printDebugInfo()
     }
     else
     {
-        base::win::SessionInfo session_info(session_id);
+        base::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
             LOG(LS_ERROR) << "Unable to get session info";
@@ -141,7 +141,7 @@ void printDebugInfo()
             LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
-                         << base::win::SessionInfo::connectStateToString(session_info.connectState());
+                         << base::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
             LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
@@ -179,7 +179,7 @@ void printDebugInfo()
 
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Member of admins group: " << (is_user_admin ? "Yes" : "No");
-    LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
+    LOG(LS_INFO) << "Process elevated: " << (base::isProcessElevated() ? "Yes" : "No");
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
 #endif // defined(Q_OS_WINDOWS)
@@ -312,7 +312,7 @@ int hostMain(int argc, char* argv[])
     else if (parser.isSet(config_option))
     {
 #if defined(Q_OS_WINDOWS)
-        if (!base::win::isProcessElevated())
+        if (!base::isProcessElevated())
         {
             LOG(LS_INFO) << "Process not eleavated";
         }

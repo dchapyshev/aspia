@@ -63,8 +63,7 @@ void Service::onStop()
 
 #if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
-void Service::onSessionEvent(
-    base::win::SessionStatus /* event */, base::SessionId /* session_id */)
+void Service::onSessionEvent(base::SessionStatus /* event */, base::SessionId /* session_id */)
 {
     // Nothing
 }

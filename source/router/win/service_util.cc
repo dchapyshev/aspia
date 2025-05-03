@@ -30,8 +30,7 @@ namespace router {
 //--------------------------------------------------------------------------------------------------
 int startService()
 {
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(router::kServiceName);
+    base::ServiceController controller = base::ServiceController::open(router::kServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -52,8 +51,7 @@ int startService()
 //--------------------------------------------------------------------------------------------------
 int stopService()
 {
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(router::kServiceName);
+    base::ServiceController controller = base::ServiceController::open(router::kServiceName);
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
@@ -82,7 +80,7 @@ int installService()
         return 1;
     }
 
-    base::win::ServiceController controller = base::win::ServiceController::install(
+    base::ServiceController controller = base::ServiceController::install(
         router::kServiceName, router::kServiceDisplayName, file_path);
     if (!controller.isValid())
     {
@@ -98,10 +96,10 @@ int installService()
 //--------------------------------------------------------------------------------------------------
 int removeService()
 {
-    if (base::win::ServiceController::isRunning(router::kServiceName))
+    if (base::ServiceController::isRunning(router::kServiceName))
         stopService();
 
-    if (!base::win::ServiceController::remove(router::kServiceName))
+    if (!base::ServiceController::remove(router::kServiceName))
     {
         std::cout << "Failed to remove the service." << std::endl;
         return 1;

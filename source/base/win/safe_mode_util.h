@@ -23,7 +23,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 class SafeModeUtil
 {
@@ -35,6 +35,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SafeModeUtil);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SAFE_MODE_UTIL_H

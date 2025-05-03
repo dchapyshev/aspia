@@ -24,7 +24,6 @@
 #include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
-#include "base/strings/string_util.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 #include "host/desktop_session_proxy.h"
@@ -280,7 +279,7 @@ std::optional<QString> UserSession::sessionName() const
 
     DCHECK_EQ(type_, Type::RDP);
 
-    base::win::SessionInfo current_session_info(sessionId());
+    base::SessionInfo current_session_info(sessionId());
     if (!current_session_info.isValid())
     {
         LOG(LS_ERROR) << "Failed to get session information (sid=" << session_id_ << ")";
@@ -301,12 +300,12 @@ std::optional<QString> UserSession::sessionName() const
 
     // Enumarate all user sessions.
     TimeInfoList times;
-    for (base::win::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
         if (user_name != it.userName().toLower())
             continue;
 
-        base::win::SessionInfo session_info(it.sessionId());
+        base::SessionInfo session_info(it.sessionId());
         if (!session_info.isValid())
             continue;
 
@@ -451,11 +450,11 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
+void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
     std::string status_str;
 #if defined(OS_WIN)
-    status_str = base::win::sessionStatusToString(status);
+    status_str = base::sessionStatusToString(status);
 #else
     status_str = base::numberToString(static_cast<int>(status));
 #endif
@@ -467,7 +466,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
 
     switch (status)
     {
-        case base::win::SessionStatus::CONSOLE_CONNECT:
+        case base::SessionStatus::CONSOLE_CONNECT:
         {
             if (state_ == State::FINISHED)
             {
@@ -505,7 +504,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         }
         break;
 
-        case base::win::SessionStatus::CONSOLE_DISCONNECT:
+        case base::SessionStatus::CONSOLE_DISCONNECT:
         {
             if (session_id != session_id_)
             {
@@ -534,7 +533,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         }
         break;
 
-        case base::win::SessionStatus::REMOTE_DISCONNECT:
+        case base::SessionStatus::REMOTE_DISCONNECT:
         {
             if (session_id != session_id_)
             {
@@ -553,7 +552,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         }
         break;
 
-        case base::win::SessionStatus::SESSION_LOGON:
+        case base::SessionStatus::SESSION_LOGON:
         {
             // Request for host ID.
             sendHostIdRequest(FROM_HERE);

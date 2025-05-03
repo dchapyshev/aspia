@@ -19,7 +19,7 @@
 #include "base/win/registry.h"
 #include "base/logging.h"
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -767,5 +767,5 @@ void RegistryKeyIterator::initialize(HKEY root_key,
     read();
 }
 
-} // namespace base::win
+} // namespace base
 

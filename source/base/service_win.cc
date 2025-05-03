@@ -314,7 +314,7 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (!self)
                 return NO_ERROR;
 
-            win::SessionStatus session_status = static_cast<win::SessionStatus>(event_type);
+            SessionStatus session_status = static_cast<SessionStatus>(event_type);
             SessionId session_id =
                 reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId;
 
@@ -374,11 +374,11 @@ int Service::exec(Application& application)
         std::make_unique<ScopedCryptoInitializer>();
     CHECK(crypto_initializer->isSucceeded());
 
-    std::unique_ptr<win::ScopedCOMInitializer> com_initializer =
-        std::make_unique<win::ScopedCOMInitializer>();
+    std::unique_ptr<ScopedCOMInitializer> com_initializer =
+        std::make_unique<ScopedCOMInitializer>();
     CHECK(com_initializer->isSucceeded());
 
-    win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     task_runner_ = Application::taskRunner();
 

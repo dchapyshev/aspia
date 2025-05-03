@@ -20,11 +20,11 @@
 
 #include "base/logging.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <TlHelp32.h>
 #include <shellapi.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 bool isProcessElevated()
@@ -180,4 +180,4 @@ bool isProcessStartedFromService()
     return false;
 }
 
-} // namespace base::win
+} // namespace base

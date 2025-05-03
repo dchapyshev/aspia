@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 bool resourceFromModule(HMODULE module,
@@ -78,4 +78,4 @@ bool dataResourceFromModule(HMODULE module,
     return resourceFromModule(module, resource_id, L"BINDATA", data, length);
 }
 
-} // namespace base::win
+} // namespace base

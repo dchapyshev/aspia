@@ -50,7 +50,7 @@ private:
     std::wstring device_key_;
     std::wstring device_name_;
 
-    base::win::ScopedCreateDC driver_dc_;
+    base::ScopedCreateDC driver_dc_;
     const Rect screen_rect_;
 
     uint8_t* shared_buffer_ = nullptr;

@@ -21,9 +21,9 @@
 
 #include "base/win/device_enumerator.h"
 
-namespace base::win {
+namespace base {
 
-class VideoAdapterEnumarator : public DeviceEnumerator
+class VideoAdapterEnumarator final : public DeviceEnumerator
 {
 public:
     VideoAdapterEnumarator();
@@ -38,6 +38,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(VideoAdapterEnumarator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_VIDEO_ADAPTER_ENUMERATOR_H

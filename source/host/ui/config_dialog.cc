@@ -245,7 +245,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui.combo_video_capturer->addItem(
         tr("Default"), static_cast<uint32_t>(base::ScreenCapturer::Type::DEFAULT));
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ui.combo_video_capturer->addItem(
         "DXGI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
 
@@ -253,16 +253,16 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         "GDI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
 
     // Mirror screen capture is available only in Windows 7/2008 R2.
-    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    if (base::windowsVersion() == base::VERSION_WIN7)
     {
         ui.combo_video_capturer->addItem(
             "MIRROR", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
     }
 
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     ui.combo_video_capturer->addItem(
         "X11", static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     ui.combo_video_capturer->addItem(
         "MACOSX", static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
 #else
@@ -888,12 +888,12 @@ void ConfigDialog::reloadServiceStatus()
 
     QString state;
 
-    if (base::win::ServiceController::isInstalled(kHostServiceName))
+    if (base::ServiceController::isInstalled(kHostServiceName))
     {
         ui.button_service_install_remove->setText(tr("Remove"));
 
-        base::win::ServiceController controller =
-            base::win::ServiceController::open(kHostServiceName);
+        base::ServiceController controller =
+            base::ServiceController::open(kHostServiceName);
         if (controller.isValid())
         {
             if (controller.isRunning())
@@ -937,18 +937,18 @@ void ConfigDialog::reloadServiceStatus()
 //--------------------------------------------------------------------------------------------------
 bool ConfigDialog::isServiceStarted()
 {
-#if defined(OS_WIN)
-    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
+#if defined(Q_OS_WINDOWS)
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
     return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ConfigDialog::installService()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     std::filesystem::path service_file_path;
 
     if (!base::BasePaths::currentExecDir(&service_file_path))
@@ -959,7 +959,7 @@ bool ConfigDialog::installService()
 
     service_file_path.append(kHostServiceFileName);
 
-    base::win::ServiceController controller = base::win::ServiceController::install(
+    base::ServiceController controller = base::ServiceController::install(
         kHostServiceName, kHostServiceDisplayName, service_file_path);
     if (!controller.isValid())
     {
@@ -985,8 +985,8 @@ bool ConfigDialog::installService()
 //--------------------------------------------------------------------------------------------------
 bool ConfigDialog::removeService()
 {
-#if defined(OS_WIN)
-    if (!base::win::ServiceController::remove(kHostServiceName))
+#if defined(Q_OS_WINDOWS)
+    if (!base::ServiceController::remove(kHostServiceName))
     {
         LOG(LS_ERROR) << "Unable to remove service";
         QMessageBox::warning(this,
@@ -1005,8 +1005,8 @@ bool ConfigDialog::removeService()
 //--------------------------------------------------------------------------------------------------
 bool ConfigDialog::startService()
 {
-#if defined(OS_WIN)
-    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
+#if defined(Q_OS_WINDOWS)
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         LOG(LS_ERROR) << "Unable to open service";
@@ -1038,8 +1038,8 @@ bool ConfigDialog::startService()
 //--------------------------------------------------------------------------------------------------
 bool ConfigDialog::stopService()
 {
-#if defined(OS_WIN)
-    base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
+#if defined(Q_OS_WINDOWS)
+    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
         LOG(LS_ERROR) << "Unable to open service";

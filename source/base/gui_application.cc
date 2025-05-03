@@ -72,7 +72,7 @@ bool isSameApplication(const QLocalSocket* socket)
         return false;
     }
 
-    base::win::ScopedHandle other_process(
+    base::ScopedHandle other_process(
         OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
     if (!other_process.isValid())
     {

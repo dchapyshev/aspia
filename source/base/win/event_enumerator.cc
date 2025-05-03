@@ -23,7 +23,7 @@
 
 #include <strsafe.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -401,4 +401,4 @@ EVENTLOGRECORD* EventEnumerator::record() const
     return reinterpret_cast<EVENTLOGRECORD*>(record_buffer_.data());
 }
 
-} // namespace base::win
+} // namespace base

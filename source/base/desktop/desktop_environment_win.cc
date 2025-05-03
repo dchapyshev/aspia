@@ -32,7 +32,7 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 void updatePerUserSystemParameters()
 {
-    win::ScopedHandle user_token;
+    ScopedHandle user_token;
 
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
@@ -49,7 +49,7 @@ void updatePerUserSystemParameters()
 
     // The process of the desktop session is running with "SYSTEM" account.
     // We need the current real user, not "SYSTEM".
-    win::ScopedImpersonator impersonator;
+    ScopedImpersonator impersonator;
     if (user_token.isValid())
     {
         if (!impersonator.loggedOnUser(user_token))

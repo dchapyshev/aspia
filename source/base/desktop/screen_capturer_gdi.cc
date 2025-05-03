@@ -163,7 +163,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
     Frame* previous = queue_.previousFrame();
 
     {
-        win::ScopedSelectObject select_object(
+        ScopedSelectObject select_object(
             memory_dc_, static_cast<FrameDib*>(current)->bitmap());
 
         if (!BitBlt(memory_dc_,

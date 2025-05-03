@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 // Like ScopedHandle but for HDC. Only use this on HDCs returned from GetDC.
 class ScopedGetDC
@@ -104,6 +104,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_HDC_H

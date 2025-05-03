@@ -21,15 +21,13 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path.h"
-#include "build/build_config.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
 #include "common/file_enumerator.h"
-#include "common/file_platform_util.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/drive_enumerator.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace common {
 
@@ -56,11 +54,11 @@ void FileWorker::doRequest(base::local_shared_ptr<FileTask> task)
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doRequest(const proto::FileRequest& request, proto::FileReply* reply)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     // We send a notification to the system that it is used to prevent the screen saver, going into
     // hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     if (request.has_drive_list_request())
     {
@@ -109,33 +107,33 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
 {
     proto::DriveList* drive_list = reply->mutable_drive_list();
 
-#if defined(OS_WIN)
-    for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+#if defined(Q_OS_WINDOWS)
+    for (base::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::DriveList::Item* item = drive_list->add_item();
 
-        const base::win::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
-        base::win::DriveEnumerator::DriveInfo::Type drive_type = drive_info.type();
+        const base::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
+        base::DriveEnumerator::DriveInfo::Type drive_type = drive_info.type();
 
         switch (drive_type)
         {
-            case base::win::DriveEnumerator::DriveInfo::Type::FIXED:
+            case base::DriveEnumerator::DriveInfo::Type::FIXED:
                 item->set_type(proto::DriveList::Item::TYPE_FIXED);
                 break;
 
-            case base::win::DriveEnumerator::DriveInfo::Type::CDROM:
+            case base::DriveEnumerator::DriveInfo::Type::CDROM:
                 item->set_type(proto::DriveList::Item::TYPE_CDROM);
                 break;
 
-            case base::win::DriveEnumerator::DriveInfo::Type::REMOVABLE:
+            case base::DriveEnumerator::DriveInfo::Type::REMOVABLE:
                 item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);
                 break;
 
-            case base::win::DriveEnumerator::DriveInfo::Type::RAM:
+            case base::DriveEnumerator::DriveInfo::Type::RAM:
                 item->set_type(proto::DriveList::Item::TYPE_RAM);
                 break;
 
-            case base::win::DriveEnumerator::DriveInfo::Type::REMOTE:
+            case base::DriveEnumerator::DriveInfo::Type::REMOTE:
                 item->set_type(proto::DriveList::Item::TYPE_REMOTE);
                 break;
 
@@ -145,7 +143,7 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
 
         item->set_path(base::utf8FromFilePath(drive_info.path()));
     }
-#elif (OS_POSIX)
+#elif (Q_OS_POSIX)
     proto::DriveList::Item* root_directory = drive_list->add_item();
     root_directory->set_type(proto::DriveList::Item::TYPE_ROOT_DIRECTORY);
     root_directory->set_path("/");

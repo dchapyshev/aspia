@@ -21,10 +21,10 @@
 #include "base/logging.h"
 #include "base/system_error.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <lm.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 UserGroupEnumerator::UserGroupEnumerator()
@@ -78,4 +78,4 @@ QString UserGroupEnumerator::comment() const
     return QString::fromWCharArray(group_info_[current_entry_].lgrpi1_comment);
 }
 
-} // base::win
+} // base

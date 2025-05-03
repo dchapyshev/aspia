@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/win/session_info.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 SessionEnumerator::SessionEnumerator()
@@ -151,4 +151,4 @@ bool SessionEnumerator::isUserLocked() const
     return session_info.isUserLocked();
 }
 
-} // namespace base::win
+} // namespace base

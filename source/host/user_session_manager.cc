@@ -55,7 +55,7 @@ const char kExecutableNameForUi[] = "aspia_host.exe";
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
-bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
+bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
 {
     if (!WTSQueryUserToken(session_id, token_out->recieve()))
     {
@@ -197,7 +197,7 @@ bool UserSessionManager::start(Delegate* delegate)
     }
 
 #if defined(OS_WIN)
-    for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
+    for (base::SessionEnumerator session; !session.isAtEnd(); session.advance())
     {
         base::SessionId session_id = session.sessionId();
 
@@ -218,7 +218,7 @@ bool UserSessionManager::start(Delegate* delegate)
             {
                 LOG(LS_INFO) << "RDP session with ID " << session_id << " not in active state. "
                              << "Session process will not be started (name='" << name << "' state="
-                             << base::win::SessionEnumerator::stateToString(session.state()) << ")";
+                             << base::SessionEnumerator::stateToString(session.state()) << ")";
                 continue;
             }
             else
@@ -232,7 +232,7 @@ bool UserSessionManager::start(Delegate* delegate)
         }
 
         LOG(LS_INFO) << "Starting process for session id: " << session_id << " (name='" << name
-                     << "' state=" << base::win::SessionEnumerator::stateToString(session.state())
+                     << "' state=" << base::SessionEnumerator::stateToString(session.state())
                      << ")";
 
         // Start UI process in user session.
@@ -247,12 +247,11 @@ bool UserSessionManager::start(Delegate* delegate)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionEvent(
-    base::win::SessionStatus status, base::SessionId session_id)
+void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
     std::string status_str;
 #if defined(OS_WIN)
-    status_str = base::win::sessionStatusToString(status);
+    status_str = base::sessionStatusToString(status);
 #else
     status_str = base::numberToString(static_cast<int>(status));
 #endif
@@ -265,16 +264,16 @@ void UserSessionManager::onUserSessionEvent(
 
     switch (status)
     {
-        case base::win::SessionStatus::CONSOLE_CONNECT:
-        case base::win::SessionStatus::REMOTE_CONNECT:
-        case base::win::SessionStatus::SESSION_LOGON:
+        case base::SessionStatus::CONSOLE_CONNECT:
+        case base::SessionStatus::REMOTE_CONNECT:
+        case base::SessionStatus::SESSION_LOGON:
         {
             // Start UI process in user session.
             startSessionProcess(FROM_HERE, session_id);
         }
         break;
 
-        case base::win::SessionStatus::SESSION_UNLOCK:
+        case base::SessionStatus::SESSION_UNLOCK:
         {
             for (const auto& session : sessions_)
             {
@@ -432,18 +431,18 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
             if (session->state() == UserSession::State::DETTACHED)
             {
 #if defined(OS_WIN)
-                base::win::SessionInfo session_info(session_id);
+                base::SessionInfo session_info(session_id);
                 if (!session_info.isValid())
                 {
                     LOG(LS_ERROR) << "Unable to determine session state. Connection aborted";
                     return;
                 }
 
-                base::win::SessionInfo::ConnectState connect_state = session_info.connectState();
+                base::SessionInfo::ConnectState connect_state = session_info.connectState();
 
                 switch (connect_state)
                 {
-                    case base::win::SessionInfo::ConnectState::CONNECTED:
+                    case base::SessionInfo::ConnectState::CONNECTED:
                     {
                         LOG(LS_INFO) << "Session exists, but there are no logged in users";
                         session->restart(nullptr);
@@ -452,7 +451,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 
                     default:
                         LOG(LS_INFO) << "No connected UI. Connection rejected (connect_state="
-                                     << base::win::SessionInfo::connectStateToString(connect_state)
+                                     << base::SessionInfo::connectStateToString(connect_state)
                                      << ")";
                         return;
                 }
@@ -602,7 +601,7 @@ void UserSessionManager::startSessionProcess(
 
     LOG(LS_INFO) << "Starting user session";
 
-    base::win::SessionInfo session_info(session_id);
+    base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
         LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
@@ -611,12 +610,12 @@ void UserSessionManager::startSessionProcess(
 
     LOG(LS_INFO) << "# Session info (sid=" << session_id
                  << " username='" << session_info.userName() << "'"
-                 << " connect_state=" << base::win::SessionInfo::connectStateToString(session_info.connectState())
+                 << " connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
                  << " win_station='" << session_info.winStationName() << "'"
                  << " domain='" << session_info.domain() << "'"
                  << " locked=" << session_info.isUserLocked() << ")";
 
-    base::win::ScopedHandle user_token;
+    base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
         LOG(LS_ERROR) << "Failed to get user token (sid=" << session_id << ")";

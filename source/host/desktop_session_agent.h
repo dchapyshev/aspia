@@ -34,15 +34,10 @@ namespace base {
 
 class AudioCapturerWrapper;
 class CaptureScheduler;
+class MessageWindow;
 class TaskRunner;
 class Thread;
 class SharedFrame;
-
-#if defined(OS_WIN)
-namespace win {
-class MessageWindow;
-} // namespace win
-#endif // defined(OS_WIN)
 
 } // namespace base
 
@@ -100,7 +95,7 @@ private:
 
 #if defined(OS_WIN)
     base::Thread ui_thread_;
-    std::unique_ptr<base::win::MessageWindow> message_window_;
+    std::unique_ptr<base::MessageWindow> message_window_;
 #endif // defined(OS_WIN)
 
     std::unique_ptr<base::IpcChannel> channel_;

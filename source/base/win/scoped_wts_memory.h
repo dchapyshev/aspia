@@ -21,10 +21,10 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <WtsApi32.h>
 
-namespace base::win {
+namespace base {
 
 template <typename T>
 class ScopedWtsMemory
@@ -88,6 +88,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_WTS_MEMORY_H

@@ -21,11 +21,10 @@
 
 #include "base/memory/typed_buffer.h"
 
-#include <string>
+#include <QString>
+#include <qt_windows.h>
 
-#include <Windows.h>
-
-namespace base::win {
+namespace base {
 
 using ScopedAcl = TypedBuffer<ACL>;
 using ScopedSd = TypedBuffer<SECURITY_DESCRIPTOR>;
@@ -43,10 +42,10 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
                            const wchar_t* mandatory_label,
                            bool activate_as_activator);
 
-bool userSidString(std::wstring* user_sid);
+bool userSidString(QString* user_sid);
 
-ScopedSd convertSddlToSd(const std::wstring& sddl);
+ScopedSd convertSddlToSd(const QString& sddl);
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SECURITY_HELPERS_H

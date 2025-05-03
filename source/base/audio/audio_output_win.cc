@@ -174,7 +174,7 @@ void AudioOutputWin::threadRun()
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
     ScopedMMCSSRegistration mmcss_registration(L"Pro Audio");
-    win::ScopedCOMInitializer com_initializer(win::ScopedCOMInitializer::kMTA);
+    ScopedCOMInitializer com_initializer(ScopedCOMInitializer::kMTA);
 
     DCHECK(mmcss_registration.isSucceeded());
     DCHECK(com_initializer.isSucceeded());

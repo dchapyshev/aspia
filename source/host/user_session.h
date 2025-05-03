@@ -91,7 +91,7 @@ public:
     bool isConnectedToUi() const { return channel_ != nullptr; }
 
     void onClientSession(std::unique_ptr<ClientSession> client_session);
-    void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(base::HostId host_id);
     void onSettingsChanged();

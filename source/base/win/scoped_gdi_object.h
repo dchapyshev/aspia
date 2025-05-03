@@ -21,9 +21,9 @@
 
 #include "base/macros_magic.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
-namespace base::win {
+namespace base {
 
 // Like ScopedHandle but for GDI objects.
 template<class T, class Traits>
@@ -89,6 +89,6 @@ using ScopedHRGN = ScopedGDIObject<HRGN, DeleteObjectTraits<HRGN>>;
 using ScopedHFONT = ScopedGDIObject<HFONT, DeleteObjectTraits<HFONT>>;
 using ScopedHBRUSH = ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>>;
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SCOPED_GDI_OBJECT_H

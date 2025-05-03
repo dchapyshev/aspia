@@ -52,9 +52,9 @@ const char kFileTransferAgentFile[] = "aspia_file_transfer_agent.exe";
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
-bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
+bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle user_token;
+    base::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         PLOG(LS_ERROR) << "WTSQueryUserToken failed";
@@ -110,8 +110,8 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 //--------------------------------------------------------------------------------------------------
 bool startProcessWithToken(HANDLE token,
                            const QString& command_line,
-                           base::win::ScopedHandle* process,
-                           base::win::ScopedHandle* thread)
+                           base::ScopedHandle* process,
+                           base::ScopedHandle* thread)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -220,14 +220,14 @@ void ClientSessionFileTransfer::onStarted()
     LOG(LS_INFO) << "IPC channel started";
 
 #if defined(Q_OS_WINDOWS)
-    base::win::ScopedHandle session_token;
+    base::ScopedHandle session_token;
     if (!createLoggedOnUserToken(sessionId(), &session_token))
     {
         LOG(LS_ERROR) << "createSessionToken failed";
         return;
     }
 
-    base::win::SessionInfo session_info(sessionId());
+    base::SessionInfo session_info(sessionId());
     if (!session_info.isValid())
     {
         LOG(LS_ERROR) << "Unable to get session info";
@@ -245,8 +245,8 @@ void ClientSessionFileTransfer::onStarted()
 
     LOG(LS_INFO) << "Starting agent process with command line: " << command_line;
 
-    base::win::ScopedHandle process_handle;
-    base::win::ScopedHandle thread_handle;
+    base::ScopedHandle process_handle;
+    base::ScopedHandle thread_handle;
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
         LOG(LS_ERROR) << "startProcessWithToken failed";

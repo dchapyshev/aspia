@@ -20,16 +20,16 @@
 
 #include "base/logging.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_impersonator.h"
 #include <UserEnv.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include <signal.h>
 #include <spawn.h>
 #include <fmt/format.h>
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 #include <QCoreApplication>
 #include <QDir>
@@ -48,9 +48,9 @@ const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 const char kDesktopAgentFile[] = "aspia_desktop_agent.exe";
 
 //--------------------------------------------------------------------------------------------------
-bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
+bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle process_token;
+    base::ScopedHandle process_token;
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_DUPLICATE | desired_access,
@@ -75,9 +75,9 @@ bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createPrivilegedToken(base::win::ScopedHandle* token_out)
+bool createPrivilegedToken(base::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle privileged_token;
+    base::ScopedHandle privileged_token;
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
@@ -112,9 +112,9 @@ bool createPrivilegedToken(base::win::ScopedHandle* token_out)
 //--------------------------------------------------------------------------------------------------
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
+bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle session_token;
+    base::ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
@@ -124,7 +124,7 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
         return false;
     }
 
-    base::win::ScopedHandle privileged_token;
+    base::ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
     {
@@ -132,7 +132,7 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
         return false;
     }
 
-    base::win::ScopedImpersonator impersonator;
+    base::ScopedImpersonator impersonator;
 
     if (!impersonator.loggedOnUser(privileged_token))
     {
@@ -161,8 +161,8 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
 //--------------------------------------------------------------------------------------------------
 bool startProcessWithToken(HANDLE token,
                            const QString& command_line,
-                           base::win::ScopedHandle* process,
-                           base::win::ScopedHandle* thread)
+                           base::ScopedHandle* process,
+                           base::ScopedHandle* thread)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -220,7 +220,7 @@ bool startProcessWithToken(HANDLE token,
 //--------------------------------------------------------------------------------------------------
 #if defined(OS_WIN)
 DesktopSessionProcess::DesktopSessionProcess(
-    base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread)
+    base::ScopedHandle&& process, base::ScopedHandle&& thread)
     : process_(std::move(process)),
       thread_(std::move(thread))
 {
@@ -265,7 +265,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
-    base::win::ScopedHandle session_token;
+    base::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
         LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << " channel_id="
@@ -274,8 +274,8 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     }
 
     QString command_line = filePath() + " --channel_id " + channel_id;
-    base::win::ScopedHandle process_handle;
-    base::win::ScopedHandle thread_handle;
+    base::ScopedHandle process_handle;
+    base::ScopedHandle thread_handle;
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {

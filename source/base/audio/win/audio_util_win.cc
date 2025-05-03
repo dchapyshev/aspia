@@ -239,7 +239,7 @@ bool isFormatSupported(IAudioClient* client,
 {
     DCHECK(client);
 
-    win::ScopedCoMem<WAVEFORMATEX> closest_match;
+    ScopedCoMem<WAVEFORMATEX> closest_match;
     // This method provides a way for a client to determine, before calling
     // IAudioClient::Initialize, whether the audio engine supports a particular
     // stream format or not. In shared mode, the audio engine always supports

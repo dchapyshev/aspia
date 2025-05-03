@@ -175,8 +175,8 @@ bool Mv2Helper::mapMemory(bool map)
             return false;
         }
 
-        base::win::ScopedHandle file0;
-        base::win::ScopedHandle file1;
+        base::ScopedHandle file0;
+        base::ScopedHandle file1;
 
         file0.reset(CreateFileW(L"c:\\video0.dat",
                                 GENERIC_READ | GENERIC_WRITE,
@@ -187,7 +187,7 @@ bool Mv2Helper::mapMemory(bool map)
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                                 nullptr, OPEN_EXISTING, 0, nullptr));
 
-        base::win::ScopedHandle file;
+        base::ScopedHandle file;
 
         if (file0.isValid() && !file1.isValid())
             file.reset(file0.release());
@@ -217,7 +217,7 @@ bool Mv2Helper::mapMemory(bool map)
             return false;
         }
 
-        base::win::ScopedHandle file_map(
+        base::ScopedHandle file_map(
             CreateFileMappingW(file, nullptr, PAGE_READWRITE, 0, 0, nullptr));
         if (!file_map.isValid())
         {

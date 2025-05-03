@@ -24,7 +24,7 @@
 
 #include <strsafe.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -220,4 +220,4 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
     return true;
 }
 
-} // namespace base::win
+} // namespace base

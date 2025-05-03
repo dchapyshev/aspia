@@ -22,10 +22,10 @@
 #include "base/system_error.h"
 #include "base/win/user_group_enumerator.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <lm.h>
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 UserEnumerator::UserEnumerator()
@@ -195,4 +195,4 @@ quint64 UserEnumerator::lastLogonTime() const
     return user_info_[current_entry_].usri3_last_logon;
 }
 
-} // base::win
+} // base

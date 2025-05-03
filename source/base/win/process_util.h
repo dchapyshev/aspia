@@ -23,7 +23,7 @@
 
 #include <QString>
 
-namespace base::win {
+namespace base {
 
 bool isProcessElevated();
 
@@ -43,6 +43,6 @@ bool createPrivilegedToken(ScopedHandle* token_out);
 
 bool isProcessStartedFromService();
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_PROCESS_UTIL_H

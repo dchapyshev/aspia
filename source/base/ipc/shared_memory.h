@@ -48,7 +48,7 @@ public:
 
 #if defined(OS_WIN)
     using PlatformHandle = HANDLE;
-    using ScopedPlatformHandle = win::ScopedHandle;
+    using ScopedPlatformHandle = ScopedHandle;
 #else
     using PlatformHandle = int;
 

@@ -24,7 +24,7 @@
 
 #include <memory>
 
-namespace base::win {
+namespace base {
 
 class MonitorEnumerator final : public DeviceEnumerator
 {
@@ -38,6 +38,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(MonitorEnumerator);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_MONITOR_ENUMERATOR_H

@@ -35,9 +35,9 @@ namespace {
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
-bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
+bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
 {
-    base::win::ScopedHandle user_token;
+    base::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         PLOG(LS_ERROR) << "WTSQueryUserToken failed";
@@ -128,8 +128,8 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
         return false;
     }
 
-    base::win::ScopedHandle thread_deleter(process_info.hThread);
-    base::win::ScopedHandle process_deleter(process_info.hProcess);
+    base::ScopedHandle thread_deleter(process_info.hThread);
+    base::ScopedHandle process_deleter(process_info.hProcess);
 
     if (!DestroyEnvironmentBlock(environment))
     {
@@ -150,7 +150,7 @@ bool launchUpdater(base::SessionId session_id)
         return false;
     }
 
-    base::win::ScopedHandle user_token;
+    base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
         LOG(LS_ERROR) << "createLoggedOnUserToken failed";

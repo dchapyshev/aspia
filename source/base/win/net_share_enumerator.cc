@@ -19,9 +19,8 @@
 #include "base/win/net_share_enumerator.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
-namespace base::win {
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 NetShareEnumerator::NetShareEnumerator()
@@ -61,30 +60,30 @@ void NetShareEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string NetShareEnumerator::name() const
+QString NetShareEnumerator::name() const
 {
     if (!share_info_[current_pos_].shi502_netname)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(share_info_[current_pos_].shi502_netname);
+    return QString::fromWCharArray(share_info_[current_pos_].shi502_netname);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string NetShareEnumerator::localPath() const
+QString NetShareEnumerator::localPath() const
 {
     if (!share_info_[current_pos_].shi502_path)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(share_info_[current_pos_].shi502_path);
+    return QString::fromWCharArray(share_info_[current_pos_].shi502_path);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string NetShareEnumerator::description() const
+QString NetShareEnumerator::description() const
 {
     if (!share_info_[current_pos_].shi502_remark)
-        return std::string();
+        return QString();
 
-    return utf8FromWide(share_info_[current_pos_].shi502_remark);
+    return QString::fromWCharArray(share_info_[current_pos_].shi502_remark);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,4 +126,4 @@ uint32_t NetShareEnumerator::maxUses() const
     return share_info_[current_pos_].shi502_max_uses;
 }
 
-} // namespace base::win
+} // namespace base

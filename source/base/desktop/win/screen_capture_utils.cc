@@ -263,14 +263,14 @@ ScreenCapturer::ScreenType ScreenCaptureUtils::screenType()
         return ScreenCapturer::ScreenType::UNKNOWN;
     }
 
-    base::win::SessionInfo session_info(session_id);
+    base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
         LOG(LS_ERROR) << "Unable to get session info";
         return ScreenCapturer::ScreenType::UNKNOWN;
     }
 
-    if (session_info.connectState() == base::win::SessionInfo::ConnectState::ACTIVE)
+    if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
     {
         if (session_info.isUserLocked())
         {

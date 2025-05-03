@@ -25,7 +25,7 @@
 
 #include <filesystem>
 
-namespace base::win {
+namespace base {
 
 class ServiceController
 {
@@ -73,6 +73,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ServiceController);
 };
 
-} // namespace base::win
+} // namespace base
 
 #endif // BASE_WIN_SERVICE_CONTROLLER_H
