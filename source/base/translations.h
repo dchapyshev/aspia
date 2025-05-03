@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_TRANSLATIONS_LOADER_H
-#define BASE_TRANSLATIONS_LOADER_H
+#ifndef BASE_TRANSLATIONS_H
+#define BASE_TRANSLATIONS_H
 
 #include "base/macros_magic.h"
 
@@ -31,11 +31,11 @@ class QTranslator;
 
 namespace base {
 
-class TranslationsLoader
+class Translations
 {
 public:
-    TranslationsLoader();
-    ~TranslationsLoader();
+    Translations();
+    ~Translations();
 
     using Locale = std::pair<QString, QString>;
     using LocaleList = QVector<Locale>;
@@ -50,9 +50,9 @@ private:
     QHash<QString, QStringList> locale_list_;
     QVector<QTranslator*> translator_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(TranslationsLoader);
+    DISALLOW_COPY_AND_ASSIGN(Translations);
 };
 
 } // namespace base
 
-#endif // BASE_TRANSLATIONS_LOADER_H
+#endif // BASE_TRANSLATIONS_H

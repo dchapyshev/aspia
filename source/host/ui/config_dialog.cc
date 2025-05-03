@@ -24,12 +24,10 @@
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
-#include "common/ui/about_dialog.h"
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
-#include "host/ui/user_settings.h"
 #include "host/ui/settings_util.h"
 #include "host/service_constants.h"
 #include "host/system_settings.h"
@@ -869,7 +867,8 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (const auto& user : user_list.list())
+    QVector<base::User> list = user_list.list();
+    for (const auto& user : std::as_const(list))
         ui.tree_users->addTopLevelItem(new UserTreeItem(user));
 
     ui.button_modify->setEnabled(false);

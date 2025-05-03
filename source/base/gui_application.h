@@ -19,8 +19,8 @@
 #ifndef BASE_GUI_APPLICATION_H
 #define BASE_GUI_APPLICATION_H
 
+#include "base/translations.h"
 #include "base/threading/thread.h"
-#include "base/translations_loader.h"
 
 #include <QApplication>
 #include <QThread>
@@ -50,8 +50,8 @@ public:
 
     bool isRunning();
 
-    using Locale = TranslationsLoader::Locale;
-    using LocaleList = TranslationsLoader::LocaleList;
+    using Locale = Translations::Locale;
+    using LocaleList = Translations::LocaleList;
 
     LocaleList localeList() const;
     void setLocale(const QString& locale);
@@ -75,7 +75,7 @@ private:
 
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
-    std::unique_ptr<TranslationsLoader> locale_loader_;
+    std::unique_ptr<Translations> translations_;
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(GuiApplication);

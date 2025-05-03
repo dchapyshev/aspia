@@ -142,7 +142,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     io_thread_.start();
 
-    locale_loader_ = std::make_unique<TranslationsLoader>();
+    translations_ = std::make_unique<Translations>();
     ui_task_runner_ = std::make_shared<TaskRunner>();
 }
 
@@ -243,19 +243,19 @@ bool GuiApplication::isRunning()
 //--------------------------------------------------------------------------------------------------
 GuiApplication::LocaleList GuiApplication::localeList() const
 {
-    return locale_loader_->localeList();
+    return translations_->localeList();
 }
 
 //--------------------------------------------------------------------------------------------------
 void GuiApplication::setLocale(const QString& locale)
 {
-    locale_loader_->installTranslators(locale);
+    translations_->installTranslators(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool GuiApplication::hasLocale(const QString& locale)
 {
-    return locale_loader_->contains(locale);
+    return translations_->contains(locale);
 }
 
 //--------------------------------------------------------------------------------------------------

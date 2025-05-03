@@ -60,8 +60,8 @@ list(APPEND SOURCE_BASE
     system_error.h
     task_runner.cc
     task_runner.h
-    translations_loader.cc
-    translations_loader.h
+    translations.cc
+    translations.h
     version_constants.cc
     version_constants.h
     waitable_event.cc

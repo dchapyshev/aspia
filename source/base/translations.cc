@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/translations_loader.h"
+#include "base/translations.h"
 
 #include "base/logging.h"
 
@@ -34,7 +34,7 @@ const QString kTranslationsDir = QStringLiteral(":/tr/");
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TranslationsLoader::TranslationsLoader()
+Translations::Translations()
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -66,14 +66,14 @@ TranslationsLoader::TranslationsLoader()
 }
 
 //--------------------------------------------------------------------------------------------------
-TranslationsLoader::~TranslationsLoader()
+Translations::~Translations()
 {
     LOG(LS_INFO) << "Dtor";
     removeTranslators();
 }
 
 //--------------------------------------------------------------------------------------------------
-TranslationsLoader::LocaleList TranslationsLoader::localeList() const
+Translations::LocaleList Translations::localeList() const
 {
     LocaleList list;
 
@@ -109,13 +109,13 @@ TranslationsLoader::LocaleList TranslationsLoader::localeList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TranslationsLoader::contains(const QString& locale) const
+bool Translations::contains(const QString& locale) const
 {
     return locale_list_.contains(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TranslationsLoader::installTranslators(const QString& locale)
+void Translations::installTranslators(const QString& locale)
 {
     removeTranslators();
 
@@ -138,7 +138,7 @@ void TranslationsLoader::installTranslators(const QString& locale)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TranslationsLoader::removeTranslators()
+void Translations::removeTranslators()
 {
     LOG(LS_INFO) << "Cleanup translators";
 
