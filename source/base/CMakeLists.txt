@@ -561,8 +561,6 @@ endif()
 list(APPEND SOURCE_BASE_STRINGS
     strings/strcat.cc
     strings/strcat.h
-    strings/string_split.cc
-    strings/string_split.h
     strings/string_util.cc
     strings/string_util.h
     strings/string_util_constants.cc
@@ -581,7 +579,6 @@ if (UNIX)
 endif()
 
 list(APPEND SOURCE_BASE_STRINGS_TESTS
-    strings/string_split_unittest.cc
     strings/string_util_unittest.cc)
 
 list(APPEND SOURCE_BASE_THREADING

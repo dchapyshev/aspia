@@ -19,11 +19,9 @@
 #include "client/ui/desktop/desktop_session_window.h"
 
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "base/version_constants.h"
 #include "base/desktop/frame_qimage.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/strings/string_split.h"
 #include "client/client_desktop.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_toolbar.h"
@@ -35,9 +33,9 @@
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/windows_version.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QApplication>
 #include <QBrush>
@@ -56,7 +54,6 @@
 
 Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
 Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)
-Q_DECLARE_METATYPE(std::filesystem::path)
 
 namespace client {
 
@@ -406,24 +403,24 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilitie
     video_encodings_ = capabilities.video_encodings();
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    std::vector<std::string_view> extensions_list = base::splitStringView(
-        capabilities.extensions(), ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+    QStringList extensions =
+        QString::fromStdString(capabilities.extensions()).split(';', Qt::SkipEmptyParts);
 
     // By default, remote update is disabled.
     toolbar_->enableRemoteUpdate(false);
 
-    if (base::contains(extensions_list, common::kRemoteUpdateExtension))
+    if (extensions.contains(common::kRemoteUpdateExtension))
     {
         if (base::kCurrentVersion > sessionState()->hostVersion())
             toolbar_->enableRemoteUpdate(true);
     }
 
-    toolbar_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
-    toolbar_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
-    toolbar_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
-    toolbar_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
-    toolbar_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
-    toolbar_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
+    toolbar_->enablePowerControl(extensions.contains(common::kPowerControlExtension));
+    toolbar_->enableScreenSelect(extensions.contains(common::kSelectScreenExtension));
+    toolbar_->enableSystemInfo(extensions.contains(common::kSystemInfoExtension));
+    toolbar_->enableTaskManager(extensions.contains(common::kTaskManagerExtension));
+    toolbar_->enableVideoPauseFeature(extensions.contains(common::kVideoPauseExtension));
+    toolbar_->enableAudioPauseFeature(extensions.contains(common::kAudioPauseExtension));
     toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::DesktopCapabilities::OS_TYPE_WINDOWS);
 
     for (int i = 0; i < capabilities.flag_size(); ++i)
