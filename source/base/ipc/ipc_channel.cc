@@ -29,10 +29,10 @@
 
 #include <functional>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include <Psapi.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -40,11 +40,11 @@ namespace {
 
 const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
-#if defined(OS_POSIX)
-const char16_t kLocalSocketPrefix[] = u"/tmp/aspia_";
-#endif // defined(OS_POSIX)
+#if defined(Q_OS_UNIX)
+const char kLocalSocketPrefix[] = "/tmp/aspia_";
+#endif // defined(Q_OS_UNIX)
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 const char kPipeNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
@@ -192,10 +192,10 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
 {
     LOG(LS_INFO) << "Ctor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ bool IpcChannel::connect(const QString& channel_id)
 
     channel_name_ = channelName(channel_id);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
 
     ScopedHandle handle;
@@ -277,7 +277,7 @@ bool IpcChannel::connect(const QString& channel_id)
 
     is_connected_ = true;
     return true;
-#else // defined(OS_WIN)
+#else
     asio::local::stream_protocol::endpoint endpoint(base::local8BitFromUtf16(channel_name_));
     std::error_code error_code;
     stream_.connect(endpoint, error_code);
@@ -289,7 +289,7 @@ bool IpcChannel::connect(const QString& channel_id)
 
     is_connected_ = true;
     return true;
-#endif // !defined(OS_WIN)
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -369,15 +369,15 @@ void IpcChannel::send(QByteArray&& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path IpcChannel::peerFilePath() const
+QString IpcChannel::peerFilePath() const
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ScopedHandle process(
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
     {
         PLOG(LS_ERROR) << "OpenProcess failed";
-        return std::filesystem::path();
+        return QString();
     }
 
     wchar_t buffer[MAX_PATH] = { 0 };
@@ -385,29 +385,29 @@ std::filesystem::path IpcChannel::peerFilePath() const
     if (!GetModuleFileNameExW(process.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
-        return std::filesystem::path();
+        return QString();
     }
 
-    return buffer;
-#else // defined(OS_WIN)
+    return QString::fromWCharArray(buffer);
+#else
     NOTIMPLEMENTED();
-    return std::filesystem::path();
-#endif // !defined(OS_WIN)
+    return QString();
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 QString IpcChannel::channelName(const QString& channel_id)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QString name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
-#else // defined(OS_WIN)
+#else
     std::u16string name(kLocalSocketPrefix);
     name.append(channel_id);
     return name;
-#endif // !defined(OS_WIN)
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

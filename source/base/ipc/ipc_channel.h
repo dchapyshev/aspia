@@ -19,18 +19,19 @@
 #ifndef BASE_IPC_CHANNEL_H
 #define BASE_IPC_CHANNEL_H
 
+#include <QtGlobal>
+
 #include "base/process_handle.h"
 #include "base/session_id.h"
 #include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <asio/windows/stream_handle.hpp>
-#elif defined(OS_POSIX)
+#else
 #include <asio/local/stream_protocol.hpp>
 #endif
 
-#include <filesystem>
 #include <queue>
 
 #include <QByteArray>
@@ -67,7 +68,7 @@ public:
 
     ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
-    std::filesystem::path peerFilePath() const;
+    QString peerFilePath() const;
 
 signals:
     void sig_disconnected();
@@ -77,9 +78,9 @@ private:
     friend class IpcServer;
     friend class IpcChannelProxy;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     using Stream = asio::windows::stream_handle;
-#elif defined(OS_POSIX)
+#else
     using Stream = asio::local::stream_protocol::socket;
 #endif
 
