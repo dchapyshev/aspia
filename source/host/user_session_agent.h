@@ -22,6 +22,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "proto/host_internal.h"
 
+#include <QPointer>
 #include <QVector>
 
 namespace host {
@@ -86,7 +87,7 @@ private slots:
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    std::unique_ptr<base::IpcChannel> ipc_channel_;
+    QPointer<base::IpcChannel> ipc_channel_;
 
     proto::internal::ServiceToUi incoming_message_;
     proto::internal::UiToService outgoing_message_;

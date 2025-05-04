@@ -29,15 +29,15 @@
 #include "base/ipc/shared_memory.h"
 #include "host/system_settings.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"
 #include "base/win/message_window.h"
 #include "host/input_injector_win.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include "host/input_injector_x11.h"
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 #include <QCoreApplication>
 
@@ -77,7 +77,7 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
 {
     LOG(LS_INFO) << "Ctor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
@@ -88,16 +88,16 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     {
         PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     SystemSettings settings;
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ui_thread_.start();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopSessionAgent::captureBegin);
@@ -108,9 +108,9 @@ DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ui_thread_.stop();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<base::MessageWindow>();
     if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
                                            this,
@@ -353,7 +353,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
         LOG(LS_ERROR) << "Couldn't create window.";
         return;
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -361,9 +361,9 @@ void DesktopSessionAgent::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "UI thread stopping";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     message_window_.reset();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -571,9 +571,9 @@ void DesktopSessionAgent::setEnabled(bool enable)
     is_session_enabled_ = enable;
     if (enable)
     {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         input_injector_ = std::make_unique<InputInjectorWin>();
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
         input_injector_ = InputInjectorX11::create();
 #else
         LOG(LS_ERROR) << "Input injector not supported for platform";
@@ -685,7 +685,7 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
     }
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool DesktopSessionAgent::onWindowsMessage(
     UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& result)
@@ -715,6 +715,6 @@ bool DesktopSessionAgent::onWindowsMessage(
 
     return false;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace host

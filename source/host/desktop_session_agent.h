@@ -19,7 +19,6 @@
 #ifndef HOST_DESKTOP_SESSION_AGENT_H
 #define HOST_DESKTOP_SESSION_AGENT_H
 
-#include "build/build_config.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
@@ -87,16 +86,16 @@ private:
     void captureBegin();
     void captureEnd(const std::chrono::milliseconds& update_interval);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     bool onWindowsMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     bool is_session_enabled_ = false;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     base::Thread ui_thread_;
     std::unique_ptr<base::MessageWindow> message_window_;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     std::unique_ptr<base::IpcChannel> channel_;
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;

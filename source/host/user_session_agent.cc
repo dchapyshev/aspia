@@ -58,11 +58,11 @@ void UserSessionAgent::onConnectToService()
     QString channel_id = HostIpcStorage().channelIdForUI();
     LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
-    ipc_channel_ = std::make_unique<base::IpcChannel>();
+    ipc_channel_ = new base::IpcChannel(this);
 
-    connect(ipc_channel_.get(), &base::IpcChannel::sig_disconnected,
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &UserSessionAgent::onIpcDisconnected);
-    connect(ipc_channel_.get(), &base::IpcChannel::sig_messageReceived,
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &UserSessionAgent::onIpcMessageReceived);
 
     if (ipc_channel_->connect(channel_id))
@@ -83,6 +83,12 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 {
     LOG(LS_INFO) << "Update credentials request: " << request_type;
 
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
+
     outgoing_message_.Clear();
 
     proto::internal::CredentialsRequest* request = outgoing_message_.mutable_credentials_request();
@@ -95,6 +101,12 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
     LOG(LS_INFO) << "One-time sessions changed: " << sessions;
+
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
 
     outgoing_message_.Clear();
 
@@ -110,6 +122,12 @@ void UserSessionAgent::onKillClient(quint32 id)
 {
     LOG(LS_INFO) << "Kill client request: " << id;
 
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
+
     outgoing_message_.Clear();
     proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
@@ -123,6 +141,12 @@ void UserSessionAgent::onKillClient(quint32 id)
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
     LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
+
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
 
     outgoing_message_.Clear();
     proto::internal::ConnectConfirmation* confirmation =
@@ -138,6 +162,12 @@ void UserSessionAgent::onMouseLock(bool enable)
 {
     LOG(LS_INFO) << "Mouse lock: " << enable;
 
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
+
     outgoing_message_.Clear();
     proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
@@ -151,6 +181,12 @@ void UserSessionAgent::onMouseLock(bool enable)
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
     LOG(LS_INFO) << "Keyboard lock: " << enable;
+
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
 
     outgoing_message_.Clear();
     proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
@@ -166,6 +202,12 @@ void UserSessionAgent::onPause(bool enable)
 {
     LOG(LS_INFO) << "Pause: " << enable;
 
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
+
     outgoing_message_.Clear();
     proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
@@ -179,6 +221,12 @@ void UserSessionAgent::onPause(bool enable)
 void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
 {
     LOG(LS_INFO) << "Text chat message";
+
+    if (!ipc_channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
