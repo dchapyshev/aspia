@@ -61,7 +61,7 @@ public:
         ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
 
     // Adds a channel to the authentication queue. After success completion, a session will be
-    // created (in a stopped state) and method Delegate::onNewSession will be called.
+    // created (in a stopped state) and signal sig_sessionReady will be called.
     // If authentication fails, the channel will be automatically deleted.
     void addNewChannel(std::unique_ptr<TcpChannel> channel);
 

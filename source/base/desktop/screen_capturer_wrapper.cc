@@ -52,7 +52,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
 
     switchToInputDesktop();
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     // If the monitor is turned off, this call will turn it on.
     if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
     {
@@ -89,7 +89,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     {
         LOG(LS_ERROR) << "Unable to get name of desktop";
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 }
@@ -353,7 +353,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer: "
                  << ScreenCapturer::typeToString(preferred_type_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     auto try_mirror_capturer = [this]()
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
@@ -415,14 +415,14 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
         screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
 
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
     {
         LOG(LS_ERROR) << "Unable to create X11 screen capturer";
         return;
     }
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     NOTIMPLEMENTED();
 #else
     NOTIMPLEMENTED();
@@ -443,7 +443,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     // Switch to the desktop receiving user input if different from the current one.
     Desktop input_desktop(Desktop::inputDesktop());
 
@@ -475,7 +475,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 
         checkScreenType();
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
