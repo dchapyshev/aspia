@@ -227,9 +227,7 @@ if (LINUX)
         ${XTST_LIB}
         ${XI_LIB}
         ${X11_LIB}
-        ${XEXT_LIB}
-        ICU::uc
-        ICU::dt)
+        ${XEXT_LIB})
 endif()
 
 # Aspia Host (GUI)

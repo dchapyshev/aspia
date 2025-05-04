@@ -30,6 +30,8 @@
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 
+#include <QSysInfo>
+
 namespace base {
 
 namespace {
@@ -236,7 +238,7 @@ void ClientAuthenticator::sendClientHello()
 
     quint32 encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     if (CpuidUtil::hasAesNi())
         encryption |= proto::ENCRYPTION_AES256_GCM;
 #endif
@@ -501,9 +503,9 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(challenge->arch()));
     setPeerDisplayName(QString::fromStdString(challenge->display_name()));
 
-    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << " name=" << challenge->computer_name()
-                 << " os=" << challenge->os_name() << " cores=" << challenge->cpu_cores()
-                 << " arch=" << challenge->arch() << " display_name=" << challenge->display_name()
+    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << " name=" << peerComputerName()
+                 << " os=" << peerOsName() << " cores=" << challenge->cpu_cores()
+                 << " arch=" << peerArch() << " display_name=" << peerDisplayName()
                  << ")";
 
     return true;
@@ -525,18 +527,7 @@ void ClientAuthenticator::sendSessionResponse()
     response->set_computer_name(SysInfo::computerName().toStdString());
     response->set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
     response->set_display_name(display_name_.toStdString());
-
-#if defined(ARCH_CPU_X86)
-    response->set_arch("x86");
-#elif defined(ARCH_CPU_X86_64)
-    response->set_arch("x86_64");
-#elif defined(ARCH_CPU_ARMEL)
-    response->set_arch("arm");
-#elif defined(ARCH_CPU_ARM64)
-    response->set_arch("arm64");
-#else
-    response->set_arch(std::string());
-#endif
+    response->set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
     LOG(LS_INFO) << "Sending: SessionResponse";
     sendMessage(*response);

@@ -303,11 +303,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(CLIENT_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ICU::uc ICU::dt)
+    set(CLIENT_PLATFORM_LIBS stdc++fs ${XFIXES_LIB})
 endif()
 
 if (APPLE)
-    set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio ICU::uc ICU::dt)
+    set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio)
     set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/client/resources/main.icns)
     set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
 

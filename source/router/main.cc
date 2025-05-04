@@ -20,7 +20,6 @@
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
-#include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
 #include "base/threading/asio_event_dispatcher.h"
@@ -38,8 +37,10 @@
 #endif
 
 #include <QCommandLineParser>
+#include <QDir>
 #include <QFileInfo>
 #include <QSysInfo>
+#include <QStandardPaths>
 
 namespace {
 
@@ -98,27 +99,24 @@ int createConfig(QTextStream& out)
 
     out << "Settings file does not exist yet." << Qt::endl;
 
-    std::filesystem::path public_key_dir;
-    if (!base::BasePaths::commonAppData(&public_key_dir))
+    QString public_key_dir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    if (public_key_dir.isEmpty())
     {
         out << "Failed to get the path to the config directory." << Qt::endl;
         return 1;
     }
 
-    public_key_dir.append("aspia");
+    public_key_dir.append("/aspia");
 
     out << "Public key directory path: " << public_key_dir << Qt::endl;
 
-    std::error_code error_code;
-    if (!std::filesystem::exists(public_key_dir, error_code))
+    if (!QFileInfo::exists(public_key_dir))
     {
-        out << "Public key directory does not exist (" << error_code.message()
-            << "). Attempt to create..." << Qt::endl;
+        out << "Public key directory does not exist. Attempt to create..." << Qt::endl;
 
-        if (!std::filesystem::create_directories(public_key_dir, error_code))
+        if (!QDir().mkpath(public_key_dir))
         {
-            out << "Failed to create directory for public key: "
-                << error_code.message() << Qt::endl;
+            out << "Failed to create directory for public key" << Qt::endl;
             return 1;
         }
         else
@@ -131,12 +129,12 @@ int createConfig(QTextStream& out)
         out << "Public key directory already exists." << Qt::endl;
     }
 
-    std::filesystem::path public_key_file = public_key_dir;
-    public_key_file.append("router.pub");
+    QString public_key_file = public_key_dir;
+    public_key_file.append("/router.pub");
 
     out << "Public key file: " << public_key_file << Qt::endl;
 
-    if (std::filesystem::exists(public_key_file, error_code))
+    if (QFileInfo::exists(public_key_file))
     {
         out << "Public key file already exists. Continuation is impossible." << Qt::endl;
         return 1;
@@ -195,7 +193,7 @@ int createConfig(QTextStream& out)
     out << "Private and public keys have been successfully generated." << Qt::endl;
     out << "Writing a public key to a file..." << Qt::endl;
 
-    if (!base::writeFile(QString::fromStdU16String(public_key_file.u16string()), public_key.toHex()))
+    if (!base::writeFile(public_key_file, public_key.toHex()))
     {
         out << "Failed to write public key to file: " << public_key_file << Qt::endl;
         return 1;

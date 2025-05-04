@@ -717,7 +717,7 @@ qt5_import_plugins(aspia_base
     EXCLUDE_BY_TYPE imageformats)
 
 if (LINUX)
-    set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt xdg_user_dirs)
+    set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs xdg_user_dirs)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto
@@ -728,11 +728,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(BASE_TESTS_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
+    set(BASE_TESTS_PLATFORM_LIBS stdc++fs)
 endif()
 
 if (APPLE)
-    set(BASE_TESTS_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
+    set(BASE_TESTS_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
 add_executable(aspia_base_tests

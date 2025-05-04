@@ -26,6 +26,20 @@
 
 #include <Windows.h>
 
+// Architecture detection.
+#if defined(_M_X64) || defined(__x86_64__)
+
+#define ARCH_CPU_STRING        "x86_64"
+#elif defined(_M_IX86) || defined(__i386__)
+#define ARCH_CPU_STRING        "x86"
+#elif defined(__ARMEL__)
+#define ARCH_CPU_STRING        "arm"
+#elif defined(__aarch64__) || defined(_M_ARM64)
+#define ARCH_CPU_STRING        "arm64"
+#else
+#error Unknown architecture
+#endif
+
 //--------------------------------------------------------------------------------------------------
 std::filesystem::path currentDir()
 {

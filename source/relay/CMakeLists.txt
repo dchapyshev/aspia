@@ -54,11 +54,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(RELAY_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
+    set(RELAY_PLATFORM_LIBS stdc++fs)
 endif()
 
 if (APPLE)
-    set(RELAY_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
+    set(RELAY_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
 add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})

@@ -583,7 +583,7 @@ void UserSessionManager::startSessionProcess(
     LOG(LS_INFO) << "Starting UI process (sid=" << session_id
                  << " from=" << location.toString() << ")";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session";
@@ -655,7 +655,7 @@ void UserSessionManager::startSessionProcess(
         LOG(LS_ERROR) << "Failed to start process with user token (sid=" << session_id
                         << " cmd=" << command_line << ")";
     }
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))

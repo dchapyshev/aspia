@@ -62,11 +62,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(ROUTER_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
+    set(ROUTER_PLATFORM_LIBS stdc++fs)
 endif()
 
 if (APPLE)
-    set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
+    set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})

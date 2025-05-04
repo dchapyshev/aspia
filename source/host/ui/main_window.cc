@@ -19,7 +19,6 @@
 #include "host/ui/main_window.h"
 
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "common/ui/about_dialog.h"
@@ -38,19 +37,20 @@
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDesktopServices>
+#include <QDir>
 #include <QMessageBox>
 #include <QNetworkInterface>
 #include <QProcess>
 #include <QTimer>
 #include <QUrl>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
 
 #include <QWinEventNotifier>
 #include <qt_windows.h>
 #include <shellapi.h>
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -575,15 +575,16 @@ void MainWindow::onSettings()
     {
         LOG(LS_INFO) << "Process not elevated";
 
-        std::filesystem::path current_exec_file;
-        if (base::BasePaths::currentExecFile(&current_exec_file))
+        QString current_exec_file =
+            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        if (!current_exec_file.isEmpty())
         {
             SHELLEXECUTEINFOW sei;
             memset(&sei, 0, sizeof(sei));
 
             sei.cbSize = sizeof(sei);
             sei.lpVerb = L"runas";
-            sei.lpFile = current_exec_file.c_str();
+            sei.lpFile = reinterpret_cast<const wchar_t*>(current_exec_file.utf16());
             sei.hwnd = reinterpret_cast<HWND>(winId());
             sei.nShow = SW_SHOW;
             sei.lpParameters = L"--config";

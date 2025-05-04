@@ -31,6 +31,8 @@
 #include "base/crypto/srp_math.h"
 #include "base/peer/user_list.h"
 
+#include <QSysInfo>
+
 namespace base {
 
 namespace {
@@ -391,7 +393,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     bool has_aes_ni = false;
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     has_aes_ni = CpuidUtil::hasAesNi();
 #endif
 
@@ -607,18 +609,7 @@ void ServerAuthenticator::doSessionChallenge()
     session_challenge->set_os_name(SysInfo::operatingSystemName().toStdString());
     session_challenge->set_computer_name(SysInfo::computerName().toStdString());
     session_challenge->set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
-
-#if defined(ARCH_CPU_X86)
-    session_challenge->set_arch("x86");
-#elif defined(ARCH_CPU_X86_64)
-    session_challenge->set_arch("x86_64");
-#elif defined(ARCH_CPU_ARMEL)
-    session_challenge->set_arch("arm");
-#elif defined(ARCH_CPU_ARM64)
-    session_challenge->set_arch("arm64");
-#else
-    session_challenge->set_arch(std::string());
-#endif
+    session_challenge->set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
     LOG(LS_INFO) << "Sending: SessionChallenge";
     sendMessage(*session_challenge);
@@ -670,9 +661,9 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(response->display_name()));
 
     LOG(LS_INFO) << "Client (session_type=" << response->session_type()
-                 << " version=" << peerVersion().toString() << " name=" << response->computer_name()
-                 << " os=" << response->os_name() << " cores=" << response->cpu_cores()
-                 << " arch=" << response->arch() << " display_name=" << response->display_name()
+                 << " version=" << peerVersion().toString() << " name=" << peerComputerName()
+                 << " os=" << peerOsName() << " cores=" << response->cpu_cores()
+                 << " arch=" << peerArch() << " display_name=" << peerDisplayName()
                  << ")";
 
     BitSet<quint32> session_type = response->session_type();
