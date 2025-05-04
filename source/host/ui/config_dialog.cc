@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
-#include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "host/ui/change_password_dialog.h"

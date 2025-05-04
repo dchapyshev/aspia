@@ -433,15 +433,8 @@ if (LINUX)
 endif()
 
 list(APPEND SOURCE_BASE_FILES
-    files/base_paths.cc
-    files/base_paths.h
     files/file_util.cc
     files/file_util.h)
-
-if (APPLE)
-    list(APPEND SOURCE_BASE_FILES
-        files/base_paths_mac.mm)
-endif()
 
 if (UNIX)
     list(APPEND SOURCE_BASE_FILES

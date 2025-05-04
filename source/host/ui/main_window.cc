@@ -613,7 +613,7 @@ void MainWindow::onSettings()
         }
         else
         {
-            LOG(LS_ERROR) << "currentExecFile failed";
+            LOG(LS_ERROR) << "Empty file path";
         }
 
         return;
