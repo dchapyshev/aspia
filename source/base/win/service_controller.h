@@ -23,8 +23,6 @@
 
 #include <QString>
 
-#include <filesystem>
-
 namespace base {
 
 class ServiceController
@@ -40,7 +38,7 @@ public:
     static ServiceController open(const QString& name);
     static ServiceController install(const QString& name,
                                      const QString& display_name,
-                                     const std::filesystem::path& file_path);
+                                     const QString& file_path);
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);
@@ -55,7 +53,7 @@ public:
 
     bool setAccount(const QString& username, const QString& password);
 
-    std::filesystem::path filePath() const;
+    QString filePath() const;
 
     bool isValid() const;
     bool isRunning() const;

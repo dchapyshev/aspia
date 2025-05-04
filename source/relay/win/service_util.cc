@@ -18,11 +18,10 @@
 
 #include "relay/win/service_util.h"
 
-#include "base/files/base_paths.h"
 #include "base/win/service_controller.h"
 #include "relay/service_constants.h"
 
-#include <filesystem>
+#include <QCoreApplication>
 #include <iostream>
 
 namespace relay {
@@ -72,16 +71,8 @@ int stopService()
 //--------------------------------------------------------------------------------------------------
 int installService()
 {
-    std::filesystem::path file_path;
-
-    if (!base::BasePaths::currentExecFile(&file_path))
-    {
-        std::cout << "Failed to get the path to the executable." << std::endl;
-        return 1;
-    }
-
     base::ServiceController controller = base::ServiceController::install(
-        relay::kServiceName, relay::kServiceDisplayName, file_path);
+        relay::kServiceName, relay::kServiceDisplayName, QCoreApplication::applicationFilePath());
     if (!controller.isValid())
     {
         std::cout << "Failed to install the service." << std::endl;

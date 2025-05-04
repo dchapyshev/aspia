@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "base/meta_types.h"
 #include "base/sys_info.h"
-#include "base/files/base_paths.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -95,16 +94,8 @@ int stopService()
 //--------------------------------------------------------------------------------------------------
 int installService()
 {
-    std::filesystem::path file_path;
-
-    if (!base::BasePaths::currentExecFile(&file_path))
-    {
-        std::cout << "Failed to get the path to the executable." << std::endl;
-        return 1;
-    }
-
     base::ServiceController controller = base::ServiceController::install(
-        host::kHostServiceName, host::kHostServiceDisplayName, file_path);
+        host::kHostServiceName, host::kHostServiceDisplayName, base::Application::applicationFilePath());
     if (!controller.isValid())
     {
         std::cout << "Failed to install the service." << std::endl;

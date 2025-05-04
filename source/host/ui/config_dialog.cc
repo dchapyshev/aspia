@@ -948,14 +948,9 @@ bool ConfigDialog::isServiceStarted()
 bool ConfigDialog::installService()
 {
 #if defined(Q_OS_WINDOWS)
-    std::filesystem::path service_file_path;
+    QString service_file_path = QCoreApplication::applicationDirPath();
 
-    if (!base::BasePaths::currentExecDir(&service_file_path))
-    {
-        LOG(LS_ERROR) << "BasePaths::currentExecDir failed";
-        return false;
-    }
-
+    service_file_path.append('/');
     service_file_path.append(kHostServiceFileName);
 
     base::ServiceController controller = base::ServiceController::install(

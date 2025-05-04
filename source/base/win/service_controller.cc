@@ -22,6 +22,8 @@
 
 #include <memory>
 
+#include <QDir>
+
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
@@ -81,7 +83,7 @@ ServiceController ServiceController::open(const QString& name)
 // static
 ServiceController ServiceController::install(const QString& name,
                                              const QString& display_name,
-                                             const std::filesystem::path& file_path)
+                                             const QString& file_path)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -97,7 +99,8 @@ ServiceController ServiceController::install(const QString& name,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
                                           SERVICE_ERROR_NORMAL,
-                                          file_path.c_str(),
+                                          reinterpret_cast<const wchar_t*>(
+                                              QDir::toNativeSeparators(file_path).utf16()),
                                           nullptr,
                                           nullptr,
                                           nullptr,
@@ -381,7 +384,7 @@ bool ServiceController::setAccount(const QString& username, const QString& passw
 }
 
 //--------------------------------------------------------------------------------------------------
-std::filesystem::path ServiceController::filePath() const
+QString ServiceController::filePath() const
 {
     DWORD bytes_needed = 0;
 
@@ -389,11 +392,11 @@ std::filesystem::path ServiceController::filePath() const
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         LOG(LS_FATAL) << "QueryServiceConfigW: unexpected result";
-        return std::u16string();
+        return QString();
     }
 
     if (!bytes_needed)
-        return std::u16string();
+        return QString();
 
     std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(bytes_needed);
     QUERY_SERVICE_CONFIGW* service_config = reinterpret_cast<QUERY_SERVICE_CONFIGW*>(buffer.get());
@@ -401,13 +404,13 @@ std::filesystem::path ServiceController::filePath() const
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {
         PLOG(LS_ERROR) << "QueryServiceConfigW failed";
-        return std::u16string();
+        return QString();
     }
 
     if (!service_config->lpBinaryPathName)
-        return std::u16string();
+        return QString();
 
-    return service_config->lpBinaryPathName;
+    return QString::fromWCharArray(service_config->lpBinaryPathName);
 }
 
 //--------------------------------------------------------------------------------------------------
