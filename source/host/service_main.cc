@@ -291,21 +291,22 @@ int hostServiceMain(int& argc, char* argv[])
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    if (!integrityCheck())
-    {
-        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
-        return 1;
-    }
-
     LOG(LS_INFO) << "Integrity check passed successfully";
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
 
     base::Application application(argc, argv);
-    QCommandLineParser parser;
+
+    if (!integrityCheck())
+    {
+        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
+        return 1;
+    }
 
     printDebugInfo();
+
+    QCommandLineParser parser;
 
 #if defined(Q_OS_WINDOWS)
     QCommandLineOption install_option("install",
