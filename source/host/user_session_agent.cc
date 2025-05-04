@@ -218,14 +218,14 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Connect event received";
 
-        clients_.emplace_back(incoming_message_.connect_event());
+        clients_.push_back(Client(incoming_message_.connect_event()));
         emit sig_clientListChanged(clients_);
     }
     else if (incoming_message_.has_disconnect_event())
     {
         LOG(LS_INFO) << "Disconnect event received";
 
-        for (auto it = clients_.begin(); it != clients_.end(); ++it)
+        for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
         {
             if (it->id == incoming_message_.disconnect_event().id())
             {

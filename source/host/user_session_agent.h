@@ -22,6 +22,8 @@
 #include "base/ipc/ipc_channel.h"
 #include "proto/host_internal.h"
 
+#include <QVector>
+
 namespace host {
 
 class UserSessionAgent final : public QObject
@@ -53,7 +55,7 @@ public:
         proto::SessionType session_type;
     };
 
-    using ClientList = std::vector<Client>;
+    using ClientList = QVector<Client>;
 
     explicit UserSessionAgent(QObject* parent = nullptr);
     ~UserSessionAgent() final;
