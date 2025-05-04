@@ -18,23 +18,21 @@
 
 #include "host/client_session_file_transfer.h"
 
-#include "build/build_config.h"
 #include "base/logging.h"
 #include "proto/file_transfer.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include "base/win/session_info.h"
 
 #include <UserEnv.h>
 #include <WtsApi32.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
-#include <fmt/format.h>
+#if defined(Q_OS_LINUX)
 #include <signal.h>
 #include <spawn.h>
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 #include <QCoreApplication>
 #include <QDir>

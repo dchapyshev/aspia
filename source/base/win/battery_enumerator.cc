@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 
-#include <fmt/format.h>
-
 #include <batclass.h>
 #include <winioctl.h>
 #include <devguid.h>

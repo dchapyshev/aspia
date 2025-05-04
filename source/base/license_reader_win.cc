@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
+#include "build/build_config.h"
 
 namespace base {
 

@@ -24,9 +24,9 @@
 #include "base/session_id.h"
 #include "base/task_runner.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QString>
 
@@ -53,16 +53,16 @@ protected:
     virtual void onStart() = 0;
     virtual void onStop() = 0;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
     virtual void onPowerEvent(quint32 event) = 0;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 private:
-#if defined(OS_POSIX)
+#if defined(Q_OS_UNIX)
     void stopHandlerImpl();
     static void signalHandler(int sig);
-#endif // defined(OS_POSIX)
+#endif // defined(Q_OS_UNIX)
 
     QString name_;
     std::shared_ptr<TaskRunner> task_runner_;

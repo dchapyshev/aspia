@@ -20,9 +20,9 @@
 
 #include <cerrno>
 
-#if defined(OS_WIN)
-#include <Windows.h>
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -39,7 +39,7 @@ ScopedClearLastErrorBase::~ScopedClearLastErrorBase()
     errno = last_errno_;
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 ScopedClearLastError::ScopedClearLastError()
     : last_error_(GetLastError())
@@ -52,6 +52,6 @@ ScopedClearLastError::~ScopedClearLastError()
 {
     SetLastError(last_error_);
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace base

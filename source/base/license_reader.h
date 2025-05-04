@@ -19,7 +19,7 @@
 #ifndef BASE_LICENSE_READER_H
 #define BASE_LICENSE_READER_H
 
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 namespace base {
 

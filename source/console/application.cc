@@ -19,6 +19,7 @@
 #include "console/application.h"
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "build/version.h"
 
 #include <QIcon>

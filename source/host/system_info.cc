@@ -363,10 +363,10 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
             system_name = enumerator.description();
 
         monitor->set_system_name(system_name.toStdString());
-        monitor->set_monitor_name(edid->monitorName());
-        monitor->set_manufacturer_name(edid->manufacturerName());
-        monitor->set_monitor_id(edid->monitorId());
-        monitor->set_serial_number(edid->serialNumber());
+        monitor->set_monitor_name(edid->monitorName().toStdString());
+        monitor->set_manufacturer_name(edid->manufacturerName().toStdString());
+        monitor->set_monitor_id(edid->monitorId().toStdString());
+        monitor->set_serial_number(edid->serialNumber().toStdString());
         monitor->set_edid_version(edid->edidVersion());
         monitor->set_edid_revision(edid->edidRevision());
         monitor->set_week_of_manufacture(edid->weekOfManufacture());

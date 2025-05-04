@@ -88,7 +88,7 @@ public:
 
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
-    static std::string errorToString(ErrorCode error_code);
+    static QString errorToString(ErrorCode error_code);
 
 protected:
     void addTxBytes(size_t bytes_count);

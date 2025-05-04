@@ -28,7 +28,6 @@
 #if defined(Q_OS_LINUX)
 #include <signal.h>
 #include <spawn.h>
-#include <fmt/format.h>
 #endif // defined(Q_OS_LINUX)
 
 #include <QCoreApplication>

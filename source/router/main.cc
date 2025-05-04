@@ -31,7 +31,7 @@
 #include "router/service.h"
 #include "router/settings.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "router/win/service_util.h"
 #else
 #include "router/server.h"
@@ -41,6 +41,7 @@
 
 #include <QCommandLineParser>
 #include <QFileInfo>
+#include <QSysInfo>
 
 namespace {
 
@@ -262,7 +263,8 @@ int main(int argc, char* argv[])
 
     parser.process(application);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
+                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
     LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
     if (parser.isSet(keygen_option))

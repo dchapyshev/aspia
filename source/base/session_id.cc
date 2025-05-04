@@ -21,13 +21,13 @@
 #include <limits>
 #include <type_traits>
 
-#if defined(OS_WIN)
-#include <Windows.h>
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 static_assert(std::is_same<SessionId, DWORD>());
 static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
@@ -38,6 +38,6 @@ SessionId activeConsoleSessionId()
     return WTSGetActiveConsoleSessionId();
 }
 
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace base

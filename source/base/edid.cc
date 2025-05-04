@@ -22,8 +22,6 @@
 #include "base/endian_util.h"
 #include "base/logging.h"
 
-#include <fmt/format.h>
-
 #include <cstring>
 
 namespace base {
@@ -265,7 +263,7 @@ quint8 Edid::featureSupport() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Edid::getManufacturerSignature() const
+QString Edid::getManufacturerSignature() const
 {
     BitSet<quint16> id = EndianUtil::byteSwap(edid_->id_manufacturer_name);
 
@@ -282,13 +280,14 @@ std::string Edid::getManufacturerSignature() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Edid::monitorId() const
+QString Edid::monitorId() const
 {
-    return fmt::format("{}{:x}", getManufacturerSignature(), edid_->id_product_code);
+    return QString("%1%2}")
+        .arg(getManufacturerSignature()).arg(edid_->id_product_code, 4, 16, QChar('0'));
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Edid::serialNumber() const
+QString Edid::serialNumber() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(
@@ -312,7 +311,7 @@ std::string Edid::serialNumber() const
         }
     }
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -333,9 +332,9 @@ quint8* Edid::getDescriptor(int type) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Edid::manufacturerName() const
+QString Edid::manufacturerName() const
 {
-    std::string signature = getManufacturerSignature();
+    QString signature = getManufacturerSignature();
 
     for (size_t i = 0; i < std::size(kManufacturers); ++i)
     {
@@ -343,11 +342,11 @@ std::string Edid::manufacturerName() const
             return kManufacturers[i].name;
     }
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Edid::monitorName() const
+QString Edid::monitorName() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
@@ -370,7 +369,7 @@ std::string Edid::monitorName() const
         }
     }
 
-    return std::string();
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

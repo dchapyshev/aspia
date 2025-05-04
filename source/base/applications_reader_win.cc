@@ -20,9 +20,7 @@
 
 #include "base/logging.h"
 #include "base/win/registry.h"
-
-#include <fmt/format.h>
-#include <fmt/xchar.h>
+#include "build/build_config.h"
 
 namespace base {
 

@@ -36,10 +36,10 @@ protected:
     void onStart() final;
     void onStop() final;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     void onSessionEvent(base::SessionStatus status, base::SessionId session_id) final;
     void onPowerEvent(quint32 event) final;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 private:
     std::unique_ptr<Server> server_;

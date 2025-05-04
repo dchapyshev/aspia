@@ -19,15 +19,15 @@
 #ifndef BASE_SESSION_ID_H
 #define BASE_SESSION_ID_H
 
-#include "build/build_config.h"
+#include <QtGlobal>
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_UNIX)
 #include <unistd.h>
 #endif
 
 namespace base {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 using SessionId = unsigned long;
 const SessionId kInvalidSessionId = 0xFFFFFFFF;
@@ -35,12 +35,12 @@ const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
 
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
 
 using SessionId = pid_t;
 const SessionId kInvalidSessionId = -1;
 
-#else // defined(OS_*)
+#else // defined(Q_OS_*)
 
 #error Not implemented
 

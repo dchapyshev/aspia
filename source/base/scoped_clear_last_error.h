@@ -20,7 +20,8 @@
 #define BASE_SCOPED_CLEAR_LAST_ERROR_H
 
 #include "base/macros_magic.h"
-#include "build/build_config.h"
+
+#include <QtGlobal>
 
 namespace base {
 
@@ -42,7 +43,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedClearLastErrorBase);
 };
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 // Windows specific implementation of ScopedClearLastError.
 class ScopedClearLastError final : public ScopedClearLastErrorBase
@@ -56,11 +57,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedClearLastError);
 };
 
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
 using ScopedClearLastError = ScopedClearLastErrorBase;
 #else
 #error Platform support not implemented
-#endif // defined(OS_WIN)
+#endif
 
 } // namespace base
 

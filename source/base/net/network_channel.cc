@@ -18,8 +18,6 @@
 
 #include "base/net/network_channel.h"
 
-#include <fmt/format.h>
-
 namespace base {
 
 namespace {
@@ -69,7 +67,7 @@ int NetworkChannel::speedTx()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::string NetworkChannel::errorToString(ErrorCode error_code)
+QString NetworkChannel::errorToString(ErrorCode error_code)
 {
     const char* str;
 
@@ -120,7 +118,7 @@ std::string NetworkChannel::errorToString(ErrorCode error_code)
             break;
     }
 
-    return fmt::format("{} ({})", str, static_cast<int>(error_code));
+    return QString("%1 (%2)").arg(str).arg(static_cast<int>(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------

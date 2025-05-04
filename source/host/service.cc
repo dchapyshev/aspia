@@ -24,19 +24,17 @@
 #include "host/service_constants.h"
 #include "host/server.h"
 
-#include <fmt/format.h>
-
-#if defined(OS_WIN)
-#include <Windows.h>
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
 namespace {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-std::string powerEventToString(quint32 event)
+QString powerEventToString(quint32 event)
 {
     const char* name;
 
@@ -67,9 +65,9 @@ std::string powerEventToString(quint32 event)
             break;
     }
 
-    return fmt::format("{} ({})", name, static_cast<int>(event));
+    return QString("%1 (%2)").arg(name).arg(static_cast<int>(event));
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -91,7 +89,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
         PLOG(LS_ERROR) << "SetPriorityClass failed";
@@ -121,7 +119,7 @@ void Service::onStart()
             LOG(LS_INFO) << "Service removed from safe mode loading";
         }
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     server_ = std::make_unique<Server>(taskRunner());
     server_->start();
@@ -135,7 +133,7 @@ void Service::onStop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
@@ -166,6 +164,6 @@ void Service::onPowerEvent(quint32 event)
         LOG(LS_ERROR) << "No server instance";
     }
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace host

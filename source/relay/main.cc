@@ -24,7 +24,7 @@
 #include "relay/service.h"
 #include "relay/settings.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "relay/win/service_util.h"
 #else
 #include "relay/controller.h"
@@ -33,6 +33,7 @@
 #include <iostream>
 
 #include <QCommandLineParser>
+#include <QSysInfo>
 
 namespace {
 
@@ -89,7 +90,8 @@ int main(int argc, char* argv[])
 
     parser.process(application);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
+                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
     LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
     if (parser.isSet(create_config_option))

@@ -34,6 +34,7 @@
 
 #include <QCommandLineParser>
 #include <QMessageBox>
+#include <QSysInfo>
 
 //--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
@@ -396,7 +397,8 @@ int clientMain(int argc, char* argv[])
 
     client::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING << " (arch: " << ARCH_CPU_STRING << ")";
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
+                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;

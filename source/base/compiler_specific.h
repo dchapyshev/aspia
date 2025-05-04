@@ -19,22 +19,22 @@
 #ifndef BASE_COMPILER_SPECIFIC_H
 #define BASE_COMPILER_SPECIFIC_H
 
-#include "build/build_config.h"
+#include <QtGlobal>
 
 // Annotate a function indicating it should not be inlined.
 // Use like:
 //   NOINLINE void DoStuff() { ... }
-#if defined(CC_GCC)
+#if defined(Q_CC_GNU)
 #define NOINLINE __attribute__((noinline))
-#elif defined(CC_MSVC)
+#elif defined(Q_CC_MSVC)
 #define NOINLINE __declspec(noinline)
 #else
 #define NOINLINE
 #endif
 
-#if defined(CC_GCC) && defined(NDEBUG)
+#if defined(Q_CC_GNU) && defined(NDEBUG)
 #define ALWAYS_INLINE inline __attribute__((__always_inline__))
-#elif defined(CC_MSVC) && defined(NDEBUG)
+#elif defined(Q_CC_MSVC) && defined(NDEBUG)
 #define ALWAYS_INLINE __forceinline
 #else
 #define ALWAYS_INLINE inline

@@ -34,8 +34,6 @@
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
-#include <fmt/format.h>
-
 #include <QCoreApplication>
 #include <QDir>
 

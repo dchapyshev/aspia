@@ -208,10 +208,10 @@ public:
         MANUFACTURERS_TIMINGS_1152X870_75HZ = 0x80
     };
 
-    std::string manufacturerName() const;
-    std::string monitorName() const;
-    std::string monitorId() const;
-    std::string serialNumber() const;
+    QString manufacturerName() const;
+    QString monitorName() const;
+    QString monitorId() const;
+    QString serialNumber() const;
     int weekOfManufacture() const;
     int yearOfManufacture() const;
     int edidVersion() const;
@@ -239,7 +239,7 @@ public:
 private:
     Edid(std::unique_ptr<quint8[]> data, size_t data_size);
 
-    std::string getManufacturerSignature() const;
+    QString getManufacturerSignature() const;
     quint8* getDescriptor(int type) const;
 
     std::unique_ptr<quint8[]> data_;

@@ -18,7 +18,6 @@
 
 #include "common/ui/about_dialog.h"
 
-#include "build/build_config.h"
 #include "build/version.h"
 #include "base/logging.h"
 #include "ui_about_dialog.h"
@@ -29,23 +28,18 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QScreen>
+#include <QSysInfo>
 #include <QTextStream>
 
 #include <asio/version.hpp>
 #include <curl/curl.h>
-#include <fmt/core.h>
 #include <google/protobuf/stubs/common.h>
 #include <libyuv.h>
 #include <openssl/crypto.h>
 #include <opus_defines.h>
-#include <rapidjson/rapidjson.h>
 #include <sqlite3.h>
 #include <vpx/vpx_codec.h>
 #include <zstd.h>
-
-#if !defined(OS_WIN)
-#include <unicode/uversion.h>
-#endif
 
 namespace common {
 
@@ -118,7 +112,8 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     ui->setupUi(this);
 
     ui->label_name->setText(application_name);
-    ui->label_version->setText(tr("Version: %1 (%2)").arg(ASPIA_VERSION_STRING, ARCH_CPU_STRING));
+    ui->label_version->setText(tr("Version: %1 (%2)")
+        .arg(ASPIA_VERSION_STRING, QSysInfo::buildCpuArchitecture()));
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
@@ -214,17 +209,6 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     add_version("asio", QString("%1.%2.%3")
         .arg(ASIO_VERSION / 100000).arg(ASIO_VERSION / 100 % 1000).arg(ASIO_VERSION % 100));
     add_version("curl", curl_version());
-    add_version("fmt", QString("%1.%2.%3")
-        .arg(FMT_VERSION / 10000).arg(FMT_VERSION / 100 % 1000).arg(FMT_VERSION % 100));
-
-#if !defined(OS_WIN)
-    UVersionInfo icu_version;
-    u_getVersion(icu_version);
-
-    char icu_version_string[64];
-    u_versionToString(icu_version, icu_version_string);
-    add_version("icu", icu_version_string);
-#endif
 
     add_version("libvpx", vpx_codec_version_str());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
@@ -236,8 +220,6 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     add_version("protobuf", protobuf_version);
 
     add_version("qt", qVersion());
-    add_version("rapidjson", RAPIDJSON_VERSION_STRING);
-    add_version("rapidxml", "1.13");
     add_version("sqlite", SQLITE_VERSION);
     add_version("zstd", ZSTD_versionString());
 

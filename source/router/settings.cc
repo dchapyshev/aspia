@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "base/net/ip_util.h"
+#include "build/build_config.h"
 
 namespace router {
 
