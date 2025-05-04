@@ -422,32 +422,31 @@
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="349"/>
         <source>Voice chat</source>
-        <translation>語音聊天</translation>
+        <translation type="vanished">語音聊天</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="363"/>
+        <location filename="../notifier_window.ui" line="349"/>
         <source>Chat</source>
         <translation>聊天</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="377"/>
+        <location filename="../notifier_window.ui" line="363"/>
         <source>Lock mouse</source>
         <translation>鎖定滑鼠</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="391"/>
+        <location filename="../notifier_window.ui" line="377"/>
         <source>Lock keyboard</source>
         <translation>鎖定鍵盤</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="405"/>
+        <location filename="../notifier_window.ui" line="391"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="419"/>
+        <location filename="../notifier_window.ui" line="405"/>
         <source>Disconnect all</source>
         <translation>中斷全部連線</translation>
     </message>
@@ -933,101 +932,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="539"/>
-        <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="506"/>
+        <location filename="../main_window.cc" line="693"/>
+        <location filename="../main_window.cc" line="868"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="192"/>
-        <location filename="../main_window.cc" line="712"/>
+        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="672"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="412"/>
+        <location filename="../main_window.cc" line="392"/>
         <source>Not available</source>
         <translation>無法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="800"/>
         <source>Router is disabled</source>
         <translation>已停用路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="450"/>
         <source>Connecting to a router %1...</source>
         <translation>正在連線到路由器 %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="474"/>
+        <location filename="../main_window.cc" line="454"/>
         <source>Connected to a router %1</source>
         <translation>已連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="478"/>
+        <location filename="../main_window.cc" line="458"/>
         <source>Failed to connect to router %1</source>
         <translation>無法連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="717"/>
+        <location filename="../main_window.cc" line="677"/>
         <source>Hide</source>
         <translation>隱藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="750"/>
+        <location filename="../main_window.cc" line="710"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="751"/>
+        <location filename="../main_window.cc" line="711"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="859"/>
+        <location filename="../main_window.cc" line="805"/>
         <source>Connecting to a router...</source>
         <translation>正在連線到路由器...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="864"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>Connected to a router</source>
         <translation>已連線到路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="815"/>
         <source>Connection error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="923"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="919"/>
+        <location filename="../main_window.cc" line="865"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="530"/>
+        <location filename="../main_window.cc" line="502"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="535"/>
+        <location filename="../main_window.cc" line="504"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="756"/>
+        <location filename="../main_window.cc" line="716"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="757"/>
+        <location filename="../main_window.cc" line="717"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1035,37 +1034,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="255"/>
+        <location filename="../notifier_window.cc" line="253"/>
         <source>Disconnect</source>
         <translation>中斷連線</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="312"/>
+        <location filename="../notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
         <translation>解鎖滑鼠</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="317"/>
+        <location filename="../notifier_window.cc" line="307"/>
         <source>Lock mouse</source>
         <translation>鎖定滑鼠</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="339"/>
+        <location filename="../notifier_window.cc" line="329"/>
         <source>Unlock keyboard</source>
         <translation>解鎖鍵盤</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="344"/>
+        <location filename="../notifier_window.cc" line="334"/>
         <source>Lock keyboard</source>
         <translation>鎖定鍵盤</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="366"/>
+        <location filename="../notifier_window.cc" line="356"/>
         <source>Resume</source>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="371"/>
+        <location filename="../notifier_window.cc" line="361"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>

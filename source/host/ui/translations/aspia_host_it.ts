@@ -426,32 +426,31 @@
         <translation>Connessioni</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="363"/>
+        <location filename="../notifier_window.ui" line="349"/>
         <source>Chat</source>
         <translation>Chatj</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="405"/>
+        <location filename="../notifier_window.ui" line="391"/>
         <source>Pause</source>
         <translation>Sospendi</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="419"/>
+        <location filename="../notifier_window.ui" line="405"/>
         <source>Disconnect all</source>
         <translation>Disconnetti tutti</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="349"/>
         <source>Voice chat</source>
-        <translation>Chat vocale</translation>
+        <translation type="vanished">Chat vocale</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="377"/>
+        <location filename="../notifier_window.ui" line="363"/>
         <source>Lock mouse</source>
         <translation>Blocca mouse</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="391"/>
+        <location filename="../notifier_window.ui" line="377"/>
         <source>Lock keyboard</source>
         <translation>Blocca tastiera</translation>
     </message>
@@ -939,101 +938,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="412"/>
+        <location filename="../main_window.cc" line="392"/>
         <source>Not available</source>
         <translation>Non disponibile</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="539"/>
-        <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="922"/>
+        <location filename="../main_window.cc" line="506"/>
+        <location filename="../main_window.cc" line="693"/>
+        <location filename="../main_window.cc" line="868"/>
         <source>Aspia Host</source>
         <translation>Host Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="192"/>
-        <location filename="../main_window.cc" line="712"/>
+        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="672"/>
         <source>Show</source>
         <translation>Visualizza</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="717"/>
+        <location filename="../main_window.cc" line="677"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="750"/>
+        <location filename="../main_window.cc" line="710"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="751"/>
+        <location filename="../main_window.cc" line="711"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Se esci da Aspia, non sarà possibile connettersi al computer fino a quando non riavvierai il computer o Aspia manualmente. Vuoi veramente uscire dall&apos;applicazione?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="800"/>
         <source>Router is disabled</source>
         <translation>Router disabilitato</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="859"/>
+        <location filename="../main_window.cc" line="805"/>
         <source>Connecting to a router...</source>
         <translation>Connession al router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="864"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>Connected to a router</source>
         <translation>Connesso al router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="815"/>
         <source>Connection error</source>
         <translation>Errore connessione</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="474"/>
+        <location filename="../main_window.cc" line="454"/>
         <source>Connected to a router %1</source>
         <translation>Connesso al router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="478"/>
+        <location filename="../main_window.cc" line="458"/>
         <source>Failed to connect to router %1</source>
         <translation>Connession al router %1 fallita</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="450"/>
         <source>Connecting to a router %1...</source>
         <translation>Connessione al router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="530"/>
+        <location filename="../main_window.cc" line="502"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha avviato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="535"/>
+        <location filename="../main_window.cc" line="504"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha arrestato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="756"/>
+        <location filename="../main_window.cc" line="716"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="757"/>
+        <location filename="../main_window.cc" line="717"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="923"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="919"/>
+        <location filename="../main_window.cc" line="865"/>
         <source>IP addresses:</source>
         <translation>Indirizzi IP:</translation>
     </message>
@@ -1041,37 +1040,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="255"/>
+        <location filename="../notifier_window.cc" line="253"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="312"/>
+        <location filename="../notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
         <translation>Sblocca il mouse</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="317"/>
+        <location filename="../notifier_window.cc" line="307"/>
         <source>Lock mouse</source>
         <translation>Blocca il mouse</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="339"/>
+        <location filename="../notifier_window.cc" line="329"/>
         <source>Unlock keyboard</source>
         <translation>Sblocca la tastiera</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="344"/>
+        <location filename="../notifier_window.cc" line="334"/>
         <source>Lock keyboard</source>
         <translation>Blocca la tastiera</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="366"/>
+        <location filename="../notifier_window.cc" line="356"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="371"/>
+        <location filename="../notifier_window.cc" line="361"/>
         <source>Pause</source>
         <translation>Sospendi</translation>
     </message>
