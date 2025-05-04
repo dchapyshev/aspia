@@ -579,8 +579,6 @@ if (WIN32)
         win/monitor_enumerator.h
         win/net_share_enumerator.cc
         win/net_share_enumerator.h
-        win/object_watcher.cc
-        win/object_watcher.h
         win/power_info.cc
         win/power_info.h
         win/printer_enumerator.cc
