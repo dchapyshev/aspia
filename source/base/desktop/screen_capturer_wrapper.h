@@ -20,12 +20,10 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_WRAPPER_H
 
 #include "base/desktop/screen_capturer.h"
-#include "base/threading/thread_checker.h"
 #include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_thread_desktop.h"
-#elif defined(OS_LINUX)
 #endif
 
 namespace base {
@@ -45,8 +43,6 @@ public:
 
         virtual void onScreenListChanged(
             const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
-        virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
-        virtual void onScreenCaptureError(ScreenCapturer::Error error) = 0;
         virtual void onCursorPositionChanged(const Point& position) = 0;
         virtual void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name) = 0;
     };
@@ -55,7 +51,7 @@ public:
     ~ScreenCapturerWrapper();
 
     void selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution);
-    void captureFrame();
+    ScreenCapturer::Error captureFrame(const Frame** frame, const MouseCursor** mouse_cursor);
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
@@ -72,9 +68,9 @@ private:
     ScreenCapturer::Type preferred_type_;
     Delegate* delegate_;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ScopedThreadDesktop desktop_;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     int screen_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
@@ -87,8 +83,6 @@ private:
     std::unique_ptr<DesktopEnvironment> environment_;
     std::unique_ptr<DesktopResizer> resizer_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
-
-    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
 };

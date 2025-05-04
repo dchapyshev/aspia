@@ -66,9 +66,6 @@ protected:
     // base::ScreenCapturerWrapper::Delegate implementation.
     void onScreenListChanged(const base::ScreenCapturer::ScreenList& list,
                              base::ScreenCapturer::ScreenId current) final;
-    void onScreenCaptured(const base::Frame* frame,
-                          const base::MouseCursor* mouse_cursor) final;
-    void onScreenCaptureError(base::ScreenCapturer::Error error) final;
     void onCursorPositionChanged(const base::Point& position) final;
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name) final;
 
@@ -83,8 +80,8 @@ private slots:
 
 private:
     void setEnabled(bool enable);
-    void captureBegin();
-    void captureEnd(const std::chrono::milliseconds& update_interval);
+    void captureScreen();
+    void scheduleNextCapture(const std::chrono::milliseconds& update_interval);
 
 #if defined(Q_OS_WINDOWS)
     bool onWindowsMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);

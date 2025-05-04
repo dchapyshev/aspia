@@ -103,8 +103,6 @@ ScreenCapturerWrapper::~ScreenCapturerWrapper()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!screen_capturer_)
     {
         LOG(LS_ERROR) << "Screen capturer not initialized";
@@ -187,14 +185,13 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::captureFrame()
+ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
+    const Frame** frame, const MouseCursor** mouse_cursor)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!screen_capturer_)
     {
         LOG(LS_ERROR) << "Screen capturer NOT initialized";
-        return;
+        return ScreenCapturer::Error::TEMPORARY;
     }
 
     switchToInputDesktop();
@@ -214,21 +211,17 @@ void ScreenCapturerWrapper::captureFrame()
     }
 
     ScreenCapturer::Error error;
-    const Frame* frame = screen_capturer_->captureFrame(&error);
-    if (!frame)
+    *frame = screen_capturer_->captureFrame(&error);
+    if (!*frame)
     {
         switch (error)
         {
             case ScreenCapturer::Error::TEMPORARY:
-                delegate_->onScreenCaptureError(error);
-                return;
+                return error;
 
             case ScreenCapturer::Error::PERMANENT:
-            {
                 selectCapturer(ScreenCapturer::Error::PERMANENT);
-                delegate_->onScreenCaptureError(error);
-            }
-            return;
+                return error;
 
             default:
                 NOTREACHED();
@@ -236,12 +229,12 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    const MouseCursor* mouse_cursor = nullptr;
+    *mouse_cursor = nullptr;
 
     // Cursor capture only on even frames.
     if ((capture_counter_ % 2) == 0)
     {
-        mouse_cursor = screen_capturer_->captureCursor();
+        *mouse_cursor = screen_capturer_->captureCursor();
 
         if (enable_cursor_position_)
         {
@@ -258,7 +251,7 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    delegate_->onScreenCaptured(frame, mouse_cursor);
+    return ScreenCapturer::Error::SUCCEEDED;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -348,8 +341,6 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer: "
                  << ScreenCapturer::typeToString(preferred_type_);
 
@@ -441,8 +432,6 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::switchToInputDesktop()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
 #if defined(Q_OS_WINDOWS)
     // Switch to the desktop receiving user input if different from the current one.
     Desktop input_desktop(Desktop::inputDesktop());
@@ -481,8 +470,6 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::checkScreenType()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
 #if defined(Q_OS_WINDOWS)
     if (!screen_capturer_)
         return;

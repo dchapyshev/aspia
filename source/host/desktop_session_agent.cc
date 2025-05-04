@@ -100,7 +100,7 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
 #endif // defined(Q_OS_WINDOWS)
 
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
-    connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopSessionAgent::captureBegin);
+    connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopSessionAgent::captureScreen);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,93 +205,6 @@ void DesktopSessionAgent::onScreenListChanged(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onScreenCaptured(
-    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
-{
-    outgoing_message_.Clear();
-
-    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
-
-    if (frame && !frame->constUpdatedRegion().isEmpty())
-    {
-        base::SharedMemoryBase* shared_memory = frame->sharedMemory();
-        if (!shared_memory)
-        {
-            LOG(LS_ERROR) << "Unable to get shared memory";
-            return;
-        }
-
-        if (input_injector_)
-            input_injector_->setScreenOffset(frame->topLeft());
-
-        proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
-
-        serialized_frame->set_capturer_type(frame->capturerType());
-        serialized_frame->set_shared_buffer_id(shared_memory->id());
-        serialized_frame->set_width(frame->size().width());
-        serialized_frame->set_height(frame->size().height());
-
-        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
-        {
-            proto::Rect* dirty_rect = serialized_frame->add_dirty_rect();
-            base::Rect rect = it.rect();
-
-            dirty_rect->set_x(rect.x());
-            dirty_rect->set_y(rect.y());
-            dirty_rect->set_width(rect.width());
-            dirty_rect->set_height(rect.height());
-        }
-    }
-
-    if (mouse_cursor)
-    {
-        proto::internal::MouseCursor* serialized_mouse_cursor =
-            screen_captured->mutable_mouse_cursor();
-
-        serialized_mouse_cursor->set_width(mouse_cursor->width());
-        serialized_mouse_cursor->set_height(mouse_cursor->height());
-        serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpotX());
-        serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpotY());
-        serialized_mouse_cursor->set_dpi_x(mouse_cursor->constDpi().x());
-        serialized_mouse_cursor->set_dpi_y(mouse_cursor->constDpi().y());
-        serialized_mouse_cursor->set_data(mouse_cursor->constImage().toStdString());
-    }
-
-    if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
-    {
-        channel_->send(base::serialize(outgoing_message_));
-    }
-    else
-    {
-        captureEnd(capture_scheduler_->updateInterval());
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error)
-{
-    outgoing_message_.Clear();
-    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
-
-    switch (error)
-    {
-        case base::ScreenCapturer::Error::PERMANENT:
-            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_PERMANENT);
-            break;
-
-        case base::ScreenCapturer::Error::TEMPORARY:
-            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_TEMPORARY);
-            break;
-
-        default:
-            NOTREACHED();
-            return;
-    }
-
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
     outgoing_message_.Clear();
@@ -390,7 +303,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 
     if (incoming_message_.has_next_screen_capture())
     {
-        captureEnd(std::chrono::milliseconds(
+        scheduleNextCapture(std::chrono::milliseconds(
             incoming_message_.next_screen_capture().update_interval()));
     }
     else if (incoming_message_.has_mouse_event())
@@ -650,7 +563,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::captureBegin()
+void DesktopSessionAgent::captureScreen()
 {
     if (!capture_scheduler_ || !screen_capturer_)
     {
@@ -659,11 +572,96 @@ void DesktopSessionAgent::captureBegin()
     }
 
     capture_scheduler_->beginCapture();
-    screen_capturer_->captureFrame();
+
+    const base::Frame* frame = nullptr;
+    const base::MouseCursor* cursor = nullptr;
+
+    base::ScreenCapturer::Error error = screen_capturer_->captureFrame(&frame, &cursor);
+
+    outgoing_message_.Clear();
+    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
+
+    if (error != base::ScreenCapturer::Error::SUCCEEDED)
+    {
+        switch (error)
+        {
+        case base::ScreenCapturer::Error::PERMANENT:
+            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_PERMANENT);
+            break;
+
+        case base::ScreenCapturer::Error::TEMPORARY:
+            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_TEMPORARY);
+            break;
+
+        default:
+            NOTREACHED();
+            return;
+        }
+
+        channel_->send(base::serialize(outgoing_message_));
+        return;
+    }
+
+    if (frame && !frame->constUpdatedRegion().isEmpty())
+    {
+        base::SharedMemoryBase* shared_memory = frame->sharedMemory();
+        if (!shared_memory)
+        {
+            LOG(LS_ERROR) << "Unable to get shared memory";
+            return;
+        }
+
+        if (input_injector_)
+            input_injector_->setScreenOffset(frame->topLeft());
+
+        proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
+
+        serialized_frame->set_capturer_type(frame->capturerType());
+        serialized_frame->set_shared_buffer_id(shared_memory->id());
+        serialized_frame->set_width(frame->size().width());
+        serialized_frame->set_height(frame->size().height());
+
+        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+        {
+            proto::Rect* dirty_rect = serialized_frame->add_dirty_rect();
+            base::Rect rect = it.rect();
+
+            dirty_rect->set_x(rect.x());
+            dirty_rect->set_y(rect.y());
+            dirty_rect->set_width(rect.width());
+            dirty_rect->set_height(rect.height());
+        }
+    }
+
+    if (cursor)
+    {
+        proto::internal::MouseCursor* serialized_mouse_cursor =
+            screen_captured->mutable_mouse_cursor();
+
+        serialized_mouse_cursor->set_width(cursor->width());
+        serialized_mouse_cursor->set_height(cursor->height());
+        serialized_mouse_cursor->set_hotspot_x(cursor->hotSpotX());
+        serialized_mouse_cursor->set_hotspot_y(cursor->hotSpotY());
+        serialized_mouse_cursor->set_dpi_x(cursor->constDpi().x());
+        serialized_mouse_cursor->set_dpi_y(cursor->constDpi().y());
+        serialized_mouse_cursor->set_data(cursor->constImage().toStdString());
+    }
+
+    if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
+    {
+        // If a frame or cursor was captured, send a message to the service. The next capture
+        // will be scheduled after the response from the service.
+        channel_->send(base::serialize(outgoing_message_));
+    }
+    else
+    {
+        // Frame and cursor unchanged. Plan the next capture immediately.
+        scheduleNextCapture(capture_scheduler_->updateInterval());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_interval)
+void DesktopSessionAgent::scheduleNextCapture(const std::chrono::milliseconds& update_interval)
 {
     if (!capture_scheduler_)
     {
