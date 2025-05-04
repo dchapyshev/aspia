@@ -22,27 +22,26 @@
 #include "base/macros_magic.h"
 #include "proto/task_manager.h"
 
+#include <QObject>
 #include <memory>
 
 namespace host {
 
 class ProcessMonitor;
 
-class TaskManager
+class TaskManager final : public QObject
 {
+    Q_OBJECT
+
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onTaskManagerMessage(const proto::task_manager::HostToClient& message) = 0;
-    };
-
-    explicit TaskManager(Delegate* delegate);
+    explicit TaskManager(QObject* parent = nullptr);
     ~TaskManager();
 
+public slots:
     void readMessage(const proto::task_manager::ClientToHost& message);
+
+signals:
+    void sig_taskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
     void sendProcessList(quint32 flags);
@@ -50,7 +49,6 @@ private:
     void sendUserList();
 
     std::unique_ptr<ProcessMonitor> process_monitor_;
-    Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(TaskManager);
 };

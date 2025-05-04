@@ -872,7 +872,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     proto::task_manager::ClientToHost message;
 
     if (!message.ParseFromString(data))
@@ -882,10 +882,15 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
     }
 
     if (!task_manager_)
-        task_manager_ = std::make_unique<TaskManager>(this);
+    {
+        task_manager_ = new TaskManager(this);
+
+        connect(task_manager_, &TaskManager::sig_taskManagerMessage,
+                this, &ClientSessionDesktop::onTaskManagerMessage);
+    }
 
     task_manager_->readMessage(message);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

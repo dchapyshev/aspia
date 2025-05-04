@@ -28,12 +28,11 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-TaskManager::TaskManager(Delegate* delegate)
-    : process_monitor_(std::make_unique<ProcessMonitor>()),
-      delegate_(delegate)
+TaskManager::TaskManager(QObject* parent)
+    : QObject(parent),
+      process_monitor_(std::make_unique<ProcessMonitor>())
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,7 +207,7 @@ void TaskManager::sendProcessList(quint32 flags)
         item->set_thread_count(process_info.thread_count);
     }
 
-    delegate_->onTaskManagerMessage(message);
+    emit sig_taskManagerMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,7 +288,7 @@ void TaskManager::sendServiceList()
         }
     }
 
-    delegate_->onTaskManagerMessage(message);
+    emit sig_taskManagerMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -363,7 +362,7 @@ void TaskManager::sendUserList()
         }
     }
 
-    delegate_->onTaskManagerMessage(message);
+    emit sig_taskManagerMessage(message);
 }
 
 } // namespace host

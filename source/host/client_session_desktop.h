@@ -47,11 +47,7 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSessionDesktop final
-    : public ClientSession
-#if defined(OS_WIN)
-      , public TaskManager::Delegate
-#endif // defined(OS_WIN)
+class ClientSessionDesktop final : public ClientSession
 {
     Q_OBJECT
 
@@ -79,10 +75,10 @@ protected:
     void onReceived(quint8 channel_id, const QByteArray& buffer) final;
     void onWritten(quint8 channel_id, size_t pending) final;
 
-#if defined(OS_WIN)
-    // TaskManager::Delegate implementation.
-    void onTaskManagerMessage(const proto::task_manager::HostToClient& message) final;
-#endif // defined(OS_WIN)
+private slots:
+#if defined(Q_OS_WINDOWS)
+    void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
+#endif // defined(Q_OS_WINDOWS)
 
 private:
     void readExtension(const proto::DesktopExtension& extension);
@@ -119,9 +115,9 @@ private:
     bool critical_overflow_ = false;
     int max_fps_ = 0;
 
-#if defined(OS_WIN)
-    std::unique_ptr<TaskManager> task_manager_;
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+    QPointer<TaskManager> task_manager_;
+#endif // defined(Q_OS_WINDOWS)
 
     proto::ClientToHost incoming_message_;
     proto::HostToClient outgoing_message_;
