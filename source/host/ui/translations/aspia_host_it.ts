@@ -661,12 +661,12 @@
         <location filename="../config_dialog.cc" line="629"/>
         <location filename="../config_dialog.cc" line="665"/>
         <location filename="../config_dialog.cc" line="678"/>
-        <location filename="../config_dialog.cc" line="967"/>
-        <location filename="../config_dialog.cc" line="992"/>
-        <location filename="../config_dialog.cc" line="1013"/>
-        <location filename="../config_dialog.cc" line="1024"/>
-        <location filename="../config_dialog.cc" line="1046"/>
-        <location filename="../config_dialog.cc" line="1057"/>
+        <location filename="../config_dialog.cc" line="962"/>
+        <location filename="../config_dialog.cc" line="987"/>
+        <location filename="../config_dialog.cc" line="1008"/>
+        <location filename="../config_dialog.cc" line="1019"/>
+        <location filename="../config_dialog.cc" line="1041"/>
+        <location filename="../config_dialog.cc" line="1052"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
@@ -715,28 +715,28 @@
         <translation>Installa</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="968"/>
+        <location filename="../config_dialog.cc" line="963"/>
         <source>The service could not be installed.</source>
         <translation>Non è stato possibile installare il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="993"/>
+        <location filename="../config_dialog.cc" line="988"/>
         <source>The service could not be removed.</source>
         <translation>Non è stato possibile rimuovere il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1014"/>
-        <location filename="../config_dialog.cc" line="1047"/>
+        <location filename="../config_dialog.cc" line="1009"/>
+        <location filename="../config_dialog.cc" line="1042"/>
         <source>Could not access the service.</source>
         <translation>Non riesco ad accedere al servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1025"/>
+        <location filename="../config_dialog.cc" line="1020"/>
         <source>The service could not be started.</source>
         <translation>Non è stato possibile avviare il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1058"/>
+        <location filename="../config_dialog.cc" line="1053"/>
         <source>The service could not be stopped.</source>
         <translation>Non è stato possibile arrestare il servizio.</translation>
     </message>
