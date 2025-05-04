@@ -18,10 +18,10 @@ void sha256_hex(const void *src, size_t n_bytes, char *dst_hex65);
 void sha256_bytes(const void *src, size_t n_bytes, void *dst_bytes32);
 
 typedef struct sha256 {
-    quint32 state[8];
-    quint8 buffer[64];
-    quint64 n_bits;
-    quint8 buffer_counter;
+    uint32_t state[8];
+    uint8_t buffer[64];
+    uint64_t n_bits;
+    uint8_t buffer_counter;
 } sha256;
 
 /* Functions to compute streaming SHA-256 checksums. */
