@@ -31,6 +31,7 @@ list(APPEND SOURCE_PROTO
     meta_types.cc
     meta_types.h
     port_forwarding.proto
+    host_internal.h
     host_internal.proto
     relay_peer.proto
     router_admin.h

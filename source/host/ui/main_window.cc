@@ -27,8 +27,6 @@
 #include "common/ui/status_dialog.h"
 #include "common/ui/text_chat_widget.h"
 #include "host/user_session_agent.h"
-#include "host/user_session_agent_proxy.h"
-#include "host/user_session_window_proxy.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -58,9 +56,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent),
-      window_proxy_(std::make_shared<UserSessionWindowProxy>(
-          base::GuiApplication::uiTaskRunner(), this))
+    : QMainWindow(parent)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -138,13 +134,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
         LOG(LS_INFO) << "[ACTION] New password";
-        if (!agent_proxy_)
-        {
-            LOG(LS_INFO) << "No agent proxy";
-            return;
-        }
-
-        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
+        emit sig_updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
 
@@ -157,21 +147,73 @@ MainWindow::~MainWindow()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::connectToService()
 {
-    if (agent_proxy_)
+    if (connected_to_service_)
     {
         LOG(LS_INFO) << "Already connected to service";
-        agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
-        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+        emit sig_oneTimeSessions(calcOneTimeSessions());
+        emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+        return;
     }
-    else
-    {
-        agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
-            base::GuiApplication::ioTaskRunner(),
-            std::make_unique<UserSessionAgent>(window_proxy_));
 
-        LOG(LS_INFO) << "Connecting to service";
-        agent_proxy_->start();
-    }
+    UserSessionAgent* agent = new UserSessionAgent();
+
+    agent->moveToThread(base::GuiApplication::ioThread());
+
+    connect(agent, &UserSessionAgent::sig_statusChanged,
+            this, &MainWindow::onStatusChanged,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_clientListChanged,
+            this, &MainWindow::onClientListChanged,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_credentialsChanged,
+            this, &MainWindow::onCredentialsChanged,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_routerStateChanged,
+            this, &MainWindow::onRouterStateChanged,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_connectConfirmationRequest,
+            this, &MainWindow::onConnectConfirmationRequest,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_videoRecordingStateChanged,
+            this, &MainWindow::onVideoRecordingStateChanged,
+            Qt::QueuedConnection);
+    connect(agent, &UserSessionAgent::sig_textChat,
+            this, &MainWindow::onTextChat,
+            Qt::QueuedConnection);
+
+    connect(this, &MainWindow::sig_connectToService,
+            agent, &UserSessionAgent::onConnectToService,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_disconnectFromService,
+            agent, &UserSessionAgent::deleteLater,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_updateCredentials,
+            agent, &UserSessionAgent::onUpdateCredentials,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_oneTimeSessions,
+            agent, &UserSessionAgent::onOneTimeSessions,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_killClient,
+            agent, &UserSessionAgent::onKillClient,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_connectConfirmation,
+            agent, &UserSessionAgent::onConnectConfirmation,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_mouseLock,
+            agent, &UserSessionAgent::onMouseLock,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_keyboardLock,
+            agent, &UserSessionAgent::onKeyboardLock,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_pause,
+            agent, &UserSessionAgent::onPause,
+            Qt::QueuedConnection);
+    connect(this, &MainWindow::sig_textChat,
+            agent, &UserSessionAgent::onTextChat,
+            Qt::QueuedConnection);
+
+    LOG(LS_INFO) << "Connecting to service";
+    emit sig_connectToService();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,8 +247,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
     else
     {
-        window_proxy_->dettach();
-
         if (notifier_)
         {
             LOG(LS_INFO) << "Close notifier window";
@@ -224,29 +264,22 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
         LOG(LS_INFO) << "The connection to the service was successfully established.";
-
-        if (agent_proxy_)
-        {
-            agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
-        }
-        else
-        {
-            LOG(LS_ERROR) << "No agent proxy";
-        }
+        connected_to_service_ = true;
+        emit sig_oneTimeSessions(calcOneTimeSessions());
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
-        agent_proxy_.reset();
-
         LOG(LS_INFO) << "The connection to the service is lost. The application will be closed.";
+        connected_to_service_ = false;
+        emit sig_disconnectFromService();
         realClose();
     }
     else if (status == UserSessionAgent::Status::SERVICE_NOT_AVAILABLE)
     {
-        agent_proxy_.reset();
-
         LOG(LS_INFO) << "The connection to the service has not been established. "
                      << "The application works offline.";
+        connected_to_service_ = false;
+        emit sig_disconnectFromService();
     }
     else
     {
@@ -263,53 +296,14 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         notifier_ = new NotifierWindow();
 
         connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
-
-        connect(notifier_, &NotifierWindow::sig_voiceChat, this, [this](bool enable)
-        {
-            if (agent_proxy_)
-                agent_proxy_->setVoiceChat(enable);
-        });
-
         connect(notifier_, &NotifierWindow::sig_textChat, this, [=]()
         {
             // TODO
         });
 
-        connect(notifier_, &NotifierWindow::sig_lockMouse, this, [this](bool enable)
-        {
-            if (agent_proxy_)
-            {
-                agent_proxy_->setMouseLock(enable);
-            }
-            else
-            {
-                LOG(LS_ERROR) << "No agent proxy";
-            }
-        });
-
-        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [this](bool enable)
-        {
-            if (agent_proxy_)
-            {
-                agent_proxy_->setKeyboardLock(enable);
-            }
-            else
-            {
-                LOG(LS_ERROR) << "No agent proxy";
-            }
-        });
-
-        connect(notifier_, &NotifierWindow::sig_pause, this, [this](bool enable)
-        {
-            if (agent_proxy_)
-            {
-                agent_proxy_->setPause(enable);
-            }
-            else
-            {
-                LOG(LS_ERROR) << "No agent proxy";
-            }
-        });
+        connect(notifier_, &NotifierWindow::sig_lockMouse, this, &MainWindow::sig_mouseLock);
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, &MainWindow::sig_keyboardLock);
+        connect(notifier_, &NotifierWindow::sig_pause, this, &MainWindow::sig_pause);
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
@@ -346,31 +340,17 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             connect(text_chat_widget_, &common::TextChatWidget::sig_sendMessage,
                     this, [this](const proto::TextChatMessage& message)
             {
-                if (agent_proxy_)
-                {
-                    proto::TextChat text_chat;
-                    text_chat.mutable_chat_message()->CopyFrom(message);
-                    agent_proxy_->onTextChat(text_chat);
-                }
-                else
-                {
-                    LOG(LS_ERROR) << "No agent proxy";
-                }
+                proto::TextChat text_chat;
+                text_chat.mutable_chat_message()->CopyFrom(message);
+                emit sig_textChat(text_chat);
             });
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
                     this, [this](const proto::TextChatStatus& status)
             {
-                if (agent_proxy_)
-                {
-                    proto::TextChat text_chat;
-                    text_chat.mutable_chat_status()->CopyFrom(status);
-                    agent_proxy_->onTextChat(text_chat);
-                }
-                else
-                {
-                    LOG(LS_ERROR) << "No agent proxy";
-                }
+                proto::TextChat text_chat;
+                text_chat.mutable_chat_status()->CopyFrom(status);
+                emit sig_textChat(text_chat);
             });
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
@@ -506,19 +486,12 @@ void MainWindow::onConnectConfirmationRequest(
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
     LOG(LS_INFO) << "[ACTION] User " << (accept ? "ACCEPT" : "REJECT") << " connection request";
-
-    if (!agent_proxy_)
-    {
-        LOG(LS_ERROR) << "No agent proxy";
-        return;
-    }
-
-    agent_proxy_->connectConfirmation(request.id(), accept);
+    emit sig_connectConfirmation(request.id(), accept);
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onVideoRecordingStateChanged(
-    const std::string& computer_name, const std::string& user_name, bool started)
+    const QString& computer_name, const QString& user_name, bool started)
 {
     LOG(LS_INFO) << "Video recoring state changed (user_name=" << user_name
                  << " started=" << started << ")";
@@ -526,15 +499,9 @@ void MainWindow::onVideoRecordingStateChanged(
     QString message;
 
     if (started)
-    {
-        message = tr("User \"%1\" (%2) started screen recording.")
-            .arg(QString::fromStdString(user_name), QString::fromStdString(computer_name));
-    }
+        message = tr("User \"%1\" (%2) started screen recording.").arg(user_name, computer_name);
     else
-    {
-        message = tr("User \"%1\" (%2) stopped screen recording.")
-            .arg(QString::fromStdString(user_name), QString::fromStdString(computer_name));
-    }
+        message = tr("User \"%1\" (%2) stopped screen recording.").arg(user_name, computer_name);
 
     tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/main.ico"), 1200);
 }
@@ -568,6 +535,7 @@ void MainWindow::realClose()
 {
     LOG(LS_INFO) << "realClose called";
 
+    emit sig_disconnectFromService();
     should_be_quit_ = true;
     close();
 }
@@ -594,15 +562,7 @@ void MainWindow::onLanguageChanged(QAction* action)
         status_dialog_->retranslateUi();
 
     updateStatusBar();
-
-    if (agent_proxy_)
-    {
-        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No agent proxy";
-    }
+    emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -610,7 +570,7 @@ void MainWindow::onSettings()
 {
     LOG(LS_INFO) << "[ACTION] Settings";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!base::isProcessElevated())
     {
         LOG(LS_INFO) << "Process not elevated";
@@ -659,7 +619,7 @@ void MainWindow::onSettings()
     }
 #endif
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
     uid_t self_uid = getuid();
     uid_t effective_uid = geteuid();
 
@@ -685,7 +645,7 @@ void MainWindow::onSettings()
             << QApplication::applicationFilePath() << "--config");
         return;
     }
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
     SystemSettings settings;
     if (settings.passwordProtection())
@@ -737,7 +697,7 @@ void MainWindow::onAbout()
 void MainWindow::onExit()
 {
     // If the connection to the service is not established, then exit immediately.
-    if (!agent_proxy_)
+    if (!connected_to_service_)
     {
         LOG(LS_INFO) << "No agent proxy";
         realClose();
@@ -788,15 +748,8 @@ void MainWindow::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onKillSession(quint32 session_id)
 {
-    if (agent_proxy_)
-    {
-        LOG(LS_INFO) << "Killing session with ID: " << session_id;
-        agent_proxy_->killClient(session_id);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No agent proxy";
-    }
+    LOG(LS_INFO) << "Killing session with ID: " << session_id;
+    emit sig_killClient(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -809,14 +762,7 @@ void MainWindow::onOneTimeSessionsChanged()
     UserSettings user_settings;
     user_settings.setOneTimeSessions(sessions);
 
-    if (agent_proxy_)
-    {
-        agent_proxy_->setOneTimeSessions(sessions);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "No agent proxy";
-    }
+    emit sig_oneTimeSessions(sessions);
 }
 
 //--------------------------------------------------------------------------------------------------

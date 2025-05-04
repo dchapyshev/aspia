@@ -39,8 +39,8 @@ public:
     SessionTreeItem(const UserSessionAgent::Client& client)
         : session_type_(client.session_type),
           id_(client.id),
-          display_name_(QString::fromStdString(client.display_name)),
-          computer_name_(QString::fromStdString(client.computer_name))
+          display_name_(client.display_name),
+          computer_name_(client.computer_name)
     {
         switch (client.session_type)
         {
@@ -155,7 +155,6 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     ui.label_connections->installEventFilter(this);
 
     connect(ui.button_show_hide, &QPushButton::clicked, this, &NotifierWindow::onShowHidePressed);
-    connect(ui.button_voice_chat, &QToolButton::clicked, this, &NotifierWindow::onVoiceChat);
     connect(ui.button_text_chat, &QToolButton::clicked, this, &NotifierWindow::onTextChat);
     connect(ui.button_lock_mouse, &QToolButton::clicked, this, &NotifierWindow::onLockMouse);
     connect(ui.button_lock_keyboard, &QToolButton::clicked, this, &NotifierWindow::onLockKeyboard);
@@ -164,7 +163,6 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 
 #if 1
     ui.button_text_chat->setVisible(false);
-    ui.button_voice_chat->setVisible(false);
 #endif
 
     setAttribute(Qt::WA_TranslucentBackground);
@@ -279,14 +277,6 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
         emit sig_finished();
         closeNotifier();
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void NotifierWindow::onVoiceChat()
-{
-    LOG(LS_INFO) << "[ACTION] Voice chat";
-    is_voice_chat_ = !is_voice_chat_;
-    emit sig_voiceChat(is_voice_chat_);
 }
 
 //--------------------------------------------------------------------------------------------------

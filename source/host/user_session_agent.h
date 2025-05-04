@@ -20,12 +20,9 @@
 #define HOST_USER_SESSION_AGENT_H
 
 #include "base/ipc/ipc_channel.h"
-#include "proto/host_internal.pb.h"
+#include "proto/host_internal.h"
 
 namespace host {
-
-class UserSessionAgentProxy;
-class UserSessionWindowProxy;
 
 class UserSessionAgent final : public QObject
 {
@@ -43,45 +40,50 @@ public:
     {
         explicit Client(const proto::internal::ConnectEvent& event)
             : id(event.id()),
-              computer_name(event.computer_name()),
-              display_name(event.display_name()),
+              computer_name(QString::fromStdString(event.computer_name())),
+              display_name(QString::fromStdString(event.display_name())),
               session_type(event.session_type())
         {
             // Nothing
         }
 
         quint32 id;
-        std::string computer_name;
-        std::string display_name;
+        QString computer_name;
+        QString display_name;
         proto::SessionType session_type;
     };
 
     using ClientList = std::vector<Client>;
 
-    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
-                              QObject* parent = nullptr);
+    explicit UserSessionAgent(QObject* parent = nullptr);
     ~UserSessionAgent() final;
 
-    void start();
+public slots:
+    void onConnectToService();
+    void onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void onOneTimeSessions(quint32 sessions);
+    void onKillClient(quint32 id);
+    void onConnectConfirmation(quint32 id, bool accept);
+    void onMouseLock(bool enable);
+    void onKeyboardLock(bool enable);
+    void onPause(bool enable);
+    void onTextChat(const proto::TextChat& text_chat);
+
+signals:
+    void sig_statusChanged(host::UserSessionAgent::Status status);
+    void sig_clientListChanged(const host::UserSessionAgent::ClientList& clients);
+    void sig_credentialsChanged(const proto::internal::Credentials& credentials);
+    void sig_routerStateChanged(const proto::internal::RouterState& state);
+    void sig_connectConfirmationRequest(const proto::internal::ConnectConfirmationRequest& request);
+    void sig_videoRecordingStateChanged(
+        const QString& computer_name, const QString& user_name, bool started);
+    void sig_textChat(const proto::TextChat& text_chat);
 
 private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    friend class UserSessionAgentProxy;
-
-    void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void setOneTimeSessions(quint32 sessions);
-    void killClient(quint32 id);
-    void connectConfirmation(quint32 id, bool accept);
-    void setVoiceChat(bool enable);
-    void setMouseLock(bool enable);
-    void setKeyboardLock(bool enable);
-    void setPause(bool enable);
-    void onTextChat(const proto::TextChat& text_chat);
-
-    std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;
 
     proto::internal::ServiceToUi incoming_message_;
@@ -93,5 +95,8 @@ private:
 };
 
 } // namespace host
+
+Q_DECLARE_METATYPE(host::UserSessionAgent::Status)
+Q_DECLARE_METATYPE(host::UserSessionAgent::ClientList)
 
 #endif // HOST_USER_SESSION_AGENT_H

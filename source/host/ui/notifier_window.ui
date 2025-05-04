@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
-    <height>152</height>
+    <width>241</width>
+    <height>160</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -344,20 +344,6 @@ background: #D7D7D7;
           </spacer>
          </item>
          <item>
-          <widget class="QToolButton" name="button_voice_chat">
-           <property name="toolTip">
-            <string>Voice chat</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/img/headphone.png</normaloff>:/img/headphone.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QToolButton" name="button_text_chat">
            <property name="toolTip">
             <string>Chat</string>
@@ -366,7 +352,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
+            <iconset resource="../../client/resources/client.qrc">
              <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
            </property>
           </widget>
@@ -422,7 +408,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
+            <iconset resource="../../client/resources/client.qrc">
              <normaloff>:/img/control-stop.png</normaloff>:/img/control-stop.png</iconset>
            </property>
           </widget>

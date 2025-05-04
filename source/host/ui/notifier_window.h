@@ -35,8 +35,7 @@ public:
     std::vector<quint32> sessions(proto::SessionType session_type);
 
 public slots:
-    void onClientListChanged(const UserSessionAgent::ClientList& clients);
-    void onVoiceChat();
+    void onClientListChanged(const host::UserSessionAgent::ClientList& clients);
     void onTextChat();
     void onLockMouse();
     void onLockKeyboard();
@@ -47,7 +46,6 @@ public slots:
 
 signals:
     void sig_killSession(quint32 id);
-    void sig_voiceChat(bool enable);
     void sig_textChat();
     void sig_lockMouse(bool enable);
     void sig_lockKeyboard(bool enable);
@@ -76,7 +74,6 @@ private:
     QPoint start_pos_;
     QRect window_rect_;
 
-    bool is_voice_chat_ = false;
     bool is_mouse_locked_ = false;
     bool is_keyboard_locked_ = false;
     bool is_paused_ = false;

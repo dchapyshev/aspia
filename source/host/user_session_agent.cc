@@ -21,25 +21,29 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "host/host_ipc_storage.h"
-#include "host/user_session_window_proxy.h"
 
 namespace host {
 
+namespace {
+
+auto g_statusType = qRegisterMetaType<host::UserSessionAgent::Status>();
+auto g_clientListType = qRegisterMetaType<host::UserSessionAgent::ClientList>();
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
-UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy, QObject* parent)
-    : QObject(parent),
-      window_proxy_(std::move(window_proxy))
+UserSessionAgent::UserSessionAgent(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(window_proxy_);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     // 0x100-0x1FF Application reserved last shutdown range.
     if (!SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY))
     {
         PLOG(LS_ERROR) << "SetProcessShutdownParameters failed";
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,7 +53,7 @@ UserSessionAgent::~UserSessionAgent()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::start()
+void UserSessionAgent::onConnectToService()
 {
     QString channel_id = HostIpcStorage().channelIdForUI();
     LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
@@ -64,23 +68,128 @@ void UserSessionAgent::start()
     if (ipc_channel_->connect(channel_id))
     {
         LOG(LS_INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
-
-        window_proxy_->onStatusChanged(Status::CONNECTED_TO_SERVICE);
+        emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
     }
     else
     {
         LOG(LS_INFO) << "IPC channel not connected (channel_id=" << channel_id << ")";
-
-        window_proxy_->onStatusChanged(Status::SERVICE_NOT_AVAILABLE);
+        emit sig_statusChanged(Status::SERVICE_NOT_AVAILABLE);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type)
+{
+    LOG(LS_INFO) << "Update credentials request: " << request_type;
+
+    outgoing_message_.Clear();
+
+    proto::internal::CredentialsRequest* request = outgoing_message_.mutable_credentials_request();
+    request->set_type(request_type);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onOneTimeSessions(quint32 sessions)
+{
+    LOG(LS_INFO) << "One-time sessions changed: " << sessions;
+
+    outgoing_message_.Clear();
+
+    proto::internal::OneTimeSessions* one_time_sessions =
+        outgoing_message_.mutable_one_time_sessions();
+    one_time_sessions->set_sessions(sessions);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onKillClient(quint32 id)
+{
+    LOG(LS_INFO) << "Kill client request: " << id;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_KILL);
+    control->set_unsigned_integer(id);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
+{
+    LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
+
+    outgoing_message_.Clear();
+    proto::internal::ConnectConfirmation* confirmation =
+        outgoing_message_.mutable_connect_confirmation();
+    confirmation->set_id(id);
+    confirmation->set_accept_connection(accept);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onMouseLock(bool enable)
+{
+    LOG(LS_INFO) << "Mouse lock: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onKeyboardLock(bool enable)
+{
+    LOG(LS_INFO) << "Keyboard lock: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onPause(bool enable)
+{
+    LOG(LS_INFO) << "Pause: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
+{
+    LOG(LS_INFO) << "Text chat message";
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconncted";
-    window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
+    emit sig_statusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,14 +212,14 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
                      << " computer_name=" << request.computer_name() << " user_name="
                      << request.user_name() << ")";
 
-        window_proxy_->onConnectConfirmationRequest(request);
+        emit sig_connectConfirmationRequest(request);
     }
     else if (incoming_message_.has_connect_event())
     {
         LOG(LS_INFO) << "Connect event received";
 
         clients_.emplace_back(incoming_message_.connect_event());
-        window_proxy_->onClientListChanged(clients_);
+        emit sig_clientListChanged(clients_);
     }
     else if (incoming_message_.has_disconnect_event())
     {
@@ -125,23 +234,23 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             }
         }
 
-        window_proxy_->onClientListChanged(clients_);
+        emit sig_clientListChanged(clients_);
     }
     else if (incoming_message_.has_credentials())
     {
         const proto::internal::Credentials& credentials = incoming_message_.credentials();
         LOG(LS_INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
-        window_proxy_->onCredentialsChanged(credentials);
+        emit sig_credentialsChanged(credentials);
     }
     else if (incoming_message_.has_router_state())
     {
         const proto::internal::RouterState router_state = incoming_message_.router_state();
         LOG(LS_INFO) << "Router state received (state=" << router_state.state() << ")";
-        window_proxy_->onRouterStateChanged(router_state);
+        emit sig_routerStateChanged(router_state);
     }
     else if (incoming_message_.has_text_chat())
     {
-        window_proxy_->onTextChat(incoming_message_.text_chat());
+        emit sig_textChat(incoming_message_.text_chat());
     }
     else if (incoming_message_.has_video_recording_state())
     {
@@ -153,136 +262,15 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
                      << video_recording_state.user_name() << " started="
                      << video_recording_state.started() << ")";
 
-        window_proxy_->onVideoRecordingStateChanged(
-            video_recording_state.computer_name(),
-            video_recording_state.user_name(),
+        emit sig_videoRecordingStateChanged(
+            QString::fromStdString(video_recording_state.computer_name()),
+            QString::fromStdString(video_recording_state.user_name()),
             video_recording_state.started());
     }
     else
     {
         LOG(LS_ERROR) << "Unhandled message from service";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
-{
-    LOG(LS_INFO) << "Update credentials request: " << request_type;
-
-    outgoing_message_.Clear();
-
-    proto::internal::CredentialsRequest* request = outgoing_message_.mutable_credentials_request();
-    request->set_type(request_type);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setOneTimeSessions(quint32 sessions)
-{
-    LOG(LS_INFO) << "One-time sessions changed: " << sessions;
-
-    outgoing_message_.Clear();
-
-    proto::internal::OneTimeSessions* one_time_sessions =
-        outgoing_message_.mutable_one_time_sessions();
-    one_time_sessions->set_sessions(sessions);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::killClient(quint32 id)
-{
-    LOG(LS_INFO) << "Kill client request: " << id;
-
-    outgoing_message_.Clear();
-    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
-
-    control->set_code(proto::internal::ServiceControl::CODE_KILL);
-    control->set_unsigned_integer(id);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::connectConfirmation(quint32 id, bool accept)
-{
-    LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
-
-    outgoing_message_.Clear();
-    proto::internal::ConnectConfirmation* confirmation =
-        outgoing_message_.mutable_connect_confirmation();
-    confirmation->set_id(id);
-    confirmation->set_accept_connection(accept);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setVoiceChat(bool enable)
-{
-    LOG(LS_INFO) << "Voice chat: " << enable;
-
-    outgoing_message_.Clear();
-    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
-
-    control->set_code(proto::internal::ServiceControl::CODE_VOICE_CHAT);
-    control->set_boolean(enable);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setMouseLock(bool enable)
-{
-    LOG(LS_INFO) << "Mouse lock: " << enable;
-
-    outgoing_message_.Clear();
-    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
-
-    control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
-    control->set_boolean(enable);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setKeyboardLock(bool enable)
-{
-    LOG(LS_INFO) << "Keyboard lock: " << enable;
-
-    outgoing_message_.Clear();
-    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
-
-    control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
-    control->set_boolean(enable);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::setPause(bool enable)
-{
-    LOG(LS_INFO) << "Pause: " << enable;
-
-    outgoing_message_.Clear();
-    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
-
-    control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
-    control->set_boolean(enable);
-
-    ipc_channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
-{
-    LOG(LS_INFO) << "Text chat message";
-
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

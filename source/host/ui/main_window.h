@@ -19,8 +19,7 @@
 #ifndef HOST_UI_MAIN_WINDOW_H
 #define HOST_UI_MAIN_WINDOW_H
 
-#include "build/build_config.h"
-#include "host/user_session_window.h"
+#include "host/user_session_agent.h"
 #include "ui_main_window.h"
 
 #include <QMainWindow>
@@ -35,11 +34,8 @@ class TextChatWidget;
 namespace host {
 
 class NotifierWindow;
-class UserSessionAgentProxy;
 
-class MainWindow final
-    : public QMainWindow,
-      public UserSessionWindow
+class MainWindow final : public QMainWindow
 {
     Q_OBJECT
 
@@ -52,22 +48,33 @@ public slots:
     void activateHost();
     void hideToTray();
 
+signals:
+    void sig_connectToService();
+    void sig_disconnectFromService();
+    void sig_updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void sig_oneTimeSessions(quint32 sessions);
+    void sig_killClient(quint32 id);
+    void sig_connectConfirmation(quint32 id, bool accept);
+    void sig_mouseLock(bool enable);
+    void sig_keyboardLock(bool enable);
+    void sig_pause(bool enable);
+    void sig_textChat(const proto::TextChat& text_chat);
+
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
 
-    // UserSessionWindow implementation.
-    void onStatusChanged(UserSessionAgent::Status status) final;
-    void onClientListChanged(const UserSessionAgent::ClientList& clients) final;
-    void onCredentialsChanged(const proto::internal::Credentials& credentials) final;
-    void onRouterStateChanged(const proto::internal::RouterState& state) final;
-    void onConnectConfirmationRequest(
-        const proto::internal::ConnectConfirmationRequest& request) final;
-    void onVideoRecordingStateChanged(
-        const std::string& computer_name, const std::string& user_name, bool started) final;
-    void onTextChat(const proto::TextChat& text_chat) final;
-
 private slots:
+    void onStatusChanged(host::UserSessionAgent::Status status);
+    void onClientListChanged(const host::UserSessionAgent::ClientList& clients);
+    void onCredentialsChanged(const proto::internal::Credentials& credentials);
+    void onRouterStateChanged(const proto::internal::RouterState& state);
+    void onConnectConfirmationRequest(
+        const proto::internal::ConnectConfirmationRequest& request);
+    void onVideoRecordingStateChanged(
+        const QString& computer_name, const QString& user_name, bool started);
+    void onTextChat(const proto::TextChat& text_chat);
+
     void realClose();
     void onLanguageChanged(QAction* action);
     void onSettings();
@@ -88,6 +95,7 @@ private:
     Ui::MainWindow ui;
 
     bool should_be_quit_ = false;
+    bool connected_to_service_ = false;
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
@@ -96,9 +104,6 @@ private:
 
     common::StatusDialog* status_dialog_ = nullptr;
     proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;
-
-    std::unique_ptr<UserSessionAgentProxy> agent_proxy_;
-    std::shared_ptr<UserSessionWindowProxy> window_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
