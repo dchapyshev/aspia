@@ -62,7 +62,6 @@ Server::~Server()
     LOG(LS_INFO) << "Dtor";
     LOG(LS_INFO) << "Stopping the server...";
 
-    authenticator_manager_.reset();
     user_session_manager_.reset();
     server_.reset();
 
@@ -103,7 +102,9 @@ void Server::start()
     settings_watcher_->addPath(settings_file);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
 
-    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(this);
+    authenticator_manager_ = new base::ServerAuthenticatorManager(this);
+    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
+            this, &Server::onSessionAuthenticated);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -146,7 +147,7 @@ void Server::setSessionEvent(base::SessionStatus status, base::SessionId session
 //--------------------------------------------------------------------------------------------------
 void Server::setPowerEvent(quint32 power_event)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     LOG(LS_INFO) << "Power event: " << power_event;
 
     switch (power_event)
@@ -171,52 +172,7 @@ void Server::setPowerEvent(quint32 power_event)
             // Ignore other events.
             break;
     }
-#endif // defined(OS_WIN)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
-{
-    LOG(LS_INFO) << "New client session";
-
-    bool channel_id_support = (session_info.version >= base::kVersion_2_6_0);
-    if (channel_id_support)
-        session_info.channel->setChannelIdSupport(true);
-
-    LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
-
-    const QVersionNumber& host_version = base::kCurrentVersion;
-    if (host_version > session_info.version)
-    {
-        LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                      << " client: " << session_info.version.toString() << ")";
-    }
-
-    std::unique_ptr<ClientSession> session = ClientSession::create(
-        static_cast<proto::SessionType>(session_info.session_type),
-        std::move(session_info.channel));
-
-    if (session)
-    {
-        session->setClientVersion(session_info.version);
-        session->setComputerName(session_info.computer_name);
-        session->setDisplayName(session_info.display_name);
-        session->setUserName(session_info.user_name);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid client session";
-        return;
-    }
-
-    if (user_session_manager_)
-    {
-        user_session_manager_->onClientSession(std::move(session));
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid user session manager";
-    }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -250,6 +206,63 @@ void Server::onUserListChanged()
 {
     LOG(LS_INFO) << "User list changed";
     reloadUserList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onSessionAuthenticated()
+{
+    LOG(LS_INFO) << "New client session";
+
+    if (!authenticator_manager_)
+    {
+        LOG(LS_ERROR) << "No authenticator manager instance";
+        return;
+    }
+
+    while (authenticator_manager_->hasReadySessions())
+    {
+        base::ServerAuthenticatorManager::SessionInfo session_info =
+            authenticator_manager_->nextReadySession();
+
+        bool channel_id_support = (session_info.version >= base::kVersion_2_6_0);
+        if (channel_id_support)
+            session_info.channel->setChannelIdSupport(true);
+
+        LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
+
+        const QVersionNumber& host_version = base::kCurrentVersion;
+        if (host_version > session_info.version)
+        {
+            LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
+            << " client: " << session_info.version.toString() << ")";
+        }
+
+        std::unique_ptr<ClientSession> session = ClientSession::create(
+            static_cast<proto::SessionType>(session_info.session_type),
+            std::move(session_info.channel));
+
+        if (session)
+        {
+            session->setClientVersion(session_info.version);
+            session->setComputerName(session_info.computer_name);
+            session->setDisplayName(session_info.display_name);
+            session->setUserName(session_info.user_name);
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Invalid client session";
+            return;
+        }
+
+        if (user_session_manager_)
+        {
+            user_session_manager_->onClientSession(std::move(session));
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Invalid user session manager";
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -421,14 +434,7 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
     channel->setReadBufferSize(kReadBufferSize);
     channel->setNoDelay(true);
 
-    if (authenticator_manager_)
-    {
-        authenticator_manager_->addNewChannel(std::move(channel));
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid authenticator manager";
-    }
+    authenticator_manager_->addNewChannel(std::move(channel));
 }
 
 //--------------------------------------------------------------------------------------------------

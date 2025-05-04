@@ -36,7 +36,6 @@ class SessionRelay;
 class Server final
     : public QObject,
       public SharedKeyPool::Delegate,
-      public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
     Q_OBJECT
@@ -58,20 +57,18 @@ protected:
     // SharedKeyPool::Delegate implementation.
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id) final;
 
-    // base::ServerAuthenticatorManager::Delegate implementation.
-    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
-
     // Session::Delegate implementation.
     void onSessionFinished(Session::SessionId session_id,
                            proto::RouterSession session_type) final;
 
 private slots:
+    void onSessionAuthenticated();
     void onNewConnection();
 
 private:
     base::local_shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::TcpServer> server_;
-    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
+    QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     std::vector<std::unique_ptr<Session>> sessions_;
 

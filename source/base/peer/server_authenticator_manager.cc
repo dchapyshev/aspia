@@ -24,12 +24,10 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ServerAuthenticatorManager::ServerAuthenticatorManager(Delegate* delegate, QObject* parent)
-    : QObject(parent),
-      delegate_(delegate)
+ServerAuthenticatorManager::ServerAuthenticatorManager(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,11 +84,28 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
             this, &ServerAuthenticatorManager::onComplete);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(Pending(std::move(channel), std::move(authenticator)));
+    pending_.emplace_back(std::move(channel), std::move(authenticator));
 
     // Start the authentication process.
     const Pending& current = pending_.back();
     current.authenticator->start(current.channel.get());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ServerAuthenticatorManager::hasReadySessions() const
+{
+    return !ready_sessions_.empty();
+}
+
+//--------------------------------------------------------------------------------------------------
+ServerAuthenticatorManager::SessionInfo ServerAuthenticatorManager::nextReadySession()
+{
+    if (ready_sessions_.empty())
+        return SessionInfo();
+
+    SessionInfo session_info = std::move(ready_sessions_.front());
+    ready_sessions_.pop();
+    return session_info;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,7 +133,8 @@ void ServerAuthenticatorManager::onComplete()
                     session_info.user_name     = current->userName();
                     session_info.session_type  = current->sessionType();
 
-                    delegate_->onNewSession(std::move(session_info));
+                    ready_sessions_.emplace(std::move(session_info));
+                    emit sig_sessionReady();
                 }
 
                 // Authenticator not needed anymore.

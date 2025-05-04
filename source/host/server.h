@@ -40,7 +40,6 @@ namespace host {
 
 class Server final
     : public QObject,
-      public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate
 {
     Q_OBJECT
@@ -54,23 +53,18 @@ public:
     void setPowerEvent(quint32 power_event);
 
 protected:
-    // base::AuthenticatorManager::Delegate implementation.
-    void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) final;
-
     // UserSessionManager::Delegate implementation.
     void onHostIdRequest(const QString& session_name) final;
     void onResetHostId(base::HostId host_id) final;
     void onUserListChanged() final;
 
 private slots:
+    void onSessionAuthenticated();
     void onNewDirectConnection();
-
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdAssigned(const QString& session_name, base::HostId host_id);
     void onNewRelayConnection();
-
     void onUpdateCheckedFinished(const QByteArray& result);
-
     void onFileDownloaderError(int error_code);
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
@@ -94,7 +88,7 @@ private:
     // Accepts incoming network connections.
     std::unique_ptr<base::TcpServer> server_;
     std::unique_ptr<RouterController> router_controller_;
-    std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
+    QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
 
     std::unique_ptr<common::UpdateChecker> update_checker_;

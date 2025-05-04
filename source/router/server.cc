@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/stl_util.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
@@ -121,10 +120,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Client white list is not empty. Allowed clients:";
-
-        for (int i = 0; i < client_white_list_.size(); ++i)
-            LOG(LS_INFO) << "#" << (i + 1) << ": " << client_white_list_[i];
+        LOG(LS_INFO) << "Client white list is not empty. Allowed clients: " << client_white_list_;
     }
 
     host_white_list_ = settings.hostWhiteList();
@@ -134,10 +130,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts:";
-
-        for (int i = 0; i < host_white_list_.size(); ++i)
-            LOG(LS_INFO) << "#" << (i + 1) << ": " << host_white_list_[i];
+        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts: " << host_white_list_;
     }
 
     admin_white_list_ = settings.adminWhiteList();
@@ -147,10 +140,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins:";
-
-        for (int i = 0; i < admin_white_list_.size(); ++i)
-            LOG(LS_INFO) << "#" << (i + 1) << ": " << admin_white_list_[i];
+        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins: " << admin_white_list_;
     }
 
     relay_white_list_ = settings.relayWhiteList();
@@ -160,10 +150,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays:";
-
-        for (int i = 0; i < relay_white_list_.size(); ++i)
-            LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
+        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays: " << relay_white_list_;
     }
 
     QByteArray seed_key = settings.seedKey();
@@ -177,8 +164,11 @@ bool Server::start()
     std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
     user_list->setSeedKey(seed_key);
 
-    authenticator_manager_ =
-        std::make_unique<base::ServerAuthenticatorManager>(this);
+    authenticator_manager_ = new base::ServerAuthenticatorManager(this);
+
+    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
+            this, &Server::onSessionAuthenticated);
+
     authenticator_manager_->setPrivateKey(private_key);
     authenticator_manager_->setUserList(std::move(user_list));
     authenticator_manager_->setAnonymousAccess(
@@ -358,89 +348,6 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
-{
-    QString address = session_info.channel->peerAddress();
-    proto::RouterSession session_type =
-        static_cast<proto::RouterSession>(session_info.session_type);
-
-    LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
-
-    if (session_info.version >= base::kVersion_2_6_0)
-    {
-        LOG(LS_INFO) << "Using channel id support";
-        session_info.channel->setChannelIdSupport(true);
-    }
-
-    std::unique_ptr<Session> session;
-
-    switch (session_info.session_type)
-    {
-        case proto::ROUTER_SESSION_CLIENT:
-        {
-            if (!client_white_list_.empty() && !base::contains(client_white_list_, address))
-                break;
-
-            session = std::make_unique<SessionClient>();
-        }
-        break;
-
-        case proto::ROUTER_SESSION_HOST:
-        {
-            if (!host_white_list_.empty() && !base::contains(host_white_list_, address))
-                break;
-
-            session = std::make_unique<SessionHost>();
-        }
-        break;
-
-        case proto::ROUTER_SESSION_ADMIN:
-        {
-            if (!admin_white_list_.empty() && !base::contains(admin_white_list_, address))
-                break;
-
-            session = std::make_unique<SessionAdmin>();
-        }
-        break;
-
-        case proto::ROUTER_SESSION_RELAY:
-        {
-            if (!relay_white_list_.empty() && !base::contains(relay_white_list_, address))
-                break;
-
-            session = std::make_unique<SessionRelay>();
-        }
-        break;
-
-        default:
-        {
-            LOG(LS_ERROR) << "Unsupported session type: "
-                          << static_cast<int>(session_info.session_type);
-        }
-        break;
-    }
-
-    if (!session)
-    {
-        LOG(LS_ERROR) << "Connection rejected for '" << address << "'";
-        return;
-    }
-
-    session->setChannel(std::move(session_info.channel));
-    session->setDatabaseFactory(database_factory_);
-    session->setServer(this);
-    session->setRelayKeyPool(relay_key_pool_->share());
-    session->setVersion(session_info.version);
-    session->setOsName(session_info.os_name);
-    session->setComputerName(session_info.computer_name);
-    session->setArchitecture(session_info.architecture);
-    session->setUserName(session_info.user_name);
-
-    sessions_.emplace_back(std::move(session));
-    sessions_.back()->start(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
@@ -454,6 +361,101 @@ void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSessi
             sessions_.erase(it);
             break;
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onSessionAuthenticated()
+{
+    if (!authenticator_manager_)
+    {
+        LOG(LS_ERROR) << "No authenticator manager instance";
+        return;
+    }
+
+    while (authenticator_manager_->hasReadySessions())
+    {
+        base::ServerAuthenticatorManager::SessionInfo session_info =
+            authenticator_manager_->nextReadySession();
+
+        QString address = session_info.channel->peerAddress();
+        proto::RouterSession session_type =
+            static_cast<proto::RouterSession>(session_info.session_type);
+
+        LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
+
+        if (session_info.version >= base::kVersion_2_6_0)
+        {
+            LOG(LS_INFO) << "Using channel id support";
+            session_info.channel->setChannelIdSupport(true);
+        }
+
+        std::unique_ptr<Session> session;
+
+        switch (session_info.session_type)
+        {
+        case proto::ROUTER_SESSION_CLIENT:
+        {
+            if (!client_white_list_.empty() && !client_white_list_.contains(address))
+                break;
+
+            session = std::make_unique<SessionClient>();
+        }
+        break;
+
+        case proto::ROUTER_SESSION_HOST:
+        {
+            if (!host_white_list_.empty() && !host_white_list_.contains(address))
+                break;
+
+            session = std::make_unique<SessionHost>();
+        }
+        break;
+
+        case proto::ROUTER_SESSION_ADMIN:
+        {
+            if (!admin_white_list_.empty() && !admin_white_list_.contains(address))
+                break;
+
+            session = std::make_unique<SessionAdmin>();
+        }
+        break;
+
+        case proto::ROUTER_SESSION_RELAY:
+        {
+            if (!relay_white_list_.empty() && !relay_white_list_.contains(address))
+                break;
+
+            session = std::make_unique<SessionRelay>();
+        }
+        break;
+
+        default:
+        {
+            LOG(LS_ERROR) << "Unsupported session type: "
+                          << static_cast<int>(session_info.session_type);
+        }
+        break;
+        }
+
+        if (!session)
+        {
+            LOG(LS_ERROR) << "Connection rejected for '" << address << "'";
+            return;
+        }
+
+        session->setChannel(std::move(session_info.channel));
+        session->setDatabaseFactory(database_factory_);
+        session->setServer(this);
+        session->setRelayKeyPool(relay_key_pool_->share());
+        session->setVersion(session_info.version);
+        session->setOsName(session_info.os_name);
+        session->setComputerName(session_info.computer_name);
+        session->setArchitecture(session_info.architecture);
+        session->setUserName(session_info.user_name);
+
+        sessions_.emplace_back(std::move(session));
+        sessions_.back()->start(this);
     }
 }
 
@@ -475,10 +477,7 @@ void Server::onNewConnection()
         channel->setKeepAlive(true);
         channel->setNoDelay(true);
 
-        if (authenticator_manager_)
-            authenticator_manager_->addNewChannel(std::move(channel));
-        else
-            LOG(LS_ERROR) << "Authenticator not available";
+        authenticator_manager_->addNewChannel(std::move(channel));
     }
 }
 

@@ -21,6 +21,8 @@
 
 #include "base/peer/server_authenticator.h"
 
+#include <queue>
+
 namespace base {
 
 class ServerAuthenticatorManager final : public QObject
@@ -48,16 +50,7 @@ public:
         quint32 session_type = 0;
     };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        // Called when authentication for the channel succeeds.
-        virtual void onNewSession(SessionInfo&& session_info) = 0;
-    };
-
-    explicit ServerAuthenticatorManager(Delegate* delegate, QObject* parent = nullptr);
+    explicit ServerAuthenticatorManager(QObject* parent = nullptr);
     ~ServerAuthenticatorManager();
 
     void setUserList(std::unique_ptr<UserListBase> user_list);
@@ -71,6 +64,12 @@ public:
     // created (in a stopped state) and method Delegate::onNewSession will be called.
     // If authentication fails, the channel will be automatically deleted.
     void addNewChannel(std::unique_ptr<TcpChannel> channel);
+
+    bool hasReadySessions() const;
+    SessionInfo nextReadySession();
+
+signals:
+    void sig_sessionReady();
 
 private slots:
     void onComplete();
@@ -92,7 +91,7 @@ private:
 
     quint32 anonymous_session_types_ = 0;
 
-    Delegate* delegate_;
+    std::queue<SessionInfo> ready_sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
 };
