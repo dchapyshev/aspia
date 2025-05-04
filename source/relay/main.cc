@@ -30,21 +30,19 @@
 #include "relay/controller.h"
 #endif
 
-#include <iostream>
-
 #include <QCommandLineParser>
 #include <QSysInfo>
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int createConfig()
+int createConfig(QTextStream& out)
 {
     relay::Settings settings;
 
     if (!settings.isEmpty())
     {
-        std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
+        out << "Settings file already exists. Continuation is impossible." << Qt::endl;
         return 1;
     }
 
@@ -52,7 +50,7 @@ int createConfig()
     settings.reset();
     settings.sync();
 
-    std::cout << "Configuration successfully created." << std::endl;
+    out << "Configuration successfully created." << Qt::endl;
     return 0;
 }
 
@@ -94,26 +92,28 @@ int main(int argc, char* argv[])
                  << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
     LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
+    QTextStream out(stdout, QIODevice::WriteOnly);
+
     if (parser.isSet(create_config_option))
     {
-        return createConfig();
+        return createConfig(out);
     }
 #if defined(Q_OS_WINDOWS)
     else if (parser.isSet(install_option))
     {
-        return relay::installService();
+        return relay::installService(out);
     }
     else if (parser.isSet(remove_option))
     {
-        return relay::removeService();
+        return relay::removeService(out);
     }
     else if (parser.isSet(start_option))
     {
-        return relay::startService();
+        return relay::startService(out);
     }
     else if (parser.isSet(stop_option))
     {
-        return relay::stopService();
+        return relay::stopService(out);
     }
 #endif // defined(Q_OS_WINDOWS)
     else

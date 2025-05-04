@@ -19,12 +19,14 @@
 #ifndef ROUTER_WIN_SERVICE_UTIL_H
 #define ROUTER_WIN_SERVICE_UTIL_H
 
+#include <QTextStream>
+
 namespace router {
 
-int startService();
-int stopService();
-int installService();
-int removeService();
+int startService(QTextStream& out);
+int stopService(QTextStream& out);
+int installService(QTextStream& out);
+int removeService(QTextStream& out);
 
 } // namespace router
 

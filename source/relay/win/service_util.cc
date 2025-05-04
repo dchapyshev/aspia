@@ -22,81 +22,81 @@
 #include "relay/service_constants.h"
 
 #include <QCoreApplication>
-#include <iostream>
+#include <QTextStream>
 
 namespace relay {
 
 //--------------------------------------------------------------------------------------------------
-int startService()
+int startService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::open(relay::kServiceName);
     if (!controller.isValid())
     {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-                  << std::endl;
+        out << "Failed to access the service. Not enough rights or service not installed."
+            << Qt::endl;
         return 1;
     }
 
     if (!controller.start())
     {
-        std::cout << "Failed to start the service." << std::endl;
+        out << "Failed to start the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service started successfully." << std::endl;
+    out << "The service started successfully." << Qt::endl;
     return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-int stopService()
+int stopService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::open(relay::kServiceName);
     if (!controller.isValid())
     {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-                  << std::endl;
+        out << "Failed to access the service. Not enough rights or service not installed."
+            << Qt::endl;
         return 1;
     }
 
     if (!controller.stop())
     {
-        std::cout << "Failed to stop the service." << std::endl;
+        out << "Failed to stop the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service has stopped successfully." << std::endl;
+    out << "The service has stopped successfully." << Qt::endl;
     return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-int installService()
+int installService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::install(
         relay::kServiceName, relay::kServiceDisplayName, QCoreApplication::applicationFilePath());
     if (!controller.isValid())
     {
-        std::cout << "Failed to install the service." << std::endl;
+        out << "Failed to install the service." << Qt::endl;
         return 1;
     }
 
     controller.setDescription(relay::kServiceDescription);
-    std::cout << "The service has been successfully installed." << std::endl;
+    out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-int removeService()
+int removeService(QTextStream& out)
 {
     if (base::ServiceController::isRunning(relay::kServiceName))
-        stopService();
+        stopService(out);
 
     if (!base::ServiceController::remove(relay::kServiceName))
     {
-        std::cout << "Failed to remove the service." << std::endl;
+        out << "Failed to remove the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service was successfully deleted." << std::endl;
+    out << "The service was successfully deleted." << Qt::endl;
     return 0;
 }
 

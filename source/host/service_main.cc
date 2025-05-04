@@ -36,8 +36,6 @@
 #include "base/win/session_enumerator.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#include <iostream>
-
 #include <QCommandLineParser>
 #include <QProcessEnvironment>
 #include <QSysInfo>
@@ -46,83 +44,83 @@ namespace host {
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-int startService()
+int startService(QTextStream& out)
 {
     base::ServiceController controller =
         base::ServiceController::open(host::kHostServiceName);
     if (!controller.isValid())
     {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-                  << std::endl;
+        out << "Failed to access the service. Not enough rights or service not installed."
+            << Qt::endl;
         return 1;
     }
 
     if (!controller.start())
     {
-        std::cout << "Failed to start the service." << std::endl;
+        out << "Failed to start the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service started successfully." << std::endl;
+    out << "The service started successfully." << Qt::endl;
     return 0;
 }
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-int stopService()
+int stopService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::open(host::kHostServiceName);
     if (!controller.isValid())
     {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-                  << std::endl;
+        out << "Failed to access the service. Not enough rights or service not installed."
+            << Qt::endl;
         return 1;
     }
 
     if (!controller.stop())
     {
-        std::cout << "Failed to stop the service." << std::endl;
+        out << "Failed to stop the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service has stopped successfully." << std::endl;
+    out << "The service has stopped successfully." << Qt::endl;
     return 0;
 }
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-int installService()
+int installService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::install(
         host::kHostServiceName, host::kHostServiceDisplayName, base::Application::applicationFilePath());
     if (!controller.isValid())
     {
-        std::cout << "Failed to install the service." << std::endl;
+        out << "Failed to install the service." << Qt::endl;
         return 1;
     }
 
     controller.setDescription(host::kHostServiceDescription);
-    std::cout << "The service has been successfully installed." << std::endl;
+    out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-int removeService()
+int removeService(QTextStream& out)
 {
     if (base::ServiceController::isRunning(host::kHostServiceName))
-        stopService();
+        stopService(out);
 
     if (!base::ServiceController::remove(host::kHostServiceName))
     {
-        std::cout << "Failed to remove the service." << std::endl;
+        out << "Failed to remove the service." << Qt::endl;
         return 1;
     }
 
-    std::cout << "The service was successfully deleted." << std::endl;
+    out << "The service was successfully deleted." << Qt::endl;
     return 0;
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -335,6 +333,8 @@ int hostServiceMain(int& argc, char* argv[])
 
     parser.process(application);
 
+    QTextStream out(stdout, QIODevice::WriteOnly);
+
     if (parser.isSet(hostid_option))
     {
         std::optional<QString> session_name = currentSessionName();
@@ -342,25 +342,27 @@ int hostServiceMain(int& argc, char* argv[])
             return 1;
 
         HostKeyStorage storage;
-        std::cout << storage.lastHostId(*session_name) << std::endl;
+        out << storage.lastHostId(*session_name) << Qt::endl;
         return 0;
     }
+#if defined(Q_OS_WINDOWS)
     else if (parser.isSet(install_option))
     {
-        return installService();
+        return installService(out);
     }
     else if (parser.isSet(remove_option))
     {
-        return removeService();
+        return removeService(out);
     }
     else if (parser.isSet(start_option))
     {
-        return startService();
+        return startService(out);
     }
     else if (parser.isSet(stop_option))
     {
-        return stopService();
+        return stopService(out);
     }
+#endif // defined(Q_OS_WINDOWS)
     else
     {
         base::registerMetaTypes();

@@ -19,12 +19,14 @@
 #ifndef RELAY_WIN_SERVICE_UTIL_H
 #define RELAY_WIN_SERVICE_UTIL_H
 
+#include <QTextStream>
+
 namespace relay {
 
-int startService();
-int stopService();
-int installService();
-int removeService();
+int startService(QTextStream& out);
+int stopService(QTextStream& out);
+int installService(QTextStream& out);
+int removeService(QTextStream& out);
 
 } // namespace relay
 

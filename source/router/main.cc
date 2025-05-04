@@ -37,8 +37,6 @@
 #include "router/server.h"
 #endif
 
-#include <iostream>
-
 #include <QCommandLineParser>
 #include <QFileInfo>
 #include <QSysInfo>
@@ -68,7 +66,7 @@ bool generateKeys(QByteArray* private_key, QByteArray* public_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-int generateAndPrintKeys()
+int generateAndPrintKeys(QTextStream& out)
 {
     QByteArray private_key;
     QByteArray public_key;
@@ -76,76 +74,76 @@ int generateAndPrintKeys()
     if (!generateKeys(&private_key, &public_key))
         return 1;
 
-    std::cout << "Private key: " << private_key.toHex().toStdString() << std::endl;
-    std::cout << "Public key: " << public_key.toHex().toStdString() << std::endl;
+    out << "Private key: " << private_key.toHex().toStdString() << Qt::endl;
+    out << "Public key: " << public_key.toHex().toStdString() << Qt::endl;
 
     return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-int createConfig()
+int createConfig(QTextStream& out)
 {
-    std::cout << "Creation of initial configuration started." << std::endl;
+    out << "Creation of initial configuration started." << Qt::endl;
 
     router::Settings settings;
     QString settings_file_path = settings.filePath();
 
-    std::cout << "Settings file path: " << settings_file_path.toStdString() << std::endl;
+    out << "Settings file path: " << settings_file_path.toStdString() << Qt::endl;
 
     if (!settings.isEmpty())
     {
-        std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
+        out << "Settings file already exists. Continuation is impossible." << Qt::endl;
         return 1;
     }
 
-    std::cout << "Settings file does not exist yet." << std::endl;
+    out << "Settings file does not exist yet." << Qt::endl;
 
     std::filesystem::path public_key_dir;
     if (!base::BasePaths::commonAppData(&public_key_dir))
     {
-        std::cout << "Failed to get the path to the config directory." << std::endl;
+        out << "Failed to get the path to the config directory." << Qt::endl;
         return 1;
     }
 
     public_key_dir.append("aspia");
 
-    std::cout << "Public key directory path: " << public_key_dir << std::endl;
+    out << "Public key directory path: " << public_key_dir << Qt::endl;
 
     std::error_code error_code;
     if (!std::filesystem::exists(public_key_dir, error_code))
     {
-        std::cout << "Public key directory does not exist (" << error_code.message()
-                  << "). Attempt to create..." << std::endl;
+        out << "Public key directory does not exist (" << error_code.message()
+            << "). Attempt to create..." << Qt::endl;
 
         if (!std::filesystem::create_directories(public_key_dir, error_code))
         {
-            std::cout << "Failed to create directory for public key: "
-                      << error_code.message() << std::endl;
+            out << "Failed to create directory for public key: "
+                << error_code.message() << Qt::endl;
             return 1;
         }
         else
         {
-            std::cout << "Public key directory created successfully." << std::endl;
+            out << "Public key directory created successfully." << Qt::endl;
         }
     }
     else
     {
-        std::cout << "Public key directory already exists." << std::endl;
+        out << "Public key directory already exists." << Qt::endl;
     }
 
     std::filesystem::path public_key_file = public_key_dir;
     public_key_file.append("router.pub");
 
-    std::cout << "Public key file: " << public_key_file << std::endl;
+    out << "Public key file: " << public_key_file << Qt::endl;
 
     if (std::filesystem::exists(public_key_file, error_code))
     {
-        std::cout << "Public key file already exists. Continuation is impossible." << std::endl;
+        out << "Public key file already exists. Continuation is impossible." << Qt::endl;
         return 1;
     }
     else
     {
-        std::cout << "Public key does not exist yet." << std::endl;
+        out << "Public key does not exist yet." << Qt::endl;
     }
 
     std::unique_ptr<router::Database> db = router::DatabaseFactorySqlite().createDatabase();
@@ -154,16 +152,16 @@ int createConfig()
         db = router::DatabaseFactorySqlite().openDatabase();
         if (db)
         {
-            std::cout << "Database already exists. Continuation is impossible." << std::endl;
+            out << "Database already exists. Continuation is impossible." << Qt::endl;
         }
         else
         {
-            std::cout << "Failed to create new database." << std::endl;
+            out << "Failed to create new database." << Qt::endl;
         }
         return 1;
     }
 
-    std::cout << "Creating a user..." << std::endl;
+    out << "Creating a user..." << Qt::endl;
 
     const char kUserName[] = "admin";
     const char kPassword[] = "admin";
@@ -171,45 +169,45 @@ int createConfig()
     base::User user = base::User::create(kUserName, kPassword);
     if (!user.isValid())
     {
-        std::cout << "Failed to create user." << std::endl;
+        out << "Failed to create user." << Qt::endl;
         return 1;
     }
 
-    std::cout << "User has been created. Adding a user to the database..." << std::endl;
+    out << "User has been created. Adding a user to the database..." << Qt::endl;
 
     user.sessions = proto::ROUTER_SESSION_ADMIN | proto::ROUTER_SESSION_CLIENT;
     user.flags = base::User::ENABLED;
 
     if (!db->addUser(user))
     {
-        std::cout << "Failed to add user to database." << std::endl;
+        out << "Failed to add user to database." << Qt::endl;
         return 1;
     }
 
-    std::cout << "User was successfully added to the database." << std::endl;
-    std::cout << "Generating encryption keys..." << std::endl;
+    out << "User was successfully added to the database." << Qt::endl;
+    out << "Generating encryption keys..." << Qt::endl;
 
     QByteArray private_key;
     QByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
         return 1;
 
-    std::cout << "Private and public keys have been successfully generated." << std::endl;
-    std::cout << "Writing a public key to a file..." << std::endl;
+    out << "Private and public keys have been successfully generated." << Qt::endl;
+    out << "Writing a public key to a file..." << Qt::endl;
 
     if (!base::writeFile(QString::fromStdU16String(public_key_file.u16string()), public_key.toHex()))
     {
-        std::cout << "Failed to write public key to file: " << public_key_file << std::endl;
+        out << "Failed to write public key to file: " << public_key_file << Qt::endl;
         return 1;
     }
 
-    std::cout << "Generate seed key...";
+    out << "Generate seed key..." << Qt::endl;
     QByteArray seed_key = base::Random::byteArray(64);
     if (seed_key.isEmpty())
     {
-        std::cout << "Unable to generate seed key";
+        out << "Unable to generate seed key" << Qt::endl;
     }
-    std::cout << "Seed key successfully generated";
+    out << "Seed key successfully generated" << Qt::endl;
 
     // Save the configuration file.
     settings.reset();
@@ -217,11 +215,10 @@ int createConfig()
     settings.setSeedKey(seed_key);
     settings.sync();
 
-    std::cout << "Configuration successfully created. Don't forget to change your password!"
-              << std::endl;
-    std::cout << "User name: " << kUserName << std::endl;
-    std::cout << "Password: " << kPassword << std::endl;
-    std::cout << "Public key file: " << public_key_file << std::endl;
+    out << "Configuration successfully created. Don't forget to change your password!" << Qt::endl;
+    out << "User name: " << kUserName << Qt::endl;
+    out << "Password: " << kPassword << Qt::endl;
+    out << "Public key file: " << public_key_file << Qt::endl;
 
     return 0;
 }
@@ -267,30 +264,32 @@ int main(int argc, char* argv[])
                  << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
     LOG(LS_INFO) << "Command line: " << base::Application::arguments();
 
+    QTextStream out(stdout, QIODevice::WriteOnly);
+
     if (parser.isSet(keygen_option))
     {
-        return generateAndPrintKeys();
+        return generateAndPrintKeys(out);
     }
     else if (parser.isSet(create_config_option))
     {
-        return createConfig();
+        return createConfig(out);
     }
 #if defined(Q_OS_WINDOWS)
     else if (parser.isSet(install_option))
     {
-        return router::installService();
+        return router::installService(out);
     }
     else if (parser.isSet(remove_option))
     {
-        return router::removeService();
+        return router::removeService(out);
     }
     else if (parser.isSet(start_option))
     {
-        return router::startService();
+        return router::startService(out);
     }
     else if (parser.isSet(stop_option))
     {
-        return router::stopService();
+        return router::stopService(out);
     }
 #endif // defined(Q_OS_WINDOWS)
     else
