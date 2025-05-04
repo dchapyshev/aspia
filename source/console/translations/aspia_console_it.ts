@@ -507,17 +507,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="69"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="70"/>
+        <location filename="../main.cc" line="72"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="71"/>
+        <location filename="../main.cc" line="73"/>
         <source>The file to open.</source>
         <translation>Il file da aprire.</translation>
     </message>
