@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_FILE_TRANSFER_AGENT_H
-#define HOST_FILE_TRANSFER_AGENT_H
+#ifndef HOST_FILE_AGENT_H
+#define HOST_FILE_AGENT_H
 
 #include "base/macros_magic.h"
 #include "base/ipc/ipc_channel.h"
@@ -25,13 +25,13 @@
 
 namespace host {
 
-class FileTransferAgent final : public QObject
+class FileAgent final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileTransferAgent(QObject* parent = nullptr);
-    ~FileTransferAgent();
+    explicit FileAgent(QObject* parent = nullptr);
+    ~FileAgent();
 
     void start(const QString& channel_id);
 
@@ -46,9 +46,9 @@ private:
     proto::FileRequest request_;
     proto::FileReply reply_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTransferAgent);
+    DISALLOW_COPY_AND_ASSIGN(FileAgent);
 };
 
 } // namespace host
 
-#endif // HOST_FILE_TRANSFER_AGENT_H
+#endif // HOST_FILE_AGENT_H

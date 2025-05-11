@@ -47,10 +47,10 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_process.h
     desktop_session_proxy.cc
     desktop_session_proxy.h
-    file_transfer_agent.cc
-    file_transfer_agent.h
-    file_transfer_agent_main.cc
-    file_transfer_agent_main.h
+    file_agent.cc
+    file_agent.h
+    file_agent_main.cc
+    file_agent_main.h
     host_export.h
     host_ipc_storage.cc
     host_ipc_storage.h
@@ -253,8 +253,8 @@ endif()
 target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})
 
 # Aspia File Transfer Agent
-add_executable(aspia_file_transfer_agent WIN32 file_transfer_agent_entry_point.cc file_transfer_agent.rc)
+add_executable(aspia_file_agent WIN32 file_agent_entry_point.cc file_agent.rc)
 if (WIN32)
-    set_target_properties(aspia_file_transfer_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+    set_target_properties(aspia_file_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
-target_link_libraries(aspia_file_transfer_agent aspia_host_core ${HOST_PLATFORM_LIBS})
+target_link_libraries(aspia_file_agent aspia_host_core ${HOST_PLATFORM_LIBS})

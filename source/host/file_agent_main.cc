@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/file_transfer_agent_main.h"
+#include "host/file_agent_main.h"
 
 #include "build/build_config.h"
 #include "base/application.h"
@@ -25,7 +25,7 @@
 #include "base/sys_info.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
-#include "host/file_transfer_agent.h"
+#include "host/file_agent.h"
 #include "proto/meta_types.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -114,7 +114,7 @@ void printDebugInfo()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-int fileTransferAgentMain(int& argc, char* argv[])
+int fileAgentMain(int& argc, char* argv[])
 {
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_LS_INFO;
@@ -147,8 +147,8 @@ int fileTransferAgentMain(int& argc, char* argv[])
     base::registerMetaTypes();
     proto::registerMetaTypes();
 
-    host::FileTransferAgent file_transfer_agent;
-    file_transfer_agent.start(parser.value(channel_id_option));
+    host::FileAgent file_agent;
+    file_agent.start(parser.value(channel_id_option));
 
     return application.exec();
 }

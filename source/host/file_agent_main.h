@@ -16,10 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/file_transfer_agent_main.h"
+#ifndef HOST_FILE_AGENT_MAIN_H
+#define HOST_FILE_AGENT_MAIN_H
 
-//--------------------------------------------------------------------------------------------------
-int main(int argc, char *argv[])
-{
-    return fileTransferAgentMain(argc, argv);
-}
+#include "host/host_export.h"
+
+int HOST_EXPORT fileAgentMain(int& argc, char* argv[]);
+
+#endif // HOST_FILE_AGENT_MAIN_H

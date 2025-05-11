@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/file_transfer_agent.h"
+#include "host/file_agent.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -26,19 +26,19 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-FileTransferAgent::FileTransferAgent(QObject* parent)
+FileAgent::FileAgent(QObject* parent)
     : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-FileTransferAgent::~FileTransferAgent()
+FileAgent::~FileAgent()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
-void FileTransferAgent::start(const QString& channel_id)
+void FileAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
@@ -50,23 +50,21 @@ void FileTransferAgent::start(const QString& channel_id)
         return;
     }
 
-    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
-            this, &FileTransferAgent::onIpcDisconnected);
-    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
-            this, &FileTransferAgent::onIpcMessageReceived);
+    connect(channel_.get(), &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
+    connect(channel_.get(), &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
 
     channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferAgent::onIpcDisconnected()
+void FileAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
     QCoreApplication::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferAgent::onIpcMessageReceived(const QByteArray& buffer)
+void FileAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     request_.Clear();
     reply_.Clear();

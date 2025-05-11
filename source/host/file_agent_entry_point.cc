@@ -16,13 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <Windows.h>
+#include "host/file_agent_main.h"
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-
-1 RT_MANIFEST "file_transfer_agent.manifest"
-
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_file_transfer_agent.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia File Transfer Agent"
-
-#include "build/version.rc"
+//--------------------------------------------------------------------------------------------------
+int main(int argc, char *argv[])
+{
+    return fileAgentMain(argc, argv);
+}

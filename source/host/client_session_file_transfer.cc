@@ -42,11 +42,11 @@ namespace host {
 namespace {
 
 #if defined(Q_OS_LINUX)
-const char kFileTransferAgentFile[] = "aspia_file_transfer_agent";
+const char kFileTransferAgentFile[] = "aspia_file_agent";
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_WINDOWS)
-const char kFileTransferAgentFile[] = "aspia_file_transfer_agent.exe";
+const char kFileTransferAgentFile[] = "aspia_file_agent.exe";
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
