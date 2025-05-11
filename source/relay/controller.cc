@@ -250,8 +250,10 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
-        task_runner_->postDelayedTask(
-            std::bind(&KeyDeleter::deleteKey, key_deleter), std::chrono::seconds(30));
+        QTimer::singleShot(std::chrono::seconds(30), this, [key_deleter]()
+        {
+            key_deleter->deleteKey();
+        });
     }
     else if (incoming_message_.has_peer_connection_request())
     {

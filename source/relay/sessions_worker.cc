@@ -28,8 +28,10 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
                                const std::chrono::minutes& peer_idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval,
-                               std::unique_ptr<SharedPool> shared_pool)
-    : listen_interface_(listen_interface),
+                               std::unique_ptr<SharedPool> shared_pool,
+                               QObject* parent)
+    : QObject(parent),
+      listen_interface_(listen_interface),
       peer_port_(peer_port),
       peer_idle_timeout_(peer_idle_timeout),
       statistics_enabled_(statistics_enabled),

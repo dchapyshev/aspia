@@ -25,7 +25,7 @@
 #include "relay/session.h"
 #include "relay/shared_pool.h"
 
-#include <asio/high_resolution_timer.hpp>
+#include <asio/steady_timer.hpp>
 
 namespace base {
 class TaskRunner;
@@ -34,9 +34,12 @@ class TaskRunner;
 namespace relay {
 
 class SessionManager final
-    : public PendingSession::Delegate,
+    : public QObject,
+      public PendingSession::Delegate,
       public Session::Delegate
 {
+    Q_OBJECT
+
 public:
     class Delegate
     {
@@ -53,7 +56,8 @@ public:
                    quint16 port,
                    const std::chrono::minutes& idle_timeout,
                    bool statistics_enabled,
-                   const std::chrono::seconds& statistics_interval);
+                   const std::chrono::seconds& statistics_interval,
+                   QObject* parent = nullptr);
     ~SessionManager() final;
 
     void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);

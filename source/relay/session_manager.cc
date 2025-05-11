@@ -124,8 +124,10 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                                quint16 port,
                                const std::chrono::minutes& idle_timeout,
                                bool statistics_enabled,
-                               const std::chrono::seconds& statistics_interval)
-    : task_runner_(std::move(task_runner)),
+                               const std::chrono::seconds& statistics_interval,
+                               QObject* parent)
+    : QObject(parent),
+      task_runner_(std::move(task_runner)),
       acceptor_(base::AsioEventDispatcher::currentIoContext()),
       address_(address),
       port_(port),

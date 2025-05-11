@@ -24,6 +24,7 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include <QObject>
 #include <QByteArray>
 
 namespace base {
@@ -32,11 +33,13 @@ class Location;
 
 namespace relay {
 
-class Session
+class Session final : public QObject
 {
+    Q_OBJECT
+
 public:
     Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
-            const QByteArray& secret);
+            const QByteArray& secret, QObject* parent = nullptr);
     ~Session();
 
     using Clock = std::chrono::steady_clock;

@@ -27,16 +27,20 @@ namespace relay {
 class SharedPool;
 
 class SessionsWorker final
-    : public base::Thread::Delegate,
+    : public QObject,
+      public base::Thread::Delegate,
       public SessionManager::Delegate
 {
+    Q_OBJECT
+
 public:
     SessionsWorker(const QString& listen_interface,
                    quint16 peer_port,
                    const std::chrono::minutes& peer_idle_timeout,
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval,
-                   std::unique_ptr<SharedPool> shared_pool);
+                   std::unique_ptr<SharedPool> shared_pool,
+                   QObject* parent = nullptr);
     ~SessionsWorker() final;
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,

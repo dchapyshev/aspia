@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/write.hpp>
@@ -28,15 +29,16 @@ namespace relay {
 
 //--------------------------------------------------------------------------------------------------
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
-                 const QByteArray& secret)
-    : socket_{ std::move(sockets.first), std::move(sockets.second) }
+                 const QByteArray& secret, QObject* parent)
+    : QObject(parent),
+      socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
     static quint64 session_id = 0;
     ++session_id;
     session_id_ = session_id;
 
     proto::PeerToRelay::Secret secret_message;
-    if (secret_message.ParseFromArray(secret.data(), static_cast<int>(secret.size())))
+    if (base::parse(secret, &secret_message))
     {
         client_address_ = secret_message.client_address();
         client_user_name_ = secret_message.client_user_name();

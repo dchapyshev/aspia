@@ -20,7 +20,6 @@
 #define RELAY_CONTROLLER_H
 
 #include "base/net/tcp_channel.h"
-#include "build/build_config.h"
 #include "proto/router_relay.pb.h"
 #include "relay/sessions_worker.h"
 #include "relay/shared_pool.h"
