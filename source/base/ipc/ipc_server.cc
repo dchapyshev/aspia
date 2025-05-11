@@ -288,7 +288,7 @@ QString IpcServer::createUniqueId()
 
 #if defined(Q_OS_WINDOWS)
     process_id = GetCurrentProcessId();
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
     process_id = getpid();
 #else
 #error Not implemented

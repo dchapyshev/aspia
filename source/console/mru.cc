@@ -74,7 +74,7 @@ bool Mru::addRecentFile(const QString& file_path)
     // We are looking for a file in the list. If the file already exists in it, then delete it.
     for (QStringList::iterator it = recent_list_.begin(); it != recent_list_.end(); ++it)
     {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         if (normalized_path.compare(*it, Qt::CaseInsensitive) == 0)
 #else
         if (normalized_path.compare(*it, Qt::CaseSensitive) == 0)
@@ -123,7 +123,7 @@ bool Mru::isPinnedFile(const QString& file_path) const
 {
     QString normalized_path = normalizedFilePath(file_path);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return pinned_list_.contains(normalized_path, Qt::CaseInsensitive);
 #else
     return pinned_list_.contains(normalized_path, Qt::CaseSensitive);

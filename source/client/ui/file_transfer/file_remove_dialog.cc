@@ -28,10 +28,10 @@
 
 // Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <QWinTaskbarButton>
 #include <QWinTaskbarProgress>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 #endif
 
 namespace client {
@@ -52,7 +52,7 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QWinTaskbarButton* button = new QWinTaskbarButton(this);
 
     button->setWindow(parent->windowHandle());
@@ -72,7 +72,7 @@ FileRemoveDialog::~FileRemoveDialog()
     LOG(LS_INFO) << "Dtor";
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->hide();
 #endif
@@ -108,7 +108,7 @@ void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentag
     ui.progress->setValue(percentage);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->setValue(percentage);
 #endif
@@ -121,7 +121,7 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
                                      quint32 available_actions)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->pause();
 #endif
@@ -181,7 +181,7 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
     dialog->exec();
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->resume();
 #endif

@@ -37,11 +37,11 @@
 #include "proto/task_manager.h"
 #include "proto/text_chat.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -137,9 +137,9 @@ void ClientSessionDesktop::onStarted()
         flag->set_value(value);
     };
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
 
     add_flag(common::kFlagDisablePasteAsKeystrokes, true);
@@ -149,7 +149,7 @@ void ClientSessionDesktop::onStarted()
     add_flag(common::kFlagDisableDesktopWallpaper, true);
     add_flag(common::kFlagDisableLockAtDisconnect, true);
     add_flag(common::kFlagDisableFontSmoothing, true);
-#elif defined(OS_MACOS)
+#elif defined(Q_OS_MACOS)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_MACOSX);
 #else
 #warning Not implemented
@@ -274,7 +274,7 @@ void ClientSessionDesktop::onWritten(quint8 /* channel_id */, size_t /* pending 
     // Nothing
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
@@ -286,7 +286,7 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
@@ -743,7 +743,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
         case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
             LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
 
             if (base::SafeModeUtil::setSafeModeService(kHostServiceName, true))
@@ -771,7 +771,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
             {
                 LOG(LS_ERROR) << "Failed to add service to start in safe mode";
             }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
         }
         break;
 
@@ -798,7 +798,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     LOG(LS_INFO) << "Remote update requested";
 
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -809,13 +809,13 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
     {
         LOG(LS_ERROR) << "Update can only be launched from a desktop manage session";
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest system_info_request;
 
     if (!data.empty())
@@ -835,7 +835,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     desktop_extension->set_data(system_info.SerializeAsString());
 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

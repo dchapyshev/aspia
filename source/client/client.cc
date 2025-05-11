@@ -23,9 +23,9 @@
 #include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
 #include "base/mac/app_nap_blocker.h"
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
 namespace client {
 
@@ -77,9 +77,9 @@ Client::Client(QObject* parent)
         start();
     });
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     base::addAppNapBlock();
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,9 +90,9 @@ Client::~Client()
     state_ = State::STOPPPED;
     emit sig_statusChanged(Status::STOPPED);
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     base::releaseAppNapBlock();
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------

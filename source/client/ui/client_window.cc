@@ -119,7 +119,7 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     connect(ui.button_connect, &QPushButton::clicked, this, &ClientWindow::connectToHost);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     connect(ui.action_check_for_updates, &QAction::triggered, this, &ClientWindow::onCheckUpdates);
     connect(ui.action_update_settings, &QAction::triggered, this, [this]()
     {
@@ -423,7 +423,7 @@ void ClientWindow::connectToHost()
 void ClientWindow::onCheckUpdates()
 {
     LOG(LS_INFO) << "[ACTION] Check updates";
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ClientSettings settings;
     common::UpdateDialog(settings.updateServer(), "client", this).exec();
 #endif

@@ -21,11 +21,11 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "common/clipboard_win.h"
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
 #include "common/clipboard_x11.h"
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
 #include "common/clipboard_mac.h"
 #else
 #error Not implemented
@@ -35,7 +35,7 @@ namespace common {
 
 namespace {
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 const base::Thread::EventDispatcher kEventDispatcher = base::Thread::QtDispatcher;
 #else
 const base::Thread::EventDispatcher kEventDispatcher = base::Thread::AsioDispatcher;
@@ -82,11 +82,11 @@ void ClipboardMonitor::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "Thread starting";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     clipboard_ = std::make_unique<common::ClipboardWin>();
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     clipboard_ = std::make_unique<common::ClipboardX11>();
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MAC)
     clipboard_ = std::make_unique<common::ClipboardMac>();
 #else
 #error Not implemented

@@ -24,9 +24,9 @@
 #include "common/ui/download_dialog.h"
 #include "ui_update_dialog.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QCloseEvent>
 #include <QDir>
@@ -124,7 +124,7 @@ void UpdateDialog::onUpdateNow()
 {
     LOG(LS_INFO) << "[ACTION] Update now";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
                           "application will automatically close.");
     QString message2 = tr("All connected sessions will be terminated. You cannot establish a "
@@ -199,7 +199,7 @@ void UpdateDialog::onUpdateNow()
             }
         }
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -234,9 +234,9 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
                 ui->edit_description->setText(update_info_.description());
                 ui->label_url->setText(makeUrl(update_info_.url()));
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
                 ui->button_update->setEnabled(true);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
             }
             else
             {

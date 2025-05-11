@@ -609,7 +609,7 @@ void Server::disconnectFromRouter()
 //--------------------------------------------------------------------------------------------------
 void Server::checkForUpdates()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!settings_.isAutoUpdateEnabled())
         return;
 
@@ -652,7 +652,7 @@ void Server::checkForUpdates()
             this, &Server::onUpdateCheckedFinished);
 
     update_checker_->start();
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace host

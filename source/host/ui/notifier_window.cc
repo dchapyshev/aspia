@@ -551,7 +551,7 @@ void NotifierWindow::hideNotifier()
 //--------------------------------------------------------------------------------------------------
 QRect NotifierWindow::currentAvailableRect()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     RECT work_area;
     memset(&work_area, 0, sizeof(work_area));
 

@@ -19,7 +19,8 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_H
 
-#include "build/build_config.h"
+#include <QtGlobal>
+
 #include "proto/desktop.h"
 
 #include <functional>

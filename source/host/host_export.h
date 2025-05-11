@@ -19,9 +19,7 @@
 #ifndef HOST_HOST_EXPORT_H
 #define HOST_HOST_EXPORT_H
 
-#include <QtGlobal>
-
-#if defined(Q_OS_WINDOWS)
+#if defined(_WIN32)
 
 #if defined(HOST_IMPLEMENTATION)
 #define HOST_EXPORT __declspec(dllexport)

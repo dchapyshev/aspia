@@ -19,13 +19,11 @@
 #include "base/gui_application.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/crypto/scoped_crypto_initializer.h"
-#include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QCryptographicHash>
 #include <QDataStream>
@@ -35,14 +33,14 @@
 #include <QLockFile>
 #include <QThread>
 
-#if defined(OS_WIN)
-#include <Windows.h>
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
 #include <Psapi.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_UNIX)
 #include <unistd.h>
-#endif // defined(OS_POSIX)
+#endif // defined(Q_OS_UNIX)
 
 namespace base {
 
@@ -59,7 +57,7 @@ const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool isSameApplication(const QLocalSocket* socket)
 {
@@ -100,7 +98,7 @@ bool isSameApplication(const QLocalSocket* socket)
 
     return _wcsicmp(current_path, other_path) == 0;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -111,7 +109,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 {
     LOG(LS_INFO) << "Ctor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     DWORD id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &id))
     {
@@ -293,13 +291,13 @@ void GuiApplication::onNewConnection()
         return;
     }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!isSameApplication(socket.get()))
     {
         LOG(LS_ERROR) << "Attempt to connect from unknown application";
         return;
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     while (true)
     {

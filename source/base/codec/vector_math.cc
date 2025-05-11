@@ -30,7 +30,7 @@
 // anywhere clang is used.
 // TODO(pcc): Linux currently uses ThinLTO which has broken auto-vectorization
 // in clang, so use our intrinsic version for now. http://crbug.com/738085
-#if !defined(__clang__) || defined(OS_LINUX)
+#if !defined(__clang__) || defined(Q_OS_LINUX)
 #define FMAC_FUNC FMAC_SSE
 #define FMUL_FUNC FMUL_SSE
 #else

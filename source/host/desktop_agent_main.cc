@@ -28,7 +28,7 @@
 #include "host/desktop_session_agent.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/session_info.h"
 #include "base/win/window_station.h"
 
@@ -36,7 +36,7 @@
 #include <d3d11.h>
 #include <comdef.h>
 #include <wrl/client.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QCommandLineParser>
 #include <QProcessEnvironment>

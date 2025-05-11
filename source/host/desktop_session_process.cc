@@ -217,7 +217,7 @@ bool startProcessWithToken(HANDLE token,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 DesktopSessionProcess::DesktopSessionProcess(
     base::ScopedHandle&& process, base::ScopedHandle&& thread)
     : process_(std::move(process)),
@@ -225,7 +225,7 @@ DesktopSessionProcess::DesktopSessionProcess(
 {
     LOG(LS_INFO) << "Ctor";
 }
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
 DesktopSessionProcess::DesktopSessionProcess(pid_t pid)
     : pid_(pid)
 {
@@ -378,7 +378,7 @@ QString DesktopSessionProcess::filePath()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionProcess::kill()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (!process_.isValid())
     {
         LOG(LS_ERROR) << "Invalid process handle";
@@ -389,7 +389,7 @@ void DesktopSessionProcess::kill()
     {
         PLOG(LS_ERROR) << "TerminateProcess failed";
     }
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     if (::kill(pid_, SIGKILL) != 0)
     {
         PLOG(LS_ERROR) << "kill failed";

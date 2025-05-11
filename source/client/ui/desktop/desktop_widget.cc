@@ -30,7 +30,7 @@
 #if defined(KeyPress)
 #undef KeyPress
 #endif // defined(KeyPress)
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
 #include <Carbon/Carbon.h>
@@ -346,7 +346,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
 
     quint32 usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
 
-#if !defined(OS_MAC)
+#if !defined(Q_OS_MACOS)
     usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
         static_cast<int>(event->nativeScanCode()));
 #else
@@ -465,7 +465,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
     painter_.begin(this);
 
-#if !defined(OS_MAC)
+#if !defined(Q_OS_MACOS)
     // SmoothPixmapTransform causes too much CPU load in MacOSX.
     painter_.setRenderHint(QPainter::SmoothPixmapTransform);
 #endif
@@ -634,12 +634,12 @@ void DesktopWidget::executeKeyEvent(quint32 usb_keycode, quint32 flags)
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::enableKeyHooks(bool enable)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (enable)
         keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
     else
         keyboard_hook_.reset();
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     if (enable)
     {
         const CGEventMask keyboard_mask =
@@ -709,7 +709,7 @@ void DesktopWidget::releaseKeyboardButtons()
     }
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 // static
 LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
@@ -766,9 +766,9 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 
     return CallNextHookEx(nullptr, code, wparam, lparam);
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 // static
 CGEventRef DesktopWidget::keyboardFilterProc(
@@ -801,6 +801,6 @@ CGEventRef DesktopWidget::keyboardFilterProc(
 
     return event;
 }
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
 } // namespace client

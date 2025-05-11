@@ -21,9 +21,9 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "host/system_info.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -50,7 +50,7 @@ void ClientSessionSystemInfo::onStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
 
     if (!base::parse(buffer, &request))
@@ -63,7 +63,7 @@ void ClientSessionSystemInfo::onReceived(quint8 /* channel_id */, const QByteArr
     createSystemInfo(request, &system_info);
 
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, system_info);
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -225,7 +225,7 @@ MainWindow::MainWindow(const QString& file_path)
     if (ui.tab_widget->count() > 0)
         ui.tab_widget->setCurrentIndex(0);
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     connect(ui.action_check_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
     connect(ui.action_update_settings, &QAction::triggered, this, [this]()
     {
@@ -284,11 +284,11 @@ void MainWindow::openAddressBook(const QString& file_path)
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab)
         {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
             if (file_path.compare(tab->filePath(), Qt::CaseInsensitive) == 0)
 #else
             if (file_path.compare(tab->filePath(), Qt::CaseSensitive) == 0)
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
             {
                 QMessageBox::information(this,
                                          tr("Information"),
@@ -731,7 +731,7 @@ void MainWindow::onOnlineHelp()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCheckUpdates()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     LOG(LS_INFO) << "[ACTION] Check for updates";
     common::UpdateDialog(Application::instance()->settings().updateServer(),"console", this).exec();
 #endif

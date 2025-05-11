@@ -19,7 +19,6 @@
 #ifndef HOST_CLIENT_SESSION_DESKTOP_H
 #define HOST_CLIENT_SESSION_DESKTOP_H
 
-#include "build/build_config.h"
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/memory/local_memory.h"
@@ -27,9 +26,9 @@
 #include "host/desktop_session.h"
 #include "host/stat_counter.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "host/task_manager.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QPointer>
 #include <QTimer>

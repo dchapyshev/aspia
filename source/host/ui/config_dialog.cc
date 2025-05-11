@@ -880,7 +880,7 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::reloadServiceStatus()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ui.button_service_install_remove->setEnabled(true);
     ui.button_service_start_stop->setEnabled(true);
 
@@ -929,7 +929,7 @@ void ConfigDialog::reloadServiceStatus()
     }
 
     ui.label_service_status->setText(tr("Current service state: %1").arg(state));
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

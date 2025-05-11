@@ -20,8 +20,10 @@
 
 #include "build/build_config.h"
 
-#if defined(OS_WIN)
-#include <Windows.h>
+#include <QtGlobal>
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
 #endif
 
 namespace base {
@@ -29,7 +31,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 bool isDebuggerPresent()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return !!IsDebuggerPresent();
 #else
 #warning Platform support not implemented
@@ -40,7 +42,7 @@ bool isDebuggerPresent()
 //--------------------------------------------------------------------------------------------------
 void debugPrint(const char* str)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     OutputDebugStringA(str);
 #else
 #warning Platform support not implemented
@@ -52,21 +54,21 @@ void debugBreak()
 {
 #if defined(ARCH_CPU_X86_FAMILY)
 
-#if defined(CC_MSVC)
+#if defined(Q_CC_MSVC)
     __debugbreak();
-#elif defined(CC_GCC)
+#elif defined(Q_CC_GNU)
     __asm__("int3");
-#elif defined(CC_CLANG)
+#elif defined(Q_CC_CLANG)
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     { __asm int 3 };
 #else
     __asm__("int3");
-#endif // OS_WIN
+#endif // Q_OS_WINDOWS
 
-#else // CC_*
+#else // Q_CC_*
 #define Compiller support not implemented
-#endif // CC_*
+#endif // Q_CC_*
 
 #elif defined(ARCH_CPU_ARM64)
     asm("brk 0");

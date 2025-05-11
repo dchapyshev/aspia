@@ -361,7 +361,7 @@ void ClientPortForwarding::startCommandLine(const QString& command_line)
         return;
     }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
@@ -395,7 +395,7 @@ void ClientPortForwarding::startCommandLine(const QString& command_line)
     }
 
     LOG(LS_INFO) << "Command line is started";
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace client

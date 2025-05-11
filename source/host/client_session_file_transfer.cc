@@ -251,7 +251,7 @@ void ClientSessionFileTransfer::onStarted()
         onError(FROM_HERE);
         return;
     }
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))

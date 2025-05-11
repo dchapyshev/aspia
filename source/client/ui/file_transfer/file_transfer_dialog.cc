@@ -27,10 +27,10 @@
 
 // Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <QWinTaskbarButton>
 #include <QWinTaskbarProgress>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 #endif
 
 namespace client {
@@ -54,7 +54,7 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileTransferDialog::close);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QWinTaskbarButton* button = new QWinTaskbarButton(this);
 
     button->setWindow(parent->windowHandle());
@@ -77,7 +77,7 @@ FileTransferDialog::~FileTransferDialog()
     LOG(LS_INFO) << "Dtor";
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->hide();
 #endif
@@ -111,7 +111,7 @@ void FileTransferDialog::setCurrentItem(
         ui.progress_current->setRange(0, 100);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
         if (taskbar_progress_)
             taskbar_progress_->setRange(0, 100);
 #endif
@@ -139,7 +139,7 @@ void FileTransferDialog::setCurrentProgress(int total, int current)
     ui.progress_current->setValue(current);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->setValue(total);
 #endif
@@ -156,7 +156,7 @@ void FileTransferDialog::setCurrentSpeed(qint64 speed)
 void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->pause();
 #endif
@@ -227,7 +227,7 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
     dialog->exec();
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->resume();
 #endif

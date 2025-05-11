@@ -18,15 +18,14 @@
 
 #include "base/net/ip_util.h"
 
-#include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <WS2tcpip.h>
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
 #include <arpa/inet.h>
 #else
 #error Platform support not implemented
-#endif // defined(OS_*)
+#endif // defined(Q_OS_*)
 
 namespace base {
 
@@ -39,7 +38,7 @@ bool ipv4FromString(const QString& str, quint32* ip)
     if (inet_pton(AF_INET, str.toLocal8Bit().data(), &(sa.sin_addr)) != 1)
         return false;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     *ip = sa.sin_addr.S_un.S_addr;
 #else
     *ip = sa.sin_addr.s_addr;

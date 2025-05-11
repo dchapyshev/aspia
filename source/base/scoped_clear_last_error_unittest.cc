@@ -20,9 +20,9 @@
 
 #include <gtest/gtest.h>
 
-#if defined(OS_WIN)
-#include <Windows.h>
-#endif // defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -46,7 +46,7 @@ TEST(ScopedClearLastError, test_error)
     EXPECT_EQ(1, errno);
 }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 TEST(ScopedClearLastError, test_no_error_win)
 {
@@ -68,6 +68,6 @@ TEST(ScopedClearLastError, test_error_win)
     EXPECT_EQ(1, ::GetLastError());
 }
 
-#endif  // defined(OS_WIN)
+#endif  // defined(Q_OS_WINDOWS)
 
 } // namespace base

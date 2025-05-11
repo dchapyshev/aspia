@@ -32,11 +32,11 @@
 #include "common/ui/update_dialog.h"
 #include "proto/meta_types.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
 #include "base/win/desktop.h"
 #include "base/win/session_info.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -53,7 +53,7 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 bool waitForValidInputDesktop()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     int max_attempt_count = 600;
 
     do
@@ -81,7 +81,7 @@ bool waitForValidInputDesktop()
         LOG(LS_ERROR) << "Exceeded the number of attempts";
         return false;
     }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     return true;
 }

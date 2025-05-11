@@ -18,13 +18,13 @@
 
 #include "base/audio/audio_capturer.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/audio/audio_capturer_win.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_LINUX)
+#if defined(Q_OS_LINUX)
 #include "base/audio/audio_capturer_linux.h"
-#endif // defined(OS_LINUX)
+#endif // defined(Q_OS_LINUX)
 
 #include "base/logging.h"
 
@@ -50,9 +50,9 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioCapturer> AudioCapturer::create()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerLinux());
 #else
     NOTIMPLEMENTED();

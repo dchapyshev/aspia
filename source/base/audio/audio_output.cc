@@ -19,13 +19,12 @@
 #include "base/audio/audio_output.h"
 
 #include "base/logging.h"
-#include "build/build_config.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/audio/audio_output_win.h"
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
 #include "base/audio/audio_output_mac.h"
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
 #include "base/audio/audio_output_pulse.h"
 #endif
 
@@ -44,11 +43,11 @@ AudioOutput::AudioOutput(const NeedMoreDataCB& need_more_data_cb)
 // static
 std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more_data_cb)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return std::make_unique<AudioOutputWin>(need_more_data_cb);
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     return std::make_unique<AudioOutputMac>(need_more_data_cb);
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     return std::make_unique<AudioOutputPulse>(need_more_data_cb);
 #else
     NOTIMPLEMENTED();

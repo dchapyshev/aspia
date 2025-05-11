@@ -77,7 +77,7 @@ float Frame::scaleFactor() const
 {
     float scale = 1.0f;
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     // At least on Windows the logical and physical pixel are the same
     // See http://crbug.com/948362.
     if (dpi() != Point(0, 0) && dpi().x() == dpi().y())

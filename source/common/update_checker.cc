@@ -95,11 +95,11 @@ void UpdateChecker::run()
     interrupted_.store(false, std::memory_order_relaxed);
 
     QString os;
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     os = "windows";
-#elif defined(OS_LINUX)
+#elif defined(Q_OS_LINUX)
     os = "linux";
-#elif defined(OS_MAC)
+#elif defined(Q_OS_MACOS)
     os = "macosx";
 #else
 #error Unknown OS

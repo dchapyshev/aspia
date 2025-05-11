@@ -132,7 +132,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 
     return true;
 }
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -189,7 +189,7 @@ bool UserSessionManager::start(Delegate* delegate)
         LOG(LS_INFO) << "IPC channel for UI started";
     }
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     for (base::SessionEnumerator session; !session.isAtEnd(); session.advance())
     {
         base::SessionId session_id = session.sessionId();
@@ -243,7 +243,7 @@ bool UserSessionManager::start(Delegate* delegate)
 void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
     QString status_str;
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     status_str = base::sessionStatusToString(status);
 #else
     status_str = QString::number(static_cast<int>(status));
@@ -386,7 +386,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         {
             LOG(LS_INFO) << "Using CONSOLE session id";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
             session_id = base::activeConsoleSessionId();
 #else
             session_id = 0;
@@ -423,7 +423,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         {
             if (session->state() == UserSession::State::DETTACHED)
             {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
                 base::SessionInfo session_info(session_id);
                 if (!session_info.isValid())
                 {
@@ -558,7 +558,7 @@ void UserSessionManager::onIpcNewConnection()
 
     base::IpcChannel* channel = ipc_server_->nextPendingConnection();
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     base::SessionId session_id = channel->peerSessionId();
     if (session_id == base::kInvalidSessionId)
     {

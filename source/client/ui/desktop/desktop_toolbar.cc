@@ -153,10 +153,10 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     if (!is_pinned)
         hide_timer_->start(0);
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     // MacOS has its own button to maximize the window to full screen.
     ui.action_fullscreen->setVisible(false);
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
     showFullScreenButtons(false);
     adjustSize();
@@ -915,7 +915,7 @@ void DesktopToolBar::showFullScreenButtons(bool show)
     // MacOS does not have the ability to minimize a window from full screen mode. Therefore, for
     // MacOS we disable the minimize button from full screen mode.
     // For more info see: https://bugreports.qt.io/browse/QTBUG-62991
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
     ui.action_minimize->setVisible(false);
     ui.action_minimize->setEnabled(false);
 #else
