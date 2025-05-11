@@ -21,18 +21,17 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 #include "host/desktop_session_proxy.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
 #include "base/win/session_status.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -59,13 +58,11 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                         base::SessionId session_id,
+UserSession::UserSession(base::SessionId session_id,
                          base::IpcChannel* channel,
                          Delegate* delegate,
                          QObject* parent)
     : QObject(parent),
-      task_runner_(task_runner),
       channel_(channel),
       session_id_(session_id),
       delegate_(delegate)
@@ -94,7 +91,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
         sendCredentials(FROM_HERE);
     });
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     base::SessionId console_session_id = base::activeConsoleSessionId();
     if (console_session_id == base::kInvalidSessionId)
     {
@@ -112,7 +109,6 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 #endif
 
     LOG(LS_INFO) << "Ctor (sid=" << session_id_ << " type=" << typeToString(type_) << ")";
-    CHECK(task_runner_);
     CHECK(delegate_);
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
@@ -270,7 +266,7 @@ std::optional<QString> UserSession::sessionName() const
                  << " type=" << typeToString(type_)
                  << " state=" << stateToString(state_) << ")";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     if (type_ == Type::CONSOLE)
     {
         LOG(LS_INFO) << "Session name for console session is empty string";
@@ -453,7 +449,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
     QString status_str;
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     status_str = base::sessionStatusToString(status);
 #else
     status_str = QString::number(static_cast<int>(status));
@@ -808,7 +804,7 @@ void UserSession::onClientSessionFinished()
                 sendDisconnectEvent(client_session->id());
 
                 // Session will be destroyed after completion of the current call.
-                task_runner_->deleteSoon(std::move(*it));
+                it->release()->deleteLater();
 
                 // Delete a session from the list.
                 it = list->erase(it);

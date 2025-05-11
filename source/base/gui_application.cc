@@ -143,7 +143,6 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     io_thread_.start();
 
     translations_ = std::make_unique<Translations>();
-    ui_task_runner_ = std::make_shared<TaskRunner>();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,34 +168,6 @@ GuiApplication::~GuiApplication()
 GuiApplication* GuiApplication::instance()
 {
     return static_cast<GuiApplication*>(QApplication::instance());
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::shared_ptr<base::TaskRunner> GuiApplication::uiTaskRunner()
-{
-    GuiApplication* application = instance();
-    if (!application)
-    {
-        LOG(LS_ERROR) << "Invalid application instance";
-        return nullptr;
-    }
-
-    return application->ui_task_runner_;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::shared_ptr<base::TaskRunner> GuiApplication::ioTaskRunner()
-{
-    GuiApplication* application = instance();
-    if (!application)
-    {
-        LOG(LS_ERROR) << "Invalid application instance";
-        return nullptr;
-    }
-
-    return application->io_thread_.taskRunner();
 }
 
 //--------------------------------------------------------------------------------------------------

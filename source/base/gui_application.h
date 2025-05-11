@@ -43,8 +43,6 @@ public:
     virtual ~GuiApplication() override;
 
     static GuiApplication* instance();
-    static std::shared_ptr<base::TaskRunner> uiTaskRunner();
-    static std::shared_ptr<base::TaskRunner> ioTaskRunner();
 
     static QThread* ioThread();
 
@@ -76,7 +74,6 @@ private:
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(GuiApplication);
 };

@@ -19,18 +19,17 @@
 #include "host/server.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/files/file_util.h"
 #include "base/net/firewall_manager.h"
 #include "base/win/process_util.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 #include <QCoreApplication>
 #include <QDir>
@@ -48,12 +47,10 @@ const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Server::Server(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
-    : QObject(parent),
-      task_runner_(std::move(task_runner))
+Server::Server(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,7 +103,7 @@ void Server::start()
     connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
             this, &Server::onSessionAuthenticated);
 
-    user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
+    user_session_manager_ = std::make_unique<UserSessionManager>();
     user_session_manager_->start(this);
 
     reloadUserList();

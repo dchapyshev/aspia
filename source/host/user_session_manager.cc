@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
@@ -138,13 +137,10 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                                       QObject* parent)
-    : QObject(parent),
-      task_runner_(std::move(task_runner))
+UserSessionManager::UserSessionManager(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
@@ -532,7 +528,7 @@ void UserSessionManager::onUserSessionFinished()
                 // User session ended, host ID is no longer valid.
                 delegate_->onResetHostId(session->hostId());
 
-                task_runner_->deleteSoon(std::move(*it));
+                it->release()->deleteLater();
                 it = sessions_.erase(it);
             }
             else
@@ -727,8 +723,8 @@ void UserSessionManager::addUserSession(const base::Location& location, base::Se
         }
     }
 
-    std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
-        task_runner_, session_id, channel, this);
+    std::unique_ptr<UserSession> user_session =
+        std::make_unique<UserSession>(session_id, channel, this);
 
     LOG(LS_INFO) << "Start user session: " << session_id;
     sessions_.emplace_back(std::move(user_session));

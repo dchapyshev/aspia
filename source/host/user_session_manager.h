@@ -38,7 +38,7 @@ class UserSessionManager final
     Q_OBJECT
 
 public:
-    explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
+    explicit UserSessionManager(QObject* parent = nullptr);
     ~UserSessionManager() final;
 
     class Delegate
@@ -74,7 +74,6 @@ private:
     void addUserSession(const base::Location& location, base::SessionId session_id,
                         base::IpcChannel* channel);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;

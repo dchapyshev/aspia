@@ -68,8 +68,7 @@ public:
         virtual void onUserSessionFinished() = 0;
     };
 
-    UserSession(std::shared_ptr<base::TaskRunner> task_runner,
-                base::SessionId session_id,
+    UserSession(base::SessionId session_id,
                 base::IpcChannel* channel,
                 Delegate* delegate,
                 QObject* parent = nullptr);
@@ -139,7 +138,6 @@ private:
     void onTextChatSessionFinished(quint32 id);
     void mergeAndSendConfiguration();
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
 
     Type type_;

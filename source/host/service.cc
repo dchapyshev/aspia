@@ -121,7 +121,7 @@ void Service::onStart()
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    server_ = std::make_unique<Server>(taskRunner());
+    server_ = std::make_unique<Server>();
     server_->start();
 }
 

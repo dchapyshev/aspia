@@ -34,7 +34,6 @@ namespace base {
 class AudioCapturerWrapper;
 class CaptureScheduler;
 class MessageWindow;
-class TaskRunner;
 class Thread;
 class SharedFrame;
 

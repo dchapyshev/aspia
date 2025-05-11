@@ -32,10 +32,6 @@
 #include <QPointer>
 #include <QTimer>
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace host {
 
 class Server final
@@ -45,7 +41,7 @@ class Server final
     Q_OBJECT
 
 public:
-    explicit Server(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
+    explicit Server(QObject* parent = nullptr);
     ~Server() final;
 
     void start();
@@ -79,7 +75,6 @@ private:
     void disconnectFromRouter();
     void checkForUpdates();
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     QPointer<QTimer> update_timer_;
 
     QPointer<QFileSystemWatcher> settings_watcher_;

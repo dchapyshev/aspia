@@ -27,11 +27,10 @@
 #include "host/desktop_session_process.h"
 #include "host/desktop_session_proxy.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/desktop.h"
 #include "base/win/session_info.h"
-#include "base/win/window_station.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -91,7 +90,7 @@ void DesktopSessionManager::attachSession(
     LOG(LS_INFO) << "Starting desktop session";
     LOG(LS_INFO) << "#####################################################";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
@@ -105,7 +104,7 @@ void DesktopSessionManager::attachSession(
                  << " win_station='" << session_info.winStationName() << "'"
                  << " domain='" << session_info.domain() << "'"
                  << " locked=" << session_info.isUserLocked() << ")";
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     QString channel_id = base::IpcServer::createUniqueId();
 

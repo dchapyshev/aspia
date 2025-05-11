@@ -31,7 +31,6 @@ namespace base {
 class Frame;
 class Location;
 class SharedMemory;
-class TaskRunner;
 } // namespace base
 
 namespace host {
