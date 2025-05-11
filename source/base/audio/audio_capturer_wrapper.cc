@@ -21,17 +21,15 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/audio/audio_capturer.h"
-#include "base/ipc/ipc_channel_proxy.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy)
-    : channel_proxy_(std::move(channel_proxy)),
+AudioCapturerWrapper::AudioCapturerWrapper(QObject* parent)
+    : QObject(parent),
       thread_(std::make_unique<Thread>(Thread::AsioDispatcher, this))
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(channel_proxy_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,7 +63,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
     capturer_->start([this](std::unique_ptr<proto::AudioPacket> packet)
     {
         outgoing_message_.set_allocated_audio_packet(packet.release());
-        channel_proxy_->send(base::serialize(outgoing_message_));
+        emit sig_sendMessage(base::serialize(outgoing_message_));
     });
 }
 

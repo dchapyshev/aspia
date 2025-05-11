@@ -25,15 +25,21 @@
 namespace base {
 
 class AudioCapturer;
-class IpcChannelProxy;
 
-class AudioCapturerWrapper final : public Thread::Delegate
+class AudioCapturerWrapper final
+    : public QObject,
+      public Thread::Delegate
 {
+    Q_OBJECT
+
 public:
-    explicit AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy);
+    explicit AudioCapturerWrapper(QObject* parent = nullptr);
     ~AudioCapturerWrapper() final;
 
     void start();
+
+signals:
+    void sig_sendMessage(const QByteArray& data);
 
 protected:
     // AsioThread::Delegate implementation.
@@ -41,7 +47,6 @@ protected:
     void onAfterThreadRunning() final;
 
 private:
-    std::shared_ptr<IpcChannelProxy> channel_proxy_;
     std::unique_ptr<Thread> thread_;
     std::unique_ptr<AudioCapturer> capturer_;
     proto::internal::DesktopToService outgoing_message_;

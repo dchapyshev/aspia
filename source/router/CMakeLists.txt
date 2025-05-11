@@ -79,7 +79,6 @@ target_link_libraries(aspia_router
     aspia_base
     aspia_proto
     OpenSSL::Crypto
-    modp_b64
     ${Protobuf_LITE_LIBRARIES}
     unofficial::sqlite3::sqlite3
     ${QT_COMMON_LIBS}

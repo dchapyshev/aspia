@@ -510,7 +510,14 @@ void DesktopSessionAgent::setEnabled(bool enable)
             preferred_video_capturer_, this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
-        audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>(channel_->channelProxy());
+        audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>();
+
+        connect(audio_capturer_.get(), &base::AudioCapturerWrapper::sig_sendMessage, this,
+                [this](const QByteArray& data)
+        {
+            channel_->send(QByteArray(data));
+        }, Qt::QueuedConnection);
+
         audio_capturer_->start();
 
         LOG(LS_INFO) << "Session successfully enabled";

@@ -20,9 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/ipc/ipc_channel_proxy.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/thread.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
@@ -105,7 +103,7 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
     return session_id;
 }
 
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -175,7 +173,6 @@ void IpcChannel::Handler::onReadData(const std::error_code& error_code, size_t b
 IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
       stream_(AsioEventDispatcher::currentIoContext()),
-      proxy_(new IpcChannelProxy(Thread::currentTaskRunner(), this)),
       handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -186,7 +183,6 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
     : QObject(parent),
       channel_name_(channel_name),
       stream_(std::move(stream)),
-      proxy_(new IpcChannelProxy(Thread::currentTaskRunner(), this)),
       is_connected_(true),
       handler_(base::make_local_shared<Handler>(this))
 {
@@ -204,16 +200,7 @@ IpcChannel::~IpcChannel()
     LOG(LS_INFO) << "Dtor";
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    proxy_->willDestroyCurrentChannel();
-    proxy_ = nullptr;
-
     disconnect();
-}
-
-//--------------------------------------------------------------------------------------------------
-std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
-{
-    return proxy_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -489,7 +476,7 @@ void IpcChannel::onWriteData(const std::error_code& error_code, size_t bytes_tra
     write_queue_.pop();
 
     // If the queue is not empty, then we send the following message.
-    if (write_queue_.empty() && !proxy_->reloadWriteQueue(&write_queue_))
+    if (write_queue_.empty())
         return;
 
     doWriteSize();

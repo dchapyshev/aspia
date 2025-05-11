@@ -39,7 +39,6 @@
 
 namespace base {
 
-class IpcChannelProxy;
 class IpcServer;
 class Location;
 
@@ -50,8 +49,6 @@ class IpcChannel final : public QObject
 public:
     explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
-
-    std::shared_ptr<IpcChannelProxy> channelProxy();
 
     [[nodiscard]]
     bool connect(const QString& channel_id);
@@ -101,8 +98,6 @@ private:
 
     QString channel_name_;
     Stream stream_;
-
-    std::shared_ptr<IpcChannelProxy> proxy_;
 
     bool is_connected_ = false;
     bool is_paused_ = true;

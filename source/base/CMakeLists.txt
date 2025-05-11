@@ -445,8 +445,6 @@ endif()
 list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
     ipc/ipc_channel.h
-    ipc/ipc_channel_proxy.cc
-    ipc/ipc_channel_proxy.h
     ipc/ipc_server.cc
     ipc/ipc_server.h
     ipc/shared_memory.cc
