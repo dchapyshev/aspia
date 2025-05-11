@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-#if defined(OS_ANDROID)
+#if defined(Q_OS_ANDROID)
 #include <malloc.h>
 #endif
 
@@ -35,9 +35,9 @@ void* alignedAlloc(size_t size, size_t alignment)
 
     void* ptr = nullptr;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ptr = _aligned_malloc(size, alignment);
-#elif defined(OS_ANDROID)
+#elif defined(Q_OS_ANDROID)
     ptr = memalign(alignment, size);
 #else
     if (posix_memalign(&ptr, alignment, size))

@@ -48,11 +48,10 @@
 #ifndef BASE_MEMORY_ALIGNED_MEMORY_H
 #define BASE_MEMORY_ALIGNED_MEMORY_H
 
-#include "build/build_config.h"
-
+#include <QtGlobal>
 #include <cstddef>
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <malloc.h>
 #else
 #include <cstdlib>
@@ -64,7 +63,7 @@ void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     _aligned_free(ptr);
 #else
     free(ptr);

@@ -19,13 +19,12 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_DIALOG_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_DIALOG_H
 
-#include "build/build_config.h"
 #include "client/file_transfer.h"
 #include "ui_file_transfer_dialog.h"
 
 // Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 class QWinTaskbarProgress;
 #endif
 #endif
@@ -66,7 +65,7 @@ private:
     std::unique_ptr<QFontMetrics> label_metrics_;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QWinTaskbarProgress* taskbar_progress_ = nullptr;
 #endif
 #endif

@@ -19,12 +19,13 @@
 #ifndef BASE_DESKTOP_POWER_SAVE_BLOCKER_H
 #define BASE_DESKTOP_POWER_SAVE_BLOCKER_H
 
-#include "base/macros_magic.h"
-#include "build/build_config.h"
+#include <QtGlobal>
 
-#if defined(OS_WIN)
+#include "base/macros_magic.h"
+
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -35,9 +36,9 @@ public:
     ~PowerSaveBlocker();
 
 private:
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     ScopedHandle handle_;
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     DISALLOW_COPY_AND_ASSIGN(PowerSaveBlocker);
 };

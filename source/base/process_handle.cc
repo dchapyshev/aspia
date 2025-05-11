@@ -20,7 +20,7 @@
 
 namespace base {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 ProcessHandle currentProcessHandle()
 {
@@ -31,9 +31,9 @@ ProcessHandle currentProcessHandle()
 //--------------------------------------------------------------------------------------------------
 ProcessId currentProcessId()
 {
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     return GetCurrentProcessId();
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
     return getpid();
 #else
 #error Platfrom support not implemented

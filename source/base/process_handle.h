@@ -19,23 +19,23 @@
 #ifndef BASE_PROCESS_HANDLE_H
 #define BASE_PROCESS_HANDLE_H
 
-#include "build/build_config.h"
+#include <QtGlobal>
 
-#if defined(OS_WIN)
-#include <Windows.h>
-#elif defined(OS_POSIX)
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#elif defined(Q_OS_UNIX)
 #include <unistd.h>
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_*)
 
 namespace base {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 using ProcessHandle = HANDLE;
 using ProcessId = DWORD;
 
 const ProcessHandle kNullProcessHandle = nullptr;
 const ProcessId kNullProcessId = 0;
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
 using ProcessHandle = pid_t;
 using ProcessId = pid_t;
 
@@ -45,7 +45,7 @@ const ProcessId kNullProcessId = 0;
 #error Platform support not implemented
 #endif
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 ProcessHandle currentProcessHandle();
 #endif
 ProcessId currentProcessId();

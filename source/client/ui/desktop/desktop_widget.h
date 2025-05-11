@@ -20,17 +20,16 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_WIDGET_H
 
 #include "base/desktop/frame.h"
-#include "build/build_config.h"
 #include "proto/desktop.h"
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_user_object.h"
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
-#if defined(OS_MAC)
+#if defined(Q_OS_MACOS)
 #include "base/mac/scoped_cftyperef.h"
 #include <CoreGraphics/CGEventTypes.h>
-#endif // defined(OS_MAC)
+#endif // defined(Q_OS_MACOS)
 
 #include <QEvent>
 #include <QPainter>

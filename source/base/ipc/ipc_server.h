@@ -19,7 +19,6 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
-#include "build/build_config.h"
 #include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
@@ -62,9 +61,9 @@ private:
     asio::io_context& io_context_;
     QString channel_name_;
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     static const size_t kListenersCount = 8;
-#elif defined(OS_POSIX)
+#elif defined(Q_OS_UNIX)
     static const size_t kListenersCount = 1;
 #endif
 

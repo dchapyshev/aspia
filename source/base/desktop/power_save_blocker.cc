@@ -24,7 +24,7 @@ namespace base {
 
 namespace {
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& description)
@@ -69,7 +69,7 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
     }
 }
 
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -78,14 +78,14 @@ PowerSaveBlocker::PowerSaveBlocker()
 {
     LOG(LS_INFO) << "Ctor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     static const wchar_t kDescription[] = L"Aspia session is active";
 
     // The display will always be on as long as the class instance exists.
     handle_.reset(createPowerRequest(PowerRequestDisplayRequired, kDescription));
-#else // defined(OS_WIN)
+#else // defined(Q_OS_WINDOWS)
     NOTIMPLEMENTED();
-#endif // defined(OS_*)
+#endif // defined(Q_OS_*)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -93,9 +93,9 @@ PowerSaveBlocker::~PowerSaveBlocker()
 {
     LOG(LS_INFO) << "Dtor";
 
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     deletePowerRequest(PowerRequestDisplayRequired, handle_.release());
-#endif // defined(OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace base

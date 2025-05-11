@@ -19,13 +19,12 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H
 
-#include "build/build_config.h"
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
 
 // Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
 class QWinTaskbarProgress;
 #endif
 #endif
@@ -60,7 +59,7 @@ private:
     Ui::FileRemoveDialog ui;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
+#if defined(Q_OS_WINDOWS)
     QWinTaskbarProgress* taskbar_progress_ = nullptr;
 #endif
 #endif
