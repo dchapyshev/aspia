@@ -37,7 +37,6 @@ namespace host {
 
 class UserSession final
     : public QObject,
-      public DesktopSession::Delegate,
       public ClientSession::Delegate
 {
     Q_OBJECT
@@ -95,17 +94,6 @@ public:
     void onSettingsChanged();
 
 protected:
-    // DesktopSession::Delegate implementation.
-    void onDesktopSessionStarted() final;
-    void onDesktopSessionStopped() final;
-    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) final;
-    void onScreenCaptureError(proto::VideoErrorCode error_code) final;
-    void onAudioCaptured(const proto::AudioPacket& audio_packet) final;
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) final;
-    void onScreenListChanged(const proto::ScreenList& list) final;
-    void onScreenTypeChanged(const proto::ScreenType& type) final;
-    void onClipboardEvent(const proto::ClipboardEvent& event) final;
-
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() final;
     void onClientSessionFinished() final;
@@ -117,6 +105,15 @@ private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
     void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);
+    void onDesktopSessionStarted();
+    void onDesktopSessionStopped();
+    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor);
+    void onScreenCaptureError(proto::VideoErrorCode error_code);
+    void onAudioCaptured(const proto::AudioPacket& audio_packet);
+    void onCursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void onScreenListChanged(const proto::ScreenList& list);
+    void onScreenTypeChanged(const proto::ScreenType& type);
+    void onClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     void onSessionDettached(const base::Location& location);

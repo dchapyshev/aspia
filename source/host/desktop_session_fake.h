@@ -29,7 +29,7 @@ class DesktopSessionFake final : public DesktopSession
     Q_OBJECT
 
 public:
-    explicit DesktopSessionFake(Delegate* delegate, QObject* parent = nullptr);
+    explicit DesktopSessionFake(QObject* parent = nullptr);
     ~DesktopSessionFake() final;
 
     // DesktopSession implementation.
@@ -47,8 +47,6 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event) final;
 
 private:
-    Delegate* delegate_;
-
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionFake);
 };
 

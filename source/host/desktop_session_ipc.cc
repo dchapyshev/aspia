@@ -71,13 +71,11 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, Delegate* delegate, QObject* parent)
+DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, QObject* parent)
     : DesktopSession(parent),
-      channel_(channel),
-      delegate_(delegate)
+      channel_(channel)
 {
     DCHECK(channel_);
-    DCHECK(delegate_);
 
     session_id_ = channel_->peerSessionId();
 
@@ -95,26 +93,19 @@ void DesktopSessionIpc::start()
 {
     LOG(LS_INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
 
-    if (!delegate_)
-    {
-        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
-        return;
-    }
-
     connect(channel_.get(), &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionIpc::onIpcDisconnected);
     connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
             this, &DesktopSessionIpc::onIpcMessageReceived);
 
     channel_->resume();
-    delegate_->onDesktopSessionStarted();
+    emit sig_desktopSessionStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::stop()
 {
     LOG(LS_INFO) << "Stop IPC desktop session (sid=" << session_id_ << ")";
-    delegate_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -164,24 +155,17 @@ void DesktopSessionIpc::captureScreen()
     {
         last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
 
-        if (delegate_)
+        if (last_screen_list_)
         {
-            if (last_screen_list_)
-            {
-                LOG(LS_INFO) << "Has last screen list (sid=" << session_id_ << ")";
-                delegate_->onScreenListChanged(*last_screen_list_);
-            }
-            else
-            {
-                LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
-            }
-
-            delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
+            LOG(LS_INFO) << "Has last screen list (sid=" << session_id_ << ")";
+            emit sig_screenListChanged(*last_screen_list_);
         }
         else
         {
-            LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
+            LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
         }
+
+        emit sig_screenCaptured(last_frame_.get(), last_mouse_cursor_.get());
     }
     else
     {
@@ -247,26 +231,12 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 void DesktopSessionIpc::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected (sid=" << session_id_ << ")";
-
-    if (delegate_)
-    {
-        delegate_->onDesktopSessionStopped();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
-    }
+    emit sig_desktopSessionStopped();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
 {
-    if (!delegate_)
-    {
-        LOG(LS_INFO) << "Invalid delegate (sid=" << session_id_ << ")";
-        return;
-    }
-
     incoming_message_.Clear();
 
     if (!base::parse(buffer, &incoming_message_))
@@ -281,22 +251,22 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_.has_audio_packet())
     {
-        onAudioCaptured(incoming_message_.audio_packet());
+        emit sig_audioCaptured(incoming_message_.audio_packet());
     }
     else if (incoming_message_.has_cursor_position())
     {
-        onCursorPositionChanged(incoming_message_.cursor_position());
+        emit sig_cursorPositionChanged(incoming_message_.cursor_position());
     }
     else if (incoming_message_.has_screen_list())
     {
         LOG(LS_INFO) << "Screen list received (sid=" << session_id_ << ")";
         last_screen_list_.reset(incoming_message_.release_screen_list());
-        delegate_->onScreenListChanged(*last_screen_list_);
+        emit sig_screenListChanged(*last_screen_list_);
     }
     else if (incoming_message_.has_screen_type())
     {
         LOG(LS_INFO) << "Screen type received (sid=" << session_id_ << ")";
-        delegate_->onScreenTypeChanged(incoming_message_.screen_type());
+        emit sig_screenTypeChanged(incoming_message_.screen_type());
     }
     else if (incoming_message_.has_shared_buffer())
     {
@@ -317,7 +287,7 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_.has_clipboard_event())
     {
-        delegate_->onClipboardEvent(incoming_message_.clipboard_event());
+        emit sig_clipboardEvent(incoming_message_.clipboard_event());
     }
     else
     {
@@ -378,51 +348,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         mouse_cursor = last_mouse_cursor_.get();
     }
 
-    if (delegate_)
-    {
-        if (screen_captured.error_code() == proto::VIDEO_ERROR_CODE_OK)
-        {
-            delegate_->onScreenCaptured(frame, mouse_cursor);
-        }
-        else
-        {
-            delegate_->onScreenCaptureError(screen_captured.error_code());
-        }
-    }
+    if (screen_captured.error_code() == proto::VIDEO_ERROR_CODE_OK)
+        emit sig_screenCaptured(frame, mouse_cursor);
     else
-    {
-        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
-    }
+        emit sig_screenCaptureError(screen_captured.error_code());
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_next_screen_capture()->set_update_interval(update_interval_.count());
     channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
-{
-    if (delegate_)
-    {
-        delegate_->onCursorPositionChanged(cursor_position);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
-{
-    if (delegate_)
-    {
-        delegate_->onAudioCaptured(audio_packet);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate (sid=" << session_id_ << ")";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

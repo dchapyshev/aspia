@@ -23,12 +23,10 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionFake::DesktopSessionFake(Delegate* delegate, QObject* parent)
-    : DesktopSession(parent),
-      delegate_(delegate)
+DesktopSessionFake::DesktopSessionFake(QObject* parent)
+    : DesktopSession(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(delegate_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -41,22 +39,13 @@ DesktopSessionFake::~DesktopSessionFake()
 void DesktopSessionFake::start()
 {
     LOG(LS_INFO) << "Start called for fake session";
-
-    if (delegate_)
-    {
-        delegate_->onDesktopSessionStarted();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-    }
+    emit sig_desktopSessionStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::stop()
 {
     LOG(LS_INFO) << "Stop called for fake session";
-    delegate_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,17 +56,8 @@ void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
     switch (action)
     {
         case proto::internal::DesktopControl::ENABLE:
-        {
-            if (delegate_)
-            {
-                delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
-            }
-            else
-            {
-                LOG(LS_ERROR) << "Invalid delegate";
-            }
-        }
-        break;
+            emit sig_screenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
+            break;
 
         default:
             break;
@@ -99,14 +79,7 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::captureScreen()
 {
-    if (delegate_)
-    {
-        delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid delegate";
-    }
+    emit sig_screenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
 }
 
 //--------------------------------------------------------------------------------------------------

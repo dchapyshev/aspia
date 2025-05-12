@@ -39,14 +39,12 @@ namespace host {
 class DesktopSessionProcess;
 class DesktopSessionProxy;
 
-class DesktopSessionManager final
-    : public QObject,
-      public DesktopSession::Delegate
+class DesktopSessionManager final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DesktopSessionManager(DesktopSession::Delegate* delegate, QObject* parent = nullptr);
+    explicit DesktopSessionManager(QObject* parent = nullptr);
     ~DesktopSessionManager() final;
 
     void attachSession(const base::Location& location, base::SessionId session_id);
@@ -58,30 +56,30 @@ public slots:
     void onNewIpcConnection();
     void onErrorOccurred();
 
-protected:
-    // DesktopSession::Delegate implementation.
-    void onDesktopSessionStarted() final;
-    void onDesktopSessionStopped() final;
-    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor) final;
-    void onScreenCaptureError(proto::VideoErrorCode error_code) final;
-    void onAudioCaptured(const proto::AudioPacket& audio_packet) final;
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position) final;
-    void onScreenListChanged(const proto::ScreenList& list) final;
-    void onScreenTypeChanged(const proto::ScreenType& type) final;
-    void onClipboardEvent(const proto::ClipboardEvent& event) final;
+signals:
+    void sig_desktopSessionStarted();
+    void sig_desktopSessionStopped();
+    void sig_screenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor);
+    void sig_screenCaptureError(proto::VideoErrorCode error_code);
+    void sig_audioCaptured(const proto::AudioPacket& audio_packet);
+    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void sig_screenListChanged(const proto::ScreenList& list);
+    void sig_screenTypeChanged(const proto::ScreenType& type);
+    void sig_clipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+
     void setState(const base::Location& location, State state);
+    void connectSessionSignals();
     static const char* stateToString(State state);
 
     QPointer<base::IpcServer> server_;
-    std::unique_ptr<DesktopSession> session_;
+    QPointer<DesktopSession> session_;
     base::local_shared_ptr<DesktopSessionProxy> session_proxy_;
-    QTimer session_attach_timer_;
+    QPointer<QTimer> session_attach_timer_;
 
     State state_ = State::STOPPED;
-    DesktopSession::Delegate* delegate_;
 
     base::SessionId session_id_ = base::kInvalidSessionId;
 

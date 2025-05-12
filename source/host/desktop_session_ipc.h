@@ -31,7 +31,7 @@ class DesktopSessionIpc final : public DesktopSession
     Q_OBJECT
 
 public:
-    DesktopSessionIpc(base::IpcChannel* channel, Delegate* delegate, QObject* parent = nullptr);
+    DesktopSessionIpc(base::IpcChannel* channel, QObject* parent = nullptr);
     ~DesktopSessionIpc() final;
 
     // DesktopSession implementation.
@@ -57,8 +57,6 @@ private:
     using SharedBuffers = std::map<int, std::unique_ptr<SharedBuffer>>;
 
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position);
-    void onAudioCaptured(const proto::AudioPacket& audio_packet);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);
@@ -69,7 +67,6 @@ private:
     std::unique_ptr<base::Frame> last_frame_;
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
-    Delegate* delegate_;
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 

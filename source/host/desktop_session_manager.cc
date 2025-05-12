@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/desktop/frame.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
@@ -28,7 +27,6 @@
 #include "host/desktop_session_proxy.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/desktop.h"
 #include "base/win/session_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -41,16 +39,16 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionManager::DesktopSessionManager(DesktopSession::Delegate* delegate, QObject* parent)
+DesktopSessionManager::DesktopSessionManager(QObject* parent)
     : QObject(parent),
       session_proxy_(base::make_local_shared<DesktopSessionProxy>()),
-      delegate_(delegate)
+      session_attach_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
-    session_attach_timer_.setSingleShot(true);
+    session_attach_timer_->setSingleShot(true);
 
-    connect(&session_attach_timer_, &QTimer::timeout, this, [this]()
+    connect(session_attach_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_ERROR) << "Session attach timeout (session_id=" << session_id_
                       << " timeout=" << kSessionAttachTimeout.count() << "min)";
@@ -83,7 +81,7 @@ void DesktopSessionManager::attachSession(
     session_id_ = session_id;
 
     if (state_ == State::STOPPED)
-        session_attach_timer_.start(kSessionAttachTimeout);
+        session_attach_timer_->start(kSessionAttachTimeout);
 
     setState(FROM_HERE, State::STARTING);
 
@@ -157,20 +155,21 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     if (state_ != State::STOPPING)
         setState(FROM_HERE, State::DETACHED);
 
-    session_attach_timer_.stop();
+    session_attach_timer_->stop();
     session_proxy_->stopAndDettach();
-    session_.release()->deleteLater();
+    session_->deleteLater();
 
     LOG(LS_INFO) << "Session process is detached (sid=" << session_id_ << ")";
 
     if (state_ == State::STOPPING)
         return;
 
-    session_attach_timer_.start(kSessionAttachTimeout);
+    session_attach_timer_->start(kSessionAttachTimeout);
 
     // The real session process has ended. We create a temporary fake session.
-    session_ = std::make_unique<DesktopSessionFake>(this);
-    session_proxy_->attachAndStart(session_.get());
+    session_ = new DesktopSessionFake(this);
+    connectSessionSignals();
+    session_proxy_->attachAndStart(session_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,15 +197,14 @@ void DesktopSessionManager::onNewIpcConnection()
 
     base::IpcChannel* channel = server_->nextPendingConnection();
 
-    session_attach_timer_.stop();
-    server_->stop();
+    session_attach_timer_->stop();
     server_->deleteLater();
-    server_ = nullptr;
 
-    session_ = std::make_unique<DesktopSessionIpc>(channel, this);
+    session_ = new DesktopSessionIpc(channel, this);
 
+    connectSessionSignals();
     setState(FROM_HERE, State::ATTACHED);
-    session_proxy_->attachAndStart(session_.get());
+    session_proxy_->attachAndStart(session_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,68 +222,34 @@ void DesktopSessionManager::onErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onDesktopSessionStarted()
-{
-    LOG(LS_INFO) << "Desktop session started";
-    delegate_->onDesktopSessionStarted();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onDesktopSessionStopped()
-{
-    LOG(LS_INFO) << "Desktop session stopped";
-    dettachSession(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onScreenCaptured(
-    const base::Frame* frame, const base::MouseCursor* mouse_cursor)
-{
-    delegate_->onScreenCaptured(frame, mouse_cursor);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onScreenCaptureError(proto::VideoErrorCode error_code)
-{
-    delegate_->onScreenCaptureError(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_packet)
-{
-    delegate_->onAudioCaptured(audio_packet);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
-{
-    delegate_->onCursorPositionChanged(cursor_position);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
-{
-    delegate_->onScreenListChanged(list);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onScreenTypeChanged(const proto::ScreenType& type)
-{
-    delegate_->onScreenTypeChanged(type);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    delegate_->onClipboardEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
                  << " (from=" << location.toString() << ")";
     state_ = state;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::connectSessionSignals()
+{
+    connect(session_, &DesktopSession::sig_desktopSessionStarted,
+            this, &DesktopSessionManager::sig_desktopSessionStarted);
+    connect(session_, &DesktopSession::sig_desktopSessionStopped,
+            this, &DesktopSessionManager::sig_desktopSessionStopped);
+    connect(session_, &DesktopSession::sig_screenCaptured,
+            this, &DesktopSessionManager::sig_screenCaptured);
+    connect(session_, &DesktopSession::sig_screenCaptureError,
+            this, &DesktopSessionManager::sig_screenCaptureError);
+    connect(session_, &DesktopSession::sig_audioCaptured,
+            this, &DesktopSessionManager::sig_audioCaptured);
+    connect(session_, &DesktopSession::sig_cursorPositionChanged,
+            this, &DesktopSessionManager::sig_cursorPositionChanged);
+    connect(session_, &DesktopSession::sig_screenListChanged,
+            this, &DesktopSessionManager::sig_screenListChanged);
+    connect(session_, &DesktopSession::sig_screenTypeChanged,
+            this, &DesktopSessionManager::sig_screenTypeChanged);
+    connect(session_, &DesktopSession::sig_clipboardEvent,
+            this, &DesktopSessionManager::sig_clipboardEvent);
 }
 
 //--------------------------------------------------------------------------------------------------

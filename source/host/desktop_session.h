@@ -19,14 +19,11 @@
 #ifndef HOST_DESKTOP_SESSION_H
 #define HOST_DESKTOP_SESSION_H
 
+#include "base/desktop/frame.h"
+#include "base/desktop/mouse_cursor.h"
 #include "proto/desktop_internal.pb.h"
 
 #include <QObject>
-
-namespace base {
-class Frame;
-class MouseCursor;
-} // namespace base
 
 namespace host {
 
@@ -37,22 +34,6 @@ class DesktopSession : public QObject
 public:
     explicit DesktopSession(QObject* parent);
     virtual ~DesktopSession() = default;
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onDesktopSessionStarted() = 0;
-        virtual void onDesktopSessionStopped() = 0;
-        virtual void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) = 0;
-        virtual void onScreenCaptureError(proto::VideoErrorCode error_code) = 0;
-        virtual void onAudioCaptured(const proto::AudioPacket& audio_packet) = 0;
-        virtual void onCursorPositionChanged(const proto::CursorPosition& cursor_position) = 0;
-        virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
-        virtual void onScreenTypeChanged(const proto::ScreenType& type) = 0;
-        virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
-    };
 
     struct Config
     {
@@ -93,6 +74,17 @@ public:
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
     static const char* controlActionToString(proto::internal::DesktopControl::Action action);
+
+signals:
+    void sig_desktopSessionStarted();
+    void sig_desktopSessionStopped();
+    void sig_screenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor);
+    void sig_screenCaptureError(proto::VideoErrorCode error_code);
+    void sig_audioCaptured(const proto::AudioPacket& audio_packet);
+    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void sig_screenListChanged(const proto::ScreenList& list);
+    void sig_screenTypeChanged(const proto::ScreenType& type);
+    void sig_clipboardEvent(const proto::ClipboardEvent& event);
 };
 
 } // namespace host

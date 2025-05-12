@@ -179,7 +179,27 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
     router_state_ = router_state;
 
-    desktop_session_ = std::make_unique<DesktopSessionManager>(this);
+    desktop_session_ = std::make_unique<DesktopSessionManager>();
+
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_desktopSessionStarted,
+            this, &UserSession::onDesktopSessionStarted);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_desktopSessionStopped,
+            this, &UserSession::onDesktopSessionStopped);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenCaptured,
+            this, &UserSession::onScreenCaptured);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenCaptureError,
+            this, &UserSession::onScreenCaptureError);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_audioCaptured,
+            this, &UserSession::onAudioCaptured);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_cursorPositionChanged,
+            this, &UserSession::onCursorPositionChanged);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenListChanged,
+            this, &UserSession::onScreenListChanged);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenTypeChanged,
+            this, &UserSession::onScreenTypeChanged);
+    connect(desktop_session_.get(), &DesktopSessionManager::sig_clipboardEvent,
+            this, &UserSession::onClipboardEvent);
+
     desktop_session_proxy_ = desktop_session_->sessionProxy();
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
@@ -629,121 +649,6 @@ void UserSession::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onDesktopSessionStarted()
-{
-    LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
-
-    proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
-    if (desktop_clients_.empty())
-    {
-        LOG(LS_INFO) << "No desktop clients. Disable session (sid=" << session_id_ << ")";
-        action = proto::internal::DesktopControl::DISABLE;
-    }
-    else
-    {
-        desktop_session_proxy_->setKeyboardLock(false);
-        desktop_session_proxy_->setMouseLock(false);
-        desktop_session_proxy_->setPaused(false);
-    }
-
-    desktop_session_proxy_->control(action);
-    onClientSessionConfigured();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onDesktopSessionStopped()
-{
-    LOG(LS_INFO) << "Desktop session is disconnected (sid=" << session_id_ << ")";
-
-    if (type_ == Type::RDP)
-    {
-        LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid=" << session_id_ << ")";
-
-        desktop_clients_.clear();
-
-        for (auto it = other_clients_.begin(); it != other_clients_.end();)
-        {
-            if ((*it)->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER)
-                it = other_clients_.erase(it);
-            else
-                ++it;
-        }
-
-        onSessionDettached(FROM_HERE);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setCursorPosition(cursor_position);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenListChanged(const proto::ScreenList& list)
-{
-    LOG(LS_INFO) << "Screen list changed (sid=" << session_id_ << ")";
-    LOG(LS_INFO) << "Primary screen: " << list.primary_screen();
-    LOG(LS_INFO) << "Current screen: " << list.current_screen();
-
-    for (int i = 0; i < list.screen_size(); ++i)
-    {
-        const proto::Screen& screen = list.screen(i);
-        const proto::Point& dpi = screen.dpi();
-        const proto::Point& position = screen.position();
-        const proto::Resolution& resolution = screen.resolution();
-
-        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
-                     << " title=" << screen.title()
-                     << " dpi=" << dpi.x() << "x" << dpi.y()
-                     << " pos=" << position.x() << "x" << position.y()
-                     << " res=" << resolution.width() << "x" << resolution.height();
-    }
-
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
-{
-    LOG(LS_INFO) << "Screen type changed (type=" << type.type() << " name=" << type.name()
-                 << " sid=" << session_id_ << ")";
-
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setScreenType(type);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionConfigured()
 {
     mergeAndSendConfiguration();
@@ -1047,6 +952,121 @@ void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
         pending_clients_.erase(it);
         return;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onDesktopSessionStarted()
+{
+    LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
+
+    proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
+    if (desktop_clients_.empty())
+    {
+        LOG(LS_INFO) << "No desktop clients. Disable session (sid=" << session_id_ << ")";
+        action = proto::internal::DesktopControl::DISABLE;
+    }
+    else
+    {
+        desktop_session_proxy_->setKeyboardLock(false);
+        desktop_session_proxy_->setMouseLock(false);
+        desktop_session_proxy_->setPaused(false);
+    }
+
+    desktop_session_proxy_->control(action);
+    onClientSessionConfigured();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onDesktopSessionStopped()
+{
+    LOG(LS_INFO) << "Desktop session is disconnected (sid=" << session_id_ << ")";
+
+    if (type_ == Type::RDP)
+    {
+        LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid=" << session_id_ << ")";
+
+        desktop_clients_.clear();
+
+        for (auto it = other_clients_.begin(); it != other_clients_.end();)
+        {
+            if ((*it)->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER)
+                it = other_clients_.erase(it);
+            else
+                ++it;
+        }
+
+        onSessionDettached(FROM_HERE);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(error_code);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setCursorPosition(cursor_position);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onScreenListChanged(const proto::ScreenList& list)
+{
+    LOG(LS_INFO) << "Screen list changed (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Primary screen: " << list.primary_screen();
+    LOG(LS_INFO) << "Current screen: " << list.current_screen();
+
+    for (int i = 0; i < list.screen_size(); ++i)
+    {
+        const proto::Screen& screen = list.screen(i);
+        const proto::Point& dpi = screen.dpi();
+        const proto::Point& position = screen.position();
+        const proto::Resolution& resolution = screen.resolution();
+
+        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
+                     << " title=" << screen.title()
+                     << " dpi=" << dpi.x() << "x" << dpi.y()
+                     << " pos=" << position.x() << "x" << position.y()
+                     << " res=" << resolution.width() << "x" << resolution.height();
+    }
+
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
+{
+    LOG(LS_INFO) << "Screen type changed (type=" << type.type() << " name=" << type.name()
+    << " sid=" << session_id_ << ")";
+
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setScreenType(type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
