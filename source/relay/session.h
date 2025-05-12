@@ -58,9 +58,9 @@ public:
     void disconnect();
 
     quint64 sessionId() const { return session_id_; }
-    const std::string& clientAddress() const { return client_address_; }
-    const std::string& clientUserName() const { return client_user_name_; }
-    const std::string& hostAddress() const { return host_address_; }
+    const QString& clientAddress() const { return client_address_; }
+    const QString& clientUserName() const { return client_user_name_; }
+    const QString& hostAddress() const { return host_address_; }
     base::HostId hostId() const { return host_id_; }
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration(const TimePoint& current_time) const;
@@ -71,9 +71,9 @@ private:
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
     quint64 session_id_ = 0;
-    std::string client_address_;
-    std::string client_user_name_;
-    std::string host_address_;
+    QString client_address_;
+    QString client_user_name_;
+    QString host_address_;
     base::HostId host_id_ = base::kInvalidHostId;
 
     TimePoint start_time_;

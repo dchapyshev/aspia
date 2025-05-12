@@ -22,7 +22,6 @@
 #include "base/application.h"
 #include "base/macros_magic.h"
 #include "base/session_id.h"
-#include "base/task_runner.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
@@ -45,7 +44,6 @@ public:
     int exec(Application& application);
 
     const QString& name() const { return name_; }
-    std::shared_ptr<TaskRunner> taskRunner() const { return task_runner_; }
 
 protected:
     friend class ServiceThread;
@@ -65,7 +63,6 @@ private:
 #endif // defined(Q_OS_UNIX)
 
     QString name_;
-    std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);
 };

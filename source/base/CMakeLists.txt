@@ -58,8 +58,6 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
-    task_runner.cc
-    task_runner.h
     translations.cc
     translations.h
     version_constants.cc

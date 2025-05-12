@@ -19,8 +19,6 @@
 #include "base/threading/thread.h"
 
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/application.h"
-#include "base/task_runner.h"
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -46,30 +44,8 @@ void Thread::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::shared_ptr<TaskRunner> Thread::currentTaskRunner()
-{
-    Thread* thread = dynamic_cast<Thread*>(QThread::currentThread());
-    if (thread)
-        return thread->taskRunner();
-
-    std::shared_ptr<TaskRunner> task_runner = Application::taskRunner();
-    CHECK(task_runner);
-
-    return task_runner;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::shared_ptr<base::TaskRunner> Thread::taskRunner()
-{
-    return task_runner_;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Thread::run()
 {
-    task_runner_ = std::make_shared<TaskRunner>();
-
 #if defined(Q_OS_WINDOWS)
     ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.isSucceeded());

@@ -30,7 +30,6 @@
 
 namespace base {
 class Location;
-class TaskRunner;
 } // namespace base
 
 namespace relay {

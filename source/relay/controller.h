@@ -35,30 +35,27 @@ namespace relay {
 
 class Controller final
     : public QObject,
-      public SessionManager::Delegate,
       public SharedPool::Delegate
 {
     Q_OBJECT
 
 public:
-    explicit Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent = nullptr);
+    explicit Controller(QObject* parent = nullptr);
     ~Controller() final;
 
     bool start();
+
+protected:
+    // SharedPool::Delegate implementation.
+    void onPoolKeyExpired(quint32 key_id) final;
 
 private slots:
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-
-protected:
-    // SessionManager::Delegate implementation.
-    void onSessionStarted() final;
-    void onSessionStatistics(const proto::RelayStat& relay_stat) final;
-    void onSessionFinished() final;
-
-    // SharedPool::Delegate implementation.
-    void onPoolKeyExpired(quint32 key_id) final;
+    void onSessionStarted();
+    void onSessionStatistics(const proto::RelayStat& relay_stat);
+    void onSessionFinished();
 
 private:
     void connectToRouter();
@@ -79,7 +76,6 @@ private:
     bool statistics_enabled_ = false;
     std::chrono::seconds statistics_interval_;
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
     QPointer<QTimer> reconnect_timer_;
     std::unique_ptr<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;

@@ -28,8 +28,7 @@ class SharedPool;
 
 class SessionsWorker final
     : public QObject,
-      public base::Thread::Delegate,
-      public SessionManager::Delegate
+      public base::Thread::Delegate
 {
     Q_OBJECT
 
@@ -43,19 +42,19 @@ public:
                    QObject* parent = nullptr);
     ~SessionsWorker() final;
 
-    void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
-               SessionManager::Delegate* delegate);
-    void disconnectSession(quint64 session_id);
+public slots:
+    void start();
+
+signals:
+    void sig_sessionStarted();
+    void sig_sessionStatistics(const proto::RelayStat& relay_stat);
+    void sig_sessionFinished();
+    void sig_disconnectSession(quint64 session_id);
 
 protected:
-    // base::AsioThread::Delegate implementation.
+    // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
-
-    // SessionManager::Delegate implementation.
-    void onSessionStarted() final;
-    void onSessionStatistics(const proto::RelayStat& relay_stat) final;
-    void onSessionFinished() final;
 
 private:
     const QString listen_interface_;
@@ -67,10 +66,7 @@ private:
     std::unique_ptr<SharedPool> shared_pool_;
 
     std::unique_ptr<base::Thread> thread_;
-    std::shared_ptr<base::TaskRunner> caller_task_runner_;
-    std::shared_ptr<base::TaskRunner> self_task_runner_;
     std::unique_ptr<SessionManager> session_manager_;
-    SessionManager::Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(SessionsWorker);
 };

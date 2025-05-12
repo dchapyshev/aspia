@@ -27,10 +27,6 @@
 
 #include <asio/steady_timer.hpp>
 
-namespace base {
-class TaskRunner;
-} // namespace base
-
 namespace relay {
 
 class SessionManager final
@@ -41,18 +37,7 @@ class SessionManager final
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onSessionStarted() = 0;
-        virtual void onSessionStatistics(const proto::RelayStat& relay_stat) = 0;
-        virtual void onSessionFinished() = 0;
-    };
-
-    SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                   const asio::ip::address& address,
+    SessionManager(const asio::ip::address& address,
                    quint16 port,
                    const std::chrono::minutes& idle_timeout,
                    bool statistics_enabled,
@@ -60,8 +45,15 @@ public:
                    QObject* parent = nullptr);
     ~SessionManager() final;
 
-    void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
+    void start(std::unique_ptr<SharedPool> shared_pool);
+
+public slots:
     void disconnectSession(quint64 session_id);
+
+signals:
+    void sig_sessionStarted();
+    void sig_sessionStatistics(const proto::RelayStat& relay_stat);
+    void sig_sessionFinished();
 
 protected:
     // PendingSession::Delegate implementation.
@@ -83,8 +75,6 @@ private:
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
 
-    std::shared_ptr<base::TaskRunner> task_runner_;
-
     asio::ip::tcp::acceptor acceptor_;
     std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
     std::vector<std::unique_ptr<Session>> active_sessions_;
@@ -98,7 +88,6 @@ private:
     asio::steady_timer stat_timer_;
 
     std::unique_ptr<SharedPool> shared_pool_;
-    Delegate* delegate_ = nullptr;
 
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;

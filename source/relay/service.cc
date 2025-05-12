@@ -42,7 +42,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Starting service...";
 
-    controller_ = std::make_unique<Controller>(taskRunner());
+    controller_ = std::make_unique<Controller>();
     controller_->start();
 
     LOG(LS_INFO) << "Service started";

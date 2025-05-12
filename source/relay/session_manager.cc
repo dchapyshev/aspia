@@ -19,7 +19,6 @@
 #include "relay/session_manager.h"
 
 #include "base/logging.h"
-#include "base/task_runner.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/threading/asio_event_dispatcher.h"
 
@@ -67,9 +66,9 @@ QByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Ke
 }
 
 //--------------------------------------------------------------------------------------------------
-// Removes a session from the list and returns a pointer to it.
+// Removes a session from the list.
 template<class T>
-std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list, T* session)
+void removeSessionT(std::vector<std::unique_ptr<T>>* session_list, T* session)
 {
     session->stop();
 
@@ -84,12 +83,9 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 
     if (it != session_list->end())
     {
-        std::unique_ptr<T> result = std::move(*it);
+        it->release()->deleteLater();
         session_list->erase(it);
-        return result;
     }
-
-    return nullptr;
 }
 
 QString peerAddress(const asio::ip::tcp::socket& socket)
@@ -119,15 +115,13 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
-                               const asio::ip::address& address,
+SessionManager::SessionManager(const asio::ip::address& address,
                                quint16 port,
                                const std::chrono::minutes& idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval,
                                QObject* parent)
     : QObject(parent),
-      task_runner_(std::move(task_runner)),
       acceptor_(base::AsioEventDispatcher::currentIoContext()),
       address_(address),
       port_(port),
@@ -138,7 +132,6 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
       statistics_interval_(statistics_interval)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,7 +146,7 @@ SessionManager::~SessionManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
+void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
 {
     LOG(LS_INFO) << "Starting session manager";
 
@@ -191,9 +184,7 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     start_time_ = Clock::now();
 
     shared_pool_ = std::move(shared_pool);
-    delegate_ = delegate;
-
-    DCHECK(delegate_ && shared_pool_);
+    DCHECK(shared_pool_);
 
     idle_timer_.expires_after(kIdleTimerInterval);
     idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
@@ -256,8 +247,7 @@ void SessionManager::onPendingSessionReady(
                         std::make_pair(session->takeSocket(), other_session->takeSocket()), secret));
                     active_sessions_.back()->start(this);
 
-                    if (delegate_)
-                        delegate_->onSessionStarted();
+                    emit sig_sessionStarted();
 
                     // Pending sessions are no longer needed, remove them.
                     removePendingSession(other_session.get());
@@ -414,32 +404,29 @@ void SessionManager::collectAndSendStatistics()
 
         peer_connection->set_session_id(session->sessionId());
         peer_connection->set_status(proto::PeerConnection::PEER_STATUS_ACTIVE);
-        peer_connection->set_client_address(session->clientAddress());
-        peer_connection->set_client_user_name(session->clientUserName());
-        peer_connection->set_host_address(session->hostAddress());
+        peer_connection->set_client_address(session->clientAddress().toStdString());
+        peer_connection->set_client_user_name(session->clientUserName().toStdString());
+        peer_connection->set_host_address(session->hostAddress().toStdString());
         peer_connection->set_host_id(session->hostId());
         peer_connection->set_bytes_transferred(session->bytesTransferred());
         peer_connection->set_idle_time(session->idleTime(now).count());
         peer_connection->set_duration(session->duration(now).count());
     }
 
-    if (delegate_)
-        delegate_->onSessionStatistics(relay_stat);
+    emit sig_sessionStatistics(relay_stat);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::removePendingSession(PendingSession* session)
 {
-    task_runner_->deleteSoon(removeSessionT(&pending_sessions_, session));
+    removeSessionT(&pending_sessions_, session);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::removeSession(Session* session)
 {
-    task_runner_->deleteSoon(removeSessionT(&active_sessions_, session));
-
-    if (delegate_)
-        delegate_->onSessionFinished();
+    removeSessionT(&active_sessions_, session);
+    emit sig_sessionFinished();
 }
 
 } // namespace relay

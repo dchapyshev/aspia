@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/task_runner.h"
 #include "base/version_constants.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
@@ -60,9 +59,8 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner, QObject* parent)
+Controller::Controller(QObject* parent)
     : QObject(parent),
-      task_runner_(task_runner),
       reconnect_timer_(new QTimer(this)),
       shared_pool_(std::make_unique<SharedPool>(this))
 {
@@ -162,7 +160,15 @@ bool Controller::start()
     sessions_worker_ = std::make_unique<SessionsWorker>(
         listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
         shared_pool_->share());
-    sessions_worker_->start(task_runner_, this);
+
+    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionStarted,
+            this, &Controller::onSessionStarted);
+    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionFinished,
+            this, &Controller::onSessionFinished);
+    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionStatistics,
+            this, &Controller::onSessionStatistics);
+
+    sessions_worker_->start();
 
     connectToRouter();
     return true;
@@ -262,7 +268,7 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
         switch (request.type())
         {
             case proto::PEER_CONNECTION_REQUEST_DISCONNECT:
-                sessions_worker_->disconnectSession(request.peer_session_id());
+                emit sessions_worker_->sig_disconnectSession(request.peer_session_id());
                 break;
 
             default:

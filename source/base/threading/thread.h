@@ -20,7 +20,6 @@
 #define BASE_THREADING_THREAD_H
 
 #include "base/macros_magic.h"
-#include "base/task_runner.h"
 
 #include <QThread>
 
@@ -53,15 +52,11 @@ public:
 
     void stop();
 
-    static std::shared_ptr<base::TaskRunner> currentTaskRunner();
-    std::shared_ptr<base::TaskRunner> taskRunner();
-
 protected:
     // QThread implementation.
     void run() final;
 
 private:
-    std::shared_ptr<TaskRunner> task_runner_;
     Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(Thread);

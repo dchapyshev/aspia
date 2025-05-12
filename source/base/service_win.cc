@@ -26,6 +26,7 @@
 
 #include <sddl.h>
 
+#include <QTimer>
 #include <QThread>
 
 namespace base {
@@ -121,7 +122,6 @@ private:
         DWORD control_code, DWORD event_type, LPVOID event_data, LPVOID context);
 
     Service* service_;
-    std::shared_ptr<TaskRunner> task_runner_;
 
     SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
@@ -144,9 +144,6 @@ ServiceThread::ServiceThread(Service* service)
 
     DCHECK(!self);
     self = this;
-
-    task_runner_ = service->taskRunner();
-    DCHECK(task_runner_);
 
     memset(&status_, 0, sizeof(status_));
 }
@@ -202,7 +199,7 @@ void ServiceThread::doEvent(EventCallback callback, bool quit)
     std::unique_lock lock(event_lock);
     event_processed = false;
 
-    task_runner_->postTask([callback, quit]()
+    QTimer::singleShot(0, QCoreApplication::instance(), [callback, quit]()
     {
         std::scoped_lock lock(self->event_lock);
 
@@ -211,7 +208,7 @@ void ServiceThread::doEvent(EventCallback callback, bool quit)
         if (quit)
         {
             // A message loop termination command was received.
-            self->task_runner_->postQuit();
+            QCoreApplication::quit();
         }
 
         // Set the event flag is processed.
@@ -379,8 +376,6 @@ int Service::exec(Application& application)
     CHECK(com_initializer->isSucceeded());
 
     initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
-
-    task_runner_ = Application::taskRunner();
 
     std::unique_ptr<ServiceThread> service_thread = std::make_unique<ServiceThread>(this);
 

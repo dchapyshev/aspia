@@ -51,39 +51,16 @@ SessionsWorker::~SessionsWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
-                           SessionManager::Delegate* delegate)
+void SessionsWorker::start()
 {
     LOG(LS_INFO) << "Starting session worker";
-
-    caller_task_runner_ = std::move(caller_task_runner);
-    delegate_ = delegate;
-
-    DCHECK(caller_task_runner_);
-    DCHECK(delegate_);
-
     thread_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionsWorker::disconnectSession(quint64 session_id)
-{
-    if (!self_task_runner_->belongsToCurrentThread())
-    {
-        self_task_runner_->postTask(std::bind(&SessionsWorker::disconnectSession, this, session_id));
-        return;
-    }
-
-    session_manager_->disconnectSession(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "Before thread running";
-
-    self_task_runner_ = thread_->taskRunner();
-    DCHECK(self_task_runner_);
 
     asio::ip::address listen_address;
 
@@ -107,9 +84,18 @@ void SessionsWorker::onBeforeThreadRunning()
                  << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
 
     session_manager_ = std::make_unique<SessionManager>(
-        self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,
-        statistics_interval_);
-    session_manager_->start(std::move(shared_pool_), this);
+        listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_);
+
+    connect(session_manager_.get(), &SessionManager::sig_sessionStarted,
+            this, &SessionsWorker::sig_sessionStarted, Qt::QueuedConnection);
+    connect(session_manager_.get(), &SessionManager::sig_sessionFinished,
+            this, &SessionsWorker::sig_sessionFinished, Qt::QueuedConnection);
+    connect(session_manager_.get(), &SessionManager::sig_sessionStatistics,
+            this, &SessionsWorker::sig_sessionStatistics, Qt::QueuedConnection);
+    connect(this, &SessionsWorker::sig_disconnectSession,
+            session_manager_.get(), &SessionManager::disconnectSession, Qt::QueuedConnection);
+
+    session_manager_->start(std::move(shared_pool_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -117,46 +103,6 @@ void SessionsWorker::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "After thread running";
     session_manager_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionsWorker::onSessionStarted()
-{
-    if (!caller_task_runner_->belongsToCurrentThread())
-    {
-        caller_task_runner_->postTask(std::bind(&SessionsWorker::onSessionStarted, this));
-        return;
-    }
-
-    if (delegate_)
-        delegate_->onSessionStarted();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionsWorker::onSessionStatistics(const proto::RelayStat& relay_stat)
-{
-    if (!caller_task_runner_->belongsToCurrentThread())
-    {
-        caller_task_runner_->postTask(
-            std::bind(&SessionsWorker::onSessionStatistics, this, relay_stat));
-        return;
-    }
-
-    if (delegate_)
-        delegate_->onSessionStatistics(relay_stat);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionsWorker::onSessionFinished()
-{
-    if (!caller_task_runner_->belongsToCurrentThread())
-    {
-        caller_task_runner_->postTask(std::bind(&SessionsWorker::onSessionFinished, this));
-        return;
-    }
-
-    if (delegate_)
-        delegate_->onSessionFinished();
 }
 
 } // namespace relay

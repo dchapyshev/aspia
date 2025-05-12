@@ -40,9 +40,9 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     proto::PeerToRelay::Secret secret_message;
     if (base::parse(secret, &secret_message))
     {
-        client_address_ = secret_message.client_address();
-        client_user_name_ = secret_message.client_user_name();
-        host_address_ = secret_message.host_address();
+        client_address_ = QString::fromStdString(secret_message.client_address());
+        client_user_name_ = QString::fromStdString(secret_message.client_user_name());
+        host_address_ = QString::fromStdString(secret_message.host_address());
         host_id_ = secret_message.host_id();
     }
 
