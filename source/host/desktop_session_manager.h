@@ -25,6 +25,7 @@
 #include "host/desktop_session.h"
 #include "proto/desktop_internal.pb.h"
 
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -74,7 +75,7 @@ private:
     void setState(const base::Location& location, State state);
     static const char* stateToString(State state);
 
-    std::unique_ptr<base::IpcServer> server_;
+    QPointer<base::IpcServer> server_;
     std::unique_ptr<DesktopSession> session_;
     base::local_shared_ptr<DesktopSessionProxy> session_proxy_;
     QTimer session_attach_timer_;

@@ -110,11 +110,11 @@ void DesktopSessionManager::attachSession(
 
     LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
-    server_ = std::make_unique<base::IpcServer>();
+    server_ = new base::IpcServer(this);
 
-    connect(server_.get(), &base::IpcServer::sig_newConnection,
+    connect(server_, &base::IpcServer::sig_newConnection,
             this, &DesktopSessionManager::onNewIpcConnection);
-    connect(server_.get(), &base::IpcServer::sig_errorOccurred,
+    connect(server_, &base::IpcServer::sig_errorOccurred,
             this, &DesktopSessionManager::onErrorOccurred);
 
     if (!server_->start(channel_id))
@@ -200,7 +200,8 @@ void DesktopSessionManager::onNewIpcConnection()
 
     session_attach_timer_.stop();
     server_->stop();
-    server_.release()->deleteLater();
+    server_->deleteLater();
+    server_ = nullptr;
 
     session_ = std::make_unique<DesktopSessionIpc>(channel, this);
 
