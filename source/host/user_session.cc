@@ -421,7 +421,10 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             request->set_timeout(static_cast<quint32>(auto_confirmation_interval_.count()));
 
             std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
-                std::make_unique<UnconfirmedClientSession>(std::move(client_session), this);
+                std::make_unique<UnconfirmedClientSession>(std::move(client_session));
+
+            connect(unconfirmed_client_session.get(), &UnconfirmedClientSession::sig_finished,
+                    this, &UserSession::onUnconfirmedSessionFinished, Qt::QueuedConnection);
 
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
             pending_clients_.emplace_back(std::move(unconfirmed_client_session));
@@ -739,45 +742,6 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onUnconfirmedSessionAccept(quint32 id)
-{
-    LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid=" << session_id_ << ")";
-
-    QTimer::singleShot(0, this, [this, id]()
-    {
-        for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
-        {
-            if ((*it)->id() != id)
-                continue;
-
-            std::unique_ptr<ClientSession> client_session = (*it)->takeClientSession();
-            addNewClientSession(std::move(client_session));
-
-            pending_clients_.erase(it);
-            return;
-        }
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onUnconfirmedSessionReject(quint32 id)
-{
-    LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid=" << session_id_ << ")";
-
-    QTimer::singleShot(0, this, [this, id]()
-    {
-        for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
-        {
-            if ((*it)->id() != id)
-                continue;
-
-            pending_clients_.erase(it);
-            return;
-        }
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionConfigured()
 {
     mergeAndSendConfiguration();
@@ -937,9 +901,9 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                      << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
 
         if (connect_confirmation.accept_connection())
-            onUnconfirmedSessionAccept(connect_confirmation.id());
+            onUnconfirmedSessionFinished(connect_confirmation.id(), false);
         else
-            onUnconfirmedSessionReject(connect_confirmation.id());
+            onUnconfirmedSessionFinished(connect_confirmation.id(), true);
     }
     else if (incoming_message_.has_control())
     {
@@ -1058,6 +1022,28 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
     else
     {
         LOG(LS_ERROR) << "Unhandled message from UI (sid=" << session_id_ << ")";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
+{
+    LOG(LS_INFO) << "Client session '" << id << "' is " << (is_rejected ? "rejected" : "accepted")
+                 << " (sid=" << session_id_ << ")";
+
+    for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
+    {
+        if ((*it)->id() != id)
+            continue;
+
+        if (!is_rejected)
+        {
+            std::unique_ptr<ClientSession> client_session = (*it)->takeClientSession();
+            addNewClientSession(std::move(client_session));
+        }
+
+        pending_clients_.erase(it);
+        return;
     }
 }
 

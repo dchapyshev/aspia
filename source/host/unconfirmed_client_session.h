@@ -35,17 +35,7 @@ class UnconfirmedClientSession final : public QObject
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onUnconfirmedSessionAccept(quint32 id) = 0;
-        virtual void onUnconfirmedSessionReject(quint32 id) = 0;
-    };
-
     UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                             Delegate* delegate,
                              QObject* parent = nullptr);
     ~UnconfirmedClientSession();
 
@@ -54,8 +44,10 @@ public:
     std::unique_ptr<ClientSession> takeClientSession();
     quint32 id() const;
 
+signals:
+    void sig_finished(quint32 id, bool is_rejected);
+
 private:
-    Delegate* delegate_;
     std::unique_ptr<ClientSession> client_session_;
     std::unique_ptr<QTimer> timer_;
     quint32 id_;

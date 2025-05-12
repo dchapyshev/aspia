@@ -38,7 +38,6 @@ namespace host {
 class UserSession final
     : public QObject,
       public DesktopSession::Delegate,
-      public UnconfirmedClientSession::Delegate,
       public ClientSession::Delegate
 {
     Q_OBJECT
@@ -107,10 +106,6 @@ protected:
     void onScreenTypeChanged(const proto::ScreenType& type) final;
     void onClipboardEvent(const proto::ClipboardEvent& event) final;
 
-    // UnconfirmedClientSession::Delegate implementation.
-    void onUnconfirmedSessionAccept(quint32 id) final;
-    void onUnconfirmedSessionReject(quint32 id) final;
-
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() final;
     void onClientSessionFinished() final;
@@ -121,6 +116,7 @@ protected:
 private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
+    void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);
 
 private:
     void onSessionDettached(const base::Location& location);

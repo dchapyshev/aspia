@@ -31,16 +31,13 @@ const std::chrono::seconds kRejectInterval { 60 };
 
 //--------------------------------------------------------------------------------------------------
 UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                                                   Delegate* delegate,
                                                    QObject* parent)
     : QObject(parent),
-      delegate_(delegate),
       client_session_(std::move(client_session)),
       timer_(std::make_unique<QTimer>())
 {
     LOG(LS_INFO) << "Ctor";
 
-    DCHECK(delegate_);
     DCHECK(client_session_);
 
     id_ = client_session_->id();
@@ -65,7 +62,7 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
         // the connection within this time, then it will be automatically rejected.
         connect(timer_.get(), &QTimer::timeout, this, [this]()
         {
-            delegate_->onUnconfirmedSessionReject(id());
+            emit sig_finished(id(), true);
         });
 
         timer_->start(kRejectInterval);
@@ -76,7 +73,7 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
         // automatically accepted.
         connect(timer_.get(), &QTimer::timeout, this, [this]()
         {
-            delegate_->onUnconfirmedSessionAccept(id());
+            emit sig_finished(id(), false);
         });
 
         timer_->start(timeout);
