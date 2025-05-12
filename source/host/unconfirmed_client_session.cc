@@ -34,7 +34,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession
                                                    QObject* parent)
     : QObject(parent),
       client_session_(std::move(client_session)),
-      timer_(std::make_unique<QTimer>())
+      timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -60,9 +60,9 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
         // An interval set to 0 means that automatic confirmation is disabled. We start a timer that
         // counts down until the connection is automatically rejected. If the user does not approve
         // the connection within this time, then it will be automatically rejected.
-        connect(timer_.get(), &QTimer::timeout, this, [this]()
+        connect(timer_, &QTimer::timeout, this, [this]()
         {
-            emit sig_finished(id(), true);
+            emit sig_finished(id(), true); // Rejected.
         });
 
         timer_->start(kRejectInterval);
@@ -71,9 +71,9 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
     {
         // If the user does not approve the connection within the specified time, then it will be
         // automatically accepted.
-        connect(timer_.get(), &QTimer::timeout, this, [this]()
+        connect(timer_, &QTimer::timeout, this, [this]()
         {
-            emit sig_finished(id(), false);
+            emit sig_finished(id(), false); // Accepted.
         });
 
         timer_->start(timeout);

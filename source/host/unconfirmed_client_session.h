@@ -24,6 +24,7 @@
 #include <chrono>
 #include <memory>
 
+#include <QPointer>
 #include <QTimer>
 
 namespace host {
@@ -49,7 +50,7 @@ signals:
 
 private:
     std::unique_ptr<ClientSession> client_session_;
-    std::unique_ptr<QTimer> timer_;
+    QPointer<QTimer> timer_;
     quint32 id_;
 
     DISALLOW_COPY_AND_ASSIGN(UnconfirmedClientSession);

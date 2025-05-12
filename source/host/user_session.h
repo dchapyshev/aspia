@@ -134,7 +134,7 @@ private:
     void onTextChatSessionFinished(quint32 id);
     void mergeAndSendConfiguration();
 
-    std::unique_ptr<base::IpcChannel> channel_;
+    QPointer<base::IpcChannel> channel_;
 
     Type type_;
     State state_ = State::DETTACHED;

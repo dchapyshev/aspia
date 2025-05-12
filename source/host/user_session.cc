@@ -189,11 +189,12 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+        connect(channel_, &base::IpcChannel::sig_disconnected,
                 this, &UserSession::onIpcDisconnected);
-        connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+        connect(channel_, &base::IpcChannel::sig_messageReceived,
                 this, &UserSession::onIpcMessageReceived);
 
+        channel_->setParent(this);
         channel_->resume();
 
         sendRouterState(FROM_HERE);
@@ -213,7 +214,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 //--------------------------------------------------------------------------------------------------
 void UserSession::restart(base::IpcChannel* channel)
 {
-    channel_.reset(channel);
+    channel_ = channel;
 
     LOG(LS_INFO) << "User session restarted "
                  << (channel_ ? "WITH" : "WITHOUT")
@@ -230,11 +231,12 @@ void UserSession::restart(base::IpcChannel* channel)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+        connect(channel_, &base::IpcChannel::sig_disconnected,
                 this, &UserSession::onIpcDisconnected);
-        connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+        connect(channel_, &base::IpcChannel::sig_messageReceived,
                 this, &UserSession::onIpcMessageReceived);
 
+        channel_->setParent(this);
         channel_->resume();
 
         auto send_connection_list = [this](const ClientSessionList& list)
@@ -1062,7 +1064,8 @@ void UserSession::onSessionDettached(const base::Location& location)
     if (channel_)
     {
         LOG(LS_INFO) << "Post task to delete IPC channel (sid=" << session_id_ << ")";
-        channel_.release()->deleteLater();
+        channel_->deleteLater();
+        channel_ = nullptr;
     }
 
     one_time_sessions_ = 0;
