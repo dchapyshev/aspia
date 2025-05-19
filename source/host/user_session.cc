@@ -64,28 +64,31 @@ UserSession::UserSession(base::SessionId session_id,
                          QObject* parent)
     : QObject(parent),
       channel_(channel),
+      ui_attach_timer_(new QTimer(this)),
+      desktop_dettach_timer_(new QTimer(this)),
       session_id_(session_id),
+      password_expire_timer_(new QTimer(this)),
       delegate_(delegate)
 {
     type_ = UserSession::Type::CONSOLE;
 
-    ui_attach_timer_.setSingleShot(true);
-    connect(&ui_attach_timer_, &QTimer::timeout, this, [this]()
+    ui_attach_timer_->setSingleShot(true);
+    connect(ui_attach_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(LS_INFO) << "Session attach timeout (sid=" << session_id_ << ")";
         setState(FROM_HERE, State::FINISHED);
         delegate_->onUserSessionFinished();
     });
 
-    desktop_dettach_timer_.setSingleShot(true);
-    connect(&desktop_dettach_timer_, &QTimer::timeout, this, [this]()
+    desktop_dettach_timer_->setSingleShot(true);
+    connect(desktop_dettach_timer_, &QTimer::timeout, this, [this]()
     {
         if (desktop_session_)
             desktop_session_->dettachSession(FROM_HERE);
     });
 
-    password_expire_timer_.setSingleShot(true);
-    connect(&password_expire_timer_, &QTimer::timeout, this, [this]()
+    password_expire_timer_->setSingleShot(true);
+    connect(password_expire_timer_, &QTimer::timeout, this, [this]()
     {
         updateCredentials(FROM_HERE);
         sendCredentials(FROM_HERE);
@@ -179,25 +182,25 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
     router_state_ = router_state;
 
-    desktop_session_ = std::make_unique<DesktopSessionManager>();
+    desktop_session_ = new DesktopSessionManager(this);
 
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_desktopSessionStarted,
+    connect(desktop_session_, &DesktopSessionManager::sig_desktopSessionStarted,
             this, &UserSession::onDesktopSessionStarted);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_desktopSessionStopped,
+    connect(desktop_session_, &DesktopSessionManager::sig_desktopSessionStopped,
             this, &UserSession::onDesktopSessionStopped);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenCaptured,
+    connect(desktop_session_, &DesktopSessionManager::sig_screenCaptured,
             this, &UserSession::onScreenCaptured);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenCaptureError,
+    connect(desktop_session_, &DesktopSessionManager::sig_screenCaptureError,
             this, &UserSession::onScreenCaptureError);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_audioCaptured,
+    connect(desktop_session_, &DesktopSessionManager::sig_audioCaptured,
             this, &UserSession::onAudioCaptured);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_cursorPositionChanged,
+    connect(desktop_session_, &DesktopSessionManager::sig_cursorPositionChanged,
             this, &UserSession::onCursorPositionChanged);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenListChanged,
+    connect(desktop_session_, &DesktopSessionManager::sig_screenListChanged,
             this, &UserSession::onScreenListChanged);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_screenTypeChanged,
+    connect(desktop_session_, &DesktopSessionManager::sig_screenTypeChanged,
             this, &UserSession::onScreenTypeChanged);
-    connect(desktop_session_.get(), &DesktopSessionManager::sig_clipboardEvent,
+    connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
             this, &UserSession::onClipboardEvent);
 
     desktop_session_proxy_ = desktop_session_->sessionProxy();
@@ -240,8 +243,8 @@ void UserSession::restart(base::IpcChannel* channel)
                  << (channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI (sid=" << session_id_ << ")";
 
-    ui_attach_timer_.stop();
-    desktop_dettach_timer_.stop();
+    ui_attach_timer_->stop();
+    desktop_dettach_timer_->stop();
 
     updateCredentials(FROM_HERE);
 
@@ -512,7 +515,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
             for (const auto& client : desktop_clients_)
                 client->setSessionId(session_id);
 
-            desktop_dettach_timer_.stop();
+            desktop_dettach_timer_->stop();
 
             if (desktop_session_)
             {
@@ -539,7 +542,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
                 LOG(LS_ERROR) << "CONSOLE_DISCONNECT for RDP session detected (sid=" << session_id_ << ")";
             }
 
-            desktop_dettach_timer_.stop();
+            desktop_dettach_timer_->stop();
 
             if (desktop_session_)
             {
@@ -754,7 +757,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
 void UserSession::onIpcDisconnected()
 {
     LOG(LS_INFO) << "Ipc channel disconnected (sid=" << session_id_ << ")";
-    desktop_dettach_timer_.start(std::chrono::seconds(5));
+    desktop_dettach_timer_->start(std::chrono::seconds(5));
     onSessionDettached(FROM_HERE);
 }
 
@@ -1129,12 +1132,12 @@ void UserSession::onSessionDettached(const base::Location& location)
     {
         LOG(LS_INFO) << "Starting attach timer (sid=" << session_id_ << ")";
 
-        if (ui_attach_timer_.isActive())
+        if (ui_attach_timer_->isActive())
         {
             LOG(LS_INFO) << "Attach timer is active (sid=" << session_id_ << ")";
         }
 
-        ui_attach_timer_.start(std::chrono::seconds(60));
+        ui_attach_timer_->start(std::chrono::seconds(60));
     }
 
     LOG(LS_INFO) << "Session dettached (sid=" << session_id_ << ")";
@@ -1206,15 +1209,15 @@ void UserSession::updateCredentials(const base::Location& location)
         one_time_password_ = generator.result();
 
         if (password_expire_interval_ > std::chrono::milliseconds(0))
-            password_expire_timer_.start(password_expire_interval_);
+            password_expire_timer_->start(password_expire_interval_);
         else
-            password_expire_timer_.stop();
+            password_expire_timer_->stop();
     }
     else
     {
         LOG(LS_INFO) << "One-time password disabled (sid=" << session_id_ << ")";
 
-        password_expire_timer_.stop();
+        password_expire_timer_->stop();
         one_time_sessions_ = 0;
         one_time_password_.clear();
     }
@@ -1338,21 +1341,21 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             connect(desktop_client_session, &ClientSessionDesktop::sig_control,
-                    desktop_session_.get(), &DesktopSessionManager::control);
+                    desktop_session_, &DesktopSessionManager::control);
             connect(desktop_client_session, &ClientSessionDesktop::sig_selectScreen,
-                    desktop_session_.get(), &DesktopSessionManager::selectScreen);
+                    desktop_session_, &DesktopSessionManager::selectScreen);
             connect(desktop_client_session, &ClientSessionDesktop::sig_captureScreen,
-                    desktop_session_.get(), &DesktopSessionManager::captureScreen);
+                    desktop_session_, &DesktopSessionManager::captureScreen);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectKeyEvent,
-                    desktop_session_.get(), &DesktopSessionManager::injectKeyEvent);
+                    desktop_session_, &DesktopSessionManager::injectKeyEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectTextEvent,
-                    desktop_session_.get(), &DesktopSessionManager::injectTextEvent);
+                    desktop_session_, &DesktopSessionManager::injectTextEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectMouseEvent,
-                    desktop_session_.get(), &DesktopSessionManager::injectMouseEvent);
+                    desktop_session_, &DesktopSessionManager::injectMouseEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectTouchEvent,
-                    desktop_session_.get(), &DesktopSessionManager::injectTouchEvent);
+                    desktop_session_, &DesktopSessionManager::injectTouchEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectClipboardEvent,
-                    desktop_session_.get(), &DesktopSessionManager::injectClipboardEvent);
+                    desktop_session_, &DesktopSessionManager::injectClipboardEvent);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
 

@@ -131,12 +131,12 @@ private:
     void onTextChatSessionFinished(quint32 id);
     void mergeAndSendConfiguration();
 
-    QPointer<base::IpcChannel> channel_;
+    base::IpcChannel* channel_ = nullptr;
 
     Type type_;
     State state_ = State::DETTACHED;
-    QTimer ui_attach_timer_;
-    QTimer desktop_dettach_timer_;
+    QTimer* ui_attach_timer_ = nullptr;
+    QTimer* desktop_dettach_timer_ = nullptr;
 
     base::SessionId session_id_;
     proto::internal::RouterState router_state_;
@@ -146,7 +146,7 @@ private:
     quint32 password_characters_ = 0;
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
-    QTimer password_expire_timer_;
+    QTimer* password_expire_timer_ = nullptr;
     QString one_time_password_;
     quint32 one_time_sessions_ = 0;
 
@@ -163,7 +163,7 @@ private:
     ClientSessionList desktop_clients_;
     ClientSessionList other_clients_;
 
-    std::unique_ptr<DesktopSessionManager> desktop_session_;
+    DesktopSessionManager* desktop_session_ = nullptr;
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
     Delegate* delegate_ = nullptr;
