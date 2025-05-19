@@ -20,6 +20,7 @@
 #define PROTO_DESKTOP_H
 
 #include <QMetaType>
+#include <QTextStream>
 
 #include "proto/desktop.pb.h"
 
@@ -51,5 +52,16 @@ Q_DECLARE_METATYPE(proto::DesktopCapabilities::Flag)
 Q_DECLARE_METATYPE(proto::DesktopConfig)
 Q_DECLARE_METATYPE(proto::HostToClient)
 Q_DECLARE_METATYPE(proto::ClientToHost)
+
+static inline QTextStream& operator<<(QTextStream& out, const proto::Size& size)
+{
+    return out << "proto::Size(" << size.width() << "x" << size.height() << ")";
+}
+
+static inline QTextStream& operator<<(QTextStream& out, const proto::Rect& rect)
+{
+    return out << "proto::Rect(" << rect.x() << " " << rect.y() << " "
+               << rect.width() << "x" << rect.height() << ")";
+}
 
 #endif // PROTO_DESKTOP_H

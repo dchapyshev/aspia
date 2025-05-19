@@ -130,17 +130,17 @@ void ClientSessionDesktop::onStarted()
     capabilities->set_video_encodings(common::kSupportedVideoEncodings);
     capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
 
+#if defined(Q_OS_WINDOWS)
+    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+#elif defined(Q_OS_LINUX)
+    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
+
     auto add_flag = [capabilities](const char* name, bool value)
     {
         proto::DesktopCapabilities::Flag* flag = capabilities->add_flag();
         flag->set_name(name);
         flag->set_value(value);
     };
-
-#if defined(Q_OS_WINDOWS)
-    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
-#elif defined(Q_OS_LINUX)
-    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
 
     add_flag(common::kFlagDisablePasteAsKeystrokes, true);
     add_flag(common::kFlagDisableAudio, true);
@@ -202,14 +202,14 @@ void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray&
         out_mouse_event.set_x(pos_x);
         out_mouse_event.set_y(pos_y);
 
-        desktop_session_proxy_->injectMouseEvent(out_mouse_event);
+        emit sig_injectMouseEvent(out_mouse_event);
         stat_counter_.addMouseEvent();
     }
     else if (incoming_message_.has_key_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            desktop_session_proxy_->injectKeyEvent(incoming_message_.key_event());
+            emit sig_injectKeyEvent(incoming_message_.key_event());
             stat_counter_.addKeyboardEvent();
         }
         else
@@ -221,7 +221,7 @@ void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray&
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            desktop_session_proxy_->injectTouchEvent(incoming_message_.touch_event());
+            emit sig_injectTouchEvent(incoming_message_.touch_event());
             stat_counter_.addTouchEvent();
         }
         else
@@ -233,7 +233,7 @@ void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray&
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            desktop_session_proxy_->injectTextEvent(incoming_message_.text_event());
+            emit sig_injectTextEvent(incoming_message_.text_event());
             stat_counter_.addTextEvent();
         }
         else
@@ -245,7 +245,7 @@ void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray&
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            desktop_session_proxy_->injectClipboardEvent(incoming_message_.clipboard_event());
+            emit sig_injectClipboardEvent(incoming_message_.clipboard_event());
             stat_counter_.addIncomingClipboardEvent();
         }
         else

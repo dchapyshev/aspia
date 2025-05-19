@@ -179,6 +179,69 @@ base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy(
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::setMouseLock(bool enable)
+{
+    is_mouse_locked_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::setKeyboardLock(bool enable)
+{
+    is_keyboard_locked_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::setPaused(bool enable)
+{
+    is_paused_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::injectKeyEvent(const proto::KeyEvent& event)
+{
+    if (is_keyboard_locked_ || is_paused_ || !session_)
+        return;
+
+    session_->injectKeyEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::injectTextEvent(const proto::TextEvent& event)
+{
+    if (is_keyboard_locked_ || is_paused_ || !session_)
+        return;
+
+    session_->injectTextEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::injectMouseEvent(const proto::MouseEvent& event)
+{
+    if (is_mouse_locked_ || is_paused_ || !session_)
+        return;
+
+    session_->injectMouseEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::injectTouchEvent(const proto::TouchEvent &event)
+{
+    if (is_mouse_locked_ || is_paused_ || !session_)
+        return;
+
+    session_->injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::injectClipboardEvent(const proto::ClipboardEvent& event)
+{
+    if (is_paused_ || !session_)
+        return;
+
+    session_->injectClipboardEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewIpcConnection()
 {
     LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";

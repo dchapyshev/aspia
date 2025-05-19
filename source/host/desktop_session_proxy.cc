@@ -116,8 +116,8 @@ void DesktopSessionProxy::control(proto::internal::DesktopControl::Action action
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 {
-    if (is_paused_)
-        return;
+    //if (is_paused_)
+    //    return;
 
     if (desktop_session_)
         desktop_session_->configure(config);
@@ -126,8 +126,8 @@ void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
-    if (is_paused_)
-        return;
+    //if (is_paused_)
+    //    return;
 
     if (desktop_session_)
         desktop_session_->selectScreen(screen);
@@ -136,8 +136,8 @@ void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::captureScreen()
 {
-    if (is_paused_)
-        return;
+    //if (is_paused_)
+    //    return;
 
     if (desktop_session_)
         desktop_session_->captureScreen();
@@ -174,74 +174,6 @@ int DesktopSessionProxy::maxScreenCaptureFps() const
 int DesktopSessionProxy::screenCaptureFps() const
 {
     return screen_capture_fps_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
-{
-    if (is_keyboard_locked_ || is_paused_)
-        return;
-
-    if (desktop_session_)
-        desktop_session_->injectKeyEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::injectTextEvent(const proto::TextEvent& event)
-{
-    if (is_keyboard_locked_ || is_paused_)
-        return;
-
-    if (desktop_session_)
-        desktop_session_->injectTextEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
-{
-    if (is_mouse_locked_ || is_paused_)
-        return;
-
-    if (desktop_session_)
-        desktop_session_->injectMouseEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::injectTouchEvent(const proto::TouchEvent &event)
-{
-    if (is_mouse_locked_ || is_paused_)
-        return;
-
-    if (desktop_session_)
-        desktop_session_->injectTouchEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
-{
-    if (is_paused_)
-        return;
-
-    if (desktop_session_)
-        desktop_session_->injectClipboardEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::setMouseLock(bool enable)
-{
-    is_mouse_locked_ = enable;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::setKeyboardLock(bool enable)
-{
-    is_keyboard_locked_ = enable;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::setPaused(bool enable)
-{
-    is_paused_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------

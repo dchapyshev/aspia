@@ -52,7 +52,22 @@ public:
 
     base::local_shared_ptr<DesktopSessionProxy> sessionProxy() const;
 
+    bool isMouseLocked() const { return is_mouse_locked_; }
+    void setMouseLock(bool enable);
+
+    bool isKeyboardLocked() const { return is_keyboard_locked_; }
+    void setKeyboardLock(bool enable);
+
+    bool isPaused() const { return is_paused_; }
+    void setPaused(bool enable);
+
 public slots:
+    void injectKeyEvent(const proto::KeyEvent& event);
+    void injectTextEvent(const proto::TextEvent& event);
+    void injectMouseEvent(const proto::MouseEvent& event);
+    void injectTouchEvent(const proto::TouchEvent& event);
+    void injectClipboardEvent(const proto::ClipboardEvent& event);
+
     void onNewIpcConnection();
     void onErrorOccurred();
 
@@ -80,8 +95,11 @@ private:
     QPointer<QTimer> session_attach_timer_;
 
     State state_ = State::STOPPED;
-
     base::SessionId session_id_ = base::kInvalidSessionId;
+
+    bool is_mouse_locked_ = false;
+    bool is_keyboard_locked_ = false;
+    bool is_paused_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionManager);
 };

@@ -68,6 +68,13 @@ public:
 
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
 
+signals:
+    void sig_injectKeyEvent(const proto::KeyEvent& event);
+    void sig_injectTextEvent(const proto::TextEvent& event);
+    void sig_injectMouseEvent(const proto::MouseEvent& event);
+    void sig_injectTouchEvent(const proto::TouchEvent& event);
+    void sig_injectClipboardEvent(const proto::ClipboardEvent& event);
+
 protected:
     // ClientSession implementation.
     void onStarted() final;

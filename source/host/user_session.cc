@@ -699,9 +699,9 @@ void UserSession::onClientSessionFinished()
 
         desktop_session_proxy_->setScreenCaptureFps(
             desktop_session_proxy_->defaultScreenCaptureFps());
-        desktop_session_proxy_->setMouseLock(false);
-        desktop_session_proxy_->setKeyboardLock(false);
-        desktop_session_proxy_->setPaused(false);
+        desktop_session_->setMouseLock(false);
+        desktop_session_->setKeyboardLock(false);
+        desktop_session_->setPaused(false);
     }
 }
 
@@ -845,7 +845,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
                          << is_paused << ")";
 
-            desktop_session_proxy_->setPaused(is_paused);
+            desktop_session_->setPaused(is_paused);
             desktop_session_proxy_->control(is_paused ?
                                                 proto::internal::DesktopControl::DISABLE :
                                                 proto::internal::DesktopControl::ENABLE);
@@ -879,7 +879,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
                          << " lock_mouse=" << control.boolean() << ")";
 
-            desktop_session_proxy_->setMouseLock(control.boolean());
+            desktop_session_->setMouseLock(control.boolean());
         }
         break;
 
@@ -894,7 +894,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
                          << " lock_keyboard=" << control.boolean() << ")";
 
-            desktop_session_proxy_->setKeyboardLock(control.boolean());
+            desktop_session_->setKeyboardLock(control.boolean());
         }
         break;
 
@@ -967,9 +967,9 @@ void UserSession::onDesktopSessionStarted()
     }
     else
     {
-        desktop_session_proxy_->setKeyboardLock(false);
-        desktop_session_proxy_->setMouseLock(false);
-        desktop_session_proxy_->setPaused(false);
+        desktop_session_->setKeyboardLock(false);
+        desktop_session_->setMouseLock(false);
+        desktop_session_->setPaused(false);
     }
 
     desktop_session_proxy_->control(action);
@@ -1337,6 +1337,17 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
             ClientSessionDesktop* desktop_client_session =
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
+
+            connect(desktop_client_session, &ClientSessionDesktop::sig_injectKeyEvent,
+                    desktop_session_.get(), &DesktopSessionManager::injectKeyEvent);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_injectTextEvent,
+                    desktop_session_.get(), &DesktopSessionManager::injectTextEvent);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_injectMouseEvent,
+                    desktop_session_.get(), &DesktopSessionManager::injectMouseEvent);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_injectTouchEvent,
+                    desktop_session_.get(), &DesktopSessionManager::injectTouchEvent);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_injectClipboardEvent,
+                    desktop_session_.get(), &DesktopSessionManager::injectClipboardEvent);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
 
