@@ -19,7 +19,6 @@
 #ifndef HOST_SERVER_H
 #define HOST_SERVER_H
 
-#include "build/build_config.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "common/http_file_downloader.h"
@@ -34,9 +33,7 @@
 
 namespace host {
 
-class Server final
-    : public QObject,
-      public UserSessionManager::Delegate
+class Server final : public QObject
 {
     Q_OBJECT
 
@@ -48,13 +45,10 @@ public:
     void setSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void setPowerEvent(quint32 power_event);
 
-protected:
-    // UserSessionManager::Delegate implementation.
-    void onHostIdRequest(const QString& session_name) final;
-    void onResetHostId(base::HostId host_id) final;
-    void onUserListChanged() final;
-
 private slots:
+    void onHostIdRequest(const QString& session_name);
+    void onResetHostId(base::HostId host_id);
+    void onUserListChanged();
     void onSessionAuthenticated();
     void onNewDirectConnection();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
@@ -75,19 +69,19 @@ private:
     void disconnectFromRouter();
     void checkForUpdates();
 
-    QPointer<QTimer> update_timer_;
+    QTimer* update_timer_ = nullptr;
 
-    QPointer<QFileSystemWatcher> settings_watcher_;
+    QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
 
     // Accepts incoming network connections.
-    std::unique_ptr<base::TcpServer> server_;
-    std::unique_ptr<RouterController> router_controller_;
-    QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
-    std::unique_ptr<UserSessionManager> user_session_manager_;
+    base::TcpServer* server_ = nullptr;
+    QPointer<RouterController> router_controller_ = nullptr;
+    base::ServerAuthenticatorManager* authenticator_manager_ = nullptr;
+    UserSessionManager* user_session_manager_ = nullptr;
 
-    std::unique_ptr<common::UpdateChecker> update_checker_;
-    std::unique_ptr<common::HttpFileDownloader> update_downloader_;
+    common::UpdateChecker* update_checker_ = nullptr;
+    common::HttpFileDownloader* update_downloader_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

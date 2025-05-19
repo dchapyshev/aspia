@@ -151,11 +151,8 @@ UserSessionManager::~UserSessionManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UserSessionManager::start(Delegate* delegate)
+bool UserSessionManager::start()
 {
-    DCHECK(delegate);
-    DCHECK(!delegate_);
-
     LOG(LS_INFO) << "Starting user session manager";
 
     if (ipc_server_)
@@ -164,11 +161,9 @@ bool UserSessionManager::start(Delegate* delegate)
         return false;
     }
 
-    delegate_ = delegate;
+    ipc_server_ = new base::IpcServer(this);
 
-    ipc_server_ = std::make_unique<base::IpcServer>();
-
-    connect(ipc_server_.get(), &base::IpcServer::sig_newConnection,
+    connect(ipc_server_, &base::IpcServer::sig_newConnection,
             this, &UserSessionManager::onIpcNewConnection);
 
     QString ipc_channel_for_ui = base::IpcServer::createUniqueId();
@@ -321,7 +316,7 @@ void UserSessionManager::onHostIdChanged(const QString& session_name, base::Host
             LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
 
             session->onHostIdChanged(host_id);
-            delegate_->onUserListChanged();
+            emit sig_userListChanged();
             return;
         }
     }
@@ -490,21 +485,21 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
 void UserSessionManager::onUserSessionHostIdRequest(const QString& session_name)
 {
     LOG(LS_INFO) << "User session host id request for session name: " << session_name;
-    delegate_->onHostIdRequest(session_name);
+    emit sig_hostIdRequest(session_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionCredentialsChanged()
 {
     LOG(LS_INFO) << "User session credentials changed";
-    delegate_->onUserListChanged();
+    emit sig_userListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionDettached()
 {
     LOG(LS_INFO) << "User session dettached";
-    delegate_->onUserListChanged();
+    emit sig_userListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -527,7 +522,7 @@ void UserSessionManager::onUserSessionFinished()
                      << session->hostId() << " for invalid session";
 
         // User session ended, host ID is no longer valid.
-        delegate_->onResetHostId(session->hostId());
+        emit sig_resetHostId(session->hostId());
 
         session->deleteLater();
         it = sessions_.erase(it);

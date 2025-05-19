@@ -37,23 +37,18 @@ public:
     explicit UserSessionManager(QObject* parent = nullptr);
     ~UserSessionManager() final;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onHostIdRequest(const QString& session_name) = 0;
-        virtual void onResetHostId(base::HostId host_id) = 0;
-        virtual void onUserListChanged() = 0;
-    };
-
-    bool start(Delegate* delegate);
+    bool start();
     void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(const QString& session_name, base::HostId host_id);
     void onSettingsChanged();
     void onClientSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
+
+signals:
+    void sig_hostIdRequest(const QString& session_name);
+    void sig_resetHostId(base::HostId host_id);
+    void sig_userListChanged();
 
 private slots:
     void onUserSessionHostIdRequest(const QString& session_name);
@@ -67,10 +62,8 @@ private:
     void addUserSession(const base::Location& location, base::SessionId session_id,
                         base::IpcChannel* channel);
 
-    std::unique_ptr<base::IpcServer> ipc_server_;
+    base::IpcServer* ipc_server_ = nullptr;
     QList<UserSession*> sessions_;
-    Delegate* delegate_ = nullptr;
-
     proto::internal::RouterState router_state_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);

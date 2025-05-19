@@ -59,8 +59,8 @@ Server::~Server()
     LOG(LS_INFO) << "Dtor";
     LOG(LS_INFO) << "Stopping the server...";
 
-    user_session_manager_.reset();
-    server_.reset();
+    delete user_session_manager_;
+    delete server_;
 
     deleteFirewallRules();
 
@@ -103,15 +103,23 @@ void Server::start()
     connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
             this, &Server::onSessionAuthenticated);
 
-    user_session_manager_ = std::make_unique<UserSessionManager>();
-    user_session_manager_->start(this);
+    user_session_manager_ = new UserSessionManager(this);
+
+    connect(user_session_manager_, &UserSessionManager::sig_hostIdRequest,
+            this, &Server::onHostIdRequest);
+    connect(user_session_manager_, &UserSessionManager::sig_resetHostId,
+            this, &Server::onResetHostId);
+    connect(user_session_manager_, &UserSessionManager::sig_userListChanged,
+            this, &Server::onUserListChanged);
+
+    user_session_manager_->start();
 
     reloadUserList();
     addFirewallRules();
 
-    server_ = std::make_unique<base::TcpServer>();
+    server_ = new base::TcpServer(this);
 
-    connect(server_.get(), &base::TcpServer::sig_newConnection,
+    connect(server_, &base::TcpServer::sig_newConnection,
             this, &Server::onNewDirectConnection);
 
     server_->start("", settings_.tcpPort());
@@ -335,13 +343,13 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
             {
                 LOG(LS_INFO) << "New version available: " << update_version.toString();
 
-                update_downloader_ = std::make_unique<common::HttpFileDownloader>();
+                update_downloader_ = new common::HttpFileDownloader(this);
 
-                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadError,
+                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadError,
                         this, &Server::onFileDownloaderError);
-                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadCompleted,
+                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadCompleted,
                         this, &Server::onFileDownloaderCompleted);
-                connect(update_downloader_.get(), &common::HttpFileDownloader::sig_downloadProgress,
+                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadProgress,
                         this, &Server::onFileDownloaderProgress);
 
                 update_downloader_->setUrl(update_info.url());
@@ -354,14 +362,16 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
         }
     }
 
-    update_checker_.release()->deleteLater();
+    update_checker_->deleteLater();
+    update_checker_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
     LOG(LS_ERROR) << "Unable to download update: " << error_code;
-    update_downloader_.release()->deleteLater();
+    update_downloader_->deleteLater();
+    update_downloader_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -412,7 +422,8 @@ void Server::onFileDownloaderCompleted()
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    update_downloader_.release()->deleteLater();
+    update_downloader_->deleteLater();
+    update_downloader_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -524,7 +535,7 @@ void Server::updateConfiguration(const QString& path)
         {
             // Destroy the controller.
             LOG(LS_INFO) << "The router is now disabled";
-            router_controller_.reset();
+            router_controller_->deleteLater();
 
             proto::internal::RouterState router_state;
             router_state.set_state(proto::internal::RouterState::DISABLED);
@@ -569,7 +580,7 @@ void Server::connectToRouter()
     LOG(LS_INFO) << "Connecting to router...";
 
     // Destroy the previous instance.
-    router_controller_.reset();
+    router_controller_->deleteLater();
 
     // Fill the connection parameters.
     RouterController::RouterInfo router_info;
@@ -578,13 +589,13 @@ void Server::connectToRouter()
     router_info.public_key = settings_.routerPublicKey();
 
     // Connect to the router.
-    router_controller_ = std::make_unique<RouterController>();
+    router_controller_ = new RouterController(this);
 
-    connect(router_controller_.get(), &RouterController::sig_routerStateChanged,
+    connect(router_controller_, &RouterController::sig_routerStateChanged,
             this, &Server::onRouterStateChanged);
-    connect(router_controller_.get(), &RouterController::sig_hostIdAssigned,
+    connect(router_controller_, &RouterController::sig_hostIdAssigned,
             this, &Server::onHostIdAssigned);
-    connect(router_controller_.get(), &RouterController::sig_clientConnected,
+    connect(router_controller_, &RouterController::sig_clientConnected,
             this, &Server::onNewRelayConnection);
 
     router_controller_->start(router_info);
@@ -597,7 +608,7 @@ void Server::disconnectFromRouter()
 
     if (router_controller_)
     {
-        router_controller_.reset();
+        delete router_controller_;
         LOG(LS_INFO) << "Disconnected from router";
     }
     else
@@ -643,12 +654,12 @@ void Server::checkForUpdates()
 
     LOG(LS_INFO) << "Start checking for updates";
 
-    update_checker_ = std::make_unique<common::UpdateChecker>();
+    update_checker_ = new common::UpdateChecker(this);
 
     update_checker_->setUpdateServer(settings_.updateServer());
     update_checker_->setPackageName("host");
 
-    connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
+    connect(update_checker_, &common::UpdateChecker::sig_checkedFinished,
             this, &Server::onUpdateCheckedFinished);
 
     update_checker_->start();
