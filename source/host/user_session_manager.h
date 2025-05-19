@@ -19,21 +19,17 @@
 #ifndef HOST_USER_SESSION_MANAGER_H
 #define HOST_USER_SESSION_MANAGER_H
 
-#include "build/build_config.h"
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
 
 #include <QObject>
+#include <QList>
 
 namespace host {
 
-class UserSession;
-
-class UserSessionManager final
-    : public QObject,
-      public UserSession::Delegate
+class UserSessionManager final : public QObject
 {
     Q_OBJECT
 
@@ -59,14 +55,11 @@ public:
     void onClientSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
 
-protected:
-    // UserSession::Delegate implementation.
-    void onUserSessionHostIdRequest(const QString& session_name) final;
-    void onUserSessionCredentialsChanged() final;
-    void onUserSessionDettached() final;
-    void onUserSessionFinished() final;
-
 private slots:
+    void onUserSessionHostIdRequest(const QString& session_name);
+    void onUserSessionCredentialsChanged();
+    void onUserSessionDettached();
+    void onUserSessionFinished();
     void onIpcNewConnection();
 
 private:
@@ -75,7 +68,7 @@ private:
                         base::IpcChannel* channel);
 
     std::unique_ptr<base::IpcServer> ipc_server_;
-    std::vector<std::unique_ptr<UserSession>> sessions_;
+    QList<UserSession*> sessions_;
     Delegate* delegate_ = nullptr;
 
     proto::internal::RouterState router_state_;

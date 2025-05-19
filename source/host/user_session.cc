@@ -58,17 +58,13 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSession::UserSession(base::SessionId session_id,
-                         base::IpcChannel* channel,
-                         Delegate* delegate,
-                         QObject* parent)
+UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, QObject* parent)
     : QObject(parent),
       channel_(channel),
       ui_attach_timer_(new QTimer(this)),
       desktop_dettach_timer_(new QTimer(this)),
       session_id_(session_id),
-      password_expire_timer_(new QTimer(this)),
-      delegate_(delegate)
+      password_expire_timer_(new QTimer(this))
 {
     type_ = UserSession::Type::CONSOLE;
 
@@ -77,7 +73,7 @@ UserSession::UserSession(base::SessionId session_id,
     {
         LOG(LS_INFO) << "Session attach timeout (sid=" << session_id_ << ")";
         setState(FROM_HERE, State::FINISHED);
-        delegate_->onUserSessionFinished();
+        emit sig_userSessionFinished();
     });
 
     desktop_dettach_timer_->setSingleShot(true);
@@ -112,7 +108,6 @@ UserSession::UserSession(base::SessionId session_id,
 #endif
 
     LOG(LS_INFO) << "Ctor (sid=" << session_id_ << " type=" << typeToString(type_) << ")";
-    CHECK(delegate_);
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 
@@ -572,7 +567,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
             }
 
             setState(FROM_HERE, State::FINISHED);
-            delegate_->onUserSessionFinished();
+            emit sig_userSessionFinished();
         }
         break;
 
@@ -799,7 +794,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                          << " to " << one_time_sessions << " (sid=" << session_id_ << ")";
             one_time_sessions_ = one_time_sessions;
 
-            delegate_->onUserSessionCredentialsChanged();
+            emit sig_userSessionCredentialsChanged();
         }
     }
     else if (incoming_message_.has_connect_confirmation())
@@ -1119,14 +1114,14 @@ void UserSession::onSessionDettached(const base::Location& location)
     onTextChatHasUser(FROM_HERE, false);
 
     setState(FROM_HERE, State::DETTACHED);
-    delegate_->onUserSessionDettached();
+    emit sig_userSessionDettached();
 
     if (type_ == Type::RDP)
     {
         LOG(LS_INFO) << "RDP session finished (sid=" << session_id_ << ")";
 
         setState(FROM_HERE, State::FINISHED);
-        delegate_->onUserSessionFinished();
+        emit sig_userSessionFinished();
     }
     else
     {
@@ -1222,7 +1217,7 @@ void UserSession::updateCredentials(const base::Location& location)
         one_time_password_.clear();
     }
 
-    delegate_->onUserSessionCredentialsChanged();
+    emit sig_userSessionCredentialsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1311,7 +1306,7 @@ void UserSession::sendHostIdRequest(const base::Location& location)
     if (session_name.has_value())
     {
         LOG(LS_INFO) << "Session name: " << *session_name << " (sid=" << session_id_ << ")";
-        delegate_->onUserSessionHostIdRequest(*session_name);
+        emit sig_userSessionHostIdRequest(*session_name);
     }
     else
     {

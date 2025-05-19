@@ -23,7 +23,6 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
-#include "host/user_session.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -252,7 +251,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
     LOG(LS_INFO) << "User session event (status=" << status_str << " session_id=" << session_id << ")";
 
     // Send an event of each session.
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
         session->onUserSessionEvent(status, session_id);
 
     switch (status)
@@ -268,7 +267,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
 
         case base::SessionStatus::SESSION_UNLOCK:
         {
-            for (const auto& session : sessions_)
+            for (const auto& session : std::as_const(sessions_))
             {
                 if (session->sessionId() == session_id)
                 {
@@ -304,7 +303,7 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
     router_state_ = router_state;
 
     // Send an event of each session.
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
         session->onRouterStateChanged(router_state);
 }
 
@@ -314,7 +313,7 @@ void UserSessionManager::onHostIdChanged(const QString& session_name, base::Host
     LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
 
     // Send an event of each session.
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
         std::optional<QString> name = session->sessionName();
         if (name.has_value() && name == session_name)
@@ -336,7 +335,7 @@ void UserSessionManager::onSettingsChanged()
     LOG(LS_INFO) << "Settings changed";
 
     // Send an event of each session.
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
         session->onSettingsChanged();
 }
 
@@ -364,7 +363,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 
         LOG(LS_INFO) << "Find session ID by host ID...";
 
-        for (const auto& session : sessions_)
+        for (const auto& session : std::as_const(sessions_))
         {
             if (session->hostId() == host_id)
             {
@@ -396,7 +395,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         {
             LOG(LS_INFO) << "Find session ID by host ID...";
 
-            for (const auto& session : sessions_)
+            for (const auto& session : std::as_const(sessions_))
             {
                 if (session->hostId() == host_id)
                 {
@@ -417,7 +416,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 
     bool user_session_found = false;
 
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
         {
@@ -513,30 +512,26 @@ void UserSessionManager::onUserSessionFinished()
 {
     LOG(LS_INFO) << "User session finished";
 
-    QTimer::singleShot(0, this, [this]()
+    for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        for (auto it = sessions_.begin(); it != sessions_.end();)
+        UserSession* session = *it;
+
+        if (session->state() != UserSession::State::FINISHED)
         {
-            if (it->get()->state() == UserSession::State::FINISHED)
-            {
-                UserSession* session = it->get();
-
-                LOG(LS_INFO) << "Finished session " << session->sessionId()
-                             << " found in list. Reset host ID "
-                             << session->hostId() << " for invalid session";
-
-                // User session ended, host ID is no longer valid.
-                delegate_->onResetHostId(session->hostId());
-
-                it->release()->deleteLater();
-                it = sessions_.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
+            ++it;
+            continue;
         }
-    });
+
+        LOG(LS_INFO) << "Finished session " << session->sessionId()
+                     << " found in list. Reset host ID "
+                     << session->hostId() << " for invalid session";
+
+        // User session ended, host ID is no longer valid.
+        delegate_->onResetHostId(session->hostId());
+
+        session->deleteLater();
+        it = sessions_.erase(it);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -713,7 +708,7 @@ void UserSessionManager::addUserSession(const base::Location& location, base::Se
 {
     LOG(LS_INFO) << "Add user session: " << session_id << " (from=" << location.toString() << ")";
 
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
         {
@@ -723,12 +718,21 @@ void UserSessionManager::addUserSession(const base::Location& location, base::Se
         }
     }
 
-    std::unique_ptr<UserSession> user_session =
-        std::make_unique<UserSession>(session_id, channel, this);
+    UserSession* user_session = new UserSession(session_id, channel, this);
+
+    connect(user_session, &UserSession::sig_userSessionHostIdRequest,
+            this, &UserSessionManager::onUserSessionHostIdRequest);
+    connect(user_session, &UserSession::sig_userSessionCredentialsChanged,
+            this, &UserSessionManager::onUserSessionCredentialsChanged);
+    connect(user_session, &UserSession::sig_userSessionDettached,
+            this, &UserSessionManager::onUserSessionDettached);
+    connect(user_session, &UserSession::sig_userSessionFinished,
+            this, &UserSessionManager::onUserSessionFinished, Qt::QueuedConnection);
+
+    sessions_.append(user_session);
 
     LOG(LS_INFO) << "Start user session: " << session_id;
-    sessions_.emplace_back(std::move(user_session));
-    sessions_.back()->start(router_state_);
+    user_session->start(router_state_);
 }
 
 } // namespace host

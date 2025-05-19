@@ -55,21 +55,7 @@ public:
         FINISHED = 2
     };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onUserSessionHostIdRequest(const QString& session_name) = 0;
-        virtual void onUserSessionCredentialsChanged() = 0;
-        virtual void onUserSessionDettached() = 0;
-        virtual void onUserSessionFinished() = 0;
-    };
-
-    UserSession(base::SessionId session_id,
-                base::IpcChannel* channel,
-                Delegate* delegate,
-                QObject* parent = nullptr);
+    UserSession(base::SessionId session_id, base::IpcChannel* channel, QObject* parent = nullptr);
     ~UserSession() final;
 
     static const char* typeToString(Type type);
@@ -92,6 +78,12 @@ public:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(base::HostId host_id);
     void onSettingsChanged();
+
+signals:
+    void sig_userSessionHostIdRequest(const QString& session_name);
+    void sig_userSessionCredentialsChanged();
+    void sig_userSessionDettached();
+    void sig_userSessionFinished();
 
 protected:
     // ClientSession::Delegate implementation.
@@ -165,8 +157,6 @@ private:
 
     DesktopSessionManager* desktop_session_ = nullptr;
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
-
-    Delegate* delegate_ = nullptr;
 
     proto::internal::UiToService incoming_message_;
     proto::internal::ServiceToUi outgoing_message_;
