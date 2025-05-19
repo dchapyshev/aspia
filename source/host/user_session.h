@@ -35,9 +35,7 @@
 
 namespace host {
 
-class UserSession final
-    : public QObject,
-      public ClientSession::Delegate
+class UserSession final : public QObject
 {
     Q_OBJECT
 
@@ -85,15 +83,11 @@ signals:
     void sig_userSessionDettached();
     void sig_userSessionFinished();
 
-protected:
-    // ClientSession::Delegate implementation.
-    void onClientSessionConfigured() final;
-    void onClientSessionFinished() final;
-    void onClientSessionVideoRecording(
-        const QString& computer_name, const QString& user_name, bool started) final;
-    void onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat) final;
-
 private slots:
+    void onClientSessionConfigured();
+    void onClientSessionFinished();
+    void onClientSessionVideoRecording(const QString& computer_name, const QString& user_name, bool started);
+    void onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat);
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
     void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);

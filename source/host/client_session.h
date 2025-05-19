@@ -28,10 +28,6 @@
 #include <QObject>
 #include <QVersionNumber>
 
-namespace base {
-class TcpChannelProxy;
-} // namespace base
-
 namespace host {
 
 class DesktopSessionProxy;
@@ -42,18 +38,6 @@ class ClientSession : public QObject
 
 public:
     virtual ~ClientSession() override;
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onClientSessionConfigured() = 0;
-        virtual void onClientSessionFinished() = 0;
-        virtual void onClientSessionVideoRecording(
-            const QString& computer_name, const QString& user_name, bool started) = 0;
-        virtual void onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat) = 0;
-    };
 
     enum class State
     {
@@ -66,7 +50,7 @@ public:
                                                  std::unique_ptr<base::TcpChannel> channel,
                                                  QObject* parent = nullptr);
 
-    void start(Delegate* delegate);
+    void start();
     void stop();
 
     State state() const { return state_; }
@@ -91,6 +75,13 @@ public:
 
     base::HostId hostId() const { return channel_->hostId(); }
 
+signals:
+    void sig_clientSessionConfigured();
+    void sig_clientSessionFinished();
+    void sig_clientSessionVideoRecording(
+        const QString& computer_name, const QString& user_name, bool started);
+    void sig_clientSessionTextChat(quint32 id, const proto::TextChat& text_chat);
+
 protected:
     ClientSession(proto::SessionType session_type,
                   std::unique_ptr<base::TcpChannel> channel,
@@ -106,8 +97,6 @@ protected:
     void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
 
     size_t pendingMessages() const;
-
-    Delegate* delegate_ = nullptr;
 
 private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);

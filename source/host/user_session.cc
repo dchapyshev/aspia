@@ -1397,9 +1397,18 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         }
     }
 
+    connect(client_session_ptr, &ClientSession::sig_clientSessionConfigured,
+            this, &UserSession::onClientSessionConfigured);
+    connect(client_session_ptr, &ClientSession::sig_clientSessionFinished,
+            this, &UserSession::onClientSessionFinished);
+    connect(client_session_ptr, &ClientSession::sig_clientSessionVideoRecording,
+            this, &UserSession::onClientSessionVideoRecording);
+    connect(client_session_ptr, &ClientSession::sig_clientSessionTextChat,
+            this, &UserSession::onClientSessionTextChat);
+
     LOG(LS_INFO) << "Starting session... (sid=" << session_id_ << ")";
     client_session_ptr->setSessionId(sessionId());
-    client_session_ptr->start(this);
+    client_session_ptr->start();
 
     // Notify the UI of a new connection.
     sendConnectEvent(*client_session_ptr);

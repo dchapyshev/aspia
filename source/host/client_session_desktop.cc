@@ -611,7 +611,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     LOG(LS_INFO) << "Clear clipboard: " << desktop_session_config_.clear_clipboard;
     LOG(LS_INFO) << "Cursor position: " << desktop_session_config_.cursor_position;
 
-    delegate_->onClientSessionConfigured();
+    emit sig_clientSessionConfigured();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -866,7 +866,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
             return;
     }
 
-    delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
+    emit sig_clientSessionVideoRecording(computerName(), userName(), started);
 }
 
 //--------------------------------------------------------------------------------------------------

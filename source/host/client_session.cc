@@ -92,13 +92,10 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::start(Delegate* delegate)
+void ClientSession::start()
 {
     LOG(LS_INFO) << "Starting client session";
     state_ = State::STARTED;
-
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     connect(channel_.get(), &base::TcpChannel::sig_disconnected,
             this, &ClientSession::onTcpDisconnected);
@@ -119,7 +116,7 @@ void ClientSession::stop()
     LOG(LS_INFO) << "Stop client session";
 
     state_ = State::FINISHED;
-    delegate_->onClientSessionFinished();
+    emit sig_clientSessionFinished();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,7 +186,7 @@ void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code
                   << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
-    delegate_->onClientSessionFinished();
+    emit sig_clientSessionFinished();
 }
 
 //--------------------------------------------------------------------------------------------------

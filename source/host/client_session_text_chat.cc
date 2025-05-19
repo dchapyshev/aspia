@@ -91,7 +91,7 @@ void ClientSessionTextChat::onReceived(quint8 /* channel_id */, const QByteArray
 
     if (hasUser())
     {
-        delegate_->onClientSessionTextChat(id(), text_chat);
+        emit sig_clientSessionTextChat(id(), text_chat);
     }
     else
     {
