@@ -69,6 +69,9 @@ public:
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
 
 signals:
+    void sig_control(proto::internal::DesktopControl::Action action);
+    void sig_selectScreen(const proto::Screen& screen);
+    void sig_captureScreen();
     void sig_injectKeyEvent(const proto::KeyEvent& event);
     void sig_injectTextEvent(const proto::TextEvent& event);
     void sig_injectMouseEvent(const proto::MouseEvent& event);

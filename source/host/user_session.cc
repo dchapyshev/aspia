@@ -695,7 +695,7 @@ void UserSession::onClientSessionFinished()
     if (desktop_clients_.empty())
     {
         LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent (sid=" << session_id_ << ")";
-        desktop_session_proxy_->control(proto::internal::DesktopControl::DISABLE);
+        desktop_session_->control(proto::internal::DesktopControl::DISABLE);
 
         desktop_session_proxy_->setScreenCaptureFps(
             desktop_session_proxy_->defaultScreenCaptureFps());
@@ -846,9 +846,8 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                          << is_paused << ")";
 
             desktop_session_->setPaused(is_paused);
-            desktop_session_proxy_->control(is_paused ?
-                                                proto::internal::DesktopControl::DISABLE :
-                                                proto::internal::DesktopControl::ENABLE);
+            desktop_session_->control(is_paused ?
+                proto::internal::DesktopControl::DISABLE : proto::internal::DesktopControl::ENABLE);
 
             if (is_paused)
             {
@@ -972,7 +971,7 @@ void UserSession::onDesktopSessionStarted()
         desktop_session_->setPaused(false);
     }
 
-    desktop_session_proxy_->control(action);
+    desktop_session_->control(action);
     onClientSessionConfigured();
 }
 
@@ -1338,6 +1337,12 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
             ClientSessionDesktop* desktop_client_session =
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
+            connect(desktop_client_session, &ClientSessionDesktop::sig_control,
+                    desktop_session_.get(), &DesktopSessionManager::control);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_selectScreen,
+                    desktop_session_.get(), &DesktopSessionManager::selectScreen);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_captureScreen,
+                    desktop_session_.get(), &DesktopSessionManager::captureScreen);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectKeyEvent,
                     desktop_session_.get(), &DesktopSessionManager::injectKeyEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectTextEvent,
@@ -1354,7 +1359,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
             if (enable_required)
             {
                 LOG(LS_INFO) << "Has desktop clients. Enable desktop session (sid=" << session_id_ << ")";
-                desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
+                desktop_session_->control(proto::internal::DesktopControl::ENABLE);
             }
         }
         break;
@@ -1607,8 +1612,8 @@ void UserSession::mergeAndSendConfiguration()
             system_config.cursor_position || client_config.cursor_position;
     }
 
-    desktop_session_proxy_->configure(system_config);
-    desktop_session_proxy_->captureScreen();
+    desktop_session_->configure(system_config);
+    desktop_session_->captureScreen();
 }
 
 } // namespace host

@@ -33,10 +33,6 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void control(proto::internal::DesktopControl::Action action);
-    void configure(const DesktopSession::Config& config);
-    void selectScreen(const proto::Screen& screen);
-    void captureScreen();
     void setScreenCaptureFps(int fps);
     int screenCaptureFps() const;
     int defaultScreenCaptureFps() const;

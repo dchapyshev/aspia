@@ -62,6 +62,11 @@ public:
     void setPaused(bool enable);
 
 public slots:
+    void control(proto::internal::DesktopControl::Action action);
+    void configure(const host::DesktopSession::Config& config);
+    void selectScreen(const proto::Screen& screen);
+    void captureScreen();
+
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectTextEvent(const proto::TextEvent& event);
     void injectMouseEvent(const proto::MouseEvent& event);

@@ -627,7 +627,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
         return;
     }
 
-    desktop_session_proxy_->selectScreen(screen);
+    emit sig_selectScreen(screen);
     preferred_size_ = base::Size();
 }
 
@@ -656,7 +656,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
                  << preferred_size.width() << "x" << preferred_size.height();
 
     preferred_size_.set(preferred_size.width(), preferred_size.height());
-    desktop_session_proxy_->captureScreen();
+    emit sig_captureScreen();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -778,14 +778,14 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         case proto::PowerControl::ACTION_LOGOFF:
         {
             LOG(LS_INFO) << "LOGOFF command";
-            desktop_session_proxy_->control(proto::internal::DesktopControl::LOGOFF);
+            emit sig_control(proto::internal::DesktopControl::LOGOFF);
         }
         break;
 
         case proto::PowerControl::ACTION_LOCK:
         {
             LOG(LS_INFO) << "LOCK command";
-            desktop_session_proxy_->control(proto::internal::DesktopControl::LOCK);
+            emit sig_control(proto::internal::DesktopControl::LOCK);
         }
         break;
 

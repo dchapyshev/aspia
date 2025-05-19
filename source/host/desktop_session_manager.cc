@@ -197,6 +197,40 @@ void DesktopSessionManager::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::control(proto::internal::DesktopControl::Action action)
+{
+    if (session_)
+        session_->control(action);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::configure(const DesktopSession::Config& config)
+{
+    if (is_paused_ || !session_)
+        return;
+
+    session_->configure(config);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::selectScreen(const proto::Screen& screen)
+{
+    if (is_paused_ || !session_)
+        return;
+
+    session_->selectScreen(screen);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::captureScreen()
+{
+    if (is_paused_ || !session_)
+        return;
+
+    session_->captureScreen();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_ || !session_)

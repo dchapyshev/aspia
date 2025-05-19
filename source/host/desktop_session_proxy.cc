@@ -107,43 +107,6 @@ DesktopSessionProxy::~DesktopSessionProxy()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::control(proto::internal::DesktopControl::Action action)
-{
-    if (desktop_session_)
-        desktop_session_->control(action);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::configure(const DesktopSession::Config& config)
-{
-    //if (is_paused_)
-    //    return;
-
-    if (desktop_session_)
-        desktop_session_->configure(config);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
-{
-    //if (is_paused_)
-    //    return;
-
-    if (desktop_session_)
-        desktop_session_->selectScreen(screen);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::captureScreen()
-{
-    //if (is_paused_)
-    //    return;
-
-    if (desktop_session_)
-        desktop_session_->captureScreen();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionProxy::setScreenCaptureFps(int fps)
 {
     screen_capture_fps_ = fps;
