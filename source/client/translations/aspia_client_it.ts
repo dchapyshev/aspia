@@ -2805,37 +2805,37 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="100"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="73"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="123"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="96"/>
         <source>True color (32 bit)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="124"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="97"/>
         <source>High color (16 bit)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="125"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="98"/>
         <source>256 colors (8 bit)</source>
         <translation>256 colori (8 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="126"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="99"/>
         <source>64 colors (6 bit)</source>
         <translation>64 colori (6 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="127"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="100"/>
         <source>8 colors (3 bit)</source>
         <translation>8 colori (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="304"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="277"/>
         <source>Compression ratio: %1</source>
         <translation>Rapporto di compressione: %1</translation>
     </message>

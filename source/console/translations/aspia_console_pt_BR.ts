@@ -1282,32 +1282,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="127"/>
+        <location filename="../computer_dialog_desktop.cc" line="100"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="128"/>
+        <location filename="../computer_dialog_desktop.cc" line="101"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="129"/>
+        <location filename="../computer_dialog_desktop.cc" line="102"/>
         <source>256 colors (8 bit)</source>
         <translation>256 cores (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="130"/>
+        <location filename="../computer_dialog_desktop.cc" line="103"/>
         <source>64 colors (6 bit)</source>
         <translation>64 cores (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="131"/>
+        <location filename="../computer_dialog_desktop.cc" line="104"/>
         <source>8 colors (3 bit)</source>
         <translation>8 cores (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="322"/>
+        <location filename="../computer_dialog_desktop.cc" line="294"/>
         <source>Compression ratio: %1</source>
         <translation>Taxa de compressão: %1</translation>
     </message>
@@ -1444,32 +1444,32 @@
 <context>
     <name>console::ComputerGroupDialogDesktop</name>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="143"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="116"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="144"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="117"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="145"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="118"/>
         <source>256 colors (8 bit)</source>
         <translation>256 cores (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="146"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="119"/>
         <source>64 colors (6 bit)</source>
         <translation>65 cores (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="147"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="120"/>
         <source>8 colors (3 bit)</source>
         <translation>8 cores (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="338"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="310"/>
         <source>Compression ratio: %1</source>
         <translation>Taxa de compressão: %1</translation>
     </message>
