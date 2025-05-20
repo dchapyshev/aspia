@@ -422,35 +422,35 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 
         switch (incoming_message_.control().action())
         {
-        case proto::internal::DesktopControl::ENABLE:
-            setEnabled(true);
-            break;
+            case proto::internal::DesktopControl::ENABLE:
+                setEnabled(true);
+                break;
 
-        case proto::internal::DesktopControl::DISABLE:
-            setEnabled(false);
-            break;
+            case proto::internal::DesktopControl::DISABLE:
+                setEnabled(false);
+                break;
 
-        case proto::internal::DesktopControl::LOGOFF:
-        {
-            if (!base::PowerController::logoff())
+            case proto::internal::DesktopControl::LOGOFF:
             {
-                LOG(LS_ERROR) << "base::PowerController::logoff failed";
+                if (!base::PowerController::logoff())
+                {
+                    LOG(LS_ERROR) << "base::PowerController::logoff failed";
+                }
             }
-        }
-        break;
-
-        case proto::internal::DesktopControl::LOCK:
-        {
-            if (!base::PowerController::lock())
-            {
-                LOG(LS_ERROR) << "base::PowerController::lock failed";
-            }
-        }
-        break;
-
-        default:
-            NOTREACHED();
             break;
+
+            case proto::internal::DesktopControl::LOCK:
+            {
+                if (!base::PowerController::lock())
+                {
+                    LOG(LS_ERROR) << "base::PowerController::lock failed";
+                }
+            }
+            break;
+
+            default:
+                NOTREACHED();
+                break;
         }
     }
     else

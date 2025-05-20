@@ -95,7 +95,7 @@ private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
 
     void setState(const base::Location& location, State state);
-    void connectSessionSignals();
+    void startDesktopSession();
     static const char* stateToString(State state);
 
     QPointer<base::IpcServer> server_;

@@ -100,7 +100,7 @@ void StatCounter::addCursorPosition()
 //--------------------------------------------------------------------------------------------------
 void StatCounter::onTimeout()
 {
-    LOG(LS_INFO) << "### Statistics (sid=" << client_session_id_ << "###";
+    LOG(LS_INFO) << "### Statistics (sid=" << client_session_id_ << ") ###";
     LOG(LS_INFO) << "Packets: video=" << video_packets_ << " audio=" << audio_packets_
                  << " video_error=" << video_error_count_;
     LOG(LS_INFO) << "Clipboard: in=" << incoming_clipboard_events_

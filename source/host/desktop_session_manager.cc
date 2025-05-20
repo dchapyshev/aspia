@@ -19,6 +19,7 @@
 #include "host/desktop_session_manager.h"
 
 #include <QCoreApplication>
+#include <QThread>
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -152,7 +153,7 @@ int DesktopSessionManager::maxCaptureFps()
 
     if (!max_fps_from_env)
     {
-        quint32 threads = std::thread::hardware_concurrency();
+        quint32 threads = QThread::idealThreadCount();
         if (threads <= 2)
         {
             LOG(LS_INFO) << "Low-end CPU detected. Maximum capture FPS: " << kMaxScreenCaptureFpsLowEnd;
@@ -270,10 +271,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     // The real session process has ended. We create a temporary fake session.
     session_ = new DesktopSessionFake(this);
 
-    connectSessionSignals();
-
-    session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
-    session_->start();
+    startDesktopSession();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -406,11 +404,8 @@ void DesktopSessionManager::onNewIpcConnection()
 
     session_ = new DesktopSessionIpc(channel, this);
 
-    connectSessionSignals();
     setState(FROM_HERE, State::ATTACHED);
-
-    session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
-    session_->start();
+    startDesktopSession();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -436,7 +431,7 @@ void DesktopSessionManager::setState(const base::Location& location, State state
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::connectSessionSignals()
+void DesktopSessionManager::startDesktopSession()
 {
     connect(session_, &DesktopSession::sig_desktopSessionStarted,
             this, &DesktopSessionManager::sig_desktopSessionStarted);
@@ -456,6 +451,9 @@ void DesktopSessionManager::connectSessionSignals()
             this, &DesktopSessionManager::sig_screenTypeChanged);
     connect(session_, &DesktopSession::sig_clipboardEvent,
             this, &DesktopSessionManager::sig_clipboardEvent);
+
+    session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
+    session_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
