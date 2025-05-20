@@ -19,8 +19,9 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_WRAPPER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_WRAPPER_H
 
+#include <QPointer>
+
 #include "base/desktop/screen_capturer.h"
-#include "build/build_config.h"
 
 namespace base {
 
@@ -46,9 +47,10 @@ public:
     void enableCursorPosition(bool enable);
 
 signals:
-    void sig_screenListChanged(const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current);
-    void sig_cursorPositionChanged(const Point& position);
-    void sig_screenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
+    void sig_screenListChanged(
+        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void sig_cursorPositionChanged(const base::Point& position);
+    void sig_screenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
 
 private:
     ScreenCapturer::ScreenId defaultScreen();
@@ -66,7 +68,7 @@ private:
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;
     std::unique_ptr<DesktopResizer> resizer_;
-    std::unique_ptr<ScreenCapturer> screen_capturer_;
+    QPointer<ScreenCapturer> screen_capturer_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
 };

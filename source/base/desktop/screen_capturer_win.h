@@ -32,7 +32,7 @@ public:
     ScreenCapturerWin(Type type, QObject* parent);
     ~ScreenCapturerWin();
 
-    static ScreenCapturer* create(Type preferred_type, Error last_error);
+    static ScreenCapturer* create(Type preferred_type, Error last_error, QObject* parent);
 
     void switchToInputDesktop() final;
 

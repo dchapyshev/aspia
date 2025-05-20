@@ -87,16 +87,16 @@ private:
     std::unique_ptr<base::MessageWindow> message_window_;
 #endif // defined(Q_OS_WINDOWS)
 
-    std::unique_ptr<base::IpcChannel> channel_;
-    std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
+    base::IpcChannel* channel_ = nullptr;
+    QPointer<common::ClipboardMonitor> clipboard_monitor_ = nullptr;
     std::unique_ptr<InputInjector> input_injector_;
 
-    QPointer<base::SharedMemoryFactory> shared_memory_factory_;
+    QPointer<base::SharedMemoryFactory> shared_memory_factory_ = nullptr;
     std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
-    QPointer<base::ScreenCapturerWrapper> screen_capturer_;
+    QPointer<base::ScreenCapturerWrapper> screen_capturer_ = nullptr;
     std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
 
-    QPointer<QTimer> screen_capture_timer_ = nullptr;
+    QTimer* screen_capture_timer_ = nullptr;
 
     base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;

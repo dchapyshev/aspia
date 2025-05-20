@@ -141,9 +141,9 @@ ScreenCapturerWin::~ScreenCapturerWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error)
+ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error, QObject* parent)
 {
-    auto try_mirror_capturer = []() -> ScreenCapturer*
+    auto try_mirror_capturer = [](QObject* parent) -> ScreenCapturer*
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
         if (windowsVersion() == base::VERSION_WIN7)
@@ -151,7 +151,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error)
             LOG(LS_INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
 
             std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
-                std::make_unique<ScreenCapturerMirror>();
+                std::make_unique<ScreenCapturerMirror>(parent);
 
             if (capturer_mirror->isSupported())
             {
@@ -184,7 +184,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error)
         {
             // Desktop Duplication API is available in Windows 8+.
             std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi =
-                std::make_unique<ScreenCapturerDxgi>();
+                std::make_unique<ScreenCapturerDxgi>(parent);
             if (capturer_dxgi->isSupported())
             {
                 LOG(LS_INFO) << "Using DXGI capturer";
@@ -193,18 +193,18 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error)
         }
         else
         {
-            screen_capturer = try_mirror_capturer();
+            screen_capturer = try_mirror_capturer(parent);
         }
     }
     else if (preferred_type == ScreenCapturer::Type::WIN_MIRROR)
     {
-        screen_capturer = try_mirror_capturer();
+        screen_capturer = try_mirror_capturer(parent);
     }
 
     if (!screen_capturer)
     {
         LOG(LS_INFO) << "Using GDI capturer";
-        screen_capturer = new ScreenCapturerGdi();
+        screen_capturer = new ScreenCapturerGdi(parent);
     }
 
     return screen_capturer;

@@ -118,7 +118,7 @@ void DesktopSessionAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
-    channel_ = std::make_unique<base::IpcChannel>();
+    channel_ = new base::IpcChannel(this);
 
     if (!channel_->connect(channel_id))
     {
@@ -126,9 +126,9 @@ void DesktopSessionAgent::start(const QString& channel_id)
         return;
     }
 
-    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+    connect(channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionAgent::onIpcDisconnected);
-    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+    connect(channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopSessionAgent::onIpcMessageReceived);
 
     channel_->resume();
@@ -494,8 +494,8 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
         // thread. Create a separate thread.
-        clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
-        connect(clipboard_monitor_.get(), &common::ClipboardMonitor::sig_clipboardEvent,
+        clipboard_monitor_ = new common::ClipboardMonitor(this);
+        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
                 this, &DesktopSessionAgent::onClipboardEvent);
         clipboard_monitor_->start();
 
@@ -556,7 +556,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         capture_scheduler_.reset();
         delete screen_capturer_;
         delete shared_memory_factory_;
-        clipboard_monitor_.reset();
+        delete clipboard_monitor_;
         audio_capturer_.reset();
 
         if (lock_at_disconnect_)

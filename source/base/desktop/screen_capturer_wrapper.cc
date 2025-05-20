@@ -271,7 +271,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
     ScreenCapturer::ScreenList screen_list;
     if (screen_capturer_->screenList(&screen_list))
     {
-        for (const auto& screen : screen_list.screens)
+        for (const auto& screen : std::as_const(screen_list.screens))
         {
             if (screen.is_primary)
             {
@@ -295,8 +295,10 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer: "
                  << ScreenCapturer::typeToString(preferred_type_);
 
+    delete screen_capturer_;
+
 #if defined(Q_OS_WINDOWS)
-    screen_capturer_.reset(ScreenCapturerWin::create(preferred_type_, last_error));
+    screen_capturer_ = ScreenCapturerWin::create(preferred_type_, last_error, this);
 #elif defined(Q_OS_LINUX)
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
@@ -310,10 +312,10 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     NOTIMPLEMENTED();
 #endif
 
-    connect(screen_capturer_.get(), &ScreenCapturer::sig_screenTypeChanged,
+    connect(screen_capturer_, &ScreenCapturer::sig_screenTypeChanged,
             this, &ScreenCapturerWrapper::sig_screenTypeChanged);
 
-    connect(screen_capturer_.get(), &ScreenCapturer::sig_desktopChanged, this, [this]()
+    connect(screen_capturer_, &ScreenCapturer::sig_desktopChanged, this, [this]()
     {
         if (!environment_)
         {
