@@ -62,7 +62,7 @@ public:
     explicit Screen(ScreenId screen_id);
     ~Screen() = default;
 
-    std::vector<Size> supportedResolutions() const;
+    QList<Size> supportedResolutions() const;
     bool setResolution(const Size& resolution);
     void restoreResolution();
 
@@ -116,9 +116,9 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
+QList<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
-    std::vector<Size> result;
+    QList<Size> result;
 
     for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
         result.push_back(it->first);
@@ -249,7 +249,7 @@ DesktopResizerWin::DesktopResizerWin()
         return;
     }
 
-    for (const auto& screen : screen_list.screens)
+    for (const auto& screen : std::as_const(screen_list.screens))
         screens_.emplace(screen.id, std::make_unique<Screen>(screen.id));
 }
 
@@ -260,7 +260,7 @@ DesktopResizerWin::~DesktopResizerWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
+QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())

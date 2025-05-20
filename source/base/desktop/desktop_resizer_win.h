@@ -32,7 +32,7 @@ public:
     DesktopResizerWin();
     ~DesktopResizerWin() final;
 
-    std::vector<Size> supportedResolutions(ScreenId screen_id) final;
+    QList<Size> supportedResolutions(ScreenId screen_id) final;
     bool setResolution(ScreenId screen_id, const Size& resolution) final;
     void restoreResolution(ScreenId screen_id) final;
     void restoreResulution() final;

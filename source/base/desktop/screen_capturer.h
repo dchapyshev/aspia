@@ -19,12 +19,12 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_H
 
+#include <QList>
 #include <QObject>
 
 #include "base/desktop/frame.h"
 
 #include <memory>
-#include <vector>
 
 namespace base {
 
@@ -84,8 +84,8 @@ public:
 
     struct ScreenList
     {
-        std::vector<Screen> screens;
-        std::vector<Size> resolutions;
+        QList<Screen> screens;
+        QList<Size> resolutions;
     };
 
     virtual void switchToInputDesktop() { /* Nothing */ };

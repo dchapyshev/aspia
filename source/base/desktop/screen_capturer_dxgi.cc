@@ -44,7 +44,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
 
     ScreenCapturer::ScreenId max_screen_id = -1;
 
-    for (const auto& screen : gdi_screens.screens)
+    for (const auto& screen : std::as_const(gdi_screens.screens))
         max_screen_id = std::max(max_screen_id, screen.id);
 
     LOG(LS_INFO) << "Device names count: " << device_names.size()
@@ -97,7 +97,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
 
     DCHECK_EQ(device_names.size(), screen_list.screens.size());
 
-    for (size_t i = 0; i < screen_list.screens.size(); ++i)
+    for (int i = 0; i < screen_list.screens.size(); ++i)
     {
         if (screen_list.screens[i].id == id)
         {
