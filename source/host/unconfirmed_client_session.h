@@ -21,10 +21,6 @@
 
 #include "base/macros_magic.h"
 
-#include <chrono>
-#include <memory>
-
-#include <QPointer>
 #include <QTimer>
 
 namespace host {
@@ -36,21 +32,20 @@ class UnconfirmedClientSession final : public QObject
     Q_OBJECT
 
 public:
-    UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                             QObject* parent = nullptr);
+    UnconfirmedClientSession(ClientSession* client_session, QObject* parent = nullptr);
     ~UnconfirmedClientSession();
 
     void setTimeout(const std::chrono::milliseconds& timeout);
 
-    std::unique_ptr<ClientSession> takeClientSession();
+    ClientSession* takeClientSession();
     quint32 id() const;
 
 signals:
     void sig_finished(quint32 id, bool is_rejected);
 
 private:
-    std::unique_ptr<ClientSession> client_session_;
-    QPointer<QTimer> timer_;
+    ClientSession* client_session_ = nullptr;
+    QTimer* timer_ = nullptr;
     quint32 id_;
 
     DISALLOW_COPY_AND_ASSIGN(UnconfirmedClientSession);

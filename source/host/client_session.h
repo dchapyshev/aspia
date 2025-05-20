@@ -46,9 +46,9 @@ public:
         FINISHED // Session is stopped.
     };
 
-    static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
-                                                 std::unique_ptr<base::TcpChannel> channel,
-                                                 QObject* parent = nullptr);
+    static ClientSession* create(proto::SessionType session_type,
+                                 std::unique_ptr<base::TcpChannel> channel,
+                                 QObject* parent = nullptr);
 
     void start();
     void stop();

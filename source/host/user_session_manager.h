@@ -42,7 +42,7 @@ public:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(const QString& session_name, base::HostId host_id);
     void onSettingsChanged();
-    void onClientSession(std::unique_ptr<ClientSession> client_session);
+    void onClientSession(ClientSession* client_session);
     std::unique_ptr<base::UserList> userList() const;
 
 signals:

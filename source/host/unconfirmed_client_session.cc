@@ -30,10 +30,9 @@ const std::chrono::seconds kRejectInterval { 60 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
-                                                   QObject* parent)
+UnconfirmedClientSession::UnconfirmedClientSession(ClientSession* client_session, QObject* parent)
     : QObject(parent),
-      client_session_(std::move(client_session)),
+      client_session_(client_session),
       timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -48,6 +47,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession
 UnconfirmedClientSession::~UnconfirmedClientSession()
 {
     LOG(LS_INFO) << "Dtor";
+    delete client_session_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,9 +81,11 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<ClientSession> UnconfirmedClientSession::takeClientSession()
+ClientSession* UnconfirmedClientSession::takeClientSession()
 {
-    return std::move(client_session_);
+    ClientSession* client_session = client_session_;
+    client_session_ = nullptr;
+    return client_session;
 }
 
 //--------------------------------------------------------------------------------------------------

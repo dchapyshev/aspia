@@ -393,7 +393,7 @@ size_t UserSession::clientsCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
+void UserSession::onClientSession(ClientSession* client_session)
 {
     DCHECK(client_session);
 
@@ -419,7 +419,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
                 LOG(LS_INFO) << "Accept client session (sid=" << session_id_ << ")";
 
                 // There is no active user and automatic accept of connections is indicated.
-                addNewClientSession(std::move(client_session));
+                addNewClientSession(client_session);
             }
             else
             {
@@ -464,7 +464,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
     {
         LOG(LS_INFO) << "No confirmation of connection is required from the user (sid="
                      << session_id_ << ")";
-        addNewClientSession(std::move(client_session));
+        addNewClientSession(client_session);
     }
 }
 
@@ -507,7 +507,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
             LOG(LS_INFO) << "User session ID changed from " << session_id_ << " to " << session_id;
             session_id_ = session_id;
 
-            for (const auto& client : desktop_clients_)
+            for (const auto& client : std::as_const(desktop_clients_))
                 client->setSessionId(session_id);
 
             desktop_dettach_timer_->stop();
@@ -659,29 +659,28 @@ void UserSession::onClientSessionFinished()
     {
         for (auto it = list->begin(); it != list->end();)
         {
-            ClientSession* client_session = it->get();
+            ClientSession* client_session = *it;
 
-            if (client_session->state() == ClientSession::State::FINISHED)
-            {
-                LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
-                             << " finished. Delete it (sid=" << session_id_ << ")";
-
-                if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
-                    onTextChatSessionFinished(client_session->id());
-
-                // Notification of the UI about disconnecting the client.
-                sendDisconnectEvent(client_session->id());
-
-                // Session will be destroyed after completion of the current call.
-                it->release()->deleteLater();
-
-                // Delete a session from the list.
-                it = list->erase(it);
-            }
-            else
+            if (client_session->state() != ClientSession::State::FINISHED)
             {
                 ++it;
+                continue;
             }
+
+            LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
+                         << " finished. Delete it (sid=" << session_id_ << ")";
+
+            if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+                onTextChatSessionFinished(client_session->id());
+
+            // Notification of the UI about disconnecting the client.
+            sendDisconnectEvent(client_session->id());
+
+            // Session will be destroyed after completion of the current call.
+            client_session->deleteLater();
+
+            // Delete a session from the list.
+            it = list->erase(it);
         }
     };
 
@@ -733,12 +732,11 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
         return;
     }
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT && client->id() != id)
         {
-            ClientSessionTextChat* text_chat_session =
-                static_cast<ClientSessionTextChat*>(client.get());
+            ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
             text_chat_session->sendTextChat(text_chat);
         }
     }
@@ -851,9 +849,9 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             {
                 QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
                 {
-                    for (const auto& client : desktop_clients_)
+                    for (const auto& client : std::as_const(desktop_clients_))
                     {
-                        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
+                        static_cast<ClientSessionDesktop*>(client)->setVideoErrorCode(
                             proto::VIDEO_ERROR_CODE_PAUSED);
                     }
                 });
@@ -913,12 +911,11 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
 
-        for (const auto& client : other_clients_)
+        for (const auto& client : std::as_const(other_clients_))
         {
             if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
             {
-                ClientSessionTextChat* text_chat_session =
-                    static_cast<ClientSessionTextChat*>(client.get());
+                ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
                 text_chat_session->sendTextChat(incoming_message_.text_chat());
             }
         }
@@ -941,10 +938,7 @@ void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
             continue;
 
         if (!is_rejected)
-        {
-            std::unique_ptr<ClientSession> client_session = (*it)->takeClientSession();
-            addNewClientSession(std::move(client_session));
-        }
+            addNewClientSession((*it)->takeClientSession());
 
         pending_clients_.erase(it);
         return;
@@ -999,29 +993,29 @@ void UserSession::onDesktopSessionStopped()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
 {
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->encodeScreen(frame, cursor);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
 {
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(error_code);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->setVideoErrorCode(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->encodeAudio(audio_packet);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setCursorPosition(cursor_position);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->setCursorPosition(cursor_position);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1045,8 +1039,8 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
                      << " res=" << resolution.width() << "x" << resolution.height();
     }
 
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->setScreenList(list);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1055,15 +1049,15 @@ void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
     LOG(LS_INFO) << "Screen type changed (type=" << type.type() << " name=" << type.name()
     << " sid=" << session_id_ << ")";
 
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->setScreenType(type);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->setScreenType(type);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
-    for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
+    for (const auto& client : std::as_const(desktop_clients_))
+        static_cast<ClientSessionDesktop*>(client)->injectClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1089,7 +1083,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     one_time_password_.clear();
 
     // Stop one-time desktop clients.
-    for (const auto& client : desktop_clients_)
+    for (const auto& client : std::as_const(desktop_clients_))
     {
         const QString& user_name = client->userName();
         if (user_name.startsWith("#"))
@@ -1101,7 +1095,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     // Stop all file transfer clients.
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_FILE_TRANSFER)
             continue;
@@ -1252,7 +1246,7 @@ void UserSession::killClientSession(quint32 id)
 {
     auto stop_by_id = [](ClientSessionList* list, quint32 id)
     {
-        for (const auto& client_session : *list)
+        for (const auto& client_session : std::as_const(*list))
         {
             if (client_session->id() == id)
             {
@@ -1315,13 +1309,11 @@ void UserSession::sendHostIdRequest(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_session)
+void UserSession::addNewClientSession(ClientSession* client_session)
 {
     DCHECK(client_session);
 
-    ClientSession* client_session_ptr = client_session.get();
-
-    switch (client_session_ptr->sessionType())
+    switch (client_session->sessionType())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
@@ -1330,10 +1322,10 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
             bool enable_required = desktop_clients_.empty();
 
-            desktop_clients_.emplace_back(std::move(client_session));
+            desktop_clients_.append(client_session);
 
             ClientSessionDesktop* desktop_client_session =
-                static_cast<ClientSessionDesktop*>(client_session_ptr);
+                static_cast<ClientSessionDesktop*>(client_session);
 
             connect(desktop_client_session, &ClientSessionDesktop::sig_control,
                     desktop_session_, &DesktopSessionManager::control);
@@ -1365,28 +1357,28 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
             LOG(LS_INFO) << "New file transfer session (sid=" << session_id_ << ")";
-            other_clients_.emplace_back(std::move(client_session));
+            other_clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
         {
             LOG(LS_INFO) << "New system info session (sid=" << session_id_ << ")";
-            other_clients_.emplace_back(std::move(client_session));
+            other_clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
         {
             LOG(LS_INFO) << "New text chat session (sid=" << session_id_ << ")";
-            other_clients_.emplace_back(std::move(client_session));
+            other_clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
         {
             LOG(LS_INFO) << "New port forwarding session (sid=" << session_id_ << ")";
-            other_clients_.emplace_back(std::move(client_session));
+            other_clients_.append(std::move(client_session));
         }
         break;
 
@@ -1397,35 +1389,35 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         }
     }
 
-    connect(client_session_ptr, &ClientSession::sig_clientSessionConfigured,
+    connect(client_session, &ClientSession::sig_clientSessionConfigured,
             this, &UserSession::onClientSessionConfigured);
-    connect(client_session_ptr, &ClientSession::sig_clientSessionFinished,
+    connect(client_session, &ClientSession::sig_clientSessionFinished,
             this, &UserSession::onClientSessionFinished);
-    connect(client_session_ptr, &ClientSession::sig_clientSessionVideoRecording,
+    connect(client_session, &ClientSession::sig_clientSessionVideoRecording,
             this, &UserSession::onClientSessionVideoRecording);
-    connect(client_session_ptr, &ClientSession::sig_clientSessionTextChat,
+    connect(client_session, &ClientSession::sig_clientSessionTextChat,
             this, &UserSession::onClientSessionTextChat);
 
     LOG(LS_INFO) << "Starting session... (sid=" << session_id_ << ")";
-    client_session_ptr->setSessionId(sessionId());
-    client_session_ptr->start();
+
+    client_session->setParent(this);
+    client_session->setSessionId(sessionId());
+    client_session->start();
 
     // Notify the UI of a new connection.
-    sendConnectEvent(*client_session_ptr);
+    sendConnectEvent(*client_session);
 
-    if (client_session_ptr->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+    if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
     {
-        onTextChatSessionStarted(client_session_ptr->id());
+        onTextChatSessionStarted(client_session->id());
 
         bool has_user = channel_ != nullptr;
-        for (const auto& client : other_clients_)
+        for (const auto& client : std::as_const(other_clients_))
         {
             if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
                 continue;
 
-            ClientSessionTextChat* text_chat_client =
-                static_cast<ClientSessionTextChat*>(client.get());
-
+            ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
             text_chat_client->setHasUser(has_user);
         }
     }
@@ -1445,13 +1437,12 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
     LOG(LS_INFO) << "User state changed (has_user=" << has_user << " sid=" << session_id_
                  << " from=" << location.toString() << ")";
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        ClientSessionTextChat* text_chat_client =
-            static_cast<ClientSessionTextChat*>(client.get());
+        ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
 
         proto::TextChatStatus::Status status = proto::TextChatStatus::STATUS_USER_CONNECTED;
         if (!has_user)
@@ -1469,15 +1460,14 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() == id)
         {
-            ClientSessionTextChat* text_chat_client =
-                static_cast<ClientSessionTextChat*>(client.get());
+            ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
 
             if (!channel_)
                 text_chat_client->sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
@@ -1496,15 +1486,14 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         }
     }
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() != id)
         {
-            ClientSessionTextChat* text_chat_session =
-                static_cast<ClientSessionTextChat*>(client.get());
+            ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.text_chat());
         }
     }
@@ -1525,15 +1514,14 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() == id)
         {
-            ClientSessionTextChat* text_chat_session =
-                static_cast<ClientSessionTextChat*>(client.get());
+            ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
 
             proto::TextChatStatus* text_chat_status =
                 outgoing_message_.mutable_text_chat()->mutable_chat_status();
@@ -1549,15 +1537,14 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         }
     }
 
-    for (const auto& client : other_clients_)
+    for (const auto& client : std::as_const(other_clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() != id)
         {
-            ClientSessionTextChat* text_chat_session =
-                static_cast<ClientSessionTextChat*>(client.get());
+            ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.text_chat());
         }
     }
@@ -1574,7 +1561,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::mergeAndSendConfiguration()
 {
-    if (desktop_clients_.empty())
+    if (desktop_clients_.isEmpty())
     {
         LOG(LS_INFO) << "No desktop clients (sid=" << session_id_ << ")";
         return;
@@ -1585,10 +1572,10 @@ void UserSession::mergeAndSendConfiguration()
     DesktopSession::Config system_config;
     memset(&system_config, 0, sizeof(system_config));
 
-    for (const auto& client : desktop_clients_)
+    for (const auto& client : std::as_const(desktop_clients_))
     {
         const DesktopSession::Config& client_config =
-            static_cast<ClientSessionDesktop*>(client.get())->desktopSessionConfig();
+            static_cast<ClientSessionDesktop*>(client)->desktopSessionConfig();
 
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.

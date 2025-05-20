@@ -335,11 +335,12 @@ void UserSessionManager::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_session)
+void UserSessionManager::onClientSession(ClientSession* client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user='" << client_session->userName()
                  << "' host_id='" << client_session->hostId() << "')";
 
+    std::unique_ptr<ClientSession> client_session_deleter(client_session);
     base::SessionId session_id = base::kInvalidSessionId;
 
     QString username = client_session->userName();
@@ -447,7 +448,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 #endif
             }
 
-            session->onClientSession(std::move(client_session));
+            session->onClientSession(client_session_deleter.release());
             user_session_found = true;
             break;
         }

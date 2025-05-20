@@ -52,9 +52,9 @@ ClientSession::~ClientSession()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_type,
-                                                     std::unique_ptr<base::TcpChannel> channel,
-                                                     QObject* parent)
+ClientSession* ClientSession::create(proto::SessionType session_type,
+                                     std::unique_ptr<base::TcpChannel> channel,
+                                     QObject* parent)
 {
     if (!channel)
     {
@@ -66,24 +66,19 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return std::unique_ptr<ClientSessionDesktop>(
-                new ClientSessionDesktop(session_type, std::move(channel), parent));
+            return new ClientSessionDesktop(session_type, std::move(channel), parent);
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            return std::unique_ptr<ClientSessionFileTransfer>(
-                new ClientSessionFileTransfer(std::move(channel), parent));
+            return new ClientSessionFileTransfer(std::move(channel), parent);
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
-            return std::unique_ptr<ClientSessionSystemInfo>(
-                new ClientSessionSystemInfo(std::move(channel), parent));
+            return new ClientSessionSystemInfo(std::move(channel), parent);
 
         case proto::SESSION_TYPE_TEXT_CHAT:
-            return std::unique_ptr<ClientSessionTextChat>(
-                new ClientSessionTextChat(std::move(channel), parent));
+            return new ClientSessionTextChat(std::move(channel), parent);
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
-            return std::unique_ptr<ClientSessionPortForwarding>(
-                new ClientSessionPortForwarding(std::move(channel), parent));
+            return new ClientSessionPortForwarding(std::move(channel), parent);
 
         default:
             LOG(LS_ERROR) << "Unknown session type: " << session_type;

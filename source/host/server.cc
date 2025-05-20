@@ -239,34 +239,31 @@ void Server::onSessionAuthenticated()
         if (host_version > session_info.version)
         {
             LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-            << " client: " << session_info.version.toString() << ")";
+                          << " client: " << session_info.version.toString() << ")";
         }
 
-        std::unique_ptr<ClientSession> session = ClientSession::create(
+        if (!user_session_manager_)
+        {
+            LOG(LS_ERROR) << "Invalid user session manager";
+            continue;
+        }
+
+        ClientSession* session = ClientSession::create(
             static_cast<proto::SessionType>(session_info.session_type),
             std::move(session_info.channel));
 
-        if (session)
-        {
-            session->setClientVersion(session_info.version);
-            session->setComputerName(session_info.computer_name);
-            session->setDisplayName(session_info.display_name);
-            session->setUserName(session_info.user_name);
-        }
-        else
+        if (!session)
         {
             LOG(LS_ERROR) << "Invalid client session";
             return;
         }
 
-        if (user_session_manager_)
-        {
-            user_session_manager_->onClientSession(std::move(session));
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Invalid user session manager";
-        }
+        session->setClientVersion(session_info.version);
+        session->setComputerName(session_info.computer_name);
+        session->setDisplayName(session_info.display_name);
+        session->setUserName(session_info.user_name);
+
+        user_session_manager_->onClientSession(session);
     }
 }
 

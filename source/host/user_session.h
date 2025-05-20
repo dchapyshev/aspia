@@ -31,6 +31,7 @@
 #include "host/unconfirmed_client_session.h"
 #include "proto/host_internal.pb.h"
 
+#include <QList>
 #include <QTimer>
 
 namespace host {
@@ -71,7 +72,7 @@ public:
     size_t clientsCount() const;
     bool isConnectedToUi() const { return channel_ != nullptr; }
 
-    void onClientSession(std::unique_ptr<ClientSession> client_session);
+    void onClientSession(ClientSession* client_session);
     void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdChanged(base::HostId host_id);
@@ -110,7 +111,7 @@ private:
     void killClientSession(quint32 id);
     void sendRouterState(const base::Location& location);
     void sendHostIdRequest(const base::Location& location);
-    void addNewClientSession(std::unique_ptr<ClientSession> client_session);
+    void addNewClientSession(ClientSession* client_session);
     void setState(const base::Location& location, State state);
     void onTextChatHasUser(const base::Location& location, bool has_user);
     void onTextChatSessionStarted(quint32 id);
@@ -140,8 +141,7 @@ private:
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
-    using ClientSessionPtr = std::unique_ptr<ClientSession>;
-    using ClientSessionList = std::vector<ClientSessionPtr>;
+    using ClientSessionList = QList<ClientSession*>;
     using UnconfirmedClientSessionPtr = std::unique_ptr<UnconfirmedClientSession>;
     using UnconfirmedClientSessionList = std::vector<UnconfirmedClientSessionPtr>;
 
