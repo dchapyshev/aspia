@@ -35,13 +35,10 @@ SessionWatcher::~SessionWatcher()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionWatcher::start(Delegate* delegate)
+bool SessionWatcher::start()
 {
     if (window_)
         return false;
-
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     std::unique_ptr<MessageWindow> window = std::make_unique<MessageWindow>();
 
@@ -76,7 +73,6 @@ void SessionWatcher::stop()
     }
 
     window_.reset();
-    delegate_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,7 +80,7 @@ bool SessionWatcher::onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESU
 {
     if (message == WM_WTSSESSION_CHANGE)
     {
-        delegate_->onSessionEvent(
+        emit sig_sessionEvent(
             static_cast<SessionStatus>(wParam), static_cast<SessionId>(lParam));
 
         result = 0;

@@ -19,6 +19,8 @@
 #ifndef BASE_WIN_SESSION_WATCHER_H
 #define BASE_WIN_SESSION_WATCHER_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 #include "base/session_id.h"
 #include "base/win/session_status.h"
@@ -31,28 +33,24 @@ namespace base {
 
 class MessageWindow;
 
-class SessionWatcher
+class SessionWatcher final : public QObject
 {
+    Q_OBJECT
+
 public:
     SessionWatcher();
     ~SessionWatcher();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onSessionEvent(SessionStatus status, SessionId session_id) = 0;
-    };
-
-    bool start(Delegate* delegate);
+    bool start();
     void stop();
+
+signals:
+    void sig_sessionEvent(SessionStatus status, SessionId session_id);
 
 private:
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
     std::unique_ptr<MessageWindow> window_;
-    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(SessionWatcher);
 };
