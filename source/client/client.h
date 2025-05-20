@@ -105,8 +105,8 @@ private:
     void startAuthentication();
     void delayedReconnect();
 
-    QPointer<QTimer> timeout_timer_;
-    QPointer<QTimer> reconnect_timer_;
+    QTimer* timeout_timer_ = nullptr;
+    QTimer* reconnect_timer_ = nullptr;
     QPointer<RouterController> router_controller_;
     QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;

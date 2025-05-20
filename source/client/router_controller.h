@@ -90,10 +90,10 @@ private:
     void sendConnectionRequest();
     void waitForHost();
 
-    std::unique_ptr<base::TcpChannel> router_channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    std::unique_ptr<QTimer> status_request_timer_;
-    std::unique_ptr<base::RelayPeer> relay_peer_;
+    QPointer<base::TcpChannel> router_channel_ = nullptr;
+    QPointer<base::ClientAuthenticator> authenticator_ = nullptr;
+    QTimer* status_request_timer_ = nullptr;
+    QPointer<base::RelayPeer> relay_peer_ = nullptr;
     RouterConfig router_config_;
 
     base::HostId host_id_ = base::kInvalidHostId;

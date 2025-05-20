@@ -35,9 +35,21 @@ auto g_errorType = qRegisterMetaType<client::RouterController::Error>();
 //--------------------------------------------------------------------------------------------------
 RouterController::RouterController(const RouterConfig& router_config, QObject* parent)
     : QObject(parent),
+      status_request_timer_(new QTimer(this)),
       router_config_(router_config)
 {
     LOG(LS_INFO) << "Ctor";
+
+    status_request_timer_->setSingleShot(true);
+
+    connect(status_request_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
+
+        proto::PeerToRouter message;
+        message.mutable_check_host_status()->set_host_id(host_id_);
+        router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,9 +69,9 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
     LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << " wait_for_host="
                  << wait_for_host_ << ")";
 
-    router_channel_ = std::make_unique<base::TcpChannel>();
+    router_channel_ = new base::TcpChannel(this);
 
-    connect(router_channel_.get(), &base::TcpChannel::sig_connected,
+    connect(router_channel_, &base::TcpChannel::sig_connected,
             this, &RouterController::onTcpConnected);
 
     router_channel_->connect(router_config_.address, router_config_.port);
@@ -79,14 +91,14 @@ void RouterController::onTcpConnected()
     router_channel_->setKeepAlive(true);
     router_channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
     authenticator_->setPassword(router_config_.password);
     authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
@@ -95,9 +107,9 @@ void RouterController::onTcpConnected()
 
             emit sig_routerConnected(router_version);
 
-            connect(router_channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(router_channel_, &base::TcpChannel::sig_disconnected,
                     this, &RouterController::onTcpDisconnected);
-            connect(router_channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(router_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
             if (router_version >= base::kVersion_2_6_0)
@@ -126,10 +138,11 @@ void RouterController::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
     });
 
-    authenticator_->start(router_channel_.get());
+    authenticator_->start(router_channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,11 +218,11 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
         }
         else
         {
-            relay_peer_ = std::make_unique<base::RelayPeer>();
+            relay_peer_ = new base::RelayPeer(this);
 
-            connect(relay_peer_.get(), &base::RelayPeer::sig_connectionError,
+            connect(relay_peer_, &base::RelayPeer::sig_connectionError,
                     this, &RouterController::onRelayConnectionError);
-            connect(relay_peer_.get(), &base::RelayPeer::sig_connectionReady,
+            connect(relay_peer_, &base::RelayPeer::sig_connectionReady,
                     this, &RouterController::onRelayConnectionReady);
 
             relay_peer_->start(connection_offer);
@@ -247,7 +260,9 @@ void RouterController::onRelayConnectionReady()
     }
 
     host_channel_.reset(relay_peer_->takeChannel());
+
     emit sig_hostConnected();
+    relay_peer_->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -260,6 +275,7 @@ void RouterController::onRelayConnectionError()
     error.code.router = ErrorCode::RELAY_ERROR;
 
     emit sig_errorOccurred(error);
+    relay_peer_->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,19 +292,6 @@ void RouterController::sendConnectionRequest()
 void RouterController::waitForHost()
 {
     LOG(LS_INFO) << "Wait for host";
-
-    status_request_timer_ = std::make_unique<QTimer>();
-    status_request_timer_->setSingleShot(true);
-
-    connect(status_request_timer_.get(), &QTimer::timeout, this, [this]()
-    {
-        LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
-
-        proto::PeerToRouter message;
-        message.mutable_check_host_status()->set_host_id(host_id_);
-        router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
-    });
-
     emit sig_hostAwaiting();
     status_request_timer_->start(std::chrono::milliseconds(5000));
 }
