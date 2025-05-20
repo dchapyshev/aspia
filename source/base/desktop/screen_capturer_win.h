@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_WIN_H
 
 #include "base/desktop/screen_capturer.h"
+#include "base/win/scoped_thread_desktop.h"
 
 namespace base {
 
@@ -30,6 +31,16 @@ class ScreenCapturerWin : public ScreenCapturer
 public:
     ScreenCapturerWin(Type type, QObject* parent);
     ~ScreenCapturerWin();
+
+    static ScreenCapturer* create(Type preferred_type, Error last_error);
+
+    void switchToInputDesktop() final;
+
+private:
+    void checkScreenType(const wchar_t* desktop_name);
+
+    ScopedThreadDesktop desktop_;
+    ScreenType last_screen_type_ = ScreenType::UNKNOWN;
 };
 
 } // namespace base

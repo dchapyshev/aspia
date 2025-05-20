@@ -45,7 +45,6 @@ public:
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
     Point cursorPosition() final;
-    ScreenType screenType() final;
 
 protected:
     // ScreenCapturer implementation.

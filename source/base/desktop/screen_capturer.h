@@ -88,6 +88,7 @@ public:
         std::vector<Size> resolutions;
     };
 
+    virtual void switchToInputDesktop() { /* Nothing */ };
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
@@ -95,7 +96,6 @@ public:
     virtual const Frame* captureFrame(Error* error) = 0;
     virtual const MouseCursor* captureCursor() = 0;
     virtual Point cursorPosition() = 0;
-    virtual ScreenType screenType();
 
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;
@@ -104,6 +104,10 @@ public:
     static const char* screenTypeToString(ScreenType screen_type);
 
     Type type() const;
+
+signals:
+    void sig_screenTypeChanged(ScreenType type, const QString& name);
+    void sig_desktopChanged();
 
 protected:
     friend class ScreenCapturerWrapper;

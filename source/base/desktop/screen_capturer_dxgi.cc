@@ -327,12 +327,6 @@ Point ScreenCapturerDxgi::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturer::ScreenType ScreenCapturerDxgi::screenType()
-{
-    return ScreenCaptureUtils::screenType();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ScreenCapturerDxgi::reset()
 {
     queue_.reset();

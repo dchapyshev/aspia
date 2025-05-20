@@ -26,10 +26,7 @@
 #include "base/ipc/shared_memory_factory.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/desktop/screen_capturer_dxgi.h"
-#include "base/desktop/screen_capturer_gdi.h"
-#include "base/desktop/screen_capturer_mirror.h"
-#include "base/win/windows_version.h"
+#include "base/desktop/screen_capturer_win.h"
 #elif defined(Q_OS_LINUX)
 #include "base/desktop/screen_capturer_x11.h"
 #elif defined(Q_OS_MACOS)
@@ -42,55 +39,15 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type,
-                                             Delegate* delegate)
-    : preferred_type_(preferred_type),
+                                             Delegate* delegate,
+                                             QObject* parent)
+    : QObject(parent),
+      preferred_type_(preferred_type),
       delegate_(delegate),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(DesktopEnvironment::create())
 {
     LOG(LS_INFO) << "Ctor";
-
-    switchToInputDesktop();
-
-#if defined(Q_OS_WINDOWS)
-    // If the monitor is turned off, this call will turn it on.
-    if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
-    {
-        PLOG(LS_ERROR) << "SetThreadExecutionState failed";
-    }
-
-    wchar_t desktop[100] = { 0 };
-    if (desktop_.assignedDesktop().name(desktop, sizeof(desktop)))
-    {
-        if (_wcsicmp(desktop, L"Screen-saver") == 0)
-        {
-            auto send_key = [](WORD key_code, DWORD flags)
-            {
-                INPUT input;
-                memset(&input, 0, sizeof(input));
-
-                input.type       = INPUT_KEYBOARD;
-                input.ki.wVk     = key_code;
-                input.ki.dwFlags = flags;
-                input.ki.wScan   = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
-
-                // Do the keyboard event.
-                if (!SendInput(1, &input, sizeof(input)))
-                {
-                    PLOG(LS_ERROR) << "SendInput failed";
-                }
-            };
-
-            send_key(VK_SPACE, 0);
-            send_key(VK_SPACE, KEYEVENTF_KEYUP);
-        }
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Unable to get name of desktop";
-    }
-#endif // defined(Q_OS_WINDOWS)
-
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 }
 
@@ -194,7 +151,7 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
         return ScreenCapturer::Error::TEMPORARY;
     }
 
-    switchToInputDesktop();
+    screen_capturer_->switchToInputDesktop();
 
     ++capture_counter_;
 
@@ -266,40 +223,37 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_m
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
-    if (environment_)
-    {
-        environment_->setWallpaper(enable);
-    }
-    else
+    if (!environment_)
     {
         LOG(LS_ERROR) << "Desktop environment not initialized";
+        return;
     }
+
+    environment_->setWallpaper(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
-    if (environment_)
-    {
-        environment_->setEffects(enable);
-    }
-    else
+    if (!environment_)
     {
         LOG(LS_ERROR) << "Desktop environment not initialized";
+        return;
     }
+
+    environment_->setEffects(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
-    if (environment_)
-    {
-        environment_->setFontSmoothing(enable);
-    }
-    else
+    if (!environment_)
     {
         LOG(LS_ERROR) << "Desktop environment not initialized";
+        return;
     }
+
+    environment_->setFontSmoothing(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,67 +299,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
                  << ScreenCapturer::typeToString(preferred_type_);
 
 #if defined(Q_OS_WINDOWS)
-    auto try_mirror_capturer = [this]()
-    {
-        // Mirror screen capture is available only in Windows 7/2008 R2.
-        if (windowsVersion() == base::VERSION_WIN7)
-        {
-            LOG(LS_INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
-
-            std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
-                std::make_unique<ScreenCapturerMirror>();
-
-            if (capturer_mirror->isSupported())
-            {
-                LOG(LS_INFO) << "Using MIRROR capturer";
-                screen_capturer_ = std::move(capturer_mirror);
-            }
-            else
-            {
-                LOG(LS_INFO) << "MIRROR capturer unavailable";
-            }
-        }
-        else
-        {
-            LOG(LS_INFO) << "Windows version is not equal to 7/2008R2. MIRROR capturer unavailable";
-        }
-    };
-
-    if (last_error == ScreenCapturer::Error::PERMANENT)
-    {
-        LOG(LS_INFO) << "Permanent error. Reset to GDI capturer";
-        screen_capturer_.reset();
-    }
-    else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
-             preferred_type_ == ScreenCapturer::Type::DEFAULT)
-    {
-        if (windowsVersion() >= VERSION_WIN8)
-        {
-            // Desktop Duplication API is available in Windows 8+.
-            std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi =
-                std::make_unique<ScreenCapturerDxgi>();
-            if (capturer_dxgi->isSupported())
-            {
-                LOG(LS_INFO) << "Using DXGI capturer";
-                screen_capturer_ = std::move(capturer_dxgi);
-            }
-        }
-        else
-        {
-            try_mirror_capturer();
-        }
-    }
-    else if (preferred_type_ == ScreenCapturer::Type::WIN_MIRROR)
-    {
-        try_mirror_capturer();
-    }
-
-    if (!screen_capturer_)
-    {
-        LOG(LS_INFO) << "Using GDI capturer";
-        screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
-    }
-
+    screen_capturer_.reset(ScreenCapturerWin::create(preferred_type_, last_error));
 #elif defined(Q_OS_LINUX)
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
@@ -419,86 +313,29 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     NOTIMPLEMENTED();
 #endif
 
+    connect(screen_capturer_.get(), &ScreenCapturer::sig_screenTypeChanged, this,
+            [this](ScreenCapturer::ScreenType type, const QString& name)
+    {
+        delegate_->onScreenTypeChanged(type, name);
+    });
+
+    connect(screen_capturer_.get(), &ScreenCapturer::sig_desktopChanged, this, [this]()
+    {
+        if (!environment_)
+        {
+            LOG(LS_ERROR) << "Desktop environment not initialized";
+            return;
+        }
+
+        environment_->onDesktopChanged();
+    });
+
     screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
     if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
     {
         LOG(LS_INFO) << "Restore selected screen: " << last_screen_id_;
         selectScreen(last_screen_id_, Size());
     }
-
-    checkScreenType();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::switchToInputDesktop()
-{
-#if defined(Q_OS_WINDOWS)
-    // Switch to the desktop receiving user input if different from the current one.
-    Desktop input_desktop(Desktop::inputDesktop());
-
-    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
-    {
-        wchar_t new_name[128] = { 0 };
-        input_desktop.name(new_name, sizeof(new_name));
-
-        wchar_t old_name[128] = { 0 };
-        desktop_.assignedDesktop().name(old_name, sizeof(old_name));
-
-        LOG(LS_INFO) << "Input desktop changed from '" << old_name << "' to '" << new_name << "'";
-
-        if (screen_capturer_)
-            screen_capturer_->reset();
-
-        // If setThreadDesktop() fails, the thread is still assigned a desktop.
-        // So we can continue capture screen bits, just from the wrong desktop.
-        desktop_.setThreadDesktop(std::move(input_desktop));
-
-        if (environment_)
-        {
-            environment_->onDesktopChanged();
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Desktop environment not initialized";
-        }
-
-        checkScreenType();
-    }
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::checkScreenType()
-{
-#if defined(Q_OS_WINDOWS)
-    if (!screen_capturer_)
-        return;
-
-    ScreenCapturer::ScreenType screen_type = screen_capturer_->screenType();
-    if (screen_type != last_screen_type_)
-    {
-        LOG(LS_INFO) << "Screen type changed from "
-                     << ScreenCapturer::screenTypeToString(last_screen_type_) << " to "
-                     << ScreenCapturer::screenTypeToString(screen_type);
-
-        Desktop desktop = Desktop::threadDesktop();
-
-        wchar_t name[128] = { 0 };
-        desktop.name(name, sizeof(name));
-
-        QString screen_name = QString::fromWCharArray(name);
-        if (screen_name.isEmpty())
-            screen_name = "unknown";
-
-        delegate_->onScreenTypeChanged(screen_type, screen_name);
-        last_screen_type_ = screen_type;
-    }
-    else
-    {
-        LOG(LS_INFO) << "Screen type not changed: "
-                     << ScreenCapturer::screenTypeToString(last_screen_type_);
-    }
-#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace base

@@ -29,6 +29,7 @@
 #include "proto/meta_types.h"
 
 #if defined(Q_OS_WINDOWS)
+#include "base/win/desktop.h"
 #include "base/win/session_info.h"
 #include "base/win/window_station.h"
 

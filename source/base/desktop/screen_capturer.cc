@@ -31,12 +31,6 @@ ScreenCapturer::ScreenCapturer(Type type, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturer::ScreenType ScreenCapturer::screenType()
-{
-    return ScreenType::UNKNOWN;
-}
-
-//--------------------------------------------------------------------------------------------------
 void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;

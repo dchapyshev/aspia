@@ -22,7 +22,6 @@
 #include "base/desktop/win/bitmap_info.h"
 #include "base/win/desktop.h"
 #include "base/win/scoped_gdi_object.h"
-#include "base/win/session_info.h"
 
 #include <VersionHelpers.h>
 
@@ -231,58 +230,6 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 int ScreenCaptureUtils::screenCount()
 {
     return GetSystemMetrics(SM_CMONITORS);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-ScreenCapturer::ScreenType ScreenCaptureUtils::screenType()
-{
-    Desktop desktop = Desktop::inputDesktop();
-    if (!desktop.isValid())
-    {
-        LOG(LS_ERROR) << "Unable to get input desktop";
-        return ScreenCapturer::ScreenType::UNKNOWN;
-    }
-
-    wchar_t desktop_name[128] = { 0 };
-    if (!desktop.name(desktop_name, sizeof(desktop_name)))
-    {
-        LOG(LS_ERROR) << "Unable to get desktop name";
-        return ScreenCapturer::ScreenType::UNKNOWN;
-    }
-
-    if (_wcsicmp(desktop_name, L"winlogon") != 0)
-        return ScreenCapturer::ScreenType::DESKTOP;
-
-    DWORD session_id = 0;
-    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
-        return ScreenCapturer::ScreenType::UNKNOWN;
-    }
-
-    base::SessionInfo session_info(session_id);
-    if (!session_info.isValid())
-    {
-        LOG(LS_ERROR) << "Unable to get session info";
-        return ScreenCapturer::ScreenType::UNKNOWN;
-    }
-
-    if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
-    {
-        if (session_info.isUserLocked())
-        {
-            // Lock screen captured.
-            return ScreenCapturer::ScreenType::LOCK;
-        }
-        else
-        {
-            // UAC screen captured.
-            return ScreenCapturer::ScreenType::OTHER;
-        }
-    }
-
-    return ScreenCapturer::ScreenType::LOGIN;
 }
 
 } // namespace base

@@ -22,10 +22,6 @@
 #include "base/desktop/screen_capturer.h"
 #include "build/build_config.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_thread_desktop.h"
-#endif
-
 namespace base {
 
 class DesktopEnvironment;
@@ -33,8 +29,10 @@ class DesktopResizer;
 class MouseCursor;
 class PowerSaveBlocker;
 
-class ScreenCapturerWrapper
+class ScreenCapturerWrapper final : public QObject
 {
+    Q_OBJECT
+
 public:
     class Delegate
     {
@@ -47,7 +45,7 @@ public:
         virtual void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name) = 0;
     };
 
-    ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate);
+    ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate, QObject* parent = nullptr);
     ~ScreenCapturerWrapper();
 
     void selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution);
@@ -61,20 +59,13 @@ public:
 private:
     ScreenCapturer::ScreenId defaultScreen();
     void selectCapturer(ScreenCapturer::Error last_error);
-    void switchToInputDesktop();
-    void checkScreenType();
 
     SharedMemoryFactory* shared_memory_factory_ = nullptr;
     ScreenCapturer::Type preferred_type_;
     Delegate* delegate_;
 
-#if defined(Q_OS_WINDOWS)
-    ScopedThreadDesktop desktop_;
-#endif // defined(Q_OS_WINDOWS)
-
     int screen_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
-    ScreenCapturer::ScreenType last_screen_type_ = ScreenCapturer::ScreenType::UNKNOWN;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;
     quint32 capture_counter_ = 0;
