@@ -617,12 +617,6 @@ QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist)
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray)
-{
-    return out << "QByteArray(" << QString::fromLatin1(qbytearray.toHex()) << ')';
-}
-
-//--------------------------------------------------------------------------------------------------
 QTextStream& operator<<(QTextStream& out, const QPoint& qpoint)
 {
     return out << "QPoint(" << qpoint.x() << ' ' << ')';

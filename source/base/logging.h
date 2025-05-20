@@ -598,7 +598,6 @@ QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path);
 QTextStream& operator<<(QTextStream& out, const std::error_code& error);
 
 QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist);
-QTextStream& operator<<(QTextStream& out, const QByteArray& qbytearray);
 
 QTextStream& operator<<(QTextStream& out, const QPoint& qpoint);
 QTextStream& operator<<(QTextStream& out, const QRect& qrect);
