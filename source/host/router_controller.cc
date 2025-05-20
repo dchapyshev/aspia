@@ -144,20 +144,20 @@ void RouterController::onTcpConnected()
     channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_info_.public_key);
     authenticator_->setSessionType(proto::ROUTER_SESSION_HOST);
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(channel_, &base::TcpChannel::sig_disconnected,
                     this, &RouterController::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
@@ -180,10 +180,11 @@ void RouterController::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_.get());
+    authenticator_->start(channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -302,9 +303,9 @@ void RouterController::connectToRouter()
 
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
-    channel_ = std::make_unique<base::TcpChannel>();
+    channel_ = new base::TcpChannel(this);
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected,
+    connect(channel_, &base::TcpChannel::sig_connected,
             this, &RouterController::onTcpConnected);
 
     channel_->connect(router_info_.address, router_info_.port);

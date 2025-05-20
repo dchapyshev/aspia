@@ -79,8 +79,8 @@ private:
     void routerStateChanged(proto::internal::RouterState::State state);
     static const char* routerStateToString(proto::internal::RouterState::State state);
 
-    std::unique_ptr<base::TcpChannel> channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    QPointer<base::TcpChannel> channel_;
+    QPointer<base::ClientAuthenticator> authenticator_;
     QPointer<base::RelayPeerManager> peer_manager_;
     QPointer<QTimer> reconnect_timer_;
     RouterInfo router_info_;
