@@ -19,6 +19,8 @@
 #ifndef BASE_IPC_SHARED_MEMORY_FACTORY_H
 #define BASE_IPC_SHARED_MEMORY_FACTORY_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 #include "base/memory/local_memory.h"
 
@@ -29,22 +31,12 @@ namespace base {
 class SharedMemory;
 class SharedMemoryFactoryProxy;
 
-class SharedMemoryFactory
+class SharedMemoryFactory final : public QObject
 {
+    Q_OBJECT
+
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        // Called when a shared memory is successfully created or opened.
-        virtual void onSharedMemoryCreate(int id) = 0;
-
-        // Called when the shared memory is destroyed.
-        virtual void onSharedMemoryDestroy(int id) = 0;
-    };
-
-    explicit SharedMemoryFactory(Delegate* delegate);
+    explicit SharedMemoryFactory(QObject* parent = nullptr);
     ~SharedMemoryFactory();
 
     // Creates a new shared memory. If an error occurs, nullptr is returned.
@@ -55,13 +47,19 @@ public:
     // If any other error occurs, nullptr is returned.
     std::unique_ptr<SharedMemory> open(int id);
 
+signals:
+    // Called when a shared memory is successfully created or opened.
+    void sig_memoryCreated(int id);
+
+    // Called when the shared memory is destroyed.
+    void sig_memoryDestroyed(int id);
+
 private:
     friend class SharedMemoryFactoryProxy;
     void onSharedMemoryCreate(int id);
     void onSharedMemoryDestroy(int id);
 
     base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
-    Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);
 };

@@ -45,7 +45,6 @@ class InputInjector;
 
 class DesktopSessionAgent final
     : public QObject,
-      public base::SharedMemoryFactory::Delegate,
       public base::Thread::Delegate
 {
     Q_OBJECT
@@ -57,15 +56,13 @@ public:
     void start(const QString& channel_id);
 
 protected:
-    // base::SharedMemoryFactory::Delegate implementation.
-    void onSharedMemoryCreate(int id) final;
-    void onSharedMemoryDestroy(int id) final;
-
     // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
 private slots:
+    void onSharedMemoryCreate(int id);
+    void onSharedMemoryDestroy(int id);
     void onScreenListChanged(
         const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
     void onCursorPositionChanged(const base::Point& position);
@@ -94,7 +91,7 @@ private:
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;
 
-    std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;
+    QPointer<base::SharedMemoryFactory> shared_memory_factory_;
     std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
     QPointer<base::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;

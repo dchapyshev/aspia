@@ -24,9 +24,9 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-SharedMemoryFactory::SharedMemoryFactory(Delegate* delegate)
-    : factory_proxy_(base::make_local_shared<SharedMemoryFactoryProxy>(this)),
-      delegate_(delegate)
+SharedMemoryFactory::SharedMemoryFactory(QObject* parent)
+    : QObject(parent),
+      factory_proxy_(base::make_local_shared<SharedMemoryFactoryProxy>(this))
 {
     // Nothing
 }
@@ -52,13 +52,13 @@ std::unique_ptr<SharedMemory> SharedMemoryFactory::open(int id)
 //--------------------------------------------------------------------------------------------------
 void SharedMemoryFactory::onSharedMemoryCreate(int id)
 {
-    delegate_->onSharedMemoryCreate(id);
+    emit sig_memoryCreated(id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SharedMemoryFactory::onSharedMemoryDestroy(int id)
 {
-    delegate_->onSharedMemoryDestroy(id);
+    emit sig_memoryDestroyed(id);
 }
 
 } // namespace base

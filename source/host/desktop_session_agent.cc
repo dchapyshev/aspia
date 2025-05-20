@@ -135,34 +135,6 @@ void DesktopSessionAgent::start(const QString& channel_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onSharedMemoryCreate(int id)
-{
-    LOG(LS_INFO) << "Shared memory created: " << id;
-
-    outgoing_message_.Clear();
-
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
-    shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
-    shared_buffer->set_shared_buffer_id(id);
-
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onSharedMemoryDestroy(int id)
-{
-    LOG(LS_INFO) << "Shared memory destroyed: " << id;
-
-    outgoing_message_.Clear();
-
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
-    shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
-    shared_buffer->set_shared_buffer_id(id);
-
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";
@@ -188,6 +160,34 @@ void DesktopSessionAgent::onAfterThreadRunning()
 #if defined(Q_OS_WINDOWS)
     message_window_.reset();
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onSharedMemoryCreate(int id)
+{
+    LOG(LS_INFO) << "Shared memory created: " << id;
+
+    outgoing_message_.Clear();
+
+    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
+    shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
+    shared_buffer->set_shared_buffer_id(id);
+
+    channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onSharedMemoryDestroy(int id)
+{
+    LOG(LS_INFO) << "Shared memory destroyed: " << id;
+
+    outgoing_message_.Clear();
+
+    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
+    shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
+    shared_buffer->set_shared_buffer_id(id);
+
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -501,13 +501,18 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         // Create a shared memory factory.
         // We will receive notifications of all creations and destruction of shared memory.
-        shared_memory_factory_ = std::make_unique<base::SharedMemoryFactory>(this);
+        shared_memory_factory_ = new base::SharedMemoryFactory(this);
+
+        connect(shared_memory_factory_, &base::SharedMemoryFactory::sig_memoryCreated,
+                this, &DesktopSessionAgent::onSharedMemoryCreate);
+        connect(shared_memory_factory_, &base::SharedMemoryFactory::sig_memoryDestroyed,
+                this, &DesktopSessionAgent::onSharedMemoryDestroy);
 
         capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
             std::chrono::milliseconds(40));
 
         screen_capturer_ = new base::ScreenCapturerWrapper(preferred_video_capturer_, this);
-        screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
+        screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
 
         connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenListChanged,
                 this, &DesktopSessionAgent::onScreenListChanged);
@@ -550,7 +555,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         input_injector_.reset();
         capture_scheduler_.reset();
         delete screen_capturer_;
-        shared_memory_factory_.reset();
+        delete shared_memory_factory_;
         clipboard_monitor_.reset();
         audio_capturer_.reset();
 
