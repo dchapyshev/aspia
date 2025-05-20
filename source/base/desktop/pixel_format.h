@@ -21,6 +21,8 @@
 
 #include <QTextStream>
 
+#include "proto/desktop.h"
+
 namespace base {
 
 class PixelFormat
@@ -101,6 +103,9 @@ public:
     PixelFormat& operator=(const PixelFormat& other);
     bool operator==(const PixelFormat& other) const;
     bool operator!=(const PixelFormat& other) const;
+
+    static PixelFormat fromProto(const proto::PixelFormat& format);
+    proto::PixelFormat toProto();
 
 private:
     quint8 bits_per_pixel_ = 0;

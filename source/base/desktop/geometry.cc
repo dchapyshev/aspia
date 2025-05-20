@@ -24,6 +24,64 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
+// static
+Point Point::fromQPoint(const QPoint& point)
+{
+    return Point(point.x(), point.y());
+}
+
+//--------------------------------------------------------------------------------------------------
+QPoint Point::toQPoint()
+{
+    return QPoint(x_, y_);
+}
+
+//--------------------------------------------------------------------------------------------------
+Point& Point::operator=(const Point& other)
+{
+    if (&other != this)
+        set(other.x_, other.y_);
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+Size Size::fromQSize(const QSize& size)
+{
+    return Size(size.width(), size.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+QSize Size::toQSize()
+{
+    return QSize(width_, height_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+Size Size::fromProto(const proto::Size& size)
+{
+    return Size(size.width(), size.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::Size Size::toProto()
+{
+    proto::Size size;
+    size.set_width(width_);
+    size.set_height(height_);
+    return size;
+}
+
+//--------------------------------------------------------------------------------------------------
+Size& Size::operator=(const Size& other)
+{
+    if (&other != this)
+        set(other.width_, other.height_);
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
 Rect::Rect(const Rect& other)
     : left_(other.left_),
       top_(other.top_),
@@ -152,6 +210,37 @@ Rect Rect::moved(qint32 x, qint32 y) const
     Rect moved_rect(*this);
     moved_rect.move(x, y);
     return moved_rect;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+Rect Rect::fromQRect(const QRect& rect)
+{
+    return Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+QRect Rect::toQRect()
+{
+    return QRect(QPoint(x(), y()), QSize(width(), height()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+Rect Rect::fromProto(const proto::Rect& rect)
+{
+    return Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::Rect Rect::toProto()
+{
+    proto::Rect rect;
+    rect.set_x(x());
+    rect.set_y(y());
+    rect.set_width(width());
+    rect.set_height(height());
+    return rect;
 }
 
 //--------------------------------------------------------------------------------------------------

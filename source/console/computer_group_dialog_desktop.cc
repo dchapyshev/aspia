@@ -34,33 +34,6 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
-//--------------------------------------------------------------------------------------------------
-base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
-{
-    return base::PixelFormat(
-        static_cast<quint8>(format.bits_per_pixel()),
-        static_cast<quint16>(format.red_max()),
-        static_cast<quint16>(format.green_max()),
-        static_cast<quint16>(format.blue_max()),
-        static_cast<quint8>(format.red_shift()),
-        static_cast<quint8>(format.green_shift()),
-        static_cast<quint8>(format.blue_shift()));
-}
-
-//--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
 const char* videoEncodingToString(proto::VideoEncoding encoding)
 {
     switch (encoding)
@@ -153,7 +126,7 @@ void ComputerGroupDialogDesktop::restoreSettings(
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    base::PixelFormat pixel_format = parsePixelFormat(desktop_config.pixel_format());
+    base::PixelFormat pixel_format = base::PixelFormat::fromProto(desktop_config.pixel_format());
     ColorDepth color_depth;
 
     if (pixel_format.isEqual(base::PixelFormat::ARGB()))
@@ -271,8 +244,7 @@ void ComputerGroupDialogDesktop::saveSettings(
                 break;
         }
 
-        serializePixelFormat(pixel_format, desktop_config->mutable_pixel_format());
-
+        desktop_config->mutable_pixel_format()->CopyFrom(pixel_format.toProto());
         desktop_config->set_compress_ratio(static_cast<quint32>(ui.slider_compress_ratio->value()));
     }
 

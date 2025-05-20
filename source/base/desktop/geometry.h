@@ -19,10 +19,11 @@
 #ifndef BASE_DESKTOP_GEOMETRY_H
 #define BASE_DESKTOP_GEOMETRY_H
 
+#include <QRect>
 #include <QMetaType>
 #include <QTextStream>
 
-#include <cstdint>
+#include "proto/desktop.h"
 
 namespace base {
 
@@ -82,12 +83,10 @@ public:
 
     void translate(const Point& offset) { translate(offset.x(), offset.y()); }
 
-    Point& operator=(const Point& other)
-    {
-        if (&other != this)
-            set(other.x_, other.y_);
-        return *this;
-    }
+    static Point fromQPoint(const QPoint& point);
+    QPoint toQPoint();
+
+    Point& operator=(const Point& other);
 
     bool operator!=(const Point& other) const { return !equals(other); }
     bool operator==(const Point& other) const { return equals(other); }
@@ -143,12 +142,13 @@ public:
         height_ = 0;
     }
 
-    Size& operator=(const Size& other)
-    {
-        if (&other != this)
-            set(other.width_, other.height_);
-        return *this;
-    }
+    static Size fromQSize(const QSize& size);
+    QSize toQSize();
+
+    static Size fromProto(const proto::Size& size);
+    proto::Size toProto();
+
+    Size& operator=(const Size& other);
 
     bool operator!=(const Size& other) const { return !equals(other); }
     bool operator==(const Size& other) const { return equals(other); }
@@ -250,6 +250,12 @@ public:
 
     Rect moved(const Point& pt) const { return moved(pt.x(), pt.y()); }
     Rect moved(qint32 x, qint32 y) const;
+
+    static Rect fromQRect(const QRect& rect);
+    QRect toQRect();
+
+    static Rect fromProto(const proto::Rect& rect);
+    proto::Rect toProto();
 
     Rect& operator=(const Rect& other);
 

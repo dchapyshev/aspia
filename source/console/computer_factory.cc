@@ -28,20 +28,6 @@ namespace {
 
 const int kDefCompressRatio = 8;
 
-//--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -59,8 +45,7 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config
     config->set_update_interval(30);
     config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);
-
-    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -77,8 +62,7 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_update_interval(30);
     config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);
-
-    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 }
 
 //--------------------------------------------------------------------------------------------------

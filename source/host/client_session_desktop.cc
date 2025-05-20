@@ -47,23 +47,6 @@
 
 namespace host {
 
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
-{
-    return base::PixelFormat(
-        static_cast<quint8>(format.bits_per_pixel()),
-        static_cast<quint16>(format.red_max()),
-        static_cast<quint16>(format.green_max()),
-        static_cast<quint16>(format.blue_max()),
-        static_cast<quint8>(format.red_shift()),
-        static_cast<quint8>(format.green_shift()),
-        static_cast<quint8>(format.blue_shift()));
-}
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
@@ -539,7 +522,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
         case proto::VIDEO_ENCODING_ZSTD:
             video_encoder_ = base::VideoEncoderZstd::create(
-                parsePixelFormat(config.pixel_format()), static_cast<int>(config.compress_ratio()));
+                base::PixelFormat::fromProto(config.pixel_format()), static_cast<int>(config.compress_ratio()));
             break;
 
         default:

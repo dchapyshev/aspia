@@ -39,33 +39,6 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
-//--------------------------------------------------------------------------------------------------
-base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
-{
-    return base::PixelFormat(
-        static_cast<quint8>(format.bits_per_pixel()),
-        static_cast<quint16>(format.red_max()),
-        static_cast<quint16>(format.green_max()),
-        static_cast<quint16>(format.blue_max()),
-        static_cast<quint8>(format.red_shift()),
-        static_cast<quint8>(format.green_shift()),
-        static_cast<quint8>(format.blue_shift()));
-}
-
-//--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
 const char* videoEncodingToString(proto::VideoEncoding encoding)
 {
     switch (encoding)
@@ -126,7 +99,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
     combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
 
-    base::PixelFormat pixel_format = parsePixelFormat(config_.pixel_format());
+    base::PixelFormat pixel_format = base::PixelFormat::fromProto(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
     if (pixel_format.isEqual(base::PixelFormat::ARGB()))
@@ -196,7 +169,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
 
-    QTimer::singleShot(0, this, [=]()
+    QTimer::singleShot(0, this, [this]()
     {
         adjustSize();
         setFixedHeight(sizeHint().height());
@@ -347,8 +320,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
             }
 
-            serializePixelFormat(pixel_format, config_.mutable_pixel_format());
-
+            config_.mutable_pixel_format()->CopyFrom(pixel_format.toProto());
             config_.set_compress_ratio(static_cast<quint32>(ui->slider_compress_ratio->value()));
         }
 

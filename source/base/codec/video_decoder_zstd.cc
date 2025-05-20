@@ -24,29 +24,6 @@
 
 namespace base {
 
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-PixelFormat parsePixelFormat(const proto::PixelFormat& format)
-{
-    return PixelFormat(
-        static_cast<quint8>(format.bits_per_pixel()),
-        static_cast<quint16>(format.red_max()),
-        static_cast<quint16>(format.green_max()),
-        static_cast<quint16>(format.blue_max()),
-        static_cast<quint8>(format.red_shift()),
-        static_cast<quint8>(format.green_shift()),
-        static_cast<quint8>(format.blue_shift()));
-}
-
-//--------------------------------------------------------------------------------------------------
-Rect parseRect(const proto::Rect& rect)
-{
-    return Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
-}
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
@@ -76,7 +53,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
 
         source_frame_ = FrameAligned::create(
             Size(format.video_rect().width(), format.video_rect().height()),
-            parsePixelFormat(format.pixel_format()), 32);
+            base::PixelFormat::fromProto(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), PixelFormat::ARGB());
     }
@@ -101,7 +78,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        Rect rect = parseRect(packet.dirty_rect(i));
+        Rect rect = base::Rect::fromProto(packet.dirty_rect(i));
 
         if (!frame_rect.containsRect(rect))
         {

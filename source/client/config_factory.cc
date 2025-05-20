@@ -32,20 +32,6 @@ const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
 const int kMaxCompressRatio = 22;
 
-//--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -89,8 +75,8 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
     config->set_compress_ratio(kDefCompressRatio);
+    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 
-    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
@@ -107,8 +93,8 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
     config->set_compress_ratio(kDefCompressRatio);
+    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 
-    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
