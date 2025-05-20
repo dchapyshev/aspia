@@ -32,7 +32,6 @@
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
 #include "common/desktop_session_constants.h"
-#include "host/desktop_session_proxy.h"
 #include "host/desktop_session_manager.h"
 #include "host/service_constants.h"
 #include "host/system_settings.h"
@@ -83,14 +82,6 @@ ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
 ClientSessionDesktop::~ClientSessionDesktop()
 {
     LOG(LS_INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::setDesktopSessionProxy(
-    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy)
-{
-    desktop_session_proxy_ = std::move(desktop_session_proxy);
-    DCHECK(desktop_session_proxy_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
-#include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 #include "host/stat_counter.h"
@@ -44,8 +43,6 @@ class VideoEncoder;
 
 namespace host {
 
-class DesktopSessionProxy;
-
 class ClientSessionDesktop final : public ClientSession
 {
     Q_OBJECT
@@ -55,8 +52,6 @@ public:
                          std::unique_ptr<base::TcpChannel> channel,
                          QObject* parent);
     ~ClientSessionDesktop() final;
-
-    void setDesktopSessionProxy(base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
     void encodeAudio(const proto::AudioPacket& audio_packet);
@@ -106,7 +101,6 @@ private:
     void downStepOverflow();
     void upStepOverflow();
 
-    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<base::ScaleReducer> scale_reducer_;
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;

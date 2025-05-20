@@ -21,7 +21,6 @@
 
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
-#include "base/memory/local_memory.h"
 #include "host/desktop_session.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -35,9 +34,6 @@ class SharedMemory;
 } // namespace base
 
 namespace host {
-
-class DesktopSessionProcess;
-class DesktopSessionProxy;
 
 class DesktopSessionManager final : public QObject
 {
@@ -58,8 +54,6 @@ public:
 
     void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);
-
-    base::local_shared_ptr<DesktopSessionProxy> sessionProxy() const;
 
     bool isMouseLocked() const { return is_mouse_locked_; }
     void setMouseLock(bool enable);
@@ -106,7 +100,6 @@ private:
 
     QPointer<base::IpcServer> server_;
     QPointer<DesktopSession> session_;
-    base::local_shared_ptr<DesktopSessionProxy> session_proxy_;
     QPointer<QTimer> session_attach_timer_;
 
     State state_ = State::STOPPED;

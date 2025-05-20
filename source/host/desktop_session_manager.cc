@@ -26,7 +26,6 @@
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
 #include "host/desktop_session_process.h"
-#include "host/desktop_session_proxy.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_info.h"
@@ -43,7 +42,6 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 //--------------------------------------------------------------------------------------------------
 DesktopSessionManager::DesktopSessionManager(QObject* parent)
     : QObject(parent),
-      session_proxy_(base::make_local_shared<DesktopSessionProxy>()),
       session_attach_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
@@ -276,12 +274,6 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 
     session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
     session_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
-{
-    return session_proxy_;
 }
 
 //--------------------------------------------------------------------------------------------------

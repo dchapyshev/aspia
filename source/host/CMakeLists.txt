@@ -45,8 +45,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_ipc.h
     desktop_session_process.cc
     desktop_session_process.h
-    desktop_session_proxy.cc
-    desktop_session_proxy.h
     file_agent.cc
     file_agent.h
     file_agent_main.cc

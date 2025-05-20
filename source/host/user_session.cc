@@ -25,7 +25,6 @@
 #include "base/desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
-#include "host/desktop_session_proxy.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -198,7 +197,6 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
             this, &UserSession::onClipboardEvent);
 
-    desktop_session_proxy_ = desktop_session_->sessionProxy();
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
     updateCredentials(FROM_HERE);
@@ -1344,8 +1342,6 @@ void UserSession::addNewClientSession(ClientSession* client_session)
                     desktop_session_, &DesktopSessionManager::injectTouchEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectClipboardEvent,
                     desktop_session_, &DesktopSessionManager::injectClipboardEvent);
-
-            desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
 
             if (enable_required)
             {

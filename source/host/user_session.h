@@ -150,7 +150,6 @@ private:
     ClientSessionList other_clients_;
 
     DesktopSessionManager* desktop_session_ = nullptr;
-    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
     proto::internal::UiToService incoming_message_;
     proto::internal::ServiceToUi outgoing_message_;
