@@ -46,7 +46,6 @@ class InputInjector;
 class DesktopSessionAgent final
     : public QObject,
       public base::SharedMemoryFactory::Delegate,
-      public base::ScreenCapturerWrapper::Delegate,
       public base::Thread::Delegate
 {
     Q_OBJECT
@@ -62,17 +61,15 @@ protected:
     void onSharedMemoryCreate(int id) final;
     void onSharedMemoryDestroy(int id) final;
 
-    // base::ScreenCapturerWrapper::Delegate implementation.
-    void onScreenListChanged(const base::ScreenCapturer::ScreenList& list,
-                             base::ScreenCapturer::ScreenId current) final;
-    void onCursorPositionChanged(const base::Point& position) final;
-    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name) final;
-
     // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 
 private slots:
+    void onScreenListChanged(
+        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void onCursorPositionChanged(const base::Point& position);
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
     void onClipboardEvent(const proto::ClipboardEvent& event);
@@ -99,7 +96,7 @@ private:
 
     std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;
     std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
-    std::unique_ptr<base::ScreenCapturerWrapper> screen_capturer_;
+    QPointer<base::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
 
     QPointer<QTimer> screen_capture_timer_ = nullptr;

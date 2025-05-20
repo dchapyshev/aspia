@@ -34,18 +34,7 @@ class ScreenCapturerWrapper final : public QObject
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onScreenListChanged(
-            const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
-        virtual void onCursorPositionChanged(const Point& position) = 0;
-        virtual void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name) = 0;
-    };
-
-    ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate, QObject* parent = nullptr);
+    explicit ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, QObject* parent = nullptr);
     ~ScreenCapturerWrapper();
 
     void selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution);
@@ -56,13 +45,17 @@ public:
     void enableFontSmoothing(bool enable);
     void enableCursorPosition(bool enable);
 
+signals:
+    void sig_screenListChanged(const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current);
+    void sig_cursorPositionChanged(const Point& position);
+    void sig_screenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
+
 private:
     ScreenCapturer::ScreenId defaultScreen();
     void selectCapturer(ScreenCapturer::Error last_error);
 
     SharedMemoryFactory* shared_memory_factory_ = nullptr;
     ScreenCapturer::Type preferred_type_;
-    Delegate* delegate_;
 
     int screen_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;

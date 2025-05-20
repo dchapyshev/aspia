@@ -163,6 +163,34 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onBeforeThreadRunning()
+{
+    LOG(LS_INFO) << "UI thread starting";
+
+#if defined(Q_OS_WINDOWS)
+    message_window_ = std::make_unique<base::MessageWindow>();
+    if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
+                                           this,
+                                           std::placeholders::_1, std::placeholders::_2,
+                                           std::placeholders::_3, std::placeholders::_4)))
+    {
+        LOG(LS_ERROR) << "Couldn't create window.";
+        return;
+    }
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onAfterThreadRunning()
+{
+    LOG(LS_INFO) << "UI thread stopping";
+
+#if defined(Q_OS_WINDOWS)
+    message_window_.reset();
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
@@ -249,34 +277,6 @@ void DesktopSessionAgent::onScreenTypeChanged(
     }
 
     channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onBeforeThreadRunning()
-{
-    LOG(LS_INFO) << "UI thread starting";
-
-#if defined(Q_OS_WINDOWS)
-    message_window_ = std::make_unique<base::MessageWindow>();
-    if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
-                                           this,
-                                           std::placeholders::_1, std::placeholders::_2,
-                                           std::placeholders::_3, std::placeholders::_4)))
-    {
-        LOG(LS_ERROR) << "Couldn't create window.";
-        return;
-    }
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onAfterThreadRunning()
-{
-    LOG(LS_INFO) << "UI thread stopping";
-
-#if defined(Q_OS_WINDOWS)
-    message_window_.reset();
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -506,9 +506,15 @@ void DesktopSessionAgent::setEnabled(bool enable)
         capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
             std::chrono::milliseconds(40));
 
-        screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(
-            preferred_video_capturer_, this);
+        screen_capturer_ = new base::ScreenCapturerWrapper(preferred_video_capturer_, this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
+
+        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenListChanged,
+                this, &DesktopSessionAgent::onScreenListChanged);
+        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_cursorPositionChanged,
+                this, &DesktopSessionAgent::onCursorPositionChanged);
+        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenTypeChanged,
+                this, &DesktopSessionAgent::onScreenTypeChanged);
 
         audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>();
 
@@ -543,7 +549,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         input_injector_.reset();
         capture_scheduler_.reset();
-        screen_capturer_.reset();
+        delete screen_capturer_;
         shared_memory_factory_.reset();
         clipboard_monitor_.reset();
         audio_capturer_.reset();

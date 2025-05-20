@@ -38,12 +38,9 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type,
-                                             Delegate* delegate,
-                                             QObject* parent)
+ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, QObject* parent)
     : QObject(parent),
       preferred_type_(preferred_type),
-      delegate_(delegate),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(DesktopEnvironment::create())
 {
@@ -117,7 +114,7 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
                 LOG(LS_INFO) << "No supported resolutions";
             }
 
-            for (const auto& resolition : screen_list.resolutions)
+            for (const auto& resolition : std::as_const(screen_list.resolutions))
             {
                 LOG(LS_INFO) << "Supported resolution: " << resolition;
             }
@@ -127,13 +124,13 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
             LOG(LS_INFO) << "No desktop resizer";
         }
 
-        for (const auto& screen : screen_list.screens)
+        for (const auto& screen : std::as_const(screen_list.screens))
         {
             LOG(LS_INFO) << "Screen #" << screen.id << " (position: " << screen.position
                          << " resolution: " << screen.resolution << " DPI: " << screen.dpi << ")";
         }
 
-        delegate_->onScreenListChanged(screen_list, screen_id);
+        emit sig_screenListChanged(screen_list, screen_id);
     }
     else
     {
@@ -202,7 +199,7 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
 
             if (delta_x > 1 || delta_y > 1)
             {
-                delegate_->onCursorPositionChanged(cursor_pos);
+                emit sig_cursorPositionChanged(cursor_pos);
                 last_cursor_pos_ = cursor_pos;
             }
         }
@@ -313,11 +310,8 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     NOTIMPLEMENTED();
 #endif
 
-    connect(screen_capturer_.get(), &ScreenCapturer::sig_screenTypeChanged, this,
-            [this](ScreenCapturer::ScreenType type, const QString& name)
-    {
-        delegate_->onScreenTypeChanged(type, name);
-    });
+    connect(screen_capturer_.get(), &ScreenCapturer::sig_screenTypeChanged,
+            this, &ScreenCapturerWrapper::sig_screenTypeChanged);
 
     connect(screen_capturer_.get(), &ScreenCapturer::sig_desktopChanged, this, [this]()
     {
