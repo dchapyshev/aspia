@@ -18,6 +18,8 @@
 
 #include "host/client_session_desktop.h"
 
+#include <QCoreApplication>
+
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
@@ -31,6 +33,7 @@
 #include "base/desktop/screen_capturer.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
+#include "host/desktop_session_manager.h"
 #include "host/service_constants.h"
 #include "host/system_settings.h"
 #include "proto/desktop_internal.pb.h"
@@ -93,12 +96,12 @@ void ClientSessionDesktop::setDesktopSessionProxy(
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onStarted()
 {
-    max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
+    max_fps_ = DesktopSessionManager::maxCaptureFps();
 
     if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
     {
         LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
-                     << desktop_session_proxy_->screenCaptureFps()
+                     << qApp->property("SCREEN_CAPTURE_FPS").toInt()
                      << ", max FPS: " << max_fps_ << ")";
 
         overflow_detection_timer_->start(std::chrono::milliseconds(1000));
@@ -106,7 +109,7 @@ void ClientSessionDesktop::onStarted()
     else
     {
         LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS: "
-                     << desktop_session_proxy_->screenCaptureFps() << ")";
+                     << qApp->property("SCREEN_CAPTURE_FPS").toInt() << ")";
     }
 
     const char* extensions;
@@ -944,7 +947,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         // Trying to raise the maximum FPS every 30 seconds.
         if ((write_normal_count_ % 30) == 0)
         {
-            int new_max_fps = std::min(max_fps_ + 1, desktop_session_proxy_->maxScreenCaptureFps());
+            int new_max_fps = std::min(max_fps_ + 1, DesktopSessionManager::maxCaptureFps());
             if (new_max_fps != max_fps_)
             {
                 LOG(LS_INFO) << "Max FPS: " << max_fps_ << " to " << new_max_fps;
@@ -963,9 +966,9 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::downStepOverflow()
 {
-    int fps = desktop_session_proxy_->screenCaptureFps();
+    int fps = qApp->property("SCREEN_CAPTURE_FPS").toInt();
     int new_fps = fps;
-    if (fps > desktop_session_proxy_->minScreenCaptureFps())
+    if (fps > DesktopSessionManager::minCaptureFps())
     {
         if (fps >= 25)
             new_fps = 20;
@@ -983,7 +986,7 @@ void ClientSessionDesktop::downStepOverflow()
         if (new_fps != fps)
         {
             LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
-            desktop_session_proxy_->setScreenCaptureFps(new_fps);
+            emit sig_captureFpsChanged(new_fps);
         }
     }
 
@@ -1028,14 +1031,14 @@ void ClientSessionDesktop::downStepOverflow()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::upStepOverflow()
 {
-    int fps = desktop_session_proxy_->screenCaptureFps();
+    int fps = qApp->property("SCREEN_CAPTURE_FPS").toInt();
     int new_fps = fps;
     if (fps < max_fps_)
     {
         new_fps = fps + 1;
 
         LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
-        desktop_session_proxy_->setScreenCaptureFps(new_fps);
+        emit sig_captureFpsChanged(new_fps);
     }
 
     if (new_fps >= 25)

@@ -42,7 +42,7 @@ signals:
     void sig_sendMessage(const QByteArray& data);
 
 protected:
-    // AsioThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 

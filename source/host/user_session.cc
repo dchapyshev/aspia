@@ -694,8 +694,7 @@ void UserSession::onClientSessionFinished()
         LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent (sid=" << session_id_ << ")";
         desktop_session_->control(proto::internal::DesktopControl::DISABLE);
 
-        desktop_session_proxy_->setScreenCaptureFps(
-            desktop_session_proxy_->defaultScreenCaptureFps());
+        desktop_session_->setScreenCaptureFps(DesktopSessionManager::defaultCaptureFps());
         desktop_session_->setMouseLock(false);
         desktop_session_->setKeyboardLock(false);
         desktop_session_->setPaused(false);
@@ -1333,6 +1332,8 @@ void UserSession::addNewClientSession(ClientSession* client_session)
                     desktop_session_, &DesktopSessionManager::selectScreen);
             connect(desktop_client_session, &ClientSessionDesktop::sig_captureScreen,
                     desktop_session_, &DesktopSessionManager::captureScreen);
+            connect(desktop_client_session, &ClientSessionDesktop::sig_captureFpsChanged,
+                    desktop_session_, &DesktopSessionManager::setScreenCaptureFps);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectKeyEvent,
                     desktop_session_, &DesktopSessionManager::injectKeyEvent);
             connect(desktop_client_session, &ClientSessionDesktop::sig_injectTextEvent,

@@ -44,8 +44,17 @@ class DesktopSessionManager final : public QObject
     Q_OBJECT
 
 public:
+    static const int kDefaultScreenCaptureFps = 20;
+    static const int kMinScreenCaptureFps = 1;
+    static const int kMaxScreenCaptureFpsHighEnd = 30;
+    static const int kMaxScreenCaptureFpsLowEnd = 20;
+
     explicit DesktopSessionManager(QObject* parent = nullptr);
     ~DesktopSessionManager() final;
+
+    static int defaultCaptureFps();
+    static int minCaptureFps();
+    static int maxCaptureFps();
 
     void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);
@@ -66,6 +75,7 @@ public slots:
     void configure(const host::DesktopSession::Config& config);
     void selectScreen(const proto::Screen& screen);
     void captureScreen();
+    void setScreenCaptureFps(int fps);
 
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectTextEvent(const proto::TextEvent& event);

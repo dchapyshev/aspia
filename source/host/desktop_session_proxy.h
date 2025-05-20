@@ -33,12 +33,6 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void setScreenCaptureFps(int fps);
-    int screenCaptureFps() const;
-    int defaultScreenCaptureFps() const;
-    int minScreenCaptureFps() const;
-    int maxScreenCaptureFps() const;
-
 private:
     friend class DesktopSessionManager;
 
@@ -46,16 +40,6 @@ private:
     void stopAndDettach();
 
     DesktopSession* desktop_session_ = nullptr;
-
-    static const int kDefaultScreenCaptureFps = 20;
-    static const int kMinScreenCaptureFps = 1;
-    static const int kMaxScreenCaptureFpsHighEnd = 30;
-    static const int kMaxScreenCaptureFpsLowEnd = 20;
-
-    int screen_capture_fps_ = kDefaultScreenCaptureFps;
-    int default_capture_fps_ = kDefaultScreenCaptureFps;
-    int min_capture_fps_ = kMinScreenCaptureFps;
-    int max_capture_fps_ = kMaxScreenCaptureFpsHighEnd;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };
