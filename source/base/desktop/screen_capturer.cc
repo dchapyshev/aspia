@@ -23,8 +23,9 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturer::ScreenCapturer(Type type)
-    : type_(type)
+ScreenCapturer::ScreenCapturer(Type type, QObject* parent)
+    : QObject(parent),
+      type_(type)
 {
     // Nothing
 }

@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 
-#include "base/desktop/screen_capturer.h"
+#include "base/desktop/screen_capturer_win.h"
 #include "base/desktop/shared_frame.h"
 #include "base/win/scoped_hdc.h"
 
@@ -28,10 +28,12 @@ namespace base {
 class Differ;
 class SharedMemoryFactory;
 
-class ScreenCapturerGdi final : public ScreenCapturer
+class ScreenCapturerGdi final : public ScreenCapturerWin
 {
+    Q_OBJECT
+
 public:
-    ScreenCapturerGdi();
+    explicit ScreenCapturerGdi(QObject* parent = nullptr);
     ~ScreenCapturerGdi() final;
 
     // ScreenCapturer implementation.

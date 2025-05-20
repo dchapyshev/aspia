@@ -253,13 +253,13 @@ quint16 TcpServer::port() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool TcpServer::isValidListenInterface(const QString& interface)
+bool TcpServer::isValidListenInterface(const QString& iface)
 {
-    if (interface.isEmpty())
+    if (iface.isEmpty())
         return true;
 
     asio::error_code error_code;
-    asio::ip::make_address(interface.toLocal8Bit().toStdString(), error_code);
+    asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
     if (error_code)
     {
         LOG(LS_ERROR) << "Invalid interface address: " << error_code;

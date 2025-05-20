@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_MIRROR_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_MIRROR_H
 
-#include "base/desktop/screen_capturer.h"
+#include "base/desktop/screen_capturer_win.h"
 #include "base/win/scoped_hdc.h"
 
 namespace base {
@@ -27,10 +27,12 @@ namespace base {
 class MirrorHelper;
 class SharedMemoryFactory;
 
-class ScreenCapturerMirror final : public ScreenCapturer
+class ScreenCapturerMirror final : public ScreenCapturerWin
 {
+    Q_OBJECT
+
 public:
-    ScreenCapturerMirror();
+    explicit ScreenCapturerMirror(QObject* parent = nullptr);
     ~ScreenCapturerMirror() final;
 
     bool isSupported();

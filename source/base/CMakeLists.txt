@@ -329,7 +329,9 @@ if (WIN32)
         desktop/screen_capturer_gdi.cc
         desktop/screen_capturer_gdi.h
         desktop/screen_capturer_mirror.cc
-        desktop/screen_capturer_mirror.h)
+        desktop/screen_capturer_mirror.h
+        desktop/screen_capturer_win.cc
+        desktop/screen_capturer_win.h)
 endif()
 
 if (LINUX)

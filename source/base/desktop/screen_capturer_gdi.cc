@@ -44,8 +44,8 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerGdi::ScreenCapturerGdi()
-    : ScreenCapturer(Type::WIN_GDI)
+ScreenCapturerGdi::ScreenCapturerGdi(QObject* parent)
+    : ScreenCapturerWin(Type::WIN_GDI, parent)
 {
     LOG(LS_INFO) << "Ctor";
 

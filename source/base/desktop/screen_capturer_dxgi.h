@@ -19,16 +19,18 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_DXGI_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_DXGI_H
 
-#include "base/desktop/screen_capturer.h"
+#include "base/desktop/screen_capturer_win.h"
 #include "base/desktop/win/dxgi_duplicator_controller.h"
 #include "base/desktop/win/dxgi_frame.h"
 
 namespace base {
 
-class ScreenCapturerDxgi final : public ScreenCapturer
+class ScreenCapturerDxgi final : public ScreenCapturerWin
 {
+    Q_OBJECT
+
 public:
-    ScreenCapturerDxgi();
+    explicit ScreenCapturerDxgi(QObject* parent = nullptr);
     ~ScreenCapturerDxgi() final;
 
     // Whether the system supports DXGI based capturing.

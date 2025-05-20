@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/memory/local_memory.h"
 
-#include <cstdint>
 #include <memory>
 #include <queue>
 
@@ -48,7 +47,7 @@ public:
     QString listenInterface() const;
     quint16 port() const;
 
-    static bool isValidListenInterface(const QString& interface);
+    static bool isValidListenInterface(const QString& iface);
 
 signals:
     void sig_newConnection();

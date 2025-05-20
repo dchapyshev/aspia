@@ -54,8 +54,8 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerMirror::ScreenCapturerMirror()
-    : ScreenCapturer(Type::WIN_MIRROR)
+ScreenCapturerMirror::ScreenCapturerMirror(QObject* parent)
+    : ScreenCapturerWin(Type::WIN_MIRROR, parent)
 {
     LOG(LS_INFO) << "Ctor";
 

@@ -19,10 +19,11 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_H
 
+#include <QObject>
+
 #include "base/desktop/frame.h"
 
 #include <memory>
-#include <string>
 #include <vector>
 
 namespace base {
@@ -31,11 +32,11 @@ class MouseCursor;
 class SharedFrame;
 class SharedMemoryFactory;
 
-class ScreenCapturer
+class ScreenCapturer : public QObject
 {
-public:
-    virtual ~ScreenCapturer() = default;
+    Q_OBJECT
 
+public:
     enum class Type
     {
         DEFAULT    = 0,
@@ -46,6 +47,9 @@ public:
         MACOSX     = 5,
         WIN_MIRROR = 6
     };
+
+    ScreenCapturer(Type type, QObject* parent);
+    virtual ~ScreenCapturer() = default;
 
     enum class Error
     {
@@ -104,7 +108,6 @@ public:
 protected:
     friend class ScreenCapturerWrapper;
 
-    explicit ScreenCapturer(Type type);
     virtual void reset() = 0;
 
     template <typename FrameType>
