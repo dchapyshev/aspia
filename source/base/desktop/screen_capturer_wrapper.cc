@@ -312,6 +312,15 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     NOTIMPLEMENTED();
 #endif
 
+    if (!screen_capturer_)
+    {
+        LOG(LS_ERROR) << "Unable to create screen capturer";
+        return;
+    }
+
+    LOG(LS_INFO) << "Selected screen capturer: "
+                 << ScreenCapturer::typeToString(screen_capturer_->type());
+
     connect(screen_capturer_, &ScreenCapturer::sig_screenTypeChanged,
             this, &ScreenCapturerWrapper::sig_screenTypeChanged);
 
