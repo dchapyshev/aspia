@@ -255,8 +255,12 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         setState(FROM_HERE, State::DETACHED);
 
     session_attach_timer_->stop();
-    session_proxy_->stopAndDettach();
-    session_->deleteLater();
+
+    if (session_)
+    {
+        session_->deleteLater();
+        session_ = nullptr;
+    }
 
     LOG(LS_INFO) << "Session process is detached (sid=" << session_id_ << ")";
 
@@ -267,8 +271,11 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 
     // The real session process has ended. We create a temporary fake session.
     session_ = new DesktopSessionFake(this);
+
     connectSessionSignals();
-    session_proxy_->attachAndStart(session_);
+
+    session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
+    session_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -409,7 +416,9 @@ void DesktopSessionManager::onNewIpcConnection()
 
     connectSessionSignals();
     setState(FROM_HERE, State::ATTACHED);
-    session_proxy_->attachAndStart(session_);
+
+    session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
+    session_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -37,28 +37,4 @@ DesktopSessionProxy::~DesktopSessionProxy()
     DCHECK(!desktop_session_);
 }
 
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
-{
-    LOG(LS_INFO) << "Desktop session attach";
-
-    desktop_session_ = desktop_session;
-    DCHECK(desktop_session_);
-
-    desktop_session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
-    desktop_session_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionProxy::stopAndDettach()
-{
-    LOG(LS_INFO) << "Desktop session dettach";
-
-    if (desktop_session_)
-    {
-        desktop_session_->stop();
-        desktop_session_ = nullptr;
-    }
-}
-
 } // namespace host

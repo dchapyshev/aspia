@@ -34,7 +34,6 @@ public:
 
     // DesktopSession implementation.
     void start() final;
-    void stop() final;
     void control(proto::internal::DesktopControl::Action action) final;
     void configure(const Config& config) final;
     void selectScreen(const proto::Screen& screen) final;

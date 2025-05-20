@@ -58,7 +58,6 @@ public:
     };
 
     virtual void start() = 0;
-    virtual void stop() = 0;
 
     virtual void control(proto::internal::DesktopControl::Action action) = 0;
     virtual void configure(const Config& config) = 0;

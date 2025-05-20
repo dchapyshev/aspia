@@ -43,12 +43,6 @@ void DesktopSessionFake::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::stop()
-{
-    LOG(LS_INFO) << "Stop called for fake session";
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "CONTROL with action: " << controlActionToString(action);

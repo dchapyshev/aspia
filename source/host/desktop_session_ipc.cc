@@ -103,12 +103,6 @@ void DesktopSessionIpc::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::stop()
-{
-    LOG(LS_INFO) << "Stop IPC desktop session (sid=" << session_id_ << ")";
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action)
