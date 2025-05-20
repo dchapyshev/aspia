@@ -23,7 +23,7 @@
 #include "base/win/session_info.h"
 #include "base/logging.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <WtsApi32.h>
 
 namespace base {

@@ -19,7 +19,7 @@
 #include "base/system_error.h"
 
 #if defined(Q_OS_WINDOWS)
-#include <Windows.h>
+#include <qt_windows.h>
 #elif defined(Q_OS_POSIX)
 #include <cstring>
 #include <cerrno>

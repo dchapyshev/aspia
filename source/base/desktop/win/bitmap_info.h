@@ -19,9 +19,8 @@
 #ifndef BASE_DESKTOP_WIN_BITMAP_INFO_H
 #define BASE_DESKTOP_WIN_BITMAP_INFO_H
 
-#include <cstdint>
-
-#include <Windows.h>
+#include <QtGlobal>
+#include <qt_windows.h>
 
 namespace base {
 

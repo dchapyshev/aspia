@@ -29,7 +29,7 @@
 #include <mmreg.h>
 #include <mmsystem.h>
 #include <objbase.h>
-#include <Windows.h>
+#include <qt_windows.h>
 #include <comdef.h>
 
 namespace {

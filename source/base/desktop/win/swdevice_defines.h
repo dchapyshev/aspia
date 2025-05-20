@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_WIN_SWDEVICE_DEFINES_H
 #define BASE_DESKTOP_WIN_SWDEVICE_DEFINES_H
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 DECLARE_HANDLE(HSWDEVICE);
 typedef HSWDEVICE *PHSWDEVICE;

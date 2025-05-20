@@ -31,7 +31,7 @@
 #include <comdef.h>
 #include <dxgi.h>
 #include <dxgiformat.h>
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base {
 

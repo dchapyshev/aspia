@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_WIN_CURSOR_H
 #define BASE_DESKTOP_WIN_CURSOR_H
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base {
 

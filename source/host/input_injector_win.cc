@@ -24,7 +24,7 @@
 #include "host/win/sas_injector.h"
 #include "host/win/touch_injector.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace host {
 

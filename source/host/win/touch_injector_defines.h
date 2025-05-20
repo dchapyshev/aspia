@@ -19,7 +19,7 @@
 #ifndef HOST_WIN_TOUCH_INJECTOR_DEFINES_H
 #define HOST_WIN_TOUCH_INJECTOR_DEFINES_H
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 typedef DWORD OWN_POINTER_INPUT_TYPE;
 typedef UINT32 OWN_POINTER_FLAGS;

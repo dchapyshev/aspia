@@ -26,7 +26,7 @@
 #include "base/macros_magic.h"
 #include "base/desktop/win/swdevice_defines.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace base {
 

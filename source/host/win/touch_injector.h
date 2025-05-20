@@ -26,7 +26,7 @@
 #include <cstdint>
 #include <map>
 
-#include <Windows.h>
+#include <qt_windows.h>
 
 namespace host {
 

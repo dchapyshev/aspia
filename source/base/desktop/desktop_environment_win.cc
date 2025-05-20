@@ -22,7 +22,7 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 
-#include <Windows.h>
+#include <qt_windows.h>
 #include <WtsApi32.h>
 
 namespace base {
