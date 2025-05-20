@@ -18,7 +18,7 @@
 
 #include "base/ipc/shared_memory.h"
 
-#include "base/ipc/shared_memory_factory_proxy.h"
+#include "base/logging.h"
 
 #include <atomic>
 #include <cstring>
@@ -189,21 +189,19 @@ const SharedMemory::PlatformHandle kInvalidHandle = -1;
 SharedMemory::SharedMemory(int id,
                            ScopedPlatformHandle&& handle,
                            void* data,
-                           base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
-    : factory_proxy_(std::move(factory_proxy)),
+                           QObject* parent)
+    : SharedMemoryBase(parent),
       handle_(std::move(handle)),
       data_(data),
       id_(id)
 {
-    if (factory_proxy_)
-        factory_proxy_->onSharedMemoryCreate(id_);
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
 SharedMemory::~SharedMemory()
 {
-    if (factory_proxy_)
-        factory_proxy_->onSharedMemoryDestroy(id_);
+    emit sig_destroyed(id_);
 
 #if defined(Q_OS_WINDOWS)
     UnmapViewOfFile(data_);
@@ -230,8 +228,7 @@ SharedMemory::~SharedMemory()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<SharedMemory> SharedMemory::create(
-    Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
 {
     static const int kRetryCount = 10;
 
@@ -255,8 +252,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
     memset(memory, 0, size);
 
-    return std::unique_ptr<SharedMemory>(
-        new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
+    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
 #elif defined(Q_OS_LINUX)
     int id = -1;
     int fd = -1;
@@ -323,8 +319,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<SharedMemory> SharedMemory::open(
-    Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
 {
 #if defined(Q_OS_WINDOWS)
     ScopedPlatformHandle file;
@@ -335,8 +330,7 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
-    return std::unique_ptr<SharedMemory>(
-        new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
+    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
 #elif defined(Q_OS_LINUX)
     std::string name = base::local8BitFromUtf16(createFilePath(id));
     int open_flags = 0;

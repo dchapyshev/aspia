@@ -19,46 +19,43 @@
 #include "base/ipc/shared_memory_factory.h"
 
 #include "base/ipc/shared_memory.h"
-#include "base/ipc/shared_memory_factory_proxy.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
 SharedMemoryFactory::SharedMemoryFactory(QObject* parent)
-    : QObject(parent),
-      factory_proxy_(base::make_local_shared<SharedMemoryFactoryProxy>(this))
+    : QObject(parent)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-SharedMemoryFactory::~SharedMemoryFactory()
-{
-    factory_proxy_->dettach();
-}
+SharedMemoryFactory::~SharedMemoryFactory() = default;
 
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedMemory> SharedMemoryFactory::create(size_t size)
 {
-    return SharedMemory::create(SharedMemory::Mode::READ_WRITE, size, factory_proxy_);
+    std::unique_ptr<SharedMemory> memory = SharedMemory::create(SharedMemory::Mode::READ_WRITE, size);
+    if (!memory)
+        return nullptr;
+
+    connect(memory.get(), &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
+
+    emit sig_memoryCreated(memory->id());
+    return memory;
 }
 
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedMemory> SharedMemoryFactory::open(int id)
 {
-    return SharedMemory::open(SharedMemory::Mode::READ_ONLY, id, factory_proxy_);
-}
+    std::unique_ptr<SharedMemory> memory = SharedMemory::open(SharedMemory::Mode::READ_ONLY, id);
+    if (!memory)
+        return nullptr;
 
-//--------------------------------------------------------------------------------------------------
-void SharedMemoryFactory::onSharedMemoryCreate(int id)
-{
-    emit sig_memoryCreated(id);
-}
+    connect(memory.get(), &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
 
-//--------------------------------------------------------------------------------------------------
-void SharedMemoryFactory::onSharedMemoryDestroy(int id)
-{
-    emit sig_memoryDestroyed(id);
+    emit sig_memoryCreated(memory->id());
+    return memory;
 }
 
 } // namespace base

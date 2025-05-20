@@ -60,7 +60,8 @@ public:
 
 private:
     explicit SharedBuffer(base::local_shared_ptr<base::SharedMemory>& shared_memory)
-        : shared_memory_(shared_memory)
+        : base::SharedMemoryBase(nullptr),
+          shared_memory_(shared_memory)
     {
         // Nothing
     }

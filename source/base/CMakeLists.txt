@@ -450,9 +450,7 @@ list(APPEND SOURCE_BASE_IPC
     ipc/shared_memory.cc
     ipc/shared_memory.h
     ipc/shared_memory_factory.cc
-    ipc/shared_memory_factory.h
-    ipc/shared_memory_factory_proxy.cc
-    ipc/shared_memory_factory_proxy.h)
+    ipc/shared_memory_factory.h)
 
 if (APPLE)
     list(APPEND SOURCE_BASE_MAC

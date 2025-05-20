@@ -19,10 +19,9 @@
 #ifndef BASE_IPC_SHARED_MEMORY_H
 #define BASE_IPC_SHARED_MEMORY_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
-#include "base/logging.h"
-#include "base/memory/local_memory.h"
-#include "build/build_config.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -33,11 +32,16 @@
 
 namespace base {
 
-class SharedMemoryFactoryProxy;
-
-class SharedMemoryBase
+class SharedMemoryBase : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit SharedMemoryBase(QObject* parent)
+        : QObject(parent)
+    {
+        // Nothing
+    }
     virtual ~SharedMemoryBase() = default;
 
     enum class Mode
@@ -80,26 +84,25 @@ public:
 
 class SharedMemory final : public SharedMemoryBase
 {
+    Q_OBJECT
+
 public:
     virtual ~SharedMemory() final;
 
-    static std::unique_ptr<SharedMemory> create(
-        Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
-    static std::unique_ptr<SharedMemory> open(
-        Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
+    static std::unique_ptr<SharedMemory> create(Mode mode, size_t size);
+    static std::unique_ptr<SharedMemory> open(Mode mode, int id);
 
     // SharedMemoryBase implementation.
     void* data() final { return data_; }
     PlatformHandle handle() const final { return handle_.get(); }
     int id() const final { return id_; }
 
-private:
-    SharedMemory(int id,
-                 ScopedPlatformHandle&& handle,
-                 void* data,
-                 base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
+signals:
+    void sig_destroyed(int id);
 
-    base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
+private:
+    SharedMemory(int id, ScopedPlatformHandle&& handle, void* data, QObject* parent = nullptr);
+
     ScopedPlatformHandle handle_;
     void* data_;
     int id_;

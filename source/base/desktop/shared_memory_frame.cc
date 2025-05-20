@@ -18,6 +18,7 @@
 
 #include "base/desktop/shared_memory_frame.h"
 
+#include "base/logging.h"
 #include "base/ipc/shared_memory.h"
 #include "base/ipc/shared_memory_factory.h"
 

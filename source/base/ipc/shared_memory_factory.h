@@ -22,14 +22,12 @@
 #include <QObject>
 
 #include "base/macros_magic.h"
-#include "base/memory/local_memory.h"
 
 #include <memory>
 
 namespace base {
 
 class SharedMemory;
-class SharedMemoryFactoryProxy;
 
 class SharedMemoryFactory final : public QObject
 {
@@ -55,12 +53,6 @@ signals:
     void sig_memoryDestroyed(int id);
 
 private:
-    friend class SharedMemoryFactoryProxy;
-    void onSharedMemoryCreate(int id);
-    void onSharedMemoryDestroy(int id);
-
-    base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
-
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);
 };
 
