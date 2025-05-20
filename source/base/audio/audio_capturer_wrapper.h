@@ -26,9 +26,7 @@ namespace base {
 
 class AudioCapturer;
 
-class AudioCapturerWrapper final
-    : public QObject,
-      public Thread::Delegate
+class AudioCapturerWrapper final : public QObject
 {
     Q_OBJECT
 
@@ -41,13 +39,12 @@ public:
 signals:
     void sig_sendMessage(const QByteArray& data);
 
-protected:
-    // Thread::Delegate implementation.
-    void onBeforeThreadRunning() final;
-    void onAfterThreadRunning() final;
+private slots:
+    void onBeforeThreadRunning();
+    void onAfterThreadRunning();
 
 private:
-    std::unique_ptr<Thread> thread_;
+    Thread thread_;
     std::unique_ptr<AudioCapturer> capturer_;
     proto::internal::DesktopToService outgoing_message_;
 

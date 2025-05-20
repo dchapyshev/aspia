@@ -24,9 +24,7 @@
 
 namespace common {
 
-class ClipboardMonitor final
-    : public QObject,
-      public base::Thread::Delegate
+class ClipboardMonitor final : public QObject
 {
     Q_OBJECT
 
@@ -44,13 +42,12 @@ signals:
     void sig_injectClipboardEventPrivate(const proto::ClipboardEvent& event);
     void sig_clearClipboardPrivate();
 
-protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() final;
-    void onAfterThreadRunning() final;
+private slots:
+    void onBeforeThreadRunning();
+    void onAfterThreadRunning();
 
 private:
-    std::unique_ptr<base::Thread> thread_;
+    base::Thread thread_;
     std::unique_ptr<common::Clipboard> clipboard_;
 
     DISALLOW_COPY_AND_ASSIGN(ClipboardMonitor);

@@ -43,9 +43,7 @@ namespace host {
 
 class InputInjector;
 
-class DesktopSessionAgent final
-    : public QObject,
-      public base::Thread::Delegate
+class DesktopSessionAgent final : public QObject
 {
     Q_OBJECT
 
@@ -55,12 +53,9 @@ public:
 
     void start(const QString& channel_id);
 
-protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() final;
-    void onAfterThreadRunning() final;
-
 private slots:
+    void onBeforeThreadRunning();
+    void onAfterThreadRunning();
     void onSharedMemoryCreate(int id);
     void onSharedMemoryDestroy(int id);
     void onScreenListChanged(

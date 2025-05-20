@@ -37,24 +37,29 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval),
       shared_pool_(std::move(shared_pool)),
-      thread_(std::make_unique<base::Thread>(base::Thread::AsioDispatcher, this))
+      thread_(base::Thread::AsioDispatcher)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(peer_port_ && shared_pool_);
+
+    connect(&thread_, &base::Thread::started, this, &SessionsWorker::onBeforeThreadRunning,
+            Qt::DirectConnection);
+    connect(&thread_, &base::Thread::finished, this, &SessionsWorker::onAfterThreadRunning,
+            Qt::DirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionsWorker::~SessionsWorker()
 {
     LOG(LS_INFO) << "Dtor";
-    thread_->stop();
+    thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::start()
 {
     LOG(LS_INFO) << "Starting session worker";
-    thread_->start();
+    thread_.start();
 }
 
 //--------------------------------------------------------------------------------------------------

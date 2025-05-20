@@ -72,10 +72,15 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     : QObject(parent),
-      ui_thread_(base::Thread::QtDispatcher, this),
+      ui_thread_(base::Thread::QtDispatcher),
       screen_capture_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&ui_thread_, &base::Thread::started, this, &DesktopSessionAgent::onBeforeThreadRunning,
+            Qt::DirectConnection);
+    connect(&ui_thread_, &base::Thread::finished, this, &DesktopSessionAgent::onAfterThreadRunning,
+            Qt::DirectConnection);
 
 #if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.

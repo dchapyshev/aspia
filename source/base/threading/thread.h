@@ -30,25 +30,7 @@ class Thread final : public QThread
 public:
     enum EventDispatcher { AsioDispatcher, QtDispatcher };
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        // Called just prior to starting the message loop.
-        virtual void onBeforeThreadRunning()
-        {
-            // Nothing
-        }
-
-        // Called just after the message loop ends.
-        virtual void onAfterThreadRunning()
-        {
-            // Nothing
-        }
-    };
-
-    Thread(EventDispatcher dispatcher, Delegate* delegate, QObject* parent = nullptr);
+    Thread(EventDispatcher dispatcher, QObject* parent = nullptr);
 
     void stop();
 
@@ -57,8 +39,6 @@ protected:
     void run() final;
 
 private:
-    Delegate* delegate_ = nullptr;
-
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };
 

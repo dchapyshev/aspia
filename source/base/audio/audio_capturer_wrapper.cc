@@ -27,31 +27,34 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::AudioCapturerWrapper(QObject* parent)
     : QObject(parent),
-      thread_(std::make_unique<Thread>(Thread::AsioDispatcher, this))
+      thread_(Thread::AsioDispatcher)
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&thread_, &Thread::started, this, &AudioCapturerWrapper::onBeforeThreadRunning,
+            Qt::DirectConnection);
+    connect(&thread_, &Thread::finished, this, &AudioCapturerWrapper::onAfterThreadRunning,
+            Qt::DirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::~AudioCapturerWrapper()
 {
     LOG(LS_INFO) << "Dtor";
-    thread_->stop();
+    thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::start()
 {
     LOG(LS_INFO) << "Starting audio capturer";
-    DCHECK(thread_);
-
-    thread_->start();
+    thread_.start();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::onBeforeThreadRunning()
 {
-    thread_->setPriority(Thread::HighestPriority);
+    thread_.setPriority(Thread::HighestPriority);
 
     capturer_ = AudioCapturer::create();
     if (!capturer_)

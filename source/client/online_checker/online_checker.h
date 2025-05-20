@@ -31,9 +31,7 @@
 
 namespace client {
 
-class OnlineChecker final
-    : public QObject,
-      public base::Thread::Delegate
+class OnlineChecker final : public QObject
 {
     Q_OBJECT
 
@@ -56,12 +54,9 @@ signals:
     void sig_checkerResult(int computer_id, bool online);
     void sig_checkerFinished();
 
-protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() final;
-    void onAfterThreadRunning() final;
-
 private slots:
+    void onBeforeThreadRunning();
+    void onAfterThreadRunning();
     void onDirectCheckerResult(int computer_id, bool online);
     void onDirectCheckerFinished();
 

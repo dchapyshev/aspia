@@ -28,9 +28,8 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-Thread::Thread(EventDispatcher dispatcher, Delegate* delegate, QObject* parent)
-    : QThread(parent),
-      delegate_(delegate)
+Thread::Thread(EventDispatcher dispatcher, QObject* parent)
+    : QThread(parent)
 {
     if (dispatcher == AsioDispatcher)
         setEventDispatcher(new AsioEventDispatcher());
@@ -51,13 +50,7 @@ void Thread::run()
     CHECK(com_initializer.isSucceeded());
 #endif // defined(Q_OS_WINDOWS)
 
-    if (delegate_)
-        delegate_->onBeforeThreadRunning();
-
     exec();
-
-    if (delegate_)
-        delegate_->onAfterThreadRunning();
 }
 
 } // namespace base

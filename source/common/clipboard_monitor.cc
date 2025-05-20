@@ -19,7 +19,6 @@
 #include "common/clipboard_monitor.h"
 
 #include "base/logging.h"
-#include "build/build_config.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/clipboard_win.h"
@@ -46,23 +45,28 @@ const base::Thread::EventDispatcher kEventDispatcher = base::Thread::AsioDispatc
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::ClipboardMonitor(QObject* parent)
     : QObject(parent),
-      thread_(std::make_unique<base::Thread>(kEventDispatcher, this))
+      thread_(kEventDispatcher)
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&thread_, &base::Thread::started, this, &ClipboardMonitor::onBeforeThreadRunning,
+            Qt::DirectConnection);
+    connect(&thread_, &base::Thread::finished, this, &ClipboardMonitor::onAfterThreadRunning,
+            Qt::DirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::~ClipboardMonitor()
 {
     LOG(LS_INFO) << "Dtor";
-    thread_->stop();
+    thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::start()
 {
     LOG(LS_INFO) << "Starting clipboard monitor";
-    thread_->start();
+    thread_.start();
 }
 
 //--------------------------------------------------------------------------------------------------

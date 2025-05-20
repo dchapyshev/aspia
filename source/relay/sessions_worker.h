@@ -26,9 +26,7 @@ namespace relay {
 
 class SharedPool;
 
-class SessionsWorker final
-    : public QObject,
-      public base::Thread::Delegate
+class SessionsWorker final : public QObject
 {
     Q_OBJECT
 
@@ -51,10 +49,9 @@ signals:
     void sig_sessionFinished();
     void sig_disconnectSession(quint64 session_id);
 
-protected:
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() final;
-    void onAfterThreadRunning() final;
+private slots:
+    void onBeforeThreadRunning();
+    void onAfterThreadRunning();
 
 private:
     const QString listen_interface_;
@@ -65,7 +62,7 @@ private:
 
     std::unique_ptr<SharedPool> shared_pool_;
 
-    std::unique_ptr<base::Thread> thread_;
+    base::Thread thread_;
     std::unique_ptr<SessionManager> session_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionsWorker);

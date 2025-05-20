@@ -26,9 +26,14 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(QObject* parent)
     : QObject(parent),
-      io_thread_(base::Thread::AsioDispatcher, this)
+      io_thread_(base::Thread::AsioDispatcher)
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(&io_thread_, &base::Thread::started, this, &OnlineChecker::onBeforeThreadRunning,
+            Qt::DirectConnection);
+    connect(&io_thread_, &base::Thread::finished, this, &OnlineChecker::onAfterThreadRunning,
+            Qt::DirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
