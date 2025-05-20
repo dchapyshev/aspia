@@ -25,7 +25,7 @@
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
-#include "host/host_key_storage.h"
+#include "host/host_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
 #include "proto/meta_types.h"
@@ -341,7 +341,7 @@ int hostServiceMain(int& argc, char* argv[])
         if (!session_name.has_value())
             return 1;
 
-        HostKeyStorage storage;
+        HostStorage storage;
         out << storage.lastHostId(*session_name) << Qt::endl;
         return 0;
     }

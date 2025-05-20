@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "host/host_ipc_storage.h"
+#include "host/host_storage.h"
 
 namespace host {
 
@@ -55,7 +55,7 @@ UserSessionAgent::~UserSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectToService()
 {
-    QString channel_id = HostIpcStorage().channelIdForUI();
+    QString channel_id = HostStorage().channelIdForUI();
     LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
     ipc_channel_ = new base::IpcChannel(this);

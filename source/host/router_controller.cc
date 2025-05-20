@@ -22,7 +22,7 @@
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
-#include "host/host_key_storage.h"
+#include "host/host_storage.h"
 #include "proto/router_peer.pb.h"
 
 namespace host {
@@ -76,7 +76,7 @@ void RouterController::hostIdRequest(const QString& session_name)
         return;
     }
 
-    HostKeyStorage host_key_storage;
+    HostStorage host_key_storage;
     QByteArray host_key = host_key_storage.key(session_name);
 
     pending_id_requests_.emplace(session_name);
@@ -248,7 +248,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
         }
 
         const QString& session_name = pending_id_requests_.front();
-        HostKeyStorage host_key_storage;
+        HostStorage host_key_storage;
 
         QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
         if (!host_key.isEmpty())

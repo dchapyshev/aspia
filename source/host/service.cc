@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/win/safe_mode_util.h"
 #include "base/win/session_status.h"
+#include "host/host_storage.h"
 #include "host/service_constants.h"
 #include "host/server.h"
 
@@ -95,11 +96,10 @@ void Service::onStart()
         PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 
-    SystemSettings settings;
-    if (settings.isBootToSafeMode())
+    HostStorage storage;
+    if (storage.isBootToSafeMode())
     {
-        settings.setBootToSafeMode(false);
-        settings.sync();
+        storage.setBootToSafeMode(false);
 
         if (!base::SafeModeUtil::setSafeMode(false))
         {

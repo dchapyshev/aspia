@@ -50,10 +50,8 @@ list(APPEND SOURCE_HOST_CORE
     file_agent_main.cc
     file_agent_main.h
     host_export.h
-    host_ipc_storage.cc
-    host_ipc_storage.h
-    host_key_storage.cc
-    host_key_storage.h
+    host_storage.cc
+    host_storage.h
     input_injector.h
     integrity_check.cc
     integrity_check.h

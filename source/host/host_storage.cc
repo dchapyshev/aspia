@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_key_storage.h"
+#include "host/host_storage.h"
 
 #include "base/xml_settings.h"
 #include "base/crypto/generic_hash.h"
@@ -44,17 +44,17 @@ QString sessionKeyForHostId(const QString& session_name)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HostKeyStorage::HostKeyStorage()
-    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "host_key")
+HostStorage::HostStorage()
+    : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "host_storage")
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-HostKeyStorage::~HostKeyStorage() = default;
+HostStorage::~HostStorage() = default;
 
 //--------------------------------------------------------------------------------------------------
-QByteArray HostKeyStorage::key(const QString& session_name) const
+QByteArray HostStorage::key(const QString& session_name) const
 {
     if (session_name.isEmpty())
         return impl_.value("console").toByteArray();
@@ -63,7 +63,7 @@ QByteArray HostKeyStorage::key(const QString& session_name) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostKeyStorage::setKey(const QString& session_name, const QByteArray& key)
+void HostStorage::setKey(const QString& session_name, const QByteArray& key)
 {
     if (session_name.isEmpty())
         impl_.setValue("console", key);
@@ -74,7 +74,7 @@ void HostKeyStorage::setKey(const QString& session_name, const QByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::HostId HostKeyStorage::lastHostId(const QString& session_name) const
+base::HostId HostStorage::lastHostId(const QString& session_name) const
 {
     if (session_name.isEmpty())
         return impl_.value("console_host_id").toULongLong();
@@ -83,7 +83,7 @@ base::HostId HostKeyStorage::lastHostId(const QString& session_name) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostKeyStorage::setLastHostId(const QString& session_name, base::HostId host_id)
+void HostStorage::setLastHostId(const QString& session_name, base::HostId host_id)
 {
     if (session_name.isEmpty())
         impl_.setValue("console_host_id", host_id);
@@ -91,6 +91,43 @@ void HostKeyStorage::setLastHostId(const QString& session_name, base::HostId hos
         impl_.setValue(sessionKeyForHostId(session_name), host_id);
 
     impl_.sync();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString HostStorage::channelIdForUI() const
+{
+    return impl_.value("ui_channel_id").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setChannelIdForUI(const QString& channel_id)
+{
+    impl_.setValue("ui_channel_id", channel_id);
+    impl_.sync();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 HostStorage::lastUpdateCheck() const
+{
+    return impl_.value("last_update_check").toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setLastUpdateCheck(qint64 timepoint)
+{
+    impl_.setValue("last_update_check", timepoint);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool HostStorage::isBootToSafeMode() const
+{
+    return impl_.value("boot_to_safe_mode").toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setBootToSafeMode(bool enable)
+{
+    impl_.setValue("boot_to_safe_mode", enable);
 }
 
 } // namespace host

@@ -22,7 +22,7 @@
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/client_session.h"
-#include "host/host_ipc_storage.h"
+#include "host/host_storage.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -39,9 +39,9 @@ namespace host {
 
 namespace {
 
-#if defined(Q_OS_POSIX)
+#if defined(Q_OS_UNIX)
 const char kExecutableNameForUi[] = "aspia_host";
-#endif // defined(Q_OS_POSIX)
+#endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_WINDOWS)
 const char kExecutableNameForUi[] = "aspia_host.exe";
@@ -167,7 +167,7 @@ bool UserSessionManager::start()
             this, &UserSessionManager::onIpcNewConnection);
 
     QString ipc_channel_for_ui = base::IpcServer::createUniqueId();
-    HostIpcStorage ipc_storage;
+    HostStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
 
     LOG(LS_INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";

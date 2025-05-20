@@ -24,6 +24,7 @@
 #include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
+#include "host/host_storage.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/files/file_util.h"
@@ -621,7 +622,9 @@ void Server::checkForUpdates()
     if (!settings_.isAutoUpdateEnabled())
         return;
 
-    qint64 last_timepoint = settings_.lastUpdateCheck();
+    HostStorage storage;
+
+    qint64 last_timepoint = storage.lastUpdateCheck();
     qint64 current_timepoint = std::time(nullptr);
 
     LOG(LS_INFO) << "Last timepoint: " << last_timepoint << ", current: " << current_timepoint;
@@ -629,7 +632,7 @@ void Server::checkForUpdates()
     qint64 time_diff = current_timepoint - last_timepoint;
     if (time_diff <= 0)
     {
-        settings_.setLastUpdateCheck(current_timepoint);
+        storage.setLastUpdateCheck(current_timepoint);
         return;
     }
 
@@ -647,7 +650,7 @@ void Server::checkForUpdates()
         return;
     }
 
-    settings_.setLastUpdateCheck(current_timepoint);
+    storage.setLastUpdateCheck(current_timepoint);
 
     LOG(LS_INFO) << "Start checking for updates";
 

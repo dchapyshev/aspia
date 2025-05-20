@@ -111,12 +111,6 @@ public:
     int updateCheckFrequency() const;
     void setUpdateCheckFrequency(int days);
 
-    qint64 lastUpdateCheck() const;
-    void setLastUpdateCheck(qint64 timepoint);
-
-    bool isBootToSafeMode() const;
-    void setBootToSafeMode(bool enable);
-
 private:
     mutable QSettings settings_;
 

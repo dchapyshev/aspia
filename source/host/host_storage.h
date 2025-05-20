@@ -16,30 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_HOST_IPC_STORAGE_H
-#define HOST_HOST_IPC_STORAGE_H
+#ifndef HOST_HOST_STORAGE_H
+#define HOST_HOST_STORAGE_H
 
 #include "base/macros_magic.h"
+#include "base/peer/host_id.h"
 
 #include <QSettings>
 
 namespace host {
 
-class HostIpcStorage
+class HostStorage
 {
 public:
-    HostIpcStorage();
-    ~HostIpcStorage();
+    HostStorage();
+    ~HostStorage();
+
+    QByteArray key(const QString& session_name) const;
+    void setKey(const QString& session_name, const QByteArray& key);
+
+    base::HostId lastHostId(const QString& session_name) const;
+    void setLastHostId(const QString& session_name, base::HostId host_id);
 
     QString channelIdForUI() const;
     void setChannelIdForUI(const QString& channel_id);
 
+    qint64 lastUpdateCheck() const;
+    void setLastUpdateCheck(qint64 timepoint);
+
+    bool isBootToSafeMode() const;
+    void setBootToSafeMode(bool enable);
+
 private:
     QSettings impl_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostIpcStorage);
+    DISALLOW_COPY_AND_ASSIGN(HostStorage);
 };
 
 } // namespace host
 
-#endif // HOST_HOST_IPC_STORAGE_H
+#endif // HOST_HOST_STORAGE_H

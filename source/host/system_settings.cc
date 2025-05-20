@@ -453,28 +453,4 @@ void SystemSettings::setUpdateCheckFrequency(int days)
     settings_.setValue("UpdateCheckFrequency", days);
 }
 
-//--------------------------------------------------------------------------------------------------
-qint64 SystemSettings::lastUpdateCheck() const
-{
-    return settings_.value("LastUpdateCheck").toLongLong();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setLastUpdateCheck(qint64 timepoint)
-{
-    settings_.setValue("LastUpdateCheck", timepoint);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::isBootToSafeMode() const
-{
-    return settings_.value("BootToSafeMode").toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setBootToSafeMode(bool enable)
-{
-    settings_.setValue("BootToSafeMode", enable);
-}
-
 } // namespace host
