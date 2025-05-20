@@ -52,8 +52,8 @@ signals:
 protected:
     // Client implementation.
     void onSessionStarted() final;
-    void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
-    void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
+    void onSessionMessageReceived(const QByteArray& buffer) final;
+    void onSessionMessageWritten(size_t pending) final;
 
 private:
     void onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket);

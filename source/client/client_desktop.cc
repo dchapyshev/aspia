@@ -144,7 +144,7 @@ void ClientDesktop::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientDesktop::onSessionMessageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -190,7 +190,7 @@ void ClientDesktop::onSessionMessageReceived(quint8 /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageWritten(quint8 /* channel_id */, size_t pending)
+void ClientDesktop::onSessionMessageWritten(size_t pending)
 {
     if (pending >= 2)
         input_event_filter_.setNetworkOverflow(true);

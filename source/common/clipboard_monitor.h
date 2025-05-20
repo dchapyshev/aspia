@@ -45,7 +45,7 @@ signals:
     void sig_clearClipboardPrivate();
 
 protected:
-    // base::AsioThread::Delegate implementation.
+    // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() final;
     void onAfterThreadRunning() final;
 

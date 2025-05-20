@@ -132,7 +132,7 @@ void ClientPortForwarding::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientPortForwarding::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientPortForwarding::onSessionMessageReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -224,7 +224,7 @@ void ClientPortForwarding::onSessionMessageReceived(quint8 /* channel_id */, con
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientPortForwarding::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
+void ClientPortForwarding::onSessionMessageWritten(size_t /* pending */)
 {
     // Nothing
 }

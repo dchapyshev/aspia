@@ -79,8 +79,8 @@ protected:
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;
-    virtual void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
-    virtual void onSessionMessageWritten(quint8 channel_id, size_t pending) = 0;
+    virtual void onSessionMessageReceived(const QByteArray& buffer) = 0;
+    virtual void onSessionMessageWritten(size_t pending) = 0;
 
     // Sends outgoing message.
     void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);

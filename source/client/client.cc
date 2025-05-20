@@ -322,7 +322,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
-        onSessionMessageReceived(channel_id, buffer);
+        onSessionMessageReceived(buffer);
     }
     else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
     {
@@ -339,7 +339,7 @@ void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
-        onSessionMessageWritten(channel_id, pending);
+        onSessionMessageWritten(pending);
     }
     else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
     {
