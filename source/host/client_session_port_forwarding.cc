@@ -139,7 +139,7 @@ void ClientSessionPortForwarding::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionPortForwarding::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -221,12 +221,6 @@ void ClientSessionPortForwarding::onReceived(quint8 /* channel_id */, const QByt
     {
         LOG(LS_ERROR) << "Unhandled message";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionPortForwarding::onWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,7 +375,7 @@ void ClientSessionPortForwarding::sendPortForwardingResult(
     result->set_error_code(error_code);
 
     LOG(LS_INFO) << "Sending port forwarding result: " << error_code;
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 
 void ClientSessionPortForwarding::sendPortForwardingData(const char *buffer, size_t length)
@@ -392,7 +386,7 @@ void ClientSessionPortForwarding::sendPortForwardingData(const char *buffer, siz
     data->set_data(buffer, length);
 
     // Send data to client.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 
 } // namespace host

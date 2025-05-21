@@ -48,7 +48,7 @@ void ClientSessionSystemInfo::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionSystemInfo::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientSessionSystemInfo::onReceived(const QByteArray& buffer)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
@@ -62,14 +62,8 @@ void ClientSessionSystemInfo::onReceived(quint8 /* channel_id */, const QByteArr
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, system_info);
+    sendMessage(system_info);
 #endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionSystemInfo::onWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    // Nothing
 }
 
 } // namespace host

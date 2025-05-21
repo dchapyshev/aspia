@@ -77,8 +77,7 @@ signals:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(quint8 channel_id, const QByteArray& buffer) final;
-    void onWritten(quint8 channel_id, size_t pending) final;
+    void onReceived(const QByteArray& buffer) final;
 
 private slots:
 #if defined(Q_OS_WINDOWS)

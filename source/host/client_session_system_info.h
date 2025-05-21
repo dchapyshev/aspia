@@ -35,8 +35,7 @@ public:
 protected:
     // ClientSession implementation.
     void onStarted() final;
-    void onReceived(quint8 channel_id, const QByteArray& buffer) final;
-    void onWritten(quint8 channel_id, size_t pending) final;
+    void onReceived(const QByteArray& buffer) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);

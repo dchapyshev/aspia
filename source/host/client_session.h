@@ -90,18 +90,16 @@ protected:
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
     virtual void onStarted() = 0;
-    virtual void onReceived(quint8 channel_id, const QByteArray& buffer) = 0;
-    virtual void onWritten(quint8 channel_id, size_t pending) = 0;
+    virtual void onReceived(const QByteArray& buffer) = 0;
 
-    void sendMessage(quint8 channel_id, QByteArray&& buffer);
-    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(QByteArray&& buffer);
+    void sendMessage(const google::protobuf::MessageLite& message);
 
     size_t pendingMessages() const;
 
 private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
     base::SessionId session_id_ = base::kInvalidSessionId;

@@ -96,8 +96,6 @@ void ClientSession::start()
             this, &ClientSession::onTcpDisconnected);
     connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
             this, &ClientSession::onTcpMessageReceived);
-    connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
-            this, &ClientSession::onTcpMessageWritten);
 
     channel_->setKeepAlive(true);
     channel_->resume();
@@ -157,15 +155,15 @@ void ClientSession::setSessionId(base::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(quint8 channel_id, QByteArray&& buffer)
+void ClientSession::sendMessage(QByteArray&& buffer)
 {
-    channel_->send(channel_id, std::move(buffer));
+    channel_->send(proto::HOST_CHANNEL_ID_SESSION, std::move(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
+void ClientSession::sendMessage(const google::protobuf::MessageLite& message)
 {
-    channel_->send(channel_id, base::serialize(message));
+    channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,7 +187,7 @@ void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
-        onReceived(channel_id, buffer);
+        onReceived(buffer);
     }
     else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
     {
@@ -198,23 +196,6 @@ void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
     else
     {
         LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpMessageWritten(quint8 channel_id, size_t pending)
-{
-    if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
-    {
-        onWritten(channel_id, pending);
-    }
-    else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
-    {
-        // TODO
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 

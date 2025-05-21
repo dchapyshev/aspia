@@ -42,7 +42,7 @@ ClientSessionTextChat::~ClientSessionTextChat()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
 {
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, text_chat);
+    sendMessage(text_chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void ClientSessionTextChat::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientSessionTextChat::onReceived(const QByteArray& buffer)
 {
     proto::TextChat text_chat;
 
@@ -98,12 +98,6 @@ void ClientSessionTextChat::onReceived(quint8 /* channel_id */, const QByteArray
         if (text_chat.has_chat_message())
             sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::onWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    // Nothing
 }
 
 } // namespace host

@@ -314,14 +314,14 @@ void ClientSessionFileTransfer::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
         proto::FileReply reply;
         reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
 
-        sendMessage(proto::HOST_CHANNEL_ID_SESSION, reply);
+        sendMessage(reply);
         return;
     }
 
@@ -337,12 +337,6 @@ void ClientSessionFileTransfer::onReceived(quint8 /* channel_id */, const QByteA
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onIpcDisconnected()
 {
     onError(FROM_HERE);
@@ -351,7 +345,7 @@ void ClientSessionFileTransfer::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 {
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, QByteArray(buffer));
+    sendMessage(QByteArray(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------

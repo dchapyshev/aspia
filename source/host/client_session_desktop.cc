@@ -139,11 +139,11 @@ void ClientSessionDesktop::onStarted()
     LOG(LS_INFO) << "OS type: " << capabilities->os_type();
 
     // Send the request.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 {
     incoming_message_.Clear();
 
@@ -245,12 +245,6 @@ void ClientSessionDesktop::onReceived(quint8 /* channel_id */, const QByteArray&
     }
 }
 
-//--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::onWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    // Nothing
-}
-
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
@@ -261,7 +255,7 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 #endif // defined(Q_OS_WINDOWS)
 
@@ -353,7 +347,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
     if (outgoing_message_.has_video_packet() || outgoing_message_.has_cursor_shape())
     {
-        sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+        sendMessage(outgoing_message_);
 
         if (outgoing_message_.has_video_packet())
         {
@@ -378,7 +372,7 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     if (!audio_encoder_->encode(audio_packet, outgoing_message_.mutable_audio_packet()))
         return;
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
     stat_counter_.addAudioPacket();
 }
 
@@ -395,7 +389,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_video_packet()->set_error_code(error_code);
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
     stat_counter_.addVideoError();
 }
 
@@ -416,7 +410,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     position->set_x(pos_x);
     position->set_y(pos_y);
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
     stat_counter_.addCursorPosition();
 }
 
@@ -430,7 +424,7 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -443,7 +437,7 @@ void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
     extension->set_name(common::kScreenTypeExtension);
     extension->set_data(type.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -453,7 +447,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     {
         outgoing_message_.Clear();
         outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+        sendMessage(outgoing_message_);
         stat_counter_.addOutgoingClipboardEvent();
     }
     else
@@ -811,7 +805,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_);
+    sendMessage(outgoing_message_);
 #endif // defined(Q_OS_WINDOWS)
 }
 
