@@ -62,9 +62,7 @@ public:
 
     void send(const QByteArray& buffer);
 
-    ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
-    QString peerFilePath() const;
 
 signals:
     void sig_disconnected();
@@ -107,7 +105,6 @@ private:
     quint32 read_size_ = 0;
     QByteArray read_buffer_;
 
-    ProcessId peer_process_id_ = kNullProcessId;
     SessionId peer_session_id_ = kInvalidSessionId;
 
     class Handler;

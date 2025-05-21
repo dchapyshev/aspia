@@ -49,34 +49,6 @@ const char kPipeNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
 //--------------------------------------------------------------------------------------------------
-ProcessId clientProcessIdImpl(HANDLE pipe_handle)
-{
-    ULONG process_id = kNullProcessId;
-
-    if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
-    {
-        PLOG(LS_ERROR) << "GetNamedPipeClientProcessId failed";
-        return kNullProcessId;
-    }
-
-    return process_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-ProcessId serverProcessIdImpl(HANDLE pipe_handle)
-{
-    ULONG process_id = kNullProcessId;
-
-    if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
-    {
-        PLOG(LS_ERROR) << "GetNamedPipeServerProcessId failed";
-        return kNullProcessId;
-    }
-
-    return process_id;
-}
-
-//--------------------------------------------------------------------------------------------------
 SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = kInvalidSessionId;
@@ -192,7 +164,6 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
     write_queue_.reserve(kWriteQueueReservedSize);
 
 #if defined(Q_OS_WINDOWS)
-    peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -262,7 +233,6 @@ bool IpcChannel::connect(const QString& channel_id)
         return false;
     }
 
-    peer_process_id_ = serverProcessIdImpl(stream_.native_handle());
     peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
 
     is_connected_ = true;
@@ -356,33 +326,6 @@ void IpcChannel::send(const QByteArray& buffer)
 
     if (schedule_write)
         doWriteSize();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString IpcChannel::peerFilePath() const
-{
-#if defined(Q_OS_WINDOWS)
-    ScopedHandle process(
-        OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
-    if (!process.isValid())
-    {
-        PLOG(LS_ERROR) << "OpenProcess failed";
-        return QString();
-    }
-
-    wchar_t buffer[MAX_PATH] = { 0 };
-
-    if (!GetModuleFileNameExW(process.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
-    {
-        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
-        return QString();
-    }
-
-    return QString::fromWCharArray(buffer);
-#else
-    NOTIMPLEMENTED();
-    return QString();
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
