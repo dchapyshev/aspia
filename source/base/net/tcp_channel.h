@@ -72,7 +72,7 @@ public:
     void resume();
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
-    void send(quint8 channel_id, QByteArray&& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -111,8 +111,6 @@ protected:
     void disconnect();
 
 private:
-    friend class TcpChannelProxy;
-
     enum class ReadState
     {
         IDLE,                // No reads are in progress right now.
@@ -159,7 +157,7 @@ private:
     void onMessageWritten(quint8 channel_id);
     void onMessageReceived();
 
-    void addWriteTask(WriteTask::Type type, quint8 channel_id, QByteArray&& data);
+    void addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
@@ -180,7 +178,6 @@ private:
     void onKeepAliveTimeout(const std::error_code& error_code);
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
-    std::shared_ptr<TcpChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;

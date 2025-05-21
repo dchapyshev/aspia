@@ -20,8 +20,7 @@
 #define BASE_NET_WRITE_TASK_H
 
 #include <QByteArray>
-
-#include <queue>
+#include <QQueue>
 
 namespace base {
 
@@ -30,10 +29,10 @@ class WriteTask
 public:
     enum class Type { SERVICE_DATA, USER_DATA };
 
-    WriteTask(Type type, quint8 channel_id, QByteArray&& data)
+    WriteTask(Type type, quint8 channel_id, const QByteArray& data)
         : type_(type),
           channel_id_(channel_id),
-          data_(std::move(data))
+          data_(data)
     {
         // Nothing
     }
@@ -52,7 +51,7 @@ private:
     QByteArray data_;
 };
 
-using WriteQueue = std::queue<WriteTask>;
+using WriteQueue = QQueue<WriteTask>;
 
 } // namespace base
 

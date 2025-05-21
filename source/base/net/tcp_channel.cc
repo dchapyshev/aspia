@@ -36,6 +36,8 @@ namespace base {
 
 namespace {
 
+const int kWriteQueueReservedSize = 32;
+
 std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
     std::string str;
@@ -184,6 +186,8 @@ TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(socket_.is_open());
+
+    write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -315,9 +319,9 @@ void TcpChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(quint8 channel_id, QByteArray&& buffer)
+void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
-    addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
+    addWriteTask(WriteTask::Type::USER_DATA, channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -598,12 +602,12 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(WriteTask::Type type, quint8 channel_id, QByteArray&& data)
+void TcpChannel::addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(type, channel_id, std::move(data));
+    write_queue_.push_back(WriteTask(type, channel_id, data));
 
     if (schedule_write)
         doWrite();
@@ -700,7 +704,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
     quint8 channel_id = task.channelId();
 
     // Delete the sent message from the queue.
-    write_queue_.pop();
+    write_queue_.pop_front();
 
     // If the queue is not empty, then we send the following message.
     bool schedule_write = !write_queue_.empty();

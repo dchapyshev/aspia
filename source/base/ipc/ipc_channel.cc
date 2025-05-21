@@ -36,6 +36,7 @@ namespace base {
 
 namespace {
 
+const int kWriteQueueReservedSize = 32;
 const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(Q_OS_UNIX)
@@ -187,6 +188,8 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       handler_(base::make_local_shared<Handler>(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    write_queue_.reserve(kWriteQueueReservedSize);
 
 #if defined(Q_OS_WINDOWS)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
@@ -342,14 +345,14 @@ void IpcChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(QByteArray&& buffer)
+void IpcChannel::send(const QByteArray& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(std::move(buffer));
+    write_queue_.push_back(buffer);
 
     if (schedule_write)
         doWriteSize();
@@ -473,7 +476,7 @@ void IpcChannel::onWriteData(const std::error_code& error_code, size_t bytes_tra
     DCHECK(!write_queue_.empty());
 
     // Delete the sent message from the queue.
-    write_queue_.pop();
+    write_queue_.pop_front();
 
     // If the queue is not empty, then we send the following message.
     if (write_queue_.empty())

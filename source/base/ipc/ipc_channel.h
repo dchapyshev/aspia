@@ -32,10 +32,9 @@
 #include <asio/local/stream_protocol.hpp>
 #endif
 
-#include <queue>
-
 #include <QByteArray>
 #include <QObject>
+#include <QQueue>
 
 namespace base {
 
@@ -61,7 +60,7 @@ public:
     void pause();
     void resume();
 
-    void send(QByteArray&& buffer);
+    void send(const QByteArray& buffer);
 
     ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
@@ -102,7 +101,7 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    std::queue<QByteArray> write_queue_;
+    QQueue<QByteArray> write_queue_;
     quint32 write_size_ = 0;
 
     quint32 read_size_ = 0;
