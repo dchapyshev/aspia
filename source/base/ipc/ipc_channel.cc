@@ -25,8 +25,6 @@
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
-#include <functional>
-
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include <Psapi.h>
@@ -80,73 +78,10 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
-class IpcChannel::Handler
-{
-public:
-    explicit Handler(IpcChannel* channel);
-    ~Handler();
-
-    void dettach();
-
-    void onWriteSize(const std::error_code& error_code, size_t bytes_transferred);
-    void onWriteData(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadData(const std::error_code& error_code, size_t bytes_transferred);
-
-private:
-    IpcChannel* channel_;
-    DISALLOW_COPY_AND_ASSIGN(Handler);
-};
-
-//--------------------------------------------------------------------------------------------------
-IpcChannel::Handler::Handler(IpcChannel* channel)
-    : channel_(channel)
-{
-    DCHECK(channel_);
-}
-
-//--------------------------------------------------------------------------------------------------
-IpcChannel::Handler::~Handler() = default;
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::Handler::dettach()
-{
-    channel_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::Handler::onWriteSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onWriteSize(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::Handler::onWriteData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onWriteData(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::Handler::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadSize(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::Handler::onReadData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadData(error_code, bytes_transferred);
-}
-
 //--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
-      stream_(AsioEventDispatcher::currentIoContext()),
-      handler_(base::make_local_shared<Handler>(this))
+      stream_(AsioEventDispatcher::currentIoContext())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -156,8 +91,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
     : QObject(parent),
       channel_name_(channel_name),
       stream_(std::move(stream)),
-      is_connected_(true),
-      handler_(base::make_local_shared<Handler>(this))
+      is_connected_(true)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -172,16 +106,12 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
 IpcChannel::~IpcChannel()
 {
     LOG(LS_INFO) << "Dtor";
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     disconnect();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool IpcChannel::connect(const QString& channel_id)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (channel_id.isEmpty())
     {
         LOG(LS_ERROR) << "Empty channel id";
@@ -255,10 +185,6 @@ bool IpcChannel::connect(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::disconnect()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-    handler_->dettach();
-
     if (!is_connected_)
     {
         LOG(LS_INFO) << "Channel not in connected state";
@@ -277,29 +203,24 @@ void IpcChannel::disconnect()
 //--------------------------------------------------------------------------------------------------
 bool IpcChannel::isConnected() const
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_connected_;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool IpcChannel::isPaused() const
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_paused_;
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::pause()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     is_paused_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::resume()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!is_connected_ || !is_paused_)
         return;
 
@@ -317,8 +238,6 @@ void IpcChannel::resume()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::send(const QByteArray& buffer)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
@@ -346,17 +265,18 @@ QString IpcChannel::channelName(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    if (error_code == asio::error::operation_aborted)
-    {
-        LOG(LS_ERROR) << "Operation aborted (from=" << location.toString() << ")";
-        return;
-    }
-
     LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': " << error_code
                   << " (location=" << location.toString() << ")";
 
     disconnect();
     emit sig_disconnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcChannel::onMessageReceived()
+{
+    emit sig_messageReceived(read_buffer_);
+    read_size_ = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,23 +292,20 @@ void IpcChannel::doWriteSize()
 
     asio::async_write(stream_,
                       asio::buffer(&write_size_, sizeof(write_size_)),
-                      std::bind(&Handler::onWriteSize,
-                                handler_,
-                                std::placeholders::_1,
-                                std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onWriteSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                      [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    DCHECK_EQ(bytes_transferred, sizeof(write_size_));
-    doWriteData();
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(bytes_transferred, sizeof(write_size_));
+        doWriteData();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -400,32 +317,29 @@ void IpcChannel::doWriteData()
 
     // Send the buffer to the recipient.
     asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
-                      std::bind(&Handler::onWriteData,
-                                handler_,
-                                std::placeholders::_1,
-                                std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onWriteData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                      [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    DCHECK_EQ(bytes_transferred, write_size_);
-    DCHECK(!write_queue_.empty());
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
 
-    // Delete the sent message from the queue.
-    write_queue_.pop_front();
+        DCHECK_EQ(bytes_transferred, write_size_);
+        DCHECK(!write_queue_.empty());
 
-    // If the queue is not empty, then we send the following message.
-    if (write_queue_.empty())
-        return;
+        // Delete the sent message from the queue.
+        write_queue_.pop_front();
 
-    doWriteSize();
+        // If the queue is not empty, then we send the following message.
+        if (write_queue_.empty())
+            return;
+
+        doWriteSize();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,30 +347,27 @@ void IpcChannel::doReadSize()
 {
     asio::async_read(stream_,
                      asio::buffer(&read_size_, sizeof(read_size_)),
-                     std::bind(&Handler::onReadSize,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    DCHECK_EQ(bytes_transferred, sizeof(read_size_));
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
 
-    if (!read_size_ || read_size_ > kMaxMessageSize)
-    {
-        onErrorOccurred(FROM_HERE, asio::error::message_size);
-        return;
-    }
+        DCHECK_EQ(bytes_transferred, sizeof(read_size_));
 
-    doReadData();
+        if (!read_size_ || read_size_ > kMaxMessageSize)
+        {
+            onErrorOccurred(FROM_HERE, asio::error::message_size);
+            return;
+        }
+
+        doReadData();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -472,40 +383,30 @@ void IpcChannel::doReadData()
 
     asio::async_read(stream_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&Handler::onReadData,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onReadData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    DCHECK_EQ(bytes_transferred, read_size_);
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
 
-    if (is_paused_)
-        return;
+        DCHECK_EQ(bytes_transferred, read_size_);
 
-    onMessageReceived();
+        if (is_paused_)
+            return;
 
-    if (is_paused_)
-        return;
+        onMessageReceived();
 
-    DCHECK_EQ(read_size_, 0);
-    doReadSize();
-}
+        if (is_paused_)
+            return;
 
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::onMessageReceived()
-{
-    emit sig_messageReceived(read_buffer_);
-    read_size_ = 0;
+        DCHECK_EQ(read_size_, 0);
+        doReadSize();
+    });
 }
 
 } // namespace base
