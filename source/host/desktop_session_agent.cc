@@ -125,7 +125,7 @@ void DesktopSessionAgent::start(const QString& channel_id)
 
     channel_ = new base::IpcChannel(this);
 
-    if (!channel_->connect(channel_id))
+    if (!channel_->connectTo(channel_id))
     {
         LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id.data() << ")";
         return;

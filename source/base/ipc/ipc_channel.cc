@@ -27,14 +27,13 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
-#include <Psapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 namespace {
 
-const int kWriteQueueReservedSize = 32;
+const int kWriteQueueReservedSize = 64;
 const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(Q_OS_UNIX)
@@ -106,11 +105,11 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
 IpcChannel::~IpcChannel()
 {
     LOG(LS_INFO) << "Dtor";
-    disconnect();
+    disconnectFrom();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannel::connect(const QString& channel_id)
+bool IpcChannel::connectTo(const QString& channel_id)
 {
     if (channel_id.isEmpty())
     {
@@ -183,7 +182,7 @@ bool IpcChannel::connect(const QString& channel_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::disconnect()
+void IpcChannel::disconnectFrom()
 {
     if (!is_connected_)
     {
@@ -268,7 +267,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': " << error_code
                   << " (location=" << location.toString() << ")";
 
-    disconnect();
+    disconnectFrom();
     emit sig_disconnected();
 }
 

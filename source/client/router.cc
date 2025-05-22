@@ -95,7 +95,7 @@ void Router::connectToRouter(const QString& address, quint16 port)
 
     channel_ = new base::TcpChannel(this);
     connect(channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
-    channel_->connect(router_address_, router_port_);
+    channel_->connectTo(router_address_, router_port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,9 +242,6 @@ void Router::onTcpConnected()
     reconnect_in_progress_ = false;
     reconnect_timer_->stop();
     timeout_timer_->stop();
-
-    channel_->setKeepAlive(true);
-    channel_->setNoDelay(true);
 
     authenticator_ = new base::ClientAuthenticator(this);
     authenticator_->setIdentify(proto::IDENTIFY_SRP);

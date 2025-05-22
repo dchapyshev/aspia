@@ -74,7 +74,7 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
     connect(router_channel_, &base::TcpChannel::sig_connected,
             this, &RouterController::onTcpConnected);
 
-    router_channel_->connect(router_config_.address, router_config_.port);
+    router_channel_->connectTo(router_config_.address, router_config_.port);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,9 +87,6 @@ base::TcpChannel* RouterController::takeChannel()
 void RouterController::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
-
-    router_channel_->setKeepAlive(true);
-    router_channel_->setNoDelay(true);
 
     authenticator_ = new base::ClientAuthenticator(this);
 

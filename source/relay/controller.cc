@@ -179,9 +179,6 @@ void Controller::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    channel_->setKeepAlive(true);
-    channel_->setNoDelay(true);
-
     authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
@@ -335,7 +332,7 @@ void Controller::connectToRouter()
     connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
 
     // Connect to router.
-    channel_->connect(router_address_, router_port_);
+    channel_->connectTo(router_address_, router_port_);
 }
 
 //--------------------------------------------------------------------------------------------------

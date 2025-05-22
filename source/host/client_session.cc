@@ -97,9 +97,7 @@ void ClientSession::start()
     connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
             this, &ClientSession::onTcpMessageReceived);
 
-    channel_->setKeepAlive(true);
     channel_->resume();
-
     onStarted();
 }
 

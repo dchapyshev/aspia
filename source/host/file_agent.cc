@@ -44,7 +44,7 @@ void FileAgent::start(const QString& channel_id)
 
     channel_ = std::make_unique<base::IpcChannel>();
 
-    if (!channel_->connect(channel_id))
+    if (!channel_->connectTo(channel_id))
     {
         LOG(LS_ERROR) << "Connection failed";
         return;

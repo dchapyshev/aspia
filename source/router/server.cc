@@ -471,12 +471,7 @@ void Server::onNewConnection()
     while (server_->hasPendingConnections())
     {
         std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
-
         LOG(LS_INFO) << "New connection: " << channel->peerAddress();
-
-        channel->setKeepAlive(true);
-        channel->setNoDelay(true);
-
         authenticator_manager_->addNewChannel(std::move(channel));
     }
 }

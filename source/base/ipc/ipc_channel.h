@@ -45,10 +45,9 @@ public:
     explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
 
-    [[nodiscard]]
-    bool connect(const QString& channel_id);
+    bool connectTo(const QString& channel_id);
 
-    void disconnect();
+    void disconnectFrom();
 
     bool isConnected() const;
     bool isPaused() const;

@@ -19,7 +19,8 @@
 #ifndef BASE_NET_TCP_CHANNEL_H
 #define BASE_NET_TCP_CHANNEL_H
 
-#include "base/memory/local_memory.h"
+#include <QTimer>
+
 #include "base/net/network_channel.h"
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
@@ -54,7 +55,7 @@ public:
     QString peerAddress() const;
 
     // Connects to a host at the specified address and port.
-    void connect(const QString& address, quint16 port);
+    void connectTo(const QString& address, quint16 port);
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const;
@@ -73,14 +74,6 @@ public:
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
     void send(quint8 channel_id, const QByteArray& buffer);
-
-    // Disable or enable the algorithm of Nagle.
-    bool setNoDelay(bool enable);
-
-    // Enables or disables sending keep alive packets.
-    bool setKeepAlive(bool enable,
-                      const Seconds& interval = Seconds(60),
-                      const Seconds& timeout = Seconds(30));
 
     void setChannelIdSupport(bool enable);
     bool hasChannelIdSupport() const;
@@ -108,7 +101,7 @@ protected:
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.
-    void disconnect();
+    void disconnectFrom();
 
 private:
     enum class ReadState
@@ -138,6 +131,12 @@ private:
         KEEP_ALIVE_PING = 1
     };
 
+    enum KeepAliveTimerType
+    {
+        KEEP_ALIVE_TIMEOUT = 0,
+        KEEP_ALIVE_INTERVAL = 1
+    };
+
     struct ServiceHeader
     {
         quint8 type;      // Type of service packet (see ServiceDataType).
@@ -147,12 +146,11 @@ private:
         quint32 length;   // Additional data size.
     };
 
+    void init();
+    void setConnected(bool connected);
+
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
-
-    void onResolved(const std::error_code& error_code,
-                    const asio::ip::tcp::resolver::results_type& endpoints);
-    void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
 
     void onMessageWritten(quint8 channel_id);
     void onMessageReceived();
@@ -160,31 +158,20 @@ private:
     void addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data);
 
     void doWrite();
-    void onWrite(const std::error_code& error_code, size_t bytes_transferred);
-
     void doReadSize();
-    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
-
     void doReadUserData(size_t length);
-    void onReadUserData(const std::error_code& error_code, size_t bytes_transferred);
-
     void doReadServiceHeader();
-    void onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred);
-
     void doReadServiceData(size_t length);
-    void onReadServiceData(const std::error_code& error_code, size_t bytes_transferred);
 
-    void onKeepAliveInterval(const std::error_code& error_code);
-    void onKeepAliveTimeout(const std::error_code& error_code);
+    void onKeepAliveTimer();
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
-    std::unique_ptr<asio::steady_timer> keep_alive_timer_;
-    Seconds keep_alive_interval_;
-    Seconds keep_alive_timeout_;
+    QTimer* keep_alive_timer_ = nullptr;
+    KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     QByteArray keep_alive_counter_;
     TimePoint keep_alive_timestamp_;
 
@@ -205,9 +192,6 @@ private:
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;
-
-    class Handler;
-    base::local_shared_ptr<Handler> handler_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpChannel);
 };

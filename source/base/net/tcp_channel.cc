@@ -24,7 +24,6 @@
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/thread.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -36,7 +35,9 @@ namespace base {
 
 namespace {
 
-const int kWriteQueueReservedSize = 32;
+const int kWriteQueueReservedSize = 64;
+const TcpChannel::Seconds kKeepAliveInterval { 60 };
+const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
 std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
@@ -54,147 +55,34 @@ std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 
 } // namespace
 
-class TcpChannel::Handler
-{
-public:
-    explicit Handler(TcpChannel* channel);
-    ~Handler();
-
-    void dettach();
-
-    void onResolved(const std::error_code& error_code,
-                    const asio::ip::tcp::resolver::results_type& endpoints);
-    void onConnected(const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint);
-    void onWrite(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadUserData(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadServiceData(const std::error_code& error_code, size_t bytes_transferred);
-    void onKeepAliveInterval(const std::error_code& error_code);
-    void onKeepAliveTimeout(const std::error_code& error_code);
-
-private:
-    TcpChannel* channel_;
-    DISALLOW_COPY_AND_ASSIGN(Handler);
-};
-
-//--------------------------------------------------------------------------------------------------
-TcpChannel::Handler::Handler(TcpChannel* channel)
-    : channel_(channel)
-{
-    DCHECK(channel_);
-}
-
-//--------------------------------------------------------------------------------------------------
-TcpChannel::Handler::~Handler() = default;
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::dettach()
-{
-    channel_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onResolved(
-    const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
-{
-    if (channel_)
-        channel_->onResolved(error_code, endpoints);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onConnected(
-    const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
-{
-    if (channel_)
-        channel_->onConnected(error_code, endpoint);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onWrite(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onWrite(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadSize(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onReadUserData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadUserData(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onReadServiceHeader(
-    const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadServiceHeader(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onReadServiceData(
-    const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (channel_)
-        channel_->onReadServiceData(error_code, bytes_transferred);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onKeepAliveInterval(const std::error_code& error_code)
-{
-    if (channel_)
-        channel_->onKeepAliveInterval(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::Handler::onKeepAliveTimeout(const std::error_code& error_code)
-{
-    if (channel_)
-        channel_->onKeepAliveTimeout(error_code);
-}
-
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(QObject* parent)
     : NetworkChannel(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
-      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
-      encryptor_(std::make_unique<MessageEncryptorFake>()),
-      decryptor_(std::make_unique<MessageDecryptorFake>()),
-      handler_(base::make_local_shared<Handler>(this))
+      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_))
 {
     LOG(LS_INFO) << "Ctor";
+    init();
 }
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
     : NetworkChannel(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
-      socket_(std::move(socket)),
-      connected_(true),
-      encryptor_(std::make_unique<MessageEncryptorFake>()),
-      decryptor_(std::make_unique<MessageDecryptorFake>()),
-      handler_(base::make_local_shared<Handler>(this))
+      socket_(std::move(socket))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(socket_.is_open());
-
-    write_queue_.reserve(kWriteQueueReservedSize);
+    init();
+    setConnected(true);
 }
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
     LOG(LS_INFO) << "Dtor (start)";
-    disconnect();
+    disconnectFrom();
     LOG(LS_INFO) << "Dtor (end)";
 }
 
@@ -255,9 +143,9 @@ QString TcpChannel::peerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connect(const QString& address, quint16 port)
+void TcpChannel::connectTo(const QString& address, quint16 port)
 {
-    if (connected_ || !resolver_)
+    if (isConnected() || !resolver_)
         return;
 
     std::string host = address.toLocal8Bit().toStdString();
@@ -266,10 +154,45 @@ void TcpChannel::connect(const QString& address, quint16 port)
     LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
 
     resolver_->async_resolve(host, service,
-                             std::bind(&Handler::onResolved,
-                                       handler_,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2));
+        [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+    {
+        if (error_code)
+        {
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
+
+        asio::async_connect(socket_, endpoints,
+            [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
+        {
+            if (error_code == asio::error::operation_aborted)
+            {
+                // If more than one address for a host was resolved, then we return false and cancel
+                // attempts to connect to all addresses.
+                return false;
+            }
+
+            return true;
+        },
+            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+        {
+            if (error_code)
+            {
+                if (error_code == asio::error::operation_aborted)
+                    return;
+
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
+                         << ":" << endpoint.port();
+            setConnected(true);
+            emit sig_connected();
+        });
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -293,7 +216,7 @@ void TcpChannel::pause()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::resume()
 {
-    if (!connected_ || !paused_)
+    if (!isConnected() || !paused_)
         return;
 
     paused_ = false;
@@ -322,76 +245,6 @@ void TcpChannel::resume()
 void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     addWriteTask(WriteTask::Type::USER_DATA, channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::setNoDelay(bool enable)
-{
-    asio::ip::tcp::no_delay option(enable);
-
-    asio::error_code error_code;
-    socket_.set_option(option, error_code);
-
-    if (error_code)
-    {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Seconds& timeout)
-{
-    if (enable && keep_alive_timer_)
-    {
-        LOG(LS_ERROR) << "Keep alive already active";
-        return false;
-    }
-
-    if (interval < Seconds(15) || interval > Seconds(300))
-    {
-        LOG(LS_ERROR) << "Invalid interval: " << interval.count();
-        return false;
-    }
-
-    if (timeout < Seconds(5) || timeout > Seconds(60))
-    {
-        LOG(LS_ERROR) << "Invalid timeout: " << timeout.count();
-        return false;
-    }
-
-    if (!enable)
-    {
-        LOG(LS_INFO) << "Keep alive disabled";
-
-        keep_alive_counter_.clear();
-
-        if (keep_alive_timer_)
-        {
-            keep_alive_timer_->cancel();
-            keep_alive_timer_.reset();
-        }
-    }
-    else
-    {
-        LOG(LS_INFO) << "Keep alive enabled (interval=" << interval.count()
-                     << " timeout=" << timeout.count() << ")";
-
-        keep_alive_interval_ = interval;
-        keep_alive_timeout_ = timeout;
-
-        keep_alive_counter_.resize(sizeof(quint32));
-        memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-        keep_alive_timer_ = std::make_unique<asio::steady_timer>(io_context_);
-        keep_alive_timer_->expires_after(keep_alive_interval_);
-        keep_alive_timer_->async_wait(
-            std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
-    }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -441,12 +294,10 @@ bool TcpChannel::setWriteBufferSize(size_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::disconnect()
+void TcpChannel::disconnectFrom()
 {
     LOG(LS_INFO) << "Disconnect";
-    connected_ = false;
-
-    handler_->dettach();
+    setConnected(false);
 
     if (resolver_)
     {
@@ -471,14 +322,45 @@ void TcpChannel::disconnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void TcpChannel::init()
 {
-    if (error_code == asio::error::operation_aborted)
-    {
-        LOG(LS_INFO) << "Operation aborted (from: " << location.toString() << ")";
+    encryptor_ = std::make_unique<MessageEncryptorFake>();
+    decryptor_ = std::make_unique<MessageDecryptorFake>();
+
+    write_queue_.reserve(kWriteQueueReservedSize);
+
+    keep_alive_timer_ = new QTimer(this);
+    keep_alive_timer_->setSingleShot(true);
+
+    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
+}
+
+void TcpChannel::setConnected(bool connected)
+{
+    connected_ = connected;
+
+    if (!connected_)
         return;
+
+    asio::ip::tcp::no_delay option(true);
+
+    asio::error_code error_code;
+    socket_.set_option(option, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
     }
 
+    keep_alive_counter_.resize(sizeof(quint32));
+    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
+
+    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+    keep_alive_timer_->start(kKeepAliveInterval);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+{
     ErrorCode error = ErrorCode::UNKNOWN;
 
     if (error_code == asio::error::host_not_found)
@@ -506,50 +388,8 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
     LOG(LS_ERROR) << "Connection finished with error " << errorToString(error_code)
                   << " from: " << location.toString();
 
-    disconnect();
+    disconnectFrom();
     emit sig_disconnected(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onResolved(
-    const std::error_code &error_code, const asio::ip::tcp::resolver::results_type& endpoints)
-{
-    if (error_code)
-    {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
-
-    LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
-
-    asio::async_connect(socket_, endpoints,
-        [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
-    {
-        if (error_code == asio::error::operation_aborted)
-        {
-            // If more than one address for a host was resolved, then we return false and cancel
-            // attempts to connect to all addresses.
-            return false;
-        }
-
-        return true;
-    },
-        std::bind(&Handler::onConnected, handler_, std::placeholders::_1, std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onConnected(const std::error_code &error_code, const asio::ip::tcp::endpoint &endpoint)
-{
-    if (error_code)
-    {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
-
-    LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
-                 << ":" << endpoint.port();
-    connected_ = true;
-    emit sig_connected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -679,41 +519,38 @@ void TcpChannel::doWrite()
     // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
-                      std::bind(&Handler::onWrite,
-                                handler_,
-                                std::placeholders::_1,
-                                std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                      [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    DCHECK(!write_queue_.empty());
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
 
-    // Update TX statistics.
-    addTxBytes(bytes_transferred);
+        DCHECK(!write_queue_.empty());
 
-    const WriteTask& task = write_queue_.front();
-    WriteTask::Type task_type = task.type();
-    quint8 channel_id = task.channelId();
+        // Update TX statistics.
+        addTxBytes(bytes_transferred);
 
-    // Delete the sent message from the queue.
-    write_queue_.pop_front();
+        const WriteTask& task = write_queue_.front();
+        WriteTask::Type task_type = task.type();
+        quint8 channel_id = task.channelId();
 
-    // If the queue is not empty, then we send the following message.
-    bool schedule_write = !write_queue_.empty();
+        // Delete the sent message from the queue.
+        write_queue_.pop_front();
 
-    if (task_type == WriteTask::Type::USER_DATA)
-        onMessageWritten(channel_id);
+        // If the queue is not empty, then we send the following message.
+        bool schedule_write = !write_queue_.empty();
 
-    if (schedule_write)
-        doWrite();
+        if (task_type == WriteTask::Type::USER_DATA)
+            onMessageWritten(channel_id);
+
+        if (schedule_write)
+            doWrite();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -722,50 +559,47 @@ void TcpChannel::doReadSize()
     state_ = ReadState::READ_SIZE;
     asio::async_read(socket_,
                      variable_size_reader_.buffer(),
-                     std::bind(&Handler::onReadSize,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
-{
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
-
-    // Update RX statistics.
-    addRxBytes(bytes_transferred);
-
-    std::optional<size_t> size = variable_size_reader_.messageSize();
-    if (size.has_value())
-    {
-        size_t message_size = *size;
-
-        if (message_size > kMaxMessageSize)
+        if (error_code)
         {
-            LOG(LS_ERROR) << "Too big incoming message: " << message_size;
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
-        // If the message size is 0 (in other words, the first received byte is 0), then you need
-        // to start reading the service message.
-        if (!message_size)
-        {
-            doReadServiceHeader();
-            return;
-        }
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
 
-        doReadUserData(message_size);
-    }
-    else
-    {
-        doReadSize();
-    }
+        std::optional<size_t> size = variable_size_reader_.messageSize();
+        if (size.has_value())
+        {
+            size_t message_size = *size;
+
+            if (message_size > kMaxMessageSize)
+            {
+                LOG(LS_ERROR) << "Too big incoming message: " << message_size;
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            }
+
+            // If the message size is 0 (in other words, the first received byte is 0), then you need
+            // to start reading the service message.
+            if (!message_size)
+            {
+                doReadServiceHeader();
+                return;
+            }
+
+            doReadUserData(message_size);
+        }
+        else
+        {
+            doReadSize();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -776,43 +610,40 @@ void TcpChannel::doReadUserData(size_t length)
     state_ = ReadState::READ_USER_DATA;
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&Handler::onReadUserData,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onReadUserData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    DCHECK_EQ(state_, ReadState::READ_USER_DATA);
-
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-    // Update RX statistics.
-    addRxBytes(bytes_transferred);
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
 
-    DCHECK_EQ(bytes_transferred, read_buffer_.size());
+        DCHECK_EQ(state_, ReadState::READ_USER_DATA);
 
-    if (paused_)
-    {
-        state_ = ReadState::PENDING;
-        return;
-    }
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
 
-    onMessageReceived();
+        DCHECK_EQ(bytes_transferred, read_buffer_.size());
 
-    if (paused_)
-    {
-        state_ = ReadState::IDLE;
-        return;
-    }
+        if (paused_)
+        {
+            state_ = ReadState::PENDING;
+            return;
+        }
 
-    doReadSize();
+        onMessageReceived();
+
+        if (paused_)
+        {
+            state_ = ReadState::IDLE;
+            return;
+        }
+
+        doReadSize();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -823,53 +654,49 @@ void TcpChannel::doReadServiceHeader()
     state_ = ReadState::READ_SERVICE_HEADER;
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     std::bind(&Handler::onReadServiceHeader,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred)
-{
-    DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
-    DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
-
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
-
-    DCHECK_EQ(bytes_transferred, read_buffer_.size());
-
-    // Update RX statistics.
-    addRxBytes(bytes_transferred);
-
-    ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
-    if (header->length > kMaxMessageSize)
-    {
-        LOG(LS_INFO) << "Too big service message: " << header->length;
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
-
-    if (header->type == KEEP_ALIVE)
-    {
-        // Keep alive packet must always contain data.
-        if (!header->length)
+        if (error_code)
         {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
+        DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+        DCHECK_EQ(bytes_transferred, read_buffer_.size());
+
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
+
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+        if (header->length > kMaxMessageSize)
+        {
+            LOG(LS_INFO) << "Too big service message: " << header->length;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
-        doReadServiceData(header->length);
-    }
-    else
-    {
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
+        if (header->type == KEEP_ALIVE)
+        {
+            // Keep alive packet must always contain data.
+            if (!header->length)
+            {
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            }
+
+            doReadServiceData(header->length);
+        }
+        else
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -886,118 +713,98 @@ void TcpChannel::doReadServiceData(size_t length)
     asio::async_read(socket_,
                      asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
                                   read_buffer_.size() - sizeof(ServiceHeader)),
-                     std::bind(&Handler::onReadServiceData,
-                               handler_,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t bytes_transferred)
-{
-    DCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
-    DCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
-
-    if (error_code)
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
     {
-        onErrorOccurred(FROM_HERE, error_code);
-        return;
-    }
-
-    // Update RX statistics.
-    addRxBytes(bytes_transferred);
-
-    // Incoming buffer contains a service header.
-    ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
-
-    DCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
-    DCHECK_LE(header->length, kMaxMessageSize);
-
-    if (header->type == KEEP_ALIVE)
-    {
-        if (header->flags & KEEP_ALIVE_PING)
+        if (error_code)
         {
-            // Send pong.
-            sendKeepAlive(KEEP_ALIVE_PONG,
-                          read_buffer_.data() + sizeof(ServiceHeader),
-                          read_buffer_.size() - sizeof(ServiceHeader));
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
+        DCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
+
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
+
+        // Incoming buffer contains a service header.
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+
+        DCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
+        DCHECK_LE(header->length, kMaxMessageSize);
+
+        if (header->type == KEEP_ALIVE)
+        {
+            if (header->flags & KEEP_ALIVE_PING)
+            {
+                // Send pong.
+                sendKeepAlive(KEEP_ALIVE_PONG,
+                              read_buffer_.data() + sizeof(ServiceHeader),
+                              read_buffer_.size() - sizeof(ServiceHeader));
+            }
+            else
+            {
+                if (read_buffer_.size() < (sizeof(ServiceHeader) + header->length))
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                if (header->length != keep_alive_counter_.size())
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                // Pong must contain the same data as ping.
+                if (memcmp(read_buffer_.data() + sizeof(ServiceHeader),
+                           keep_alive_counter_.data(),
+                           keep_alive_counter_.size()) != 0)
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                if (DCHECK_IS_ON())
+                {
+                    Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
+                        Clock::now() - keep_alive_timestamp_);
+
+                    DLOG(LS_INFO) << "Ping result: " << ping_time.count() << " ms ("
+                                  << keep_alive_counter_.size() << " bytes)";
+                }
+
+                // The user can disable keep alive. Restart the timer only if keep alive is enabled.
+                if (keep_alive_timer_->isActive())
+                {
+                    DCHECK(!keep_alive_counter_.isEmpty());
+
+                    // Increase the counter of sent packets.
+                    largeNumberIncrement(&keep_alive_counter_);
+
+                    // Restart keep alive timer.
+                    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+                    keep_alive_timer_->start(kKeepAliveInterval);
+                }
+            }
         }
         else
         {
-            if (read_buffer_.size() < (sizeof(ServiceHeader) + header->length))
-            {
-                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-                return;
-            }
-
-            if (header->length != keep_alive_counter_.size())
-            {
-                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-                return;
-            }
-
-            // Pong must contain the same data as ping.
-            if (memcmp(read_buffer_.data() + sizeof(ServiceHeader),
-                       keep_alive_counter_.data(),
-                       keep_alive_counter_.size()) != 0)
-            {
-                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-                return;
-            }
-
-            if (DCHECK_IS_ON())
-            {
-                Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
-                    Clock::now() - keep_alive_timestamp_);
-
-                DLOG(LS_INFO) << "Ping result: " << ping_time.count() << " ms ("
-                              << keep_alive_counter_.size() << " bytes)";
-            }
-
-            // The user can disable keep alive. Restart the timer only if keep alive is enabled.
-            if (keep_alive_timer_)
-            {
-                DCHECK(!keep_alive_counter_.isEmpty());
-
-                // Increase the counter of sent packets.
-                largeNumberIncrement(&keep_alive_counter_);
-
-                // Restart keep alive timer.
-                keep_alive_timer_->cancel();
-                keep_alive_timer_->expires_after(keep_alive_interval_);
-                keep_alive_timer_->async_wait(
-                    std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
-            }
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
         }
-    }
-    else
-    {
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
 
-    doReadSize();
+        doReadSize();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
+void TcpChannel::onKeepAliveTimer()
 {
-    if (error_code == asio::error::operation_aborted)
-        return;
-
-    DCHECK(keep_alive_timer_);
-
-    if (error_code)
-    {
-        LOG(LS_ERROR) << "Keep alive timer error: " << error_code;
-
-        // Restarting the timer.
-        keep_alive_timer_->cancel();
-        keep_alive_timer_->expires_after(keep_alive_interval_);
-        keep_alive_timer_->async_wait(
-            std::bind(&Handler::onKeepAliveInterval, handler_, std::placeholders::_1));
-    }
-    else
+    if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
     {
         // Save sending time.
         keep_alive_timestamp_ = Clock::now();
@@ -1005,28 +812,17 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
         // Send ping.
         sendKeepAlive(KEEP_ALIVE_PING, keep_alive_counter_.data(), keep_alive_counter_.size());
 
-        // If a response is not received within the specified interval, the connection will be
-        // terminated.
-        keep_alive_timer_->cancel();
-        keep_alive_timer_->expires_after(keep_alive_timeout_);
-        keep_alive_timer_->async_wait(
-            std::bind(&Handler::onKeepAliveTimeout, handler_, std::placeholders::_1));
+        // If a response is not received within the specified interval, the connection will be terminated.
+        keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
+        keep_alive_timer_->start(kKeepAliveTimeout);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeepAliveTimeout(const std::error_code& error_code)
-{
-    if (error_code == asio::error::operation_aborted)
-        return;
-
-    if (error_code)
+    else
     {
-        LOG(LS_ERROR) << "Keep alive timer error: " << error_code;
-    }
+        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
 
-    // No response came within the specified period of time. We forcibly terminate the connection.
-    onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
+        // No response came within the specified period of time. We forcibly terminate the connection.
+        onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

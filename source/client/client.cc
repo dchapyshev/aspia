@@ -163,7 +163,7 @@ void Client::start()
 
         // Now connect to the host.
         emit sig_statusChanged(Status::HOST_CONNECTING);
-        channel_->connect(config.address_or_id, config.port);
+        channel_->connectTo(config.address_or_id, config.port);
     }
 }
 
@@ -417,11 +417,8 @@ void Client::startAuthentication()
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
     channel_->setReadBufferSize(kReadBufferSize);
-    channel_->setNoDelay(true);
-    channel_->setKeepAlive(true);
 
     authenticator_ = new base::ClientAuthenticator(this);
-
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(session_state_->hostUserName());
     authenticator_->setPassword(session_state_->hostPassword());

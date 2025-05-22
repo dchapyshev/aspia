@@ -105,7 +105,7 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     connect(channel_.get(), &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
     connect(channel_.get(), &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
 
-    channel_->connect(address_, port_);
+    channel_->connectTo(address_, port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -125,7 +125,6 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    channel_->setNoDelay(true);
     channel_->resume();
     channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }

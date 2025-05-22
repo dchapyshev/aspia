@@ -436,9 +436,7 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
     LOG(LS_INFO) << "Start authentication";
 
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
-
     channel->setReadBufferSize(kReadBufferSize);
-    channel->setNoDelay(true);
 
     authenticator_manager_->addNewChannel(std::move(channel));
 }

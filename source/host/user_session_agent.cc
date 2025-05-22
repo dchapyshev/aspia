@@ -65,7 +65,7 @@ void UserSessionAgent::onConnectToService()
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &UserSessionAgent::onIpcMessageReceived);
 
-    if (ipc_channel_->connect(channel_id))
+    if (ipc_channel_->connectTo(channel_id))
     {
         LOG(LS_INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
         emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);

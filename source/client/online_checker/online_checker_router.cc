@@ -74,16 +74,13 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
     connect(channel_.get(), &base::TcpChannel::sig_connected,
             this, &OnlineCheckerRouter::onTcpConnected);
 
-    channel_->connect(router_config_.address, router_config_.port);
+    channel_->connectTo(router_config_.address, router_config_.port);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
-
-    channel_->setKeepAlive(true);
-    channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>();
 
