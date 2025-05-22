@@ -95,7 +95,7 @@ qint64 calculateSpeed(qint64 last_speed, const FileTransfer::Milliseconds& durat
 FileTransfer::FileTransfer(Type type,
                            const std::string& source_path,
                            const std::string& target_path,
-                           const std::vector<Item>& items,
+                           const QList<Item>& items,
                            QObject* parent)
     : QObject(parent),
       type_(type),
@@ -211,7 +211,7 @@ void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action a
 {
     LOG(LS_INFO) << "Set action for error " << static_cast<int>(error_type) << ": "
                  << static_cast<int>(action);
-    actions_.insert_or_assign(error_type, action);
+    actions_[error_type] = action;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -484,7 +484,7 @@ void FileTransfer::onError(Error::Type type, proto::FileError code, const std::s
     auto default_action = actions_.find(type);
     if (default_action != actions_.end())
     {
-        setAction(type, default_action->second);
+        setAction(type, default_action.value());
         return;
     }
 

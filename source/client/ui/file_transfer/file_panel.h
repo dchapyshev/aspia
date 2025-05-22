@@ -55,10 +55,10 @@ signals:
     void sig_rename(const QString& old_name, const QString& new_name);
     void sig_createDirectory(const QString& path);
     void sig_removeItems(FilePanel* sender, const FileRemover::TaskList& items);
-    void sig_sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items);
+    void sig_sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void sig_receiveItems(FilePanel* sender,
                           const QString& folder,
-                          const std::vector<FileTransfer::Item>& items);
+                          const QList<FileTransfer::Item>& items);
     void sig_pathChanged(FilePanel* sender, const QString& path);
 
 public slots:

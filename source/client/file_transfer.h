@@ -23,9 +23,8 @@
 #include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
-#include <deque>
-#include <map>
-
+#include <QList>
+#include <QMap>
 #include <QPointer>
 #include <QTimer>
 
@@ -159,7 +158,7 @@ public:
     FileTransfer(Type type,
                  const std::string& source_path,
                  const std::string& target_path,
-                 const std::vector<Item>& items,
+                 const QList<Item>& items,
                  QObject* parent = nullptr);
     ~FileTransfer() final;
 
@@ -195,7 +194,7 @@ private:
     const Type type_;
     const std::string source_path_;
     const std::string target_path_;
-    const std::vector<Item> items_;
+    const QList<Item> items_;
 
     QPointer<common::FileTaskFactory> task_factory_source_;
     QPointer<common::FileTaskFactory> task_factory_target_;
@@ -203,7 +202,7 @@ private:
     QPointer<QTimer> cancel_timer_ = nullptr;
 
     // The map contains available actions for the error and the current action.
-    std::map<Error::Type, Error::Action> actions_;
+    QMap<Error::Type, Error::Action> actions_;
     QPointer<FileTransferQueueBuilder> queue_builder_;
     TaskList tasks_;
 

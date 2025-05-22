@@ -65,7 +65,7 @@ public:
 signals:
     void sig_nameChangeRequest(const QString& old_name, const QString& new_name);
     void sig_createFolderRequest(const QString& name);
-    void sig_fileListDropped(const QString& folder_name, const std::vector<FileTransfer::Item>& files);
+    void sig_fileListDropped(const QString& folder_name, const QList<FileTransfer::Item>& files);
 
 protected:
     void sortItems(int column, Qt::SortOrder order);

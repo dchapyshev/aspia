@@ -39,7 +39,7 @@ void FileMimeData::setMimeType(const QString& mime_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileMimeData::setFileList(const std::vector<FileTransfer::Item>& file_list)
+void FileMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     file_list_ = file_list;
     setData(mimeType(), QByteArray());

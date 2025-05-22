@@ -404,12 +404,13 @@ QStringList FileListModel::mimeTypes() const
 //--------------------------------------------------------------------------------------------------
 QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
 {
-    std::vector<FileTransfer::Item> file_list;
+    QList<FileTransfer::Item> file_list;
 
     for (const auto& index : indexes)
     {
         if (index.column() == COLUMN_NAME)
-            file_list.emplace_back(nameAt(index).toStdString(), sizeAt(index), isFolder(index));
+            file_list.push_back(FileTransfer::Item(
+                nameAt(index).toStdString(), sizeAt(index), isFolder(index)));
     }
 
     if (file_list.empty())

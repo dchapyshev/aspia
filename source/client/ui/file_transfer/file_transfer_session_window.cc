@@ -318,7 +318,7 @@ void FileTransferSessionWindow::removeItems(FilePanel* sender, const FileRemover
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::sendItems(
-    FilePanel* sender, const std::vector<FileTransfer::Item>& items)
+    FilePanel* sender, const QList<FileTransfer::Item>& items)
 {
     if (sender == ui->local_panel)
     {
@@ -340,7 +340,7 @@ void FileTransferSessionWindow::sendItems(
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::receiveItems(
-    FilePanel* sender, const QString& target_folder, const std::vector<FileTransfer::Item>& items)
+    FilePanel* sender, const QString& target_folder, const QList<FileTransfer::Item>& items)
 {
     if (sender == ui->local_panel)
     {
@@ -363,7 +363,7 @@ void FileTransferSessionWindow::receiveItems(
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::transferItems(
     FileTransfer::Type type, const QString& source_path, const QString& target_path,
-    const std::vector<FileTransfer::Item>& items)
+    const QList<FileTransfer::Item>& items)
 {
     transfer_dialog_ = new FileTransferDialog(this);
     transfer_dialog_->setAttribute(Qt::WA_DeleteOnClose);

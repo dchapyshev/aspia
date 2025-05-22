@@ -77,7 +77,7 @@ FilePanel::FilePanel(QWidget* parent)
     connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
     connect(ui.list, &FileList::sig_fileListDropped,
-            this, [this](const QString& folder_name, const std::vector<FileTransfer::Item>& items)
+            this, [this](const QString& folder_name, const QList<FileTransfer::Item>& items)
     {
         QString target_folder = currentPath();
         if (!folder_name.isEmpty())
@@ -447,16 +447,15 @@ void FilePanel::sendSelected()
     FileListModel* model = static_cast<FileListModel*>(ui.list->model());
 
     QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
-    std::vector<FileTransfer::Item> items;
+    QList<FileTransfer::Item> items;
 
     for (const auto& index : std::as_const(selected_rows))
     {
-        items.emplace_back(model->nameAt(index).toStdString(),
-                           model->sizeAt(index),
-                           model->isFolder(index));
+        items.push_back(FileTransfer::Item(
+            model->nameAt(index).toStdString(), model->sizeAt(index), model->isFolder(index)));
     }
 
-    if (items.empty())
+    if (items.isEmpty())
         return;
 
     emit sig_sendItems(this, items);

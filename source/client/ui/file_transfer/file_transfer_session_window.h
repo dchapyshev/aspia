@@ -82,17 +82,17 @@ protected:
 
 private slots:
     void removeItems(FilePanel* sender, const FileRemover::TaskList& items);
-    void sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items);
+    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender,
                       const QString& target_folder,
-                      const std::vector<FileTransfer::Item>& items);
+                      const QList<FileTransfer::Item>& items);
     void onPathChanged(FilePanel* sender, const QString& path);
 
 private:
     void transferItems(FileTransfer::Type type,
                        const QString& source_path,
                        const QString& target_path,
-                       const std::vector<FileTransfer::Item>& items);
+                       const QList<FileTransfer::Item>& items);
 
     void initPanel(common::FileTask::Target target,
                    const QString& title,
