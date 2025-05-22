@@ -24,13 +24,14 @@
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
+#include <QPointer>
 #include <QTimer>
 
 namespace client {
 
 namespace {
 
-const size_t kNumberOfParallelTasks = 30;
+const int kNumberOfParallelTasks = 30;
 const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
@@ -38,7 +39,7 @@ const std::chrono::seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(int computer_id, const QString& address, quint16 port);
+    Instance(int computer_id, const QString& address, quint16 port, QObject* parent);
     ~Instance() final;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
@@ -59,15 +60,16 @@ private:
     const quint16 port_;
 
     FinishCallback finish_callback_;
-    std::unique_ptr<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> channel_;
     QTimer timer_;
     bool finished_ = false;
 };
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const QString& address, quint16 port)
-    : computer_id_(computer_id),
+    int computer_id, const QString& address, quint16 port, QObject* parent)
+    : QObject(parent),
+      computer_id_(computer_id),
       address_(address),
       port_(port)
 {
@@ -87,7 +89,6 @@ OnlineCheckerDirect::Instance::~Instance()
 {
     finished_ = true;
     timer_.stop();
-    channel_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,11 +100,11 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     LOG(LS_INFO) << "Starting connection to " << address_ << ":" << port_
                  << " (computer: " << computer_id_ << ")";
 
-    channel_ = std::make_unique<base::TcpChannel>();
+    channel_ = new base::TcpChannel(this);
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
-    connect(channel_.get(), &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
-    connect(channel_.get(), &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
+    connect(channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
+    connect(channel_, &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
+    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
 
     channel_->connectTo(address_, port_);
 }
@@ -200,14 +201,14 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
 {
     pending_queue_ = computers;
 
-    if (pending_queue_.empty())
+    if (pending_queue_.isEmpty())
     {
         LOG(LS_INFO) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
 
-    size_t count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
+    int count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
         const Computer& computer = pending_queue_.front();
@@ -216,18 +217,17 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
         if (port == 0)
             port = DEFAULT_HOST_TCP_PORT;
 
-        std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-            computer.computer_id, computer.address, port);
+        Instance* instance = new Instance(computer.computer_id, computer.address, port, this);
 
         LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
                      << computer.address << " port: " << port << ")";
-        work_queue_.emplace_back(std::move(instance));
+        work_queue_.push_back(instance);
         pending_queue_.pop_front();
 
         --count;
     }
 
-    for (const auto& task : work_queue_)
+    for (const auto& task : std::as_const(work_queue_))
     {
         task->start(std::bind(&OnlineCheckerDirect::onChecked, this,
                               std::placeholders::_1, std::placeholders::_2));
@@ -239,16 +239,16 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 {
     emit sig_checkerResult(computer_id, online);
 
-    if (!pending_queue_.empty())
+    if (!pending_queue_.isEmpty())
     {
         const Computer& computer = pending_queue_.front();
-        std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-            computer.computer_id, computer.address, computer.port);
+        Instance* instance = new Instance(
+            computer.computer_id, computer.address, computer.port, this);
 
         LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
                      << computer.address << " port: " << computer.port << ")";
 
-        work_queue_.emplace_back(std::move(instance));
+        work_queue_.push_back(instance);
         work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
                                             std::placeholders::_1, std::placeholders::_2));
         pending_queue_.pop_front();
@@ -257,15 +257,17 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     {
         for (auto it = work_queue_.begin(); it != work_queue_.end(); ++it)
         {
-            if (it->get()->computerId() == computer_id)
+            Instance* instance = *it;
+
+            if (instance->computerId() == computer_id)
             {
-                it->release()->deleteLater();
+                instance->deleteLater();
                 work_queue_.erase(it);
                 break;
             }
         }
 
-        if (work_queue_.empty())
+        if (work_queue_.isEmpty())
         {
             LOG(LS_INFO) << "No more items in queue";
             onFinished(FROM_HERE);

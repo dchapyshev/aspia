@@ -69,10 +69,9 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 
     LOG(LS_INFO) << "Connecting to router...";
 
-    channel_ = std::make_unique<base::TcpChannel>();
+    channel_ = new base::TcpChannel(this);
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected,
-            this, &OnlineCheckerRouter::onTcpConnected);
+    connect(channel_, &base::TcpChannel::sig_connected, this, &OnlineCheckerRouter::onTcpConnected);
 
     channel_->connectTo(router_config_.address, router_config_.port);
 }
@@ -82,21 +81,21 @@ void OnlineCheckerRouter::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    authenticator_ = std::make_unique<base::ClientAuthenticator>();
+    authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
     authenticator_->setPassword(router_config_.password);
     authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
 
-    connect(authenticator_.get(), &base::Authenticator::sig_finished,
+    connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(channel_, &base::TcpChannel::sig_disconnected,
                     this, &OnlineCheckerRouter::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &OnlineCheckerRouter::onTcpMessageReceived);
 
             const QVersionNumber& router_version = authenticator_->peerVersion();
@@ -119,10 +118,11 @@ void OnlineCheckerRouter::onTcpConnected()
         }
 
         // Authenticator is no longer needed.
-        authenticator_.release()->deleteLater();
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_.get());
+    authenticator_->start(channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,10 +186,16 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
 
     if (channel_)
-        channel_.release()->deleteLater();
+    {
+        channel_->deleteLater();
+        channel_ = nullptr;
+    }
 
     if (authenticator_)
-        authenticator_.release()->deleteLater();
+    {
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
+    }
 
     for (const auto& computer : computers_)
         emit sig_checkerResult(computer.computer_id, false);

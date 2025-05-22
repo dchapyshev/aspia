@@ -22,8 +22,8 @@
 #include "base/net/tcp_channel.h"
 #include "client/router_config.h"
 
-#include <deque>
-
+#include <QQueue>
+#include <QPointer>
 #include <QTimer>
 
 namespace base {
@@ -46,7 +46,7 @@ public:
         int computer_id = -1;
         base::HostId host_id = base::kInvalidHostId;
     };
-    using ComputerList = std::deque<Computer>;
+    using ComputerList = QQueue<Computer>;
 
     void start(const ComputerList& computers);
 
@@ -63,8 +63,8 @@ private:
     void checkNextComputer();
     void onFinished(const base::Location& location);
 
-    std::unique_ptr<base::TcpChannel> channel_;
-    std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    QPointer<base::TcpChannel> channel_;
+    QPointer<base::ClientAuthenticator> authenticator_;
     QTimer timer_;
     RouterConfig router_config_;
 

@@ -18,7 +18,6 @@
 
 #include "console/address_book_tab.h"
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor_chacha20_poly1305.h"
@@ -777,7 +776,7 @@ void AddressBookTab::startOnlineChecker()
         computer_to_check.address_or_id = QString::fromStdString(computer->address());
         computer_to_check.port = computer->port();
 
-        computers.emplace_back(std::move(computer_to_check));
+        computers.push_back(std::move(computer_to_check));
     }
 
     if (computers.empty())

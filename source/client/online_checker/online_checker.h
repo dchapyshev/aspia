@@ -25,9 +25,9 @@
 #include "client/online_checker/online_checker_router.h"
 
 #include <optional>
-#include <vector>
 
 #include <QObject>
+#include <QList>
 
 namespace client {
 
@@ -45,7 +45,7 @@ public:
         QString address_or_id;
         quint16 port = 0;
     };
-    using ComputerList = std::vector<Computer>;
+    using ComputerList = QList<Computer>;
 
     void checkComputers(const std::optional<RouterConfig>& router_config,
                         const ComputerList& computers);
@@ -66,8 +66,8 @@ private slots:
 private:
     base::Thread io_thread_;
 
-    std::unique_ptr<OnlineCheckerDirect> direct_checker_;
-    std::unique_ptr<OnlineCheckerRouter> router_checker_;
+    OnlineCheckerDirect* direct_checker_ = nullptr;
+    OnlineCheckerRouter* router_checker_ = nullptr;
 
     std::optional<RouterConfig> router_config_;
     OnlineCheckerRouter::ComputerList router_computers_;

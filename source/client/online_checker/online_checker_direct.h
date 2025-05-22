@@ -19,10 +19,8 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_DIRECT_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_DIRECT_H
 
-#include <deque>
-#include <memory>
-
 #include <QObject>
+#include <QQueue>
 
 namespace base {
 class Location;
@@ -44,7 +42,7 @@ public:
         QString address;
         quint16 port = 0;
     };
-    using ComputerList = std::deque<Computer>;
+    using ComputerList = QQueue<Computer>;
 
     void start(const ComputerList& computers);
 
@@ -59,7 +57,7 @@ private:
     ComputerList pending_queue_;
 
     class Instance;
-    std::deque<std::unique_ptr<Instance>> work_queue_;
+    QQueue<Instance*> work_queue_;
 };
 
 } // namespace client

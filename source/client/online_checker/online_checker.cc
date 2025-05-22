@@ -60,7 +60,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
             router_computer.computer_id = computer.computer_id;
             router_computer.host_id = base::stringToHostId(computer.address_or_id);
 
-            router_computers_.emplace_back(router_computer);
+            router_computers_.push_back(router_computer);
         }
         else
         {
@@ -69,7 +69,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
             direct_computer.address = computer.address_or_id;
             direct_computer.port = computer.port;
 
-            direct_computers_.emplace_back(direct_computer);
+            direct_computers_.push_back(direct_computer);
         }
     }
 
@@ -87,12 +87,12 @@ void OnlineChecker::onBeforeThreadRunning()
         {
             LOG(LS_INFO) << "Computers for ROUTER checking: " << router_computers_.size();
 
-            router_checker_ = std::make_unique<OnlineCheckerRouter>(*router_config_);
+            router_checker_ = new OnlineCheckerRouter(*router_config_);
 
-            connect(router_checker_.get(), &OnlineCheckerRouter::sig_checkerResult,
+            connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
                     this, &OnlineChecker::onRouterCheckerResult,
                     Qt::DirectConnection);
-            connect(router_checker_.get(), &OnlineCheckerRouter::sig_checkerFinished,
+            connect(router_checker_, &OnlineCheckerRouter::sig_checkerFinished,
                     this, &OnlineChecker::onRouterCheckerFinished,
                     Qt::DirectConnection);
 
@@ -114,12 +114,12 @@ void OnlineChecker::onBeforeThreadRunning()
     {
         LOG(LS_INFO) << "Computers for DIRECT checking: " << direct_computers_.size();
 
-        direct_checker_ = std::make_unique<OnlineCheckerDirect>();
+        direct_checker_ = new OnlineCheckerDirect();
 
-        connect(direct_checker_.get(), &OnlineCheckerDirect::sig_checkerResult,
+        connect(direct_checker_, &OnlineCheckerDirect::sig_checkerResult,
                 this, &OnlineChecker::onDirectCheckerResult,
                 Qt::DirectConnection);
-        connect(direct_checker_.get(), &OnlineCheckerDirect::sig_checkerFinished,
+        connect(direct_checker_, &OnlineCheckerDirect::sig_checkerFinished,
                 this, &OnlineChecker::onDirectCheckerFinished,
                 Qt::DirectConnection);
 
@@ -137,8 +137,8 @@ void OnlineChecker::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "I/O thread stopping...";
 
-    direct_checker_.reset();
-    router_checker_.reset();
+    delete direct_checker_;
+    delete router_checker_;
 
     LOG(LS_INFO) << "I/O thread stopped";
 }
