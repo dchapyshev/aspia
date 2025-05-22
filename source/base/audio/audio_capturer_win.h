@@ -19,13 +19,13 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 
+#include <QTimer>
+
 #include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"
 #include "base/audio/audio_volume_filter_win.h"
-
-#include <asio/high_resolution_timer.hpp>
 
 #include <Audioclient.h>
 #include <mmdeviceapi.h>
@@ -40,8 +40,10 @@ class DefaultAudioDeviceChangeDetector;
 // surround layouts will both be marked as surround layout.
 class AudioCapturerWin final : public AudioCapturer
 {
+    Q_OBJECT
+
 public:
-    AudioCapturerWin();
+    explicit AudioCapturerWin(QObject* parent = nullptr);
     ~AudioCapturerWin() final;
 
     // AudioCapturer interface.
@@ -66,12 +68,12 @@ private:
     // Receives all packets from the audio capture endpoint buffer and pushes them to the network.
     void doCapture();
 
-    void onCaptureTimeout(const std::error_code& error_code);
+    void onCaptureTimeout();
 
     PacketCapturedCallback callback_;
 
     proto::AudioPacket::SamplingRate sampling_rate_;
-    asio::high_resolution_timer capture_timer_;
+    QTimer* capture_timer_ = nullptr;
     std::chrono::milliseconds audio_device_period_;
     AudioVolumeFilterWin volume_filter_;
 

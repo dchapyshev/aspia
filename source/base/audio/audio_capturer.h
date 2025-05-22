@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_H
 
-#include <QtGlobal>
+#include <QObject>
 
 #include "proto/desktop.h"
 
@@ -28,11 +28,18 @@
 
 namespace base {
 
-class AudioCapturer
+class AudioCapturer : public QObject
 {
+    Q_OBJECT
+
 public:
     using PacketCapturedCallback = std::function<void(std::unique_ptr<proto::AudioPacket> packet)>;
 
+    explicit AudioCapturer(QObject* parent)
+        : QObject(parent)
+    {
+        // Nothing
+    }
     virtual ~AudioCapturer() = default;
 
     // Returns true if audio capturing is supported on this platform. If this returns true, then

@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/audio/win/default_audio_device_change_detector.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 #include <algorithm>
 #include <utility>
@@ -58,13 +57,16 @@ const int kMaxExpectedTimerLag = 30;
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-AudioCapturerWin::AudioCapturerWin()
-    : sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
-      capture_timer_(AsioEventDispatcher::currentIoContext()),
+AudioCapturerWin::AudioCapturerWin(QObject* parent)
+    : AudioCapturer(parent),
+      sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
+      capture_timer_(new QTimer(this)),
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(capture_timer_, &QTimer::timeout, this, &AudioCapturerWin::onCaptureTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,9 +92,7 @@ bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
     // Initialize the capture timer and start capturing. Note, this timer won't be reset or
     // restarted in resetAndInitialize() function. Which means we expect the audio_device_period_
     // is a system wide configuration, it would not be changed with the default audio device.
-    capture_timer_.expires_after(audio_device_period_);
-    capture_timer_.async_wait(
-        std::bind(&AudioCapturerWin::onCaptureTimeout, this, std::placeholders::_1));
+    capture_timer_->start(audio_device_period_);
     return true;
 }
 
@@ -365,19 +365,10 @@ void AudioCapturerWin::doCapture()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioCapturerWin::onCaptureTimeout(const std::error_code& error_code)
+void AudioCapturerWin::onCaptureTimeout()
 {
-    if (error_code)
-    {
-        LOG(LS_ERROR) << "Timer error: " << error_code;
-        return;
-    }
-
     doCapture();
-
-    capture_timer_.expires_after(audio_device_period_);
-    capture_timer_.async_wait(
-        std::bind(&AudioCapturerWin::onCaptureTimeout, this, std::placeholders::_1));
+    capture_timer_->start(audio_device_period_);
 }
 
 //--------------------------------------------------------------------------------------------------
