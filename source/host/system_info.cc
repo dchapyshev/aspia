@@ -30,7 +30,6 @@
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
-#include "base/win/drive_enumerator.h"
 #include "base/win/event_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
@@ -46,6 +45,7 @@
 #include <thread>
 
 #include <QProcessEnvironment>
+#include <QStorageInfo>
 
 namespace host {
 
@@ -797,17 +797,17 @@ void fillMemory(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillDrives(proto::system_info::SystemInfo* system_info)
 {
-    for (base::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-    {
-        const base::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
+    QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
 
+    for (const auto& volume : std::as_const(volumes))
+    {
         proto::system_info::LogicalDrives::Drive* drive =
             system_info->mutable_logical_drives()->add_drive();
 
-        drive->set_path(drive_info.path().toStdString());
-        drive->set_file_system(drive_info.fileSystem().toStdString());
-        drive->set_total_size(drive_info.totalSpace());
-        drive->set_free_size(drive_info.freeSpace());
+        drive->set_path(volume.rootPath().toStdString());
+        drive->set_file_system(volume.fileSystemType().toStdString());
+        drive->set_total_size(volume.bytesTotal());
+        drive->set_free_size(volume.bytesFree());
     }
 }
 

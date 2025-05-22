@@ -561,8 +561,6 @@ if (WIN32)
         win/device.h
         win/device_enumerator.cc
         win/device_enumerator.h
-        win/drive_enumerator.cc
-        win/drive_enumerator.h
         win/event_enumerator.cc
         win/event_enumerator.h
         win/file_version_info.cc

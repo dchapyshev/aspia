@@ -27,9 +27,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QStorageInfo>
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/drive_enumerator.h"
 #include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -111,47 +111,44 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
 {
     proto::DriveList* drive_list = reply->mutable_drive_list();
 
-#if defined(Q_OS_WINDOWS)
-    for (base::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
+
+    for (const auto& volume : std::as_const(volumes))
     {
         proto::DriveList::Item* item = drive_list->add_item();
 
-        const base::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
-        base::DriveEnumerator::DriveInfo::Type drive_type = drive_info.type();
-
-        switch (drive_type)
+#if defined(Q_OS_WINDOWS)
+        switch (GetDriveTypeW(reinterpret_cast<const wchar_t*>(volume.rootPath().utf16())))
         {
-            case base::DriveEnumerator::DriveInfo::Type::FIXED:
-                item->set_type(proto::DriveList::Item::TYPE_FIXED);
-                break;
-
-            case base::DriveEnumerator::DriveInfo::Type::CDROM:
-                item->set_type(proto::DriveList::Item::TYPE_CDROM);
-                break;
-
-            case base::DriveEnumerator::DriveInfo::Type::REMOVABLE:
+            case DRIVE_REMOVABLE:
                 item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);
                 break;
 
-            case base::DriveEnumerator::DriveInfo::Type::RAM:
-                item->set_type(proto::DriveList::Item::TYPE_RAM);
+            case DRIVE_FIXED:
+                item->set_type(proto::DriveList::Item::TYPE_FIXED);
                 break;
 
-            case base::DriveEnumerator::DriveInfo::Type::REMOTE:
+            case DRIVE_REMOTE:
                 item->set_type(proto::DriveList::Item::TYPE_REMOTE);
+                break;
+
+            case DRIVE_CDROM:
+                item->set_type(proto::DriveList::Item::TYPE_CDROM);
+                break;
+
+            case DRIVE_RAMDISK:
+                item->set_type(proto::DriveList::Item::TYPE_RAM);
                 break;
 
             default:
                 break;
         }
-
-        item->set_path(drive_info.path().toStdString());
-    }
 #else
-    proto::DriveList::Item* root_directory = drive_list->add_item();
-    root_directory->set_type(proto::DriveList::Item::TYPE_ROOT_DIRECTORY);
-    root_directory->set_path("/");
+        item->set_type(proto::DriveList::Item::TYPE_FIXED);
 #endif
+
+        item->set_path(volume.rootPath().toStdString());
+    }
 
     QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     if (!desktop_path.isEmpty())
