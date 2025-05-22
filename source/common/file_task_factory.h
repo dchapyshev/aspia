@@ -21,7 +21,7 @@
 
 #include "common/file_task.h"
 
-#include <string>
+#include <QString>
 
 namespace proto {
 class FilePacket;
@@ -40,12 +40,12 @@ public:
     FileTask::Target target() const { return target_; }
 
     base::local_shared_ptr<FileTask> driveList();
-    base::local_shared_ptr<FileTask> fileList(const std::string& path);
-    base::local_shared_ptr<FileTask> createDirectory(const std::string& path);
-    base::local_shared_ptr<FileTask> rename(const std::string& old_name, const std::string& new_name);
-    base::local_shared_ptr<FileTask> remove(const std::string& path);
-    base::local_shared_ptr<FileTask> download(const std::string& file_path);
-    base::local_shared_ptr<FileTask> upload(const std::string& file_path, bool overwrite);
+    base::local_shared_ptr<FileTask> fileList(const QString& path);
+    base::local_shared_ptr<FileTask> createDirectory(const QString& path);
+    base::local_shared_ptr<FileTask> rename(const QString& old_name, const QString& new_name);
+    base::local_shared_ptr<FileTask> remove(const QString& path);
+    base::local_shared_ptr<FileTask> download(const QString& file_path);
+    base::local_shared_ptr<FileTask> upload(const QString& file_path, bool overwrite);
     base::local_shared_ptr<FileTask> packetRequest(quint32 flags);
     base::local_shared_ptr<FileTask> packet(const proto::FilePacket& packet);
     base::local_shared_ptr<FileTask> packet(std::unique_ptr<proto::FilePacket> packet);

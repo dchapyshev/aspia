@@ -73,14 +73,14 @@ void FileRemoveQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTask>
         return;
     }
 
-    const std::string& path = request.file_list_request().path();
+    const QString& path = QString::fromStdString(request.file_list_request().path());
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
         const proto::FileList::Item& item = reply.file_list().item(i);
-        std::string item_path = path + '/' + item.name();
+        QString item_path = path + '/' + QString::fromStdString(item.name());
 
-        pending_tasks_.emplace_back(std::move(item_path), item.is_directory());
+        pending_tasks_.push_back(FileRemover::Task(std::move(item_path), item.is_directory()));
     }
 
     doPendingTasks();
@@ -91,7 +91,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
 {
     while (!pending_tasks_.empty())
     {
-        tasks_.emplace_front(std::move(pending_tasks_.front()));
+        tasks_.push_front(std::move(pending_tasks_.front()));
         pending_tasks_.pop_front();
 
         if (tasks_.front().isDirectory())

@@ -40,11 +40,11 @@ public:
 public slots:
     void onTask(base::local_shared_ptr<common::FileTask> task);
     void onDriveListRequest(common::FileTask::Target target);
-    void onFileListRequest(common::FileTask::Target target, const std::string& path);
-    void onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path);
+    void onFileListRequest(common::FileTask::Target target, const QString& path);
+    void onCreateDirectoryRequest(common::FileTask::Target target, const QString& path);
     void onRenameRequest(common::FileTask::Target target,
-                         const std::string& old_path,
-                         const std::string& new_path);
+                         const QString& old_path,
+                         const QString& new_path);
     void onRemoveRequest(client::FileRemover* remover);
     void onTransferRequest(client::FileTransfer* transfer);
 

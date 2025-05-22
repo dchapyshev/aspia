@@ -41,9 +41,9 @@ FileTransferQueueBuilder::~FileTransferQueueBuilder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferQueueBuilder::start(const std::string& source_path,
-                                     const std::string& target_path,
-                                     const std::vector<FileTransfer::Item>& items)
+void FileTransferQueueBuilder::start(const QString& source_path,
+                                     const QString& target_path,
+                                     const QList<FileTransfer::Item>& items)
 {
     LOG(LS_INFO) << "Start file transfer queue builder";
 
@@ -95,7 +95,7 @@ void FileTransferQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTas
 
         addPendingTask(last_task.sourcePath(),
                        last_task.targetPath(),
-                       item.name(),
+                       QString::fromStdString(item.name()),
                        item.is_directory(),
                        static_cast<qint64>(item.size()));
     }
@@ -104,16 +104,16 @@ void FileTransferQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTas
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferQueueBuilder::addPendingTask(const std::string& source_dir,
-                                              const std::string& target_dir,
-                                              const std::string& item_name,
+void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
+                                              const QString& target_dir,
+                                              const QString& item_name,
                                               bool is_directory,
                                               qint64 size)
 {
     total_size_ += size;
 
-    std::string source_path = source_dir + '/' + item_name;
-    std::string target_path = target_dir + '/' + item_name;
+    QString source_path = source_dir + '/' + item_name;
+    QString target_path = target_dir + '/' + item_name;
 
     pending_tasks_.emplace_back(std::move(source_path), std::move(target_path), is_directory, size);
 }

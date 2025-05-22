@@ -42,7 +42,7 @@ public:
 public slots:
     void start();
     void stop();
-    void setCurrentItem(const std::string& source_path, const std::string& target_path);
+    void setCurrentItem(const QString& source_path, const QString& target_path);
     void setCurrentProgress(int total, int current);
     void setCurrentSpeed(qint64 speed);
     void errorOccurred(const client::FileTransfer::Error& error);

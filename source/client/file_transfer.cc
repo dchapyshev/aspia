@@ -93,8 +93,8 @@ qint64 calculateSpeed(qint64 last_speed, const FileTransfer::Milliseconds& durat
 
 //--------------------------------------------------------------------------------------------------
 FileTransfer::FileTransfer(Type type,
-                           const std::string& source_path,
-                           const std::string& target_path,
+                           const QString& source_path,
+                           const QString& target_path,
                            const QList<Item>& items,
                            QObject* parent)
     : QObject(parent),
@@ -479,7 +479,7 @@ void FileTransfer::doUpdateSpeed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::onError(Error::Type type, proto::FileError code, const std::string& path)
+void FileTransfer::onError(Error::Type type, proto::FileError code, const QString& path)
 {
     auto default_action = actions_.find(type);
     if (default_action != actions_.end())
@@ -525,7 +525,7 @@ FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
 }
 
 //--------------------------------------------------------------------------------------------------
-FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
+FileTransfer::Task::Task(QString&& source_path, QString&& target_path,
                          bool is_directory, qint64 size)
     : source_path_(std::move(source_path)),
       target_path_(std::move(target_path)),

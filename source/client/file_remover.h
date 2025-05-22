@@ -23,11 +23,9 @@
 #include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
-#include <deque>
-#include <string>
-
 #include <QObject>
 #include <QPointer>
+#include <QQueue>
 
 namespace client {
 
@@ -49,7 +47,7 @@ public:
     class Task
     {
     public:
-        Task(std::string&& path, bool is_directory);
+        Task(QString&& path, bool is_directory);
 
         Task(const Task& other) = default;
         Task& operator=(const Task& other) = default;
@@ -59,16 +57,16 @@ public:
 
         ~Task() = default;
 
-        const std::string& path() const { return path_; }
+        const QString& path() const { return path_; }
         bool isDirectory() const { return is_directory_; }
 
     private:
-        std::string path_;
+        QString path_;
         bool is_directory_;
     };
 
 
-    using TaskList = std::deque<Task>;
+    using TaskList = QQueue<Task>;
 
     FileRemover(common::FileTask::Target target, const TaskList& items, QObject* parent = nullptr);
     ~FileRemover() final;
@@ -81,8 +79,8 @@ public slots:
 signals:
     void sig_started();
     void sig_finished();
-    void sig_progressChanged(const std::string& name, int percentage);
-    void sig_errorOccurred(const std::string& path,
+    void sig_progressChanged(const QString& name, int percentage);
+    void sig_errorOccurred(const QString& path,
                            proto::FileError error_code,
                            quint32 available_actions);
     void sig_doTask(base::local_shared_ptr<common::FileTask> task);

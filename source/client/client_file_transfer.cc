@@ -148,21 +148,21 @@ void ClientFileTransfer::onDriveListRequest(common::FileTask::Target target)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onFileListRequest(common::FileTask::Target target, const std::string& path)
+void ClientFileTransfer::onFileListRequest(common::FileTask::Target target, const QString& path)
 {
     onTask(taskFactory(target)->fileList(path));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onCreateDirectoryRequest(common::FileTask::Target target, const std::string& path)
+void ClientFileTransfer::onCreateDirectoryRequest(common::FileTask::Target target, const QString& path)
 {
     onTask(taskFactory(target)->createDirectory(path));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onRenameRequest(common::FileTask::Target target,
-                                         const std::string& old_path,
-                                         const std::string& new_path)
+                                         const QString& old_path,
+                                         const QString& new_path)
 {
     onTask(taskFactory(target)->rename(old_path, new_path));
 }

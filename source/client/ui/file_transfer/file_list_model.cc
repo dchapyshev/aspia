@@ -409,8 +409,7 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
     for (const auto& index : indexes)
     {
         if (index.column() == COLUMN_NAME)
-            file_list.push_back(FileTransfer::Item(
-                nameAt(index).toStdString(), sizeAt(index), isFolder(index)));
+            file_list.push_back(FileTransfer::Item(nameAt(index), sizeAt(index), isFolder(index)));
     }
 
     if (file_list.empty())

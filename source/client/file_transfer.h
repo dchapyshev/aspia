@@ -74,7 +74,7 @@ public:
             // Nothing
         }
 
-        Error(Type type, proto::FileError code, const std::string& path)
+        Error(Type type, proto::FileError code, const QString& path)
             : type_(type),
               code_(code),
               path_(path)
@@ -86,7 +86,7 @@ public:
 
         Type type() const { return type_; }
         proto::FileError code() const { return code_; }
-        const std::string& path() const { return path_; }
+        const QString& path() const { return path_; }
 
         quint32 availableActions() const;
         Action defaultAction() const;
@@ -94,12 +94,12 @@ public:
     private:
         const Type type_;
         const proto::FileError code_;
-        const std::string path_;
+        const QString path_;
     };
 
     struct Item
     {
-        Item(const std::string& name, qint64 size, bool is_directory)
+        Item(const QString& name, qint64 size, bool is_directory)
             : name(name),
               is_directory(is_directory),
               size(size)
@@ -107,7 +107,7 @@ public:
             // Nothing
         }
 
-        Item(std::string&& name, qint64 size, bool is_directory)
+        Item(QString&& name, qint64 size, bool is_directory)
             : name(std::move(name)),
               is_directory(is_directory),
               size(size)
@@ -115,7 +115,7 @@ public:
             // Nothing
         }
 
-        std::string name;
+        QString name;
         bool is_directory;
         qint64 size;
     };
@@ -123,7 +123,7 @@ public:
     class Task
     {
     public:
-        Task(std::string&& source_path, std::string&& target_path,
+        Task(QString&& source_path, QString&& target_path,
              bool is_directory, qint64 size);
 
         Task(const Task& other) = default;
@@ -134,8 +134,8 @@ public:
 
         ~Task() = default;
 
-        const std::string& sourcePath() const { return source_path_; }
-        const std::string& targetPath() const { return target_path_; }
+        const QString& sourcePath() const { return source_path_; }
+        const QString& targetPath() const { return target_path_; }
         bool isDirectory() const { return is_directory_; }
         qint64 size() const { return size_; }
 
@@ -143,8 +143,8 @@ public:
         void setOverwrite(bool value) { overwrite_ = value; }
 
     private:
-        std::string source_path_;
-        std::string target_path_;
+        QString source_path_;
+        QString target_path_;
         bool is_directory_;
         bool overwrite_ = false;
         qint64 size_;
@@ -156,8 +156,8 @@ public:
     using Milliseconds = std::chrono::milliseconds;
 
     FileTransfer(Type type,
-                 const std::string& source_path,
-                 const std::string& target_path,
+                 const QString& source_path,
+                 const QString& target_path,
                  const QList<Item>& items,
                  QObject* parent = nullptr);
     ~FileTransfer() final;
@@ -172,7 +172,7 @@ signals:
     void sig_started();
     void sig_finished();
     void sig_progressChanged(int total, int current);
-    void sig_currentItemChanged(const std::string& source_path, const std::string& target_path);
+    void sig_currentItemChanged(const QString& source_path, const QString& target_path);
     void sig_currentSpeedChanged(qint64 speed);
     void sig_errorOccurred(const client::FileTransfer::Error& error);
     void sig_doTask(base::local_shared_ptr<common::FileTask> task);
@@ -187,13 +187,13 @@ private:
     void doFrontTask(bool overwrite);
     void doNextTask();
     void doUpdateSpeed();
-    void onError(Error::Type type, proto::FileError code, const std::string& path = std::string());
+    void onError(Error::Type type, proto::FileError code, const QString& path = QString());
     void setActionForErrorType(Error::Type error_type, Error::Action action);
     void onFinished(const base::Location& location);
 
     const Type type_;
-    const std::string source_path_;
-    const std::string target_path_;
+    const QString source_path_;
+    const QString target_path_;
     const QList<Item> items_;
 
     QPointer<common::FileTaskFactory> task_factory_source_;

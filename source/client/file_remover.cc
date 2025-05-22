@@ -70,7 +70,7 @@ void FileRemover::start()
         }
         else
         {
-            emit sig_errorOccurred(std::string(), error_code, ACTION_ABORT);
+            emit sig_errorOccurred(QString(), error_code, ACTION_ABORT);
         }
 
         queue_builder_->deleteLater();
@@ -123,8 +123,8 @@ void FileRemover::onTaskDone(base::local_shared_ptr<common::FileTask> task)
 
     if (!request.has_remove_request())
     {
-        emit sig_errorOccurred(
-            request.remove_request().path(), proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
+        emit sig_errorOccurred(QString::fromStdString(request.remove_request().path()),
+                               proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
         return;
     }
 
@@ -152,7 +152,8 @@ void FileRemover::onTaskDone(base::local_shared_ptr<common::FileTask> task)
                 break;
         }
 
-        emit sig_errorOccurred(request.remove_request().path(), reply.error_code(), actions);
+        emit sig_errorOccurred(QString::fromStdString(request.remove_request().path()),
+                               reply.error_code(), actions);
         return;
     }
 
@@ -181,7 +182,7 @@ void FileRemover::doCurrentTask()
     DCHECK_NE(tasks_count_, 0);
 
     const size_t percentage = (tasks_count_ - tasks_.size()) * 100 / tasks_count_;
-    const std::string& path = tasks_.front().path();
+    const QString& path = tasks_.front().path();
 
     // Updating progress in UI.
     emit sig_progressChanged(path, static_cast<int>(percentage));
@@ -198,7 +199,7 @@ void FileRemover::onFinished(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-FileRemover::Task::Task(std::string&& path, bool is_directory)
+FileRemover::Task::Task(QString&& path, bool is_directory)
     : path_(std::move(path)),
       is_directory_(is_directory)
 {

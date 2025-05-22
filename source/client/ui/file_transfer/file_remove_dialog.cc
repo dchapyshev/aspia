@@ -97,10 +97,10 @@ void FileRemoveDialog::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentage)
+void FileRemoveDialog::setCurrentProgress(const QString& name, int percentage)
 {
     QString elided_text = label_metrics_->elidedText(
-        tr("Deleting: %1").arg(QString::fromStdString(name)),
+        tr("Deleting: %1").arg(name),
         Qt::ElideMiddle,
         ui.label_current_item->width());
 
@@ -116,7 +116,7 @@ void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentag
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveDialog::errorOccurred(const std::string& path,
+void FileRemoveDialog::errorOccurred(const QString& path,
                                      proto::FileError error_code,
                                      quint32 available_actions)
 {
@@ -129,15 +129,14 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
 
     QString message;
 
-    if (path.empty())
+    if (path.isEmpty())
     {
         message = tr("An error occurred while retrieving the list of files: %1")
             .arg(fileErrorToString(error_code));
     }
     else
     {
-        message = tr("Failed to delete \"%1\": %2.")
-            .arg(QString::fromStdString(path), fileErrorToString(error_code));
+        message = tr("Failed to delete \"%1\": %2.").arg(path, fileErrorToString(error_code));
     }
 
     QPointer<QMessageBox> dialog(new QMessageBox(this));

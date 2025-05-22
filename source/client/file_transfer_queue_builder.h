@@ -33,9 +33,9 @@ public:
     ~FileTransferQueueBuilder() final;
 
     // Starts building of the task queue.
-    void start(const std::string& source_path,
-               const std::string& target_path,
-               const std::vector<FileTransfer::Item>& items);
+    void start(const QString& source_path,
+               const QString& target_path,
+               const QList<FileTransfer::Item>& items);
 
     FileTransfer::TaskList takeQueue();
     qint64 totalSize() const;
@@ -48,9 +48,9 @@ private slots:
     void onTaskDone(base::local_shared_ptr<common::FileTask> task);
 
 private:
-    void addPendingTask(const std::string& source_dir,
-                        const std::string& target_dir,
-                        const std::string& item_name,
+    void addPendingTask(const QString& source_dir,
+                        const QString& target_dir,
+                        const QString& item_name,
                         bool is_directory,
                         qint64 size);
     void doPendingTasks();

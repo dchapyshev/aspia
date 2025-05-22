@@ -408,18 +408,15 @@ void FilePanel::removeSelected()
         return;
 
     FileListModel* model = static_cast<FileListModel*>(ui.list->model());
-    std::string current_path = currentPath().toStdString();
+    QString current_path = currentPath();
 
     QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
     FileRemover::TaskList items;
 
     for (const auto& index : std::as_const(selected_rows))
-    {
-        items.emplace_back(current_path + model->nameAt(index).toStdString(),
-                           model->isFolder(index));
-    }
+        items.push_back(FileRemover::Task(current_path + model->nameAt(index), model->isFolder(index)));
 
-    if (items.empty())
+    if (items.isEmpty())
         return;
 
     QMessageBox message_box(QMessageBox::Question,
@@ -431,9 +428,7 @@ void FilePanel::removeSelected()
     message_box.button(QMessageBox::No)->setText(tr("No"));
 
     if (message_box.exec() != QMessageBox::Yes)
-    {
         return;
-    }
 
     emit sig_removeItems(this, items);
 }
@@ -452,7 +447,7 @@ void FilePanel::sendSelected()
     for (const auto& index : std::as_const(selected_rows))
     {
         items.push_back(FileTransfer::Item(
-            model->nameAt(index).toStdString(), model->sizeAt(index), model->isFolder(index)));
+            model->nameAt(index), model->sizeAt(index), model->isFolder(index)));
     }
 
     if (items.isEmpty())

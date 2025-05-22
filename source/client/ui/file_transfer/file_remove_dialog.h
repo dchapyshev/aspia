@@ -42,8 +42,8 @@ public:
 public slots:
     void start();
     void stop();
-    void setCurrentProgress(const std::string& name, int percentage);
-    void errorOccurred(const std::string& path,
+    void setCurrentProgress(const QString& name, int percentage);
+    void errorOccurred(const QString& path,
                        proto::FileError error_code,
                        quint32 available_actions);
 

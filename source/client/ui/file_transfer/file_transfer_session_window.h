@@ -65,11 +65,9 @@ public slots:
 
 signals:
     void sig_driveListRequest(common::FileTask::Target target);
-    void sig_fileListRequest(common::FileTask::Target target, const std::string& path);
-    void sig_createDirectoryRequest(common::FileTask::Target target, const std::string& path);
-    void sig_renameRequest(common::FileTask::Target target,
-                         const std::string& old_path,
-                         const std::string& new_path);
+    void sig_fileListRequest(common::FileTask::Target target, const QString& path);
+    void sig_createDirectoryRequest(common::FileTask::Target target, const QString& path);
+    void sig_renameRequest(common::FileTask::Target target, const QString& old_path, const QString& new_path);
     void sig_removeRequest(FileRemover* remover);
     void sig_transferRequest(FileTransfer* transfer);
 

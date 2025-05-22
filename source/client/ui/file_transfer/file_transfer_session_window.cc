@@ -381,8 +381,7 @@ void FileTransferSessionWindow::transferItems(
     ui->local_panel->setEnabled(false);
     ui->remote_panel->setEnabled(false);
 
-    FileTransfer* transfer =
-        new FileTransfer(type, source_path.toStdString(), target_path.toStdString(), items);
+    FileTransfer* transfer = new FileTransfer(type, source_path, target_path, items);
     transfer->moveToThread(base::GuiApplication::ioThread());
 
     connect(transfer, &FileTransfer::sig_started,
@@ -447,18 +446,18 @@ void FileTransferSessionWindow::initPanel(
 
     connect(panel, &FilePanel::sig_fileList, this, [this, target](const QString& path)
     {
-        emit sig_fileListRequest(target, path.toStdString());
+        emit sig_fileListRequest(target, path);
     });
 
     connect(panel, &FilePanel::sig_rename,
             this, [this, target](const QString& old_path, const QString& new_path)
     {
-        emit sig_renameRequest(target, old_path.toStdString(), new_path.toStdString());
+        emit sig_renameRequest(target, old_path, new_path);
     });
 
     connect(panel, &FilePanel::sig_createDirectory, this, [this, target](const QString& path)
     {
-        emit sig_createDirectoryRequest(target, path.toStdString());
+        emit sig_createDirectoryRequest(target, path);
     });
 
     connect(panel, &FilePanel::sig_removeItems, this, &FileTransferSessionWindow::removeItems);
