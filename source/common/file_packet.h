@@ -23,7 +23,7 @@ namespace common {
 
 // When transferring a file is divided into parts and each part is transmitted separately.
 // This parameter specifies the size of the part.
-static const size_t kMaxFilePacketSize = 64 * 1024; // 64 kB
+static const size_t kMaxFilePacketSize = 256 * 1024; // 256 kB
 
 } // namespace common
 
