@@ -49,6 +49,7 @@ list(APPEND SOURCE_BASE
     service.h
     session_id.cc
     session_id.h
+    shared_pointer.h
     smbios.h
     smbios_parser.cc
     smbios_parser.h
@@ -311,8 +312,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/screen_capturer_helper.h
     desktop/screen_capturer_wrapper.cc
     desktop/screen_capturer_wrapper.h
-    desktop/shared_frame.cc
-    desktop/shared_frame.h
     desktop/shared_memory_frame.cc
     desktop/shared_memory_frame.h)
 

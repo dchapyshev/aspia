@@ -25,7 +25,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-DxgiFrame::DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
+DxgiFrame::DxgiFrame(SharedPointer<DxgiDuplicatorController> controller,
                      SharedMemoryFactory* shared_memory_factory)
     : shared_memory_factory_(shared_memory_factory),
       context_(std::move(controller))
@@ -93,17 +93,17 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
         DCHECK_EQ(frame->stride(), frame_size.width() * frame->format().bytesPerPixel());
         memset(frame->frameData(), 0, static_cast<size_t>(frame->stride() * frame_size.height()));
 
-        frame_ = SharedFrame::wrap(std::move(frame));
+        frame_.reset(frame.release());
     }
 
     return !!frame_;
 }
 
 //--------------------------------------------------------------------------------------------------
-SharedFrame* DxgiFrame::frame() const
+SharedPointer<Frame> DxgiFrame::frame() const
 {
     DCHECK(frame_);
-    return frame_.get();
+    return frame_;
 }
 
 //--------------------------------------------------------------------------------------------------

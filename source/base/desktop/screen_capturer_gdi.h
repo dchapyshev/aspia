@@ -20,7 +20,6 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 
 #include "base/desktop/screen_capturer_win.h"
-#include "base/desktop/shared_frame.h"
 #include "base/win/scoped_hdc.h"
 
 namespace base {

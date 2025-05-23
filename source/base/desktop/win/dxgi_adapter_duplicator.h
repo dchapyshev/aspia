@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_ADAPTER_DUPLICATOR_H
 #define BASE_DESKTOP_WIN_DXGI_ADAPTER_DUPLICATOR_H
 
-#include "base/desktop/shared_frame.h"
 #include "base/desktop/win/d3d_device.h"
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_output_duplicator.h"
@@ -56,10 +55,10 @@ public:
 
     // Sequentially calls Duplicate function of all the DxgiOutputDuplicator instances owned by
     // this instance, and writes into |target|.
-    bool duplicate(Context* context, SharedFrame* target, DxgiCursor* cursor);
+    bool duplicate(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
 
     // Captures one monitor and writes into |target|. |monitor_id| should be between [0, screenCount()).
-    bool duplicateMonitor(Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor);
+    bool duplicateMonitor(Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor);
 
     // Returns desktop rect covered by this DxgiAdapterDuplicator.
     const Rect& desktopRect() const { return desktop_rect_; }

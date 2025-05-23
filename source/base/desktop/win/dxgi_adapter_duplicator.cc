@@ -162,7 +162,8 @@ void DxgiAdapterDuplicator::unregister(const Context* const context)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiAdapterDuplicator::duplicate(Context* context, SharedFrame* target, DxgiCursor* cursor)
+bool DxgiAdapterDuplicator::duplicate(
+    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
@@ -182,7 +183,7 @@ bool DxgiAdapterDuplicator::duplicate(Context* context, SharedFrame* target, Dxg
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiAdapterDuplicator::duplicateMonitor(
-    Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor)
+    Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     DCHECK_GE(monitor_id, 0);
     DCHECK_LT(monitor_id, static_cast<int>(duplicators_.size()));

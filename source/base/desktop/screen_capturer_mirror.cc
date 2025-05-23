@@ -24,7 +24,6 @@
 #include "base/desktop/win/dfmirage_helper.h"
 #include "base/desktop/win/mv2_helper.h"
 #include "base/desktop/frame_aligned.h"
-#include "base/desktop/shared_frame.h"
 #include "base/desktop/shared_memory_frame.h"
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/ipc/shared_memory_factory.h"

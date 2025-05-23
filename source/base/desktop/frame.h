@@ -64,7 +64,7 @@ public:
 
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
-    // Frame should be kept unchanged. For example and SharedFrame::share().
+    // Frame should be kept unchanged.
     void copyFrameInfoFrom(const Frame& other);
 
 protected:

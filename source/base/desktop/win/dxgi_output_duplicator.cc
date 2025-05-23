@@ -19,7 +19,6 @@
 #include "base/desktop/win/dxgi_output_duplicator.h"
 
 #include "base/logging.h"
-#include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/dxgi_texture_mapping.h"
 #include "base/desktop/win/dxgi_texture_staging.h"
 
@@ -217,7 +216,7 @@ bool DxgiOutputDuplicator::releaseFrame()
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::duplicate(
-    Context* context, const Point& offset, SharedFrame* target, DxgiCursor* cursor)
+    Context* context, const Point& offset, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     DCHECK(duplication_);
     DCHECK(texture_);
@@ -314,7 +313,7 @@ bool DxgiOutputDuplicator::duplicate(
                 // not. So we need to rotate it reversely.
                 const Rect source_rect =
                     rotateRect(it.rect(), desktopSize(), reverseRotation(rotation_));
-                rotateDesktopFrame(source, source_rect, rotation_, offset, target);
+                rotateDesktopFrame(source, source_rect, rotation_, offset, target.get());
             }
         }
         else
@@ -331,7 +330,7 @@ bool DxgiOutputDuplicator::duplicate(
             }
         }
 
-        last_frame_ = target->share();
+        last_frame_ = target;
         last_frame_offset_ = offset;
 
         updated_region.translate(offset.x(), offset.y());

@@ -19,13 +19,11 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_FRAME_H
 #define BASE_DESKTOP_WIN_DXGI_FRAME_H
 
+#include "base/shared_pointer.h"
 #include "base/desktop/screen_capturer.h"
-#include "base/desktop/shared_frame.h"
 #include "base/desktop/win/dxgi_context.h"
 
-#include <memory>
 #include <optional>
-#include <vector>
 
 namespace base {
 
@@ -39,12 +37,12 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    explicit DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
+    explicit DxgiFrame(SharedPointer<DxgiDuplicatorController> controller,
                        SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
-    SharedFrame* frame() const;
+    SharedPointer<Frame> frame() const;
 
 private:
     // Allows DxgiDuplicatorController to access prepare() and context() function as well as
@@ -60,7 +58,7 @@ private:
     SharedMemoryFactory* const shared_memory_factory_;
     std::optional<Size> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
-    std::unique_ptr<SharedFrame> frame_;
+    SharedPointer<Frame> frame_;
     Context context_;
 };
 

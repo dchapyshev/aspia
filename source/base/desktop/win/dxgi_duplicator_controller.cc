@@ -188,22 +188,24 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     if (!frame->prepare(selectedDesktopSize(monitor_id), monitor_id))
         return Result::FRAME_PREPARE_FAILED;
 
-    frame->frame()->updatedRegion()->clear();
+    SharedPointer<Frame> shared_frame = frame->frame();
+
+    shared_frame->updatedRegion()->clear();
 
     setup(frame->context());
 
-    if (ensureFrameCaptured(frame->context(), frame->frame(), cursor))
+    if (ensureFrameCaptured(frame->context(), shared_frame, cursor))
     {
         bool result;
 
         if (monitor_id < 0)
         {
             // Capture entire screen.
-            result = doDuplicateAll(frame->context(), frame->frame(), cursor);
+            result = doDuplicateAll(frame->context(), shared_frame, cursor);
         }
         else
         {
-            result = doDuplicateOne(frame->context(), monitor_id, frame->frame(), cursor);
+            result = doDuplicateOne(frame->context(), monitor_id, shared_frame, cursor);
         }
 
         if (result)
@@ -355,7 +357,7 @@ void DxgiDuplicatorController::setup(Context* context)
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::doDuplicateAll(
-    Context* context, SharedFrame* target, DxgiCursor* cursor)
+    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     for (size_t i = 0; i < duplicators_.size(); ++i)
     {
@@ -368,7 +370,7 @@ bool DxgiDuplicatorController::doDuplicateAll(
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::doDuplicateOne(
-    Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor)
+    Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     DCHECK(monitor_id >= 0);
 
@@ -447,7 +449,7 @@ Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::ensureFrameCaptured(
-    Context* context, SharedFrame* target, DxgiCursor* cursor)
+    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -471,19 +473,17 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
     if (numFramesCaptured() >= frames_to_skip)
         return true;
 
-    std::unique_ptr<SharedFrame> fallback_frame;
-    SharedFrame* shared_frame = nullptr;
+    SharedPointer<Frame> frame;
 
     if (target->size().width() >= desktopSize().width() &&
         target->size().height() >= desktopSize().height())
     {
         // |target| is large enough to cover entire screen, we do not need to use |fallback_frame|.
-        shared_frame = target;
+        frame = target;
     }
     else
     {
-        fallback_frame = SharedFrame::wrap(FrameAligned::create(desktopSize(), PixelFormat::ARGB(), 32));
-        shared_frame = fallback_frame.get();
+        frame.reset(FrameAligned::create(desktopSize(), PixelFormat::ARGB(), 32).release());
     }
 
     const TimePoint start_ms = Clock::now();
@@ -500,7 +500,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
         last_frame_start_ms = Clock::now();
 
-        if (!doDuplicateAll(context, shared_frame, cursor))
+        if (!doDuplicateAll(context, frame, cursor))
             return false;
 
         if (Clock::now() - start_ms > timeout_ms)

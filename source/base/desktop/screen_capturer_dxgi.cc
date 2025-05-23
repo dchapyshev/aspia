@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/screen_capture_utils.h"
-#include "base/ipc/shared_memory_factory.h"
 
 namespace base {
 
@@ -56,7 +55,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
         const QString& device_name = device_names[device_index];
         bool device_found = false;
 
-        for (const auto& gdi_screen : gdi_screens.screens)
+        for (const auto& gdi_screen : std::as_const(gdi_screens.screens))
         {
             if (gdi_screen.title == device_name)
             {
@@ -116,7 +115,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerDxgi::ScreenCapturerDxgi(QObject* parent)
     : ScreenCapturerWin(Type::WIN_DXGI, parent),
-      controller_(base::make_local_shared<DxgiDuplicatorController>()),
+      controller_(new DxgiDuplicatorController()),
       cursor_(std::make_unique<DxgiCursor>())
 {
     LOG(LS_INFO) << "Ctor";
@@ -163,7 +162,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 
     dpi_for_rect_.clear();
 
-    for (const auto& screen : screens->screens)
+    for (const auto& screen : std::as_const(screens->screens))
     {
         dpi_for_rect_.emplace_back(
             Rect::makeXYWH(screen.position, screen.resolution), screen.dpi);
@@ -248,7 +247,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
         {
             temporary_error_count_ = 0;
             *error = Error::SUCCEEDED;
-            return queue_.currentFrame()->frame();
+            return queue_.currentFrame()->frame().get();
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:

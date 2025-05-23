@@ -19,8 +19,8 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_OUTPUT_DUPLICATOR_H
 #define BASE_DESKTOP_WIN_DXGI_OUTPUT_DUPLICATOR_H
 
+#include "base/shared_pointer.h"
 #include "base/desktop/frame_rotation.h"
-#include "base/desktop/shared_frame.h"
 #include "base/desktop/win/d3d_device.h"
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_cursor.h"
@@ -64,8 +64,7 @@ public:
     // this function copies the content to the rectangle of (offset.x(), offset.y()) to
     // (offset.x() + desktop_rect_.width(), offset.y() + desktop_rect_.height()).
     // Returns false in case of a failure.
-    bool duplicate(
-        Context* context, const Point& offset, SharedFrame* target_frame, DxgiCursor* cursor);
+    bool duplicate(Context* context, const Point& offset, SharedPointer<Frame>& target_frame, DxgiCursor* cursor);
 
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
     const Rect& desktopRect() const { return desktop_rect_; }
@@ -129,7 +128,7 @@ private:
 
     // The last full frame of this output and its offset. If on AcquireNextFrame() failed because
     // of timeout, i.e. no update, we can copy content from |last_frame_|.
-    std::unique_ptr<SharedFrame> last_frame_;
+    SharedPointer<Frame> last_frame_;
     Point last_frame_offset_;
 
     qint64 num_frames_captured_ = 0;

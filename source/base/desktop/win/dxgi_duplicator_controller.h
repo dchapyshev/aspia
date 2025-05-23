@@ -141,10 +141,10 @@ private:
     void setup(Context* context);
 
     // Captures all monitors.
-    bool doDuplicateAll(Context* context, SharedFrame* target, DxgiCursor* cursor);
+    bool doDuplicateAll(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
 
     // Captures one monitor.
-    bool doDuplicateOne(Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor);
+    bool doDuplicateOne(Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor);
 
     // The minimum numFramesCaptured() returned by |duplicators_|.
     qint64 numFramesCaptured() const;
@@ -168,7 +168,7 @@ private:
     // the requirement.
     // According to http://crbug.com/682112, dxgi capturer returns a black frame during first
     // several capture attempts.
-    bool ensureFrameCaptured(Context* context, SharedFrame* target, DxgiCursor* cursor);
+    bool ensureFrameCaptured(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
 
     // Moves |desktop_rect_| and all underlying |duplicators_|, putting top left corner of the
     // desktop at (0, 0). This is necessary because DXGI_OUTPUT_DESC may return negative

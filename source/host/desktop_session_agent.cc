@@ -25,7 +25,6 @@
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
-#include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "host/system_settings.h"
 
