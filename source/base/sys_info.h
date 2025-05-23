@@ -19,11 +19,9 @@
 #ifndef BASE_SYS_INFO_H
 #define BASE_SYS_INFO_H
 
-#include "base/macros_magic.h"
-
-#include <cstdint>
-
 #include <QString>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

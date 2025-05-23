@@ -23,7 +23,6 @@
 #include "host/win/touch_injector_defines.h"
 #include "proto/desktop.h"
 
-#include <cstdint>
 #include <map>
 
 #include <qt_windows.h>

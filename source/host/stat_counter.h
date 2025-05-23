@@ -19,11 +19,9 @@
 #ifndef HOST_STAT_COUNTER_H
 #define HOST_STAT_COUNTER_H
 
-#include "base/macros_magic.h"
-
-#include <cstdint>
-
 #include <QTimer>
+
+#include "base/macros_magic.h"
 
 namespace host {
 

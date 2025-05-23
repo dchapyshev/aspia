@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/codec/audio_bus.h"
+#include "base/codec/audio_sample_types.h"
 #include "base/codec/multi_channel_resampler.h"
 
 #include <opus.h>

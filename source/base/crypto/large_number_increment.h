@@ -20,7 +20,6 @@
 #define BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H
 
 #include <QByteArray>
-#include <cstdint>
 
 namespace base {
 

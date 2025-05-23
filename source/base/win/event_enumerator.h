@@ -21,9 +21,6 @@
 
 #include "base/win/scoped_object.h"
 
-#include <cstdint>
-#include <memory>
-
 #include <QByteArray>
 #include <QString>
 

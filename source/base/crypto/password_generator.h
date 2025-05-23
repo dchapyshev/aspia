@@ -19,10 +19,9 @@
 #ifndef BASE_CRYPTO_PASSWORD_GENERATOR_H
 #define BASE_CRYPTO_PASSWORD_GENERATOR_H
 
-#include "base/macros_magic.h"
-
-#include <cstdint>
 #include <QString>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

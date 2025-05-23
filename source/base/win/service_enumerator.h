@@ -19,12 +19,11 @@
 #ifndef BASE_WIN_SERVICE_ENUMERATOR_H
 #define BASE_WIN_SERVICE_ENUMERATOR_H
 
+#include <QString>
+
 #include "base/win/scoped_object.h"
 
-#include <cstdint>
 #include <memory>
-
-#include <QString>
 
 namespace base {
 

@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 
-#include <cstdint>
-
 #include <opus.h>
 
 namespace base {

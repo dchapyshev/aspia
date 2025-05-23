@@ -19,9 +19,7 @@
 #ifndef CLIENT_ROUTER_CONFIG_H
 #define CLIENT_ROUTER_CONFIG_H
 
-#include <cstdint>
-#include <vector>
-
+#include <QList>
 #include <QString>
 
 namespace client {
@@ -45,7 +43,7 @@ struct RouterConfig
     QString password;
 };
 
-using RouterConfigList = std::vector<RouterConfig>;
+using RouterConfigList = QList<RouterConfig>;
 
 } // namespace client
 

@@ -20,10 +20,8 @@
 #define BASE_CODEC_AUDIO_BUS_H
 
 #include "base/macros_magic.h"
-#include "base/codec/audio_sample_types.h"
 #include "base/memory/aligned_memory.h"
 
-#include <cstdint>
 #include <memory>
 #include <vector>
 
