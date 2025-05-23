@@ -31,6 +31,7 @@ DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, QObject* parent)
 {
     DCHECK(channel_);
 
+    channel_->setParent(this);
     session_id_ = channel_->peerSessionId();
 
     LOG(LS_INFO) << "Ctor (sid=" << session_id_ << ")";
@@ -47,9 +48,9 @@ void DesktopSessionIpc::start()
 {
     LOG(LS_INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
 
-    connect(channel_.get(), &base::IpcChannel::sig_disconnected,
+    connect(channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionIpc::onIpcDisconnected);
-    connect(channel_.get(), &base::IpcChannel::sig_messageReceived,
+    connect(channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopSessionIpc::onIpcMessageReceived);
 
     channel_->resume();
@@ -113,7 +114,10 @@ void DesktopSessionIpc::captureScreen()
             LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
         }
 
-        emit sig_screenCaptured(&last_frame_, last_mouse_cursor_.get());
+        base::MouseCursor* last_mouse_cursor =
+            last_mouse_cursor_.isValid() ? &last_mouse_cursor_ : nullptr;
+
+        emit sig_screenCaptured(&last_frame_, last_mouse_cursor);
     }
     else
     {
@@ -290,10 +294,10 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         base::Point dpi =
             base::Point(serialized_mouse_cursor.dpi_x(), serialized_mouse_cursor.dpi_y());
 
-        last_mouse_cursor_ = std::make_unique<base::MouseCursor>(
+        last_mouse_cursor_ = base::MouseCursor(
             QByteArray::fromStdString(serialized_mouse_cursor.data()), size, hotspot, dpi);
 
-        mouse_cursor = last_mouse_cursor_.get();
+        mouse_cursor = &last_mouse_cursor_;
     }
 
     if (screen_captured.error_code() == proto::VIDEO_ERROR_CODE_OK)
@@ -321,8 +325,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
         return;
     }
 
-    shared_buffers_.emplace(
-        shared_buffer_id, base::SharedPointer<base::SharedMemory>(shared_memory.release()));
+    shared_buffers_[shared_buffer_id] = base::SharedPointer<base::SharedMemory>(shared_memory.release());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -330,9 +333,9 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id << " (sid=" << session_id_ << ")";
 
-    shared_buffers_.erase(shared_buffer_id);
+    shared_buffers_.remove(shared_buffer_id);
 
-    if (shared_buffers_.empty())
+    if (shared_buffers_.isEmpty())
     {
         LOG(LS_INFO) << "Reset last frame (sid=" << session_id_ << ")";
         last_frame_.dettach();
@@ -350,7 +353,7 @@ base::SharedPointer<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shar
         return nullptr;
     }
 
-    return result->second;
+    return result.value();
 }
 
 } // namespace host

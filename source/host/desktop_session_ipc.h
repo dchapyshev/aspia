@@ -19,13 +19,13 @@
 #ifndef HOST_DESKTOP_SESSION_IPC_H
 #define HOST_DESKTOP_SESSION_IPC_H
 
+#include <QMap>
+
 #include "base/shared_pointer.h"
 #include "base/desktop/shared_memory_frame.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory.h"
 #include "host/desktop_session.h"
-
-#include <map>
 
 namespace host {
 
@@ -55,7 +55,7 @@ private slots:
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    using SharedBuffers = std::map<int, base::SharedPointer<base::SharedMemory>>;
+    using SharedBuffers = QMap<int, base::SharedPointer<base::SharedMemory>>;
 
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
     void onCreateSharedBuffer(int shared_buffer_id);
@@ -63,10 +63,10 @@ private:
     base::SharedPointer<base::SharedMemory> sharedBuffer(int shared_buffer_id);
 
     base::SessionId session_id_ = base::kInvalidSessionId;
-    std::unique_ptr<base::IpcChannel> channel_;
+    base::IpcChannel* channel_ = nullptr;
     SharedBuffers shared_buffers_;
     base::SharedMemoryFrame last_frame_;
-    std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
+    base::MouseCursor last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.

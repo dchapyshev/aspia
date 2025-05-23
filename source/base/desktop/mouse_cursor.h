@@ -33,6 +33,7 @@ public:
     static const int kDefaultDpiX = 96;
     static const int kDefaultDpiY = 96;
 
+    MouseCursor() = default;
     MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot,
                 const Point& dpi = Point(kDefaultDpiX, kDefaultDpiY));
 
@@ -43,6 +44,8 @@ public:
     MouseCursor& operator=(const MouseCursor& other) = default;
 
     ~MouseCursor() = default;
+
+    bool isValid() const;
 
     const Size& size() const { return size_; }
     int width() const { return size_.width(); }

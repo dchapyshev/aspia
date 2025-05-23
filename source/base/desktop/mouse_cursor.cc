@@ -55,6 +55,12 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
+bool MouseCursor::isValid() const
+{
+    return !image_.isEmpty() && !size_.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
 int MouseCursor::stride() const
 {
     return size_.width() * static_cast<int>(sizeof(quint32));
