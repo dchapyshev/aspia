@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/stl_util.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "router/database.h"
@@ -50,7 +49,7 @@ SessionHost::~SessionHost()
 //--------------------------------------------------------------------------------------------------
 bool SessionHost::hasHostId(base::HostId host_id) const
 {
-    return base::contains(host_id_list_, host_id);
+    return host_id_list_.contains(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,7 +149,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
                 host_id_response->set_error_code(proto::HostIdResponse::SUCCESS);
                 host_id_response->set_host_id(host_id);
 
-                if (!base::contains(host_id_list_, host_id))
+                if (!host_id_list_.contains(host_id))
                 {
                     host_id_list_.push_back(host_id);
 

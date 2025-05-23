@@ -43,7 +43,7 @@ namespace {
 
 constexpr quint32 kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
-std::set<quint32> g_local_pressed_keys;
+QSet<quint32> g_local_pressed_keys;
 
 //--------------------------------------------------------------------------------------------------
 bool isNumLockActivated()
@@ -622,7 +622,7 @@ void DesktopWidget::executeKeyEvent(quint32 usb_keycode, quint32 flags)
     if (flags & proto::KeyEvent::PRESSED)
         remote_pressed_keys_.insert(usb_keycode);
     else
-        remote_pressed_keys_.erase(usb_keycode);
+        remote_pressed_keys_.remove(usb_keycode);
 
     proto::KeyEvent event;
     event.set_usb_keycode(usb_keycode);
@@ -751,14 +751,14 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
                     if (result == g_local_pressed_keys.end())
                         return TRUE;
 
-                    g_local_pressed_keys.erase(usb_keycode);
+                    g_local_pressed_keys.remove(usb_keycode);
                 }
                 else
                 {
                     if (flags & proto::KeyEvent::PRESSED)
                         g_local_pressed_keys.insert(usb_keycode);
                     else
-                        g_local_pressed_keys.erase(usb_keycode);
+                        g_local_pressed_keys.remove(usb_keycode);
                 }
             }
         }

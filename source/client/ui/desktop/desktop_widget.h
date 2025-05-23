@@ -34,11 +34,11 @@
 #include <QEvent>
 #include <QPainter>
 #include <QPointer>
+#include <QSet>
 #include <QTimer>
 #include <QWidget>
 
 #include <memory>
-#include <set>
 
 namespace client {
 
@@ -124,7 +124,7 @@ private:
     QPoint prev_pos_;
     quint32 prev_mask_ = 0;
 
-    std::set<quint32> remote_pressed_keys_;
+    QSet<quint32> remote_pressed_keys_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
 };

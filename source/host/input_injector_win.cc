@@ -19,7 +19,6 @@
 #include "host/input_injector_win.h"
 
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
 #include "host/win/touch_injector.h"
@@ -111,7 +110,7 @@ InputInjectorWin::~InputInjectorWin()
     LOG(LS_INFO) << "Dtor";
 
     setBlockInputImpl(false);
-    for (const auto& key : pressed_keys_)
+    for (const auto& key : std::as_const(pressed_keys_))
     {
         int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
         if (scancode != common::KeycodeConverter::invalidNativeKeycode())
@@ -154,13 +153,13 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
     }
     else
     {
-        if (!base::contains(pressed_keys_, event.usb_keycode()))
+        if (!pressed_keys_.contains(event.usb_keycode()))
         {
             LOG(LS_INFO) << "No pressed key in the list";
             return;
         }
 
-        pressed_keys_.erase(event.usb_keycode());
+        pressed_keys_.remove(event.usb_keycode());
     }
 
     int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
@@ -347,7 +346,7 @@ bool InputInjectorWin::isCtrlAndAltPressed()
     bool ctrl_pressed = false;
     bool alt_pressed = false;
 
-    for (const auto& key : pressed_keys_)
+    for (const auto& key : std::as_const(pressed_keys_))
     {
         if (key == kUsbCodeLeftCtrl || key == kUsbCodeRightCtrl)
             ctrl_pressed = true;

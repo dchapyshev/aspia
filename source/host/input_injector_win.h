@@ -19,10 +19,11 @@
 #ifndef HOST_INPUT_INJECTOR_WIN_H
 #define HOST_INPUT_INJECTOR_WIN_H
 
+#include <QSet>
+
 #include "host/input_injector.h"
 
 #include <memory>
-#include <set>
 
 namespace host {
 
@@ -48,7 +49,7 @@ private:
     void setBlockInputImpl(bool enable);
 
     bool block_input_ = false;
-    std::set<quint32> pressed_keys_;
+    QSet<quint32> pressed_keys_;
 
     base::Point screen_offset_;
     base::Point last_mouse_pos_;

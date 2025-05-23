@@ -54,7 +54,6 @@ list(APPEND SOURCE_BASE
     smbios_parser.cc
     smbios_parser.h
     smbios_reader.h
-    stl_util.h
     sys_info.cc
     sys_info.h
     system_error.cc
@@ -101,7 +100,6 @@ endif()
 list(APPEND SOURCE_BASE_TESTS
     bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
-    stl_util_unittest.cc
     tests_main.cc)
 
 list(APPEND SOURCE_BASE_AUDIO

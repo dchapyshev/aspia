@@ -18,8 +18,9 @@
 
 #include "host/process_monitor.h"
 
+#include <QSet>
+
 #include "base/logging.h"
-#include "base/stl_util.h"
 #include "base/win/scoped_object.h"
 
 #include <memory>
@@ -553,7 +554,7 @@ void ProcessMonitor::updateTable()
     while (current->NextEntryOffset);
 
     qint64 time_delta = total_time - last_total_time;
-    std::set<ProcessId> active_pids;
+    QSet<ProcessId> active_pids;
 
     // Update process list.
     offset = 0;
@@ -577,7 +578,7 @@ void ProcessMonitor::updateTable()
                 table_.emplace(process_id, std::move(entry));
             }
 
-            active_pids.emplace(process_id);
+            active_pids.insert(process_id);
         }
 
         offset += current->NextEntryOffset;
@@ -587,7 +588,7 @@ void ProcessMonitor::updateTable()
     // Remove obsolete processes.
     for (auto it = table_.begin(); it != table_.end();)
     {
-        if (!base::contains(active_pids, it->first))
+        if (!active_pids.contains(it->first))
             it = table_.erase(it);
         else
             ++it;
