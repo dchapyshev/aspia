@@ -19,12 +19,12 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
-#include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
 #include <asio/io_context.hpp>
 
 #include <array>
+#include <memory>
 #include <queue>
 
 #include <QObject>
@@ -68,7 +68,7 @@ private:
 #endif
 
     class Listener;
-    std::array<base::local_shared_ptr<Listener>, kListenersCount> listeners_;
+    std::array<std::shared_ptr<Listener>, kListenersCount> listeners_;
     std::queue<std::unique_ptr<IpcChannel>> pending_;
 
     THREAD_CHECKER(thread_checker_);

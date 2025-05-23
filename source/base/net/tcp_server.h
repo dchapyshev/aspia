@@ -20,7 +20,6 @@
 #define BASE_NET_TCP_SERVER_H
 
 #include "base/macros_magic.h"
-#include "base/memory/local_memory.h"
 
 #include <memory>
 #include <queue>
@@ -56,7 +55,7 @@ private:
     void onNewConnection(std::unique_ptr<TcpChannel> channel);
 
     class Impl;
-    base::local_shared_ptr<Impl> impl_;
+    std::shared_ptr<Impl> impl_;
 
     std::queue<std::unique_ptr<TcpChannel>> pending_;
 

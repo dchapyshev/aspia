@@ -463,18 +463,7 @@ endif()
 list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.cc
     memory/aligned_memory.h
-    memory/local_memory.h
-    memory/typed_buffer.h
-    memory/local_memory_impl/bad_local_weak_ptr.h
-    memory/local_memory_impl/checked_delete.h
-    memory/local_memory_impl/enable_shared_from_this.h
-    memory/local_memory_impl/local_shared_ptr.h
-    memory/local_memory_impl/local_weak_ptr.h
-    memory/local_memory_impl/make_local_shared.h
-    memory/local_memory_impl/shared_count.h
-    memory/local_memory_impl/sp_convertible.h
-    memory/local_memory_impl/sp_counted_base_nt.h
-    memory/local_memory_impl/sp_counted_impl.h)
+    memory/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_MEMORY_TESTS
     memory/aligned_memory_unittest.cc)

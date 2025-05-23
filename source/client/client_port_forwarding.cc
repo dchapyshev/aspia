@@ -88,7 +88,7 @@ void ClientPortForwarding::Handler::onRead(
 //--------------------------------------------------------------------------------------------------
 ClientPortForwarding::ClientPortForwarding(QObject* parent)
     : Client(parent),
-      handler_(base::make_local_shared<Handler>(this)),
+      handler_(new Handler(this)),
       statistics_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";

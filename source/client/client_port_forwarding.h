@@ -19,7 +19,7 @@
 #ifndef CLIENT_CLIENT_PORT_FORWARDING_H
 #define CLIENT_CLIENT_PORT_FORWARDING_H
 
-#include "base/memory/local_memory.h"
+#include "base/shared_pointer.h"
 #include "client/client.h"
 #include "proto/port_forwarding.pb.h"
 
@@ -91,7 +91,7 @@ private:
     proto::port_forwarding::ClientToHost outgoing_message_;
 
     class Handler;
-    base::local_shared_ptr<Handler> handler_;
+    base::SharedPointer<Handler> handler_;
 
     std::queue<std::string> write_queue_;
 

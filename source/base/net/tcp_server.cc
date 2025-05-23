@@ -26,7 +26,7 @@
 
 namespace base {
 
-class TcpServer::Impl : public base::enable_shared_from_this<Impl>
+class TcpServer::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(asio::io_context& io_context);
@@ -197,7 +197,7 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer(QObject* parent)
     : QObject(parent),
-      impl_(base::make_local_shared<Impl>(AsioEventDispatcher::currentIoContext()))
+      impl_(std::make_shared<Impl>(AsioEventDispatcher::currentIoContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }
