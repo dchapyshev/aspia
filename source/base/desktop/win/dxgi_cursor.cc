@@ -59,6 +59,7 @@ MouseCursor* DxgiCursor::mouseCursor()
         height /= 2;
 
         image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
+        memset(image.data(), 0, image.size());
 
         quint8* mask_and = reinterpret_cast<quint8*>(pointer_shape_.data());
         quint8* mask_xor = reinterpret_cast<quint8*>(pointer_shape_.data()) + (pitch * height);
