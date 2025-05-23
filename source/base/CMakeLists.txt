@@ -62,8 +62,6 @@ list(APPEND SOURCE_BASE
     translations.h
     version_constants.cc
     version_constants.h
-    waitable_event.cc
-    waitable_event.h
     xml_settings.cc
     xml_settings.h)
 
