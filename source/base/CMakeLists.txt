@@ -159,8 +159,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/audio_bus.h
     codec/audio_decoder.cc
     codec/audio_decoder.h
-    codec/audio_encoder_opus.cc
-    codec/audio_encoder_opus.h
+    codec/audio_encoder.cc
+    codec/audio_encoder.h
     codec/audio_sample_types.h
     codec/cursor_decoder.cc
     codec/cursor_decoder.h

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_AUDIO_DECODER_OPUS_H
-#define BASE_CODEC_AUDIO_DECODER_OPUS_H
+#ifndef BASE_CODEC_AUDIO_DECODER_H
+#define BASE_CODEC_AUDIO_DECODER_H
 
 #include <memory>
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace base
 
-#endif // BASE_CODEC_AUDIO_DECODER_OPUS_H
+#endif // BASE_CODEC_AUDIO_DECODER_H

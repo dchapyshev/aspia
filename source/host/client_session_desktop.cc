@@ -24,7 +24,7 @@
 #include "base/power_controller.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
-#include "base/codec/audio_encoder_opus.h"
+#include "base/codec/audio_encoder.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
