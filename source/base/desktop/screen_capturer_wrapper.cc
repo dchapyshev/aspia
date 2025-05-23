@@ -150,8 +150,6 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
 
     screen_capturer_->switchToInputDesktop();
 
-    ++capture_counter_;
-
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
@@ -183,25 +181,19 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
         }
     }
 
-    *mouse_cursor = nullptr;
+    *mouse_cursor = screen_capturer_->captureCursor();
 
-    // Cursor capture only on even frames.
-    if ((capture_counter_ % 2) == 0)
+    if (enable_cursor_position_)
     {
-        *mouse_cursor = screen_capturer_->captureCursor();
+        Point cursor_pos = screen_capturer_->cursorPosition();
 
-        if (enable_cursor_position_)
+        qint32 delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+        qint32 delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+
+        if (delta_x > 1 || delta_y > 1)
         {
-            Point cursor_pos = screen_capturer_->cursorPosition();
-
-            qint32 delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
-            qint32 delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
-
-            if (delta_x > 1 || delta_y > 1)
-            {
-                emit sig_cursorPositionChanged(cursor_pos);
-                last_cursor_pos_ = cursor_pos;
-            }
+            emit sig_cursorPositionChanged(cursor_pos);
+            last_cursor_pos_ = cursor_pos;
         }
     }
 
