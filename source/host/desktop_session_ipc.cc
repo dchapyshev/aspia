@@ -22,54 +22,8 @@
 #include "base/serialization.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/shared_memory_frame.h"
-#include "base/memory/local_memory.h"
-#include "base/ipc/shared_memory.h"
 
 namespace host {
-
-class DesktopSessionIpc::SharedBuffer final : public base::SharedMemoryBase
-{
-public:
-    ~SharedBuffer() final = default;
-
-    static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
-    {
-        base::local_shared_ptr<base::SharedMemory> shared_frame(shared_memory.release());
-        return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_frame));
-    }
-
-    std::unique_ptr<SharedBuffer> share()
-    {
-        return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_memory_));
-    }
-
-    void* data() final
-    {
-        return shared_memory_->data();
-    }
-
-    PlatformHandle handle() const final
-    {
-        return shared_memory_->handle();
-    }
-
-    int id() const final
-    {
-        return shared_memory_->id();
-    }
-
-private:
-    explicit SharedBuffer(base::local_shared_ptr<base::SharedMemory>& shared_memory)
-        : base::SharedMemoryBase(nullptr),
-          shared_memory_(shared_memory)
-    {
-        // Nothing
-    }
-
-    base::local_shared_ptr<base::SharedMemory> shared_memory_;
-
-    DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
-};
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, QObject* parent)
@@ -301,7 +255,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     {
         const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
 
-        std::unique_ptr<SharedBuffer> shared_buffer = sharedBuffer(
+        base::local_shared_ptr<base::SharedMemory> shared_buffer = sharedBuffer(
             serialized_frame.shared_buffer_id());
         if (shared_buffer)
         {
@@ -368,7 +322,8 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
         return;
     }
 
-    shared_buffers_.emplace(shared_buffer_id, SharedBuffer::wrap(std::move(shared_memory)));
+    shared_buffers_.emplace(
+        shared_buffer_id, base::local_shared_ptr<base::SharedMemory>(shared_memory.release()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,8 +341,7 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer(
-    int shared_buffer_id)
+base::local_shared_ptr<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shared_buffer_id)
 {
     auto result = shared_buffers_.find(shared_buffer_id);
     if (result == shared_buffers_.end())
@@ -397,7 +351,7 @@ std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer
         return nullptr;
     }
 
-    return result->second->share();
+    return result->second;
 }
 
 } // namespace host

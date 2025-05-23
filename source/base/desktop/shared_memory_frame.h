@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_SHARED_MEMORY_FRAME_H
 
 #include "base/desktop/frame.h"
+#include "base/memory/local_memory.h"
 
 #include <memory>
 
@@ -39,10 +40,14 @@ public:
         const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> attach(
-        const Size& size, const PixelFormat& format, std::unique_ptr<SharedMemoryBase> shared_memory);
+        const Size& size, const PixelFormat& format, local_shared_ptr<SharedMemoryBase> shared_memory);
 
 private:
-    SharedMemoryFrame(const Size& size, const PixelFormat& format, SharedMemoryBase* shared_memory);
+    SharedMemoryFrame(const Size& size,
+                      const PixelFormat& format,
+                      local_shared_ptr<SharedMemoryBase> shared_memory);
+
+    local_shared_ptr<SharedMemoryBase> owned_shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFrame);
 };

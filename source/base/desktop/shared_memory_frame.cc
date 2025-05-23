@@ -27,18 +27,16 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                                      const PixelFormat& format,
-                                     SharedMemoryBase* shared_memory)
+                                     local_shared_ptr<SharedMemoryBase> shared_memory)
     : Frame(size, format, size.width() * format.bytesPerPixel(),
-      reinterpret_cast<quint8*>(shared_memory->data()), shared_memory)
+            reinterpret_cast<quint8*>(shared_memory->data()), shared_memory.get()),
+      owned_shared_memory_(std::move(shared_memory))
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-SharedMemoryFrame::~SharedMemoryFrame()
-{
-    delete shared_memory_;
-}
+SharedMemoryFrame::~SharedMemoryFrame() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -54,7 +52,8 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
         return nullptr;
     }
 
-    return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
+    return std::unique_ptr<Frame>(new SharedMemoryFrame(
+        size, format, local_shared_ptr<SharedMemoryBase>(shared_memory.release())));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,15 +68,16 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
         return nullptr;
     }
 
-    return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
+    return std::unique_ptr<Frame>(new SharedMemoryFrame(
+        size, format, local_shared_ptr<SharedMemoryBase>(shared_memory.release())));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::attach(
-    const Size& size, const PixelFormat& format, std::unique_ptr<SharedMemoryBase> shared_memory)
+    const Size& size, const PixelFormat& format, local_shared_ptr<SharedMemoryBase> shared_memory)
 {
-    return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
+    return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, std::move(shared_memory)));
 }
 
 } // namespace base
