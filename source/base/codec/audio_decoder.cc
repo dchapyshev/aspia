@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/audio_decoder_opus.h"
+#include "base/codec/audio_decoder.h"
 
 #include "base/logging.h"
 

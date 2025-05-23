@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/codec/audio_decoder_opus.h"
+#include "base/codec/audio_decoder.h"
 #include "base/audio/audio_player.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
