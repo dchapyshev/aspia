@@ -41,7 +41,7 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     for (int i = 0; i < channels; ++i)
     {
         resamplers_.push_back(std::make_unique<SincResampler>(
-            io_sample_rate_ratio, request_size,
+            io_sample_rate_ratio, static_cast<int>(request_size),
             std::bind(&MultiChannelResampler::ProvideInput,
                 this, i, std::placeholders::_1, std::placeholders::_2)));
     }
