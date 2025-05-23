@@ -19,22 +19,16 @@
 #include "base/codec/pixel_translator.h"
 
 #include "base/macros_magic.h"
-#include "build/build_config.h"
-
-#include <limits>
 
 namespace base {
 
 namespace {
 
-const int kBlockSize = 16;
-
 template<typename SourceT, typename TargetT>
 class PixelTranslatorT final : public PixelTranslator
 {
 public:
-    PixelTranslatorT(const PixelFormat& source_format,
-                     const PixelFormat& target_format)
+    PixelTranslatorT(const PixelFormat& source_format, const PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
@@ -63,52 +57,29 @@ public:
 
     ~PixelTranslatorT() final = default;
 
-    void translatePixel(const SourceT* src_ptr, TargetT* dst_ptr)
-    {
-        const quint32 red = red_table_[
-            *src_ptr >> source_format_.redShift() & source_format_.redMax()];
-        const quint32 green = green_table_[
-            *src_ptr >> source_format_.greenShift() & source_format_.greenMax()];
-        const quint32 blue = blue_table_[
-            *src_ptr >> source_format_.blueShift() & source_format_.blueMax()];
-
-        *dst_ptr = static_cast<TargetT>(red | green | blue | 0xFF000000);
-    }
-
-    void translate(const quint8* src, int src_stride,
-                   quint8* dst, int dst_stride,
+    void translate(const quint8* src, int src_stride, quint8* dst, int dst_stride,
                    int width, int height) final
     {
-        const int block_count = width / kBlockSize;
-        const int partial_width = width - (block_count * kBlockSize);
+        src_stride -= width * sizeof(SourceT);
+        dst_stride -= width * sizeof(TargetT);
 
         for (int y = 0; y < height; ++y)
         {
-            const SourceT* src_ptr = reinterpret_cast<const SourceT*>(src);
-            TargetT* dst_ptr = reinterpret_cast<TargetT*>(dst);
-
-            for (int x = 0; x < block_count; ++x)
+            for (int x = 0; x < width; ++x)
             {
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-                translatePixel(src_ptr++, dst_ptr++);
-            }
+                quint32 red;
+                quint32 green;
+                quint32 blue;
 
-            for (int x = 0; x < partial_width; ++x)
-                translatePixel(src_ptr++, dst_ptr++);
+                red = red_table_[*(SourceT*)src >> source_format_.redShift() & source_format_.redMax()];
+                green = green_table_[*(SourceT*)src >> source_format_.greenShift() & source_format_.greenMax()];
+                blue = blue_table_[*(SourceT*)src >> source_format_.blueShift() & source_format_.blueMax()];
+
+                *(TargetT*)dst = (TargetT)(red | green | blue);
+
+                src += sizeof(SourceT);
+                dst += sizeof(TargetT);
+            }
 
             src += src_stride;
             dst += dst_stride;
@@ -130,14 +101,14 @@ template<typename SourceT, typename TargetT>
 class PixelTranslatorFrom8_16bppT final : public PixelTranslator
 {
 public:
-    PixelTranslatorFrom8_16bppT(const PixelFormat& source_format,
-                                const PixelFormat& target_format)
+    PixelTranslatorFrom8_16bppT(const PixelFormat& source_format, const PixelFormat& target_format)
         : source_format_(source_format),
           target_format_(target_format)
     {
         static_assert(sizeof(SourceT) == sizeof(quint8) || sizeof(SourceT) == sizeof(quint16));
 
         const size_t table_size = std::numeric_limits<SourceT>::max() + 1;
+
         table_ = std::make_unique<quint32[]>(table_size);
 
         quint32 source_red_mask = source_format.redMax() << source_format.redShift();
@@ -157,46 +128,28 @@ public:
             quint32 target_blue =
                 (source_blue * target_format.blueMax() / source_format.blueMax()) << target_format.blueShift();
 
-            table_[i] = target_red | target_green | target_blue | 0xFF000000;
+            table_[i] = target_red | target_green | target_blue;
         }
     }
 
-    ~PixelTranslatorFrom8_16bppT() final = default;
+    ~PixelTranslatorFrom8_16bppT() = default;
 
     void translate(const quint8* src, int src_stride,
                    quint8* dst, int dst_stride,
                    int width, int height) final
     {
-        const int block_count = width / kBlockSize;
-        const int partial_width = width - (block_count * kBlockSize);
+        src_stride -= width * sizeof(SourceT);
+        dst_stride -= width * sizeof(TargetT);
 
         for (int y = 0; y < height; ++y)
         {
-            const SourceT* src_ptr = reinterpret_cast<const SourceT*>(src);
-            TargetT* dst_ptr = reinterpret_cast<TargetT*>(dst);
-
-            for (int x = 0; x < block_count; ++x)
+            for (int x = 0; x < width; ++x)
             {
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
-            }
+                *(TargetT*)dst = (TargetT)(table_[*(SourceT*)src]);
 
-            for (int x = 0; x < partial_width; ++x)
-                *dst_ptr++ = static_cast<TargetT>(table_[*src_ptr++]);
+                src += sizeof(SourceT);
+                dst += sizeof(TargetT);
+            }
 
             src += src_stride;
             dst += dst_stride;
@@ -236,9 +189,6 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint32>>(
                         source_format, target_format);
-
-                default:
-                    break;
             }
         }
         break;
@@ -258,9 +208,6 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint16>>(
                         source_format, target_format);
-
-                default:
-                    break;
             }
         }
         break;
@@ -280,15 +227,9 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(
                 case 1:
                     return std::make_unique<PixelTranslatorFrom8_16bppT<quint8, quint8>>(
                         source_format, target_format);
-
-                default:
-                    break;
             }
         }
         break;
-
-        default:
-            break;
     }
 
     return nullptr;
