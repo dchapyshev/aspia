@@ -19,12 +19,10 @@
 #ifndef BASE_WIN_DESKTOP_H
 #define BASE_WIN_DESKTOP_H
 
-#include "base/macros_magic.h"
-
+#include <QStringList>
 #include <qt_windows.h>
 
-#include <string>
-#include <vector>
+#include "base/macros_magic.h"
 
 namespace base {
 
@@ -45,7 +43,7 @@ public:
     static Desktop threadDesktop();
 
     // Returns list of desktops in system.
-    static std::vector<std::wstring> desktopList(HWINSTA winsta = nullptr);
+    static QStringList desktopList(HWINSTA winsta = nullptr);
 
     // Returns the name of the desktop represented by the object. Return false if quering the name
     // failed for any reason.

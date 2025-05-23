@@ -18,7 +18,6 @@
 
 #include "host/desktop_agent_main.h"
 
-#include "build/build_config.h"
 #include "base/application.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
@@ -162,20 +161,21 @@ void printDebugInfo()
 
     LOG(LS_INFO) << "WindowStation list";
     LOG(LS_INFO) << "#####################################################";
-    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    QStringList windowStations = base::WindowStation::windowStationList();
+    for (const auto& window_station_name : std::as_const(windowStations))
     {
-        std::wstring desktops;
+        QString desktops;
 
         base::WindowStation window_station = base::WindowStation::open(window_station_name);
         if (window_station.isValid())
         {
-            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+            QStringList list = base::Desktop::desktopList(window_station.get());
 
-            for (size_t i = 0; i < list.size(); ++i)
+            for (int i = 0; i < list.size(); ++i)
             {
                 desktops += list[i];
                 if ((i + 1) != list.size())
-                    desktops += L", ";
+                    desktops += ", ";
             }
         }
 

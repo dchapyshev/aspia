@@ -97,9 +97,9 @@ Desktop Desktop::threadDesktop()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::vector<std::wstring> Desktop::desktopList(HWINSTA winsta)
+QStringList Desktop::desktopList(HWINSTA winsta)
 {
-    std::vector<std::wstring> list;
+    QStringList list;
 
     if (!EnumDesktopsW(winsta, enumDesktopProc, reinterpret_cast<LPARAM>(&list)))
     {
@@ -190,7 +190,7 @@ Desktop& Desktop::operator=(Desktop&& other) noexcept
 // static
 BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
 {
-    std::vector<std::wstring>* list = reinterpret_cast<std::vector<std::wstring>*>(lparam);
+    QStringList* list = reinterpret_cast<QStringList*>(lparam);
     if (!list)
     {
         LOG(LS_ERROR) << "Invalid desktop list pointer";
@@ -203,7 +203,7 @@ BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
         return FALSE;
     }
 
-    list->emplace_back(desktop);
+    list->append(QString::fromWCharArray(desktop));
     return TRUE;
 }
 
