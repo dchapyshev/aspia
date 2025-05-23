@@ -19,21 +19,22 @@
 #ifndef BASE_CODEC_AUDIO_DECODER_OPUS_H
 #define BASE_CODEC_AUDIO_DECODER_OPUS_H
 
+#include <memory>
+
 #include "base/macros_magic.h"
-#include "base/codec/audio_decoder.h"
+#include "proto/desktop.h"
 
 struct OpusDecoder;
 
 namespace base {
 
-class AudioDecoderOpus final : public AudioDecoder
+class AudioDecoder
 {
 public:
-    AudioDecoderOpus();
-    ~AudioDecoderOpus() final;
+    AudioDecoder();
+    ~AudioDecoder();
 
-    // AudioDecoder interface.
-    std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet) final;
+    std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet);
 
 private:
     void initDecoder();
@@ -44,7 +45,7 @@ private:
     int channels_ = 0;
     OpusDecoder* decoder_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioDecoderOpus);
+    DISALLOW_COPY_AND_ASSIGN(AudioDecoder);
 };
 
 } // namespace base

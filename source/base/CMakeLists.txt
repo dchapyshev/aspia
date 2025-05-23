@@ -157,8 +157,6 @@ endif()
 list(APPEND SOURCE_BASE_CODEC
     codec/audio_bus.cc
     codec/audio_bus.h
-    codec/audio_decoder.cc
-    codec/audio_decoder.h
     codec/audio_decoder_opus.cc
     codec/audio_decoder_opus.h
     codec/audio_encoder.h

@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/codec/audio_decoder.h"
+#include "base/codec/audio_decoder_opus.h"
 #include "base/audio/audio_player.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
@@ -666,7 +666,12 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 
     if (packet.encoding() != audio_encoding_)
     {
-        audio_decoder_ = base::AudioDecoder::create(packet.encoding());
+        if (packet.encoding() != proto::AUDIO_ENCODING_OPUS)
+        {
+            LOG(LS_WARNING) << "Unsupported audio encoding: " << packet.encoding();
+            return;
+        }
+        audio_decoder_ = std::make_unique<base::AudioDecoder>();
         audio_encoding_ = packet.encoding();
 
         LOG(LS_INFO) << "Audio encoding changed to: " << audioEncodingToString(audio_encoding_);
