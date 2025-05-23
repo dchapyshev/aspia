@@ -355,8 +355,8 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
             {
-                std::vector<quint32> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
-                for (const auto& session : sessions)
+                QList<quint32> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
+                for (const auto& session : std::as_const(sessions))
                     onKillSession(session);
             });
 

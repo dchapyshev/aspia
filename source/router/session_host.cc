@@ -152,7 +152,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 
                 if (!base::contains(host_id_list_, host_id))
                 {
-                    host_id_list_.emplace_back(host_id);
+                    host_id_list_.push_back(host_id);
 
                     // Notify the server that the ID has been assigned.
                     server().onHostSessionWithId(this);

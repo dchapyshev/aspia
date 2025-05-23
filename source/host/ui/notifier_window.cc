@@ -207,9 +207,9 @@ NotifierWindow::~NotifierWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<quint32> NotifierWindow::sessions(proto::SessionType session_type)
+QList<quint32> NotifierWindow::sessions(proto::SessionType session_type)
 {
-    std::vector<quint32> result;
+    QList<quint32> result;
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {

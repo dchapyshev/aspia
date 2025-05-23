@@ -33,7 +33,7 @@ public:
     SessionHost();
     ~SessionHost() final;
 
-    using HostIdList = std::vector<base::HostId>;
+    using HostIdList = QList<base::HostId>;
 
     const HostIdList& hostIdList() const { return host_id_list_; }
     bool hasHostId(base::HostId host_id) const;
