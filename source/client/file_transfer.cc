@@ -215,34 +215,34 @@ void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action a
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::onTaskDone(base::local_shared_ptr<common::FileTask> task)
+void FileTransfer::onTaskDone(const common::FileTask& task)
 {
     if (type_ == Type::DOWNLOADER)
     {
-        if (task->target() == common::FileTask::Target::LOCAL)
+        if (task.target() == common::FileTask::Target::LOCAL)
         {
-            targetReply(task->request(), task->reply());
+            targetReply(task.request(), task.reply());
         }
         else
         {
-            DCHECK_EQ(task->target(), common::FileTask::Target::REMOTE);
+            DCHECK_EQ(task.target(), common::FileTask::Target::REMOTE);
 
-            sourceReply(task->request(), task->reply());
+            sourceReply(task.request(), task.reply());
         }
     }
     else
     {
         DCHECK_EQ(type_, Type::UPLOADER);
 
-        if (task->target() == common::FileTask::Target::LOCAL)
+        if (task.target() == common::FileTask::Target::LOCAL)
         {
-            sourceReply(task->request(), task->reply());
+            sourceReply(task.request(), task.reply());
         }
         else
         {
-            DCHECK_EQ(task->target(), common::FileTask::Target::REMOTE);
+            DCHECK_EQ(task.target(), common::FileTask::Target::REMOTE);
 
-            targetReply(task->request(), task->reply());
+            targetReply(task.request(), task.reply());
         }
     }
 }

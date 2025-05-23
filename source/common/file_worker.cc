@@ -48,11 +48,14 @@ FileWorker::~FileWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRequest(base::local_shared_ptr<FileTask> task)
+void FileWorker::doRequest(const FileTask& task)
 {
-    std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
-    doRequest(task->request(), reply.get());
-    task->setReply(std::move(reply));
+    FileTask localTask(task);
+
+    proto::FileReply reply;
+    doRequest(localTask.request(), &reply);
+
+    localTask.onReply(std::move(reply));
 }
 
 //--------------------------------------------------------------------------------------------------

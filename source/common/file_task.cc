@@ -20,54 +20,51 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
-#include "proto/file_transfer.h"
 
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
 FileTask::FileTask(QPointer<FileTaskFactory> factory,
-                   std::unique_ptr<proto::FileRequest> request,
+                   proto::FileRequest&& request,
                    Target target)
-    : factory_(std::move(factory)),
-      target_(target),
-      request_(std::move(request))
+    : data_(new Data(factory, std::move(request), target))
 {
-    DCHECK(factory_);
-    DCHECK(request_);
-    DCHECK(target_ == Target::LOCAL || target_ == Target::REMOTE);
+    DCHECK(data_->factory);
+    DCHECK(data_->target == Target::LOCAL || data_->target == Target::REMOTE);
 }
 
 //--------------------------------------------------------------------------------------------------
 FileTask::~FileTask() = default;
 
 //--------------------------------------------------------------------------------------------------
+FileTask::Target FileTask::target() const
+{
+    return data_->target;
+}
+
+//--------------------------------------------------------------------------------------------------
 const proto::FileRequest& FileTask::request() const
 {
-    return *request_;
+    return data_->request;
 }
 
 //--------------------------------------------------------------------------------------------------
 const proto::FileReply& FileTask::reply() const
 {
-    static const proto::FileReply kEmptyReply;
-
-    if (!reply_)
-        return kEmptyReply;
-
-    return *reply_;
+    return data_->reply;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTask::setReply(std::unique_ptr<proto::FileReply> reply)
+void FileTask::onReply(proto::FileReply&& reply)
 {
-    if (!factory_)
+    if (!data_->factory)
         return;
 
     // Save the reply inside the request.
-    reply_ = std::move(reply);
+    data_->reply = std::move(reply);
 
     // Now notify the sender of the reply.
-    emit factory_->sig_taskDone(shared_from_this());
+    emit data_->factory->sig_taskDone(*this);
 }
 
 } // namespace common

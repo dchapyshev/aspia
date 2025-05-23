@@ -63,7 +63,7 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 //--------------------------------------------------------------------------------------------------
 Server::Server(QObject* parent)
     : QObject(parent),
-      database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
+      database_factory_(new DatabaseFactorySqlite())
 {
     LOG(LS_INFO) << "Ctor";
 }

@@ -22,7 +22,6 @@
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
-#include "build/build_config.h"
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
 #include "router/shared_key_pool.h"
@@ -66,7 +65,7 @@ private slots:
     void onNewConnection();
 
 private:
-    base::local_shared_ptr<DatabaseFactory> database_factory_;
+    base::SharedPointer<DatabaseFactory> database_factory_;
     std::unique_ptr<base::TcpServer> server_;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;

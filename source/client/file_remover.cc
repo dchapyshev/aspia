@@ -116,10 +116,10 @@ void FileRemover::setAction(Action action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemover::onTaskDone(base::local_shared_ptr<common::FileTask> task)
+void FileRemover::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task->request();
-    const proto::FileReply& reply = task->reply();
+    const proto::FileRequest& request = task.request();
+    const proto::FileReply& reply = task.reply();
 
     if (!request.has_remove_request())
     {

@@ -175,10 +175,10 @@ signals:
     void sig_currentItemChanged(const QString& source_path, const QString& target_path);
     void sig_currentSpeedChanged(qint64 speed);
     void sig_errorOccurred(const client::FileTransfer::Error& error);
-    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
+    void sig_doTask(const common::FileTask& task);
 
 private slots:
-    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
+    void onTaskDone(const common::FileTask& task);
 
 private:
     Task& frontTask();

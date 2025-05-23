@@ -19,6 +19,7 @@
 #ifndef CLIENT_FILE_TASK_FACTORY_H
 #define CLIENT_FILE_TASK_FACTORY_H
 
+#include "base/macros_magic.h"
 #include "common/file_task.h"
 
 #include <QString>
@@ -39,22 +40,22 @@ public:
 
     FileTask::Target target() const { return target_; }
 
-    base::local_shared_ptr<FileTask> driveList();
-    base::local_shared_ptr<FileTask> fileList(const QString& path);
-    base::local_shared_ptr<FileTask> createDirectory(const QString& path);
-    base::local_shared_ptr<FileTask> rename(const QString& old_name, const QString& new_name);
-    base::local_shared_ptr<FileTask> remove(const QString& path);
-    base::local_shared_ptr<FileTask> download(const QString& file_path);
-    base::local_shared_ptr<FileTask> upload(const QString& file_path, bool overwrite);
-    base::local_shared_ptr<FileTask> packetRequest(quint32 flags);
-    base::local_shared_ptr<FileTask> packet(const proto::FilePacket& packet);
-    base::local_shared_ptr<FileTask> packet(std::unique_ptr<proto::FilePacket> packet);
+    FileTask driveList();
+    FileTask fileList(const QString& path);
+    FileTask createDirectory(const QString& path);
+    FileTask rename(const QString& old_name, const QString& new_name);
+    FileTask remove(const QString& path);
+    FileTask download(const QString& file_path);
+    FileTask upload(const QString& file_path, bool overwrite);
+    FileTask packetRequest(quint32 flags);
+    FileTask packet(const proto::FilePacket& packet);
+    FileTask packet(proto::FilePacket&& packet);
 
 signals:
-    void sig_taskDone(base::local_shared_ptr<FileTask> task);
+    void sig_taskDone(const FileTask& task);
 
 private:
-    base::local_shared_ptr<FileTask> makeTask(std::unique_ptr<proto::FileRequest> request);
+    FileTask makeTask(proto::FileRequest&& request);
 
     const FileTask::Target target_;
 

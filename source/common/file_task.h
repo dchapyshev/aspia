@@ -19,24 +19,17 @@
 #ifndef COMMON_FILE_TASK_H
 #define COMMON_FILE_TASK_H
 
-#include "base/macros_magic.h"
-#include "base/memory/local_memory.h"
+#include "base/shared_pointer.h"
+#include "proto/file_transfer.h"
 
 #include <QMetaType>
 #include <QPointer>
-
-#include <memory>
-
-namespace proto {
-class FileRequest;
-class FileReply;
-} // namespace proto
 
 namespace common {
 
 class FileTaskFactory;
 
-class FileTask final : public base::enable_shared_from_this<FileTask>
+class FileTask
 {
 public:
     enum class Target
@@ -45,13 +38,12 @@ public:
         REMOTE // Remote task.
     };
 
-    FileTask(QPointer<FileTaskFactory> factory,
-             std::unique_ptr<proto::FileRequest> request,
-             Target target);
-    virtual ~FileTask();
+    FileTask() = default;
+    FileTask(QPointer<FileTaskFactory> factory, proto::FileRequest&& request, Target target);
+    ~FileTask();
 
     // Returns the target of the current request. It can be a local computer or a remote computer.
-    Target target() const { return target_; }
+    Target target() const;
 
     // Returns the data of the current request.
     const proto::FileRequest& request() const;
@@ -62,21 +54,32 @@ public:
     const proto::FileReply& reply() const;
 
     // Sets the reply to the current request. The sender will be notified of this reply.
-    void setReply(std::unique_ptr<proto::FileReply> reply);
+    void onReply(proto::FileReply&& reply);
 
 private:
-    QPointer<FileTaskFactory> factory_;
-    const Target target_;
+    class Data
+    {
+    public:
+        Data(QPointer<FileTaskFactory> factory, proto::FileRequest&& request, Target target)
+            : factory(std::move(factory)),
+              target(target),
+              request(std::move(request))
+        {
+            // Nothing
+        }
 
-    std::unique_ptr<proto::FileRequest> request_;
-    std::unique_ptr<proto::FileReply> reply_;
+        QPointer<FileTaskFactory> factory;
+        FileTask::Target target;
+        proto::FileRequest request;
+        proto::FileReply reply;
+    };
 
-    DISALLOW_COPY_AND_ASSIGN(FileTask);
+    base::SharedPointer<Data> data_;
 };
 
 } // namespace common
 
-Q_DECLARE_METATYPE(base::local_shared_ptr<common::FileTask>)
+Q_DECLARE_METATYPE(common::FileTask)
 Q_DECLARE_METATYPE(common::FileTask::Target)
 
 #endif // COMMON_FILE_TASK_H

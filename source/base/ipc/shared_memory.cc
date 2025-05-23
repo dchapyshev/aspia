@@ -190,7 +190,7 @@ SharedMemory::SharedMemory(int id,
                            ScopedPlatformHandle&& handle,
                            void* data,
                            QObject* parent)
-    : SharedMemoryBase(parent),
+    : QObject(parent),
       handle_(std::move(handle)),
       data_(data),
       id_(id)

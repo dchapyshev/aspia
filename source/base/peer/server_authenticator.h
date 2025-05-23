@@ -19,10 +19,9 @@
 #ifndef BASE_PEER_SERVER_AUTHENTICATOR_H
 #define BASE_PEER_SERVER_AUTHENTICATOR_H
 
+#include "base/shared_pointer.h"
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
-#include "base/memory/local_memory.h"
-#include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 
 namespace base {
@@ -44,7 +43,7 @@ public:
     };
 
     // Sets the user list.
-    void setUserList(base::local_shared_ptr<UserListBase> user_list);
+    void setUserList(SharedPointer<UserListBase> user_list);
 
     // Sets the private key.
     [[nodiscard]] bool setPrivateKey(const QByteArray& private_key);
@@ -69,7 +68,7 @@ private:
     void onSessionResponse(const QByteArray& buffer);
     [[nodiscard]] QByteArray createSrpKey();
 
-    base::local_shared_ptr<UserListBase> user_list_;
+    SharedPointer<UserListBase> user_list_;
 
     enum class InternalState
     {

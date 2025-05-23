@@ -32,17 +32,12 @@
 
 namespace base {
 
-class SharedMemoryBase : public QObject
+class SharedMemory final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit SharedMemoryBase(QObject* parent)
-        : QObject(parent)
-    {
-        // Nothing
-    }
-    virtual ~SharedMemoryBase() = default;
+    virtual ~SharedMemory() final;
 
     enum class Mode
     {
@@ -77,25 +72,12 @@ public:
 
     static const PlatformHandle kInvalidHandle;
 
-    virtual void* data()  = 0;
-    virtual PlatformHandle handle() const = 0;
-    virtual int id() const = 0;
-};
-
-class SharedMemory final : public SharedMemoryBase
-{
-    Q_OBJECT
-
-public:
-    virtual ~SharedMemory() final;
-
     static std::unique_ptr<SharedMemory> create(Mode mode, size_t size);
     static std::unique_ptr<SharedMemory> open(Mode mode, int id);
 
-    // SharedMemoryBase implementation.
-    void* data() final { return data_; }
-    PlatformHandle handle() const final { return handle_.get(); }
-    int id() const final { return id_; }
+    void* data() { return data_; }
+    PlatformHandle handle() const { return handle_.get(); }
+    int id() const { return id_; }
 
 signals:
     void sig_destroyed(int id);

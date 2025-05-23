@@ -34,7 +34,7 @@ public:
     FileWorker();
     ~FileWorker();
 
-    void doRequest(base::local_shared_ptr<common::FileTask> task);
+    void doRequest(const common::FileTask& task);
     void doRequest(const proto::FileRequest& request, proto::FileReply* reply);
 
 private:

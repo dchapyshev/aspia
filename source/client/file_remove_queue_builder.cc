@@ -56,10 +56,10 @@ FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTask> task)
+void FileRemoveQueueBuilder::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task->request();
-    const proto::FileReply& reply = task->reply();
+    const proto::FileRequest& request = task.request();
+    const proto::FileReply& reply = task.reply();
 
     if (!request.has_file_list_request())
     {

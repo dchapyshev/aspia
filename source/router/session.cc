@@ -60,7 +60,7 @@ void Session::setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::setDatabaseFactory(base::local_shared_ptr<DatabaseFactory> database_factory)
+void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory)
 {
     database_factory_ = std::move(database_factory);
 }

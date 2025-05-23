@@ -42,10 +42,10 @@ public:
 
 signals:
     void sig_finished(proto::FileError error_code);
-    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
+    void sig_doTask(const common::FileTask& task);
 
 private slots:
-    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
+    void onTaskDone(const common::FileTask& task);
 
 private:
     void addPendingTask(const QString& source_dir,

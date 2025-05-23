@@ -81,7 +81,7 @@ private:
         std::unique_ptr<ServerAuthenticator> authenticator;
     };
 
-    base::local_shared_ptr<UserListBase> user_list_;
+    SharedPointer<UserListBase> user_list_;
     std::vector<Pending> pending_;
 
     QByteArray private_key_;

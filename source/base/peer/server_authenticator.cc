@@ -71,7 +71,7 @@ ServerAuthenticator::~ServerAuthenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::setUserList(base::local_shared_ptr<UserListBase> user_list)
+void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);

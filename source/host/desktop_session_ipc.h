@@ -19,9 +19,9 @@
 #ifndef HOST_DESKTOP_SESSION_IPC_H
 #define HOST_DESKTOP_SESSION_IPC_H
 
+#include "base/shared_pointer.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session.h"
-#include "base/memory/local_memory.h"
 #include "base/ipc/shared_memory.h"
 
 #include <map>
@@ -54,12 +54,12 @@ private slots:
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    using SharedBuffers = std::map<int, base::local_shared_ptr<base::SharedMemory>>;
+    using SharedBuffers = std::map<int, base::SharedPointer<base::SharedMemory>>;
 
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
-    base::local_shared_ptr<base::SharedMemory> sharedBuffer(int shared_buffer_id);
+    base::SharedPointer<base::SharedMemory> sharedBuffer(int shared_buffer_id);
 
     base::SessionId session_id_ = base::kInvalidSessionId;
     std::unique_ptr<base::IpcChannel> channel_;

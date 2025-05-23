@@ -175,14 +175,14 @@ bool SharedKeyPool::Impl::isEmpty() const
 
 //--------------------------------------------------------------------------------------------------
 SharedKeyPool::SharedKeyPool(Delegate* delegate)
-    : impl_(base::make_local_shared<Impl>(delegate)),
+    : impl_(new Impl(delegate)),
       is_primary_(true)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-SharedKeyPool::SharedKeyPool(base::local_shared_ptr<Impl> impl)
+SharedKeyPool::SharedKeyPool(base::SharedPointer<Impl> impl)
     : impl_(std::move(impl)),
       is_primary_(false)
 {

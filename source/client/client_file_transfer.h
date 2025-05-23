@@ -38,7 +38,7 @@ public:
     ~ClientFileTransfer() final;
 
 public slots:
-    void onTask(base::local_shared_ptr<common::FileTask> task);
+    void onTask(const common::FileTask& task);
     void onDriveListRequest(common::FileTask::Target target);
     void onFileListRequest(common::FileTask::Target target, const QString& path);
     void onCreateDirectoryRequest(common::FileTask::Target target, const QString& path);
@@ -66,7 +66,7 @@ protected:
     void onSessionMessageWritten(size_t pending) final;
 
 private slots:
-    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
+    void onTaskDone(const common::FileTask& task);
 
 private:
     void doNextRemoteTask();
@@ -76,7 +76,7 @@ private:
     QPointer<common::FileTaskFactory> local_task_factory_;
     QPointer<common::FileTaskFactory> remote_task_factory_;
 
-    std::queue<base::local_shared_ptr<common::FileTask>> remote_task_queue_;
+    std::queue<common::FileTask> remote_task_queue_;
     common::FileWorker local_worker_;
 
     QPointer<FileRemover> remover_;

@@ -255,7 +255,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     {
         const proto::internal::DesktopFrame& serialized_frame = screen_captured.frame();
 
-        base::local_shared_ptr<base::SharedMemory> shared_buffer = sharedBuffer(
+        base::SharedPointer<base::SharedMemory> shared_buffer = sharedBuffer(
             serialized_frame.shared_buffer_id());
         if (shared_buffer)
         {
@@ -323,7 +323,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
     }
 
     shared_buffers_.emplace(
-        shared_buffer_id, base::local_shared_ptr<base::SharedMemory>(shared_memory.release()));
+        shared_buffer_id, base::SharedPointer<base::SharedMemory>(shared_memory.release()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,7 +341,7 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shared_buffer_id)
+base::SharedPointer<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shared_buffer_id)
 {
     auto result = shared_buffers_.find(shared_buffer_id);
     if (result == shared_buffers_.end())

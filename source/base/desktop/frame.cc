@@ -33,7 +33,7 @@ Frame::Frame(const Size& size,
              const PixelFormat& format,
              int stride,
              quint8* data,
-             SharedMemoryBase* shared_memory)
+             SharedMemory* shared_memory)
     : data_(data),
       shared_memory_(shared_memory),
       size_(size),

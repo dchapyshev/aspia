@@ -29,7 +29,7 @@ ClientFileTransfer::ClientFileTransfer(QObject* parent)
     : Client(parent)
 {
     LOG(LS_INFO) << "Ctor";
-    qRegisterMetaType<base::local_shared_ptr<common::FileTask>>();
+    qRegisterMetaType<common::FileTask>();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,23 +57,23 @@ void ClientFileTransfer::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
 {
-    std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
+    proto::FileReply reply;
 
-    if (!base::parse(buffer, reply.get()))
+    if (!base::parse(buffer, &reply))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;
     }
 
-    if (reply->error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
+    if (reply.error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
     {
         LOG(LS_INFO) << "No logged in user on host side";
-        emit sig_errorOccurred(reply->error_code());
+        emit sig_errorOccurred(reply.error_code());
     }
     else if (!remote_task_queue_.empty())
     {
         // Move the reply to the request and notify the sender.
-        remote_task_queue_.front()->setReply(std::move(reply));
+        remote_task_queue_.front().onReply(std::move(reply));
 
         // Remove the request from the queue.
         remote_task_queue_.pop();
@@ -94,26 +94,26 @@ void ClientFileTransfer::onSessionMessageWritten(size_t /* pending */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onTaskDone(base::local_shared_ptr<common::FileTask> task)
+void ClientFileTransfer::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task->request();
-    const proto::FileReply& reply = task->reply();
+    const proto::FileRequest& request = task.request();
+    const proto::FileReply& reply = task.reply();
 
     if (request.has_drive_list_request())
     {
-        emit sig_driveListReply(task->target(), reply.error_code(), reply.drive_list());
+        emit sig_driveListReply(task.target(), reply.error_code(), reply.drive_list());
     }
     else if (request.has_file_list_request())
     {
-        emit sig_fileListReply(task->target(), reply.error_code(), reply.file_list());
+        emit sig_fileListReply(task.target(), reply.error_code(), reply.file_list());
     }
     else if (request.has_create_directory_request())
     {
-        emit sig_createDirectoryReply(task->target(), reply.error_code());
+        emit sig_createDirectoryReply(task.target(), reply.error_code());
     }
     else if (request.has_rename_request())
     {
-        emit sig_renameReply(task->target(), reply.error_code());
+        emit sig_renameReply(task.target(), reply.error_code());
     }
     else
     {
@@ -122,11 +122,11 @@ void ClientFileTransfer::onTaskDone(base::local_shared_ptr<common::FileTask> tas
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onTask(base::local_shared_ptr<common::FileTask> task)
+void ClientFileTransfer::onTask(const common::FileTask& task)
 {
-    if (task->target() == common::FileTask::Target::LOCAL)
+    if (task.target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_.doRequest(std::move(task));
+        local_worker_.doRequest(task);
     }
     else
     {
@@ -198,7 +198,7 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front()->request());
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front().request());
 }
 
 //--------------------------------------------------------------------------------------------------

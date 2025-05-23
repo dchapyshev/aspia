@@ -121,7 +121,7 @@ ClientSessionPortForwarding::ClientSessionPortForwarding(
     : ClientSession(proto::SESSION_TYPE_PORT_FORWARDING, std::move(channel), parent),
       socket_(base::AsioEventDispatcher::currentIoContext()),
       resolver_(base::AsioEventDispatcher::currentIoContext()),
-      handler_(base::make_local_shared<Handler>(this))
+      handler_(new Handler(this))
 {
     LOG(LS_INFO) << "Ctor";
 };

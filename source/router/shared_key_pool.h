@@ -20,11 +20,10 @@
 #define ROUTER_SHARED_KEY_POOL_H
 
 #include "base/macros_magic.h"
-#include "base/memory/local_memory.h"
+#include "base/shared_pointer.h"
 #include "proto/router_common.pb.h"
 #include "router/session.h"
 
-#include <cstdint>
 #include <optional>
 #include <memory>
 
@@ -62,9 +61,9 @@ public:
 
 private:
     class Impl;
-    explicit SharedKeyPool(base::local_shared_ptr<Impl> impl);
+    explicit SharedKeyPool(base::SharedPointer<Impl> impl);
 
-    base::local_shared_ptr<Impl> impl_;
+    base::SharedPointer<Impl> impl_;
     const bool is_primary_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedKeyPool);

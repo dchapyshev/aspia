@@ -83,10 +83,10 @@ signals:
     void sig_errorOccurred(const QString& path,
                            proto::FileError error_code,
                            quint32 available_actions);
-    void sig_doTask(base::local_shared_ptr<common::FileTask> task);
+    void sig_doTask(const common::FileTask& task);
 
 private slots:
-    void onTaskDone(base::local_shared_ptr<common::FileTask> task);
+    void onTaskDone(const common::FileTask& task);
 
 private:
     void doNextTask();

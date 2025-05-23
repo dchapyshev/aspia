@@ -19,8 +19,8 @@
 #ifndef ROUTER_SESSION_H
 #define ROUTER_SESSION_H
 
+#include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
-#include "base/memory/local_memory.h"
 #include "proto/router_common.pb.h"
 
 #include <QObject>
@@ -54,7 +54,7 @@ public:
 
     void setChannel(std::unique_ptr<base::TcpChannel> channel);
     void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
-    void setDatabaseFactory(base::local_shared_ptr<DatabaseFactory> database_factory);
+    void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
     void setServer(Server* server);
 
     void start(Delegate* delegate);
@@ -101,7 +101,7 @@ private:
     time_t start_time_ = 0;
 
     std::unique_ptr<base::TcpChannel> channel_;
-    base::local_shared_ptr<DatabaseFactory> database_factory_;
+    base::SharedPointer<DatabaseFactory> database_factory_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_ = nullptr;
 

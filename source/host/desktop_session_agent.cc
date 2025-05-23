@@ -626,7 +626,7 @@ void DesktopSessionAgent::captureScreen()
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
-        base::SharedMemoryBase* shared_memory = frame->sharedMemory();
+        base::SharedMemory* shared_memory = frame->sharedMemory();
         if (!shared_memory)
         {
             LOG(LS_ERROR) << "Unable to get shared memory";

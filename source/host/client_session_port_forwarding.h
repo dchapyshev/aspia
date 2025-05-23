@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/location.h"
-
-#include "base/memory/local_memory.h"
+#include "base/shared_pointer.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.pb.h"
 
@@ -76,7 +75,7 @@ private:
     asio::ip::tcp::resolver resolver_;
 
     class Handler;
-    base::local_shared_ptr<Handler> handler_;
+    base::SharedPointer<Handler> handler_;
 
     proto::port_forwarding::ClientToHost incoming_message_;
     proto::port_forwarding::HostToClient outgoing_message_;

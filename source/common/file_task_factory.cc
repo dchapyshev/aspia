@@ -35,36 +35,35 @@ FileTaskFactory::FileTaskFactory(FileTask::Target target, QObject* parent)
 FileTaskFactory::~FileTaskFactory() = default;
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::driveList()
+FileTask FileTaskFactory::driveList()
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_drive_list_request()->set_dummy(1);
+    proto::FileRequest request;
+    request.mutable_drive_list_request()->set_dummy(1);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::fileList(const QString& path)
+FileTask FileTaskFactory::fileList(const QString& path)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_file_list_request()->set_path(path.toStdString());
+    proto::FileRequest request;
+    request.mutable_file_list_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::createDirectory(const QString& path)
+FileTask FileTaskFactory::createDirectory(const QString& path)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_create_directory_request()->set_path(path.toStdString());
+    proto::FileRequest request;
+    request.mutable_create_directory_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::rename(
-    const QString& old_name, const QString& new_name)
+FileTask FileTaskFactory::rename(const QString& old_name, const QString& new_name)
 {
-    auto request = std::make_unique<proto::FileRequest>();
+    proto::FileRequest request;
 
-    proto::RenameRequest* rename_request = request->mutable_rename_request();
+    proto::RenameRequest* rename_request = request.mutable_rename_request();
     rename_request->set_old_name(old_name.toStdString());
     rename_request->set_new_name(new_name.toStdString());
 
@@ -72,27 +71,27 @@ base::local_shared_ptr<FileTask> FileTaskFactory::rename(
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::remove(const QString& path)
+FileTask FileTaskFactory::remove(const QString& path)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_remove_request()->set_path(path.toStdString());
+    proto::FileRequest request;
+    request.mutable_remove_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::download(const QString& file_path)
+FileTask FileTaskFactory::download(const QString& file_path)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_download_request()->set_path(file_path.toStdString());
+    proto::FileRequest request;
+    request.mutable_download_request()->set_path(file_path.toStdString());
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::upload(const QString& file_path, bool overwrite)
+FileTask FileTaskFactory::upload(const QString& file_path, bool overwrite)
 {
-    auto request = std::make_unique<proto::FileRequest>();
+    proto::FileRequest request;
 
-    proto::UploadRequest* upload_request = request->mutable_upload_request();
+    proto::UploadRequest* upload_request = request.mutable_upload_request();
     upload_request->set_path(file_path.toStdString());
     upload_request->set_overwrite(overwrite);
 
@@ -100,33 +99,33 @@ base::local_shared_ptr<FileTask> FileTaskFactory::upload(const QString& file_pat
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::packetRequest(quint32 flags)
+FileTask FileTaskFactory::packetRequest(quint32 flags)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_packet_request()->set_flags(flags);
+    proto::FileRequest request;
+    request.mutable_packet_request()->set_flags(flags);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::packet(const proto::FilePacket& packet)
+FileTask FileTaskFactory::packet(const proto::FilePacket& packet)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->mutable_packet()->CopyFrom(packet);
+    proto::FileRequest request;
+    request.mutable_packet()->CopyFrom(packet);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::packet(std::unique_ptr<proto::FilePacket> packet)
+FileTask FileTaskFactory::packet(proto::FilePacket&& packet)
 {
-    auto request = std::make_unique<proto::FileRequest>();
-    request->set_allocated_packet(packet.release());
+    proto::FileRequest request;
+    *request.mutable_packet() = std::move(packet);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-base::local_shared_ptr<FileTask> FileTaskFactory::makeTask(std::unique_ptr<proto::FileRequest> request)
+FileTask FileTaskFactory::makeTask(proto::FileRequest&& request)
 {
-    return base::make_local_shared<FileTask>(this, std::move(request), target_);
+    return FileTask(this, std::move(request), target_);
 }
 
 } // namespace common

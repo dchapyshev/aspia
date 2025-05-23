@@ -66,12 +66,12 @@ qint64 FileTransferQueueBuilder::totalSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferQueueBuilder::onTaskDone(base::local_shared_ptr<common::FileTask> task)
+void FileTransferQueueBuilder::onTaskDone(const common::FileTask& task)
 {
     DCHECK(!tasks_.empty());
 
-    const proto::FileRequest& request = task->request();
-    const proto::FileReply& reply = task->reply();
+    const proto::FileRequest& request = task.request();
+    const proto::FileReply& reply = task.reply();
 
     if (!request.has_file_list_request())
     {
