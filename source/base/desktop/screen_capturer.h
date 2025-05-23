@@ -29,7 +29,6 @@
 namespace base {
 
 class MouseCursor;
-class SharedFrame;
 class SharedMemoryFactory;
 
 class ScreenCapturer : public QObject

@@ -35,7 +35,6 @@ class AudioCapturerWrapper;
 class CaptureScheduler;
 class MessageWindow;
 class Thread;
-class SharedFrame;
 
 } // namespace base
 
