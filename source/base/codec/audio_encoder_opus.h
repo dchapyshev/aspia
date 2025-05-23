@@ -20,7 +20,6 @@
 #define BASE_CODEC_AUDIO_ENCODER_OPUS_H
 
 #include "base/macros_magic.h"
-#include "base/codec/audio_encoder.h"
 #include "proto/desktop.h"
 
 struct OpusEncoder;
@@ -30,16 +29,16 @@ namespace base {
 class AudioBus;
 class MultiChannelResampler;
 
-class AudioEncoderOpus final : public AudioEncoder
+class AudioEncoder
 {
 public:
-    AudioEncoderOpus();
-    ~AudioEncoderOpus() final;
+    AudioEncoder();
+    ~AudioEncoder();
 
     // AudioEncoder interface.
-    bool encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet) final;
-    int bitrate() final;
-    bool setBitrate(int bitrate) final;
+    bool encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet);
+    int bitrate();
+    bool setBitrate(int bitrate);
 
 private:
     void initEncoder();
@@ -67,7 +66,7 @@ private:
     int leftover_buffer_size_ = 0;
     int leftover_samples_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioEncoderOpus);
+    DISALLOW_COPY_AND_ASSIGN(AudioEncoder);
 };
 
 } // namespace base

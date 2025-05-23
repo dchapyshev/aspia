@@ -536,7 +536,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     switch (config.audio_encoding())
     {
         case proto::AUDIO_ENCODING_OPUS:
-            audio_encoder_ = std::make_unique<base::AudioEncoderOpus>();
+            audio_encoder_ = std::make_unique<base::AudioEncoder>();
             break;
 
         default:

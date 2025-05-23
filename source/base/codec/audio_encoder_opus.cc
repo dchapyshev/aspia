@@ -53,16 +53,16 @@ bool isSupportedSampleRate(int rate)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-AudioEncoderOpus::AudioEncoderOpus() = default;
+AudioEncoder::AudioEncoder() = default;
 
 //--------------------------------------------------------------------------------------------------
-AudioEncoderOpus::~AudioEncoderOpus()
+AudioEncoder::~AudioEncoder()
 {
     destroyEncoder();
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioEncoderOpus::initEncoder()
+void AudioEncoder::initEncoder()
 {
     DCHECK(!encoder_);
 
@@ -87,7 +87,7 @@ void AudioEncoderOpus::initEncoder()
             channels_,
             double(sampling_rate_) / double(kOpusSamplingRate),
             SincResampler::kDefaultRequestSize,
-            std::bind(&AudioEncoderOpus::fetchBytesToResample,
+            std::bind(&AudioEncoder::fetchBytesToResample,
                 this, std::placeholders::_1, std::placeholders::_2)));
         resampler_bus_ = AudioBus::Create(channels_, kFrameSamples);
     }
@@ -100,7 +100,7 @@ void AudioEncoderOpus::initEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioEncoderOpus::destroyEncoder()
+void AudioEncoder::destroyEncoder()
 {
     if (encoder_)
     {
@@ -112,7 +112,7 @@ void AudioEncoderOpus::destroyEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
+bool AudioEncoder::resetForPacket(const proto::AudioPacket& packet)
 {
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
@@ -136,7 +136,7 @@ bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioEncoderOpus::fetchBytesToResample(int /* resampler_frame_delay */, AudioBus* audio_bus)
+void AudioEncoder::fetchBytesToResample(int /* resampler_frame_delay */, AudioBus* audio_bus)
 {
     DCHECK(resampling_data_);
 
@@ -152,13 +152,13 @@ void AudioEncoderOpus::fetchBytesToResample(int /* resampler_frame_delay */, Aud
 }
 
 //--------------------------------------------------------------------------------------------------
-int AudioEncoderOpus::bitrate()
+int AudioEncoder::bitrate()
 {
     return bitrate_;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioEncoderOpus::setBitrate(int bitrate)
+bool AudioEncoder::setBitrate(int bitrate)
 {
     if (!encoder_)
         return false;
@@ -186,8 +186,7 @@ bool AudioEncoderOpus::setBitrate(int bitrate)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioEncoderOpus::encode(
-    const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet)
+bool AudioEncoder::encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet)
 {
     DCHECK_EQ(proto::AUDIO_ENCODING_RAW, input_packet.encoding());
     DCHECK_EQ(1, input_packet.data_size());
