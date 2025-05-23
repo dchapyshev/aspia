@@ -31,6 +31,7 @@ class SharedMemoryFactory;
 class SharedMemoryFrame final : public Frame
 {
 public:
+    SharedMemoryFrame();
     ~SharedMemoryFrame() final;
 
     static std::unique_ptr<Frame> create(
@@ -39,8 +40,9 @@ public:
     static std::unique_ptr<Frame> open(
         const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory);
 
-    static std::unique_ptr<Frame> attach(
-        const Size& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory);
+    void attach(const Size& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory);
+    void dettach();
+    bool isAttached() const;
 
 private:
     SharedMemoryFrame(const Size& size,

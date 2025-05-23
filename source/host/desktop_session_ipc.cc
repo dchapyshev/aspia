@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/desktop/shared_memory_frame.h"
 
 namespace host {
 
@@ -100,9 +99,9 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::captureScreen()
 {
-    if (last_frame_)
+    if (last_frame_.isAttached())
     {
-        last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
+        last_frame_.updatedRegion()->addRect(base::Rect::makeSize(last_frame_.size()));
 
         if (last_screen_list_)
         {
@@ -114,7 +113,7 @@ void DesktopSessionIpc::captureScreen()
             LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
         }
 
-        emit sig_screenCaptured(last_frame_.get(), last_mouse_cursor_.get());
+        emit sig_screenCaptured(&last_frame_, last_mouse_cursor_.get());
     }
     else
     {
@@ -259,14 +258,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
             serialized_frame.shared_buffer_id());
         if (shared_buffer)
         {
-            last_frame_ = base::SharedMemoryFrame::attach(
+            last_frame_.attach(
                 base::Size(serialized_frame.width(), serialized_frame.height()),
                 base::PixelFormat::ARGB(),
                 std::move(shared_buffer));
 
-            last_frame_->setCapturerType(serialized_frame.capturer_type());
+            last_frame_.setCapturerType(serialized_frame.capturer_type());
 
-            base::Region* updated_region = last_frame_->updatedRegion();
+            base::Region* updated_region = last_frame_.updatedRegion();
 
             for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             {
@@ -275,7 +274,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
                     dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height()));
             }
 
-            frame = last_frame_.get();
+            frame = &last_frame_;
         }
     }
 
@@ -336,7 +335,7 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
     if (shared_buffers_.empty())
     {
         LOG(LS_INFO) << "Reset last frame (sid=" << session_id_ << ")";
-        last_frame_.reset();
+        last_frame_.dettach();
     }
 }
 

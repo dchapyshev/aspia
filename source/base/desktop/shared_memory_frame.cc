@@ -25,6 +25,13 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
+SharedMemoryFrame::SharedMemoryFrame()
+    : Frame(Size(), PixelFormat(), 0, nullptr, nullptr)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                                      const PixelFormat& format,
                                      SharedPointer<SharedMemory> shared_memory)
@@ -73,11 +80,36 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<Frame> SharedMemoryFrame::attach(
+void SharedMemoryFrame::attach(
     const Size& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory)
 {
-    return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, std::move(shared_memory)));
+    owned_shared_memory_ = std::move(shared_memory);
+
+    data_ = reinterpret_cast<quint8*>(owned_shared_memory_->data());
+    shared_memory_ = owned_shared_memory_.get();
+
+    size_ = size;
+    format_ = format;
+    stride_ = size.width() * format.bytesPerPixel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SharedMemoryFrame::dettach()
+{
+    owned_shared_memory_.reset();
+
+    data_ = nullptr;
+    shared_memory_ = nullptr;
+
+    size_ = Size();
+    format_ = PixelFormat();
+    stride_ = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SharedMemoryFrame::isAttached() const
+{
+    return owned_shared_memory_;
 }
 
 } // namespace base

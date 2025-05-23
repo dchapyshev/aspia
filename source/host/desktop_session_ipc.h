@@ -20,9 +20,10 @@
 #define HOST_DESKTOP_SESSION_IPC_H
 
 #include "base/shared_pointer.h"
+#include "base/desktop/shared_memory_frame.h"
 #include "base/ipc/ipc_channel.h"
-#include "host/desktop_session.h"
 #include "base/ipc/shared_memory.h"
+#include "host/desktop_session.h"
 
 #include <map>
 
@@ -64,7 +65,7 @@ private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     std::unique_ptr<base::IpcChannel> channel_;
     SharedBuffers shared_buffers_;
-    std::unique_ptr<base::Frame> last_frame_;
+    base::SharedMemoryFrame last_frame_;
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
 

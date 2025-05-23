@@ -78,14 +78,13 @@ protected:
 
     // Ownership of the buffers is defined by the classes that inherit from this class. They must
     // guarantee that the buffer is not deleted before the frame is deleted.
-    quint8* const data_;
-    SharedMemory* const shared_memory_;
+    quint8* data_;
+    SharedMemory* shared_memory_;
+    Size size_;
+    PixelFormat format_;
+    int stride_;
 
 private:
-    const Size size_;
-    const PixelFormat format_;
-    const int stride_;
-
     Region updated_region_;
     Point top_left_;
     Point dpi_;
