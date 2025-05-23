@@ -57,7 +57,7 @@ protected:
     void reset() final;
 
 private:
-    SharedPointer<DxgiDuplicatorController> controller_;
+    std::shared_ptr<DxgiDuplicatorController> controller_;
 
     int current_screen_index_ = -1;
     ScreenId current_screen_id_ = kFullDesktopScreenId;

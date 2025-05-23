@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_CONTEXT_H
 #define BASE_DESKTOP_WIN_DXGI_CONTEXT_H
 
-#include "base/shared_pointer.h"
 #include "base/desktop/region.h"
 
+#include <memory>
 #include <vector>
 
 namespace base {
@@ -52,7 +52,7 @@ struct DxgiAdapterContext final
 struct DxgiFrameContext final
 {
 public:
-    explicit DxgiFrameContext(SharedPointer<DxgiDuplicatorController> controller);
+    explicit DxgiFrameContext(std::shared_ptr<DxgiDuplicatorController> controller);
 
     // Unregister this Context instance from DxgiDuplicatorController during destructing.
     ~DxgiFrameContext();
@@ -66,8 +66,7 @@ public:
 
     // Child DxgiAdapterContext belongs to this DxgiFrameContext.
     std::vector<DxgiAdapterContext> contexts;
-
-    SharedPointer<DxgiDuplicatorController> controller;
+    std::shared_ptr<DxgiDuplicatorController> controller;
 };
 
 } // namespace base
