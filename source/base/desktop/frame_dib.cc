@@ -87,7 +87,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
 
     if (shared_memory_factory)
     {
-        shared_memory = shared_memory_factory->create(buffer_size);
+        shared_memory.reset(shared_memory_factory->create(buffer_size));
         section_handle = shared_memory->handle();
     }
 

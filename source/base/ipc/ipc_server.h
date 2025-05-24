@@ -19,7 +19,7 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
-#include "base/threading/thread_checker.h"
+#include <QObject>
 
 #include <asio/io_context.hpp>
 
@@ -27,7 +27,7 @@
 #include <memory>
 #include <queue>
 
-#include <QObject>
+#include "base/macros_magic.h"
 
 namespace base {
 
@@ -70,8 +70,6 @@ private:
     class Listener;
     std::array<std::shared_ptr<Listener>, kListenersCount> listeners_;
     std::queue<std::unique_ptr<IpcChannel>> pending_;
-
-    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };

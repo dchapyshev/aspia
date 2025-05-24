@@ -18,6 +18,8 @@
 
 #include "base/ipc/ipc_server.h"
 
+#include <QRandomGenerator>
+
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
@@ -31,11 +33,9 @@
 #include <asio/windows/stream_handle.hpp>
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_POSIX)
+#if defined(Q_OS_UNIX)
 #include <asio/local/stream_protocol.hpp>
-#endif // defined(Q_OS_POSIX)
-
-#include <random>
+#endif // defined(Q_OS_UNIX)
 
 namespace base {
 
@@ -274,7 +274,6 @@ IpcServer::IpcServer(QObject* parent)
 IpcServer::~IpcServer()
 {
     LOG(LS_INFO) << "Dtor";
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     stop();
 }
 
@@ -283,7 +282,6 @@ IpcServer::~IpcServer()
 QString IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
-
     quint32 process_id;
 
 #if defined(Q_OS_WINDOWS)
@@ -294,12 +292,7 @@ QString IpcServer::createUniqueId()
 #error Not implemented
 #endif
 
-    std::random_device device;
-    std::mt19937 engine(device());
-
-    std::uniform_int_distribution<quint32> distance(0, std::numeric_limits<quint32>::max());
-
-    quint32 random_number = distance(engine);
+    quint32 random_number = QRandomGenerator::global()->generate();
     quint32 channel_id = last_channel_id++;
 
     return QString("%1.%2.%3").arg(process_id).arg(channel_id).arg(random_number);
@@ -308,8 +301,6 @@ QString IpcServer::createUniqueId()
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::start(const QString& channel_id)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
 
     if (channel_id.isEmpty())

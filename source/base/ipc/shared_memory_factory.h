@@ -23,8 +23,6 @@
 
 #include "base/macros_magic.h"
 
-#include <memory>
-
 namespace base {
 
 class SharedMemory;
@@ -38,12 +36,12 @@ public:
     ~SharedMemoryFactory();
 
     // Creates a new shared memory. If an error occurs, nullptr is returned.
-    std::unique_ptr<SharedMemory> create(size_t size);
+    SharedMemory* create(size_t size);
 
     // Opens an existing shared memory.
     // If shared memory does not exist, nullptr is returned.
     // If any other error occurs, nullptr is returned.
-    std::unique_ptr<SharedMemory> open(int id);
+    SharedMemory* open(int id);
 
 signals:
     // Called when a shared memory is successfully created or opened.

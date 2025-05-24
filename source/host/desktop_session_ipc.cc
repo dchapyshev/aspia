@@ -315,7 +315,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
     LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id << " (sid=" << session_id_ << ")";
 
-    std::unique_ptr<base::SharedMemory> shared_memory =
+    base::SharedMemory* shared_memory =
         base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
@@ -325,7 +325,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
         return;
     }
 
-    shared_buffers_[shared_buffer_id] = base::SharedPointer<base::SharedMemory>(shared_memory.release());
+    shared_buffers_[shared_buffer_id] = base::SharedPointer<base::SharedMemory>(shared_memory);
 }
 
 //--------------------------------------------------------------------------------------------------

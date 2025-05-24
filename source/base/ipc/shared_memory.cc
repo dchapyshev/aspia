@@ -18,41 +18,33 @@
 
 #include "base/ipc/shared_memory.h"
 
+#include <QRandomGenerator>
+
 #include "base/logging.h"
 
 #include <atomic>
 #include <cstring>
-#include <random>
 
 #if defined(Q_OS_WINDOWS)
 #include <AclAPI.h>
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_UNIX)
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_UNIX)
 
 namespace base {
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int randomInt()
-{
-    std::random_device device;
-    std::mt19937 engine(device());
-
-    std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
-    return distance(engine);
-}
-
-//--------------------------------------------------------------------------------------------------
 int createUniqueId()
 {
-    static std::atomic_int last_id = randomInt();
+    static std::atomic_int last_id =
+        QRandomGenerator::global()->bounded(0, std::numeric_limits<int>::max());
     return last_id++;
 }
 
@@ -178,17 +170,8 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
 
 } // namespace
 
-#if defined(Q_OS_WINDOWS)
-const SharedMemory::PlatformHandle kInvalidHandle = nullptr;
-#else
-const SharedMemory::PlatformHandle kInvalidHandle = -1;
-#endif
-
 //--------------------------------------------------------------------------------------------------
-SharedMemory::SharedMemory(int id,
-                           ScopedPlatformHandle&& handle,
-                           void* data,
-                           QObject* parent)
+SharedMemory::SharedMemory(int id, ScopedPlatformHandle&& handle, void* data, QObject* parent)
     : QObject(parent),
       handle_(std::move(handle)),
       data_(data),
@@ -206,7 +189,7 @@ SharedMemory::~SharedMemory()
     UnmapViewOfFile(data_);
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_UNIX)
     struct stat info;
     if (fstat(handle_.get(), &info) != 0)
     {
@@ -222,12 +205,12 @@ SharedMemory::~SharedMemory()
     {
         PLOG(LS_ERROR) << "shm_unlink failed";
     }
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_UNIX)
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
+SharedMemory* SharedMemory::create(Mode mode, size_t size)
 {
     static const int kRetryCount = 10;
 
@@ -251,8 +234,8 @@ std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
 
     memset(memory, 0, size);
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
-#elif defined(Q_OS_LINUX)
+    return new SharedMemory(id, std::move(file), memory);
+#elif defined(Q_OS_UNIX)
     int id = -1;
     int fd = -1;
 
@@ -318,7 +301,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(Mode mode, size_t size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
+SharedMemory* SharedMemory::open(Mode mode, int id)
 {
 #if defined(Q_OS_WINDOWS)
     ScopedPlatformHandle file;
@@ -329,8 +312,8 @@ std::unique_ptr<SharedMemory> SharedMemory::open(Mode mode, int id)
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
-    return std::unique_ptr<SharedMemory>(new SharedMemory(id, std::move(file), memory));
-#elif defined(Q_OS_LINUX)
+    return new SharedMemory(id, std::move(file), memory);
+#elif defined(Q_OS_UNIX)
     std::string name = base::local8BitFromUtf16(createFilePath(id));
     int open_flags = 0;
 

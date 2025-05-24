@@ -27,9 +27,6 @@
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#include <cstddef>
-#include <memory>
-
 namespace base {
 
 class SharedMemory final : public QObject
@@ -70,10 +67,8 @@ public:
 
 #endif
 
-    static const PlatformHandle kInvalidHandle;
-
-    static std::unique_ptr<SharedMemory> create(Mode mode, size_t size);
-    static std::unique_ptr<SharedMemory> open(Mode mode, int id);
+    static SharedMemory* create(Mode mode, size_t size);
+    static SharedMemory* open(Mode mode, int id);
 
     void* data() { return data_; }
     PlatformHandle handle() const { return handle_.get(); }

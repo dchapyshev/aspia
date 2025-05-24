@@ -33,26 +33,26 @@ SharedMemoryFactory::SharedMemoryFactory(QObject* parent)
 SharedMemoryFactory::~SharedMemoryFactory() = default;
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<SharedMemory> SharedMemoryFactory::create(size_t size)
+SharedMemory* SharedMemoryFactory::create(size_t size)
 {
-    std::unique_ptr<SharedMemory> memory = SharedMemory::create(SharedMemory::Mode::READ_WRITE, size);
+    SharedMemory* memory = SharedMemory::create(SharedMemory::Mode::READ_WRITE, size);
     if (!memory)
         return nullptr;
 
-    connect(memory.get(), &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
+    connect(memory, &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
 
     emit sig_memoryCreated(memory->id());
     return memory;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<SharedMemory> SharedMemoryFactory::open(int id)
+SharedMemory* SharedMemoryFactory::open(int id)
 {
-    std::unique_ptr<SharedMemory> memory = SharedMemory::open(SharedMemory::Mode::READ_ONLY, id);
+    SharedMemory* memory = SharedMemory::open(SharedMemory::Mode::READ_ONLY, id);
     if (!memory)
         return nullptr;
 
-    connect(memory.get(), &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
+    connect(memory, &SharedMemory::sig_destroyed, this, &SharedMemoryFactory::sig_memoryDestroyed);
 
     emit sig_memoryCreated(memory->id());
     return memory;
