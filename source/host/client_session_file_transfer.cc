@@ -171,9 +171,9 @@ QString agentFilePath()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel,
+ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
                                                      QObject* parent)
-    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel), parent),
+    : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, channel, parent),
       attach_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";

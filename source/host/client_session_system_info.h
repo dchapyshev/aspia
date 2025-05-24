@@ -29,7 +29,7 @@ class ClientSessionSystemInfo final : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
+    ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionSystemInfo() final;
 
 protected:

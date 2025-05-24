@@ -28,9 +28,8 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionSystemInfo::ClientSessionSystemInfo(
-    std::unique_ptr<base::TcpChannel> channel, QObject* parent)
-    : ClientSession(proto::SESSION_TYPE_SYSTEM_INFO, std::move(channel), parent)
+ClientSessionSystemInfo::ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent)
+    : ClientSession(proto::SESSION_TYPE_SYSTEM_INFO, channel, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

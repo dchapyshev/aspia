@@ -30,12 +30,14 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 ClientSession::ClientSession(
-    proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel, QObject* parent)
+    proto::SessionType session_type, base::TcpChannel* channel, QObject* parent)
     : QObject(parent),
       session_type_(session_type),
-      channel_(std::move(channel))
+      channel_(channel)
 {
     DCHECK(channel_);
+
+    channel_->setParent(this);
 
     // All sessions are executed in one thread. We can safely use a global counter to get session IDs.
     // Session IDs must start with 1.
@@ -53,7 +55,7 @@ ClientSession::~ClientSession()
 //--------------------------------------------------------------------------------------------------
 // static
 ClientSession* ClientSession::create(proto::SessionType session_type,
-                                     std::unique_ptr<base::TcpChannel> channel,
+                                     base::TcpChannel* channel,
                                      QObject* parent)
 {
     if (!channel)
@@ -66,19 +68,19 @@ ClientSession* ClientSession::create(proto::SessionType session_type,
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return new ClientSessionDesktop(session_type, std::move(channel), parent);
+            return new ClientSessionDesktop(session_type, channel, parent);
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            return new ClientSessionFileTransfer(std::move(channel), parent);
+            return new ClientSessionFileTransfer(channel, parent);
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
-            return new ClientSessionSystemInfo(std::move(channel), parent);
+            return new ClientSessionSystemInfo(channel, parent);
 
         case proto::SESSION_TYPE_TEXT_CHAT:
-            return new ClientSessionTextChat(std::move(channel), parent);
+            return new ClientSessionTextChat(channel, parent);
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
-            return new ClientSessionPortForwarding(std::move(channel), parent);
+            return new ClientSessionPortForwarding(channel, parent);
 
         default:
             LOG(LS_ERROR) << "Unknown session type: " << session_type;
@@ -92,10 +94,8 @@ void ClientSession::start()
     LOG(LS_INFO) << "Starting client session";
     state_ = State::STARTED;
 
-    connect(channel_.get(), &base::TcpChannel::sig_disconnected,
-            this, &ClientSession::onTcpDisconnected);
-    connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
-            this, &ClientSession::onTcpMessageReceived);
+    connect(channel_, &base::TcpChannel::sig_disconnected, this, &ClientSession::onTcpDisconnected);
+    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &ClientSession::onTcpMessageReceived);
 
     channel_->resume();
     onStarted();

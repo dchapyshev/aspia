@@ -35,7 +35,7 @@ class ClientSessionFileTransfer final : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
+    ClientSessionFileTransfer(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionFileTransfer() final;
 
 protected:

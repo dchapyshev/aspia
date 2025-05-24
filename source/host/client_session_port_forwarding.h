@@ -37,7 +37,7 @@ class ClientSessionPortForwarding final : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionPortForwarding(std::unique_ptr<base::TcpChannel> channel, QObject* parent);
+    ClientSessionPortForwarding(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionPortForwarding() final;
 
 protected:

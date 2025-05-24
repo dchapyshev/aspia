@@ -30,8 +30,6 @@
 
 namespace host {
 
-class DesktopSessionProxy;
-
 class ClientSession : public QObject
 {
     Q_OBJECT
@@ -46,9 +44,8 @@ public:
         FINISHED // Session is stopped.
     };
 
-    static ClientSession* create(proto::SessionType session_type,
-                                 std::unique_ptr<base::TcpChannel> channel,
-                                 QObject* parent = nullptr);
+    static ClientSession* create(
+        proto::SessionType session_type, base::TcpChannel* channel, QObject* parent = nullptr);
 
     void start();
     void stop();
@@ -83,9 +80,7 @@ signals:
     void sig_clientSessionTextChat(quint32 id, const proto::TextChat& text_chat);
 
 protected:
-    ClientSession(proto::SessionType session_type,
-                  std::unique_ptr<base::TcpChannel> channel,
-                  QObject* parent);
+    ClientSession(proto::SessionType session_type, base::TcpChannel* channel, QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
@@ -111,7 +106,7 @@ private:
     QString computer_name_;
     QString display_name_;
 
-    std::unique_ptr<base::TcpChannel> channel_;
+    base::TcpChannel* channel_ = nullptr;
 };
 
 } // namespace host

@@ -251,7 +251,7 @@ void Server::onSessionAuthenticated()
 
         ClientSession* session = ClientSession::create(
             static_cast<proto::SessionType>(session_info.session_type),
-            std::move(session_info.channel));
+            session_info.channel.release());
 
         if (!session)
         {
