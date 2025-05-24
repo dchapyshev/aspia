@@ -112,7 +112,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfoForModule
 std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(const QString& file_path)
 {
     DWORD dummy;
-    const wchar_t* path = reinterpret_cast<const wchar_t*>(file_path.utf16());
+    const wchar_t* path = qUtf16Printable(file_path);
 
     const DWORD length = GetFileVersionInfoSizeW(path, &dummy);
     if (length == 0)

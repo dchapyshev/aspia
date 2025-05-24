@@ -31,7 +31,7 @@ bool Device::open(const QString& device_path,
                   DWORD desired_access,
                   DWORD share_mode)
 {
-    device_.reset(CreateFileW(reinterpret_cast<const wchar_t*>(device_path.utf16()),
+    device_.reset(CreateFileW(qUtf16Printable(device_path),
                               desired_access,
                               share_mode,
                               nullptr,

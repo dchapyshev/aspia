@@ -159,8 +159,7 @@ ScopedSd convertSddlToSd(const QString& sddl)
     ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
     ULONG length = 0;
 
-    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
-            reinterpret_cast<const wchar_t*>(sddl.utf16()), SDDL_REVISION_1,
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(qUtf16Printable(sddl), SDDL_REVISION_1,
         raw_sd.recieve(), &length))
     {
         PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";

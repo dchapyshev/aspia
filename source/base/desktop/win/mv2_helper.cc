@@ -150,10 +150,9 @@ bool Mv2Helper::update(bool load)
     }
 
     wcsncpy_s(device_mode.dmDeviceName, std::size(device_mode.dmDeviceName),
-              reinterpret_cast<const wchar_t*>(device_name_.utf16()), device_name_.length());
+              qUtf16Printable(device_name_), device_name_.length());
 
-    LONG status = ChangeDisplaySettingsExW(
-        reinterpret_cast<const wchar_t*>(device_name_.utf16()), &device_mode, nullptr,
+    LONG status = ChangeDisplaySettingsExW(qUtf16Printable(device_name_), &device_mode, nullptr,
         CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
@@ -169,8 +168,7 @@ bool Mv2Helper::mapMemory(bool map)
 {
     if (map)
     {
-        driver_dc_.reset(CreateDCW(reinterpret_cast<const wchar_t*>(device_name_.utf16()), nullptr,
-                                   nullptr, nullptr));
+        driver_dc_.reset(CreateDCW(qUtf16Printable(device_name_), nullptr, nullptr, nullptr));
         if (!driver_dc_.isValid())
         {
             PLOG(LS_ERROR) << "CreateDCW failed";

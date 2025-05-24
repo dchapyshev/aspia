@@ -47,7 +47,7 @@ const char kFileTransferAgentFile[] = "aspia_file_agent";
 
 #if defined(Q_OS_WINDOWS)
 const char kFileTransferAgentFile[] = "aspia_file_agent.exe";
-const char16_t kDefaultDesktopName[] = u"winsta0\\default";
+const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------
 bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
@@ -115,8 +115,7 @@ bool startProcessWithToken(HANDLE token,
     memset(&startup_info, 0, sizeof(startup_info));
 
     startup_info.cb = sizeof(startup_info);
-    startup_info.lpDesktop = const_cast<wchar_t*>(
-        reinterpret_cast<const wchar_t*>(kDefaultDesktopName));
+    startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
     void* environment = nullptr;
 
@@ -131,8 +130,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!CreateProcessAsUserW(token,
                               nullptr,
-                              const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(
-                                  command_line.utf16())),
+                              const_cast<wchar_t*>(qUtf16Printable(command_line)),
                               nullptr,
                               nullptr,
                               FALSE,

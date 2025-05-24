@@ -370,7 +370,7 @@ void ClientPortForwarding::startCommandLine(const QString& command_line)
     startup_info.cb = sizeof(startup_info);
 
     if (!CreateProcessW(nullptr,
-                        const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(command_line.utf16())),
+                        const_cast<wchar_t*>(qUtf16Printable(command_line)),
                         nullptr,
                         nullptr,
                         FALSE,

@@ -121,7 +121,7 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
         proto::DriveList::Item* item = drive_list->add_item();
 
 #if defined(Q_OS_WINDOWS)
-        switch (GetDriveTypeW(reinterpret_cast<const wchar_t*>(volume.rootPath().utf16())))
+        switch (GetDriveTypeW(qUtf16Printable(volume.rootPath())))
         {
             case DRIVE_REMOVABLE:
                 item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);

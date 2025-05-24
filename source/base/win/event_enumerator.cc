@@ -273,8 +273,7 @@ EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32
     DWORD first_record = 0;
     DWORD records_count = 0;
 
-    event_log_.reset(openEventLogHandle(reinterpret_cast<const wchar_t*>(log_name_.utf16()),
-                                        &records_count, &first_record));
+    event_log_.reset(openEventLogHandle(qUtf16Printable(log_name_), &records_count, &first_record));
     if (!records_count)
         return;
 

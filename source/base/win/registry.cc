@@ -127,7 +127,7 @@ LONG RegistryKey::createWithDisposition(HKEY rootkey, const QString& subkey,
     HKEY subhkey = nullptr;
 
     LONG result = RegCreateKeyExW(rootkey,
-                                  reinterpret_cast<const wchar_t*>(subkey.utf16()),
+                                  qUtf16Printable(subkey),
                                   0,
                                   nullptr,
                                   REG_OPTION_NON_VOLATILE,
@@ -161,7 +161,7 @@ LONG RegistryKey::createKey(const QString& name, REGSAM access)
         return ERROR_INVALID_PARAMETER;
     }
     HKEY subkey = nullptr;
-    LONG result = RegCreateKeyExW(key_, reinterpret_cast<const wchar_t*>(name.utf16()), 0, nullptr,
+    LONG result = RegCreateKeyExW(key_, qUtf16Printable(name), 0, nullptr,
                                   REG_OPTION_NON_VOLATILE, access, nullptr, &subkey, nullptr);
     if (result == ERROR_SUCCESS)
     {
@@ -180,8 +180,7 @@ LONG RegistryKey::open(HKEY rootkey, const QString& subkey, REGSAM access)
 
     HKEY subhkey = nullptr;
 
-    LONG result = RegOpenKeyExW(rootkey, reinterpret_cast<const wchar_t*>(subkey.utf16()), 0,
-                                access, &subhkey);
+    LONG result = RegOpenKeyExW(rootkey, qUtf16Printable(subkey), 0, access, &subhkey);
     if (result == ERROR_SUCCESS)
     {
         close();
@@ -209,8 +208,7 @@ LONG RegistryKey::openKey(const QString& relative_key_name, REGSAM access)
     }
 
     HKEY subkey = nullptr;
-    LONG result = RegOpenKeyExW(key_, reinterpret_cast<const wchar_t*>(relative_key_name.utf16()),
-                                0, access, &subkey);
+    LONG result = RegOpenKeyExW(key_, qUtf16Printable(relative_key_name), 0, access, &subkey);
 
     // We have to close the current opened key before replacing it with the new
     // one.
@@ -238,12 +236,7 @@ void RegistryKey::close()
 //--------------------------------------------------------------------------------------------------
 bool RegistryKey::hasValue(const QString& name) const
 {
-    return (RegQueryValueExW(key_,
-                             reinterpret_cast<const wchar_t*>(name.utf16()),
-                             nullptr,
-                             nullptr,
-                             nullptr,
-                             nullptr) == ERROR_SUCCESS);
+    return (RegQueryValueExW(key_, qUtf16Printable(name), nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,17 +249,9 @@ DWORD RegistryKey::valueCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-LONG RegistryKey::readValue(const QString& name,
-                            void* data,
-                            DWORD* dsize,
-                            DWORD* dtype) const
+LONG RegistryKey::readValue(const QString& name, void* data, DWORD* dsize, DWORD* dtype) const
 {
-    return RegQueryValueExW(key_,
-                            reinterpret_cast<const wchar_t*>(name.utf16()),
-                            nullptr,
-                            dtype,
-                            reinterpret_cast<LPBYTE>(data),
-                            dsize);
+    return RegQueryValueExW(key_, qUtf16Printable(name), nullptr, dtype, reinterpret_cast<LPBYTE>(data), dsize);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,30 +419,21 @@ LONG RegistryKey::writeValue(const QString& name, const void* data, DWORD dsize,
 {
     DCHECK(data || !dsize);
 
-    return RegSetValueExW(key_,
-                          reinterpret_cast<const wchar_t*>(name.utf16()),
-                          0,
-                          dtype,
-                          reinterpret_cast<LPBYTE>(const_cast<void*>(data)),
-                          dsize);
+    return RegSetValueExW(key_, qUtf16Printable(name), 0, dtype,
+                          reinterpret_cast<LPBYTE>(const_cast<void*>(data)), dsize);
 }
 
 //--------------------------------------------------------------------------------------------------
 LONG RegistryKey::writeValue(const QString& name, DWORD in_value)
 {
-    return writeValue(name,
-                      &in_value,
-                      static_cast<DWORD>(sizeof(in_value)),
-                      REG_DWORD);
+    return writeValue(name, &in_value, static_cast<DWORD>(sizeof(in_value)), REG_DWORD);
 }
 
 //--------------------------------------------------------------------------------------------------
 LONG RegistryKey::writeValue(const QString& name, const QString& in_value)
 {
-    return writeValue(name,
-                      reinterpret_cast<const wchar_t*>(in_value.utf16()),
-                      static_cast<DWORD>((in_value.length() + 1) * sizeof(wchar_t)),
-                      REG_SZ);
+    return writeValue(name, qUtf16Printable(in_value),
+                      static_cast<DWORD>((in_value.length() + 1) * sizeof(wchar_t)), REG_SZ);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -468,8 +444,7 @@ LONG RegistryKey::deleteKey(const QString& name)
     HKEY subkey = nullptr;
 
     // Verify the key exists before attempting delete to replicate previous behavior.
-    LONG result = RegOpenKeyExW(key_, reinterpret_cast<const wchar_t*>(name.utf16()), 0,
-                                READ_CONTROL | wow64access_, &subkey);
+    LONG result = RegOpenKeyExW(key_, qUtf16Printable(name), 0, READ_CONTROL | wow64access_, &subkey);
     if (result != ERROR_SUCCESS)
         return result;
 
@@ -484,8 +459,7 @@ LONG RegistryKey::deleteEmptyKey(const QString& name)
     DCHECK(key_);
 
     HKEY target_key = nullptr;
-    LONG result = RegOpenKeyExW(key_, reinterpret_cast<const wchar_t*>(name.utf16()), 0,
-                                KEY_READ | wow64access_, &target_key);
+    LONG result = RegOpenKeyExW(key_, qUtf16Printable(name), 0, KEY_READ | wow64access_, &target_key);
     if (result != ERROR_SUCCESS)
         return result;
 
@@ -499,7 +473,7 @@ LONG RegistryKey::deleteEmptyKey(const QString& name)
         return result;
 
     if (count == 0)
-        return RegDeleteKeyExW(key_, reinterpret_cast<const wchar_t*>(name.utf16()), wow64access_, 0);
+        return RegDeleteKeyExW(key_, qUtf16Printable(name), wow64access_, 0);
 
     return ERROR_DIR_NOT_EMPTY;
 }
@@ -508,7 +482,7 @@ LONG RegistryKey::deleteEmptyKey(const QString& name)
 LONG RegistryKey::deleteValue(const QString& value_name)
 {
     DCHECK(key_);
-    LONG result = RegDeleteValueW(key_, reinterpret_cast<const wchar_t*>(value_name.utf16()));
+    LONG result = RegDeleteValueW(key_, qUtf16Printable(value_name));
     return result;
 }
 
@@ -517,12 +491,12 @@ LONG RegistryKey::deleteValue(const QString& value_name)
 LONG RegistryKey::deleteKeyRecurse(HKEY root_key, const QString& name, REGSAM access)
 {
     // First, see if the key can be deleted without having to recurse.
-    LONG result = RegDeleteKeyExW(root_key, reinterpret_cast<const wchar_t*>(name.utf16()), access, 0);
+    LONG result = RegDeleteKeyExW(root_key, qUtf16Printable(name), access, 0);
     if (result == ERROR_SUCCESS)
         return result;
 
     HKEY target_key = nullptr;
-    result = RegOpenKeyExW(root_key, reinterpret_cast<const wchar_t*>(name.utf16()), 0,
+    result = RegOpenKeyExW(root_key, qUtf16Printable(name), 0,
                            KEY_ENUMERATE_SUB_KEYS | access, &target_key);
 
     if (result == ERROR_FILE_NOT_FOUND)
@@ -567,7 +541,7 @@ LONG RegistryKey::deleteKeyRecurse(HKEY root_key, const QString& name, REGSAM ac
     RegCloseKey(target_key);
 
     // Try again to delete the key.
-    result = RegDeleteKeyExW(root_key, reinterpret_cast<const wchar_t*>(name.utf16()), access, 0);
+    result = RegDeleteKeyExW(root_key, qUtf16Printable(name), access, 0);
 
     return result;
 }
@@ -599,7 +573,7 @@ void RegistryValueIterator::initialize(HKEY root_key,
 {
     DCHECK_EQ((wow64access & ~kWow64AccessMask), static_cast<REGSAM>(0));
 
-    LONG result = RegOpenKeyExW(root_key, reinterpret_cast<const wchar_t*>(folder_key.utf16()), 0,
+    LONG result = RegOpenKeyExW(root_key, qUtf16Printable(folder_key), 0,
                                 KEY_READ | wow64access, &key_);
     if (result != ERROR_SUCCESS)
     {
@@ -786,7 +760,7 @@ void RegistryKeyIterator::initialize(HKEY root_key,
 {
     DCHECK_EQ((wow64access & ~kWow64AccessMask), static_cast<REGSAM>(0));
 
-    LONG result = RegOpenKeyExW(root_key, reinterpret_cast<const wchar_t*>(folder_key.utf16()), 0,
+    LONG result = RegOpenKeyExW(root_key, qUtf16Printable(folder_key), 0,
                                 KEY_READ | wow64access, &key_);
     if (result != ERROR_SUCCESS)
     {

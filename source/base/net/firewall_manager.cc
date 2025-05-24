@@ -119,9 +119,9 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
         return false;
     }
 
-    rule->put_Name(_bstr_t(reinterpret_cast<const wchar_t*>(rule_name.utf16())));
-    rule->put_Description(_bstr_t(reinterpret_cast<const wchar_t*>(description.utf16())));
-    rule->put_ApplicationName(_bstr_t(reinterpret_cast<const wchar_t*>(application_path_.utf16())));
+    rule->put_Name(_bstr_t(qUtf16Printable(rule_name)));
+    rule->put_Description(_bstr_t(qUtf16Printable(description)));
+    rule->put_ApplicationName(_bstr_t(qUtf16Printable(application_path_)));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);
@@ -159,9 +159,9 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
         return false;
     }
 
-    rule->put_Name(_bstr_t(reinterpret_cast<const wchar_t*>(rule_name.utf16())));
-    rule->put_Description(_bstr_t(reinterpret_cast<const wchar_t*>(description.utf16())));
-    rule->put_ApplicationName(_bstr_t(reinterpret_cast<const wchar_t*>(application_path_.utf16())));
+    rule->put_Name(_bstr_t(qUtf16Printable(rule_name)));
+    rule->put_Description(_bstr_t(qUtf16Printable(description)));
+    rule->put_ApplicationName(_bstr_t(qUtf16Printable(application_path_)));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_UDP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);

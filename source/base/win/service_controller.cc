@@ -67,9 +67,7 @@ ServiceController ServiceController::open(const QString& name)
         return ServiceController();
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
-                                        SERVICE_ALL_ACCESS));
+    ScopedScHandle service(OpenServiceW(sc_manager, qUtf16Printable(name), SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -93,14 +91,13 @@ ServiceController ServiceController::install(const QString& name,
     }
 
     ScopedScHandle service(CreateServiceW(sc_manager,
-                                          reinterpret_cast<const wchar_t*>(name.utf16()),
-                                          reinterpret_cast<const wchar_t*>(display_name.utf16()),
+                                          qUtf16Printable(name),
+                                          qUtf16Printable(display_name),
                                           SERVICE_ALL_ACCESS,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
                                           SERVICE_ERROR_NORMAL,
-                                          reinterpret_cast<const wchar_t*>(
-                                              QDir::toNativeSeparators(file_path).utf16()),
+                                          qUtf16Printable(QDir::toNativeSeparators(file_path)),
                                           nullptr,
                                           nullptr,
                                           nullptr,
@@ -143,9 +140,7 @@ bool ServiceController::remove(const QString& name)
         return false;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
-                                        SERVICE_ALL_ACCESS));
+    ScopedScHandle service(OpenServiceW(sc_manager, qUtf16Printable(name), SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -186,9 +181,7 @@ bool ServiceController::isInstalled(const QString& name)
         return false;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
-                                        SERVICE_QUERY_CONFIG));
+    ScopedScHandle service(OpenServiceW(sc_manager, qUtf16Printable(name), SERVICE_QUERY_CONFIG));
     if (!service.isValid())
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
@@ -213,9 +206,7 @@ bool ServiceController::isRunning(const QString& name)
         return false;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
-                                        SERVICE_QUERY_STATUS));
+    ScopedScHandle service(OpenServiceW(sc_manager, qUtf16Printable(name), SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
         PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -244,8 +235,7 @@ void ServiceController::close()
 bool ServiceController::setDescription(const QString& description)
 {
     SERVICE_DESCRIPTIONW service_description;
-    service_description.lpDescription =
-        const_cast<LPWSTR>(reinterpret_cast<const wchar_t*>(description.utf16()));
+    service_description.lpDescription = const_cast<LPWSTR>(qUtf16Printable(description));
 
     // Set the service description.
     if (!ChangeServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, &service_description))
@@ -372,8 +362,8 @@ bool ServiceController::setAccount(const QString& username, const QString& passw
                               SERVICE_NO_CHANGE,
                               SERVICE_NO_CHANGE,
                               nullptr, nullptr, nullptr, nullptr,
-                              reinterpret_cast<const wchar_t*>(username.utf16()),
-                              reinterpret_cast<const wchar_t*>(password.utf16()),
+                              qUtf16Printable(username),
+                              qUtf16Printable(password),
                               nullptr))
     {
         PLOG(LS_ERROR) << "ChangeServiceConfigW failed";

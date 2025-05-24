@@ -584,7 +584,7 @@ void MainWindow::onSettings()
 
             sei.cbSize = sizeof(sei);
             sei.lpVerb = L"runas";
-            sei.lpFile = reinterpret_cast<const wchar_t*>(current_exec_file.utf16());
+            sei.lpFile = qUtf16Printable(current_exec_file);
             sei.hwnd = reinterpret_cast<HWND>(winId());
             sei.nShow = SW_SHOW;
             sei.lpParameters = L"--config";

@@ -53,8 +53,7 @@ WindowStation::~WindowStation()
 // static
 WindowStation WindowStation::open(const QString& name)
 {
-    HWINSTA winsta = OpenWindowStationW(
-        reinterpret_cast<const wchar_t*>(name.utf16()), TRUE, GENERIC_ALL);
+    HWINSTA winsta = OpenWindowStationW(qUtf16Printable(name), TRUE, GENERIC_ALL);
     if (!winsta)
     {
         PLOG(LS_ERROR) << "OpenWindowStationW failed";

@@ -123,7 +123,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     security_attributes.bInheritHandle = FALSE;
 
     ScopedHandle handle(
-        CreateNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name.utf16()),
+        CreateNamedPipeW(qUtf16Printable(channel_name),
                          FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
                          PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,
                          PIPE_UNLIMITED_INSTANCES,

@@ -185,8 +185,7 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
         LONG status = key.create(HKEY_LOCAL_MACHINE, key_path, KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "create failed: "
-                          << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(LS_ERROR) << "create failed: " << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
 
@@ -199,8 +198,7 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
     }
     else
     {
-        LONG status = RegDeleteTreeW(HKEY_LOCAL_MACHINE,
-                                     reinterpret_cast<const wchar_t*>(key_path.utf16()));
+        LONG status = RegDeleteTreeW(HKEY_LOCAL_MACHINE, qUtf16Printable(key_path));
         if (status == ERROR_FILE_NOT_FOUND)
         {
             // Service is no longer listed to boot in Safe Mode.

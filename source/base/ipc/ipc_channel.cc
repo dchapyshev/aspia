@@ -126,7 +126,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
 
     while (true)
     {
-        handle.reset(CreateFileW(reinterpret_cast<const wchar_t*>(channel_name_.utf16()),
+        handle.reset(CreateFileW(qUtf16Printable(channel_name_),
                                  GENERIC_WRITE | GENERIC_READ,
                                  0,
                                  nullptr,
@@ -146,8 +146,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
             return false;
         }
 
-        if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.utf16()),
-                            kConnectTimeout))
+        if (!WaitNamedPipeW(qUtf16Printable(channel_name_), kConnectTimeout))
         {
             PLOG(LS_ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
             return false;

@@ -114,7 +114,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
     QString path = createFilePath(id);
 
     ScopedHandle file(CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, protect, high, low,
-                                         reinterpret_cast<const wchar_t*>(path.utf16())));
+                                         qUtf16Printable(path)));
     if (!file.isValid())
     {
         PLOG(LS_ERROR) << "CreateFileMappingW failed";
@@ -146,8 +146,7 @@ bool openFileMapping(SharedMemory::Mode mode, int id, ScopedHandle* out)
     if (!modeToDesiredAccess(mode, &desired_access))
         return false;
 
-    ScopedHandle file(OpenFileMappingW(desired_access, FALSE,
-        reinterpret_cast<const wchar_t*>(createFilePath(id).utf16())));
+    ScopedHandle file(OpenFileMappingW(desired_access, FALSE, qUtf16Printable(createFilePath(id))));
     if (!file.isValid())
     {
         PLOG(LS_ERROR) << "OpenFileMappingW failed";
