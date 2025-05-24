@@ -73,7 +73,6 @@ AudioCapturerWin::AudioCapturerWin(QObject* parent)
 AudioCapturerWin::~AudioCapturerWin()
 {
     LOG(LS_INFO) << "Dtor";
-    DCHECK(thread_checker_.calledOnValidThread());
     deinitialize();
 }
 
@@ -113,7 +112,6 @@ bool AudioCapturerWin::resetAndInitialize()
 void AudioCapturerWin::deinitialize()
 {
     LOG(LS_INFO) << "Deinitialize audio capturer";
-    DCHECK(thread_checker_.calledOnValidThread());
 
     wave_format_ex_.reset(nullptr);
     default_device_detector_.reset();
@@ -132,7 +130,6 @@ bool AudioCapturerWin::initialize()
     DCHECK(!audio_client_.Get());
     DCHECK(!mm_device_.Get());
     DCHECK(static_cast<PWAVEFORMATEX>(wave_format_ex_) == nullptr);
-    DCHECK(thread_checker_.calledOnValidThread());
 
     _com_error hr = S_OK;
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> mm_device_enumerator;
@@ -298,7 +295,6 @@ bool AudioCapturerWin::isInitialized() const
 void AudioCapturerWin::doCapture()
 {
     DCHECK(AudioCapturer::isValidSampleRate(sampling_rate_));
-    DCHECK(thread_checker_.calledOnValidThread());
 
     if (!isInitialized() || default_device_detector_->getAndReset())
     {

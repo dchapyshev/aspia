@@ -19,6 +19,8 @@
 list(APPEND SOURCE_BASE
     application.h
     applications_reader.h
+    asio_event_dispatcher.cc
+    asio_event_dispatcher.h
     bitset.h
     compiler_specific.h
     cpuid_util.cc
@@ -56,6 +58,8 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
+    thread.cc
+    thread.h
     translations.cc
     translations.h
     version_constants.cc
@@ -520,14 +524,6 @@ if (UNIX)
         posix/eintr_wrapper.h)
 endif()
 
-list(APPEND SOURCE_BASE_THREADING
-    threading/asio_event_dispatcher.cc
-    threading/asio_event_dispatcher.h
-    threading/thread.cc
-    threading/thread.h
-    threading/thread_checker.cc
-    threading/thread_checker.h)
-
 if (WIN32)
     list(APPEND SOURCE_BASE_WIN
         win/battery_enumerator.cc
@@ -626,7 +622,6 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
-source_group(threading FILES ${SOURCE_BASE_THREADING})
 
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
@@ -665,7 +660,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
-    ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
 

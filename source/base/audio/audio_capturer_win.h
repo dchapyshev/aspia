@@ -22,7 +22,6 @@
 #include <QTimer>
 
 #include "base/macros_magic.h"
-#include "base/threading/thread_checker.h"
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"
 #include "base/audio/audio_volume_filter_win.h"
@@ -84,7 +83,6 @@ private:
 
     std::unique_ptr<DefaultAudioDeviceChangeDetector> default_device_detector_;
     HRESULT last_capture_error_;
-    base::ThreadChecker thread_checker_;
 
     DISALLOW_COPY_AND_ASSIGN(AudioCapturerWin);
 };
