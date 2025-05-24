@@ -19,13 +19,13 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
+#include <QQueue>
 #include <QObject>
 
 #include <asio/io_context.hpp>
 
 #include <array>
 #include <memory>
-#include <queue>
 
 #include "base/macros_magic.h"
 
@@ -55,7 +55,7 @@ signals:
 
 private:
     bool runListener(size_t index);
-    void onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel);
+    void onNewConnection(size_t index, IpcChannel* channel);
     void onErrorOccurred(const Location& location);
 
     asio::io_context& io_context_;
@@ -69,7 +69,7 @@ private:
 
     class Listener;
     std::array<std::shared_ptr<Listener>, kListenersCount> listeners_;
-    std::queue<std::unique_ptr<IpcChannel>> pending_;
+    QQueue<IpcChannel*> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };

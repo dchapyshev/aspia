@@ -199,11 +199,11 @@ void ClientSessionFileTransfer::onStarted()
 
     LOG(LS_INFO) << "Starting ipc channel for file transfer";
 
-    ipc_server_ = std::make_unique<base::IpcServer>();
+    ipc_server_ = new base::IpcServer(this);
 
-    connect(ipc_server_.get(), &base::IpcServer::sig_newConnection,
+    connect(ipc_server_, &base::IpcServer::sig_newConnection,
             this, &ClientSessionFileTransfer::onIpcNewConnection);
-    connect(ipc_server_.get(), &base::IpcServer::sig_errorOccurred,
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
             this, &ClientSessionFileTransfer::onIpcErrorOccurred);
 
     if (!ipc_server_->start(channel_id))
@@ -330,7 +330,7 @@ void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
     else
     {
         // IPC channel not connected yet.
-        pending_messages_.emplace_back(buffer);
+        pending_messages_.push_back(buffer);
     }
 }
 
@@ -363,16 +363,17 @@ void ClientSessionFileTransfer::onIpcNewConnection()
         return;
     }
 
-    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
+    ipc_channel_ = ipc_server_->nextPendingConnection();
+    ipc_channel_->setParent(this);
 
-    ipc_server_.release()->deleteLater();
+    ipc_server_->deleteLater();
+    ipc_server_ = nullptr;
+
     attach_timer_->stop();
 
-    ipc_channel_.reset(channel);
-
-    connect(ipc_channel_.get(), &base::IpcChannel::sig_disconnected,
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &ClientSessionFileTransfer::onIpcDisconnected);
-    connect(ipc_channel_.get(), &base::IpcChannel::sig_messageReceived,
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &ClientSessionFileTransfer::onIpcMessageReceived);
 
     ipc_channel_->resume();

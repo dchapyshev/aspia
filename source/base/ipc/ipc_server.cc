@@ -227,10 +227,7 @@ void IpcServer::Listener::onNewConnetion(
         return;
     }
 
-    std::unique_ptr<IpcChannel> channel =
-        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(*handle_), nullptr));
-
-    server_->onNewConnection(index_, std::move(channel));
+    server_->onNewConnection(index_, new IpcChannel(server_->channel_name_, std::move(*handle_), server_));
 }
 #endif // defined(Q_OS_WINDOWS)
 
@@ -341,18 +338,19 @@ void IpcServer::stop()
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::hasPendingConnections()
 {
-    return !pending_.empty();
+    return !pending_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 IpcChannel* IpcServer::nextPendingConnection()
 {
-    if (pending_.empty())
+    if (pending_.isEmpty())
         return nullptr;
 
-    IpcChannel* channel = pending_.front().release();
-    pending_.pop();
+    IpcChannel* channel = pending_.front();
+    channel->setParent(nullptr);
 
+    pending_.pop_front();
     return channel;
 }
 
@@ -370,11 +368,11 @@ bool IpcServer::runListener(size_t index)
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel)
+void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
     LOG(LS_INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
 
-    pending_.emplace(std::move(channel));
+    pending_.push_back(channel);
     emit sig_newConnection();
 }
 

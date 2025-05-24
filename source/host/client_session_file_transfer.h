@@ -19,16 +19,14 @@
 #ifndef HOST_CLIENT_SESSION_FILE_TRANSFER_H
 #define HOST_CLIENT_SESSION_FILE_TRANSFER_H
 
+#include <QList>
+#include <QTimer>
+
 #include "base/macros_magic.h"
 #include "base/location.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/client_session.h"
-
-#include <vector>
-
-#include <QPointer>
-#include <QTimer>
 
 namespace host {
 
@@ -54,10 +52,10 @@ private slots:
 private:
     void onError(const base::Location& location);
 
-    QPointer<QTimer> attach_timer_;
-    std::unique_ptr<base::IpcServer> ipc_server_;
-    std::unique_ptr<base::IpcChannel> ipc_channel_;
-    std::vector<QByteArray> pending_messages_;
+    QTimer* attach_timer_ = nullptr;
+    base::IpcServer* ipc_server_ = nullptr;
+    base::IpcChannel* ipc_channel_ = nullptr;
+    QList<QByteArray> pending_messages_;
     bool has_logged_on_user_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
