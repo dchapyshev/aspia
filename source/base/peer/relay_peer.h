@@ -22,17 +22,15 @@
 #include <QByteArray>
 #include <QObject>
 
+#include "base/location.h"
 #include "base/macros_magic.h"
-#include "base/peer/host_id.h"
+#include "base/net/tcp_channel.h"
 #include "proto/router_common.pb.h"
 #include "proto/router_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
 
 namespace base {
-
-class TcpChannel;
-class Location;
 
 class RelayPeer final : public QObject
 {
@@ -69,7 +67,7 @@ private:
     asio::ip::tcp::socket socket_;
     asio::ip::tcp::resolver resolver_;
 
-    std::unique_ptr<TcpChannel> pending_channel_;
+    TcpChannel* pending_channel_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeer);
 };

@@ -21,12 +21,10 @@
 #include <QtEndian>
 
 #include "base/asio_event_dispatcher.h"
-#include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor_openssl.h"
-#include "base/net/tcp_channel.h"
 #include "base/serialization.h"
 #include "proto/relay_peer.pb.h"
 
@@ -126,7 +124,15 @@ void RelayPeer::start(const proto::ConnectionOffer& offer)
 //--------------------------------------------------------------------------------------------------
 TcpChannel* RelayPeer::takeChannel()
 {
-    return pending_channel_.release();
+    if (!pending_channel_)
+        return nullptr;
+
+    TcpChannel* channel = pending_channel_;
+    pending_channel_ = nullptr;
+
+    channel->setParent(nullptr);
+
+    return channel;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,8 +198,7 @@ void RelayPeer::onConnected()
 
             is_finished_ = true;
 
-            pending_channel_ =
-                std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_), nullptr));
+            pending_channel_ = new TcpChannel(std::move(socket_), this);
             pending_channel_->setHostId(connection_offer_.host_data().host_id());
 
             emit sig_connectionReady();

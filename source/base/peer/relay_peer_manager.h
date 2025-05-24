@@ -19,22 +19,17 @@
 #ifndef BASE_PEER_RELAY_PEER_MANAGER_H
 #define BASE_PEER_RELAY_PEER_MANAGER_H
 
+#include <QList>
 #include <QObject>
 
 #include "base/macros_magic.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/relay_peer.h"
 
 #include <memory>
 #include <queue>
-#include <vector>
-
-namespace proto {
-class RelayCredentials;
-} // namespace proto
 
 namespace base {
-
-class TcpChannel;
 
 class RelayPeerManager final : public QObject
 {
@@ -57,7 +52,7 @@ private slots:
 private:
     void cleanup();
 
-    std::vector<std::unique_ptr<RelayPeer>> pending_;
+    QList<RelayPeer*> pending_;
     std::queue<std::unique_ptr<TcpChannel>> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);

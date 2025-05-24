@@ -19,7 +19,6 @@
 #include "base/peer/relay_peer_manager.h"
 
 #include "base/logging.h"
-#include "base/net/tcp_channel.h"
 
 namespace base {
 
@@ -39,15 +38,13 @@ RelayPeerManager::~RelayPeerManager()
 //--------------------------------------------------------------------------------------------------
 void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 {
-    std::unique_ptr<RelayPeer> peer = std::make_unique<RelayPeer>();
+    RelayPeer* peer = new RelayPeer(this);
 
-    connect(peer.get(), &RelayPeer::sig_connectionError,
-            this, &RelayPeerManager::onRelayConnectionError);
-    connect(peer.get(), &RelayPeer::sig_connectionReady,
-            this, &RelayPeerManager::onRelayConnectionReady);
+    connect(peer, &RelayPeer::sig_connectionError, this, &RelayPeerManager::onRelayConnectionError);
+    connect(peer, &RelayPeer::sig_connectionReady, this, &RelayPeerManager::onRelayConnectionReady);
 
-    pending_.emplace_back(std::move(peer));
-    pending_.back()->start(offer);
+    pending_.push_back(peer);
+    peer->start(offer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,10 +58,14 @@ void RelayPeerManager::onRelayConnectionReady()
 {
     for (auto it = pending_.cbegin(), it_end = pending_.cend(); it != it_end; ++it)
     {
-        if (!it->get()->hasChannel())
+        RelayPeer* peer = *it;
+
+        if (!peer->hasChannel())
             continue;
 
-        channels_.emplace(std::unique_ptr<TcpChannel>(it->get()->takeChannel()));
+        TcpChannel* channel = peer->takeChannel();
+
+        channels_.emplace(std::unique_ptr<TcpChannel>(channel));
         emit sig_newPeerConnected();
     }
 
@@ -83,9 +84,11 @@ void RelayPeerManager::cleanup()
     auto it = pending_.begin();
     while (it != pending_.end())
     {
-        if (it->get()->isFinished())
+        RelayPeer* peer = *it;
+
+        if (peer->isFinished())
         {
-            it->release()->deleteLater();
+            peer->deleteLater();
             it = pending_.erase(it);
         }
         else
