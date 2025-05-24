@@ -39,6 +39,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(ClientSession* client_session
 
     DCHECK(client_session_);
 
+    client_session_->setParent(this);
     id_ = client_session_->id();
     timer_->setSingleShot(true);
 }
@@ -47,7 +48,6 @@ UnconfirmedClientSession::UnconfirmedClientSession(ClientSession* client_session
 UnconfirmedClientSession::~UnconfirmedClientSession()
 {
     LOG(LS_INFO) << "Dtor";
-    delete client_session_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,8 +83,13 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
 //--------------------------------------------------------------------------------------------------
 ClientSession* UnconfirmedClientSession::takeClientSession()
 {
+    if (!client_session_)
+        return nullptr;
+
     ClientSession* client_session = client_session_;
     client_session_ = nullptr;
+
+    client_session->setParent(nullptr);
     return client_session;
 }
 

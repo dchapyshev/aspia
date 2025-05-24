@@ -438,14 +438,14 @@ void UserSession::onClientSession(ClientSession* client_session)
             request->set_user_name(client_session->userName().toStdString());
             request->set_timeout(static_cast<quint32>(auto_confirmation_interval_.count()));
 
-            std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
-                std::make_unique<UnconfirmedClientSession>(std::move(client_session));
+            UnconfirmedClientSession* unconfirmed_client_session =
+                new UnconfirmedClientSession(client_session, this);
 
-            connect(unconfirmed_client_session.get(), &UnconfirmedClientSession::sig_finished,
+            connect(unconfirmed_client_session, &UnconfirmedClientSession::sig_finished,
                     this, &UserSession::onUnconfirmedSessionFinished, Qt::QueuedConnection);
 
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
-            pending_clients_.emplace_back(std::move(unconfirmed_client_session));
+            pending_clients_.push_back(unconfirmed_client_session);
 
             if (channel_)
             {
@@ -931,12 +931,15 @@ void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
 
     for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
     {
-        if ((*it)->id() != id)
+        UnconfirmedClientSession* session = *it;
+
+        if (session->id() != id)
             continue;
 
         if (!is_rejected)
-            addNewClientSession((*it)->takeClientSession());
+            addNewClientSession(session->takeClientSession());
 
+        session->deleteLater();
         pending_clients_.erase(it);
         return;
     }

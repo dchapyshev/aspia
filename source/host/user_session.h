@@ -142,8 +142,7 @@ private:
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
     using ClientSessionList = QList<ClientSession*>;
-    using UnconfirmedClientSessionPtr = std::unique_ptr<UnconfirmedClientSession>;
-    using UnconfirmedClientSessionList = std::vector<UnconfirmedClientSessionPtr>;
+    using UnconfirmedClientSessionList = QList<UnconfirmedClientSession*>;
 
     UnconfirmedClientSessionList pending_clients_;
     ClientSessionList desktop_clients_;
