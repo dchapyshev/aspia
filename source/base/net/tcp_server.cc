@@ -183,11 +183,8 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
     {
         accept_error_count_ = 0;
 
-        std::unique_ptr<TcpChannel> channel =
-            std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket), nullptr));
-
         // Connection accepted.
-        server_->onNewConnection(std::move(channel));
+        server_->onNewConnection(new TcpChannel(std::move(socket), server_));
     }
 
     // Accept next connection.
@@ -224,18 +221,19 @@ void TcpServer::stop()
 //--------------------------------------------------------------------------------------------------
 bool TcpServer::hasPendingConnections()
 {
-    return !pending_.empty();
+    return !pending_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel* TcpServer::nextPendingConnection()
 {
-    if (pending_.empty())
+    if (pending_.isEmpty())
         return nullptr;
 
-    TcpChannel* channel = pending_.front().release();
-    pending_.pop();
+    TcpChannel* channel = pending_.front();
+    channel->setParent(nullptr);
 
+    pending_.pop_front();
     return channel;
 }
 
@@ -270,9 +268,9 @@ bool TcpServer::isValidListenInterface(const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::onNewConnection(std::unique_ptr<TcpChannel> channel)
+void TcpServer::onNewConnection(TcpChannel* channel)
 {
-    pending_.emplace(std::move(channel));
+    pending_.push_back(channel);
     emit sig_newConnection();
 }
 

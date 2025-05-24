@@ -19,12 +19,12 @@
 #ifndef BASE_NET_TCP_SERVER_H
 #define BASE_NET_TCP_SERVER_H
 
+#include <QQueue>
 #include <QObject>
 
 #include "base/macros_magic.h"
 
 #include <memory>
-#include <queue>
 
 namespace base {
 
@@ -52,12 +52,12 @@ signals:
     void sig_newConnection();
 
 private:
-    void onNewConnection(std::unique_ptr<TcpChannel> channel);
+    void onNewConnection(TcpChannel* channel);
 
     class Impl;
     std::shared_ptr<Impl> impl_;
 
-    std::queue<std::unique_ptr<TcpChannel>> pending_;
+    QQueue<TcpChannel*> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(TcpServer);
 };
