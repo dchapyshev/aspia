@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/audio/win/audio_util_win.h"
 #include "base/audio/win/scoped_mmcss_registration.h"
-#include "base/threading/simple_thread.h"
 #include "base/win/scoped_com_initializer.h"
 
 namespace base {
@@ -96,8 +95,8 @@ bool AudioOutputWin::start()
 
     if (!audio_thread_)
     {
-        audio_thread_ = std::make_unique<SimpleThread>();
-        audio_thread_->start(std::bind(&AudioOutputWin::threadRun, this));
+        audio_thread_ = std::make_unique<AudioThread>(this);
+        audio_thread_->start();
 
         if (!audio_thread_->isRunning())
         {
@@ -421,7 +420,7 @@ void AudioOutputWin::stopThread()
         if (audio_thread_->isRunning())
         {
             SetEvent(stop_event_);
-            audio_thread_->stop();
+            audio_thread_->wait();
         }
 
         audio_thread_.reset();

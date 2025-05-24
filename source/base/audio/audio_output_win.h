@@ -19,6 +19,8 @@
 #ifndef BASE_AUDIO_AUDIO_OUTPUT_WIN_H
 #define BASE_AUDIO_AUDIO_OUTPUT_WIN_H
 
+#include <QThread>
+
 #include "base/audio/audio_output.h"
 #include "base/win/scoped_object.h"
 
@@ -37,6 +39,8 @@ class AudioOutputWin final
     : public AudioOutput,
       public IAudioSessionEvents
 {
+    Q_OBJECT
+
 public:
     explicit AudioOutputWin(const NeedMoreDataCB& need_more_data_cb);
     ~AudioOutputWin() final;
@@ -62,21 +66,12 @@ private:
     // These methods are called on separate threads owned by the session manager. More than one
     // thread can be involved depending on the type of callback and audio session.
     HRESULT __stdcall OnStateChanged(AudioSessionState new_state) final;
-    HRESULT __stdcall OnSessionDisconnected(
-        AudioSessionDisconnectReason disconnect_reason) final;
-    HRESULT __stdcall OnDisplayNameChanged(LPCWSTR new_display_name,
-                                           LPCGUID event_context) final;
-    HRESULT __stdcall OnIconPathChanged(LPCWSTR new_icon_path,
-                                        LPCGUID event_context) final;
-    HRESULT __stdcall OnSimpleVolumeChanged(float new_simple_volume,
-                                            BOOL new_mute,
-                                            LPCGUID event_context) final;
-    HRESULT __stdcall OnChannelVolumeChanged(DWORD channel_count,
-                                             float new_channel_volumes[],
-                                             DWORD changed_channel,
-                                             LPCGUID event_context) final;
-    HRESULT __stdcall OnGroupingParamChanged(LPCGUID new_grouping_param,
-                                             LPCGUID event_context) final;
+    HRESULT __stdcall OnSessionDisconnected(AudioSessionDisconnectReason disconnect_reason) final;
+    HRESULT __stdcall OnDisplayNameChanged(LPCWSTR new_display_name, LPCGUID event_context) final;
+    HRESULT __stdcall OnIconPathChanged(LPCWSTR new_icon_path, LPCGUID event_context) final;
+    HRESULT __stdcall OnSimpleVolumeChanged(float new_simple_volume, BOOL new_mute, LPCGUID event_context) final;
+    HRESULT __stdcall OnChannelVolumeChanged(DWORD channel_count, float new_channel_volumes[], DWORD changed_channel, LPCGUID event_context) final;
+    HRESULT __stdcall OnGroupingParamChanged(LPCGUID new_grouping_param, LPCGUID event_context) final;
 
     bool is_initialized_ = false;
     bool is_active_ = false;
@@ -86,7 +81,26 @@ private:
     Microsoft::WRL::ComPtr<IAudioRenderClient> audio_render_client_;
     Microsoft::WRL::ComPtr<IAudioSessionControl> audio_session_control_;
 
-    std::unique_ptr<SimpleThread> audio_thread_;
+    class AudioThread final : public QThread
+    {
+    public:
+        AudioThread(AudioOutputWin* output)
+            : output_(output)
+        {
+            // Nothing
+        }
+
+    protected:
+        void run() final
+        {
+            output_->threadRun();
+        }
+
+    private:
+        AudioOutputWin* output_;
+    };
+
+    std::unique_ptr<AudioThread> audio_thread_;
 
     ScopedHandle audio_samples_event_;
     ScopedHandle stop_event_;

@@ -523,8 +523,6 @@ endif()
 list(APPEND SOURCE_BASE_THREADING
     threading/asio_event_dispatcher.cc
     threading/asio_event_dispatcher.h
-    threading/simple_thread.cc
-    threading/simple_thread.h
     threading/thread.cc
     threading/thread.h
     threading/thread_checker.cc

@@ -19,15 +19,17 @@
 #ifndef BASE_AUDIO_AUDIO_OUTPUT_H
 #define BASE_AUDIO_AUDIO_OUTPUT_H
 
-#include <QtGlobal>
+#include <QObject>
 
 #include <functional>
 #include <memory>
 
 namespace base {
 
-class AudioOutput
+class AudioOutput : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~AudioOutput() = default;
 
