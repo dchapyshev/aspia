@@ -99,7 +99,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     });
 
     connect(ui.tree, &QTreeWidget::currentItemChanged,
-            this, [=](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
+            this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
         QString description;
 
@@ -113,7 +113,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         ui.label_description->setEnabled(enable);
     });
 
-    connect(ui.button_next, &QPushButton::clicked, this, [=]()
+    connect(ui.button_next, &QPushButton::clicked, this, [this]()
     {
         int index = ui.combobox_page->currentIndex() + 1;
         int count = ui.combobox_page->count();
@@ -124,7 +124,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         onPageActivated(index);
     });
 
-    connect(ui.button_prev, &QPushButton::clicked, this, [=]()
+    connect(ui.button_prev, &QPushButton::clicked, this, [this]()
     {
         int index = ui.combobox_page->currentIndex() - 1;
         if (index < 0)
@@ -136,7 +136,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     connect(ui.combobox_page, QOverload<int>::of(&QComboBox::activated),
             this, &SysInfoWidgetEventLogs::onPageActivated);
 
-    connect(ui.combobox_type, QOverload<int>::of(&QComboBox::activated), this, [=](int index)
+    connect(ui.combobox_type, QOverload<int>::of(&QComboBox::activated), this, [this](int index)
     {
         proto::system_info::EventLogs::Event::Type type =
             static_cast<proto::system_info::EventLogs::Event::Type>(

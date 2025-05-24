@@ -19,9 +19,9 @@
 #ifndef BASE_CRYPTO_RANDOM_H
 #define BASE_CRYPTO_RANDOM_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

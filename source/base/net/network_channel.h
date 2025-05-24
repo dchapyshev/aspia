@@ -19,10 +19,10 @@
 #ifndef BASE_NET_NETWORK_CHANNEL_H
 #define BASE_NET_NETWORK_CHANNEL_H
 
-#include <chrono>
-
 #include <QByteArray>
 #include <QObject>
+
+#include <chrono>
 
 namespace base {
 

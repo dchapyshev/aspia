@@ -19,12 +19,12 @@
 #ifndef BASE_NET_TCP_SERVER_H
 #define BASE_NET_TCP_SERVER_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 
 #include <memory>
 #include <queue>
-
-#include <QObject>
 
 namespace base {
 

@@ -19,10 +19,10 @@
 #ifndef BASE_NET_FIREWALL_MANAGER_H
 #define BASE_NET_FIREWALL_MANAGER_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
 #include <QVector>
+
+#include "base/macros_magic.h"
 
 #include <wrl/client.h>
 #include <netfw.h>

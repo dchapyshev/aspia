@@ -18,19 +18,19 @@
 
 #include "base/gui_application.h"
 
-#include "base/logging.h"
-#include "base/crypto/scoped_crypto_initializer.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_object.h"
-#endif // defined(Q_OS_WINDOWS)
-
 #include <QCryptographicHash>
 #include <QDataStream>
 #include <QDir>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
+
+#include "base/logging.h"
+#include "base/crypto/scoped_crypto_initializer.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "base/win/scoped_object.h"
+#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

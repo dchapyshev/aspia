@@ -19,9 +19,9 @@
 #ifndef BASE_WIN_PROCESS_UTIL_H
 #define BASE_WIN_PROCESS_UTIL_H
 
-#include "base/win/scoped_object.h"
-
 #include <QString>
+
+#include "base/win/scoped_object.h"
 
 namespace base {
 

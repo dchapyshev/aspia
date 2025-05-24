@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_USER_ENUMERATOR_H
 #define BASE_WIN_USER_ENUMERATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
 #include <QVector>
+
+#include "base/macros_magic.h"
 
 struct _USER_INFO_3;
 

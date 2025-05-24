@@ -19,10 +19,10 @@
 #ifndef BASE_NET_CONNECT_ENUMERATOR_H
 #define BASE_NET_CONNECT_ENUMERATOR_H
 
+#include <QString>
+
 #include "base/macros_magic.h"
 #include "base/win/scoped_object.h"
-
-#include <QString>
 
 #include <memory>
 

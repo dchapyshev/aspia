@@ -17,9 +17,6 @@
 //
 
 #include "base/asio_event_dispatcher.h"
-#include "base/logging.h"
-
-#include <asio/post.hpp>
 
 #include <QCoreApplication>
 #include <QThread>
@@ -27,6 +24,10 @@
 #if defined(Q_OS_WINDOWS)
 #include <QWinEventNotifier>
 #endif // defined(Q_OS_WINDOWS)
+
+#include "base/logging.h"
+
+#include <asio/post.hpp>
 
 namespace base {
 

@@ -19,9 +19,9 @@
 #ifndef BASE_CPUID_UTIL_H
 #define BASE_CPUID_UTIL_H
 
-#include "build/build_config.h"
-
 #include <QtGlobal>
+
+#include "build/build_config.h"
 
 #if defined(ARCH_CPU_X86_FAMILY)
 

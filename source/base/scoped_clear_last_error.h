@@ -19,9 +19,9 @@
 #ifndef BASE_SCOPED_CLEAR_LAST_ERROR_H
 #define BASE_SCOPED_CLEAR_LAST_ERROR_H
 
-#include "base/macros_magic.h"
-
 #include <QtGlobal>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

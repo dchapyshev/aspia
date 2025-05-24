@@ -19,14 +19,14 @@
 #ifndef BASE_PEER_RELAY_PEER_MANAGER_H
 #define BASE_PEER_RELAY_PEER_MANAGER_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 #include "base/peer/relay_peer.h"
 
 #include <memory>
 #include <queue>
 #include <vector>
-
-#include <QObject>
 
 namespace proto {
 class RelayCredentials;

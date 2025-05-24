@@ -19,11 +19,11 @@
 #ifndef BASE_SMBIOS_PARSER_H
 #define BASE_SMBIOS_PARSER_H
 
-#include "base/macros_magic.h"
-#include "base/smbios.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "base/macros_magic.h"
+#include "base/smbios.h"
 
 namespace base {
 

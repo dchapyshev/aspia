@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_SESSION_INFO_H
 #define BASE_WIN_SESSION_INFO_H
 
+#include <QString>
+
 #include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
-
-#include <QString>
 
 namespace base {
 

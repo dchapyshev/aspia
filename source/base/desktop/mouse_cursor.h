@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_MOUSE_CURSOR_H
 #define BASE_DESKTOP_MOUSE_CURSOR_H
 
-#include "base/desktop/geometry.h"
-
 #include <QByteArray>
+
+#include "base/desktop/geometry.h"
 
 namespace base {
 

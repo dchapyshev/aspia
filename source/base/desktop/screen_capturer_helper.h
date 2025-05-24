@@ -23,7 +23,6 @@
 #include "base/desktop/geometry.h"
 #include "base/desktop/region.h"
 
-#include <memory>
 #include <mutex>
 
 namespace base {

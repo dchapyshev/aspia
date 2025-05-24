@@ -18,6 +18,8 @@
 
 #include "base/net/tcp_channel.h"
 
+#include <QThread>
+
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -28,8 +30,6 @@
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
-
-#include <QThread>
 
 namespace base {
 

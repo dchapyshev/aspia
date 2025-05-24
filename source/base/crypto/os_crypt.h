@@ -19,9 +19,9 @@
 #ifndef BASE_CRYPTO_OS_CRYPT_H
 #define BASE_CRYPTO_OS_CRYPT_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

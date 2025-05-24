@@ -19,12 +19,12 @@
 #ifndef BASE_WIN_REGISTRY_H
 #define BASE_WIN_REGISTRY_H
 
+#include <QString>
+#include <qt_windows.h>
+
 #include "base/macros_magic.h"
 
 #include <vector>
-
-#include <QString>
-#include <qt_windows.h>
 
 namespace base {
 

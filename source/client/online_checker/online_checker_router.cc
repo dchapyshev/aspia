@@ -197,7 +197,7 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
         authenticator_ = nullptr;
     }
 
-    for (const auto& computer : computers_)
+    for (const auto& computer : std::as_const(computers_))
         emit sig_checkerResult(computer.computer_id, false);
 
     emit sig_checkerFinished();

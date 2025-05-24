@@ -19,11 +19,12 @@
 #ifndef BASE_NET_VARIABLE_SIZE_H
 #define BASE_NET_VARIABLE_SIZE_H
 
+#include <QtGlobal>
+
 #include "base/macros_magic.h"
 
 #include <asio/buffer.hpp>
 
-#include <QtGlobal>
 #include <optional>
 
 namespace base {

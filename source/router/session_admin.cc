@@ -103,7 +103,7 @@ void SessionAdmin::doUserListRequest()
     proto::UserList* list = message->mutable_user_list();
 
     QVector<base::User> users = database->userList();
-    for (const auto& user : users)
+    for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);

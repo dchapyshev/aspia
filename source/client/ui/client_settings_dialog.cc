@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
+#include "build/build_config.h"
 #include "client/router_config_storage.h"
 #include "client/ui/client_settings.h"
 

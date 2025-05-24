@@ -19,6 +19,8 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_VPX_H
 #define BASE_CODEC_VIDEO_ENCODER_VPX_H
 
+#include <QByteArray>
+
 #include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
@@ -27,8 +29,6 @@
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
-
-#include <QByteArray>
 
 namespace base {
 

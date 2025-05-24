@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_WIN_MIRROR_HELPER_H
 #define BASE_DESKTOP_WIN_MIRROR_HELPER_H
 
-#include "base/desktop/geometry.h"
-
 #include <QString>
+
+#include "base/desktop/geometry.h"
 
 namespace base {
 

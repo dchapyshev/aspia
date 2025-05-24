@@ -39,9 +39,7 @@ Location::Location(const char* file_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-Location::Location(const char* function_name,
-                   const char* file_name,
-                   int line_number)
+Location::Location(const char* function_name, const char* file_name, int line_number)
     : function_name_(function_name),
       file_name_(file_name),
       line_number_(line_number)
@@ -50,7 +48,7 @@ Location::Location(const char* function_name,
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string Location::toString(PathType path_type) const
+QString Location::toString(PathType path_type) const
 {
     std::string_view file_name(file_name_);
 
@@ -61,9 +59,7 @@ std::string Location::toString(PathType path_type) const
             file_name.remove_prefix(last_slash_pos + 1);
     }
 
-    return std::string(function_name_) + "@" +
-           std::string(file_name) + ":" +
-           std::to_string(line_number_);
+    return QString(function_name_) + "@" + file_name.data() + ":" + QString::number(line_number_);
 }
 
 //--------------------------------------------------------------------------------------------------

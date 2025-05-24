@@ -19,12 +19,11 @@
 #ifndef BASE_EDID_H
 #define BASE_EDID_H
 
-#include "base/macros_magic.h"
-
 #include <QtGlobal>
 
+#include "base/macros_magic.h"
+
 #include <memory>
-#include <string>
 
 namespace base {
 

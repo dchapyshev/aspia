@@ -19,10 +19,8 @@
 #include "base/desktop/win/screen_capture_utils.h"
 
 #include "base/logging.h"
-#include "base/desktop/win/bitmap_info.h"
-#include "base/win/desktop.h"
-#include "base/win/scoped_gdi_object.h"
 
+#include <qt_windows.h>
 #include <VersionHelpers.h>
 
 namespace base {

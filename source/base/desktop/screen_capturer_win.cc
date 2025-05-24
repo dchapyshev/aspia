@@ -18,14 +18,14 @@
 
 #include "base/desktop/screen_capturer_win.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/screen_capturer_mirror.h"
 #include "base/win/session_info.h"
 #include "base/win/windows_version.h"
-
-#include <QTimer>
 
 namespace base {
 

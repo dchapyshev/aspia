@@ -111,7 +111,7 @@ void StatusBar::clear()
 
     QList<QLabel*> items = findChildren<QLabel*>();
 
-    for (const auto& item : items)
+    for (const auto& item : std::as_const(items))
     {
         removeWidget(item);
         delete item;

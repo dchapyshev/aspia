@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_BATTERY_ENUMERATOR_H
 #define BASE_WIN_BATTERY_ENUMERATOR_H
 
+#include <QString>
+
 #include "base/win/device.h"
 #include "base/win/scoped_device_info.h"
-
-#include <QString>
 
 namespace base {
 

@@ -19,9 +19,9 @@
 #ifndef BASE_WIN_DEVICE_ENUMERATOR_H
 #define BASE_WIN_DEVICE_ENUMERATOR_H
 
-#include "base/win/scoped_device_info.h"
-
 #include <QString>
+
+#include "base/win/scoped_device_info.h"
 
 namespace base {
 

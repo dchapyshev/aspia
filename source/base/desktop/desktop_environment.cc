@@ -18,7 +18,6 @@
 
 #include "base/desktop/desktop_environment.h"
 
-#include "build/build_config.h"
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)

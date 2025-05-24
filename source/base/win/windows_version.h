@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_WINDOWS_VERSION_H
 #define BASE_WIN_WINDOWS_VERSION_H
 
-#include "base/macros_magic.h"
-
 #include <QVersionNumber>
 #include <QString>
+
+#include "base/macros_magic.h"
 
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;

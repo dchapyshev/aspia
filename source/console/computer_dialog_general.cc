@@ -18,13 +18,14 @@
 
 #include "console/computer_dialog_general.h"
 
+#include <QMessageBox>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
-
-#include <QMessageBox>
-#include <QTimer>
+#include "build/build_config.h"
 
 namespace console {
 
@@ -59,7 +60,7 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
     connect(ui.groupbox_inherit_creds, &QGroupBox::toggled, this, [this](bool checked)
     {
         QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
-        for (const auto& widget : widgets)
+        for (const auto& widget : std::as_const(widgets))
         {
             widget->setEnabled(!checked);
         }
@@ -78,7 +79,7 @@ void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
     QTimer::singleShot(0, this, [this, inherit_creds]()
     {
         QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
-        for (const auto& widget : widgets)
+        for (const auto& widget : std::as_const(widgets))
         {
             widget->setEnabled(!inherit_creds);
         }

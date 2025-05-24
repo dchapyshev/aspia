@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_POWER_INFO_H
 #define BASE_WIN_POWER_INFO_H
 
-#include "base/macros_magic.h"
-
 #include <QtGlobal>
 #include <qt_windows.h>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

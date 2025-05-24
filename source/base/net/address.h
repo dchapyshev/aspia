@@ -19,8 +19,6 @@
 #ifndef BASE_NET_ADDRESS_H
 #define BASE_NET_ADDRESS_H
 
-#include "build/build_config.h"
-
 #include <QString>
 
 namespace base {

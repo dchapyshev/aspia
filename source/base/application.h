@@ -19,9 +19,9 @@
 #ifndef BASE_APPLICATION_H
 #define BASE_APPLICATION_H
 
-#include "base/macros_magic.h"
-
 #include <QCoreApplication>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

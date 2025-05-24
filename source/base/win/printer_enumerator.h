@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_PRINTER_ENUMERATOR_H
 #define BASE_WIN_PRINTER_ENUMERATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "base/macros_magic.h"
 
 struct _PRINTER_INFO_2W;
 

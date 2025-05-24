@@ -19,12 +19,10 @@
 #ifndef BASE_CRYPTO_BIG_NUM_H
 #define BASE_CRYPTO_BIG_NUM_H
 
+#include <QByteArray>
+
 #include "base/macros_magic.h"
 #include "base/crypto/openssl_util.h"
-
-#include <memory>
-
-#include <QByteArray>
 
 namespace base {
 

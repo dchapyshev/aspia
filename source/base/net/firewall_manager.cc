@@ -18,13 +18,13 @@
 
 #include "base/net/firewall_manager.h"
 
+#include <QDir>
+#include <QUuid>
+
 #include "base/logging.h"
 
 #include <comutil.h>
 #include <Unknwn.h>
-
-#include <QDir>
-#include <QUuid>
 
 namespace base {
 

@@ -19,10 +19,10 @@
 #ifndef BASE_NET_ADAPTER_ENUMERATOR_H
 #define BASE_NET_ADAPTER_ENUMERATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "base/macros_magic.h"
 
 #if defined(Q_OS_WINDOWS)
 struct _IP_ADAPTER_ADDRESSES_LH;

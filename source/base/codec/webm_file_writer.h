@@ -19,6 +19,8 @@
 #ifndef BASE_CODEC_WEBM_FILE_WRITER_H
 #define BASE_CODEC_WEBM_FILE_WRITER_H
 
+#include <QString>
+
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "proto/desktop.h"
@@ -26,8 +28,6 @@
 #include <chrono>
 #include <memory>
 #include <optional>
-
-#include <QString>
 
 namespace base {
 

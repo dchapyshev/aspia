@@ -19,17 +19,17 @@
 #ifndef BASE_LOGGING_H
 #define BASE_LOGGING_H
 
+#include <QRect>
+#include <QString>
+#include <QStringList>
+#include <QTextStream>
+
 #include "base/scoped_clear_last_error.h"
 #include "base/system_error.h"
 
 #include <filesystem>
 #include <type_traits>
 #include <utility>
-
-#include <QRect>
-#include <QString>
-#include <QStringList>
-#include <QTextStream>
 
 // Instructions
 // ------------

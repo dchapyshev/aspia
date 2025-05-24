@@ -19,11 +19,11 @@
 #ifndef BASE_CRYPTO_MESSAGE_ENCRYPTOR_OPENSSL_H
 #define BASE_CRYPTO_MESSAGE_ENCRYPTOR_OPENSSL_H
 
+#include <QByteArray>
+
 #include "base/macros_magic.h"
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/openssl_util.h"
-
-#include <QByteArray>
 
 namespace base {
 

@@ -19,9 +19,9 @@
 #ifndef BASE_CODEC_WEBM_FILE_MUXER_H
 #define BASE_CODEC_WEBM_FILE_MUXER_H
 
-#include "base/macros_magic.h"
-
 #include <QtGlobal>
+
+#include "base/macros_magic.h"
 
 #include <chrono>
 #include <memory>

@@ -243,7 +243,7 @@ void ScreenCapturerMirror::updateExcludeRegion()
         return;
     }
 
-    for (const auto& screen : screen_list.screens)
+    for (const auto& screen : std::as_const(screen_list.screens))
     {
         std::wstring device_key;
 

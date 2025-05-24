@@ -18,11 +18,12 @@
 
 #include "console/computer_item.h"
 
-#include "base/net/address.h"
-#include "console/computer_group_item.h"
-
 #include <QCollator>
 #include <QDateTime>
+
+#include "base/net/address.h"
+#include "build/build_config.h"
+#include "console/computer_group_item.h"
 
 namespace console {
 

@@ -19,11 +19,11 @@
 #ifndef BASE_WIN_SESSION_ENUMERATOR_H
 #define BASE_WIN_SESSION_ENUMERATOR_H
 
+#include <QString>
+
 #include "base/macros_magic.h"
 #include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
-
-#include <QString>
 
 namespace base {
 

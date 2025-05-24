@@ -2733,27 +2733,27 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="42"/>
+        <location filename="../ui/client_settings_dialog.cc" line="43"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="130"/>
+        <location filename="../ui/client_settings_dialog.cc" line="131"/>
         <source>An invalid router address was entered.</source>
         <translation>E&apos; stato inserito un indirizzo del router non valido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="149"/>
+        <location filename="../ui/client_settings_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e caratteri _, -, .</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="166"/>
+        <location filename="../ui/client_settings_dialog.cc" line="167"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="195"/>
+        <location filename="../ui/client_settings_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>

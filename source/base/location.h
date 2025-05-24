@@ -19,9 +19,9 @@
 #ifndef BASE_LOCATION_H
 #define BASE_LOCATION_H
 
-#include "build/build_config.h"
+#include <QString>
 
-#include <string>
+#include "build/build_config.h"
 
 namespace base {
 
@@ -60,7 +60,7 @@ public:
 
     // Converts to the most user-readable form possible. If function and filename
     // are not available, this will return "pc:<hex address>".
-    std::string toString(PathType path_type = SHORT_PATH) const;
+    QString toString(PathType path_type = SHORT_PATH) const;
 
     static Location createFromHere(const char* file_name);
     static Location createFromHere(const char* function_name,

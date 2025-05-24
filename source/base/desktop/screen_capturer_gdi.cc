@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/cursor.h"
-#include "base/desktop/win/bitmap_info.h"
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/desktop/frame_dib.h"
 #include "base/desktop/differ.h"

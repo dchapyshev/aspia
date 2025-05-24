@@ -2811,27 +2811,27 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="42"/>
+        <location filename="../ui/client_settings_dialog.cc" line="43"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="130"/>
+        <location filename="../ui/client_settings_dialog.cc" line="131"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="149"/>
+        <location filename="../ui/client_settings_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-，.。 字符。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="166"/>
+        <location filename="../ui/client_settings_dialog.cc" line="167"/>
         <source>Password cannot be empty.</source>
         <translation>密码不能为空。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="195"/>
+        <location filename="../ui/client_settings_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>

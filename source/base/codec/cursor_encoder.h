@@ -19,10 +19,10 @@
 #ifndef BASE_CODEC_CURSOR_ENCODER_H
 #define BASE_CODEC_CURSOR_ENCODER_H
 
+#include <QVector>
+
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
-
-#include <QVector>
 
 namespace proto {
 class CursorShape;

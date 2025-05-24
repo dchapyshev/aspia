@@ -19,10 +19,10 @@
 #ifndef BASE_PEER_USER_H
 #define BASE_PEER_USER_H
 
-#include "proto/router_admin.pb.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "proto/router_admin.pb.h"
 
 namespace base {
 

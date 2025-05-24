@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/win/dxgi_frame.h"
-#include "base/desktop/win/screen_capture_utils.h"
 
 #include <chrono>
 #include <thread>

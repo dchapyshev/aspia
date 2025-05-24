@@ -19,9 +19,9 @@
 #ifndef BASE_NET_OPEN_FILES_ENUMERATOR_H
 #define BASE_NET_OPEN_FILES_ENUMERATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
+
+#include "base/macros_magic.h"
 
 struct _FILE_INFO_3;
 

@@ -344,7 +344,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-    quint32 usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
+    quint32 usb_keycode;
 
 #if !defined(Q_OS_MACOS)
     usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(

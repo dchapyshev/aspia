@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_DIFF_BLOCK_32BPP_SSE2_H
 #define BASE_DESKTOP_DIFF_BLOCK_32BPP_SSE2_H
 
-#include "build/build_config.h"
-
 #include <QtGlobal>
+
+#include "build/build_config.h"
 
 namespace base {
 

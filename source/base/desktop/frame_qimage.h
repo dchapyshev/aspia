@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_FRAME_QIMAGE_H
 #define BASE_DESKTOP_FRAME_QIMAGE_H
 
-#include "base/desktop/frame.h"
-
 #include <QImage>
+
+#include "base/desktop/frame.h"
 
 #include <memory>
 

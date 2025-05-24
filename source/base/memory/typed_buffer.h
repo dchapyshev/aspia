@@ -19,9 +19,10 @@
 #ifndef BASE_MEMORY_TYPED_BUFFER_H
 #define BASE_MEMORY_TYPED_BUFFER_H
 
+#include <QtGlobal>
+
 #include "base/macros_magic.h"
 
-#include <QtGlobal>
 #include <algorithm>
 
 namespace base {

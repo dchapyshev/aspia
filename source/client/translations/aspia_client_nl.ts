@@ -2807,27 +2807,27 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="42"/>
+        <location filename="../ui/client_settings_dialog.cc" line="43"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="130"/>
+        <location filename="../ui/client_settings_dialog.cc" line="131"/>
         <source>An invalid router address was entered.</source>
         <translation>Er is een ongelid router adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="149"/>
+        <location filename="../ui/client_settings_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen letters, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="166"/>
+        <location filename="../ui/client_settings_dialog.cc" line="167"/>
         <source>Password cannot be empty.</source>
         <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="195"/>
+        <location filename="../ui/client_settings_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>

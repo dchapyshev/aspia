@@ -19,10 +19,10 @@
 #ifndef BASE_CRYPTO_SRP_MATH_H
 #define BASE_CRYPTO_SRP_MATH_H
 
-#include "base/crypto/big_num.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "base/crypto/big_num.h"
 
 namespace base {
 

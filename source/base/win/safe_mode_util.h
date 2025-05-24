@@ -19,9 +19,9 @@
 #ifndef BASE_WIN_SAFE_MODE_UTIL_H
 #define BASE_WIN_SAFE_MODE_UTIL_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

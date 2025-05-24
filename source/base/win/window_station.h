@@ -19,11 +19,10 @@
 #ifndef BASE_WIN_WINDOW_STATION_H
 #define BASE_WIN_WINDOW_STATION_H
 
-#include "base/macros_magic.h"
-
+#include <QStringList>
 #include <qt_windows.h>
 
-#include <QStringList>
+#include "base/macros_magic.h"
 
 namespace base {
 

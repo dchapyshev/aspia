@@ -18,11 +18,11 @@
 
 #include "base/codec/webm_file_writer.h"
 
-#include "base/logging.h"
-#include "base/codec/webm_file_muxer.h"
-
 #include <QDateTime>
 #include <QDir>
+
+#include "base/logging.h"
+#include "base/codec/webm_file_muxer.h"
 
 namespace base {
 

@@ -19,13 +19,13 @@
 #ifndef BASE_TRANSLATIONS_H
 #define BASE_TRANSLATIONS_H
 
-#include "base/macros_magic.h"
-
-#include <utility>
-
 #include <QHash>
 #include <QStringList>
 #include <QVector>
+
+#include "base/macros_magic.h"
+
+#include <utility>
 
 class QTranslator;
 

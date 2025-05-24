@@ -18,6 +18,8 @@
 
 #include "base/peer/server_authenticator.h"
 
+#include <QSysInfo>
+
 #include "base/bitset.h"
 #include "base/cpuid_util.h"
 #include "base/location.h"
@@ -30,8 +32,6 @@
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/peer/user_list.h"
-
-#include <QSysInfo>
 
 namespace base {
 

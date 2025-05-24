@@ -19,12 +19,12 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
-#include "base/net/tcp_channel.h"
-#include "proto/key_exchange.pb.h"
-
 #include <QPointer>
 #include <QTimer>
 #include <QVersionNumber>
+
+#include "base/net/tcp_channel.h"
+#include "proto/key_exchange.pb.h"
 
 namespace base {
 

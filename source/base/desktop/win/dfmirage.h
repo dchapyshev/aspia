@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_WIN_DFMIRAGE_H
 #define BASE_DESKTOP_WIN_DFMIRAGE_H
 
-#include "build/build_config.h"
-
 #include <QtGlobal>
+
+#include "build/build_config.h"
 
 namespace base {
 

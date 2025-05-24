@@ -33,8 +33,6 @@
 
 namespace base {
 
-class SimpleThread;
-
 class AudioOutputWin final
     : public AudioOutput,
       public IAudioSessionEvents

@@ -19,9 +19,9 @@
 #ifndef BASE_PEER_USER_LIST_BASE_H
 #define BASE_PEER_USER_LIST_BASE_H
 
-#include "base/peer/user.h"
-
 #include <QVector>
+
+#include "base/peer/user.h"
 
 namespace base {
 

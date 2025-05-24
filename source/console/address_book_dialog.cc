@@ -18,21 +18,22 @@
 
 #include "console/address_book_dialog.h"
 
+#include <QAbstractButton>
+#include <QMessageBox>
+#include <QUuid>
+
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
+#include "build/build_config.h"
 #include "console/computer_factory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
 #include "console/computer_group_dialog_port_forwarding.h"
 #include "console/settings.h"
-
-#include <QAbstractButton>
-#include <QMessageBox>
-#include <QUuid>
 
 namespace console {
 

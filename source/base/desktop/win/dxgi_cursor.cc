@@ -18,8 +18,6 @@
 
 #include "base/desktop/win/dxgi_cursor.h"
 
-#include "base/logging.h"
-
 namespace base {
 
 namespace {

@@ -19,10 +19,10 @@
 #ifndef BASE_CODEC_CURSOR_DECODER_H
 #define BASE_CODEC_CURSOR_DECODER_H
 
+#include <QByteArray>
+
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
-
-#include <QByteArray>
 
 #include <optional>
 #include <vector>

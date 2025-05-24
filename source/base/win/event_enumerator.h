@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_EVENT_ENUMERATOR_H
 #define BASE_WIN_EVENT_ENUMERATOR_H
 
-#include "base/win/scoped_object.h"
-
 #include <QByteArray>
 #include <QString>
+
+#include "base/win/scoped_object.h"
 
 namespace base {
 

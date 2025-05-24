@@ -19,9 +19,9 @@
 #ifndef BASE_WIN_USER_GROUP_ENUMERATOR_H
 #define BASE_WIN_USER_GROUP_ENUMERATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QString>
+
+#include "base/macros_magic.h"
 
 struct _LOCALGROUP_INFO_1;
 

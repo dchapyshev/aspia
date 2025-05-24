@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include <cstddef>
-
 namespace base {
 
 // Helper used in audio capturers to detect and drop silent audio packets.

@@ -18,6 +18,9 @@
 
 #include "base/service.h"
 
+#include <QTimer>
+#include <QThread>
+
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -25,9 +28,6 @@
 #include "base/win/security_helpers.h"
 
 #include <sddl.h>
-
-#include <QTimer>
-#include <QThread>
 
 namespace base {
 

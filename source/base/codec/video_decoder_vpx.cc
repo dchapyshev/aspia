@@ -18,6 +18,8 @@
 
 #include "base/codec/video_decoder_vpx.h"
 
+#include <QThread>
+
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 
@@ -27,8 +29,6 @@
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_decoder.h>
 #include <vpx/vp8dx.h>
-
-#include <thread>
 
 namespace base {
 
@@ -95,7 +95,7 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 //--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
-    quint32 thread_count = std::thread::hardware_concurrency();
+    quint32 thread_count = QThread::idealThreadCount();
     if (thread_count >= 8)
         thread_count = 4;
     else if (thread_count >= 4)

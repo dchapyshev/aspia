@@ -19,10 +19,10 @@
 #ifndef BASE_MEMORY_BYTE_ARRAY_H
 #define BASE_MEMORY_BYTE_ARRAY_H
 
-#include "proto/common.h"
-
 #include <QByteArray>
 #include <QVersionNumber>
+
+#include "proto/common.h"
 
 #include <google/protobuf/message_lite.h>
 

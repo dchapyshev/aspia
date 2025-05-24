@@ -19,11 +19,11 @@
 #ifndef BASE_NET_ROUTE_ENUMERATOR_H
 #define BASE_NET_ROUTE_ENUMERATOR_H
 
+#include <QString>
+
 #include "base/macros_magic.h"
 
 #include <memory>
-
-#include <QString>
 
 namespace base {
 

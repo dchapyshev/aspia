@@ -19,9 +19,9 @@
 #ifndef BASE_CODEC_ZSTD_COMPRESS_H
 #define BASE_CODEC_ZSTD_COMPRESS_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
+
+#include "base/macros_magic.h"
 
 namespace base {
 

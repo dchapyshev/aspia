@@ -18,11 +18,11 @@
 
 #include "base/codec/webm_video_encoder.h"
 
+#include <QThread>
+
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 #include "proto/desktop.h"
-
-#include <thread>
 
 #include <libyuv/convert.h>
 
@@ -60,7 +60,7 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     // adequate processing power. NB: Going to multiple threads on low end
     // windows systems can really hurt performance.
     // http://crbug.com/99179
-    config->g_threads = (std::thread::hardware_concurrency() + 1) / 2;
+    config->g_threads = (QThread::idealThreadCount() + 1) / 2;
 
     // Do not drop any frames at encoder.
     config->rc_dropframe_thresh = 0;
