@@ -27,7 +27,6 @@ extern const QVersionNumber kCurrentVersion;
 extern const QVersionNumber kMinimumSupportedVersion;
 extern const QVersionNumber kVersion_2_7_0;
 extern const QVersionNumber kVersion_2_6_0;
-extern const QVersionNumber kVersion_2_4_0;
 
 } // namespace base
 

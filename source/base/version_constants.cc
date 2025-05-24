@@ -21,9 +21,8 @@
 namespace base {
 
 const QVersionNumber kCurrentVersion(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-const QVersionNumber kMinimumSupportedVersion(2, 3, 0);
+const QVersionNumber kMinimumSupportedVersion(2, 6, 0);
 const QVersionNumber kVersion_2_7_0(2, 7, 0);
 const QVersionNumber kVersion_2_6_0(2, 6, 0);
-const QVersionNumber kVersion_2_4_0(2, 4, 0);
 
 } // namespace base

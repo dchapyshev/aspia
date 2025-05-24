@@ -358,7 +358,7 @@ void DesktopSessionWindow::onShowWindow()
     showNormal();
     activateWindow();
 
-    toolbar_->enableTextChat(sessionState()->hostVersion() >= base::kVersion_2_4_0);
+    toolbar_->enableTextChat(true);
 }
 
 //--------------------------------------------------------------------------------------------------
