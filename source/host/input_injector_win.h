@@ -21,6 +21,7 @@
 
 #include <QSet>
 
+#include "base/macros_magic.h"
 #include "host/input_injector.h"
 
 #include <memory>

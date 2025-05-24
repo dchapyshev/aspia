@@ -55,9 +55,9 @@ bool SessionHost::hasHostId(base::HostId host_id) const
 //--------------------------------------------------------------------------------------------------
 void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
 {
-    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
-    message->mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    proto::RouterToPeer message;
+    message.mutable_connection_offer()->CopyFrom(offer);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,20 +69,20 @@ void SessionHost::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
-    if (!base::parse(buffer, message.get()))
+    proto::PeerToRouter message;
+    if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from host";
         return;
     }
 
-    if (message->has_host_id_request())
+    if (message.has_host_id_request())
     {
-        readHostIdRequest(message->host_id_request());
+        readHostIdRequest(message.host_id_request());
     }
-    else if (message->has_reset_host_id())
+    else if (message.has_reset_host_id())
     {
-        readResetHostId(message->reset_host_id());
+        readResetHostId(message.reset_host_id());
     }
     else
     {
@@ -106,8 +106,8 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         return;
     }
 
-    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
-    proto::HostIdResponse* host_id_response = message->mutable_host_id_response();
+    proto::RouterToPeer message;
+    proto::HostIdResponse* host_id_response = message.mutable_host_id_response();
     QByteArray key_hash;
 
     if (host_id_request.type() == proto::HostIdRequest::NEW_ID)
@@ -174,7 +174,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
             break;
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------

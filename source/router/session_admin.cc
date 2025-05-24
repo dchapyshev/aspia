@@ -49,33 +49,33 @@ void SessionAdmin::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    std::unique_ptr<proto::AdminToRouter> message = std::make_unique<proto::AdminToRouter>();
+    proto::AdminToRouter message;
 
-    if (!base::parse(buffer, message.get()))
+    if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from manager";
         return;
     }
 
-    if (message->has_session_list_request())
+    if (message.has_session_list_request())
     {
-        doSessionListRequest(message->session_list_request());
+        doSessionListRequest(message.session_list_request());
     }
-    else if (message->has_session_request())
+    else if (message.has_session_request())
     {
-        doSessionRequest(message->session_request());
+        doSessionRequest(message.session_request());
     }
-    else if (message->has_user_list_request())
+    else if (message.has_user_list_request())
     {
         doUserListRequest();
     }
-    else if (message->has_user_request())
+    else if (message.has_user_request())
     {
-        doUserRequest(message->user_request());
+        doUserRequest(message.user_request());
     }
-    else if (message->has_peer_connection_request())
+    else if (message.has_peer_connection_request())
     {
-        doPeerConnectionRequest(message->peer_connection_request());
+        doPeerConnectionRequest(message.peer_connection_request());
     }
     else
     {
@@ -99,21 +99,21 @@ void SessionAdmin::doUserListRequest()
         return;
     }
 
-    std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
-    proto::UserList* list = message->mutable_user_list();
+    proto::RouterToAdmin message;
+    proto::UserList* list = message.mutable_user_list();
 
     QVector<base::User> users = database->userList();
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doUserRequest(const proto::UserRequest& request)
 {
-    std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
-    proto::UserResult* result = message->mutable_user_result();
+    proto::RouterToAdmin message;
+    proto::UserResult* result = message.mutable_user_result();
     result->set_type(request.type());
 
     switch (request.type())
@@ -135,26 +135,26 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
             return;
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
 {
-    std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
+    proto::RouterToAdmin message;
 
-    message->set_allocated_session_list(server().sessionList().release());
-    if (!message->has_session_list())
-        message->mutable_session_list()->set_error_code(proto::SessionList::UNKNOWN_ERROR);
+    message.set_allocated_session_list(server().sessionList().release());
+    if (!message.has_session_list())
+        message.mutable_session_list()->set_error_code(proto::SessionList::UNKNOWN_ERROR);
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
 {
-    std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
-    proto::SessionResult* session_result = message->mutable_session_result();
+    proto::RouterToAdmin message;
+    proto::SessionResult* session_result = message.mutable_session_result();
     session_result->set_type(request.type());
 
     if (request.type() == proto::SESSION_REQUEST_DISCONNECT)
@@ -178,7 +178,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
         session_result->set_error_code(proto::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------

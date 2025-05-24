@@ -50,20 +50,20 @@ void SessionClient::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
-    if (!base::parse(buffer, message.get()))
+    proto::PeerToRouter message;
+    if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from client";
         return;
     }
 
-    if (message->has_connection_request())
+    if (message.has_connection_request())
     {
-        readConnectionRequest(message->connection_request());
+        readConnectionRequest(message.connection_request());
     }
-    else if (message->has_check_host_status())
+    else if (message.has_check_host_status())
     {
-        readCheckHostStatus(message->check_host_status());
+        readCheckHostStatus(message.check_host_status());
     }
     else
     {
@@ -82,8 +82,8 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 {
     LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
 
-    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
-    proto::ConnectionOffer* offer = message->mutable_connection_offer();
+    proto::RouterToPeer message;
+    proto::ConnectionOffer* offer = message.mutable_connection_offer();
 
     SessionHost* host = server().hostSessionById(request.host_id());
     if (!host)
@@ -152,14 +152,14 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     LOG(LS_INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::ConnectionOffer::CLIENT);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host_status)
 {
-    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
-    proto::HostStatus* host_status = message->mutable_host_status();
+    proto::RouterToPeer message;
+    proto::HostStatus* host_status = message.mutable_host_status();
 
     if (server().hostSessionById(check_host_status.host_id()))
         host_status->set_status(proto::HostStatus::STATUS_ONLINE);
@@ -168,7 +168,7 @@ void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host
 
     LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
                  << ": " << host_status->status();
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
 } // namespace router
