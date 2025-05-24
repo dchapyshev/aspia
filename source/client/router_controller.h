@@ -99,7 +99,7 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;
 
-    std::unique_ptr<base::TcpChannel> host_channel_;
+    base::TcpChannel* host_channel_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

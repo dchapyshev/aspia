@@ -80,7 +80,15 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
 //--------------------------------------------------------------------------------------------------
 base::TcpChannel* RouterController::takeChannel()
 {
-    return host_channel_.release();
+    if (!host_channel_)
+        return nullptr;
+
+    base::TcpChannel* channel = host_channel_;
+    host_channel_ = nullptr;
+
+    channel->setParent(nullptr);
+
+    return channel;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,7 +264,8 @@ void RouterController::onRelayConnectionReady()
         return;
     }
 
-    host_channel_.reset(relay_peer_->takeChannel());
+    host_channel_ = relay_peer_->takeChannel();
+    host_channel_->setParent(this);
 
     emit sig_hostConnected();
     relay_peer_->deleteLater();
