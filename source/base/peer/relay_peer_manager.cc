@@ -48,8 +48,11 @@ void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::queue<std::unique_ptr<TcpChannel>> RelayPeerManager::takePendingConnections()
+QQueue<TcpChannel*> RelayPeerManager::takePendingConnections()
 {
+    for (const auto& channel : std::as_const(channels_))
+        channel->setParent(nullptr);
+
     return std::move(channels_);
 }
 
@@ -64,8 +67,9 @@ void RelayPeerManager::onRelayConnectionReady()
             continue;
 
         TcpChannel* channel = peer->takeChannel();
+        channel->setParent(this);
 
-        channels_.emplace(std::unique_ptr<TcpChannel>(channel));
+        channels_.push_back(channel);
         emit sig_newPeerConnected();
     }
 

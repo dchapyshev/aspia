@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
-#include "base/peer/client_authenticator.h"
 #include "host/host_storage.h"
 #include "proto/router_peer.pb.h"
 
@@ -79,7 +78,7 @@ void RouterController::hostIdRequest(const QString& session_name)
     HostStorage host_key_storage;
     QByteArray host_key = host_key_storage.key(session_name);
 
-    pending_id_requests_.emplace(session_name);
+    pending_id_requests_.push_back(session_name);
 
     proto::PeerToRouter message;
     proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
@@ -120,17 +119,19 @@ void RouterController::resetHostId(base::HostId host_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterController::hasPendingConnections() const
 {
-    return !channels_.empty();
+    return !channels_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 base::TcpChannel* RouterController::nextPendingConnection()
 {
-    if (channels_.empty())
+    if (channels_.isEmpty())
         return nullptr;
 
-    base::TcpChannel* channel = channels_.front().release();
-    channels_.pop();
+    base::TcpChannel* channel = channels_.front();
+    channel->setParent(nullptr);
+
+    channels_.pop_front();
     return channel;
 }
 
@@ -261,7 +262,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             host_key_storage.setLastHostId(session_name, host_id);
 
         emit sig_hostIdAssigned(session_name, host_id);
-        pending_id_requests_.pop();
+        pending_id_requests_.pop_front();
     }
     else if (in_message.has_connection_offer())
     {
@@ -290,6 +291,10 @@ void RouterController::onNewPeerConnected()
 {
     LOG(LS_INFO) << "New peer connected";
     channels_ = peer_manager_->takePendingConnections();
+
+    for (const auto& channel : std::as_const(channels_))
+        channel->setParent(this);
+
     emit sig_clientConnected();
 }
 
@@ -301,9 +306,7 @@ void RouterController::connectToRouter()
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
     channel_ = new base::TcpChannel(this);
-
-    connect(channel_, &base::TcpChannel::sig_connected,
-            this, &RouterController::onTcpConnected);
+    connect(channel_, &base::TcpChannel::sig_connected, this, &RouterController::onTcpConnected);
 
     channel_->connectTo(router_info_.address, router_info_.port);
 }

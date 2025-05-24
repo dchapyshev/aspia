@@ -19,19 +19,15 @@
 #ifndef HOST_ROUTER_CONTROLLER_H
 #define HOST_ROUTER_CONTROLLER_H
 
-#include "base/net/tcp_channel.h"
-#include "base/peer/host_id.h"
-#include "base/peer/relay_peer_manager.h"
-#include "proto/host_internal.pb.h"
-
-#include <queue>
-
+#include <QQueue>
 #include <QPointer>
 #include <QTimer>
 
-namespace base {
-class ClientAuthenticator;
-} // namespace base
+#include "base/net/tcp_channel.h"
+#include "base/peer/client_authenticator.h"
+#include "base/peer/host_id.h"
+#include "base/peer/relay_peer_manager.h"
+#include "proto/host_internal.pb.h"
 
 namespace host {
 
@@ -85,8 +81,8 @@ private:
     QPointer<QTimer> reconnect_timer_;
     RouterInfo router_info_;
 
-    std::queue<QString> pending_id_requests_;
-    std::queue<std::unique_ptr<base::TcpChannel>> channels_;
+    QQueue<QString> pending_id_requests_;
+    QQueue<base::TcpChannel*> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

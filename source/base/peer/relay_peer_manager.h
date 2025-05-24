@@ -21,13 +21,11 @@
 
 #include <QList>
 #include <QObject>
+#include <QQueue>
 
 #include "base/macros_magic.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/relay_peer.h"
-
-#include <memory>
-#include <queue>
 
 namespace base {
 
@@ -40,7 +38,7 @@ public:
     ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::ConnectionOffer& offer);
-    std::queue<std::unique_ptr<TcpChannel>> takePendingConnections();
+    QQueue<TcpChannel*> takePendingConnections();
 
 signals:
     void sig_newPeerConnected();
@@ -53,7 +51,7 @@ private:
     void cleanup();
 
     QList<RelayPeer*> pending_;
-    std::queue<std::unique_ptr<TcpChannel>> channels_;
+    QQueue<TcpChannel*> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);
 };
