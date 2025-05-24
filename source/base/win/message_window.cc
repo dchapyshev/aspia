@@ -36,8 +36,6 @@ static std::atomic_bool _class_registered = false;
 //--------------------------------------------------------------------------------------------------
 MessageWindow::~MessageWindow()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (hwnd_)
     {
         DestroyWindow(hwnd_);
@@ -48,7 +46,6 @@ MessageWindow::~MessageWindow()
 //--------------------------------------------------------------------------------------------------
 bool MessageWindow::create(MessageCallback message_callback)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(!hwnd_);
 
     message_callback_ = std::move(message_callback);

@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_COM_INITIALIZER_H
 #define BASE_WIN_SCOPED_COM_INITIALIZER_H
 
-#include "base/threading/thread_checker.h"
+#include "base/macros_magic.h"
 
 #include <objbase.h>
 
@@ -52,8 +52,6 @@ private:
     void initialize(COINIT init);
 
     HRESULT hr_;
-
-    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };

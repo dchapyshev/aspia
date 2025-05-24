@@ -37,7 +37,6 @@ ScopedCOMInitializer::ScopedCOMInitializer(SelectMTA /* mta */)
 //--------------------------------------------------------------------------------------------------
 ScopedCOMInitializer::~ScopedCOMInitializer()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     if (isSucceeded())
         CoUninitialize();
 }
@@ -51,7 +50,6 @@ bool ScopedCOMInitializer::isSucceeded() const
 //--------------------------------------------------------------------------------------------------
 void ScopedCOMInitializer::initialize(COINIT init)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     hr_ = CoInitializeEx(nullptr, init);
     DCHECK_NE(hr_, RPC_E_CHANGED_MODE) << "Invalid COM thread model change";
 }

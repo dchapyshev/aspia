@@ -19,10 +19,10 @@
 #include "host/desktop_agent_main.h"
 
 #include "base/application.h"
+#include "base/asio_event_dispatcher.h"
 #include "base/meta_types.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
-#include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 #include "proto/meta_types.h"

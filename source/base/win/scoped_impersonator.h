@@ -20,7 +20,6 @@
 #define BASE_WIN_SCOPED_IMPERSONATOR_H
 
 #include "base/macros_magic.h"
-#include "base/threading/thread_checker.h"
 
 #include <qt_windows.h>
 
@@ -42,7 +41,6 @@ public:
 
 private:
     bool impersonated_ = false;
-    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScopedImpersonator);
 };

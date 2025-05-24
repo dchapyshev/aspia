@@ -19,7 +19,7 @@
 #ifndef COMMON_CLIPBOARD_MONITOR_H
 #define COMMON_CLIPBOARD_MONITOR_H
 
-#include "base/threading/thread.h"
+#include "base/thread.h"
 #include "common/clipboard.h"
 
 namespace common {

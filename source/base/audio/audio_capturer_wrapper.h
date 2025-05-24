@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
-#include "base/threading/thread.h"
+#include "base/thread.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {

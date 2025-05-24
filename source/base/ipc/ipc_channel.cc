@@ -18,9 +18,9 @@
 
 #include "base/ipc/ipc_channel.h"
 
+#include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>

@@ -19,15 +19,15 @@
 #ifndef HOST_DESKTOP_SESSION_AGENT_H
 #define HOST_DESKTOP_SESSION_AGENT_H
 
+#include <QPointer>
+#include <QTimer>
+
+#include "base/thread.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "base/threading/thread.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
-
-#include <QPointer>
-#include <QTimer>
 
 namespace base {
 

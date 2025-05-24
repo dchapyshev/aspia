@@ -20,7 +20,7 @@
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
 
 #include "base/macros_magic.h"
-#include "base/threading/thread.h"
+#include "base/thread.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
 

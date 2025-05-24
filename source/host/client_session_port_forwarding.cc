@@ -18,9 +18,9 @@
 
 #include "host/client_session_port_forwarding.h"
 
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -30,13 +30,13 @@ namespace host {
 
 namespace {
 
-std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
-    std::string str;
+    QString str;
 
     for (auto it = endpoints.begin(); it != endpoints.end();)
     {
-        str += it->endpoint().address().to_string();
+        str += QString::fromStdString(it->endpoint().address().to_string());
         if (++it != endpoints.end())
             str += ", ";
     }

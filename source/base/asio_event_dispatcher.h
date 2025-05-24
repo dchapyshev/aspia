@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREADING_ASIO_EVENT_DISPATCHER_H
-#define BASE_THREADING_ASIO_EVENT_DISPATCHER_H
-
-#include "base/macros_magic.h"
+#ifndef BASE_ASIO_EVENT_DISPATCHER_H
+#define BASE_ASIO_EVENT_DISPATCHER_H
 
 #include <QAbstractEventDispatcher>
+
+#include "base/macros_magic.h"
 
 #include <asio/io_context.hpp>
 #include <asio/steady_timer.hpp>
@@ -51,10 +51,10 @@ public:
     QList<TimerInfo> registeredTimers(QObject* object) const final;
     int remainingTime(int timer_id) final;
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
     bool registerEventNotifier(QWinEventNotifier* notifier) final;
     void unregisterEventNotifier(QWinEventNotifier* notifier) final;
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
     void wakeUp() final;
     void interrupt() final;
@@ -102,4 +102,4 @@ private:
 
 } // namespace base
 
-#endif // BASE_THREADING_ASIO_EVENT_DISPATCHER_H
+#endif // BASE_ASIO_EVENT_DISPATCHER_H

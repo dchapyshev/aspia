@@ -31,7 +31,6 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
-#include <QThread>
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

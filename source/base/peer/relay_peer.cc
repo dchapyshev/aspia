@@ -20,6 +20,7 @@
 
 #include <QtEndian>
 
+#include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
@@ -27,7 +28,6 @@
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/net/tcp_channel.h"
 #include "base/serialization.h"
-#include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.pb.h"
 
 #include <asio/connect.hpp>
@@ -37,13 +37,13 @@ namespace base {
 
 namespace {
 
-std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
-    std::string str;
+    QString str;
 
     for (auto it = endpoints.begin(); it != endpoints.end();)
     {
-        str += it->endpoint().address().to_string();
+        str += QString::fromStdString(it->endpoint().address().to_string());
         if (++it != endpoints.end())
             str += ", ";
     }

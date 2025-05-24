@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREADING_THREAD_H
-#define BASE_THREADING_THREAD_H
-
-#include "base/macros_magic.h"
+#ifndef BASE_THREAD_H
+#define BASE_THREAD_H
 
 #include <QThread>
+
+#include "base/macros_magic.h"
 
 namespace base {
 
@@ -44,4 +44,4 @@ private:
 
 } // namespace base
 
-#endif // BASE_THREADING_THREAD_H
+#endif // BASE_THREAD_H

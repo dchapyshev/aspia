@@ -18,12 +18,12 @@
 
 #include "base/net/tcp_channel.h"
 
+#include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
@@ -39,13 +39,13 @@ const int kWriteQueueReservedSize = 64;
 const TcpChannel::Seconds kKeepAliveInterval { 60 };
 const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
-std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
-    std::string str;
+    QString str;
 
     for (auto it = endpoints.begin(); it != endpoints.end();)
     {
-        str += it->endpoint().address().to_string();
+        str += QString::fromStdString(it->endpoint().address().to_string());
         if (++it != endpoints.end())
             str += ", ";
     }

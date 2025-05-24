@@ -33,8 +33,6 @@ ScopedImpersonator::~ScopedImpersonator()
 //--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::loggedOnUser(HANDLE user_token)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!ImpersonateLoggedOnUser(user_token))
     {
         PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
@@ -48,8 +46,6 @@ bool ScopedImpersonator::loggedOnUser(HANDLE user_token)
 //--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::anonymous()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!ImpersonateAnonymousToken(GetCurrentThread()))
     {
         PLOG(LS_ERROR) << "ImpersonateAnonymousToken failed";
@@ -63,8 +59,6 @@ bool ScopedImpersonator::anonymous()
 //--------------------------------------------------------------------------------------------------
 bool ScopedImpersonator::namedPipeClient(HANDLE named_pipe)
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!ImpersonateNamedPipeClient(named_pipe))
     {
         PLOG(LS_ERROR) << "ImpersonateNamedPipeClient failed";
@@ -78,8 +72,6 @@ bool ScopedImpersonator::namedPipeClient(HANDLE named_pipe)
 //--------------------------------------------------------------------------------------------------
 void ScopedImpersonator::revertToSelf()
 {
-    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
     if (!impersonated_)
         return;
 

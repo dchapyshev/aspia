@@ -19,11 +19,10 @@
 #ifndef BASE_GUI_APPLICATION_H
 #define BASE_GUI_APPLICATION_H
 
-#include "base/translations.h"
-#include "base/threading/thread.h"
-
 #include <QApplication>
-#include <QThread>
+
+#include "base/thread.h"
+#include "base/translations.h"
 
 class QLocalServer;
 class QLockFile;

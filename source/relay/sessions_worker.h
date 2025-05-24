@@ -19,7 +19,7 @@
 #ifndef RELAY_SESSIONS_WORKER_H
 #define RELAY_SESSIONS_WORKER_H
 
-#include "base/threading/thread.h"
+#include "base/thread.h"
 #include "relay/session_manager.h"
 
 namespace relay {

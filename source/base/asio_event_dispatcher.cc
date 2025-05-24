@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/threading/asio_event_dispatcher.h"
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 
 #include <asio/post.hpp>

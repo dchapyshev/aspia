@@ -18,9 +18,9 @@
 
 #include "client/client_port_forwarding.h"
 
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/threading/asio_event_dispatcher.h"
 
 #include <asio/ip/address.hpp>
 #include <asio/read.hpp>
