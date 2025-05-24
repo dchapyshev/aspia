@@ -19,14 +19,13 @@
 #include "relay/service.h"
 
 #include "base/logging.h"
-#include "relay/controller.h"
 #include "relay/service_constants.h"
 
 namespace relay {
 
 //--------------------------------------------------------------------------------------------------
-Service::Service()
-    : base::Service(kServiceName)
+Service::Service(QObject* parent)
+    : base::Service(kServiceName, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -42,7 +41,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Starting service...";
 
-    controller_ = std::make_unique<Controller>();
+    controller_ = new Controller(this);
     controller_->start();
 
     LOG(LS_INFO) << "Service started";
@@ -52,9 +51,7 @@ void Service::onStart()
 void Service::onStop()
 {
     LOG(LS_INFO) << "Stopping service...";
-
-    controller_.reset();
-
+    delete controller_;
     LOG(LS_INFO) << "Service stopped";
 }
 

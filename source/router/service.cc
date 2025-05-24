@@ -19,14 +19,13 @@
 #include "router/service.h"
 
 #include "base/logging.h"
-#include "router/server.h"
 #include "router/service_constants.h"
 
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-Service::Service()
-    : base::Service(kServiceName)
+Service::Service(QObject* parent)
+    : base::Service(kServiceName, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -42,7 +41,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service start...";
 
-    server_ = std::make_unique<Server>();
+    server_ = new Server(this);
     if (!server_->start())
     {
         LOG(LS_ERROR) << "Unable to start server. Service not started";
@@ -57,7 +56,7 @@ void Service::onStart()
 void Service::onStop()
 {
     LOG(LS_INFO) << "Service stop...";
-    server_.reset();
+    delete server_;
     LOG(LS_INFO) << "Service stopped";
 }
 

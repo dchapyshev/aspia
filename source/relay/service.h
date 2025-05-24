@@ -19,16 +19,19 @@
 #ifndef RELAY_SERVICE_H
 #define RELAY_SERVICE_H
 
+#include <QPointer>
+
 #include "base/service.h"
+#include "relay/controller.h"
 
 namespace relay {
 
-class Controller;
-
 class Service final : public base::Service
 {
+    Q_OBJECT
+
 public:
-    Service();
+    explicit Service(QObject* parent = nullptr);
     ~Service() final;
 
 protected:
@@ -42,7 +45,7 @@ protected:
 #endif // defined(Q_OS_WINDOWS)
 
 private:
-    std::unique_ptr<Controller> controller_;
+    QPointer<Controller> controller_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);
 };

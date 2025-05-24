@@ -19,16 +19,19 @@
 #ifndef ROUTER_SERVICE_H
 #define ROUTER_SERVICE_H
 
+#include <QPointer>
+
 #include "base/service.h"
+#include "router/server.h"
 
 namespace router {
 
-class Server;
-
 class Service final : public base::Service
 {
+    Q_OBJECT
+
 public:
-    Service();
+    explicit Service(QObject* parent = nullptr);
     ~Service() final;
 
 protected:
@@ -42,7 +45,7 @@ protected:
 #endif // defined(Q_OS_WINDOWS)
 
 private:
-    std::unique_ptr<Server> server_;
+    QPointer<Server> server_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);
 };

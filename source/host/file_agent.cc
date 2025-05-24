@@ -42,7 +42,7 @@ void FileAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
-    channel_ = std::make_unique<base::IpcChannel>();
+    channel_ = new base::IpcChannel(this);
 
     if (!channel_->connectTo(channel_id))
     {
@@ -50,8 +50,8 @@ void FileAgent::start(const QString& channel_id)
         return;
     }
 
-    connect(channel_.get(), &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
-    connect(channel_.get(), &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
+    connect(channel_, &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
+    connect(channel_, &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
 
     channel_->resume();
 }

@@ -35,10 +35,12 @@ namespace {
 class ServiceThread;
 } // namespace
 
-class Service
+class Service : public QObject
 {
+    Q_OBJECT
+
 public:
-    explicit Service(const QString& name);
+    Service(const QString& name, QObject* parent);
     virtual ~Service();
 
     int exec(Application& application);

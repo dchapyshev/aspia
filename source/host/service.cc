@@ -23,7 +23,6 @@
 #include "base/win/session_status.h"
 #include "host/host_storage.h"
 #include "host/service_constants.h"
-#include "host/server.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -73,8 +72,8 @@ QString powerEventToString(quint32 event)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Service::Service()
-    : base::Service(kHostServiceName)
+Service::Service(QObject* parent)
+    : base::Service(kHostServiceName, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -121,7 +120,7 @@ void Service::onStart()
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    server_ = std::make_unique<Server>();
+    server_ = new Server(this);
     server_->start();
 }
 
@@ -129,7 +128,7 @@ void Service::onStart()
 void Service::onStop()
 {
     LOG(LS_INFO) << "Service stopping...";
-    server_.reset();
+    delete server_;
     LOG(LS_INFO) << "Service is stopped";
 }
 

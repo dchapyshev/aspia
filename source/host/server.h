@@ -19,6 +19,10 @@
 #ifndef HOST_SERVER_H
 #define HOST_SERVER_H
 
+#include <QFileSystemWatcher>
+#include <QPointer>
+#include <QTimer>
+
 #include "base/net/tcp_server.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "common/http_file_downloader.h"
@@ -26,10 +30,6 @@
 #include "host/router_controller.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
-
-#include <QFileSystemWatcher>
-#include <QPointer>
-#include <QTimer>
 
 namespace host {
 

@@ -349,8 +349,9 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Service::Service(const QString& name)
-    : name_(name)
+Service::Service(const QString& name, QObject* parent)
+    : QObject(parent),
+      name_(name)
 {
     LOG(LS_INFO) << "Ctor";
 }

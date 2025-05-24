@@ -40,7 +40,7 @@ private slots:
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
-    std::unique_ptr<base::IpcChannel> channel_;
+    base::IpcChannel* channel_ = nullptr;
     common::FileWorker worker_;
 
     proto::FileRequest request_;
