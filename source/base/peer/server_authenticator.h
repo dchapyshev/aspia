@@ -23,10 +23,9 @@
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/peer/authenticator.h"
+#include "base/peer/user_list_base.h"
 
 namespace base {
-
-class UserListBase;
 
 class ServerAuthenticator final : public Authenticator
 {

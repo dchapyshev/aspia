@@ -31,7 +31,6 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
-#include "base/peer/user_list.h"
 
 namespace base {
 
@@ -277,17 +276,17 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientHello";
 
-    std::unique_ptr<proto::ClientHello> client_hello = std::make_unique<proto::ClientHello>();
-    if (!parse(buffer, client_hello.get()))
+    proto::ClientHello client_hello;
+    if (!parse(buffer, &client_hello))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    if (client_hello->has_version())
+    if (client_hello.has_version())
     {
         LOG(LS_INFO) << "ClientHello with version info";
-        setPeerVersion(client_hello->version());
+        setPeerVersion(client_hello.version());
 
         const QVersionNumber& peer_version = peerVersion();
 
@@ -311,7 +310,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         }
     }
 
-    const quint32 encryption = client_hello->encryption();
+    const quint32 encryption = client_hello.encryption();
 
     LOG(LS_INFO) << "Supported by client:";
 
@@ -321,7 +320,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     if (encryption & proto::ENCRYPTION_CHACHA20_POLY1305)
         LOG(LS_INFO) << "ENCRYPTION_CHACHA20_POLY1305";
 
-    LOG(LS_INFO) << "Identify: " << identifyToString(client_hello->identify());
+    LOG(LS_INFO) << "Identify: " << identifyToString(client_hello.identify());
 
     if (!(encryption & proto::ENCRYPTION_AES256_GCM) &&
         !(encryption & proto::ENCRYPTION_CHACHA20_POLY1305))
@@ -331,7 +330,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         return;
     }
 
-    identify_ = client_hello->identify();
+    identify_ = client_hello.identify();
     switch (identify_)
     {
         // SRP is always supported.
@@ -357,12 +356,12 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         }
     }
 
-    std::unique_ptr<proto::ServerHello> server_hello = std::make_unique<proto::ServerHello>();
+    proto::ServerHello server_hello ;
 
     if (key_pair_.isValid())
     {
-        QByteArray peer_public_key = QByteArray::fromStdString(client_hello->public_key());
-        decrypt_iv_ = QByteArray::fromStdString(client_hello->iv());
+        QByteArray peer_public_key = QByteArray::fromStdString(client_hello.public_key());
+        decrypt_iv_ = QByteArray::fromStdString(client_hello.iv());
 
         if (peer_public_key.isEmpty() != decrypt_iv_.isEmpty())
         {
@@ -387,7 +386,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
             }
 
             DCHECK(!encrypt_iv_.isEmpty());
-            server_hello->set_iv(encrypt_iv_.toStdString());
+            server_hello.set_iv(encrypt_iv_.toStdString());
         }
     }
 
@@ -401,28 +400,28 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
-        server_hello->set_encryption(proto::ENCRYPTION_AES256_GCM);
+        server_hello.set_encryption(proto::ENCRYPTION_AES256_GCM);
     }
     else
     {
         LOG(LS_INFO) << "Using ChaCha20+Poly1305";
         // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
         // support AES.
-        server_hello->set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
+        server_hello.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
     }
 
     // Now we are in the authentication phase.
     internal_state_ = InternalState::SEND_SERVER_HELLO;
-    encryption_ = server_hello->encryption();
+    encryption_ = server_hello.encryption();
 
-    proto::Version* version = server_hello->mutable_version();
+    proto::Version* version = server_hello.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
     LOG(LS_INFO) << "Sending: ServerHello";
-    sendMessage(*server_hello);
+    sendMessage(server_hello);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,14 +429,14 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: Identify";
 
-    std::unique_ptr<proto::SrpIdentify> identify = std::make_unique<proto::SrpIdentify>();
-    if (!parse(buffer, identify.get()))
+    proto::SrpIdentify identify;
+    if (!parse(buffer, &identify))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    user_name_ = QString::fromStdString(identify->username());
+    user_name_ = QString::fromStdString(identify.username());
     if (user_name_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -521,17 +520,16 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     internal_state_ = InternalState::SEND_SERVER_KEY_EXCHANGE;
     encrypt_iv_ = Random::byteArray(kIvSize);
 
-    std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
-        std::make_unique<proto::SrpServerKeyExchange>();
+    proto::SrpServerKeyExchange server_key_exchange;
 
-    server_key_exchange->set_number(N_.toStdString());
-    server_key_exchange->set_generator(g_.toStdString());
-    server_key_exchange->set_salt(s_.toStdString());
-    server_key_exchange->set_b(B_.toStdString());
-    server_key_exchange->set_iv(encrypt_iv_.toStdString());
+    server_key_exchange.set_number(N_.toStdString());
+    server_key_exchange.set_generator(g_.toStdString());
+    server_key_exchange.set_salt(s_.toStdString());
+    server_key_exchange.set_b(B_.toStdString());
+    server_key_exchange.set_iv(encrypt_iv_.toStdString());
 
     LOG(LS_INFO) << "Sending: ServerKeyExchange";
-    sendMessage(*server_key_exchange);
+    sendMessage(server_key_exchange);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -539,16 +537,15 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientKeyExchange";
 
-    std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
-        std::make_unique<proto::SrpClientKeyExchange>();
-    if (!parse(buffer, client_key_exchange.get()))
+    proto::SrpClientKeyExchange client_key_exchange;
+    if (!parse(buffer, &client_key_exchange))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    A_ = BigNum::fromStdString(client_key_exchange->a());
-    decrypt_iv_ = QByteArray::fromStdString(client_key_exchange->iv());
+    A_ = BigNum::fromStdString(client_key_exchange.a());
+    decrypt_iv_ = QByteArray::fromStdString(client_key_exchange.iv());
 
     if (!A_.isValid() || decrypt_iv_.isEmpty())
     {
@@ -596,23 +593,22 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::doSessionChallenge()
 {
-    std::unique_ptr<proto::SessionChallenge> session_challenge =
-        std::make_unique<proto::SessionChallenge>();
-    session_challenge->set_session_types(session_types_);
+    proto::SessionChallenge session_challenge;
+    session_challenge.set_session_types(session_types_);
 
-    proto::Version* version = session_challenge->mutable_version();
+    proto::Version* version = session_challenge.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    session_challenge->set_os_name(SysInfo::operatingSystemName().toStdString());
-    session_challenge->set_computer_name(SysInfo::computerName().toStdString());
-    session_challenge->set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
-    session_challenge->set_arch(QSysInfo::buildCpuArchitecture().toStdString());
+    session_challenge.set_os_name(SysInfo::operatingSystemName().toStdString());
+    session_challenge.set_computer_name(SysInfo::computerName().toStdString());
+    session_challenge.set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
+    session_challenge.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
     LOG(LS_INFO) << "Sending: SessionChallenge";
-    sendMessage(*session_challenge);
+    sendMessage(session_challenge);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -620,9 +616,8 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
-    std::unique_ptr<proto::SessionResponse> response =
-        std::make_unique<proto::SessionResponse>();
-    if (!parse(buffer, response.get()))
+    proto::SessionResponse response;
+    if (!parse(buffer, &response))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
@@ -630,7 +625,7 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 
     if (peerVersion().isNull())
     {
-        setPeerVersion(response->version());
+        setPeerVersion(response.version());
 
         const QVersionNumber& peer_version = peerVersion();
 
@@ -655,18 +650,18 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
         }
     }
 
-    setPeerOsName(QString::fromStdString(response->os_name()));
-    setPeerComputerName(QString::fromStdString(response->computer_name()));
-    setPeerArch(QString::fromStdString(response->arch()));
-    setPeerDisplayName(QString::fromStdString(response->display_name()));
+    setPeerOsName(QString::fromStdString(response.os_name()));
+    setPeerComputerName(QString::fromStdString(response.computer_name()));
+    setPeerArch(QString::fromStdString(response.arch()));
+    setPeerDisplayName(QString::fromStdString(response.display_name()));
 
-    LOG(LS_INFO) << "Client (session_type=" << response->session_type()
+    LOG(LS_INFO) << "Client (session_type=" << response.session_type()
                  << " version=" << peerVersion().toString() << " name=" << peerComputerName()
-                 << " os=" << peerOsName() << " cores=" << response->cpu_cores()
+                 << " os=" << peerOsName() << " cores=" << response.cpu_cores()
                  << " arch=" << peerArch() << " display_name=" << peerDisplayName()
                  << ")";
 
-    BitSet<quint32> session_type = response->session_type();
+    BitSet<quint32> session_type = response.session_type();
     if (session_type.count() != 1)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
