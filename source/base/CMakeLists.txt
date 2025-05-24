@@ -27,8 +27,6 @@ list(APPEND SOURCE_BASE
     debug.h
     edid.cc
     edid.h
-    endian_util.cc
-    endian_util.h
     gui_application.cc
     gui_application.h
     license_reader.h

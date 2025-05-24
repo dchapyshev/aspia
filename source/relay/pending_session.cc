@@ -18,7 +18,8 @@
 
 #include "relay/pending_session.h"
 
-#include "base/endian_util.h"
+#include <QtEndian>
+
 #include "base/location.h"
 #include "base/logging.h"
 
@@ -168,7 +169,7 @@ void PendingSession::doReadMessage(PendingSession* session)
             return;
         }
 
-        session->buffer_size_ = base::EndianUtil::fromBig(session->buffer_size_);
+        session->buffer_size_ = qFromBigEndian(session->buffer_size_);
         if (!session->buffer_size_ || session->buffer_size_ > kMaxMessageSize)
         {
             session->onErrorOccurred(FROM_HERE, std::error_code());

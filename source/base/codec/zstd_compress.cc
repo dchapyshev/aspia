@@ -18,7 +18,8 @@
 
 #include "base/codec/zstd_compress.h"
 
-#include "base/endian_util.h"
+#include <QtEndian>
+
 #include "base/logging.h"
 #include "base/codec/scoped_zstd_stream.h"
 
@@ -56,7 +57,7 @@ T compressT(const T& source, int compress_level)
     T target;
     target.resize(static_cast<T::size_type>(output_size + sizeof(quint32)));
 
-    source_data_size = EndianUtil::toBig(source_data_size);
+    source_data_size = qToBigEndian(source_data_size);
     memcpy(target.data(), &source_data_size, sizeof(quint32));
 
     quint8* output_data = reinterpret_cast<quint8*>(target.data() + sizeof(quint32));
@@ -95,7 +96,7 @@ T decompressT(const T& source)
     quint32 target_data_size;
 
     memcpy(&target_data_size, source.data(), sizeof(quint32));
-    target_data_size = EndianUtil::fromBig(target_data_size);
+    target_data_size = qFromBigEndian(target_data_size);
 
     if (!target_data_size || target_data_size > kMaxDataSize)
     {

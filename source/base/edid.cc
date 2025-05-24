@@ -18,8 +18,9 @@
 
 #include "base/edid.h"
 
+#include <QtEndian>
+
 #include "base/bitset.h"
-#include "base/endian_util.h"
 #include "base/logging.h"
 
 #include <cstring>
@@ -265,7 +266,7 @@ quint8 Edid::featureSupport() const
 //--------------------------------------------------------------------------------------------------
 QString Edid::getManufacturerSignature() const
 {
-    BitSet<quint16> id = EndianUtil::byteSwap(edid_->id_manufacturer_name);
+    BitSet<quint16> id = qbswap(edid_->id_manufacturer_name);
 
     // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
     // Bits 9:5 : second letter.

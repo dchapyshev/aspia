@@ -18,7 +18,8 @@
 
 #include "base/net/connect_enumerator.h"
 
-#include "base/endian_util.h"
+#include <QtEndian>
+
 #include "base/logging.h"
 
 #include <iphlpapi.h>
@@ -98,7 +99,7 @@ QString processNameByPid(HANDLE process_snapshot, DWORD process_id)
 //--------------------------------------------------------------------------------------------------
 QString addressToString(quint32 address)
 {
-    address = base::EndianUtil::byteSwap(address);
+    address = qbswap(address);
 
     return QString("%1.%2.%3.%4")
         .arg((address >> 24) & 0xFF)
