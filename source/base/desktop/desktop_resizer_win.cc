@@ -73,7 +73,7 @@ private:
     const ScreenId screen_id_;
     QString name_;
     Size current_resolution_;
-    std::map<Size, DEVMODEW> best_mode_;
+    QMap<Size, DEVMODEW> best_mode_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ QList<Size> DesktopResizerWin::Screen::supportedResolutions() const
     QList<Size> result;
 
     for (auto it = best_mode_.begin(), it_end = best_mode_.end(); it != it_end; ++it)
-        result.push_back(it->first);
+        result.push_back(it.key());
 
     return result;
 }
@@ -175,7 +175,7 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
     if (result == best_mode_.end())
         return false;
 
-    *mode = result->second;
+    *mode = result.value();
     return true;
 }
 
