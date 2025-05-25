@@ -250,7 +250,7 @@ DesktopResizerWin::DesktopResizerWin()
     }
 
     for (const auto& screen : std::as_const(screen_list.screens))
-        screens_.emplace(screen.id, std::make_unique<Screen>(screen.id));
+        screens_.insert(std::make_pair(screen.id, Screen(screen.id)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -269,7 +269,7 @@ QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
         return {};
     }
 
-    return screen->second->supportedResolutions();
+    return screen->second.supportedResolutions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,7 +282,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
         return false;
     }
 
-    return screen->second->setResolution(resolution);
+    return screen->second.setResolution(resolution);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
         return;
     }
 
-    screen->second->restoreResolution();
+    screen->second.restoreResolution();
 }
 
 //--------------------------------------------------------------------------------------------------

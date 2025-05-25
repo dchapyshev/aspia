@@ -39,7 +39,7 @@ public:
 
 private:
     class Screen;
-    std::map<ScreenId, std::unique_ptr<Screen>> screens_;
+    std::map<ScreenId, Screen> screens_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopResizerWin);
 };
