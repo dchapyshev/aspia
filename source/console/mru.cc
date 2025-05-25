@@ -72,7 +72,7 @@ bool Mru::addRecentFile(const QString& file_path)
         return false;
 
     // We are looking for a file in the list. If the file already exists in it, then delete it.
-    for (QStringList::iterator it = recent_list_.begin(); it != recent_list_.end(); ++it)
+    for (auto it = recent_list_.begin(), it_end = recent_list_.end(); it != it_end; ++it)
     {
 #if defined(Q_OS_WINDOWS)
         if (normalized_path.compare(*it, Qt::CaseInsensitive) == 0)

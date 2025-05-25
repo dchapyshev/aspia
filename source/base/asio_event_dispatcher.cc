@@ -128,6 +128,9 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier 
 void AsioEventDispatcher::registerTimer(
     int timer_id, int interval, Qt::TimerType type, QObject* object)
 {
+    if (!object)
+        return;
+
     const TimePoint start_time = Clock::now();
     const TimePoint end_time = start_time + Milliseconds(interval);
 

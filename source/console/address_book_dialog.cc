@@ -287,7 +287,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     QSize min_size;
 
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
@@ -326,7 +326,7 @@ bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
     }
     else if (object == ui.widget && event->type() == QEvent::Resize)
     {
-        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
         {
             QWidget* tab = *it;
             tab->resize(ui.widget->size());
@@ -447,7 +447,7 @@ void AddressBookDialog::showError(const QString& message)
 //--------------------------------------------------------------------------------------------------
 void AddressBookDialog::showTab(int type)
 {
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         if (static_cast<ComputerGroupDialogTab*>(tab)->type() == type)
@@ -605,7 +605,7 @@ bool AddressBookDialog::saveChanges()
         router->set_password(password.toStdString());
     }
 
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         int type = static_cast<ComputerGroupDialogTab*>(tab)->type();

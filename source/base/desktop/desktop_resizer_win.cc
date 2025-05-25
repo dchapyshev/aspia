@@ -120,7 +120,7 @@ QList<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
     QList<Size> result;
 
-    for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
+    for (auto it = best_mode_.begin(), it_end = best_mode_.end(); it != it_end; ++it)
         result.push_back(it->first);
 
     return result;

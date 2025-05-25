@@ -255,7 +255,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     }
     else
     {
-        for (auto it = work_queue_.begin(); it != work_queue_.end(); ++it)
+        for (auto it = work_queue_.begin(), it_end = work_queue_.end(); it != it_end; ++it)
         {
             Instance* instance = *it;
 

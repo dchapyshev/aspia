@@ -142,7 +142,7 @@ void Translations::removeTranslators()
 {
     LOG(LS_INFO) << "Cleanup translators";
 
-    for (auto it = translator_list_.begin(); it != translator_list_.end(); ++it)
+    for (auto it = translator_list_.begin(), it_end = translator_list_.end(); it != it_end; ++it)
     {
         QCoreApplication::removeTranslator(*it);
         delete *it;

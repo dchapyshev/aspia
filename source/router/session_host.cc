@@ -193,7 +193,7 @@ void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
         return;
     }
 
-    for (auto it = host_id_list_.begin(); it != host_id_list_.end(); ++it)
+    for (auto it = host_id_list_.begin(), it_end = host_id_list_.end(); it != it_end; ++it)
     {
         if (*it == host_id)
         {

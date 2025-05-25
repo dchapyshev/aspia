@@ -56,7 +56,7 @@ void FileNameValidator::fixup(QString& input) const
     const QList<QChar>& invalid_characters =
         common::FilePlatformUtil::invalidFileNameCharacters();
 
-    for (auto it = input.begin(); it != input.end(); ++it)
+    for (auto it = input.begin(), it_end = input.end(); it != it_end; ++it)
     {
         if (invalid_characters.contains(*it))
             input.remove(*it);

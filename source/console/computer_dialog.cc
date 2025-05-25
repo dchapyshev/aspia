@@ -128,7 +128,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
     QSize min_size;
 
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
@@ -167,7 +167,7 @@ bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
     {
-        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
         {
             QWidget* tab = *it;
             tab->resize(ui.widget->size());
@@ -223,7 +223,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void ComputerDialog::showTab(int type)
 {
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         if (static_cast<ComputerDialogTab*>(tab)->type() == type)
@@ -236,7 +236,7 @@ void ComputerDialog::showTab(int type)
 //--------------------------------------------------------------------------------------------------
 bool ComputerDialog::saveChanges()
 {
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    for (auto it = tabs_.begin(), it_end = tabs_.end(); it != it_end; ++it)
     {
         QWidget* tab = *it;
         int type = static_cast<ComputerDialogTab*>(tab)->type();

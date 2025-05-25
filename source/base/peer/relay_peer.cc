@@ -39,10 +39,10 @@ QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints
 {
     QString str;
 
-    for (auto it = endpoints.begin(); it != endpoints.end();)
+    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end;)
     {
         str += QString::fromStdString(it->endpoint().address().to_string());
-        if (++it != endpoints.end())
+        if (++it != it_end)
             str += ", ";
     }
 
