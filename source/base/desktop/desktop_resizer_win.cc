@@ -71,7 +71,7 @@ private:
     void updateBestModeForResolution(const DEVMODEW& current_mode, const DEVMODEW& candidate_mode);
 
     const ScreenId screen_id_;
-    std::wstring name_;
+    QString name_;
     Size current_resolution_;
     std::map<Size, DEVMODEW> best_mode_;
 };
@@ -98,7 +98,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
         return;
     }
 
-    name_ = device.DeviceName;
+    name_ = QString::fromWCharArray(device.DeviceName);
     current_resolution_.set(static_cast<qint32>(current_mode.dmPelsWidth),
                             static_cast<qint32>(current_mode.dmPelsHeight));
 
@@ -144,7 +144,7 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
         return false;
     }
 
-    LONG result = ChangeDisplaySettingsExW(name_.c_str(), &mode, nullptr, 0, nullptr);
+    LONG result = ChangeDisplaySettingsExW(qUtf16Printable(name_), &mode, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
         LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
@@ -159,7 +159,7 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
 void DesktopResizerWin::Screen::restoreResolution()
 {
     // Restore the display mode based on the registry configuration.
-    LONG result = ChangeDisplaySettingsExW(name_.c_str(), nullptr, nullptr, 0, nullptr);
+    LONG result = ChangeDisplaySettingsExW(qUtf16Printable(name_), nullptr, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
         LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
