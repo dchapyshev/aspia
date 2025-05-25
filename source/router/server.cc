@@ -186,13 +186,13 @@ bool Server::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<proto::SessionList> Server::sessionList() const
+proto::SessionList Server::sessionList() const
 {
-    std::unique_ptr<proto::SessionList> result = std::make_unique<proto::SessionList>();
+    proto::SessionList result;
 
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
-        proto::Session* item = result->add_session();
+        proto::Session* item = result.add_session();
 
         item->set_session_id(session->sessionId());
         item->set_session_type(session->sessionType());
@@ -209,7 +209,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
             {
                 proto::HostSessionData session_data;
 
-                for (const auto& host_id : static_cast<SessionHost*>(session.get())->hostIdList())
+                for (const auto& host_id : static_cast<SessionHost*>(session)->hostIdList())
                     session_data.add_host_id(host_id);
 
                 item->set_session_data(session_data.SerializeAsString());
@@ -222,7 +222,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
                 session_data.set_pool_size(relay_key_pool_->countForRelay(session->sessionId()));
 
                 const std::optional<proto::RelayStat>& in_relay_stat =
-                    static_cast<SessionRelay*>(session.get())->relayStat();
+                    static_cast<SessionRelay*>(session)->relayStat();
                 if (in_relay_stat.has_value())
                 {
                     proto::RelaySessionData::RelayStat* out_relay_stat =
@@ -242,17 +242,20 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
         }
     }
 
-    result->set_error_code(proto::SessionList::SUCCESS);
+    result.set_error_code(proto::SessionList::SUCCESS);
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Server::stopSession(Session::SessionId session_id)
 {
-    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
     {
-        if (it->get()->sessionId() == session_id)
+        Session* session = *it;
+
+        if (session->sessionId() == session_id)
         {
+            session->deleteLater();
             sessions_.erase(it);
             return true;
         }
@@ -272,7 +275,7 @@ void Server::onHostSessionWithId(SessionHost* session)
 
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        Session* other_session_ptr = it->get();
+        Session* other_session_ptr = *it;
 
         if (!other_session_ptr || other_session_ptr->sessionType() != proto::ROUTER_SESSION_HOST)
         {
@@ -301,23 +304,28 @@ void Server::onHostSessionWithId(SessionHost* session)
         }
 
         if (is_found)
+        {
+            other_session_ptr->deleteLater();
             it = sessions_.erase(it);
+        }
         else
+        {
             ++it;
+        }
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionHost* Server::hostSessionById(base::HostId host_id)
 {
-    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
     {
-        Session* entry = it->get();
+        Session* session = *it;
 
-        if (entry->sessionType() == proto::ROUTER_SESSION_HOST &&
-            static_cast<SessionHost*>(entry)->hasHostId(host_id))
+        if (session->sessionType() == proto::ROUTER_SESSION_HOST &&
+            static_cast<SessionHost*>(session)->hasHostId(host_id))
         {
-            return static_cast<SessionHost*>(entry);
+            return static_cast<SessionHost*>(session);
         }
     }
 
@@ -327,10 +335,10 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
 //--------------------------------------------------------------------------------------------------
 Session* Server::sessionById(Session::SessionId session_id)
 {
-    for (auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
-            return session.get();
+            return session;
     }
 
     return nullptr;
@@ -339,9 +347,9 @@ Session* Server::sessionById(Session::SessionId session_id)
 //--------------------------------------------------------------------------------------------------
 void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 {
-    for (const auto& session : sessions_)
+    for (const auto& session : std::as_const(sessions_))
     {
-        SessionRelay* relay_session = static_cast<SessionRelay*>(session.get());
+        SessionRelay* relay_session = static_cast<SessionRelay*>(session);
         if (relay_session->sessionId() == session_id)
             relay_session->sendKeyUsed(key_id);
     }
@@ -350,12 +358,14 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 //--------------------------------------------------------------------------------------------------
 void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
 {
-    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
     {
-        if (it->get()->sessionId() == session_id)
+        Session* session = *it;
+
+        if (session->sessionId() == session_id)
         {
             // Session will be destroyed after completion of the current call.
-            it->release()->deleteLater();
+            session->deleteLater();
 
             // Delete a session from the list.
             sessions_.erase(it);
@@ -390,52 +400,52 @@ void Server::onSessionAuthenticated()
             session_info.channel->setChannelIdSupport(true);
         }
 
-        std::unique_ptr<Session> session;
+        Session* session = nullptr;
 
         switch (session_info.session_type)
         {
-        case proto::ROUTER_SESSION_CLIENT:
-        {
-            if (!client_white_list_.empty() && !client_white_list_.contains(address))
-                break;
+            case proto::ROUTER_SESSION_CLIENT:
+            {
+                if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
+                    break;
 
-            session = std::make_unique<SessionClient>();
-        }
-        break;
+                session = new SessionClient(this);
+            }
+            break;
 
-        case proto::ROUTER_SESSION_HOST:
-        {
-            if (!host_white_list_.empty() && !host_white_list_.contains(address))
-                break;
+            case proto::ROUTER_SESSION_HOST:
+            {
+                if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
+                    break;
 
-            session = std::make_unique<SessionHost>();
-        }
-        break;
+                session = new SessionHost(this);
+            }
+            break;
 
-        case proto::ROUTER_SESSION_ADMIN:
-        {
-            if (!admin_white_list_.empty() && !admin_white_list_.contains(address))
-                break;
+            case proto::ROUTER_SESSION_ADMIN:
+            {
+                if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
+                    break;
 
-            session = std::make_unique<SessionAdmin>();
-        }
-        break;
+                session = new SessionAdmin(this);
+            }
+            break;
 
-        case proto::ROUTER_SESSION_RELAY:
-        {
-            if (!relay_white_list_.empty() && !relay_white_list_.contains(address))
-                break;
+            case proto::ROUTER_SESSION_RELAY:
+            {
+                if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
+                    break;
 
-            session = std::make_unique<SessionRelay>();
-        }
-        break;
+                session = new SessionRelay(this);
+            }
+            break;
 
-        default:
-        {
-            LOG(LS_ERROR) << "Unsupported session type: "
-                          << static_cast<int>(session_info.session_type);
-        }
-        break;
+            default:
+            {
+                LOG(LS_ERROR) << "Unsupported session type: "
+                              << static_cast<int>(session_info.session_type);
+            }
+            break;
         }
 
         if (!session)
@@ -454,10 +464,10 @@ void Server::onSessionAuthenticated()
         session->setArchitecture(session_info.architecture);
         session->setUserName(session_info.user_name);
 
-        connect(session.get(), &Session::sig_sessionFinished, this, &Server::onSessionFinished);
+        connect(session, &Session::sig_sessionFinished, this, &Server::onSessionFinished);
 
-        sessions_.emplace_back(std::move(session));
-        sessions_.back()->start();
+        sessions_.push_back(session);
+        session->start();
     }
 }
 

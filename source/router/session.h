@@ -38,7 +38,7 @@ class Session : public QObject
     Q_OBJECT
 
 public:
-    explicit Session(proto::RouterSession session_type, QObject* parent = nullptr);
+    Session(proto::RouterSession session_type, QObject* parent);
     virtual ~Session() override;
 
     using SessionId = qint64;

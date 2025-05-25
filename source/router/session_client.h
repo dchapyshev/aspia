@@ -30,7 +30,7 @@ class SharedKeyPool;
 class SessionClient final : public Session
 {
 public:
-    SessionClient();
+    explicit SessionClient(QObject* parent = nullptr);
     ~SessionClient() final;
 
 protected:

@@ -19,6 +19,8 @@
 #ifndef ROUTER_SERVER_H
 #define ROUTER_SERVER_H
 
+#include <QList>
+
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
@@ -44,7 +46,7 @@ public:
 
     bool start();
 
-    std::unique_ptr<proto::SessionList> sessionList() const;
+    proto::SessionList sessionList() const;
     bool stopSession(Session::SessionId session_id);
     void onHostSessionWithId(SessionHost* session);
 
@@ -65,7 +67,7 @@ private:
     std::unique_ptr<base::TcpServer> server_;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
-    std::vector<std::unique_ptr<Session>> sessions_;
+    QList<Session*> sessions_;
 
     QStringList client_white_list_;
     QStringList host_white_list_;

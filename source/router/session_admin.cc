@@ -28,8 +28,8 @@
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-SessionAdmin::SessionAdmin()
-    : Session(proto::ROUTER_SESSION_ADMIN)
+SessionAdmin::SessionAdmin(QObject* parent)
+    : Session(proto::ROUTER_SESSION_ADMIN, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -142,11 +142,7 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
 void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
 {
     proto::RouterToAdmin message;
-
-    message.set_allocated_session_list(server().sessionList().release());
-    if (!message.has_session_list())
-        message.mutable_session_list()->set_error_code(proto::SessionList::UNKNOWN_ERROR);
-
+    *message.mutable_session_list() = server().sessionList();
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 

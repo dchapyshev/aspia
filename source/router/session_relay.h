@@ -28,7 +28,7 @@ namespace router {
 class SessionRelay final : public Session
 {
 public:
-    SessionRelay();
+    explicit SessionRelay(QObject* parent = nullptr);
     ~SessionRelay() final;
 
     using PeerData = std::pair<std::string, quint16>;

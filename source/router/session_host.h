@@ -30,7 +30,7 @@ class ServerProxy;
 class SessionHost final : public Session
 {
 public:
-    SessionHost();
+    explicit SessionHost(QObject* parent = nullptr);
     ~SessionHost() final;
 
     using HostIdList = QList<base::HostId>;

@@ -29,7 +29,7 @@ class ServerProxy;
 class SessionAdmin final : public Session
 {
 public:
-    SessionAdmin();
+    explicit SessionAdmin(QObject* parent = nullptr);
     ~SessionAdmin() final;
 
 protected:

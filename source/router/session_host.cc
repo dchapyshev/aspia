@@ -34,8 +34,8 @@ const size_t kHostKeySize = 512;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionHost::SessionHost()
-    : Session(proto::ROUTER_SESSION_HOST)
+SessionHost::SessionHost(QObject* parent)
+    : Session(proto::ROUTER_SESSION_HOST, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
