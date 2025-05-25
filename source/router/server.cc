@@ -177,8 +177,8 @@ bool Server::start()
 
     relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
 
-    server_ = std::make_unique<base::TcpServer>();
-    connect(server_.get(), &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+    server_ = new base::TcpServer(this);
+    connect(server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
     server_->start(listen_interface, port);
 
     LOG(LS_INFO) << "Server started";

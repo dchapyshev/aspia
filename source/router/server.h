@@ -64,7 +64,7 @@ private slots:
 
 private:
     base::SharedPointer<DatabaseFactory> database_factory_;
-    std::unique_ptr<base::TcpServer> server_;
+    base::TcpServer* server_ = nullptr;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     QList<Session*> sessions_;

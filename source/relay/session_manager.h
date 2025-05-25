@@ -20,6 +20,7 @@
 #define RELAY_SESSION_MANAGER_H
 
 #include <QList>
+#include <QTimer>
 
 #include "proto/relay_peer.pb.h"
 #include "proto/router_relay.pb.h"
@@ -61,11 +62,8 @@ private slots:
 
 private:
     static void doAccept(SessionManager* self);
-    static void doIdleTimeout(SessionManager* self, const std::error_code& error_code);
-    void doIdleTimeoutImpl(const std::error_code& error_code);
-    static void doStatTimeout(SessionManager* self, const std::error_code& error_code);
-    void doStatTimeoutImpl(const std::error_code& error_code);
-    void collectAndSendStatistics();
+    void onIdleTimeout();
+    void onStatTimeout();
 
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
@@ -78,9 +76,9 @@ private:
     const quint16 port_;
 
     const std::chrono::minutes idle_timeout_;
-    asio::steady_timer idle_timer_;
+    QTimer* idle_timer_ = nullptr;
 
-    asio::steady_timer stat_timer_;
+    QTimer* stat_timer_ = nullptr;
 
     std::unique_ptr<SharedPool> shared_pool_;
 

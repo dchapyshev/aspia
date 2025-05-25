@@ -128,12 +128,15 @@ SessionManager::SessionManager(const asio::ip::address& address,
       address_(address),
       port_(port),
       idle_timeout_(idle_timeout),
-      idle_timer_(base::AsioEventDispatcher::currentIoContext()),
-      stat_timer_(base::AsioEventDispatcher::currentIoContext()),
+      idle_timer_(new QTimer(this)),
+      stat_timer_(new QTimer(this)),
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval)
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(idle_timer_, &QTimer::timeout, this, &SessionManager::onIdleTimeout);
+    connect(stat_timer_, &QTimer::timeout, this, &SessionManager::onStatTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,7 +147,6 @@ SessionManager::~SessionManager()
     std::error_code ignored_code;
     acceptor_.cancel(ignored_code);
     acceptor_.close(ignored_code);
-    idle_timer_.cancel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -188,14 +190,10 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
     shared_pool_ = std::move(shared_pool);
     DCHECK(shared_pool_);
 
-    idle_timer_.expires_after(kIdleTimerInterval);
-    idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
+    idle_timer_->start(kIdleTimerInterval);
 
     if (statistics_enabled_)
-    {
-        stat_timer_.expires_after(statistics_interval_);
-        stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
-    }
+        stat_timer_->start(statistics_interval_);
 
     SessionManager::doAccept(this);
 }
@@ -329,82 +327,33 @@ void SessionManager::doAccept(SessionManager* self)
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-void SessionManager::doIdleTimeout(SessionManager* self, const std::error_code& error_code)
+void SessionManager::onIdleTimeout()
 {
-    if (error_code == asio::error::operation_aborted)
+    auto current_time = Session::Clock::now();
+    auto it = active_sessions_.begin();
+    int count = 0;
+
+    while (it != active_sessions_.end())
     {
-        LOG(LS_ERROR) << "Operation aborted";
-        return;
-    }
+        Session* session = *it;
 
-    self->doIdleTimeoutImpl(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
-{
-    if (!error_code)
-    {
-        auto current_time = Session::Clock::now();
-        auto it = active_sessions_.begin();
-        int count = 0;
-
-        while (it != active_sessions_.end())
+        if (session->idleTime(current_time) >= idle_timeout_)
         {
-            if ((*it)->idleTime(current_time) >= idle_timeout_)
-            {
-                it = active_sessions_.erase(it);
-                ++count;
-            }
-            else
-            {
-                ++it;
-            }
+            session->deleteLater();
+            it = active_sessions_.erase(it);
+            ++count;
         }
-
-        LOG(LS_INFO) << "Sessions ended by timeout: " << count;
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Error in idle timer: " << error_code;
+        else
+        {
+            ++it;
+        }
     }
 
-    idle_timer_.expires_after(kIdleTimerInterval);
-    idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
+    LOG(LS_INFO) << "Sessions ended by timeout: " << count;
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-void SessionManager::doStatTimeout(SessionManager* self, const std::error_code& error_code)
-{
-    if (error_code == asio::error::operation_aborted)
-    {
-        LOG(LS_ERROR) << "Operation aborted";
-        return;
-    }
-
-    self->doStatTimeoutImpl(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
-{
-    if (!error_code)
-    {
-        collectAndSendStatistics();
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Error in stat timer: " << error_code;
-    }
-
-    stat_timer_.expires_after(statistics_interval_);
-    stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::collectAndSendStatistics()
+void SessionManager::onStatTimeout()
 {
     Session::TimePoint now = Session::Clock::now();
 
