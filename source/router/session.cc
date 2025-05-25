@@ -48,9 +48,10 @@ Session::Session(proto::RouterSession session_type, QObject* parent)
 Session::~Session() = default;
 
 //--------------------------------------------------------------------------------------------------
-void Session::setChannel(std::unique_ptr<base::TcpChannel> channel)
+void Session::setChannel(base::TcpChannel* channel)
 {
-    channel_ = std::move(channel);
+    channel_ = channel;
+    channel_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,7 +73,7 @@ void Session::setServer(Server* server)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::start(Delegate* delegate)
+void Session::start()
 {
     if (!channel_)
     {
@@ -98,21 +99,15 @@ void Session::start(Delegate* delegate)
         return;
     }
 
-    delegate_ = delegate;
-    DCHECK(delegate_);
-
     std::chrono::time_point<std::chrono::system_clock> time_point =
         std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
     address_ = channel_->peerAddress();
 
-    connect(channel_.get(), &base::TcpChannel::sig_disconnected,
-            this, &Session::onTcpDisconnected);
-    connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
-            this, &Session::onTcpMessageReceived);
-    connect(channel_.get(), &base::TcpChannel::sig_messageWritten,
-            this, &Session::onTcpMessageWritten);
+    connect(channel_, &base::TcpChannel::sig_disconnected, this, &Session::onTcpDisconnected);
+    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
+    connect(channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
 
     channel_->resume();
 
@@ -176,9 +171,7 @@ void Session::sendMessage(quint8 channel_id, const google::protobuf::MessageLite
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
-
-    if (delegate_)
-        delegate_->onSessionFinished(session_id_, session_type_);
+    emit sig_sessionFinished(session_id_, session_type_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -43,21 +43,12 @@ public:
 
     using SessionId = qint64;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onSessionFinished(
-            SessionId session_id, proto::RouterSession session_type) = 0;
-    };
-
-    void setChannel(std::unique_ptr<base::TcpChannel> channel);
+    void setChannel(base::TcpChannel* channel);
     void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
     void setServer(Server* server);
 
-    void start(Delegate* delegate);
+    void start();
 
     void setVersion(const QVersionNumber& version);
     const QVersionNumber& version() const { return version_; }
@@ -75,6 +66,9 @@ public:
     const QString& address() const { return address_; }
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
+
+signals:
+    void sig_sessionFinished(SessionId session_id, proto::RouterSession session_type);
 
 protected:
     void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
@@ -100,7 +94,7 @@ private:
     const SessionId session_id_;
     time_t start_time_ = 0;
 
-    std::unique_ptr<base::TcpChannel> channel_;
+    base::TcpChannel* channel_ = nullptr;
     base::SharedPointer<DatabaseFactory> database_factory_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_ = nullptr;
@@ -111,8 +105,6 @@ private:
     QString os_name_;
     QString computer_name_;
     QString architecture_;
-
-    Delegate* delegate_ = nullptr;
 };
 
 } // namespace router

@@ -444,7 +444,7 @@ void Server::onSessionAuthenticated()
             return;
         }
 
-        session->setChannel(std::move(session_info.channel));
+        session->setChannel(session_info.channel.release());
         session->setDatabaseFactory(database_factory_);
         session->setServer(this);
         session->setRelayKeyPool(relay_key_pool_->share());
@@ -454,8 +454,10 @@ void Server::onSessionAuthenticated()
         session->setArchitecture(session_info.architecture);
         session->setUserName(session_info.user_name);
 
+        connect(session.get(), &Session::sig_sessionFinished, this, &Server::onSessionFinished);
+
         sessions_.emplace_back(std::move(session));
-        sessions_.back()->start(this);
+        sessions_.back()->start();
     }
 }
 

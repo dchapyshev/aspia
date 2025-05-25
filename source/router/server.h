@@ -34,8 +34,7 @@ class SessionRelay;
 
 class Server final
     : public QObject,
-      public SharedKeyPool::Delegate,
-      public Session::Delegate
+      public SharedKeyPool::Delegate
 {
     Q_OBJECT
 
@@ -56,11 +55,8 @@ protected:
     // SharedKeyPool::Delegate implementation.
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id) final;
 
-    // Session::Delegate implementation.
-    void onSessionFinished(Session::SessionId session_id,
-                           proto::RouterSession session_type) final;
-
 private slots:
+    void onSessionFinished(Session::SessionId session_id, proto::RouterSession session_type);
     void onSessionAuthenticated();
     void onNewConnection();
 
