@@ -23,7 +23,6 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory.h"
-#include "router/shared_key_pool.h"
 
 namespace router {
 
@@ -55,7 +54,7 @@ void Session::setChannel(base::TcpChannel* channel)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool)
+void Session::setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool)
 {
     relay_key_pool_ = std::move(relay_key_pool);
 }

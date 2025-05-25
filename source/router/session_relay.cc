@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "router/shared_key_pool.h"
+#include "router/key_pool.h"
 
 namespace router {
 
@@ -94,7 +94,7 @@ void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pe
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
-    SharedKeyPool& pool = relayKeyPool();
+    KeyPool& pool = relayKeyPool();
 
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 

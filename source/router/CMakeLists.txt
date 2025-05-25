@@ -23,6 +23,10 @@ list(APPEND SOURCE_ROUTER
     database_factory_sqlite.h
     database_sqlite.cc
     database_sqlite.h
+    key_factory.cc
+    key_factory.h
+    key_pool.cc
+    key_pool.h
     main.cc
     server.cc
     server.h
@@ -42,8 +46,6 @@ list(APPEND SOURCE_ROUTER
     session_relay.h
     settings.cc
     settings.h
-    shared_key_pool.cc
-    shared_key_pool.h
     user_list_db.cc
     user_list_db.h)
 

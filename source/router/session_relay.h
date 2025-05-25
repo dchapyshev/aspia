@@ -21,7 +21,6 @@
 
 #include "proto/router_relay.pb.h"
 #include "router/session.h"
-#include "router/shared_key_pool.h"
 
 namespace router {
 

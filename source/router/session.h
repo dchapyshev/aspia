@@ -19,19 +19,19 @@
 #ifndef ROUTER_SESSION_H
 #define ROUTER_SESSION_H
 
+#include <QObject>
+#include <QVersionNumber>
+
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_common.pb.h"
-
-#include <QObject>
-#include <QVersionNumber>
+#include "router/key_pool.h"
 
 namespace router {
 
 class Database;
 class DatabaseFactory;
 class Server;
-class SharedKeyPool;
 
 class Session : public QObject
 {
@@ -44,7 +44,7 @@ public:
     using SessionId = qint64;
 
     void setChannel(base::TcpChannel* channel);
-    void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
+    void setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
     void setServer(Server* server);
 
@@ -78,8 +78,8 @@ protected:
     virtual void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(quint8 channel_id, size_t pending) = 0;
 
-    SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
-    const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }
+    KeyPool& relayKeyPool() { return *relay_key_pool_; }
+    const KeyPool& relayKeyPool() const { return *relay_key_pool_; }
 
     Server& server() { return *server_; }
     const Server& server() const { return *server_; }
@@ -96,7 +96,7 @@ private:
 
     base::TcpChannel* channel_ = nullptr;
     base::SharedPointer<DatabaseFactory> database_factory_;
-    std::unique_ptr<SharedKeyPool> relay_key_pool_;
+    base::SharedPointer<KeyPool> relay_key_pool_;
     Server* server_ = nullptr;
 
     QString address_;

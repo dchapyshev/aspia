@@ -175,7 +175,8 @@ bool Server::start()
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);
 
-    relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
+    key_factory_ = new KeyFactory(this);
+    connect(key_factory_, &KeyFactory::sig_keyUsed, this, &Server::onPoolKeyUsed);
 
     server_ = new base::TcpServer(this);
     connect(server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
@@ -219,7 +220,7 @@ proto::SessionList Server::sessionList() const
             case proto::ROUTER_SESSION_RELAY:
             {
                 proto::RelaySessionData session_data;
-                session_data.set_pool_size(relay_key_pool_->countForRelay(session->sessionId()));
+                session_data.set_pool_size(key_factory_->countForRelay(session->sessionId()));
 
                 const std::optional<proto::RelayStat>& in_relay_stat =
                     static_cast<SessionRelay*>(session)->relayStat();
@@ -457,7 +458,7 @@ void Server::onSessionAuthenticated()
         session->setChannel(session_info.channel.release());
         session->setDatabaseFactory(database_factory_);
         session->setServer(this);
-        session->setRelayKeyPool(relay_key_pool_->share());
+        session->setRelayKeyPool(key_factory_->sharedKeyPool());
         session->setVersion(session_info.version);
         session->setOsName(session_info.os_name);
         session->setComputerName(session_info.computer_name);

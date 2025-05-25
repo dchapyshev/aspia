@@ -95,7 +95,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     {
         LOG(LS_INFO) << "Host with id " << request.host_id() << " found";
 
-        std::optional<SharedKeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
+        std::optional<KeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
         if (!credentials.has_value())
         {
             LOG(LS_ERROR) << "Empty key pool";

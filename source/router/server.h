@@ -25,8 +25,8 @@
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "proto/router_admin.pb.h"
+#include "router/key_factory.h"
 #include "router/session.h"
-#include "router/shared_key_pool.h"
 
 namespace router {
 
@@ -34,9 +34,7 @@ class DatabaseFactory;
 class SessionHost;
 class SessionRelay;
 
-class Server final
-    : public QObject,
-      public SharedKeyPool::Delegate
+class Server final : public QObject
 {
     Q_OBJECT
 
@@ -53,11 +51,8 @@ public:
     SessionHost* hostSessionById(base::HostId host_id);
     Session* sessionById(Session::SessionId session_id);
 
-protected:
-    // SharedKeyPool::Delegate implementation.
-    void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id) final;
-
 private slots:
+    void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
     void onSessionFinished(Session::SessionId session_id, proto::RouterSession session_type);
     void onSessionAuthenticated();
     void onNewConnection();
@@ -66,7 +61,7 @@ private:
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* server_ = nullptr;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
-    std::unique_ptr<SharedKeyPool> relay_key_pool_;
+    KeyFactory* key_factory_ = nullptr;
     QList<Session*> sessions_;
 
     QStringList client_white_list_;
