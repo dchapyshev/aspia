@@ -22,8 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/desktop/desktop_resizer.h"
 
-#include <map>
-
 namespace base {
 
 class DesktopResizerWin final : public DesktopResizer
@@ -39,7 +37,7 @@ public:
 
 private:
     class Screen;
-    std::map<ScreenId, Screen> screens_;
+    QMap<ScreenId, Screen> screens_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopResizerWin);
 };

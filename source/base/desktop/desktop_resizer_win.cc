@@ -70,7 +70,7 @@ private:
     bool modeForResolution(const Size& resolution, DEVMODEW* mode);
     void updateBestModeForResolution(const DEVMODEW& current_mode, const DEVMODEW& candidate_mode);
 
-    const ScreenId screen_id_;
+    ScreenId screen_id_;
     QString name_;
     Size current_resolution_;
     QMap<Size, DEVMODEW> best_mode_;
@@ -250,7 +250,7 @@ DesktopResizerWin::DesktopResizerWin()
     }
 
     for (const auto& screen : std::as_const(screen_list.screens))
-        screens_.insert(std::make_pair(screen.id, Screen(screen.id)));
+        screens_.insert(screen.id, Screen(screen.id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -269,7 +269,7 @@ QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
         return {};
     }
 
-    return screen->second.supportedResolutions();
+    return screen.value().supportedResolutions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,7 +282,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
         return false;
     }
 
-    return screen->second.setResolution(resolution);
+    return screen.value().setResolution(resolution);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,14 +295,14 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
         return;
     }
 
-    screen->second.restoreResolution();
+    screen.value().restoreResolution();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::restoreResulution()
 {
-    for (const auto& screen : screens_)
-        restoreResolution(screen.first);
+    for (auto it = screens_.cbegin(), it_end = screens_.cend(); it != it_end; ++it)
+        restoreResolution(it.key());
 }
 
 } // namespace base
