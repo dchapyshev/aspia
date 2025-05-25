@@ -29,12 +29,7 @@
 #include "base/crypto/scoped_crypto_initializer.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_object.h"
-#endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
-#include <Psapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)
@@ -55,49 +50,6 @@ const int kWriteTimeoutMs = 1500;
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-bool isSameApplication(const QLocalSocket* socket)
-{
-    ULONG process_id;
-
-    if (!GetNamedPipeClientProcessId(
-        reinterpret_cast<HANDLE>(socket->socketDescriptor()), &process_id))
-    {
-        PLOG(LS_ERROR) << "GetNamedPipeClientProcessId failed";
-        return false;
-    }
-
-    base::ScopedHandle other_process(
-        OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
-    if (!other_process.isValid())
-    {
-        PLOG(LS_ERROR) << "OpenProcess failed";
-        return false;
-    }
-
-    wchar_t other_path[MAX_PATH];
-    DWORD size = MAX_PATH;
-
-    if (!QueryFullProcessImageNameW(other_process, 0, other_path, &size))
-    {
-        PLOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
-        return false;
-    }
-
-    wchar_t current_path[MAX_PATH];
-    size = MAX_PATH;
-
-    if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, current_path, &size))
-    {
-        PLOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
-        return false;
-    }
-
-    return _wcsicmp(current_path, other_path) == 0;
-}
-#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -289,14 +241,6 @@ void GuiApplication::onNewConnection()
         LOG(LS_ERROR) << "Invalid socket";
         return;
     }
-
-#if defined(Q_OS_WINDOWS)
-    if (!isSameApplication(socket.get()))
-    {
-        LOG(LS_ERROR) << "Attempt to connect from unknown application";
-        return;
-    }
-#endif // defined(Q_OS_WINDOWS)
 
     while (true)
     {
