@@ -45,8 +45,7 @@ public:
 
     LONG create(HKEY rootkey, const QString& subkey, REGSAM access);
 
-    LONG createWithDisposition(HKEY rootkey, const QString& subkey,
-                               DWORD *disposition, REGSAM access);
+    LONG createWithDisposition(HKEY rootkey, const QString& subkey, DWORD *disposition, REGSAM access);
 
     // Creates a subkey or open it if it already exists.
     LONG createKey(const QString& name, REGSAM access);
@@ -130,9 +129,7 @@ public:
     // Note: |wow64access| should be the same access used to open |root_key|
     // previously, or a predefined key (e.g. HKEY_LOCAL_MACHINE).
     // See http://msdn.microsoft.com/en-us/library/windows/desktop/aa384129.aspx.
-    RegistryValueIterator(HKEY root_key,
-                          const QString& folder_key,
-                          REGSAM wow64access);
+    RegistryValueIterator(HKEY root_key, const QString& folder_key, REGSAM wow64access);
 
     ~RegistryValueIterator();
 
@@ -197,7 +194,6 @@ public:
     void operator++();
 
     QString name() const { return QString::fromWCharArray(name_); }
-
     int index() const { return index_; }
 
 private:

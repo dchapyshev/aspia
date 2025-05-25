@@ -80,7 +80,7 @@ signals:
     void sig_computerGroupActivated(bool activated, bool is_root);
     void sig_computerActivated(bool activated);
     void sig_computerGroupContextMenu(const QPoint& point, bool is_root);
-    void sig_computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
+    void sig_computerContextMenu(console::ComputerItem* comouter_item, const QPoint& point);
     void sig_computerDoubleClicked(const proto::address_book::Computer& computer);
     void sig_updateStateForComputers(bool started);
 

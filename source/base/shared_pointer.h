@@ -127,7 +127,6 @@ public:
     T* get() { return ptr_; }
 
     T& operator*() const { return *ptr_; }
-    //T& operator*() { return *ptr_; }
     T* operator->() const { return ptr_; }
     operator bool() const noexcept { return ptr_; }
 

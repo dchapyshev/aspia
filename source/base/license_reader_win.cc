@@ -234,7 +234,7 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
         while (key_iterator.valid())
         {
             QString key_path =
-                QString("%1\\%2\\Registration").arg(kMsProducts[i]).arg(key_iterator.name());
+                QString("%1\\%2\\Registration").arg(kMsProducts[i], key_iterator.name());
 
             RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path, access);
 
@@ -273,7 +273,7 @@ void addVisualStudio(proto::system_info::Licenses* message, REGSAM access)
     while (key_iterator.valid())
     {
         QString key_path =
-            QString("%1\\%2\\Registration").arg(kVisualStudioPath).arg(key_iterator.name());
+            QString("%1\\%2\\Registration").arg(kVisualStudioPath, key_iterator.name());
 
         RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path, access);
 
@@ -375,7 +375,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
     // Enumerate products types (Workstation, Server, etc).
     while (key_iterator.valid())
     {
-        QString sub_key_path = QString("%1\\%2").arg(kKeyPath).arg(key_iterator.name());
+        QString sub_key_path = QString("%1\\%2").arg(kKeyPath, key_iterator.name());
 
         RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path, access);
 

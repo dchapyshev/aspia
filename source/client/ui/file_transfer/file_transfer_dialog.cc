@@ -185,7 +185,7 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
     if (available_actions & FileTransfer::Error::ACTION_ABORT)
         dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
-    connect(dialog, &QMessageBox::buttonClicked, this, [&](QAbstractButton* button)
+    connect(dialog, &QMessageBox::buttonClicked, this, [=, this](QAbstractButton* button)
     {
         if (button != nullptr)
         {

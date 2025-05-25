@@ -201,8 +201,9 @@ TEST_F(RegistryTest, TruncatedCharTest)
     ASSERT_EQ(std::size(kData), iterator.valueSize());
     // Value() is NUL terminated.
     int end = (iterator.valueSize() + sizeof(wchar_t) - 1) / sizeof(wchar_t);
-    EXPECT_NE(L'\0', iterator.value()[end - 1]);
-    EXPECT_EQ(L'\0', iterator.value()[end]);
+    QString str = iterator.value();
+    EXPECT_NE(L'\0', str[end - 1]);
+    EXPECT_EQ(L'\0', str[end]);
     ++iterator;
     EXPECT_FALSE(iterator.valid());
 }

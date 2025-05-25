@@ -52,7 +52,7 @@ public:
     FileTask packet(proto::FilePacket&& packet);
 
 signals:
-    void sig_taskDone(const FileTask& task);
+    void sig_taskDone(const common::FileTask& task);
 
 private:
     FileTask makeTask(proto::FileRequest&& request);

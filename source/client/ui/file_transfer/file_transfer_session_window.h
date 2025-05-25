@@ -68,8 +68,8 @@ signals:
     void sig_fileListRequest(common::FileTask::Target target, const QString& path);
     void sig_createDirectoryRequest(common::FileTask::Target target, const QString& path);
     void sig_renameRequest(common::FileTask::Target target, const QString& old_path, const QString& new_path);
-    void sig_removeRequest(FileRemover* remover);
-    void sig_transferRequest(FileTransfer* transfer);
+    void sig_removeRequest(client::FileRemover* remover);
+    void sig_transferRequest(client::FileTransfer* transfer);
 
 protected:
     // SessionWindow implementation.
@@ -79,12 +79,12 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
 private slots:
-    void removeItems(FilePanel* sender, const FileRemover::TaskList& items);
-    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
-    void receiveItems(FilePanel* sender,
+    void removeItems(client::FilePanel* sender, const client::FileRemover::TaskList& items);
+    void sendItems(client::FilePanel* sender, const QList<client::FileTransfer::Item>& items);
+    void receiveItems(client::FilePanel* sender,
                       const QString& target_folder,
-                      const QList<FileTransfer::Item>& items);
-    void onPathChanged(FilePanel* sender, const QString& path);
+                      const QList<client::FileTransfer::Item>& items);
+    void onPathChanged(client::FilePanel* sender, const QString& path);
 
 private:
     void transferItems(FileTransfer::Type type,

@@ -549,8 +549,7 @@ LONG RegistryKey::deleteKeyRecurse(HKEY root_key, const QString& name, REGSAM ac
 // RegistryValueIterator ---------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------
-RegistryValueIterator::RegistryValueIterator(HKEY root_key,
-                                             const QString& folder_key,
+RegistryValueIterator::RegistryValueIterator(HKEY root_key, const QString& folder_key,
                                              REGSAM wow64access) :
     name_(MAX_PATH, L'\0'),
     value_(MAX_PATH, L'\0')
@@ -567,9 +566,7 @@ RegistryValueIterator::RegistryValueIterator(HKEY root_key, const QString& folde
 }
 
 //--------------------------------------------------------------------------------------------------
-void RegistryValueIterator::initialize(HKEY root_key,
-                                       const QString& folder_key,
-                                       REGSAM wow64access)
+void RegistryValueIterator::initialize(HKEY root_key, const QString& folder_key, REGSAM wow64access)
 {
     DCHECK_EQ((wow64access & ~kWow64AccessMask), static_cast<REGSAM>(0));
 
@@ -611,9 +608,8 @@ RegistryValueIterator::~RegistryValueIterator()
 DWORD RegistryValueIterator::valueCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr,
-                                   nullptr, nullptr, &count, nullptr, nullptr,
-                                   nullptr, nullptr);
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+                                   &count, nullptr, nullptr, nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
 
@@ -645,10 +641,8 @@ bool RegistryValueIterator::read()
         value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(wchar_t));
 
         LONG result = RegEnumValueW(key_, static_cast<DWORD>(index_), writeInto(&name_, name_size),
-                                    &name_size, nullptr, &type_,
-                                    reinterpret_cast<BYTE*>(value_.data()),
+                                    &name_size, nullptr, &type_, reinterpret_cast<BYTE*>(value_.data()),
                                     &value_size_);
-
         if (result == ERROR_MORE_DATA)
         {
             // Registry key names are limited to 255 characters and fit within
@@ -695,9 +689,7 @@ RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const QString& folder_ke
 }
 
 //--------------------------------------------------------------------------------------------------
-RegistryKeyIterator::RegistryKeyIterator(HKEY root_key,
-                                         const QString& folder_key,
-                                         REGSAM wow64access)
+RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const QString& folder_key, REGSAM wow64access)
 {
     initialize(root_key, folder_key, wow64access);
 }
@@ -713,9 +705,8 @@ RegistryKeyIterator::~RegistryKeyIterator()
 DWORD RegistryKeyIterator::subkeyCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count,
-                                   nullptr, nullptr, nullptr, nullptr, nullptr,
-                                   nullptr, nullptr);
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr, nullptr,
+                                   nullptr, nullptr, nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
 
@@ -769,10 +760,8 @@ void RegistryKeyIterator::initialize(HKEY root_key,
     else
     {
         DWORD count = 0;
-        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count,
-                                  nullptr, nullptr, nullptr, nullptr, nullptr,
-                                  nullptr, nullptr);
-
+        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr, nullptr,
+                                  nullptr, nullptr, nullptr, nullptr);
         if (result != ERROR_SUCCESS)
         {
             RegCloseKey(key_);

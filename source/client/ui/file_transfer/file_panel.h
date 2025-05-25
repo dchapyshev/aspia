@@ -54,12 +54,12 @@ signals:
     void sig_fileList(const QString& path);
     void sig_rename(const QString& old_name, const QString& new_name);
     void sig_createDirectory(const QString& path);
-    void sig_removeItems(FilePanel* sender, const FileRemover::TaskList& items);
-    void sig_sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
-    void sig_receiveItems(FilePanel* sender,
+    void sig_removeItems(client::FilePanel* sender, const client::FileRemover::TaskList& items);
+    void sig_sendItems(client::FilePanel* sender, const QList<client::FileTransfer::Item>& items);
+    void sig_receiveItems(client::FilePanel* sender,
                           const QString& folder,
-                          const QList<FileTransfer::Item>& items);
-    void sig_pathChanged(FilePanel* sender, const QString& path);
+                          const QList<client::FileTransfer::Item>& items);
+    void sig_pathChanged(client::FilePanel* sender, const QString& path);
 
 public slots:
     void refresh();

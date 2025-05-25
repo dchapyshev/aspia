@@ -42,7 +42,7 @@ public:
         SHA512     = 7
     };
 
-    GenericHash(Type type);
+    explicit GenericHash(Type type);
     ~GenericHash();
 
     static QByteArray hash(Type type, const void* data, size_t size);
