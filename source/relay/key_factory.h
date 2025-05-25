@@ -16,32 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY_SHARED_POOL_H
-#define RELAY_SHARED_POOL_H
+#ifndef RELAY_KEY_FACTORY_H
+#define RELAY_KEY_FACTORY_H
 
+#include <QObject>
+
+#include "relay/key_pool.h"
 #include "relay/session_key.h"
 
 #include <optional>
 
 namespace relay {
 
-class SharedPool
+class KeyFactory final : public QObject
 {
+    Q_OBJECT
+
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    explicit KeyFactory(QObject* parent = nullptr);
+    ~KeyFactory();
 
-        virtual void onPoolKeyExpired(quint32 key_id) = 0;
-    };
+    using Key = KeyPool::Key;
 
-    using Key = std::pair<QByteArray, QByteArray>;
-
-    explicit SharedPool(Delegate* delegate);
-    ~SharedPool();
-
-    std::unique_ptr<SharedPool> share();
+    std::shared_ptr<KeyPool> sharedKeyPool();
 
     quint32 addKey(SessionKey&& session_key);
     bool removeKey(quint32 key_id);
@@ -49,16 +46,15 @@ public:
     std::optional<Key> key(quint32 key_id, const std::string& peer_public_key) const;
     void clear();
 
+signals:
+    void sig_keyExpired(quint32 key_id);
+
 private:
-    class Pool;
-    explicit SharedPool(std::shared_ptr<Pool> pool);
+    std::shared_ptr<KeyPool> pool_;
 
-    std::shared_ptr<Pool> pool_;
-    bool is_primary_;
-
-    DISALLOW_COPY_AND_ASSIGN(SharedPool);
+    DISALLOW_COPY_AND_ASSIGN(KeyFactory);
 };
 
 } // namespace relay
 
-#endif // RELAY_SHARED_POOL_H
+#endif // RELAY_KEY_FACTORY_H

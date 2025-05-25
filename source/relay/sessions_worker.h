@@ -24,8 +24,6 @@
 
 namespace relay {
 
-class SharedPool;
-
 class SessionsWorker final : public QObject
 {
     Q_OBJECT
@@ -36,7 +34,7 @@ public:
                    const std::chrono::minutes& peer_idle_timeout,
                    bool statistics_enabled,
                    const std::chrono::seconds& statistics_interval,
-                   std::unique_ptr<SharedPool> shared_pool,
+                   std::shared_ptr<KeyPool> shared_key_pool,
                    QObject* parent = nullptr);
     ~SessionsWorker() final;
 
@@ -60,7 +58,7 @@ private:
     const bool statistics_enabled_;
     const std::chrono::seconds statistics_interval_;
 
-    std::unique_ptr<SharedPool> shared_pool_;
+    std::shared_ptr<KeyPool> shared_key_pool_;
 
     base::Thread thread_;
     std::unique_ptr<SessionManager> session_manager_;

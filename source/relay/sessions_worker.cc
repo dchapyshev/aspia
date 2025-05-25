@@ -28,7 +28,7 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
                                const std::chrono::minutes& peer_idle_timeout,
                                bool statistics_enabled,
                                const std::chrono::seconds& statistics_interval,
-                               std::unique_ptr<SharedPool> shared_pool,
+                               std::shared_ptr<KeyPool> shared_key_pool,
                                QObject* parent)
     : QObject(parent),
       listen_interface_(listen_interface),
@@ -36,11 +36,11 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
       peer_idle_timeout_(peer_idle_timeout),
       statistics_enabled_(statistics_enabled),
       statistics_interval_(statistics_interval),
-      shared_pool_(std::move(shared_pool)),
+      shared_key_pool_(std::move(shared_key_pool)),
       thread_(base::Thread::AsioDispatcher)
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(peer_port_ && shared_pool_);
+    DCHECK(peer_port_ && shared_key_pool_);
 
     connect(&thread_, &base::Thread::started, this, &SessionsWorker::onBeforeThreadRunning,
             Qt::DirectConnection);
@@ -100,7 +100,7 @@ void SessionsWorker::onBeforeThreadRunning()
     connect(this, &SessionsWorker::sig_disconnectSession,
             session_manager_.get(), &SessionManager::disconnectSession, Qt::QueuedConnection);
 
-    session_manager_->start(std::move(shared_pool_));
+    session_manager_->start(std::move(shared_key_pool_));
 }
 
 //--------------------------------------------------------------------------------------------------

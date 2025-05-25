@@ -26,7 +26,7 @@
 #include "proto/router_relay.pb.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
-#include "relay/shared_pool.h"
+#include "relay/key_pool.h"
 
 #include <asio/steady_timer.hpp>
 
@@ -45,7 +45,7 @@ public:
                    QObject* parent = nullptr);
     ~SessionManager() final;
 
-    void start(std::unique_ptr<SharedPool> shared_pool);
+    void start(std::shared_ptr<KeyPool> shared_key_pool);
 
 public slots:
     void disconnectSession(quint64 session_id);
@@ -77,10 +77,9 @@ private:
 
     const std::chrono::minutes idle_timeout_;
     QTimer* idle_timer_ = nullptr;
-
     QTimer* stat_timer_ = nullptr;
 
-    std::unique_ptr<SharedPool> shared_pool_;
+    std::shared_ptr<KeyPool> shared_key_pool_;
 
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;

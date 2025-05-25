@@ -35,7 +35,7 @@ const std::chrono::seconds kReconnectTimeout{ 15 };
 class KeyDeleter
 {
 public:
-    KeyDeleter(std::unique_ptr<SharedPool> pool, quint32 key_id)
+    KeyDeleter(std::shared_ptr<KeyPool> pool, quint32 key_id)
         : pool_(std::move(pool)),
           key_id_(key_id)
     {
@@ -50,7 +50,7 @@ public:
     }
 
 private:
-    std::unique_ptr<SharedPool> pool_;
+    std::shared_ptr<KeyPool> pool_;
     const quint32 key_id_;
 
     DISALLOW_COPY_AND_ASSIGN(KeyDeleter);
@@ -62,9 +62,13 @@ private:
 Controller::Controller(QObject* parent)
     : QObject(parent),
       reconnect_timer_(new QTimer(this)),
-      shared_pool_(std::make_unique<SharedPool>(this))
+      key_factory_(new KeyFactory(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(key_factory_, &KeyFactory::sig_keyExpired,
+            this, &Controller::onPoolKeyExpired,
+            Qt::QueuedConnection);
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &Controller::connectToRouter);
@@ -159,7 +163,7 @@ bool Controller::start()
 
     sessions_worker_ = new SessionsWorker(
         listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
-        shared_pool_->share(), this);
+        key_factory_->sharedKeyPool(), this);
 
     connect(sessions_worker_, &SessionsWorker::sig_sessionStarted,
             this, &Controller::onSessionStarted);
@@ -229,7 +233,7 @@ void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
                  << base::NetworkChannel::errorToString(error_code);
 
     // Clearing the key pool.
-    shared_pool_->clear();
+    key_factory_->clear();
 
     // Retrying a connection at a time interval.
     delayedConnectToRouter();
@@ -249,7 +253,7 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
     if (incoming_message_.has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(shared_pool_->share(), incoming_message_.key_used().key_id());
+            std::make_shared<KeyDeleter>(key_factory_->sharedKeyPool(), incoming_message_.key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
@@ -371,7 +375,7 @@ void Controller::sendKeyPool(quint32 key_count)
         key->set_iv(session_key.iv().toStdString());
 
         // Add the key to the pool.
-        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
+        key->set_key_id(key_factory_->addKey(std::move(session_key)));
     }
 
     // Send a message to the router.

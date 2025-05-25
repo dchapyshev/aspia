@@ -22,7 +22,7 @@
 #include "base/net/tcp_channel.h"
 #include "proto/router_relay.pb.h"
 #include "relay/sessions_worker.h"
-#include "relay/shared_pool.h"
+#include "relay/key_factory.h"
 
 #include <QPointer>
 #include <QTimer>
@@ -33,9 +33,7 @@ class ClientAuthenticator;
 
 namespace relay {
 
-class Controller final
-    : public QObject,
-      public SharedPool::Delegate
+class Controller final: public QObject
 {
     Q_OBJECT
 
@@ -45,11 +43,8 @@ public:
 
     bool start();
 
-protected:
-    // SharedPool::Delegate implementation.
-    void onPoolKeyExpired(quint32 key_id) final;
-
 private slots:
+    void onPoolKeyExpired(quint32 key_id);
     void onTcpConnected();
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
@@ -79,7 +74,7 @@ private:
     QPointer<QTimer> reconnect_timer_;
     base::TcpChannel* channel_ = nullptr;
     QPointer<base::ClientAuthenticator> authenticator_;
-    std::unique_ptr<SharedPool> shared_pool_;
+    KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;
 
     proto::RouterToRelay incoming_message_;

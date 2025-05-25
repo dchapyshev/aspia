@@ -19,6 +19,10 @@
 list(APPEND SOURCE_RELAY
     controller.cc
     controller.h
+    key_factory.cc
+    key_factory.h
+    key_pool.cc
+    key_pool.h
     main.cc
     pending_session.cc
     pending_session.h
@@ -35,9 +39,7 @@ list(APPEND SOURCE_RELAY
     sessions_worker.cc
     sessions_worker.h
     settings.cc
-    settings.h
-    shared_pool.cc
-    shared_pool.h)
+    settings.h)
 
 if (WIN32)
     list(APPEND SOURCE_RELAY_WIN

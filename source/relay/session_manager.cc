@@ -30,7 +30,7 @@ const std::chrono::minutes kIdleTimerInterval { 1 };
 
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-QByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
+QByteArray decryptSecret(const proto::PeerToRelay& message, const KeyPool::Key& key)
 {
     if (key.first.isEmpty() || key.second.isEmpty())
     {
@@ -150,7 +150,7 @@ SessionManager::~SessionManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
+void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
 {
     LOG(LS_INFO) << "Starting session manager";
 
@@ -187,8 +187,8 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
 
     start_time_ = Clock::now();
 
-    shared_pool_ = std::move(shared_pool);
-    DCHECK(shared_pool_);
+    shared_key_pool_ = std::move(shared_key_pool);
+    DCHECK(shared_key_pool_);
 
     idle_timer_->start(kIdleTimerInterval);
 
@@ -222,7 +222,7 @@ void SessionManager::onPendingSessionReady(
     LOG(LS_INFO) << "Pending session ready for key_id: " << message.key_id();
 
     // Looking for a key with the specified identifier.
-    std::optional<SharedPool::Key> key = shared_pool_->key(message.key_id(), message.public_key());
+    std::optional<KeyPool::Key> key = shared_key_pool_->key(message.key_id(), message.public_key());
     if (key.has_value())
     {
         // Decrypt the identifiers of peers.
@@ -240,7 +240,7 @@ void SessionManager::onPendingSessionReady(
                     LOG(LS_INFO) << "Both peers are connected with key " << message.key_id();
 
                     // Delete the key from the pool. It can no longer be used.
-                    shared_pool_->removeKey(message.key_id());
+                    shared_key_pool_->removeKey(message.key_id());
 
                     Session* session = new Session(
                         std::make_pair(pending_session->takeSocket(), other_pending_session->takeSocket()),
