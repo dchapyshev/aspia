@@ -58,11 +58,13 @@ void ServerAuthenticatorManager::setAnonymousAccess(
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> channel)
+void ServerAuthenticatorManager::addNewChannel(TcpChannel* channel)
 {
     DCHECK(channel);
 
-    std::unique_ptr<ServerAuthenticator> authenticator = std::make_unique<ServerAuthenticator>();
+    channel->setParent(this);
+
+    ServerAuthenticator* authenticator = new ServerAuthenticator(this);
     authenticator->setUserList(user_list_);
 
     if (!private_key_.isEmpty())
@@ -80,31 +82,32 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
         }
     }
 
-    connect(authenticator.get(), &Authenticator::sig_finished,
+    connect(authenticator, &Authenticator::sig_finished,
             this, &ServerAuthenticatorManager::onComplete);
 
     // Create a new authenticator for the connection and put it on the list.
-    pending_.emplace_back(std::move(channel), std::move(authenticator));
+    pending_.append(std::make_pair(channel, authenticator));
 
     // Start the authentication process.
-    const Pending& current = pending_.back();
-    current.authenticator->start(current.channel.get());
+    authenticator->start(channel);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ServerAuthenticatorManager::hasReadySessions() const
 {
-    return !ready_sessions_.empty();
+    return !ready_sessions_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 ServerAuthenticatorManager::SessionInfo ServerAuthenticatorManager::nextReadySession()
 {
-    if (ready_sessions_.empty())
+    if (ready_sessions_.isEmpty())
         return SessionInfo();
 
     SessionInfo session_info = std::move(ready_sessions_.front());
-    ready_sessions_.pop();
+    session_info.channel->setParent(nullptr);
+
+    ready_sessions_.pop_front();
     return session_info;
 }
 
@@ -113,7 +116,7 @@ void ServerAuthenticatorManager::onComplete()
 {
     for (auto it = pending_.begin(); it != pending_.end();)
     {
-        ServerAuthenticator* current = it->authenticator.get();
+        ServerAuthenticator* current = it->second;
 
         switch (current->state())
         {
@@ -124,7 +127,7 @@ void ServerAuthenticatorManager::onComplete()
                 {
                     SessionInfo session_info;
 
-                    session_info.channel       = std::move(it->channel);
+                    session_info.channel       = it->first;
                     session_info.version       = current->peerVersion();
                     session_info.os_name       = current->peerOsName();
                     session_info.computer_name = current->peerComputerName();
@@ -133,12 +136,12 @@ void ServerAuthenticatorManager::onComplete()
                     session_info.user_name     = current->userName();
                     session_info.session_type  = current->sessionType();
 
-                    ready_sessions_.emplace(std::move(session_info));
+                    ready_sessions_.push_back(session_info);
                     emit sig_sessionReady();
                 }
 
                 // Authenticator not needed anymore.
-                it->authenticator.release()->deleteLater();
+                current->deleteLater();
                 it = pending_.erase(it);
             }
             break;

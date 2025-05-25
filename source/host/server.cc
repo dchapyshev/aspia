@@ -250,9 +250,7 @@ void Server::onSessionAuthenticated()
         }
 
         ClientSession* session = ClientSession::create(
-            static_cast<proto::SessionType>(session_info.session_type),
-            session_info.channel.release());
-
+            static_cast<proto::SessionType>(session_info.session_type), session_info.channel);
         if (!session)
         {
             LOG(LS_ERROR) << "Invalid client session";
@@ -280,10 +278,7 @@ void Server::onNewDirectConnection()
     }
 
     while (server_->hasPendingConnections())
-    {
-        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
-        startAuthentication(std::move(channel));
-    }
+        startAuthentication(server_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -312,10 +307,7 @@ void Server::onNewRelayConnection()
     }
 
     while (router_controller_->hasPendingConnections())
-    {
-        std::unique_ptr<base::TcpChannel> channel(router_controller_->nextPendingConnection());
-        startAuthentication(std::move(channel));
-    }
+        startAuthentication(router_controller_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -431,14 +423,14 @@ void Server::onFileDownloaderProgress(int percentage)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
+void Server::startAuthentication(base::TcpChannel* channel)
 {
     LOG(LS_INFO) << "Start authentication";
 
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
     channel->setReadBufferSize(kReadBufferSize);
 
-    authenticator_manager_->addNewChannel(std::move(channel));
+    authenticator_manager_->addNewChannel(channel);
 }
 
 //--------------------------------------------------------------------------------------------------

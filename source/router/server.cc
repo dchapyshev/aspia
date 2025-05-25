@@ -455,7 +455,7 @@ void Server::onSessionAuthenticated()
             return;
         }
 
-        session->setChannel(session_info.channel.release());
+        session->setChannel(session_info.channel);
         session->setDatabaseFactory(database_factory_);
         session->setServer(this);
         session->setRelayKeyPool(key_factory_->sharedKeyPool());
@@ -483,9 +483,9 @@ void Server::onNewConnection()
 
     while (server_->hasPendingConnections())
     {
-        std::unique_ptr<base::TcpChannel> channel(server_->nextPendingConnection());
+        base::TcpChannel* channel = server_->nextPendingConnection();
         LOG(LS_INFO) << "New connection: " << channel->peerAddress();
-        authenticator_manager_->addNewChannel(std::move(channel));
+        authenticator_manager_->addNewChannel(channel);
     }
 }
 

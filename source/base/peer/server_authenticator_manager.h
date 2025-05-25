@@ -19,9 +19,10 @@
 #ifndef BASE_PEER_SERVER_AUTHENTICATOR_MANAGER_H
 #define BASE_PEER_SERVER_AUTHENTICATOR_MANAGER_H
 
-#include "base/peer/server_authenticator.h"
+#include <QList>
+#include <QQueue>
 
-#include <queue>
+#include "base/peer/server_authenticator.h"
 
 namespace base {
 
@@ -37,10 +38,10 @@ public:
         SessionInfo(SessionInfo&& other) noexcept = default;
         SessionInfo& operator=(SessionInfo&& other) noexcept = default;
 
-        SessionInfo(const SessionInfo& other) = delete;
-        SessionInfo& operator=(const SessionInfo& other) = delete;
+        SessionInfo(const SessionInfo& other) = default;
+        SessionInfo& operator=(const SessionInfo& other) = default;
 
-        std::unique_ptr<TcpChannel> channel;
+        TcpChannel* channel = nullptr;
         QVersionNumber version;
         QString os_name;
         QString computer_name;
@@ -63,7 +64,7 @@ public:
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and signal sig_sessionReady will be called.
     // If authentication fails, the channel will be automatically deleted.
-    void addNewChannel(std::unique_ptr<TcpChannel> channel);
+    void addNewChannel(TcpChannel* channel);
 
     bool hasReadySessions() const;
     SessionInfo nextReadySession();
@@ -75,14 +76,8 @@ private slots:
     void onComplete();
 
 private:
-    struct Pending
-    {
-        std::unique_ptr<TcpChannel> channel;
-        std::unique_ptr<ServerAuthenticator> authenticator;
-    };
-
     SharedPointer<UserListBase> user_list_;
-    std::vector<Pending> pending_;
+    QList<std::pair<TcpChannel*, ServerAuthenticator*>> pending_;
 
     QByteArray private_key_;
 
@@ -91,7 +86,7 @@ private:
 
     quint32 anonymous_session_types_ = 0;
 
-    std::queue<SessionInfo> ready_sessions_;
+    QQueue<SessionInfo> ready_sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
 };

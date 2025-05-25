@@ -60,7 +60,7 @@ private slots:
     void onFileDownloaderProgress(int percentage);
 
 private:
-    void startAuthentication(std::unique_ptr<base::TcpChannel> channel);
+    void startAuthentication(base::TcpChannel* channel);
     void addFirewallRules();
     void deleteFirewallRules();
     void updateConfiguration(const QString& path);

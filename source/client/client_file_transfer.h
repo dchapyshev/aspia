@@ -25,8 +25,6 @@
 #include "common/file_task_factory.h"
 #include "common/file_worker.h"
 
-#include <queue>
-
 namespace client {
 
 class ClientFileTransfer final : public Client
@@ -76,7 +74,7 @@ private:
     QPointer<common::FileTaskFactory> local_task_factory_;
     QPointer<common::FileTaskFactory> remote_task_factory_;
 
-    std::queue<common::FileTask> remote_task_queue_;
+    QQueue<common::FileTask> remote_task_queue_;
     common::FileWorker local_worker_;
 
     QPointer<FileRemover> remover_;

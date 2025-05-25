@@ -70,13 +70,13 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
         LOG(LS_INFO) << "No logged in user on host side";
         emit sig_errorOccurred(reply.error_code());
     }
-    else if (!remote_task_queue_.empty())
+    else if (!remote_task_queue_.isEmpty())
     {
         // Move the reply to the request and notify the sender.
         remote_task_queue_.front().onReply(std::move(reply));
 
         // Remove the request from the queue.
-        remote_task_queue_.pop();
+        remote_task_queue_.pop_front();
 
         // Execute the next request.
         doNextRemoteTask();
@@ -130,10 +130,10 @@ void ClientFileTransfer::onTask(const common::FileTask& task)
     }
     else
     {
-        const bool schedule = remote_task_queue_.empty();
+        const bool schedule = remote_task_queue_.isEmpty();
 
         // Add the request to the queue.
-        remote_task_queue_.emplace(std::move(task));
+        remote_task_queue_.push_back(task);
 
         // If the request queue was empty, then run execution.
         if (schedule)
@@ -194,7 +194,7 @@ void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::doNextRemoteTask()
 {
-    if (remote_task_queue_.empty())
+    if (remote_task_queue_.isEmpty())
         return;
 
     // Send a request to the remote computer.
