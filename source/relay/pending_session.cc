@@ -35,13 +35,13 @@ constexpr quint32 kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-PendingSession::PendingSession(asio::ip::tcp::socket&& socket, Delegate* delegate, QObject* parent)
+PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
     : QObject(parent),
-      delegate_(delegate),
+      timer_(new QTimer(this)),
       socket_(std::move(socket))
 {
-    timer_.setSingleShot(true);
-    connect(&timer_, &QTimer::timeout, this, [this]()
+    timer_->setSingleShot(true);
+    connect(timer_, &QTimer::timeout, this, [this]()
     {
         onErrorOccurred(FROM_HERE, std::error_code());
     });
@@ -56,7 +56,9 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, Delegate* delegat
         }
         else
         {
-            address_ = endpoint.address().to_string();
+            std::string address = endpoint.address().to_string();
+            address_ = QString::fromLocal8Bit(
+                address.c_str(), static_cast<QString::size_type>(address.size()));
         }
     }
     catch (const std::error_code& error_code)
@@ -87,18 +89,14 @@ void PendingSession::start()
         LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
     }
 
-    timer_.start(kTimeout);
+    timer_->start(kTimeout);
     PendingSession::doReadMessage(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 void PendingSession::stop()
 {
-    if (!delegate_)
-        return;
-
-    delegate_ = nullptr;
-    timer_.stop();
+    timer_->stop();
 
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
@@ -131,7 +129,7 @@ asio::ip::tcp::socket PendingSession::takeSocket()
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::string& PendingSession::address() const
+const QString& PendingSession::address() const
 {
     return address_;
 }
@@ -201,13 +199,10 @@ void PendingSession::doReadMessage(PendingSession* session)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PendingSession::onErrorOccurred(
-    const base::Location& location, const std::error_code& error_code)
+void PendingSession::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Connection error: " << error_code << " (" << location.toString() << ")";
-    if (delegate_)
-        delegate_->onPendingSessionFailed(this);
-
+    emit sig_pendingSessionFailed(this);
     stop();
 }
 
@@ -221,8 +216,7 @@ void PendingSession::onMessage()
         return;
     }
 
-    if (delegate_)
-        delegate_->onPendingSessionReady(this, message);
+    emit sig_pendingSessionReady(this, message);
 }
 
 } // namespace relay

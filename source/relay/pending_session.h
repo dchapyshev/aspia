@@ -39,25 +39,10 @@ class PendingSession final : public QObject
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        // Called when received authentication data from a peer.
-        virtual void onPendingSessionReady(
-            PendingSession* session, const proto::PeerToRelay& message) = 0;
-
-        // Called when an error has occurred.
-        virtual void onPendingSessionFailed(PendingSession* session) = 0;
-    };
-
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
-    PendingSession(asio::ip::tcp::socket&& socket,
-                   Delegate* delegate,
-                   QObject* parent = nullptr);
+    PendingSession(asio::ip::tcp::socket&& socket, QObject* parent = nullptr);
     ~PendingSession();
 
     // Starts a session. This starts the timer. If the peer does not send authentication data or if
@@ -77,20 +62,25 @@ public:
     // Releases a socket from a class.
     asio::ip::tcp::socket takeSocket();
 
-    const std::string& address() const;
+    const QString& address() const;
     std::chrono::seconds duration(const TimePoint& now) const;
     quint32 keyId() const;
+
+signals:
+    // Called when received authentication data from a peer.
+    void sig_pendingSessionReady(relay::PendingSession* session, const proto::PeerToRelay& message);
+
+    // Called when an error has occurred.
+    void sig_pendingSessionFailed(relay::PendingSession* session);
 
 private:
     static void doReadMessage(PendingSession* pending_session);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
     void onMessage();
 
-    Delegate* delegate_;
-
-    std::string address_;
+    QString address_;
     TimePoint start_time_;
-    QTimer timer_;
+    QTimer* timer_ = nullptr;
     asio::ip::tcp::socket socket_;
 
     quint32 buffer_size_ = 0;

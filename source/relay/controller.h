@@ -77,10 +77,10 @@ private:
     std::chrono::seconds statistics_interval_;
 
     QPointer<QTimer> reconnect_timer_;
-    std::unique_ptr<base::TcpChannel> channel_;
+    base::TcpChannel* channel_ = nullptr;
     QPointer<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
-    std::unique_ptr<SessionsWorker> sessions_worker_;
+    SessionsWorker* sessions_worker_ = nullptr;
 
     proto::RouterToRelay incoming_message_;
     proto::RelayToRouter outgoing_message_;

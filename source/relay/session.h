@@ -45,15 +45,7 @@ public:
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onSessionFinished(Session* session) = 0;
-    };
-
-    void start(Delegate* delegate);
+    void start();
     void stop();
     void disconnect();
 
@@ -65,6 +57,9 @@ public:
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration(const TimePoint& current_time) const;
     qint64 bytesTransferred() const { return bytes_transferred_; }
+
+signals:
+    void sig_sessionFinished(relay::Session* session);
 
 private:
     static void doReadSome(Session* session, int source);
@@ -85,8 +80,6 @@ private:
 
     asio::ip::tcp::socket socket_[kNumberOfSides];
     std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
-
-    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(Session);
 };

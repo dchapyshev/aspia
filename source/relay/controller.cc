@@ -157,15 +157,15 @@ bool Controller::start()
         return false;
     }
 
-    sessions_worker_ = std::make_unique<SessionsWorker>(
+    sessions_worker_ = new SessionsWorker(
         listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
-        shared_pool_->share());
+        shared_pool_->share(), this);
 
-    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionStarted,
+    connect(sessions_worker_, &SessionsWorker::sig_sessionStarted,
             this, &Controller::onSessionStarted);
-    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionFinished,
+    connect(sessions_worker_, &SessionsWorker::sig_sessionFinished,
             this, &Controller::onSessionFinished);
-    connect(sessions_worker_.get(), &SessionsWorker::sig_sessionStatistics,
+    connect(sessions_worker_, &SessionsWorker::sig_sessionStatistics,
             this, &Controller::onSessionStatistics);
 
     sessions_worker_->start();
@@ -190,9 +190,9 @@ void Controller::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_.get(), &base::TcpChannel::sig_disconnected,
+            connect(channel_, &base::TcpChannel::sig_disconnected,
                     this, &Controller::onTcpDisconnected);
-            connect(channel_.get(), &base::TcpChannel::sig_messageReceived,
+            connect(channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Controller::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
@@ -219,7 +219,7 @@ void Controller::onTcpConnected()
         authenticator_->deleteLater();
     });
 
-    authenticator_->start(channel_.get());
+    authenticator_->start(channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -327,9 +327,9 @@ void Controller::connectToRouter()
     LOG(LS_INFO) << "Connecting to router...";
 
     // Create channel.
-    channel_ = std::make_unique<base::TcpChannel>();
+    channel_ = new base::TcpChannel(this);
 
-    connect(channel_.get(), &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
+    connect(channel_, &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
 
     // Connect to router.
     channel_->connectTo(router_address_, router_port_);

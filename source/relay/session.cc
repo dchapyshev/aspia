@@ -57,12 +57,11 @@ Session::~Session()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::start(Delegate* delegate)
+void Session::start()
 {
     LOG(LS_INFO) << "Starting peers session";
 
     start_time_ = Clock::now();
-    delegate_ = delegate;
 
     for (int i = 0; i < kNumberOfSides; ++i)
         Session::doReadSome(this, i);
@@ -71,12 +70,7 @@ void Session::start(Delegate* delegate)
 //--------------------------------------------------------------------------------------------------
 void Session::stop()
 {
-    if (!delegate_)
-        return;
-
-    delegate_ = nullptr;
     disconnect();
-
     LOG(LS_INFO) << "Session stopped (duration: " << duration(Clock::now()).count()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
@@ -91,8 +85,7 @@ void Session::disconnect()
         socket_[i].close(ignored_code);
     }
 
-    if (delegate_)
-        delegate_->onSessionFinished(this);
+    emit sig_sessionFinished(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,9 +147,7 @@ void Session::doReadSome(Session* session, int source)
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Connection finished: " << error_code << " (" << location.toString() << ")";
-    if (delegate_)
-        delegate_->onSessionFinished(this);
-
+    emit sig_sessionFinished(this);
     stop();
 }
 

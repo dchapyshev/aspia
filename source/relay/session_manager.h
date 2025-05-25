@@ -19,6 +19,8 @@
 #ifndef RELAY_SESSION_MANAGER_H
 #define RELAY_SESSION_MANAGER_H
 
+#include <QList>
+
 #include "proto/relay_peer.pb.h"
 #include "proto/router_relay.pb.h"
 #include "relay/pending_session.h"
@@ -29,10 +31,7 @@
 
 namespace relay {
 
-class SessionManager final
-    : public QObject,
-      public PendingSession::Delegate,
-      public Session::Delegate
+class SessionManager final : public QObject
 {
     Q_OBJECT
 
@@ -55,14 +54,10 @@ signals:
     void sig_sessionStatistics(const proto::RelayStat& relay_stat);
     void sig_sessionFinished();
 
-protected:
-    // PendingSession::Delegate implementation.
-    void onPendingSessionReady(
-        PendingSession* session, const proto::PeerToRelay& message) final;
-    void onPendingSessionFailed(PendingSession* session) final;
-
-    // Session::Delegate implementation.
-    void onSessionFinished(Session* session) final;
+private slots:
+    void onPendingSessionReady(relay::PendingSession* session, const proto::PeerToRelay& message);
+    void onPendingSessionFailed(relay::PendingSession* session);
+    void onSessionFinished(relay::Session* session);
 
 private:
     static void doAccept(SessionManager* self);
@@ -76,8 +71,8 @@ private:
     void removeSession(Session* session);
 
     asio::ip::tcp::acceptor acceptor_;
-    std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
-    std::vector<std::unique_ptr<Session>> active_sessions_;
+    QList<PendingSession*> pending_sessions_;
+    QList<Session*> active_sessions_;
 
     const asio::ip::address address_;
     const quint16 port_;
