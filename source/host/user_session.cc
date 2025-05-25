@@ -310,7 +310,7 @@ std::optional<QString> UserSession::sessionName() const
     }
 
     using TimeInfo = std::pair<base::SessionId, qint64>;
-    using TimeInfoList = std::vector<TimeInfo>;
+    using TimeInfoList = QList<TimeInfo>;
 
     // Enumarate all user sessions.
     TimeInfoList times;
@@ -325,7 +325,7 @@ std::optional<QString> UserSession::sessionName() const
 
         // In Windows Server can have multiple RDP sessions with the same username. We get a list of
         // sessions with the same username and session connection time.
-        times.emplace_back(session_info.sessionId(), session_info.connectTime());
+        times.push_back(std::make_pair(session_info.sessionId(), session_info.connectTime()));
     }
 
     // Sort the list by the time it was connected to the server.

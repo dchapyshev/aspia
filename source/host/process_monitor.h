@@ -21,10 +21,9 @@
 
 #include "base/macros_magic.h"
 
+#include <QByteArray>
+#include <QMap>
 #include <QString>
-
-#include <map>
-#include <vector>
 
 namespace host {
 
@@ -56,7 +55,7 @@ public:
     };
 
     using ProcessId = quint32;
-    using ProcessMap = std::map<ProcessId, ProcessEntry>;
+    using ProcessMap = QMap<ProcessId, ProcessEntry>;
 
     const ProcessMap& processes(bool reset_cache);
     int calcCpuUsage();
@@ -71,7 +70,7 @@ private:
     void* ntdll_library_ = nullptr;
     void* nt_query_system_info_func_ = nullptr;
 
-    std::vector<quint8> snapshot_;
+    QByteArray snapshot_;
     ProcessMap table_;
 
     static const quint32 kMaxCpuCount = 64;

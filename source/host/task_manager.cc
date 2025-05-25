@@ -180,12 +180,12 @@ void TaskManager::sendProcessList(quint32 flags)
     process_list->set_memory_usage(process_monitor_->calcMemoryUsage());
 
     const ProcessMonitor::ProcessMap& processes = process_monitor_->processes(reset_cache);
-    for (const auto& process : processes)
+    for (auto it = processes.cbegin(), it_end = processes.cend(); it != it_end; ++it)
     {
         proto::task_manager::Process* item = process_list->add_process();
 
-        ProcessMonitor::ProcessId process_id = process.first;
-        const ProcessMonitor::ProcessEntry& process_info = process.second;
+        ProcessMonitor::ProcessId process_id = it.key();
+        const ProcessMonitor::ProcessEntry& process_info = it.value();
 
         if (process_info.process_name_changed)
             item->set_process_name(process_info.process_name.toStdString());

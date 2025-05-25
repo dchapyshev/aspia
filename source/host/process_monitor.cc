@@ -461,7 +461,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
-        if (result->second.process_name.compare(kBlackList[i], Qt::CaseInsensitive) == 0)
+        if (result.value().process_name.compare(kBlackList[i], Qt::CaseInsensitive) == 0)
         {
             LOG(LS_ERROR) << "Unable to end system process";
             return false;
@@ -491,7 +491,7 @@ bool ProcessMonitor::updateSnapshot()
 {
     while (true)
     {
-        if (!snapshot_.empty())
+        if (!snapshot_.isEmpty())
         {
             NtQuerySystemInformationFunc nt_query_system_information_func =
                 reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
@@ -524,14 +524,14 @@ void ProcessMonitor::updateTable()
     size_t offset = 0;
     do
     {
-        current = reinterpret_cast<OWN_SYSTEM_PROCESS_INFORMATION*>(&snapshot_[offset]);
+        current = reinterpret_cast<OWN_SYSTEM_PROCESS_INFORMATION*>(snapshot_.data() + offset);
 
         if (current->UniqueProcessId || current->NumberOfThreads)
         {
             auto old_info = table_.find(PtrToUlong(current->UniqueProcessId));
             if (old_info != table_.end())
             {
-                if (old_info->second.cpu_time > current->KernelTime + current->UserTime)
+                if (old_info.value().cpu_time > current->KernelTime + current->UserTime)
                 {
                     // PID has been reused.
                     table_.erase(old_info);
@@ -542,7 +542,7 @@ void ProcessMonitor::updateTable()
                 }
                 else
                 {
-                    last_total_time += old_info->second.cpu_time;
+                    last_total_time += old_info.value().cpu_time;
                 }
             }
 
@@ -560,7 +560,7 @@ void ProcessMonitor::updateTable()
     offset = 0;
     do
     {
-        current = reinterpret_cast<OWN_SYSTEM_PROCESS_INFORMATION*>(&snapshot_[offset]);
+        current = reinterpret_cast<OWN_SYSTEM_PROCESS_INFORMATION*>(snapshot_.data() + offset);
 
         if (current->UniqueProcessId || current->NumberOfThreads)
         {
@@ -569,13 +569,13 @@ void ProcessMonitor::updateTable()
             auto old_info = table_.find(process_id);
             if (old_info != table_.end())
             {
-                updateProcess(&old_info->second, *current, time_delta, true);
+                updateProcess(&old_info.value(), *current, time_delta, true);
             }
             else
             {
                 ProcessEntry entry;
                 updateProcess(&entry, *current, time_delta, false);
-                table_.emplace(process_id, std::move(entry));
+                table_[process_id] = entry;
             }
 
             active_pids.insert(process_id);
@@ -588,7 +588,7 @@ void ProcessMonitor::updateTable()
     // Remove obsolete processes.
     for (auto it = table_.begin(); it != table_.end();)
     {
-        if (!active_pids.contains(it->first))
+        if (!active_pids.contains(it.key()))
             it = table_.erase(it);
         else
             ++it;

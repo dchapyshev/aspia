@@ -968,18 +968,20 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
     process_monitor.processes(true);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    for (const auto& process : process_monitor.processes(false))
+    ProcessMonitor::ProcessMap map = process_monitor.processes(false);
+    for (auto it = map.cbegin(), it_end = map.cend(); it != it_end; ++it)
     {
         proto::system_info::Processes::Process* process_item =
             system_info->mutable_processes()->add_process();
+        const ProcessMonitor::ProcessEntry& process = it.value();
 
-        process_item->set_name(process.second.process_name.toStdString());
-        process_item->set_pid(process.first);
-        process_item->set_sid(process.second.session_id);
-        process_item->set_user(process.second.user_name.toStdString());
-        process_item->set_path(process.second.file_path.toStdString());
-        process_item->set_cpu(process.second.cpu_ratio);
-        process_item->set_memory(process.second.mem_private_working_set);
+        process_item->set_name(process.process_name.toStdString());
+        process_item->set_pid(it.key());
+        process_item->set_sid(process.session_id);
+        process_item->set_user(process.user_name.toStdString());
+        process_item->set_path(process.file_path.toStdString());
+        process_item->set_cpu(process.cpu_ratio);
+        process_item->set_memory(process.mem_private_working_set);
     }
 }
 
