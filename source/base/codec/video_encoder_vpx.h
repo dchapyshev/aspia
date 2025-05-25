@@ -24,7 +24,6 @@
 #include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
-#include "base/desktop/region.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>

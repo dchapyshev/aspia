@@ -164,8 +164,8 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 
     for (const auto& screen : std::as_const(screens->screens))
     {
-        dpi_for_rect_.emplace_back(
-            Rect::makeXYWH(screen.position, screen.resolution), screen.dpi);
+        dpi_for_rect_.push_back(
+            std::make_pair(Rect::makeXYWH(screen.position, screen.resolution), screen.dpi));
     }
 
     return result;

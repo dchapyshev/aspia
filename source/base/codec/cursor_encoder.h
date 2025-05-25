@@ -23,14 +23,10 @@
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
-
-namespace proto {
-class CursorShape;
-} // namespace proto
+#include "base/desktop/mouse_cursor.h"
+#include "proto/desktop.h"
 
 namespace base {
-
-class MouseCursor;
 
 class CursorEncoder
 {

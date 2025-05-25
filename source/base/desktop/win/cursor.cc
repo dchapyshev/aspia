@@ -142,7 +142,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     int width = bitmap_info.bmWidth;
     int height = bitmap_info.bmHeight;
 
-    std::vector<quint32> mask_data(static_cast<size_t>(width) * static_cast<size_t>(height));
+    QVector<quint32> mask_data(static_cast<size_t>(width) * static_cast<size_t>(height));
 
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.

@@ -18,6 +18,8 @@
 
 #include "host/win/touch_injector.h"
 
+#include <QVector>
+
 #include "base/logging.h"
 #include "base/desktop/geometry.h"
 #include "base/desktop/win/screen_capture_utils.h"
@@ -37,7 +39,7 @@ const quint32 kMaxSimultaneousTouchCount = 10;
 // the other finger in place.
 void appendMapValuesToVector(
     std::map<quint32, OWN_POINTER_TOUCH_INFO>* touches_in_contact,
-    std::vector<OWN_POINTER_TOUCH_INFO>* output_vector)
+    QVector<OWN_POINTER_TOUCH_INFO>* output_vector)
 {
     for (auto& id_and_pointer_touch_info : *touches_in_contact)
     {
@@ -185,7 +187,7 @@ void TouchInjector::addNewTouchPoints(const proto::TouchEvent& event)
 {
     DCHECK_EQ(event.event_type(), proto::TouchEvent::TOUCH_POINT_START);
 
-    std::vector<OWN_POINTER_TOUCH_INFO> touches;
+    QVector<OWN_POINTER_TOUCH_INFO> touches;
     // Must inject already touching points as move events.
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
@@ -226,7 +228,7 @@ void TouchInjector::moveTouchPoints(const proto::TouchEvent& event)
         convertToPointerTouchInfo(touch_point, pointer_touch_info);
     }
 
-    std::vector<OWN_POINTER_TOUCH_INFO> touches;
+    QVector<OWN_POINTER_TOUCH_INFO> touches;
     // Must inject already touching points as move events.
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
@@ -241,7 +243,7 @@ void TouchInjector::endTouchPoints(const proto::TouchEvent& event)
 {
     DCHECK_EQ(event.event_type(), proto::TouchEvent::TOUCH_POINT_END);
 
-    std::vector<OWN_POINTER_TOUCH_INFO> touches;
+    QVector<OWN_POINTER_TOUCH_INFO> touches;
     for (const proto::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO pointer_touch_info = touches_in_contact_[touch_point.id()];
@@ -264,7 +266,7 @@ void TouchInjector::cancelTouchPoints(const proto::TouchEvent& event)
 {
     DCHECK_EQ(event.event_type(), proto::TouchEvent::TOUCH_POINT_CANCEL);
 
-    std::vector<OWN_POINTER_TOUCH_INFO> touches;
+    QVector<OWN_POINTER_TOUCH_INFO> touches;
     for (const proto::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO pointer_touch_info = touches_in_contact_[touch_point.id()];

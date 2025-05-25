@@ -63,7 +63,7 @@ VS_FIXEDFILEINFO* GetVsFixedFileInfo(const void* data)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileVersionInfo::FileVersionInfo(std::vector<quint8>&& data, WORD language, WORD code_page)
+FileVersionInfo::FileVersionInfo(QVector<quint8>&& data, WORD language, WORD code_page)
     : owned_data_(std::move(data)),
       data_(owned_data_.data()),
       language_(language),
@@ -118,7 +118,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(const QS
     if (length == 0)
         return nullptr;
 
-    std::vector<quint8> data(length, 0);
+    QVector<quint8> data(length, 0);
 
     if (!GetFileVersionInfoW(path, dummy, length, data.data()))
     {

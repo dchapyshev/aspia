@@ -20,12 +20,12 @@
 #define BASE_WIN_FILE_VERSION_INFO_H
 
 #include <QString>
+#include <QVector>
 #include <qt_windows.h>
 
 #include "base/macros_magic.h"
 
 #include <memory>
-#include <vector>
 
 struct tagVS_FIXEDFILEINFO;
 typedef tagVS_FIXEDFILEINFO VS_FIXEDFILEINFO;
@@ -78,10 +78,10 @@ public:
 private:
     // |data| is a VS_VERSION_INFO resource. |language| and |code_page| are
     // extracted from the \VarFileInfo\Translation value of |data|.
-    FileVersionInfo(std::vector<quint8>&& data, WORD language, WORD code_page);
+    FileVersionInfo(QVector<quint8>&& data, WORD language, WORD code_page);
     FileVersionInfo(void* data, WORD language, WORD code_page);
 
-    const std::vector<quint8> owned_data_;
+    const QVector<quint8> owned_data_;
     const void* const data_;
     const WORD language_;
     const WORD code_page_;
