@@ -51,7 +51,7 @@ private:
     static int progressCallback(
         HttpFileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
 
-    std::atomic_bool interrupted_;
+    std::atomic_bool interrupted_ { false };
     QString url_;
     QByteArray data_;
 

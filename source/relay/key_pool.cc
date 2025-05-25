@@ -51,7 +51,7 @@ quint32 KeyPool::addKey(SessionKey&& session_key)
     std::scoped_lock lock(lock_);
 
     quint32 key_id = current_key_id_++;
-    map_.emplace(key_id, std::move(session_key));
+    map_.try_emplace(key_id, std::move(session_key));
 
     LOG(LS_INFO) << "Key with id " << key_id << " added to pool";
     return key_id;

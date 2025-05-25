@@ -72,12 +72,14 @@ void ServerAuthenticatorManager::addNewChannel(TcpChannel* channel)
         if (!authenticator->setPrivateKey(private_key_))
         {
             LOG(LS_ERROR) << "Failed to set private key for authenticator";
+            delete authenticator;
             return;
         }
 
         if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
         {
             LOG(LS_ERROR) << "Failed to set anonymous access settings";
+            delete authenticator;
             return;
         }
     }

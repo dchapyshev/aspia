@@ -13,7 +13,7 @@
 
 namespace mkvparser {
 
-MkvReader::MkvReader() : m_file(nullptr), reader_owns_file_(true) {}
+MkvReader::MkvReader() : m_length(0), m_file(nullptr), reader_owns_file_(true) {}
 
 MkvReader::MkvReader(FILE* fp) : m_file(fp), reader_owns_file_(false) {
   GetFileSize();

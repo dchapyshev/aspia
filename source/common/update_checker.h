@@ -46,7 +46,7 @@ protected:
 private:
     QString update_server_;
     QString package_name_;
-    std::atomic_bool interrupted_;
+    std::atomic_bool interrupted_ { false };
 
     DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
 };

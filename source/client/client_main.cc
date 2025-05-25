@@ -37,20 +37,6 @@
 #include <QSysInfo>
 
 //--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
-//--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
 {
     QMessageBox::warning(
@@ -94,23 +80,23 @@ bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
     {
         if (value == "32")
         {
-            serializePixelFormat(base::PixelFormat::ARGB(), config.mutable_pixel_format());
+            *config.mutable_pixel_format() = base::PixelFormat::ARGB().toProto();
         }
         else if (value == "16")
         {
-            serializePixelFormat(base::PixelFormat::RGB565(), config.mutable_pixel_format());
+            *config.mutable_pixel_format() = base::PixelFormat::RGB565().toProto();
         }
         else if (value == "8")
         {
-            serializePixelFormat(base::PixelFormat::RGB332(), config.mutable_pixel_format());
+            *config.mutable_pixel_format() = base::PixelFormat::RGB332().toProto();
         }
         else if (value == "6")
         {
-            serializePixelFormat(base::PixelFormat::RGB222(), config.mutable_pixel_format());
+            *config.mutable_pixel_format() = base::PixelFormat::RGB222().toProto();
         }
         else if (value == "3")
         {
-            serializePixelFormat(base::PixelFormat::RGB111(), config.mutable_pixel_format());
+            *config.mutable_pixel_format() = base::PixelFormat::RGB111().toProto();
         }
         else
         {
