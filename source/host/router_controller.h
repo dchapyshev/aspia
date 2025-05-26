@@ -48,7 +48,7 @@ public:
 
     void start(const RouterInfo& router_info);
 
-    void hostIdRequest(const QString& session_name);
+    void hostIdRequest();
     void resetHostId(base::HostId host_id);
 
     const QString& address() const { return router_info_.address; }
@@ -60,7 +60,7 @@ public:
 
 signals:
     void sig_routerStateChanged(const proto::internal::RouterState& router_state);
-    void sig_hostIdAssigned(const QString& username, base::HostId host_id);
+    void sig_hostIdAssigned(base::HostId host_id);
     void sig_clientConnected();
 
 private slots:
@@ -81,7 +81,6 @@ private:
     QPointer<QTimer> reconnect_timer_;
     RouterInfo router_info_;
 
-    QQueue<QString> pending_id_requests_;
     QQueue<base::TcpChannel*> channels_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);

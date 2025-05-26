@@ -65,9 +65,9 @@ void RouterController::start(const RouterInfo& router_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::hostIdRequest(const QString& session_name)
+void RouterController::hostIdRequest()
 {
-    LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
+    LOG(LS_INFO) << "Started ID request for session";
 
     if (!channel_ || !channel_->isConnected())
     {
@@ -76,9 +76,7 @@ void RouterController::hostIdRequest(const QString& session_name)
     }
 
     HostStorage host_key_storage;
-    QByteArray host_key = host_key_storage.key(session_name);
-
-    pending_id_requests_.push_back(session_name);
+    QByteArray host_key = host_key_storage.hostKey();
 
     proto::PeerToRouter message;
     proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
@@ -207,12 +205,6 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 
     if (in_message.has_host_id_response())
     {
-        if (pending_id_requests_.empty())
-        {
-            LOG(LS_ERROR) << "ID received, but no request was sent";
-            return;
-        }
-
         const proto::HostIdResponse& host_id_response = in_message.host_id_response();
 
         switch (host_id_response.error_code())
@@ -246,23 +238,21 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             return;
         }
 
-        const QString& session_name = pending_id_requests_.front();
         HostStorage host_key_storage;
 
         QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
         if (!host_key.isEmpty())
         {
             LOG(LS_INFO) << "New host key received";
-            host_key_storage.setKey(session_name, host_key);
+            host_key_storage.setHostKey(host_key);
         }
 
-        LOG(LS_INFO) << "Host ID received: " << host_id << " session name: '" << session_name << "'";
+        LOG(LS_INFO) << "Host ID received: " << host_id;
 
-        if (host_key_storage.lastHostId(session_name) != host_id)
-            host_key_storage.setLastHostId(session_name, host_id);
+        if (host_key_storage.lastHostId() != host_id)
+            host_key_storage.setLastHostId(host_id);
 
-        emit sig_hostIdAssigned(session_name, host_id);
-        pending_id_requests_.pop_front();
+        emit sig_hostIdAssigned(host_id);
     }
     else if (in_message.has_connection_offer())
     {

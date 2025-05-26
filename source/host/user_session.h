@@ -19,7 +19,6 @@
 #ifndef HOST_USER_SESSION_H
 #define HOST_USER_SESSION_H
 
-#include "build/build_config.h"
 #include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
@@ -67,7 +66,6 @@ public:
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
     base::HostId hostId() const { return host_id_; }
-    std::optional<QString> sessionName() const;
     base::User user() const;
     size_t clientsCount() const;
     bool isConnectedToUi() const { return channel_ != nullptr; }
@@ -79,7 +77,7 @@ public:
     void onSettingsChanged();
 
 signals:
-    void sig_userSessionHostIdRequest(const QString& session_name);
+    void sig_userSessionHostIdRequest();
     void sig_userSessionCredentialsChanged();
     void sig_userSessionDettached();
     void sig_userSessionFinished();

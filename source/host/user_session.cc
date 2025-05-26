@@ -27,8 +27,6 @@
 #include "host/client_session_text_chat.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/session_enumerator.h"
-#include "base/win/session_info.h"
 #include "base/win/session_status.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -275,87 +273,6 @@ void UserSession::restart(base::IpcChannel* channel)
     }
 
     setState(FROM_HERE, State::STARTED);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QString> UserSession::sessionName() const
-{
-    LOG(LS_INFO) << "Session name request (sid=" << session_id_
-                 << " type=" << typeToString(type_)
-                 << " state=" << stateToString(state_) << ")";
-
-#if defined(Q_OS_WINDOWS)
-    if (type_ == Type::CONSOLE)
-    {
-        LOG(LS_INFO) << "Session name for console session is empty string";
-        return QString();
-    }
-
-    DCHECK_EQ(type_, Type::RDP);
-
-    base::SessionInfo current_session_info(sessionId());
-    if (!current_session_info.isValid())
-    {
-        LOG(LS_ERROR) << "Failed to get session information (sid=" << session_id_ << ")";
-        return std::nullopt;
-    }
-
-    QString user_name = current_session_info.userName().toLower();
-    QString domain = current_session_info.domain().toLower();
-
-    if (user_name.isEmpty())
-    {
-        LOG(LS_INFO) << "User is not logged in yet (sid=" << session_id_ << ")";
-        return std::nullopt;
-    }
-
-    using TimeInfo = std::pair<base::SessionId, qint64>;
-    using TimeInfoList = QList<TimeInfo>;
-
-    // Enumarate all user sessions.
-    TimeInfoList times;
-    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
-    {
-        if (user_name != it.userName().toLower())
-            continue;
-
-        base::SessionInfo session_info(it.sessionId());
-        if (!session_info.isValid())
-            continue;
-
-        // In Windows Server can have multiple RDP sessions with the same username. We get a list of
-        // sessions with the same username and session connection time.
-        times.push_back(std::make_pair(session_info.sessionId(), session_info.connectTime()));
-    }
-
-    // Sort the list by the time it was connected to the server.
-    std::sort(times.begin(), times.end(), [](const TimeInfo& p1, const TimeInfo& p2)
-    {
-        return p1.second < p2.second;
-    });
-
-    // We are looking for the current session in the sorted list.
-    int user_number = 0;
-    for (int i = 0; i < times.size(); ++i)
-    {
-        if (times[i].first == current_session_info.sessionId())
-        {
-            // Save the user number in the list.
-            user_number = i;
-            break;
-        }
-    }
-
-    // The session name contains the username and domain to reliably distinguish between local and
-    // domain users. It also contains the user number found above. This way, users will receive the
-    // same ID based on the time they were connected to the server.
-    QString session_name = user_name + "@" + domain + "@" + QString::number(user_number);
-
-    LOG(LS_INFO) << "Session name for RDP session: " << session_name << " (sid=" << session_id_ << ")";
-    return std::move(session_name);
-#else
-    return std::string();
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1296,16 +1213,7 @@ void UserSession::sendHostIdRequest(const base::Location& location)
         return;
     }
 
-    std::optional<QString> session_name = sessionName();
-    if (session_name.has_value())
-    {
-        LOG(LS_INFO) << "Session name: " << *session_name << " (sid=" << session_id_ << ")";
-        emit sig_userSessionHostIdRequest(*session_name);
-    }
-    else
-    {
-        LOG(LS_INFO) << "No session name (sid=" << session_id_ << ")";
-    }
+    emit sig_userSessionHostIdRequest();
 }
 
 //--------------------------------------------------------------------------------------------------

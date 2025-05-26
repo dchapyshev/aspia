@@ -126,74 +126,6 @@ int removeService(QTextStream& out)
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QString> currentSessionName()
-{
-#if defined(Q_OS_WINDOWS)
-    DWORD process_session_id = 0;
-    if (!ProcessIdToSessionId(GetCurrentProcessId(), &process_session_id))
-        return std::nullopt;
-
-    DWORD console_session_id = WTSGetActiveConsoleSessionId();
-    if (console_session_id == process_session_id)
-        return QString();
-
-    base::SessionInfo current_session_info(process_session_id);
-    if (!current_session_info.isValid())
-        return std::nullopt;
-
-    QString user_name = current_session_info.userName().toLower();
-    QString domain = current_session_info.domain().toLower();
-
-    if (user_name.isEmpty())
-        return std::nullopt;
-
-    using TimeInfo = std::pair<base::SessionId, qint64>;
-    using TimeInfoList = QList<TimeInfo>;
-
-    // Enumarate all user sessions.
-    TimeInfoList times;
-    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
-    {
-        if (user_name != it.userName().toLower())
-            continue;
-
-        base::SessionInfo session_info(it.sessionId());
-        if (!session_info.isValid())
-            continue;
-
-        // In Windows Server can have multiple RDP sessions with the same username. We get a list of
-        // sessions with the same username and session connection time.
-        times.push_back(std::make_pair(session_info.sessionId(), session_info.connectTime()));
-    }
-
-    // Sort the list by the time it was connected to the server.
-    std::sort(times.begin(), times.end(), [](const TimeInfo& p1, const TimeInfo& p2)
-    {
-        return p1.second < p2.second;
-    });
-
-    // We are looking for the current session in the sorted list.
-    size_t user_number = 0;
-    for (int i = 0; i < times.size(); ++i)
-    {
-        if (times[i].first == current_session_info.sessionId())
-        {
-            // Save the user number in the list.
-            user_number = i;
-            break;
-        }
-    }
-
-    // The session name contains the username and domain to reliably distinguish between local and
-    // domain users. It also contains the user number found above. This way, users will receive the
-    // same ID based on the time they were connected to the server.
-    return user_name + "@" + domain + "@" + QString::number(user_number);
-#else
-    return std::nullopt;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
 void printDebugInfo()
 {
     LOG(LS_INFO) << "Command line: " << base::Application::arguments();
@@ -337,12 +269,8 @@ int hostServiceMain(int& argc, char* argv[])
 
     if (parser.isSet(hostid_option))
     {
-        std::optional<QString> session_name = currentSessionName();
-        if (!session_name.has_value())
-            return 1;
-
         HostStorage storage;
-        out << storage.lastHostId(*session_name) << Qt::endl;
+        out << storage.lastHostId() << Qt::endl;
         return 0;
     }
 #if defined(Q_OS_WINDOWS)

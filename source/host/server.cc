@@ -182,7 +182,7 @@ void Server::setPowerEvent(quint32 power_event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onHostIdRequest(const QString& session_name)
+void Server::onHostIdRequest()
 {
     if (!router_controller_)
     {
@@ -190,8 +190,8 @@ void Server::onHostIdRequest(const QString& session_name)
         return;
     }
 
-    LOG(LS_INFO) << "New host ID request for session name: '" << session_name << "'";
-    router_controller_->hostIdRequest(session_name);
+    LOG(LS_INFO) << "New host ID request";
+    router_controller_->hostIdRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,10 +289,10 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onHostIdAssigned(const QString& session_name, base::HostId host_id)
+void Server::onHostIdAssigned(base::HostId host_id)
 {
-    LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
-    user_session_manager_->onHostIdChanged(session_name, host_id);
+    LOG(LS_INFO) << "New host ID assigned: " << host_id;
+    user_session_manager_->onHostIdChanged(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------

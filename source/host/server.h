@@ -46,13 +46,13 @@ public:
     void setPowerEvent(quint32 power_event);
 
 private slots:
-    void onHostIdRequest(const QString& session_name);
+    void onHostIdRequest();
     void onResetHostId(base::HostId host_id);
     void onUserListChanged();
     void onSessionAuthenticated();
     void onNewDirectConnection();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
-    void onHostIdAssigned(const QString& session_name, base::HostId host_id);
+    void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
     void onUpdateCheckedFinished(const QByteArray& result);
     void onFileDownloaderError(int error_code);

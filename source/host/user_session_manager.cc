@@ -302,25 +302,16 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onHostIdChanged(const QString& session_name, base::HostId host_id)
+void UserSessionManager::onHostIdChanged(base::HostId host_id)
 {
-    LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
+    LOG(LS_INFO) << "Set host ID for session: " << host_id;
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
     {
-        std::optional<QString> name = session->sessionName();
-        if (name.has_value() && name == session_name)
-        {
-            LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
-
-            session->onHostIdChanged(host_id);
-            emit sig_userListChanged();
-            return;
-        }
+        session->onHostIdChanged(host_id);
+        emit sig_userListChanged();
     }
-
-    LOG(LS_ERROR) << "Session '" << session_name << "' NOT found";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -482,10 +473,10 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionHostIdRequest(const QString& session_name)
+void UserSessionManager::onUserSessionHostIdRequest()
 {
-    LOG(LS_INFO) << "User session host id request for session name: " << session_name;
-    emit sig_hostIdRequest(session_name);
+    LOG(LS_INFO) << "User session host id request";
+    emit sig_hostIdRequest();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -32,11 +32,11 @@ public:
     HostStorage();
     ~HostStorage();
 
-    QByteArray key(const QString& session_name) const;
-    void setKey(const QString& session_name, const QByteArray& key);
+    QByteArray hostKey() const;
+    void setHostKey(const QByteArray& key);
 
-    base::HostId lastHostId(const QString& session_name) const;
-    void setLastHostId(const QString& session_name, base::HostId host_id);
+    base::HostId lastHostId() const;
+    void setLastHostId(base::HostId host_id);
 
     QString channelIdForUI() const;
     void setChannelIdForUI(const QString& channel_id);
