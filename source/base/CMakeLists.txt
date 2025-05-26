@@ -427,6 +427,8 @@ if (LINUX)
 endif()
 
 list(APPEND SOURCE_BASE_FILES
+    files/file_enumerator.cc
+    files/file_enumerator.h
     files/file_util.cc
     files/file_util.h)
 

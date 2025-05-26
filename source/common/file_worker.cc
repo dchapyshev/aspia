@@ -18,16 +18,17 @@
 
 #include "common/file_worker.h"
 
-#include "base/logging.h"
-#include "common/file_depacketizer.h"
-#include "common/file_packetizer.h"
-
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QStorageInfo>
+
+#include "base/logging.h"
+#include "base/files/file_enumerator.h"
+#include "common/file_depacketizer.h"
+#include "common/file_packetizer.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -196,22 +197,16 @@ void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto:
 
     proto::FileList* file_list = reply->mutable_file_list();
 
-    QDir dir(path);
-    QFileInfoList dir_items = dir.entryInfoList(
-        QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-
-    for (const auto& dir_item : std::as_const(dir_items))
+    for (base::FileEnumerator enumerator(path); !enumerator.isAtEnd(); enumerator.advance())
     {
+        const base::FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
         proto::FileList::Item* item = file_list->add_item();
 
-        LOG(LS_INFO) << "ITEM: " << dir_item.fileName();
-
-        item->set_name(dir_item.fileName().toStdString());
-        item->set_size(dir_item.size());
-        item->set_modification_time(dir_item.lastModified().toTime_t());
-        item->set_is_directory(dir_item.isDir());
+        item->set_name(file_info.name().toStdString());
+        item->set_size(file_info.size());
+        item->set_modification_time(file_info.lastWriteTime());
+        item->set_is_directory(file_info.isDirectory());
     }
-
     reply->set_error_code(proto::FILE_ERROR_SUCCESS);
 }
 
