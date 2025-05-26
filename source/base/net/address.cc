@@ -18,7 +18,7 @@
 
 #include "base/net/address.h"
 
-#include "base/net/ip_util.h"
+#include <QHostAddress>
 
 namespace base {
 
@@ -289,7 +289,10 @@ Address Address::fromString(const QString& str, quint16 default_port)
     AddressParts parts;
     if (parse(begin, end, &parts))
     {
-        if (isValidIpV4Address(parts.host) || isValidIpV6Address(parts.host) ||
+        QHostAddress address(parts.host);
+
+        if (address.protocol() == QAbstractSocket::IPv4Protocol ||
+            address.protocol() == QAbstractSocket::IPv6Protocol ||
             isValidHostName(parts.host))
         {
             bool ok = false;
@@ -311,7 +314,9 @@ QString Address::toString() const
     if (!isValidPort(port_))
         return QString();
 
-    if (isValidIpV6Address(host_))
+    QHostAddress address(host_);
+
+    if (address.protocol() == QAbstractSocket::IPv6Protocol)
     {
         if (port_ == default_port_)
             return "[" + host_ + "]";
@@ -320,7 +325,7 @@ QString Address::toString() const
     }
     else
     {
-        if (!isValidIpV4Address(host_) && !isValidHostName(host_))
+        if (address.protocol() != QAbstractSocket::IPv4Protocol && !isValidHostName(host_))
             return QString();
 
         if (port_ == default_port_)
@@ -360,10 +365,11 @@ bool Address::isValid() const
     if (!isValidPort(port_))
         return false;
 
-    if (!isValidIpV4Address(host_) && !isValidIpV6Address(host_) && !isValidHostName(host_))
-        return false;
+    QHostAddress address(host_);
 
-    return true;
+    return address.protocol() == QAbstractSocket::IPv4Protocol ||
+           address.protocol() == QAbstractSocket::IPv6Protocol ||
+           isValidHostName(host_);
 }
 
 //--------------------------------------------------------------------------------------------------

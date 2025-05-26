@@ -18,9 +18,10 @@
 
 #include "router/settings.h"
 
+#include <QHostAddress>
+
 #include "base/logging.h"
 #include "base/xml_settings.h"
-#include "base/net/ip_util.h"
 #include "build/build_config.h"
 
 namespace router {
@@ -167,7 +168,10 @@ void Settings::setWhiteList(const QString& key, const WhiteList& value)
 
     for (const auto& entry : value)
     {
-        if (base::isValidIpV4Address(entry) || base::isValidIpV6Address(entry))
+        QHostAddress address(entry);
+
+        if (address.protocol() == QAbstractSocket::IPv4Protocol ||
+            address.protocol() == QAbstractSocket::IPv6Protocol)
         {
             result += entry + ';';
         }
@@ -188,7 +192,10 @@ Settings::WhiteList Settings::whiteList(const QString& key) const
     auto it = result.begin();
     while (it != result.end())
     {
-        if (base::isValidIpV4Address(*it) || base::isValidIpV6Address(*it))
+        QHostAddress address(*it);
+
+        if (address.protocol() == QAbstractSocket::IPv4Protocol ||
+            address.protocol() == QAbstractSocket::IPv6Protocol)
         {
             ++it;
         }

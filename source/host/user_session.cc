@@ -335,8 +335,8 @@ std::optional<QString> UserSession::sessionName() const
     });
 
     // We are looking for the current session in the sorted list.
-    size_t user_number = 0;
-    for (size_t i = 0; i < times.size(); ++i)
+    int user_number = 0;
+    for (int i = 0; i < times.size(); ++i)
     {
         if (times[i].first == current_session_info.sessionId())
         {

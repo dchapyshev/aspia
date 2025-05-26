@@ -472,8 +472,6 @@ list(APPEND SOURCE_BASE_NET
     net/address.h
     net/curl_util.cc
     net/curl_util.h
-    net/ip_util.cc
-    net/ip_util.h
     net/network_channel.cc
     net/network_channel.h
     net/tcp_channel.cc
@@ -497,8 +495,7 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS
-    net/address_unittest.cc
-    net/ip_util_unittest.cc)
+    net/address_unittest.cc)
 
 list(APPEND SOURCE_BASE_PEER
     peer/authenticator.cc
