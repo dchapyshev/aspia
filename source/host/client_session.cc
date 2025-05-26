@@ -54,9 +54,8 @@ ClientSession::~ClientSession()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ClientSession* ClientSession::create(proto::SessionType session_type,
-                                     base::TcpChannel* channel,
-                                     QObject* parent)
+ClientSession* ClientSession::create(
+    proto::SessionType session_type, base::TcpChannel* channel, QObject* parent)
 {
     if (!channel)
     {

@@ -22,7 +22,6 @@
 #include "base/serialization.h"
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
-#include "base/desktop/capture_scheduler.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/shared_memory.h"
@@ -489,7 +488,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
     if (enable)
     {
 #if defined(Q_OS_WINDOWS)
-        input_injector_ = std::make_unique<InputInjectorWin>();
+        input_injector_ = new InputInjectorWin(this);
 #elif defined(Q_OS_LINUX)
         input_injector_ = InputInjectorX11::create();
 #else
@@ -512,8 +511,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         connect(shared_memory_factory_, &base::SharedMemoryFactory::sig_memoryDestroyed,
                 this, &DesktopSessionAgent::onSharedMemoryDestroy);
 
-        capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
-            std::chrono::milliseconds(40));
+        capture_scheduler_.setUpdateInterval(std::chrono::milliseconds(40));
 
         screen_capturer_ = new base::ScreenCapturerWrapper(preferred_video_capturer_, this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
@@ -525,9 +523,9 @@ void DesktopSessionAgent::setEnabled(bool enable)
         connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenTypeChanged,
                 this, &DesktopSessionAgent::onScreenTypeChanged);
 
-        audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>();
+        audio_capturer_ = new base::AudioCapturerWrapper(this);
 
-        connect(audio_capturer_.get(), &base::AudioCapturerWrapper::sig_sendMessage, this,
+        connect(audio_capturer_, &base::AudioCapturerWrapper::sig_sendMessage, this,
                 [this](const QByteArray& data)
         {
             channel_->send(QByteArray(data));
@@ -556,12 +554,11 @@ void DesktopSessionAgent::setEnabled(bool enable)
             clear_clipboard_ = false;
         }
 
-        input_injector_.reset();
-        capture_scheduler_.reset();
+        delete input_injector_;
         delete screen_capturer_;
         delete shared_memory_factory_;
         delete clipboard_monitor_;
-        audio_capturer_.reset();
+        delete audio_capturer_;
 
         if (lock_at_disconnect_)
         {
@@ -587,13 +584,13 @@ void DesktopSessionAgent::setEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::captureScreen()
 {
-    if (!capture_scheduler_ || !screen_capturer_)
+    if (!screen_capturer_)
     {
         LOG(LS_ERROR) << "Screen capturer not initialized";
         return;
     }
 
-    capture_scheduler_->beginCapture();
+    capture_scheduler_.onBeginCapture();
 
     const base::Frame* frame = nullptr;
     const base::MouseCursor* cursor = nullptr;
@@ -678,20 +675,14 @@ void DesktopSessionAgent::captureScreen()
     else
     {
         // Frame and cursor unchanged. Plan the next capture immediately.
-        scheduleNextCapture(capture_scheduler_->updateInterval());
+        scheduleNextCapture(capture_scheduler_.updateInterval());
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::scheduleNextCapture(const std::chrono::milliseconds& update_interval)
 {
-    if (!capture_scheduler_)
-    {
-        LOG(LS_ERROR) << "No capture scheduler";
-        return;
-    }
-
-    capture_scheduler_->endCapture();
+    capture_scheduler_.onEndCapture();
 
     if (update_interval == std::chrono::milliseconds::zero())
     {
@@ -700,8 +691,8 @@ void DesktopSessionAgent::scheduleNextCapture(const std::chrono::milliseconds& u
     }
     else
     {
-        capture_scheduler_->setUpdateInterval(update_interval);
-        screen_capture_timer_->start(capture_scheduler_->nextCaptureDelay());
+        capture_scheduler_.setUpdateInterval(update_interval);
+        screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
     }
 }
 

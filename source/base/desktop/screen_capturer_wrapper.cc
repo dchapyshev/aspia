@@ -42,7 +42,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     : QObject(parent),
       preferred_type_(preferred_type),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
-      environment_(DesktopEnvironment::create())
+      environment_(DesktopEnvironment::create(this))
 {
     LOG(LS_INFO) << "Ctor";
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);

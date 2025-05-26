@@ -19,14 +19,23 @@
 #ifndef HOST_INPUT_INJECTOR_H
 #define HOST_INPUT_INJECTOR_H
 
+#include <QObject>
+
 #include "base/desktop/geometry.h"
 #include "proto/desktop.h"
 
 namespace host {
 
-class InputInjector
+class InputInjector : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit InputInjector(QObject* parent)
+        : QObject(parent)
+    {
+        // Nothing
+    }
     virtual ~InputInjector() = default;
 
     virtual void setScreenOffset(const base::Point& offset) = 0;

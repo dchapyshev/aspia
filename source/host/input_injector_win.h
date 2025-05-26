@@ -29,8 +29,10 @@ namespace host {
 
 class InputInjectorWin final : public InputInjector
 {
+    Q_OBJECT
+
 public:
-    InputInjectorWin();
+    explicit InputInjectorWin(QObject* parent = nullptr);
     ~InputInjectorWin() final;
 
     // InputInjector implementation.

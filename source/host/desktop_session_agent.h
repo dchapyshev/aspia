@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #include "base/thread.h"
+#include "base/desktop/capture_scheduler.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
@@ -32,7 +33,6 @@
 namespace base {
 
 class AudioCapturerWrapper;
-class CaptureScheduler;
 class MessageWindow;
 class Thread;
 
@@ -82,15 +82,15 @@ private:
 #endif // defined(Q_OS_WINDOWS)
 
     base::IpcChannel* channel_ = nullptr;
-    QPointer<common::ClipboardMonitor> clipboard_monitor_ = nullptr;
-    std::unique_ptr<InputInjector> input_injector_;
 
-    QPointer<base::SharedMemoryFactory> shared_memory_factory_ = nullptr;
-    std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
-    QPointer<base::ScreenCapturerWrapper> screen_capturer_ = nullptr;
-    std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
+    QPointer<common::ClipboardMonitor> clipboard_monitor_;
+    QPointer<InputInjector> input_injector_;
+    QPointer<base::SharedMemoryFactory> shared_memory_factory_;
+    QPointer<base::ScreenCapturerWrapper> screen_capturer_;
+    QPointer<base::AudioCapturerWrapper> audio_capturer_;
 
     QTimer* screen_capture_timer_ = nullptr;
+    base::CaptureScheduler capture_scheduler_;
 
     base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;

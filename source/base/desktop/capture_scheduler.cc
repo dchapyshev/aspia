@@ -21,13 +21,6 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-CaptureScheduler::CaptureScheduler(const std::chrono::milliseconds& update_interval)
-    : update_interval_(update_interval)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void CaptureScheduler::setUpdateInterval(const std::chrono::milliseconds& update_interval)
 {
     update_interval_ = update_interval;
@@ -40,13 +33,13 @@ std::chrono::milliseconds CaptureScheduler::updateInterval() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void CaptureScheduler::beginCapture()
+void CaptureScheduler::onBeginCapture()
 {
     begin_time_ = std::chrono::steady_clock::now();
 }
 
 //--------------------------------------------------------------------------------------------------
-void CaptureScheduler::endCapture()
+void CaptureScheduler::onEndCapture()
 {
     end_time_ = std::chrono::steady_clock::now();
 }

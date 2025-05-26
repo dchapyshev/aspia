@@ -28,14 +28,14 @@ namespace base {
 class CaptureScheduler
 {
 public:
-    explicit CaptureScheduler(const std::chrono::milliseconds& update_interval);
+    CaptureScheduler() = default;
     ~CaptureScheduler() = default;
 
     void setUpdateInterval(const std::chrono::milliseconds& update_interval);
     std::chrono::milliseconds updateInterval() const;
 
-    void beginCapture();
-    void endCapture();
+    void onBeginCapture();
+    void onEndCapture();
     std::chrono::milliseconds nextCaptureDelay() const;
 
 private:

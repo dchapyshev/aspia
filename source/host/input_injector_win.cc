@@ -97,7 +97,8 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorWin::InputInjectorWin()
+InputInjectorWin::InputInjectorWin(QObject* parent)
+    : InputInjector(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -113,8 +114,7 @@ InputInjectorWin::~InputInjectorWin()
         int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
         if (scancode != common::KeycodeConverter::invalidNativeKeycode())
         {
-            sendKeyboardScancode(
-                static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+            sendKeyboardScancode(static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
         }
         else
         {

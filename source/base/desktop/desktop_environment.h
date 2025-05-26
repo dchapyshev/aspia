@@ -19,20 +19,23 @@
 #ifndef BASE_DESKTOP_WIN_DESKTOP_ENVIRONMENT_H
 #define BASE_DESKTOP_WIN_DESKTOP_ENVIRONMENT_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 
 #include <optional>
-#include <memory>
 
 namespace base {
 
-class DesktopEnvironment
+class DesktopEnvironment : public QObject
 {
+    Q_OBJECT
+
 public:
-    DesktopEnvironment();
+    explicit DesktopEnvironment(QObject* parent);
     virtual ~DesktopEnvironment();
 
-    static std::unique_ptr<DesktopEnvironment> create();
+    static DesktopEnvironment* create(QObject* parent = nullptr);
 
     void setWallpaper(bool enable);
     void setFontSmoothing(bool enable);

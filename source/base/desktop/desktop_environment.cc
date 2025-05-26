@@ -33,7 +33,8 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-DesktopEnvironment::DesktopEnvironment()
+DesktopEnvironment::DesktopEnvironment(QObject* parent)
+    : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -46,14 +47,14 @@ DesktopEnvironment::~DesktopEnvironment()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<DesktopEnvironment> DesktopEnvironment::create()
+DesktopEnvironment* DesktopEnvironment::create(QObject* parent)
 {
 #if defined(Q_OS_WINDOWS)
-    return std::make_unique<DesktopEnvironmentWin>();
+    return new DesktopEnvironmentWin(parent);
 #elif defined(Q_OS_MACOS)
-    return std::make_unique<DesktopEnvironmentMac>();
+    return new DesktopEnvironmentMac(parent);
 #elif defined(Q_OS_LINUX)
-    return std::make_unique<DesktopEnvironmentLinux>();
+    return new DesktopEnvironmentLinux(parent);
 #else
 #warning Not supported platform
     return nullptr;

@@ -99,7 +99,8 @@ void updatePerUserSystemParameters()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopEnvironmentWin::DesktopEnvironmentWin()
+DesktopEnvironmentWin::DesktopEnvironmentWin(QObject* parent)
+    : DesktopEnvironment(parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

@@ -25,8 +25,10 @@ namespace base {
 
 class DesktopEnvironmentWin final : public DesktopEnvironment
 {
+    Q_OBJECT
+
 public:
-    DesktopEnvironmentWin();
+    explicit DesktopEnvironmentWin(QObject* parent = nullptr);
     ~DesktopEnvironmentWin() final;
 
     static void updateEnvironment();

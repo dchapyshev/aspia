@@ -65,7 +65,7 @@ private:
     bool enable_cursor_position_ = false;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
-    std::unique_ptr<DesktopEnvironment> environment_;
+    DesktopEnvironment* environment_ = nullptr;
     std::unique_ptr<DesktopResizer> resizer_;
     QPointer<ScreenCapturer> screen_capturer_ = nullptr;
 
