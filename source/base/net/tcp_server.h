@@ -23,8 +23,9 @@
 #include <QObject>
 
 #include "base/macros_magic.h"
+#include "base/net/tcp_channel.h"
 
-#include <memory>
+#include <asio/ip/address.hpp>
 
 namespace base {
 
@@ -52,10 +53,14 @@ signals:
     void sig_newConnection();
 
 private:
-    void onNewConnection(TcpChannel* channel);
+    void doAccept();
 
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    asio::io_context& io_context_;
+    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+    int accept_error_count_ = 0;
+
+    QString listen_interface_;
+    quint16 port_ = 0;
 
     QQueue<TcpChannel*> pending_;
 

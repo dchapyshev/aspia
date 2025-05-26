@@ -20,62 +20,29 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/net/tcp_channel.h"
-
-#include <asio/ip/address.hpp>
 
 namespace base {
 
-class TcpServer::Impl : public std::enable_shared_from_this<Impl>
-{
-public:
-    explicit Impl(asio::io_context& io_context);
-    ~Impl();
-
-    void start(const QString& listen_interface, quint16 port, TcpServer* server);
-    void stop();
-
-    QString listenInterface() const;
-    quint16 port() const;
-
-private:
-    void doAccept();
-    void onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket);
-
-    asio::io_context& io_context_;
-    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
-    TcpServer* server_ = nullptr;
-
-    QString listen_interface_;
-    quint16 port_ = 0;
-
-    int accept_error_count_ = 0;
-
-    DISALLOW_COPY_AND_ASSIGN(Impl);
-};
-
 //--------------------------------------------------------------------------------------------------
-TcpServer::Impl::Impl(asio::io_context& io_context)
-    : io_context_(io_context)
+TcpServer::TcpServer(QObject* parent)
+    : QObject(parent),
+      io_context_(AsioEventDispatcher::currentIoContext())
 {
     LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpServer::Impl::~Impl()
+TcpServer::~TcpServer()
 {
     LOG(LS_INFO) << "Dtor";
-    DCHECK(!acceptor_);
+    stop();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::start(const QString& listen_interface, quint16 port, TcpServer* server)
+void TcpServer::start(const QString& listen_interface, quint16 port)
 {
-    server_ = server;
     listen_interface_ = listen_interface;
     port_ = port;
-
-    DCHECK(server_);
 
     LOG(LS_INFO) << "Listen interface: "
                  << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << port;
@@ -134,88 +101,14 @@ void TcpServer::Impl::start(const QString& listen_interface, quint16 port, TcpSe
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::stop()
-{
-    server_ = nullptr;
-    acceptor_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString TcpServer::Impl::listenInterface() const
-{
-    return listen_interface_;
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 TcpServer::Impl::port() const
-{
-    return port_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::doAccept()
-{
-    acceptor_->async_accept(
-        std::bind(&Impl::onAccept, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
-{
-    if (!server_)
-        return;
-
-    if (error_code)
-    {
-        LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
-
-        static const int kMaxErrorCount = 500;
-
-        ++accept_error_count_;
-        if (accept_error_count_ > kMaxErrorCount)
-        {
-            LOG(LS_ERROR) << "WARNING! Too many errors when trying to accept a connection. "
-                          << "New connections will not be accepted";
-            return;
-        }
-    }
-    else
-    {
-        accept_error_count_ = 0;
-
-        // Connection accepted.
-        server_->onNewConnection(new TcpChannel(std::move(socket), server_));
-    }
-
-    // Accept next connection.
-    doAccept();
-}
-
-//--------------------------------------------------------------------------------------------------
-TcpServer::TcpServer(QObject* parent)
-    : QObject(parent),
-      impl_(std::make_shared<Impl>(AsioEventDispatcher::currentIoContext()))
-{
-    LOG(LS_INFO) << "Ctor";
-}
-
-//--------------------------------------------------------------------------------------------------
-TcpServer::~TcpServer()
-{
-    LOG(LS_INFO) << "Dtor";
-    impl_->stop();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpServer::start(const QString& listen_interface, quint16 port)
-{
-    impl_->start(listen_interface, port, this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpServer::stop()
 {
-    impl_->stop();
+    if (!acceptor_)
+        return;
+
+    std::error_code ignored_error;
+    acceptor_->cancel(ignored_error);
+    acceptor_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,13 +133,13 @@ TcpChannel* TcpServer::nextPendingConnection()
 //--------------------------------------------------------------------------------------------------
 QString TcpServer::listenInterface() const
 {
-    return impl_->listenInterface();
+    return listen_interface_;
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 TcpServer::port() const
 {
-    return impl_->port();
+    return port_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,10 +161,39 @@ bool TcpServer::isValidListenInterface(const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::onNewConnection(TcpChannel* channel)
+void TcpServer::doAccept()
 {
-    pending_.push_back(channel);
-    emit sig_newConnection();
+    acceptor_->async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    {
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
+
+            static const int kMaxErrorCount = 500;
+
+            ++accept_error_count_;
+            if (accept_error_count_ > kMaxErrorCount)
+            {
+                LOG(LS_ERROR) << "WARNING! Too many errors when trying to accept a connection. "
+                              << "New connections will not be accepted";
+                return;
+            }
+        }
+        else
+        {
+            accept_error_count_ = 0;
+
+            // Connection accepted.
+            pending_.push_back(new TcpChannel(std::move(socket), this));
+            emit sig_newConnection();
+        }
+
+        // Accept next connection.
+        doAccept();
+    });
 }
 
 } // namespace base
