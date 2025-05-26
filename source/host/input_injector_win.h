@@ -23,12 +23,9 @@
 
 #include "base/macros_magic.h"
 #include "host/input_injector.h"
-
-#include <memory>
+#include "host/win/touch_injector.h"
 
 namespace host {
-
-class TouchInjector;
 
 class InputInjectorWin final : public InputInjector
 {
@@ -56,7 +53,7 @@ private:
     base::Point last_mouse_pos_;
     quint32 last_mouse_mask_ = 0;
 
-    std::unique_ptr<TouchInjector> touch_injector_;
+    TouchInjector touch_injector_;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjectorWin);
 };

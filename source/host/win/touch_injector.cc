@@ -24,8 +24,6 @@
 #include "base/desktop/geometry.h"
 #include "base/desktop/win/screen_capture_utils.h"
 
-#include <vector>
-
 namespace host {
 
 namespace {
@@ -38,12 +36,12 @@ const quint32 kMaxSimultaneousTouchCount = 10;
 // won't work without reinjecting the points, even though the user moved only one finger and held
 // the other finger in place.
 void appendMapValuesToVector(
-    std::map<quint32, OWN_POINTER_TOUCH_INFO>* touches_in_contact,
+    QMap<quint32, OWN_POINTER_TOUCH_INFO>* touches_in_contact,
     QVector<OWN_POINTER_TOUCH_INFO>* output_vector)
 {
     for (auto& id_and_pointer_touch_info : *touches_in_contact)
     {
-        OWN_POINTER_TOUCH_INFO& pointer_touch_info = id_and_pointer_touch_info.second;
+        OWN_POINTER_TOUCH_INFO& pointer_touch_info = id_and_pointer_touch_info;
         output_vector->push_back(pointer_touch_info);
     }
 }
@@ -51,8 +49,7 @@ void appendMapValuesToVector(
 void convertToPointerTouchInfoImpl(
     const proto::TouchEventPoint& touch_point, OWN_POINTER_TOUCH_INFO* pointer_touch_info)
 {
-    pointer_touch_info->touchMask =
-        OWN_TOUCH_MASK_CONTACTAREA | OWN_TOUCH_MASK_ORIENTATION;
+    pointer_touch_info->touchMask = OWN_TOUCH_MASK_CONTACTAREA | OWN_TOUCH_MASK_ORIENTATION;
     pointer_touch_info->touchFlags = TOUCH_FLAG_NONE;
 
     // Although radius_{x,y} can be undefined (i.e. has_radius_{x,y} == false),
@@ -249,7 +246,7 @@ void TouchInjector::endTouchPoints(const proto::TouchEvent& event)
         OWN_POINTER_TOUCH_INFO pointer_touch_info = touches_in_contact_[touch_point.id()];
         pointer_touch_info.pointerInfo.pointerFlags = OWN_POINTER_FLAG_UP;
 
-        touches_in_contact_.erase(touch_point.id());
+        touches_in_contact_.remove(touch_point.id());
         touches.push_back(pointer_touch_info);
     }
 
@@ -273,7 +270,7 @@ void TouchInjector::cancelTouchPoints(const proto::TouchEvent& event)
         pointer_touch_info.pointerInfo.pointerFlags =
             OWN_POINTER_FLAG_UP | OWN_POINTER_FLAG_CANCELED;
 
-        touches_in_contact_.erase(touch_point.id());
+        touches_in_contact_.remove(touch_point.id());
         touches.push_back(pointer_touch_info);
     }
 

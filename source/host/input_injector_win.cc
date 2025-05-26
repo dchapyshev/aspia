@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
-#include "host/win/touch_injector.h"
 
 #include <qt_windows.h>
 
@@ -99,7 +98,6 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorWin::InputInjectorWin()
-    : touch_injector_(std::make_unique<TouchInjector>())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -327,7 +325,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectTouchEvent(const proto::TouchEvent& event)
 {
-    touch_injector_->injectTouchEvent(event);
+    touch_injector_.injectTouchEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
