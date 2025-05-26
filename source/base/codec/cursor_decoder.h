@@ -20,6 +20,7 @@
 #define BASE_CODEC_CURSOR_DECODER_H
 
 #include <QByteArray>
+#include <QVector>
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
@@ -27,7 +28,6 @@
 #include "proto/desktop.h"
 
 #include <optional>
-#include <vector>
 
 namespace base {
 
@@ -45,7 +45,7 @@ public:
 private:
     QByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
 
-    std::vector<std::shared_ptr<MouseCursor>> cache_;
+    QVector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;

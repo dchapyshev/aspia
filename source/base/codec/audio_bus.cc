@@ -107,7 +107,7 @@ AudioBus::AudioBus(int channels, int frames, float* data)
 }
 
 //--------------------------------------------------------------------------------------------------
-AudioBus::AudioBus(int frames, const std::vector<float*>& channel_data)
+AudioBus::AudioBus(int frames, const QVector<float*>& channel_data)
     : channel_data_(channel_data),
       frames_(frames),
       can_set_channel_data_(false)
@@ -115,7 +115,7 @@ AudioBus::AudioBus(int frames, const std::vector<float*>& channel_data)
     ValidateConfig(static_cast<int>(channel_data_.size()), frames_);
 
     // Sanity check wrapped vector for alignment and channel count.
-    for (size_t i = 0; i < channel_data_.size(); ++i)
+    for (int i = 0; i < channel_data_.size(); ++i)
         DCHECK(IsAligned(channel_data_[i]));
 }
 
@@ -126,7 +126,7 @@ AudioBus::AudioBus(int channels)
       can_set_channel_data_(true)
 {
     CHECK_GT(channels, 0);
-    for (size_t i = 0; i < channel_data_.size(); ++i)
+    for (int i = 0; i < channel_data_.size(); ++i)
         channel_data_[i] = NULL;
 }
 
@@ -146,7 +146,7 @@ std::unique_ptr<AudioBus> AudioBus::CreateWrapper(int channels)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<AudioBus> AudioBus::WrapVector(int frames, const std::vector<float*>& channel_data)
+std::unique_ptr<AudioBus> AudioBus::WrapVector(int frames, const QVector<float*>& channel_data)
 {
     return std::unique_ptr<AudioBus>(new AudioBus(frames, channel_data));
 }
@@ -247,7 +247,7 @@ void AudioBus::ZeroFramesPartial(int start_frame, int frames)
         return;
     }
 
-    for (size_t i = 0; i < channel_data_.size(); ++i)
+    for (int i = 0; i < channel_data_.size(); ++i)
     {
         memset(channel_data_[i] + start_frame, 0, frames * sizeof(*channel_data_[i]));
     }
@@ -269,7 +269,7 @@ void AudioBus::Zero()
 bool AudioBus::AreFramesZero() const
 {
     DCHECK(!is_bitstream_format_);
-    for (size_t i = 0; i < channel_data_.size(); ++i)
+    for (int i = 0; i < channel_data_.size(); ++i)
     {
         for (int j = 0; j < frames_; ++j)
         {

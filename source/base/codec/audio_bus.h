@@ -19,11 +19,12 @@
 #ifndef BASE_CODEC_AUDIO_BUS_H
 #define BASE_CODEC_AUDIO_BUS_H
 
+#include <QVector>
+
 #include "base/macros_magic.h"
 #include "base/memory/aligned_memory.h"
 
 #include <memory>
-#include <vector>
 
 namespace base {
 
@@ -53,9 +54,7 @@ public:
     // Creates a new AudioBus from an existing channel vector.  Does not transfer
     // ownership of |channel_data| to AudioBus; i.e., |channel_data| must outlive
     // the returned AudioBus.  Each channel must be aligned by kChannelAlignment.
-    static std::unique_ptr<AudioBus> WrapVector(
-        int frames,
-        const std::vector<float*>& channel_data);
+    static std::unique_ptr<AudioBus> WrapVector(int frames, const QVector<float*>& channel_data);
 
     // Creates a new AudioBus by wrapping an existing block of memory.  Block must
     // be at least CalculateMemorySize() bytes in size.  |data| must outlive the
@@ -173,7 +172,7 @@ public:
 protected:
     AudioBus(int channels, int frames);
     AudioBus(int channels, int frames, float* data);
-    AudioBus(int frames, const std::vector<float*>& channel_data);
+    AudioBus(int frames, const QVector<float*>& channel_data);
     explicit AudioBus(int channels);
 
 private:
@@ -211,7 +210,7 @@ private:
     // that channel. If the memory is owned by this instance, this will
     // point to the memory in |data_|. Otherwise, it may point to memory provided
     // by the client.
-    std::vector<float*> channel_data_;
+    QVector<float*> channel_data_;
     int frames_;
 
     // Protect SetChannelData() and set_frames() for use by CreateWrapper().

@@ -93,7 +93,7 @@ QByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shap
 //--------------------------------------------------------------------------------------------------
 std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
-    size_t cache_index;
+    int cache_index;
 
     if (cursor_shape.flags() & proto::CursorShape::CACHE)
     {
@@ -139,7 +139,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {
-            size_t cache_size = cursor_shape.flags() & 0x1F;
+            int cache_size = cursor_shape.flags() & 0x1F;
 
             if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
             {
@@ -159,7 +159,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
         }
 
         // Add the cursor to the end of the list.
-        cache_.emplace_back(std::move(mouse_cursor));
+        cache_.push_back(std::move(mouse_cursor));
 
         // If the current cache size exceeds the maximum cache size.
         if (cache_.size() > cache_size_.value())
