@@ -180,7 +180,7 @@ bool Server::start()
 
     server_ = new base::TcpServer(this);
     connect(server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
-    server_->start(listen_interface, port);
+    server_->start(port, listen_interface);
 
     LOG(LS_INFO) << "Server started";
     return true;

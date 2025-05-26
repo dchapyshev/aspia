@@ -123,7 +123,7 @@ void Server::start()
     connect(server_, &base::TcpServer::sig_newConnection,
             this, &Server::onNewDirectConnection);
 
-    server_->start("", settings_.tcpPort());
+    server_->start(settings_.tcpPort());
 
     if (settings_.isRouterEnabled())
     {

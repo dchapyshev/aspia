@@ -26,7 +26,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer(QObject* parent)
     : QObject(parent),
-      io_context_(AsioEventDispatcher::currentIoContext())
+      acceptor_(AsioEventDispatcher::currentIoContext())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -35,29 +35,31 @@ TcpServer::TcpServer(QObject* parent)
 TcpServer::~TcpServer()
 {
     LOG(LS_INFO) << "Dtor";
-    stop();
+
+    std::error_code ignored_error;
+    acceptor_.cancel(ignored_error);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(const QString& listen_interface, quint16 port)
+void TcpServer::start(quint16 port, const QString& iface)
 {
-    listen_interface_ = listen_interface;
-    port_ = port;
+    if (acceptor_.is_open())
+    {
+        LOG(LS_ERROR) << "Tcp server is already started";
+        return;
+    }
 
-    LOG(LS_INFO) << "Listen interface: "
-                 << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << port;
+    LOG(LS_INFO) << "Listen interface: " << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
 
     asio::ip::address listen_address;
     asio::error_code error_code;
 
-    if (!listen_interface_.isEmpty())
+    if (!iface.isEmpty())
     {
-        listen_address = asio::ip::make_address(
-            listen_interface.toLocal8Bit().toStdString(), error_code);
+        listen_address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Invalid listen address: " << listen_interface_
-                          << " (" << error_code << ")";
+            LOG(LS_ERROR) << "Invalid listen address: " << iface << " (" << error_code << ")";
             return;
         }
     }
@@ -66,49 +68,37 @@ void TcpServer::start(const QString& listen_interface, quint16 port)
         listen_address = asio::ip::address_v6::any();
     }
 
-    asio::ip::tcp::endpoint endpoint(listen_address, port_);
-    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_);
+    asio::ip::tcp::endpoint endpoint(listen_address, port);
 
-    acceptor_->open(endpoint.protocol(), error_code);
+    acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::open failed: " << error_code;
         return;
     }
 
-    acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+    acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->set_option failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::set_option failed: " << error_code;
         return;
     }
 
-    acceptor_->bind(endpoint, error_code);
+    acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::bind failed: " << error_code;
         return;
     }
 
-    acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
+    acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::listen failed: " << error_code;
         return;
     }
 
     doAccept();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpServer::stop()
-{
-    if (!acceptor_)
-        return;
-
-    std::error_code ignored_error;
-    acceptor_->cancel(ignored_error);
-    acceptor_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,18 +118,6 @@ TcpChannel* TcpServer::nextPendingConnection()
 
     pending_.pop_front();
     return channel;
-}
-
-//--------------------------------------------------------------------------------------------------
-QString TcpServer::listenInterface() const
-{
-    return listen_interface_;
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 TcpServer::port() const
-{
-    return port_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,7 +141,7 @@ bool TcpServer::isValidListenInterface(const QString& iface)
 //--------------------------------------------------------------------------------------------------
 void TcpServer::doAccept()
 {
-    acceptor_->async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    acceptor_.async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
         if (error_code)
         {
@@ -172,7 +150,7 @@ void TcpServer::doAccept()
 
             LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
 
-            static const int kMaxErrorCount = 500;
+            static const int kMaxErrorCount = 50;
 
             ++accept_error_count_;
             if (accept_error_count_ > kMaxErrorCount)

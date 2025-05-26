@@ -22,7 +22,6 @@
 #include <QQueue>
 #include <QObject>
 
-#include "base/macros_magic.h"
 #include "base/net/tcp_channel.h"
 
 #include <asio/ip/address.hpp>
@@ -39,13 +38,10 @@ public:
     explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
-    void start(const QString& listen_interface, quint16 port);
-    void stop();
+    void start(quint16 port, const QString& iface = QString());
+
     bool hasPendingConnections();
     TcpChannel* nextPendingConnection();
-
-    QString listenInterface() const;
-    quint16 port() const;
 
     static bool isValidListenInterface(const QString& iface);
 
@@ -55,12 +51,8 @@ signals:
 private:
     void doAccept();
 
-    asio::io_context& io_context_;
-    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+    asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
-
-    QString listen_interface_;
-    quint16 port_ = 0;
 
     QQueue<TcpChannel*> pending_;
 
