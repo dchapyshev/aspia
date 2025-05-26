@@ -19,14 +19,15 @@
 #ifndef CLIENT_FILE_TRANSFER_H
 #define CLIENT_FILE_TRANSFER_H
 
+#include <QList>
+#include <QMap>
+#include <QQueue>
+#include <QPointer>
+#include <QTimer>
+
 #include "base/location.h"
 #include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
-
-#include <QList>
-#include <QMap>
-#include <QPointer>
-#include <QTimer>
 
 namespace client {
 
@@ -123,8 +124,8 @@ public:
     class Task
     {
     public:
-        Task(QString&& source_path, QString&& target_path,
-             bool is_directory, qint64 size);
+        Task() = default;
+        Task(QString&& source_path, QString&& target_path, bool is_directory, qint64 size);
 
         Task(const Task& other) = default;
         Task& operator=(const Task& other) = default;
@@ -150,7 +151,7 @@ public:
         qint64 size_;
     };
 
-    using TaskList = std::deque<Task>;
+    using TaskList = QQueue<Task>;
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;

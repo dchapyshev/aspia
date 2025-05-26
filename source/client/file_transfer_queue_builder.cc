@@ -115,7 +115,8 @@ void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
     QString source_path = source_dir + '/' + item_name;
     QString target_path = target_dir + '/' + item_name;
 
-    pending_tasks_.emplace_back(std::move(source_path), std::move(target_path), is_directory, size);
+    pending_tasks_.push_back(
+        FileTransfer::Task(std::move(source_path), std::move(target_path), is_directory, size));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +124,7 @@ void FileTransferQueueBuilder::doPendingTasks()
 {
     while (!pending_tasks_.empty())
     {
-        tasks_.emplace_back(std::move(pending_tasks_.front()));
+        tasks_.push_back(pending_tasks_.front());
         pending_tasks_.pop_front();
 
         if (tasks_.back().isDirectory())
