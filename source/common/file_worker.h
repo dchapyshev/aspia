@@ -19,6 +19,8 @@
 #ifndef COMMON_FILE_WORKER_H
 #define COMMON_FILE_WORKER_H
 
+#include <QObject>
+
 #include "base/macros_magic.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
@@ -28,10 +30,12 @@
 
 namespace common {
 
-class FileWorker
+class FileWorker final : public QObject
 {
+    Q_OBJECT
+
 public:
-    FileWorker();
+    explicit FileWorker(QObject* parent = nullptr);
     ~FileWorker();
 
     void doRequest(const common::FileTask& task);
@@ -47,6 +51,8 @@ private:
     void doUploadRequest(const proto::UploadRequest& request, proto::FileReply* reply);
     void doPacketRequest(const proto::FilePacketRequest& request, proto::FileReply* reply);
     void doPacket(const proto::FilePacket& packet, proto::FileReply* reply);
+
+    QTimer* idle_timer_ = nullptr;
 
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;

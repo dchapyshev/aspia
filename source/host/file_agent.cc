@@ -27,7 +27,8 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 FileAgent::FileAgent(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      worker_(new common::FileWorker(this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -75,7 +76,7 @@ void FileAgent::onIpcMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    worker_.doRequest(request_, &reply_);
+    worker_->doRequest(request_, &reply_);
     channel_->send(base::serialize(reply_));
 }
 

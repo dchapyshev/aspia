@@ -41,7 +41,7 @@ private slots:
 
 private:
     base::IpcChannel* channel_ = nullptr;
-    common::FileWorker worker_;
+    common::FileWorker* worker_ = nullptr;
 
     proto::FileRequest request_;
     proto::FileReply reply_;

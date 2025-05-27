@@ -75,7 +75,7 @@ private:
     QPointer<common::FileTaskFactory> remote_task_factory_;
 
     QQueue<common::FileTask> remote_task_queue_;
-    common::FileWorker local_worker_;
+    common::FileWorker* local_worker_ = nullptr;
 
     QPointer<FileRemover> remover_;
     QPointer<FileTransfer> transfer_;

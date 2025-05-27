@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QStorageInfo>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/files/file_enumerator.h"
@@ -37,9 +38,22 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileWorker::FileWorker()
+FileWorker::FileWorker(QObject* parent)
+    : QObject(parent),
+      idle_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(idle_timer_, &QTimer::timeout, this, []()
+    {
+#if defined(Q_OS_WINDOWS)
+        // We send a notification to the system that it is used to prevent the screen saver, going into
+        // hibernation mode, etc.
+        SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+#endif // defined(Q_OS_WINDOWS)
+    });
+
+    idle_timer_->start(std::chrono::seconds(60));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,12 +76,6 @@ void FileWorker::doRequest(const FileTask& task)
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doRequest(const proto::FileRequest& request, proto::FileReply* reply)
 {
-#if defined(Q_OS_WINDOWS)
-    // We send a notification to the system that it is used to prevent the screen saver, going into
-    // hibernation mode, etc.
-    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-#endif // defined(Q_OS_WINDOWS)
-
     if (request.has_drive_list_request())
     {
         doDriveListRequest(reply);

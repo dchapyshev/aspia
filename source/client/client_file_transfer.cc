@@ -26,7 +26,8 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::ClientFileTransfer(QObject* parent)
-    : Client(parent)
+    : Client(parent),
+      local_worker_(new common::FileWorker(this))
 {
     LOG(LS_INFO) << "Ctor";
     qRegisterMetaType<common::FileTask>();
@@ -126,7 +127,7 @@ void ClientFileTransfer::onTask(const common::FileTask& task)
 {
     if (task.target() == common::FileTask::Target::LOCAL)
     {
-        local_worker_.doRequest(task);
+        local_worker_->doRequest(task);
     }
     else
     {
