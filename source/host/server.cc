@@ -20,8 +20,10 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/crypto/password_generator.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/user_list.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
 #include "host/host_storage.h"
@@ -49,40 +51,50 @@ const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 //--------------------------------------------------------------------------------------------------
 Server::Server(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      update_timer_(new QTimer(this)),
+      settings_watcher_(new QFileSystemWatcher(this)),
+      server_(new base::TcpServer(this)),
+      authenticator_manager_(new base::ServerAuthenticatorManager(this)),
+      user_session_manager_(new UserSessionManager(this)),
+      password_expire_timer_(new QTimer(this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    connect(update_timer_, &QTimer::timeout, this, &Server::checkForUpdates);
+    connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
+    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
+            this, &Server::onSessionAuthenticated);
+
+    connect(user_session_manager_, &UserSessionManager::sig_routerStateRequested,
+            this, &Server::onRouterStateRequested);
+    connect(user_session_manager_, &UserSessionManager::sig_credentialsRequested,
+            this, &Server::onCredentialsRequested);
+    connect(user_session_manager_, &UserSessionManager::sig_changeOneTimePassword,
+            this, &Server::onChangeOneTimePassword);
+    connect(user_session_manager_, &UserSessionManager::sig_changeOneTimeSessions,
+            this, &Server::onChangeOneTimeSessions);
+
+    connect(server_, &base::TcpServer::sig_newConnection,
+            this, &Server::onNewDirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
     LOG(LS_INFO) << "Dtor";
-    LOG(LS_INFO) << "Stopping the server...";
-
-    delete user_session_manager_;
-    delete server_;
-
     deleteFirewallRules();
-
-    LOG(LS_INFO) << "Server is stopped";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::start()
 {
-    if (server_)
-    {
-        DLOG(LS_ERROR) << "An attempt was start an already running server";
-        return;
-    }
-
     LOG(LS_INFO) << "Starting the host server";
 
-    QString settings_file = settings_.filePath();
-    LOG(LS_INFO) << "Configuration file path: " << settings_file;
+    QString settings_file_path = settings_.filePath();
+    LOG(LS_INFO) << "Configuration file path: " << settings_file_path;
 
-    if (!QFileInfo::exists(settings_file))
+    if (!QFileInfo::exists(settings_file_path))
     {
         LOG(LS_ERROR) << "Configuration file does not exist";
 
@@ -92,38 +104,15 @@ void Server::start()
         settings_.sync();
     }
 
-    update_timer_ = new QTimer(this);
-    connect(update_timer_, &QTimer::timeout, this, &Server::checkForUpdates);
+    settings_watcher_->addPath(settings_file_path);
     update_timer_->start(std::chrono::minutes(5));
-
-    settings_watcher_ = new QFileSystemWatcher(this);
-    settings_watcher_->addPath(settings_file);
-    connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
-
-    authenticator_manager_ = new base::ServerAuthenticatorManager(this);
-    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
-            this, &Server::onSessionAuthenticated);
-
-    user_session_manager_ = new UserSessionManager(this);
-
-    connect(user_session_manager_, &UserSessionManager::sig_hostIdRequest,
-            this, &Server::onHostIdRequest);
-    connect(user_session_manager_, &UserSessionManager::sig_resetHostId,
-            this, &Server::onResetHostId);
-    connect(user_session_manager_, &UserSessionManager::sig_userListChanged,
-            this, &Server::onUserListChanged);
-
     user_session_manager_->start();
 
-    reloadUserList();
     addFirewallRules();
-
-    server_ = new base::TcpServer(this);
-
-    connect(server_, &base::TcpServer::sig_newConnection,
-            this, &Server::onNewDirectConnection);
-
     server_->start(settings_.tcpPort());
+
+    updateOneTimeCredentials(FROM_HERE);
+    reloadUserList();
 
     if (settings_.isRouterEnabled())
     {
@@ -139,15 +128,7 @@ void Server::setSessionEvent(base::SessionStatus status, base::SessionId session
 {
     LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
                  << " session_id: " << session_id << ")";
-
-    if (user_session_manager_)
-    {
-        user_session_manager_->onUserSessionEvent(status, session_id);
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid user session manager";
-    }
+    user_session_manager_->onUserSessionEvent(status, session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,35 +163,44 @@ void Server::setPowerEvent(quint32 power_event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onHostIdRequest()
+void Server::onRouterStateRequested()
 {
-    if (!router_controller_)
-    {
-        LOG(LS_ERROR) << "No router controller";
-        return;
-    }
+    proto::internal::RouterState state;
+    state.set_state(proto::internal::RouterState::DISABLED);
 
-    LOG(LS_INFO) << "New host ID request";
-    router_controller_->hostIdRequest();
+    if (router_controller_)
+        state = router_controller_->state();
+
+    user_session_manager_->onRouterStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onResetHostId(base::HostId host_id)
+void Server::onCredentialsRequested()
 {
-    if (!router_controller_)
+    base::HostId host_id = base::kInvalidHostId;
+    QString password;
+
+    if (router_controller_)
     {
-        LOG(LS_ERROR) << "No router controller";
-        return;
+        host_id = router_controller_->hostId();
+        password = one_time_password_;
     }
 
-    LOG(LS_INFO) << "Reset host ID for: " << host_id;
-    router_controller_->resetHostId(host_id);
+    user_session_manager_->onUpdateCredentials(host_id, password);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onUserListChanged()
+void Server::onChangeOneTimePassword()
 {
-    LOG(LS_INFO) << "User list changed";
+    updateOneTimeCredentials(FROM_HERE);
+    reloadUserList();
+    onCredentialsRequested();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onChangeOneTimeSessions(quint32 sessions)
+{
+    one_time_sessions_ = sessions;
     reloadUserList();
 }
 
@@ -218,12 +208,6 @@ void Server::onUserListChanged()
 void Server::onSessionAuthenticated()
 {
     LOG(LS_INFO) << "New client session";
-
-    if (!authenticator_manager_)
-    {
-        LOG(LS_ERROR) << "No authenticator manager instance";
-        return;
-    }
 
     while (authenticator_manager_->hasReadySessions())
     {
@@ -241,12 +225,6 @@ void Server::onSessionAuthenticated()
         {
             LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
                           << " client: " << session_info.version.toString() << ")";
-        }
-
-        if (!user_session_manager_)
-        {
-            LOG(LS_ERROR) << "Invalid user session manager";
-            continue;
         }
 
         ClientSession* session = ClientSession::create(
@@ -292,7 +270,7 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
 void Server::onHostIdAssigned(base::HostId host_id)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id;
-    user_session_manager_->onHostIdChanged(host_id);
+    user_session_manager_->onUpdateCredentials(host_id, one_time_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,6 +472,7 @@ void Server::updateConfiguration(const QString& path)
     user_session_manager_->onSettingsChanged();
 
     // Reload user lists.
+    updateOneTimeCredentials(FROM_HERE);
     reloadUserList();
 
     // If a controller instance already exists.
@@ -524,6 +503,7 @@ void Server::updateConfiguration(const QString& path)
             // Destroy the controller.
             LOG(LS_INFO) << "The router is now disabled";
             router_controller_->deleteLater();
+            router_controller_ = nullptr;
 
             proto::internal::RouterState router_state;
             router_state.set_state(proto::internal::RouterState::DISABLED);
@@ -550,13 +530,10 @@ void Server::reloadUserList()
     // Read the list of regular users.
     std::unique_ptr<base::UserList> user_list = settings_.userList();
 
-    // Add a list of one-time users to the list of regular users.
-    user_list->merge(*user_session_manager_->userList());
+    user_list->add(createOneTimeUser());
 
     if (user_list->seedKey().isEmpty())
-    {
         LOG(LS_ERROR) << "Empty seed key for user list";
-    }
 
     // Updating the list of users.
     authenticator_manager_->setUserList(std::move(user_list));
@@ -568,7 +545,11 @@ void Server::connectToRouter()
     LOG(LS_INFO) << "Connecting to router...";
 
     // Destroy the previous instance.
-    router_controller_->deleteLater();
+    if (router_controller_)
+    {
+        router_controller_->deleteLater();
+        router_controller_ = nullptr;
+    }
 
     // Fill the connection parameters.
     RouterController::RouterInfo router_info;
@@ -596,7 +577,8 @@ void Server::disconnectFromRouter()
 
     if (router_controller_)
     {
-        delete router_controller_;
+        router_controller_->deleteLater();
+        router_controller_ = nullptr;
         LOG(LS_INFO) << "Disconnected from router";
     }
     else
@@ -654,6 +636,70 @@ void Server::checkForUpdates()
 
     update_checker_->start();
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::updateOneTimeCredentials(const base::Location &location)
+{
+    LOG(LS_INFO) << "Updating credentials (from: " << location.toString() << ")";
+
+    if (settings_.oneTimePassword())
+    {
+        LOG(LS_INFO) << "One-time password is enabled";
+
+        base::PasswordGenerator generator;
+        generator.setCharacters(settings_.oneTimePasswordCharacters());
+        generator.setLength(settings_.oneTimePasswordLength());
+
+        one_time_password_ = generator.result();
+
+        std::chrono::milliseconds expire_interval = settings_.oneTimePasswordExpire();
+        if (expire_interval > std::chrono::milliseconds(0))
+            password_expire_timer_->start(expire_interval);
+        else
+            password_expire_timer_->stop();
+    }
+    else
+    {
+        LOG(LS_INFO) << "One-time password is disabled";
+
+        password_expire_timer_->stop();
+        one_time_sessions_ = 0;
+        one_time_password_.clear();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+base::User Server::createOneTimeUser() const
+{
+    if (!router_controller_)
+    {
+        LOG(LS_WARNING) << "No router controller instance";
+        return base::User();
+    }
+
+    base::HostId host_id = router_controller_->hostId();
+    if (host_id == base::kInvalidHostId)
+    {
+        LOG(LS_INFO) << "Invalid host ID";
+        return base::User();
+    }
+
+    if (one_time_password_.isEmpty())
+    {
+        LOG(LS_INFO) << "No password for one-time user";
+        return base::User();
+    }
+
+    QString username = QLatin1Char('#') + base::hostIdToString(host_id);
+    base::User user = base::User::create(username, one_time_password_);
+
+    user.sessions = one_time_sessions_;
+    user.flags = base::User::ENABLED;
+
+    LOG(LS_INFO) << "One time user '" << username << "' created (host_id=" << host_id
+                 << " sessions=" << one_time_sessions_ << ")";
+    return user;
 }
 
 } // namespace host

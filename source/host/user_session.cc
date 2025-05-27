@@ -21,7 +21,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
@@ -60,8 +59,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, 
       channel_(channel),
       ui_attach_timer_(new QTimer(this)),
       desktop_dettach_timer_(new QTimer(this)),
-      session_id_(session_id),
-      password_expire_timer_(new QTimer(this))
+      session_id_(session_id)
 {
     type_ = UserSession::Type::CONSOLE;
 
@@ -70,7 +68,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, 
     {
         LOG(LS_INFO) << "Session attach timeout (sid=" << session_id_ << ")";
         setState(FROM_HERE, State::FINISHED);
-        emit sig_userSessionFinished();
+        emit sig_finished();
     });
 
     desktop_dettach_timer_->setSingleShot(true);
@@ -78,13 +76,6 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, 
     {
         if (desktop_session_)
             desktop_session_->dettachSession(FROM_HERE);
-    });
-
-    password_expire_timer_->setSingleShot(true);
-    connect(password_expire_timer_, &QTimer::timeout, this, [this]()
-    {
-        updateCredentials(FROM_HERE);
-        sendCredentials(FROM_HERE);
     });
 
 #if defined(Q_OS_WINDOWS)
@@ -106,15 +97,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, 
 
     LOG(LS_INFO) << "Ctor (sid=" << session_id_ << " type=" << typeToString(type_) << ")";
 
-    router_state_.set_state(proto::internal::RouterState::DISABLED);
-
     SystemSettings settings;
-
-    password_enabled_ = settings.oneTimePassword();
-    password_characters_ = settings.oneTimePasswordCharacters();
-    password_length_ = settings.oneTimePasswordLength();
-    password_expire_interval_ = settings.oneTimePasswordExpire();
-
     connection_confirmation_ = settings.connConfirm();
     no_user_action_ = settings.connConfirmNoUserAction();
     auto_confirmation_interval_ = settings.autoConnConfirmInterval();
@@ -166,13 +149,11 @@ const char* UserSession::stateToString(State state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::start(const proto::internal::RouterState& router_state)
+void UserSession::start()
 {
     LOG(LS_INFO) << "User session started "
                  << (channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI (sid=" << session_id_ << ")";
-
-    router_state_ = router_state;
 
     desktop_session_ = new DesktopSessionManager(this);
 
@@ -197,8 +178,6 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
-    updateCredentials(FROM_HERE);
-
     if (channel_)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
@@ -211,9 +190,6 @@ void UserSession::start(const proto::internal::RouterState& router_state)
         channel_->setParent(this);
         channel_->resume();
 
-        sendRouterState(FROM_HERE);
-        sendCredentials(FROM_HERE);
-
         onTextChatHasUser(FROM_HERE, true);
     }
     else
@@ -222,7 +198,9 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     }
 
     setState(FROM_HERE, State::STARTED);
-    sendHostIdRequest(FROM_HERE);
+
+    emit sig_routerStateRequested();
+    emit sig_credentialsRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,8 +214,6 @@ void UserSession::restart(base::IpcChannel* channel)
 
     ui_attach_timer_->stop();
     desktop_dettach_timer_->stop();
-
-    updateCredentials(FROM_HERE);
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
@@ -253,7 +229,7 @@ void UserSession::restart(base::IpcChannel* channel)
         channel_->setParent(this);
         channel_->resume();
 
-        auto send_connection_list = [this](const ClientSessionList& list)
+        auto send_connection_list = [this](const QList<ClientSession*>& list)
         {
             for (const auto& client : list)
                 sendConnectEvent(*client);
@@ -261,9 +237,6 @@ void UserSession::restart(base::IpcChannel* channel)
 
         send_connection_list(desktop_clients_);
         send_connection_list(other_clients_);
-
-        sendRouterState(FROM_HERE);
-        sendCredentials(FROM_HERE);
 
         onTextChatHasUser(FROM_HERE, true);
     }
@@ -273,32 +246,9 @@ void UserSession::restart(base::IpcChannel* channel)
     }
 
     setState(FROM_HERE, State::STARTED);
-}
 
-//--------------------------------------------------------------------------------------------------
-base::User UserSession::user() const
-{
-    if (host_id_ == base::kInvalidHostId)
-    {
-        LOG(LS_INFO) << "Invalid host ID (sid=" << session_id_ << ")";
-        return base::User();
-    }
-
-    if (one_time_password_.isEmpty())
-    {
-        LOG(LS_INFO) << "No password for user (sid=" << session_id_ << " host_id=" << host_id_ << ")";
-        return base::User();
-    }
-
-    QString username = QLatin1Char('#') + base::hostIdToString(host_id_);
-    base::User user = base::User::create(username, one_time_password_);
-
-    user.sessions = one_time_sessions_;
-    user.flags = base::User::ENABLED;
-
-    LOG(LS_INFO) << "One time user '" << username << "' created (host_id=" << host_id_
-                 << " sessions=" << one_time_sessions_ << ")";
-    return user;
+    emit sig_routerStateRequested();
+    emit sig_credentialsRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -482,14 +432,13 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
             }
 
             setState(FROM_HERE, State::FINISHED);
-            emit sig_userSessionFinished();
+            emit sig_finished();
         }
         break;
 
         case base::SessionStatus::SESSION_LOGON:
         {
-            // Request for host ID.
-            sendHostIdRequest(FROM_HERE);
+            emit sig_credentialsRequested();
         }
         break;
 
@@ -505,27 +454,54 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
 void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state changed (sid=" << session_id_ << ")";
-    router_state_ = router_state;
 
-    sendRouterState(FROM_HERE);
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
+        return;
+    }
 
-    if (router_state.state() == proto::internal::RouterState::CONNECTED)
-    {
-        sendHostIdRequest(FROM_HERE);
-    }
-    else
-    {
-        host_id_ = base::kInvalidHostId;
-    }
+    LOG(LS_INFO) << "Router: " << router_state.host_name() << ":" << router_state.host_port()
+                 << " (state=" << routerStateToString(router_state.state())
+                 << " sid=" << session_id_ << ")";
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_router_state()->CopyFrom(router_state);
+    channel_->send(base::serialize(outgoing_message_));
+
+    emit sig_credentialsRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onHostIdChanged(base::HostId host_id)
+void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    LOG(LS_INFO) << "Host id changed from " << host_id_ << " to " << host_id;
+    LOG(LS_INFO) << "Send credentials for host ID: " << host_id << " (sid=" << session_id_ << ")";
 
-    host_id_ = host_id;
-    sendCredentials(FROM_HERE);
+    if (!channel_)
+    {
+        LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
+        return;
+    }
+
+    if (host_id == base::kInvalidHostId)
+    {
+        LOG(LS_ERROR) << "Invalid host ID (sid=" << session_id_ << ")";
+        return;
+    }
+
+    outgoing_message_.Clear();
+
+    proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
+    credentials->set_host_id(host_id);
+
+#if defined(Q_OS_WINDOWS)
+    // Only console sessions receive a password. RDP sessions cannot receive a password because it
+    // would allow connecting to a console session.
+    if (session_id_ == base::activeConsoleSessionId())
+        credentials->set_password(password.toStdString());
+#endif // defined(Q_OS_WINDOWS)
+
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -534,28 +510,6 @@ void UserSession::onSettingsChanged()
     LOG(LS_INFO) << "Settings changed";
 
     SystemSettings settings;
-
-    bool password_enabled = settings.oneTimePassword();
-    quint32 password_characters = settings.oneTimePasswordCharacters();
-    int password_length = settings.oneTimePasswordLength();
-    std::chrono::milliseconds password_expire_interval = settings.oneTimePasswordExpire();
-
-    if (password_enabled_ != password_enabled || password_characters_ != password_characters ||
-        password_length_ != password_length || password_expire_interval_ != password_expire_interval)
-    {
-        password_enabled_ = password_enabled;
-        password_characters_ = password_characters;
-        password_length_ = password_length;
-        password_expire_interval_ = password_expire_interval;
-
-        updateCredentials(FROM_HERE);
-        sendCredentials(FROM_HERE);
-    }
-    else
-    {
-        LOG(LS_INFO) << "No changes in password settings (sid=" << session_id_ << ")";
-    }
-
     connection_confirmation_ = settings.connConfirm();
     no_user_action_ = settings.connConfirmNoUserAction();
     auto_confirmation_interval_ = settings.autoConnConfirmInterval();
@@ -570,7 +524,7 @@ void UserSession::onClientSessionConfigured()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionFinished()
 {
-    auto delete_finished = [this](ClientSessionList* list)
+    auto delete_finished = [this](QList<ClientSession*>* list)
     {
         for (auto it = list->begin(); it != list->end();)
         {
@@ -687,27 +641,18 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
             LOG(LS_INFO) << "New credentials requested (sid=" << session_id_ << ")";
-            updateCredentials(FROM_HERE);
+            emit sig_changeOneTimePassword();
         }
         else
         {
             DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
             LOG(LS_INFO) << "Credentials update requested (sid=" << session_id_ << ")";
         }
-
-        sendCredentials(FROM_HERE);
     }
     else if (incoming_message_.has_one_time_sessions())
     {
-        quint32 one_time_sessions = incoming_message_.one_time_sessions().sessions();
-        if (one_time_sessions != one_time_sessions_)
-        {
-            LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
-                         << " to " << one_time_sessions << " (sid=" << session_id_ << ")";
-            one_time_sessions_ = one_time_sessions;
-
-            emit sig_userSessionCredentialsChanged();
-        }
+        quint32 sessions = incoming_message_.one_time_sessions().sessions();
+        emit sig_changeOneTimeSessions(sessions);
     }
     else if (incoming_message_.has_connect_confirmation())
     {
@@ -996,9 +941,6 @@ void UserSession::onSessionDettached(const base::Location& location)
         channel_ = nullptr;
     }
 
-    one_time_sessions_ = 0;
-    one_time_password_.clear();
-
     // Stop one-time desktop clients.
     for (const auto& client : std::as_const(desktop_clients_))
     {
@@ -1025,14 +967,13 @@ void UserSession::onSessionDettached(const base::Location& location)
     onTextChatHasUser(FROM_HERE, false);
 
     setState(FROM_HERE, State::DETTACHED);
-    emit sig_userSessionDettached();
 
     if (type_ == Type::RDP)
     {
         LOG(LS_INFO) << "RDP session finished (sid=" << session_id_ << ")";
 
         setState(FROM_HERE, State::FINISHED);
-        emit sig_userSessionFinished();
+        emit sig_finished();
     }
     else
     {
@@ -1099,69 +1040,9 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::updateCredentials(const base::Location& location)
-{
-    LOG(LS_INFO) << "Updating credentials (sid=" << session_id_
-                 << " from=" << location.toString() << ")";
-
-    if (password_enabled_)
-    {
-        LOG(LS_INFO) << "One-time password enabled (sid=" << session_id_ << ")";
-
-        base::PasswordGenerator generator;
-        generator.setCharacters(password_characters_);
-        generator.setLength(static_cast<size_t>(password_length_));
-
-        one_time_password_ = generator.result();
-
-        if (password_expire_interval_ > std::chrono::milliseconds(0))
-            password_expire_timer_->start(password_expire_interval_);
-        else
-            password_expire_timer_->stop();
-    }
-    else
-    {
-        LOG(LS_INFO) << "One-time password disabled (sid=" << session_id_ << ")";
-
-        password_expire_timer_->stop();
-        one_time_sessions_ = 0;
-        one_time_password_.clear();
-    }
-
-    emit sig_userSessionCredentialsChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::sendCredentials(const base::Location& location)
-{
-    LOG(LS_INFO) << "Send credentials for host ID: " << host_id_
-                 << " (sid=" << session_id_ << " from=" << location.toString() << ")";
-
-    if (!channel_)
-    {
-        LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
-        return;
-    }
-
-    if (host_id_ == base::kInvalidHostId)
-    {
-        LOG(LS_ERROR) << "Invalid host ID (sid=" << session_id_ << ")";
-        return;
-    }
-
-    outgoing_message_.Clear();
-
-    proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
-    credentials->set_host_id(host_id_);
-    credentials->set_password(one_time_password_.toStdString());
-
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::killClientSession(quint32 id)
 {
-    auto stop_by_id = [](ClientSessionList* list, quint32 id)
+    auto stop_by_id = [](QList<ClientSession*>* list, quint32 id)
     {
         for (const auto& client_session : std::as_const(*list))
         {
@@ -1178,42 +1059,6 @@ void UserSession::killClientSession(quint32 id)
 
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&other_clients_, id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::sendRouterState(const base::Location& location)
-{
-    LOG(LS_INFO) << "Sending router state to UI (sid=" << session_id_
-                 << " from=" << location.toString() << ")";
-
-    if (!channel_)
-    {
-        LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
-        return;
-    }
-
-    LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port()
-                 << " (state=" << routerStateToString(router_state_.state())
-                 << " sid=" << session_id_ << ")";
-
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
-    channel_->send(base::serialize(outgoing_message_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::sendHostIdRequest(const base::Location& location)
-{
-    LOG(LS_INFO) << "Send host id request (sid=" << session_id_
-                 << " from=" << location.toString() << ")";
-
-    if (router_state_.state() != proto::internal::RouterState::CONNECTED)
-    {
-        LOG(LS_INFO) << "Router not connected yet (sid=" << session_id_ << ")";
-        return;
-    }
-
-    emit sig_userSessionHostIdRequest();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -46,9 +46,10 @@ public:
     void setPowerEvent(quint32 power_event);
 
 private slots:
-    void onHostIdRequest();
-    void onResetHostId(base::HostId host_id);
-    void onUserListChanged();
+    void onRouterStateRequested();
+    void onCredentialsRequested();
+    void onChangeOneTimePassword();
+    void onChangeOneTimeSessions(quint32 sessions);
     void onSessionAuthenticated();
     void onNewDirectConnection();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
@@ -69,19 +70,26 @@ private:
     void disconnectFromRouter();
     void checkForUpdates();
 
+    void updateOneTimeCredentials(const base::Location& location);
+    base::User createOneTimeUser() const;
+
     QTimer* update_timer_ = nullptr;
 
     QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
 
-    // Accepts incoming network connections.
+    QPointer<RouterController> router_controller_;
+
     base::TcpServer* server_ = nullptr;
-    QPointer<RouterController> router_controller_ = nullptr;
     base::ServerAuthenticatorManager* authenticator_manager_ = nullptr;
     UserSessionManager* user_session_manager_ = nullptr;
 
-    common::UpdateChecker* update_checker_ = nullptr;
-    common::HttpFileDownloader* update_downloader_ = nullptr;
+    QPointer<common::UpdateChecker> update_checker_;
+    QPointer<common::HttpFileDownloader> update_downloader_;
+
+    QTimer* password_expire_timer_ = nullptr;
+    QString one_time_password_;
+    quint32 one_time_sessions_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

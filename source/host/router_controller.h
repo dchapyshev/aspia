@@ -48,12 +48,11 @@ public:
 
     void start(const RouterInfo& router_info);
 
-    void hostIdRequest();
-    void resetHostId(base::HostId host_id);
-
     const QString& address() const { return router_info_.address; }
     quint16 port() const { return router_info_.port; }
     const QByteArray& publicKey() const { return router_info_.public_key; }
+    const base::HostId hostId() const { return host_id_; }
+    const proto::internal::RouterState state() const { return router_state_; }
 
     bool hasPendingConnections() const;
     base::TcpChannel* nextPendingConnection();
@@ -73,13 +72,17 @@ private:
     void connectToRouter();
     void delayedConnectToRouter();
     void routerStateChanged(proto::internal::RouterState::State state);
+    void hostIdRequest();
     static const char* routerStateToString(proto::internal::RouterState::State state);
 
     QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
     QPointer<base::RelayPeerManager> peer_manager_;
     QPointer<QTimer> reconnect_timer_;
+
     RouterInfo router_info_;
+    base::HostId host_id_ = base::kInvalidHostId;
+    proto::internal::RouterState router_state_;
 
     QQueue<base::TcpChannel*> channels_;
 

@@ -22,7 +22,6 @@
 #include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/user_list.h"
 #include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
@@ -59,28 +58,27 @@ public:
     static const char* typeToString(Type type);
     static const char* stateToString(State state);
 
-    void start(const proto::internal::RouterState& router_state);
+    void start();
     void restart(base::IpcChannel* channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    base::HostId hostId() const { return host_id_; }
-    base::User user() const;
     size_t clientsCount() const;
     bool isConnectedToUi() const { return channel_ != nullptr; }
 
     void onClientSession(ClientSession* client_session);
     void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
-    void onHostIdChanged(base::HostId host_id);
+    void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onSettingsChanged();
 
 signals:
-    void sig_userSessionHostIdRequest();
-    void sig_userSessionCredentialsChanged();
-    void sig_userSessionDettached();
-    void sig_userSessionFinished();
+    void sig_routerStateRequested();
+    void sig_credentialsRequested();
+    void sig_changeOneTimePassword();
+    void sig_changeOneTimeSessions(quint32 sessions);
+    void sig_finished();
 
 private slots:
     void onClientSessionConfigured();
@@ -104,11 +102,7 @@ private:
     void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
     void sendDisconnectEvent(quint32 session_id);
-    void updateCredentials(const base::Location& location);
-    void sendCredentials(const base::Location& location);
     void killClientSession(quint32 id);
-    void sendRouterState(const base::Location& location);
-    void sendHostIdRequest(const base::Location& location);
     void addNewClientSession(ClientSession* client_session);
     void setState(const base::Location& location, State state);
     void onTextChatHasUser(const base::Location& location, bool has_user);
@@ -124,27 +118,14 @@ private:
     QTimer* desktop_dettach_timer_ = nullptr;
 
     base::SessionId session_id_;
-    proto::internal::RouterState router_state_;
-    base::HostId host_id_ = base::kInvalidHostId;
-
-    bool password_enabled_ = false;
-    quint32 password_characters_ = 0;
-    int password_length_ = 0;
-    std::chrono::milliseconds password_expire_interval_ { 0 };
-    QTimer* password_expire_timer_ = nullptr;
-    QString one_time_password_;
-    quint32 one_time_sessions_ = 0;
 
     bool connection_confirmation_ = false;
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
-    using ClientSessionList = QList<ClientSession*>;
-    using UnconfirmedClientSessionList = QList<UnconfirmedClientSession*>;
-
-    UnconfirmedClientSessionList pending_clients_;
-    ClientSessionList desktop_clients_;
-    ClientSessionList other_clients_;
+    QList<UnconfirmedClientSession*> pending_clients_;
+    QList<ClientSession*> desktop_clients_;
+    QList<ClientSession*> other_clients_;
 
     DesktopSessionManager* desktop_session_ = nullptr;
 

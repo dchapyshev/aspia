@@ -65,56 +65,6 @@ void RouterController::start(const RouterInfo& router_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::hostIdRequest()
-{
-    LOG(LS_INFO) << "Started ID request for session";
-
-    if (!channel_ || !channel_->isConnected())
-    {
-        LOG(LS_INFO) << "No active connection to the router";
-        return;
-    }
-
-    HostStorage host_key_storage;
-    QByteArray host_key = host_key_storage.hostKey();
-
-    proto::PeerToRouter message;
-    proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
-
-    if (host_key.isEmpty())
-    {
-        LOG(LS_INFO) << "Host key is empty. Request for a new ID";
-        host_id_request->set_type(proto::HostIdRequest::NEW_ID);
-    }
-    else
-    {
-        LOG(LS_INFO) << "Host key is present. Request for an existing ID";
-        host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
-        host_id_request->set_key(host_key.toStdString());
-    }
-
-    // Send host ID request.
-    LOG(LS_INFO) << "Send ID request to router";
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterController::resetHostId(base::HostId host_id)
-{
-    LOG(LS_INFO) << "ResetHostId request: " << host_id;
-
-    if (!channel_ || !channel_->isConnected())
-    {
-        LOG(LS_INFO) << "No active connection to the router";
-        return;
-    }
-
-    proto::PeerToRouter message;
-    message.mutable_reset_host_id()->set_host_id(host_id);
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 bool RouterController::hasPendingConnections() const
 {
     return !channels_.isEmpty();
@@ -167,6 +117,7 @@ void RouterController::onTcpConnected()
 
             // Now the session will receive incoming messages.
             channel_->resume();
+            hostIdRequest();
         }
         else
         {
@@ -231,8 +182,8 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
                 return;
         }
 
-        base::HostId host_id = host_id_response.host_id();
-        if (host_id == base::kInvalidHostId)
+        host_id_ = host_id_response.host_id();
+        if (host_id_ == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Invalid host ID received";
             return;
@@ -247,12 +198,12 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             host_key_storage.setHostKey(host_key);
         }
 
-        LOG(LS_INFO) << "Host ID received: " << host_id;
+        LOG(LS_INFO) << "Host ID received: " << host_id_;
 
-        if (host_key_storage.lastHostId() != host_id)
-            host_key_storage.setLastHostId(host_id);
+        if (host_key_storage.lastHostId() != host_id_)
+            host_key_storage.setLastHostId(host_id_);
 
-        emit sig_hostIdAssigned(host_id);
+        emit sig_hostIdAssigned(host_id_);
     }
     else if (in_message.has_connection_offer())
     {
@@ -313,13 +264,45 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
 {
     LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
 
-    proto::internal::RouterState router_state;
-    router_state.set_state(state);
+    router_state_.set_state(state);
+    router_state_.set_host_name(router_info_.address.toStdString());
+    router_state_.set_host_port(router_info_.port);
 
-    router_state.set_host_name(router_info_.address.toStdString());
-    router_state.set_host_port(router_info_.port);
+    emit sig_routerStateChanged(router_state_);
+}
 
-    emit sig_routerStateChanged(router_state);
+//--------------------------------------------------------------------------------------------------
+void RouterController::hostIdRequest()
+{
+    LOG(LS_INFO) << "Started ID request for session";
+
+    if (!channel_ || !channel_->isConnected())
+    {
+        LOG(LS_INFO) << "No active connection to the router";
+        return;
+    }
+
+    HostStorage host_key_storage;
+    QByteArray host_key = host_key_storage.hostKey();
+
+    proto::PeerToRouter message;
+    proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
+
+    if (host_key.isEmpty())
+    {
+        LOG(LS_INFO) << "Host key is empty. Request for a new ID";
+        host_id_request->set_type(proto::HostIdRequest::NEW_ID);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Host key is present. Request for an existing ID";
+        host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
+        host_id_request->set_key(host_key.toStdString());
+    }
+
+    // Send host ID request.
+    LOG(LS_INFO) << "Send ID request to router";
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

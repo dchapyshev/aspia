@@ -40,20 +40,17 @@ public:
     bool start();
     void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
-    void onHostIdChanged(base::HostId host_id);
+    void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onSettingsChanged();
     void onClientSession(ClientSession* client_session);
-    std::unique_ptr<base::UserList> userList() const;
 
 signals:
-    void sig_hostIdRequest();
-    void sig_resetHostId(base::HostId host_id);
-    void sig_userListChanged();
+    void sig_routerStateRequested();
+    void sig_credentialsRequested();
+    void sig_changeOneTimePassword();
+    void sig_changeOneTimeSessions(quint32 sessions);
 
 private slots:
-    void onUserSessionHostIdRequest();
-    void onUserSessionCredentialsChanged();
-    void onUserSessionDettached();
     void onUserSessionFinished();
     void onIpcNewConnection();
 
@@ -64,7 +61,6 @@ private:
 
     base::IpcServer* ipc_server_ = nullptr;
     QList<UserSession*> sessions_;
-    proto::internal::RouterState router_state_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
 };

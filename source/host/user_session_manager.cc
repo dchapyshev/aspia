@@ -28,7 +28,6 @@
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
-
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -139,8 +138,6 @@ UserSessionManager::UserSessionManager(QObject* parent)
     : QObject(parent)
 {
     LOG(LS_INFO) << "Ctor";
-
-    router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -263,21 +260,20 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
         {
             for (const auto& session : std::as_const(sessions_))
             {
-                if (session->sessionId() == session_id)
+                if (session->sessionId() != session_id)
+                    continue;
+
+                if (!session->isConnectedToUi())
                 {
-                    if (!session->isConnectedToUi())
-                    {
-                        // Start UI process in user session.
-                        LOG(LS_INFO) << "Starting session process for session: " << session_id;
-                        startSessionProcess(FROM_HERE, session_id);
-                    }
-                    else
-                    {
-                        LOG(LS_INFO) << "Session proccess already connected for session: "
-                                     << session_id;
-                    }
-                    break;
+                    // Start UI process in user session.
+                    LOG(LS_INFO) << "Starting session process for session: " << session_id;
+                    startSessionProcess(FROM_HERE, session_id);
                 }
+                else
+                {
+                    LOG(LS_INFO) << "Session proccess already connected for session: " << session_id;
+                }
+                break;
             }
         }
         break;
@@ -294,7 +290,6 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state changed (state=" << router_state.state() << ")";
-    router_state_ = router_state;
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -302,16 +297,13 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onHostIdChanged(base::HostId host_id)
+void UserSessionManager::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
     LOG(LS_INFO) << "Set host ID for session: " << host_id;
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
-    {
-        session->onHostIdChanged(host_id);
-        emit sig_userListChanged();
-    }
+        session->onUpdateCredentials(host_id, password);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -331,69 +323,8 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
                  << "' host_id='" << client_session->hostId() << "')";
 
     std::unique_ptr<ClientSession> client_session_deleter(client_session);
-    base::SessionId session_id = base::kInvalidSessionId;
 
-    QString username = client_session->userName();
-    if (username.startsWith('#'))
-    {
-        LOG(LS_INFO) << "Connection with one-time password";
-
-        username.remove('#');
-
-        base::HostId host_id = base::stringToHostId(username);
-        if (host_id == base::kInvalidHostId)
-        {
-            LOG(LS_ERROR) << "Failed to convert host id: " << username;
-            return;
-        }
-
-        LOG(LS_INFO) << "Find session ID by host ID...";
-
-        for (const auto& session : std::as_const(sessions_))
-        {
-            if (session->hostId() == host_id)
-            {
-                session_id = session->sessionId();
-
-                LOG(LS_INFO) << "Session with ID '" << session_id << "' found";
-                break;
-            }
-        }
-
-        LOG(LS_INFO) << "Connection by host id: " << host_id;
-    }
-    else
-    {
-        LOG(LS_INFO) << "Connecting with a permanent username";
-
-        base::HostId host_id = client_session->hostId();
-        if (host_id == base::kInvalidHostId)
-        {
-            LOG(LS_INFO) << "Using CONSOLE session id";
-
-#if defined(Q_OS_WINDOWS)
-            session_id = base::activeConsoleSessionId();
-#else
-            session_id = 0;
-#endif
-        }
-        else
-        {
-            LOG(LS_INFO) << "Find session ID by host ID...";
-
-            for (const auto& session : std::as_const(sessions_))
-            {
-                if (session->hostId() == host_id)
-                {
-                    session_id = session->sessionId();
-
-                    LOG(LS_INFO) << "Session with ID '" << session_id << "' found";
-                    break;
-                }
-            }
-        }
-    }
-
+    base::SessionId session_id = base::activeConsoleSessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "Failed to get session id";
@@ -404,93 +335,50 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 
     for (const auto& session : std::as_const(sessions_))
     {
-        if (session->sessionId() == session_id)
+        if (session->sessionId() != session_id)
+            continue;
+
+        if (session->state() == UserSession::State::DETTACHED)
         {
-            if (session->state() == UserSession::State::DETTACHED)
-            {
 #if defined(Q_OS_WINDOWS)
-                base::SessionInfo session_info(session_id);
-                if (!session_info.isValid())
-                {
-                    LOG(LS_ERROR) << "Unable to determine session state. Connection aborted";
-                    return;
-                }
-
-                base::SessionInfo::ConnectState connect_state = session_info.connectState();
-
-                switch (connect_state)
-                {
-                    case base::SessionInfo::ConnectState::CONNECTED:
-                    {
-                        LOG(LS_INFO) << "Session exists, but there are no logged in users";
-                        session->restart(nullptr);
-                    }
-                    break;
-
-                    default:
-                        LOG(LS_INFO) << "No connected UI. Connection rejected (connect_state="
-                                     << base::SessionInfo::connectStateToString(connect_state)
-                                     << ")";
-                        return;
-                }
-#else
-                session->restart(nullptr);
-#endif
+            base::SessionInfo session_info(session_id);
+            if (!session_info.isValid())
+            {
+                LOG(LS_ERROR) << "Unable to determine session state. Connection aborted";
+                return;
             }
 
-            session->onClientSession(client_session_deleter.release());
-            user_session_found = true;
-            break;
+            base::SessionInfo::ConnectState connect_state = session_info.connectState();
+
+            switch (connect_state)
+            {
+                case base::SessionInfo::ConnectState::CONNECTED:
+                {
+                    LOG(LS_INFO) << "Session exists, but there are no logged in users";
+                    session->restart(nullptr);
+                }
+                break;
+
+                default:
+                    LOG(LS_INFO) << "No connected UI. Connection rejected (connect_state="
+                                 << base::SessionInfo::connectStateToString(connect_state)
+                                 << ")";
+                    return;
+            }
+#else
+            session->restart(nullptr);
+#endif
         }
+
+        session->onClientSession(client_session_deleter.release());
+        user_session_found = true;
+        break;
     }
 
     if (!user_session_found)
     {
         LOG(LS_ERROR) << "User session with id " << session_id << " not found";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-std::unique_ptr<base::UserList> UserSessionManager::userList() const
-{
-    std::unique_ptr<base::UserList> user_list = base::UserList::createEmpty();
-
-    for (const auto& session : sessions_)
-    {
-        base::User user = session->user();
-        if (user.isValid())
-        {
-            LOG(LS_INFO) << "User '" << user.name << "' added to user list";
-            user_list->add(user);
-        }
-        else
-        {
-            LOG(LS_INFO) << "User is invalid and not added to user list";
-        }
-    }
-
-    return user_list;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionHostIdRequest()
-{
-    LOG(LS_INFO) << "User session host id request";
-    emit sig_hostIdRequest();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionCredentialsChanged()
-{
-    LOG(LS_INFO) << "User session credentials changed";
-    emit sig_userListChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionDettached()
-{
-    LOG(LS_INFO) << "User session dettached";
-    emit sig_userListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,12 +396,7 @@ void UserSessionManager::onUserSessionFinished()
             continue;
         }
 
-        LOG(LS_INFO) << "Finished session " << session->sessionId()
-                     << " found in list. Reset host ID "
-                     << session->hostId() << " for invalid session";
-
-        // User session ended, host ID is no longer valid.
-        emit sig_resetHostId(session->hostId());
+        LOG(LS_INFO) << "Finished session: " << session->sessionId();
 
         session->deleteLater();
         it = sessions_.erase(it);
@@ -538,19 +421,18 @@ void UserSessionManager::onIpcNewConnection()
     }
 
     base::IpcChannel* channel = ipc_server_->nextPendingConnection();
+    base::SessionId session_id = 0;
 
 #if defined(Q_OS_WINDOWS)
-    base::SessionId session_id = channel->peerSessionId();
+    session_id = channel->peerSessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "Invalid session id";
         return;
     }
+#endif
 
     addUserSession(FROM_HERE, session_id, channel);
-#else
-    addUserSession(FROM_HERE, 0, channel);
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -689,8 +571,8 @@ void UserSessionManager::startSessionProcess(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::addUserSession(const base::Location& location, base::SessionId session_id,
-                                        base::IpcChannel* channel)
+void UserSessionManager::addUserSession(
+    const base::Location& location, base::SessionId session_id, base::IpcChannel* channel)
 {
     LOG(LS_INFO) << "Add user session: " << session_id << " (from=" << location.toString() << ")";
 
@@ -706,19 +588,22 @@ void UserSessionManager::addUserSession(const base::Location& location, base::Se
 
     UserSession* user_session = new UserSession(session_id, channel, this);
 
-    connect(user_session, &UserSession::sig_userSessionHostIdRequest,
-            this, &UserSessionManager::onUserSessionHostIdRequest);
-    connect(user_session, &UserSession::sig_userSessionCredentialsChanged,
-            this, &UserSessionManager::onUserSessionCredentialsChanged);
-    connect(user_session, &UserSession::sig_userSessionDettached,
-            this, &UserSessionManager::onUserSessionDettached);
-    connect(user_session, &UserSession::sig_userSessionFinished,
+    connect(user_session, &UserSession::sig_routerStateRequested,
+            this, &UserSessionManager::sig_routerStateRequested);
+    connect(user_session, &UserSession::sig_credentialsRequested,
+            this, &UserSessionManager::sig_credentialsRequested);
+    connect(user_session, &UserSession::sig_changeOneTimePassword,
+            this, &UserSessionManager::sig_changeOneTimePassword);
+    connect(user_session, &UserSession::sig_changeOneTimeSessions,
+            this, &UserSessionManager::sig_changeOneTimeSessions);
+    connect(user_session, &UserSession::sig_finished,
             this, &UserSessionManager::onUserSessionFinished, Qt::QueuedConnection);
 
     sessions_.append(user_session);
 
     LOG(LS_INFO) << "Start user session: " << session_id;
-    user_session->start(router_state_);
+
+    user_session->start();
 }
 
 } // namespace host

@@ -55,13 +55,6 @@ void UserList::add(const User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserList::merge(const UserList& user_list)
-{
-    for (const auto& user : user_list.list_)
-        add(user);
-}
-
-//--------------------------------------------------------------------------------------------------
 User UserList::find(const QString& username) const
 {
     const User* user = &User::kInvalidUser;

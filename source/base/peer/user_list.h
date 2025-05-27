@@ -31,7 +31,6 @@ public:
 
     static std::unique_ptr<UserList> createEmpty();
     std::unique_ptr<UserList> duplicate() const;
-    void merge(const UserList& user_list);
 
     // UserListBase implementation.
     void add(const User& user) final;
