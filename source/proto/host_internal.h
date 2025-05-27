@@ -20,6 +20,7 @@
 #define PROTO_HOST_INTERNAL_H
 
 #include <QMetaType>
+#include <QTextStream>
 
 #include "proto/host_internal.pb.h"
 
@@ -27,5 +28,7 @@ Q_DECLARE_METATYPE(proto::internal::Credentials)
 Q_DECLARE_METATYPE(proto::internal::CredentialsRequest::Type)
 Q_DECLARE_METATYPE(proto::internal::RouterState)
 Q_DECLARE_METATYPE(proto::internal::ConnectConfirmationRequest)
+
+QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& state);
 
 #endif // PROTO_HOST_INTERNAL_H
