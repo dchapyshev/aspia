@@ -154,8 +154,6 @@ ServiceThread::~ServiceThread()
     LOG(LS_INFO) << "Dtor";
 
     setStatus(SERVICE_STOPPED);
-
-    terminate();
     wait();
 
     DCHECK(self);
