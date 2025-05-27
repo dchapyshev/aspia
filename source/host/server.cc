@@ -551,12 +551,6 @@ void Server::connectToRouter()
         router_controller_ = nullptr;
     }
 
-    // Fill the connection parameters.
-    RouterController::RouterInfo router_info;
-    router_info.address = settings_.routerAddress();
-    router_info.port = settings_.routerPort();
-    router_info.public_key = settings_.routerPublicKey();
-
     // Connect to the router.
     router_controller_ = new RouterController(this);
 
@@ -567,7 +561,8 @@ void Server::connectToRouter()
     connect(router_controller_, &RouterController::sig_clientConnected,
             this, &Server::onNewRelayConnection);
 
-    router_controller_->start(router_info);
+    router_controller_->start(
+        settings_.routerAddress(), settings_.routerPort(), settings_.routerPublicKey());
 }
 
 //--------------------------------------------------------------------------------------------------

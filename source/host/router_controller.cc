@@ -54,13 +54,13 @@ RouterController::~RouterController()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::start(const RouterInfo& router_info)
+void RouterController::start(const QString& address, quint16 port, const QByteArray& public_key)
 {
-    router_info_ = router_info;
+    address_ = address;
+    port_ = port;
+    public_key_ = public_key;
 
-    LOG(LS_INFO) << "Starting host controller for router: "
-                 << router_info_.address << ":" << router_info_.port;
-
+    LOG(LS_INFO) << "Starting host controller for router: " << address_ << ":" << port_;
     connectToRouter();
 }
 
@@ -93,7 +93,7 @@ void RouterController::onTcpConnected()
     authenticator_ = new base::ClientAuthenticator(this);
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
-    authenticator_->setPeerPublicKey(router_info_.public_key);
+    authenticator_->setPeerPublicKey(public_key_);
     authenticator_->setSessionType(proto::ROUTER_SESSION_HOST);
 
     connect(authenticator_, &base::Authenticator::sig_finished,
@@ -249,7 +249,7 @@ void RouterController::connectToRouter()
     channel_ = new base::TcpChannel(this);
     connect(channel_, &base::TcpChannel::sig_connected, this, &RouterController::onTcpConnected);
 
-    channel_->connectTo(router_info_.address, router_info_.port);
+    channel_->connectTo(address_, port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,8 +265,8 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
     LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
 
     router_state_.set_state(state);
-    router_state_.set_host_name(router_info_.address.toStdString());
-    router_state_.set_host_port(router_info_.port);
+    router_state_.set_host_name(address_.toStdString());
+    router_state_.set_host_port(port_);
 
     emit sig_routerStateChanged(router_state_);
 }

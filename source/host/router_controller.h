@@ -39,18 +39,11 @@ public:
     explicit RouterController(QObject* parent = nullptr);
     ~RouterController() final;
 
-    struct RouterInfo
-    {
-        QString address;
-        quint16 port = 0;
-        QByteArray public_key;
-    };
+    void start(const QString& address, quint16 port, const QByteArray& public_key);
 
-    void start(const RouterInfo& router_info);
-
-    const QString& address() const { return router_info_.address; }
-    quint16 port() const { return router_info_.port; }
-    const QByteArray& publicKey() const { return router_info_.public_key; }
+    const QString& address() const { return address_; }
+    quint16 port() const { return port_; }
+    const QByteArray& publicKey() const { return public_key_; }
     const base::HostId hostId() const { return host_id_; }
     const proto::internal::RouterState state() const { return router_state_; }
 
@@ -80,7 +73,10 @@ private:
     QPointer<base::RelayPeerManager> peer_manager_;
     QPointer<QTimer> reconnect_timer_;
 
-    RouterInfo router_info_;
+    QString address_;
+    quint16 port_ = 0;
+    QByteArray public_key_;
+
     base::HostId host_id_ = base::kInvalidHostId;
     proto::internal::RouterState router_state_;
 
