@@ -96,20 +96,20 @@ void DesktopSessionAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
-    channel_ = new base::IpcChannel(this);
+    ipc_channel_ = new base::IpcChannel(this);
 
-    if (!channel_->connectTo(channel_id))
+    if (!ipc_channel_->connectTo(channel_id))
     {
         LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id.data() << ")";
         return;
     }
 
-    connect(channel_, &base::IpcChannel::sig_disconnected,
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionAgent::onIpcDisconnected);
-    connect(channel_, &base::IpcChannel::sig_messageReceived,
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopSessionAgent::onIpcMessageReceived);
 
-    channel_->resume();
+    ipc_channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void DesktopSessionAgent::onScreenTypeChanged(
             break;
     }
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -444,7 +444,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         connect(audio_capturer_, &base::AudioCapturerWrapper::sig_sendMessage, this,
                 [this](const QByteArray& data)
         {
-            channel_->send(QByteArray(data));
+            ipc_channel_->send(QByteArray(data));
         }, Qt::QueuedConnection);
 
         audio_capturer_->start();
@@ -591,7 +591,7 @@ void DesktopSessionAgent::captureScreen()
             return;
         }
 
-        channel_->send(base::serialize(outgoing_message_));
+        ipc_channel_->send(base::serialize(outgoing_message_));
         return;
     }
 
@@ -644,7 +644,7 @@ void DesktopSessionAgent::captureScreen()
     {
         // If a frame or cursor was captured, send a message to the service. The next capture
         // will be scheduled after the response from the service.
-        channel_->send(base::serialize(outgoing_message_));
+        ipc_channel_->send(base::serialize(outgoing_message_));
     }
     else
     {

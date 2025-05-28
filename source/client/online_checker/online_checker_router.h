@@ -63,7 +63,7 @@ private:
     void checkNextComputer();
     void onFinished(const base::Location& location);
 
-    QPointer<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> tcp_channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
     QTimer timer_;
     RouterConfig router_config_;

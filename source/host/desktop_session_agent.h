@@ -81,7 +81,7 @@ private:
     std::unique_ptr<base::MessageWindow> message_window_;
 #endif // defined(Q_OS_WINDOWS)
 
-    base::IpcChannel* channel_ = nullptr;
+    base::IpcChannel* ipc_channel_ = nullptr;
 
     QPointer<common::ClipboardMonitor> clipboard_monitor_;
     QPointer<InputInjector> input_injector_;

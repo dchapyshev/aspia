@@ -94,7 +94,7 @@ private:
     const SessionId session_id_;
     time_t start_time_ = 0;
 
-    base::TcpChannel* channel_ = nullptr;
+    base::TcpChannel* tcp_channel_ = nullptr;
 
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::SharedPointer<KeyPool> relay_key_pool_;

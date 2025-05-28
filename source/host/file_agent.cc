@@ -43,18 +43,18 @@ void FileAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
-    channel_ = new base::IpcChannel(this);
+    ipc_channel_ = new base::IpcChannel(this);
 
-    if (!channel_->connectTo(channel_id))
+    if (!ipc_channel_->connectTo(channel_id))
     {
         LOG(LS_ERROR) << "Connection failed";
         return;
     }
 
-    connect(channel_, &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
-    connect(channel_, &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
 
-    channel_->resume();
+    ipc_channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ void FileAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
 
     worker_->doRequest(request_, &reply_);
-    channel_->send(base::serialize(reply_));
+    ipc_channel_->send(base::serialize(reply_));
 }
 
 } // namespace host

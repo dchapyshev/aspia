@@ -50,8 +50,8 @@ Session::~Session() = default;
 //--------------------------------------------------------------------------------------------------
 void Session::setChannel(base::TcpChannel* channel)
 {
-    channel_ = channel;
-    channel_->setParent(this);
+    tcp_channel_ = channel;
+    tcp_channel_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_f
 //--------------------------------------------------------------------------------------------------
 void Session::start()
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_FATAL) << "Invalid network channel";
         return;
@@ -91,13 +91,13 @@ void Session::start()
         std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
-    address_ = channel_->peerAddress();
+    address_ = tcp_channel_->peerAddress();
 
-    connect(channel_, &base::TcpChannel::sig_disconnected, this, &Session::onTcpDisconnected);
-    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
-    connect(channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
+    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &Session::onTcpDisconnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
 
-    channel_->resume();
+    tcp_channel_->resume();
 
     onSessionReady();
 }
@@ -169,8 +169,8 @@ std::chrono::seconds Session::duration() const
 //--------------------------------------------------------------------------------------------------
 void Session::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
-    if (channel_)
-        channel_->send(channel_id, base::serialize(message));
+    if (tcp_channel_)
+        tcp_channel_->send(channel_id, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

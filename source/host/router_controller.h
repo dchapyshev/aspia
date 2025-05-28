@@ -67,7 +67,7 @@ private:
     void routerStateChanged(proto::internal::RouterState::State state);
     void hostIdRequest();
 
-    QPointer<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> tcp_channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
     QPointer<base::RelayPeerManager> peer_manager_;
     QPointer<QTimer> reconnect_timer_;

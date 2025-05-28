@@ -49,7 +49,7 @@ Router::Router(QObject* parent)
         reconnect_timer_->stop();
         reconnect_in_progress_ = false;
         setAutoReconnect(false);
-        delete channel_;
+        delete tcp_channel_;
     });
 }
 
@@ -93,9 +93,9 @@ void Router::connectToRouter(const QString& address, quint16 port)
 
     emit sig_connecting();
 
-    channel_ = new base::TcpChannel(this);
-    connect(channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
-    channel_->connectTo(router_address_, router_port_);
+    tcp_channel_ = new base::TcpChannel(this);
+    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
+    tcp_channel_->connectTo(router_address_, router_port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ void Router::refreshSessionList()
 {
     LOG(LS_INFO) << "Sending session list request";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -111,7 +111,7 @@ void Router::refreshSessionList()
 
     proto::AdminToRouter message;
     message.mutable_session_list_request()->set_dummy(1);
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void Router::stopSession(qint64 session_id)
 {
     LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -131,7 +131,7 @@ void Router::stopSession(qint64 session_id)
     request->set_type(proto::SESSION_REQUEST_DISCONNECT);
     request->set_session_id(session_id);
 
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ void Router::refreshUserList()
 {
     LOG(LS_INFO) << "Sending user list request";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -147,7 +147,7 @@ void Router::refreshUserList()
 
     proto::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ void Router::addUser(const proto::User& user)
     LOG(LS_INFO) << "Sending user add request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -168,7 +168,7 @@ void Router::addUser(const proto::User& user)
     request->set_type(proto::USER_REQUEST_ADD);
     request->mutable_user()->CopyFrom(user);
 
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void Router::modifyUser(const proto::User& user)
     LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -189,7 +189,7 @@ void Router::modifyUser(const proto::User& user)
     request->set_type(proto::USER_REQUEST_MODIFY);
     request->mutable_user()->CopyFrom(user);
 
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void Router::deleteUser(qint64 entry_id)
 {
     LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -209,7 +209,7 @@ void Router::deleteUser(qint64 entry_id)
     request->set_type(proto::USER_REQUEST_DELETE);
     request->mutable_user()->set_entry_id(entry_id);
 
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
     LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
                  << " (relay: " << relay_session_id << ")";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "Tcp channel not connected yet";
         return;
@@ -231,7 +231,7 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
     request->set_peer_session_id(peer_session_id);
     request->set_type(proto::PEER_CONNECTION_REQUEST_DISCONNECT);
 
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,16 +256,16 @@ void Router::onTcpConnected()
         {
             LOG(LS_INFO) << "Successful authentication";
 
-            connect(channel_, &base::TcpChannel::sig_disconnected,
+            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &Router::onTcpDisconnected);
-            connect(channel_, &base::TcpChannel::sig_messageReceived,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Router::onTcpMessageReceived);
 
             const QVersionNumber& router_version = authenticator_->peerVersion();
             if (router_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                tcp_channel_->setChannelIdSupport(true);
             }
 
             const QVersionNumber& client_version = base::kCurrentVersion;
@@ -280,7 +280,7 @@ void Router::onTcpConnected()
                 emit sig_connected(router_version);
 
                 // Now the session will receive incoming messages.
-                channel_->resume();
+                tcp_channel_->resume();
             }
         }
         else
@@ -295,7 +295,7 @@ void Router::onTcpConnected()
         authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_);
+    authenticator_->start(tcp_channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -312,10 +312,10 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         reconnect_in_progress_ = true;
 
         // Delete old channel.
-        if (channel_)
+        if (tcp_channel_)
         {
-            channel_->deleteLater();
-            channel_ = nullptr;
+            tcp_channel_->deleteLater();
+            tcp_channel_ = nullptr;
         }
 
         emit sig_waitForRouter();

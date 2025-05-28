@@ -73,7 +73,7 @@ private slots:
 private:
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
-    QPointer<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> tcp_channel_;
     QPointer<base::ClientAuthenticator> authenticator_;
 
     QString router_address_;

@@ -69,11 +69,11 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 
     LOG(LS_INFO) << "Connecting to router...";
 
-    channel_ = new base::TcpChannel(this);
+    tcp_channel_ = new base::TcpChannel(this);
 
-    connect(channel_, &base::TcpChannel::sig_connected, this, &OnlineCheckerRouter::onTcpConnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &OnlineCheckerRouter::onTcpConnected);
 
-    channel_->connectTo(router_config_.address, router_config_.port);
+    tcp_channel_->connectTo(router_config_.address, router_config_.port);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -93,20 +93,20 @@ void OnlineCheckerRouter::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_, &base::TcpChannel::sig_disconnected,
+            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &OnlineCheckerRouter::onTcpDisconnected);
-            connect(channel_, &base::TcpChannel::sig_messageReceived,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &OnlineCheckerRouter::onTcpMessageReceived);
 
             const QVersionNumber& router_version = authenticator_->peerVersion();
             if (router_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                tcp_channel_->setChannelIdSupport(true);
             }
 
             // Now the session will receive incoming messages.
-            channel_->resume();
+            tcp_channel_->resume();
 
             checkNextComputer();
         }
@@ -122,7 +122,7 @@ void OnlineCheckerRouter::onTcpConnected()
         authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_);
+    authenticator_->start(tcp_channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void OnlineCheckerRouter::checkNextComputer()
 
     proto::PeerToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,10 +185,10 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
 
-    if (channel_)
+    if (tcp_channel_)
     {
-        channel_->deleteLater();
-        channel_ = nullptr;
+        tcp_channel_->deleteLater();
+        tcp_channel_ = nullptr;
     }
 
     if (authenticator_)

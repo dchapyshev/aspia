@@ -57,7 +57,7 @@ public:
         SESSION_DENIED
     };
 
-    void start(TcpChannel* channel);
+    void start(TcpChannel* tcp_channel);
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
@@ -84,7 +84,7 @@ protected:
     virtual void onWritten() = 0;
 
     void sendMessage(const google::protobuf::MessageLite& message);
-    void sendMessage(QByteArray&& data);
+    void sendMessage(const QByteArray& data);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::Version& version);
     void setPeerOsName(const QString& name);
@@ -110,7 +110,7 @@ private slots:
 
 private:
     QPointer<QTimer> timer_;
-    QPointer<TcpChannel> channel_;
+    QPointer<TcpChannel> tcp_channel_;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.
     QString peer_os_name_;

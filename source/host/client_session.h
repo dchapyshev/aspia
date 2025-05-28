@@ -70,7 +70,7 @@ public:
     void setSessionId(base::SessionId session_id);
     base::SessionId sessionId() const { return session_id_; }
 
-    base::HostId hostId() const { return channel_->hostId(); }
+    base::HostId hostId() const { return tcp_channel_->hostId(); }
 
 signals:
     void sig_clientSessionConfigured();
@@ -106,7 +106,7 @@ private:
     QString computer_name_;
     QString display_name_;
 
-    base::TcpChannel* channel_ = nullptr;
+    base::TcpChannel* tcp_channel_ = nullptr;
 };
 
 } // namespace host

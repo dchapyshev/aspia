@@ -56,10 +56,10 @@ Client::Client(QObject* parent)
         session_state_->setReconnecting(false);
         session_state_->setAutoReconnect(false);
 
-        if (channel_)
+        if (tcp_channel_)
         {
             LOG(LS_INFO) << "Destroy channel";
-            channel_->deleteLater();
+            tcp_channel_->deleteLater();
         }
 
         if (router_controller_)
@@ -157,13 +157,13 @@ void Client::start()
         }
 
         // Create a network channel for messaging.
-        channel_ = new base::TcpChannel(this);
+        tcp_channel_ = new base::TcpChannel(this);
 
-        connect(channel_, &base::TcpChannel::sig_connected, this, &Client::onTcpConnected);
+        connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Client::onTcpConnected);
 
         // Now connect to the host.
         emit sig_statusChanged(Status::HOST_CONNECTING);
-        channel_->connectTo(config.address_or_id, config.port);
+        tcp_channel_->connectTo(config.address_or_id, config.port);
     }
 }
 
@@ -216,61 +216,61 @@ const char* Client::statusToString(Status status)
 //--------------------------------------------------------------------------------------------------
 void Client::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
-    channel_->send(channel_id, base::serialize(message));
+    tcp_channel_->send(channel_id, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 qint64 Client::totalRx() const
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "totalRx called but channel not initialized";
         return 0;
     }
 
-    return channel_->totalRx();
+    return tcp_channel_->totalRx();
 }
 
 //--------------------------------------------------------------------------------------------------
 qint64 Client::totalTx() const
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "totalTx called but channel not initialized";
         return 0;
     }
 
-    return channel_->totalTx();
+    return tcp_channel_->totalTx();
 }
 
 //--------------------------------------------------------------------------------------------------
 int Client::speedRx()
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "speedRx called but channel not initialized";
         return 0;
     }
 
-    return channel_->speedRx();
+    return tcp_channel_->speedRx();
 }
 
 //--------------------------------------------------------------------------------------------------
 int Client::speedTx()
 {
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "speedTx called but channel not initialized";
         return 0;
     }
 
-    return channel_->speedTx();
+    return tcp_channel_->speedTx();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,10 +296,10 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         timeout_timer_->start(std::chrono::minutes(5));
 
         // Delete old channel.
-        if (channel_)
+        if (tcp_channel_)
         {
             LOG(LS_INFO) << "Post task to destroy channel";
-            channel_->deleteLater();
+            tcp_channel_->deleteLater();
         }
 
         if (session_state_->isConnectionByHostId())
@@ -378,8 +378,8 @@ void Client::onHostConnected()
         return;
     }
 
-    channel_ = router_controller_->takeChannel();
-    channel_->setParent(this);
+    tcp_channel_ = router_controller_->takeChannel();
+    tcp_channel_->setParent(this);
 
     startAuthentication();
 
@@ -416,7 +416,7 @@ void Client::startAuthentication()
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
-    channel_->setReadBufferSize(kReadBufferSize);
+    tcp_channel_->setReadBufferSize(kReadBufferSize);
 
     authenticator_ = new base::ClientAuthenticator(this);
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
@@ -432,11 +432,11 @@ void Client::startAuthentication()
         {
             LOG(LS_INFO) << "Successful authentication";
 
-            connect(channel_, &base::TcpChannel::sig_disconnected,
+            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &Client::onTcpDisconnected);
-            connect(channel_, &base::TcpChannel::sig_messageReceived,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Client::onTcpMessageReceived);
-            connect(channel_, &base::TcpChannel::sig_messageWritten,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageWritten,
                     this, &Client::onTcpMessageWritten);
 
             const QVersionNumber& host_version = authenticator_->peerVersion();
@@ -445,7 +445,7 @@ void Client::startAuthentication()
             if (host_version >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                tcp_channel_->setChannelIdSupport(true);
             }
 
             const QVersionNumber& client_version = base::kCurrentVersion;
@@ -466,7 +466,7 @@ void Client::startAuthentication()
                 emit sig_showSessionWindow();
 
                 // Now the session will receive incoming messages.
-                channel_->resume();
+                tcp_channel_->resume();
             }
         }
         else
@@ -480,7 +480,7 @@ void Client::startAuthentication()
         authenticator_->deleteLater();
     });
 
-    authenticator_->start(std::move(channel_));
+    authenticator_->start(std::move(tcp_channel_));
 }
 
 //--------------------------------------------------------------------------------------------------

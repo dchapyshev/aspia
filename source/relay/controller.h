@@ -72,7 +72,7 @@ private:
     std::chrono::seconds statistics_interval_;
 
     QPointer<QTimer> reconnect_timer_;
-    base::TcpChannel* channel_ = nullptr;
+    base::TcpChannel* tcp_channel_ = nullptr;
     QPointer<base::ClientAuthenticator> authenticator_;
     KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;

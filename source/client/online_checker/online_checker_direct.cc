@@ -60,7 +60,7 @@ private:
     const quint16 port_;
 
     FinishCallback finish_callback_;
-    QPointer<base::TcpChannel> channel_;
+    QPointer<base::TcpChannel> tcp_channel_;
     QTimer timer_;
     bool finished_ = false;
 };
@@ -100,13 +100,13 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     LOG(LS_INFO) << "Starting connection to " << address_ << ":" << port_
                  << " (computer: " << computer_id_ << ")";
 
-    channel_ = new base::TcpChannel(this);
+    tcp_channel_ = new base::TcpChannel(this);
 
-    connect(channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
-    connect(channel_, &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
-    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
 
-    channel_->connectTo(address_, port_);
+    tcp_channel_->connectTo(address_, port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,8 +126,8 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    channel_->resume();
-    channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->resume();
+    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -33,11 +33,11 @@ ClientSession::ClientSession(
     proto::SessionType session_type, base::TcpChannel* channel, QObject* parent)
     : QObject(parent),
       session_type_(session_type),
-      channel_(channel)
+      tcp_channel_(channel)
 {
-    DCHECK(channel_);
+    DCHECK(tcp_channel_);
 
-    channel_->setParent(this);
+    tcp_channel_->setParent(this);
 
     // All sessions are executed in one thread. We can safely use a global counter to get session IDs.
     // Session IDs must start with 1.
@@ -93,10 +93,10 @@ void ClientSession::start()
     LOG(LS_INFO) << "Starting client session";
     state_ = State::STARTED;
 
-    connect(channel_, &base::TcpChannel::sig_disconnected, this, &ClientSession::onTcpDisconnected);
-    connect(channel_, &base::TcpChannel::sig_messageReceived, this, &ClientSession::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &ClientSession::onTcpDisconnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ClientSession::onTcpMessageReceived);
 
-    channel_->resume();
+    tcp_channel_->resume();
     onStarted();
 }
 
@@ -154,19 +154,19 @@ void ClientSession::setSessionId(base::SessionId session_id)
 //--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(QByteArray&& buffer)
 {
-    channel_->send(proto::HOST_CHANNEL_ID_SESSION, std::move(buffer));
+    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, std::move(buffer));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(const google::protobuf::MessageLite& message)
 {
-    channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 size_t ClientSession::pendingMessages() const
 {
-    return channel_->pendingMessages();
+    return tcp_channel_->pendingMessages();
 }
 
 //--------------------------------------------------------------------------------------------------

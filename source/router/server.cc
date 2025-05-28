@@ -52,7 +52,7 @@ Server::~Server()
 //--------------------------------------------------------------------------------------------------
 bool Server::start()
 {
-    if (server_)
+    if (tcp_server_)
     {
         LOG(LS_ERROR) << "Server already started";
         return false;
@@ -153,9 +153,9 @@ bool Server::start()
     key_factory_ = new KeyFactory(this);
     connect(key_factory_, &KeyFactory::sig_keyUsed, this, &Server::onPoolKeyUsed);
 
-    server_ = new base::TcpServer(this);
-    connect(server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
-    server_->start(port, listen_interface);
+    tcp_server_ = new base::TcpServer(this);
+    connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+    tcp_server_->start(port, listen_interface);
 
     LOG(LS_INFO) << "Server started";
     return true;
@@ -273,15 +273,15 @@ void Server::onSessionAuthenticated()
 //--------------------------------------------------------------------------------------------------
 void Server::onNewConnection()
 {
-    if (!server_)
+    if (!tcp_server_)
     {
         LOG(LS_ERROR) << "No TCP server instance";
         return;
     }
 
-    while (server_->hasPendingConnections())
+    while (tcp_server_->hasPendingConnections())
     {
-        base::TcpChannel* channel = server_->nextPendingConnection();
+        base::TcpChannel* channel = tcp_server_->nextPendingConnection();
         LOG(LS_INFO) << "New connection: " << channel->peerAddress();
         authenticator_manager_->addNewChannel(channel);
     }

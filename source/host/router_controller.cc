@@ -86,7 +86,7 @@ base::TcpChannel* RouterController::nextPendingConnection()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpConnected()
 {
-    DCHECK(channel_);
+    DCHECK(tcp_channel_);
 
     LOG(LS_INFO) << "Connection to the router is established";
 
@@ -101,22 +101,22 @@ void RouterController::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_, &base::TcpChannel::sig_disconnected,
+            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &RouterController::onTcpDisconnected);
-            connect(channel_, &base::TcpChannel::sig_messageReceived,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                tcp_channel_->setChannelIdSupport(true);
             }
 
             LOG(LS_INFO) << "Router connected";
             routerStateChanged(proto::internal::RouterState::CONNECTED);
 
             // Now the session will receive incoming messages.
-            channel_->resume();
+            tcp_channel_->resume();
             hostIdRequest();
         }
         else
@@ -131,7 +131,7 @@ void RouterController::onTcpConnected()
         authenticator_ = nullptr;
     });
 
-    authenticator_->start(channel_);
+    authenticator_->start(tcp_channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 
                 // Send host ID request.
                 LOG(LS_INFO) << "Send ID request to router";
-                channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(out_message));
+                tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(out_message));
                 return;
             }
 
@@ -246,10 +246,10 @@ void RouterController::connectToRouter()
 
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
-    channel_ = new base::TcpChannel(this);
-    connect(channel_, &base::TcpChannel::sig_connected, this, &RouterController::onTcpConnected);
+    tcp_channel_ = new base::TcpChannel(this);
+    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &RouterController::onTcpConnected);
 
-    channel_->connectTo(address_, port_);
+    tcp_channel_->connectTo(address_, port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,7 +276,7 @@ void RouterController::hostIdRequest()
 {
     LOG(LS_INFO) << "Started ID request for session";
 
-    if (!channel_ || !channel_->isConnected())
+    if (!tcp_channel_ || !tcp_channel_->isConnected())
     {
         LOG(LS_INFO) << "No active connection to the router";
         return;
@@ -302,7 +302,7 @@ void RouterController::hostIdRequest()
 
     // Send host ID request.
     LOG(LS_INFO) << "Send ID request to router";
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 } // namespace host

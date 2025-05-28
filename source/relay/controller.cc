@@ -194,21 +194,21 @@ void Controller::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            connect(channel_, &base::TcpChannel::sig_disconnected,
+            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &Controller::onTcpDisconnected);
-            connect(channel_, &base::TcpChannel::sig_messageReceived,
+            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Controller::onTcpMessageReceived);
 
             if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
-                channel_->setChannelIdSupport(true);
+                tcp_channel_->setChannelIdSupport(true);
             }
 
             LOG(LS_INFO) << "Authentication complete (session count: " << session_count_ << ")";
 
             // Now the session will receive incoming messages.
-            channel_->resume();
+            tcp_channel_->resume();
 
             sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
         }
@@ -223,7 +223,7 @@ void Controller::onTcpConnected()
         authenticator_->deleteLater();
     });
 
-    authenticator_->start(channel_);
+    authenticator_->start(tcp_channel_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,7 +296,7 @@ void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
     outgoing_message_.mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -331,12 +331,12 @@ void Controller::connectToRouter()
     LOG(LS_INFO) << "Connecting to router...";
 
     // Create channel.
-    channel_ = new base::TcpChannel(this);
+    tcp_channel_ = new base::TcpChannel(this);
 
-    connect(channel_, &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
 
     // Connect to router.
-    channel_->connectTo(router_address_, router_port_);
+    tcp_channel_->connectTo(router_address_, router_port_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,7 +379,7 @@ void Controller::sendKeyPool(quint32 key_count)
     }
 
     // Send a message to the router.
-    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
+    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(outgoing_message_));
 }
 
 } // namespace relay

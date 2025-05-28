@@ -56,7 +56,7 @@ Authenticator::~Authenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::start(TcpChannel* channel)
+void Authenticator::start(TcpChannel* tcp_channel)
 {
     if (state() != State::STOPPED)
     {
@@ -64,22 +64,22 @@ void Authenticator::start(TcpChannel* channel)
         return;
     }
 
-    channel_ = channel;
-    DCHECK(channel_);
+    tcp_channel_ = tcp_channel;
+    DCHECK(tcp_channel_);
 
-    LOG(LS_INFO) << "Authentication started for: " << channel_->peerAddress();
+    LOG(LS_INFO) << "Authentication started for: " << tcp_channel_->peerAddress();
     state_ = State::PENDING;
 
     // If authentication does not complete within the specified time interval, an error will be
     // raised.
     timer_->start(kTimeout);
 
-    connect(channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
-    connect(channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
-    connect(channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
+    connect(tcp_channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
+    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
+    connect(tcp_channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
 
     if (onStarted())
-        channel_->resume();
+        tcp_channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,25 +141,25 @@ void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::sendMessage(QByteArray&& data)
+void Authenticator::sendMessage(const QByteArray& data)
 {
-    if (channel_)
-        channel_->send(kChannelIdAuthenticator, std::move(data));
+    if (tcp_channel_)
+        tcp_channel_->send(kChannelIdAuthenticator, data);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Authenticator::finish(const Location& location, ErrorCode error_code)
 {
     // If the network channel is already destroyed, then exit (we have a repeated notification).
-    if (!channel_)
+    if (!tcp_channel_)
         return;
 
-    channel_->pause();
+    tcp_channel_->pause();
     timer_->stop();
 
-    disconnect(channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
-    disconnect(channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
-    disconnect(channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
+    disconnect(tcp_channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
+    disconnect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
+    disconnect(tcp_channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
 
     if (error_code == ErrorCode::SUCCESS)
         state_ = State::SUCCESS;
@@ -206,7 +206,7 @@ bool Authenticator::onSessionKeyChanged()
 {
     LOG(LS_INFO) << "Session key changed";
 
-    if (!channel_)
+    if (!tcp_channel_)
     {
         LOG(LS_ERROR) << "No valid TCP channel";
         return false;
@@ -244,8 +244,8 @@ bool Authenticator::onSessionKeyChanged()
         return false;
     }
 
-    channel_->setEncryptor(std::move(encryptor));
-    channel_->setDecryptor(std::move(decryptor));
+    tcp_channel_->setEncryptor(std::move(encryptor));
+    tcp_channel_->setDecryptor(std::move(decryptor));
     return true;
 }
 

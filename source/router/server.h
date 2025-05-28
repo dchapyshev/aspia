@@ -53,7 +53,7 @@ private slots:
 
 private:
     base::SharedPointer<DatabaseFactory> database_factory_;
-    base::TcpServer* server_ = nullptr;
+    base::TcpServer* tcp_server_ = nullptr;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     KeyFactory* key_factory_ = nullptr;
     SessionManager* session_manager_ = nullptr;
