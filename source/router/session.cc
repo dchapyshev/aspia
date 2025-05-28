@@ -23,6 +23,7 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory.h"
+#include "router/session_manager.h"
 
 namespace router {
 
@@ -66,12 +67,6 @@ void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_f
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::setServer(Server* server)
-{
-    server_ = server;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Session::start()
 {
     if (!channel_)
@@ -89,12 +84,6 @@ void Session::start()
     if (!database_factory_)
     {
         LOG(LS_FATAL) << "Invalid database factory";
-        return;
-    }
-
-    if (!server_)
-    {
-        LOG(LS_FATAL) << "Invalid server";
         return;
     }
 
@@ -117,6 +106,24 @@ void Session::start()
 std::unique_ptr<Database> Session::openDatabase() const
 {
     return database_factory_->openDatabase();
+}
+
+//--------------------------------------------------------------------------------------------------
+SessionManager* Session::sessionManager() const
+{
+    return static_cast<SessionManager*>(parent());
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<Session*> Session::sessions() const
+{
+    return sessionManager()->sessions();
+}
+
+//--------------------------------------------------------------------------------------------------
+Session* Session::sessionById(SessionId session_id) const
+{
+    return sessionManager()->sessionById(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,7 +177,7 @@ void Session::sendMessage(quint8 channel_id, const google::protobuf::MessageLite
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
-    emit sig_sessionFinished(session_id_, session_type_);
+    emit sig_sessionFinished(session_id_);
 }
 
 //--------------------------------------------------------------------------------------------------

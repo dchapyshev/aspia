@@ -22,8 +22,9 @@
 #include "base/serialization.h"
 #include "base/peer/user.h"
 #include "router/database.h"
-#include "router/server.h"
+#include "router/session_host.h"
 #include "router/session_relay.h"
+#include "router/session_manager.h"
 
 namespace router {
 
@@ -141,8 +142,65 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
 {
+    QList<Session*> session_list = sessions();
+
     proto::RouterToAdmin message;
-    *message.mutable_session_list() = server().sessionList();
+    proto::SessionList* result = message.mutable_session_list();
+
+    for (const auto& session : std::as_const(session_list))
+    {
+        proto::Session* item = result->add_session();
+
+        item->set_session_id(session->sessionId());
+        item->set_session_type(session->sessionType());
+        item->set_timepoint(static_cast<quint64>(session->startTime()));
+        item->set_ip_address(session->address().toStdString());
+        item->mutable_version()->CopyFrom(base::serialize(session->version()));
+        item->set_os_name(session->osName().toStdString());
+        item->set_computer_name(session->computerName().toStdString());
+        item->set_architecture(session->architecture().toStdString());
+
+        switch (session->sessionType())
+        {
+            case proto::ROUTER_SESSION_HOST:
+            {
+                proto::HostSessionData session_data;
+
+                for (const auto& host_id : static_cast<SessionHost*>(session)->hostIdList())
+                    session_data.add_host_id(host_id);
+
+                item->set_session_data(session_data.SerializeAsString());
+            }
+            break;
+
+        case proto::ROUTER_SESSION_RELAY:
+        {
+            proto::RelaySessionData session_data;
+            session_data.set_pool_size(relayKeyPool().countForRelay(session->sessionId()));
+
+            const std::optional<proto::RelayStat>& in_relay_stat =
+                static_cast<SessionRelay*>(session)->relayStat();
+            if (in_relay_stat.has_value())
+            {
+                proto::RelaySessionData::RelayStat* out_relay_stat =
+                    session_data.mutable_relay_stat();
+
+                out_relay_stat->set_uptime(in_relay_stat->uptime());
+                out_relay_stat->mutable_peer_connection()->CopyFrom(
+                    in_relay_stat->peer_connection());
+            }
+
+            item->set_session_data(session_data.SerializeAsString());
+        }
+        break;
+
+        default:
+            break;
+        }
+    }
+
+    result->set_error_code(proto::SessionList::SUCCESS);
+
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
 }
 
@@ -157,7 +215,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
     {
         Session::SessionId session_id = request.session_id();
 
-        if (!server().stopSession(session_id))
+        if (!sessionManager()->stopSession(session_id))
         {
             LOG(LS_ERROR) << "Session not found: " << session_id;
             session_result->set_error_code(proto::SessionResult::INVALID_SESSION_ID);
@@ -181,7 +239,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
 void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& request)
 {
     SessionRelay* relay_session =
-        dynamic_cast<SessionRelay*>(server().sessionById(request.relay_session_id()));
+        dynamic_cast<SessionRelay*>(sessionManager()->sessionById(request.relay_session_id()));
     if (!relay_session)
     {
         LOG(LS_ERROR) << "Relay with id " << request.relay_session_id() << " not found";

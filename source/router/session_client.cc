@@ -85,7 +85,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     proto::RouterToPeer message;
     proto::ConnectionOffer* offer = message.mutable_connection_offer();
 
-    SessionHost* host = server().hostSessionById(request.host_id());
+    SessionHost* host = sessionByHostId(request.host_id());
     if (!host)
     {
         LOG(LS_ERROR) << "Host with id " << request.host_id() << " NOT found!";
@@ -103,8 +103,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
         }
         else
         {
-            SessionRelay* relay = static_cast<SessionRelay*>(
-                server().sessionById(credentials->session_id));
+            SessionRelay* relay = static_cast<SessionRelay*>(sessionById(credentials->session_id));
             if (!relay)
             {
                 LOG(LS_ERROR) << "No relay with session id " << credentials->session_id;
@@ -161,7 +160,7 @@ void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host
     proto::RouterToPeer message;
     proto::HostStatus* host_status = message.mutable_host_status();
 
-    if (server().hostSessionById(check_host_status.host_id()))
+    if (sessionByHostId(check_host_status.host_id()))
         host_status->set_status(proto::HostStatus::STATUS_ONLINE);
     else
         host_status->set_status(proto::HostStatus::STATUS_OFFLINE);
@@ -169,6 +168,23 @@ void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host
     LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
                  << ": " << host_status->status();
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+SessionHost* SessionClient::sessionByHostId(base::HostId host_id)
+{
+    QList<Session*> session_list = sessions();
+
+    for (const auto& session : std::as_const(session_list))
+    {
+        if (session->sessionType() == proto::ROUTER_SESSION_HOST &&
+            static_cast<SessionHost*>(session)->hasHostId(host_id))
+        {
+            return static_cast<SessionHost*>(session);
+        }
+    }
+
+    return nullptr;
 }
 
 } // namespace router

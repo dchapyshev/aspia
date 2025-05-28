@@ -19,7 +19,6 @@
 #include "router/server.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
@@ -63,7 +62,8 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 //--------------------------------------------------------------------------------------------------
 Server::Server(QObject* parent)
     : QObject(parent),
-      database_factory_(new DatabaseFactorySqlite())
+      database_factory_(new DatabaseFactorySqlite()),
+      session_manager_(new SessionManager(this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -187,190 +187,16 @@ bool Server::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::SessionList Server::sessionList() const
-{
-    proto::SessionList result;
-
-    for (const auto& session : std::as_const(sessions_))
-    {
-        proto::Session* item = result.add_session();
-
-        item->set_session_id(session->sessionId());
-        item->set_session_type(session->sessionType());
-        item->set_timepoint(static_cast<quint64>(session->startTime()));
-        item->set_ip_address(session->address().toStdString());
-        item->mutable_version()->CopyFrom(base::serialize(session->version()));
-        item->set_os_name(session->osName().toStdString());
-        item->set_computer_name(session->computerName().toStdString());
-        item->set_architecture(session->architecture().toStdString());
-
-        switch (session->sessionType())
-        {
-            case proto::ROUTER_SESSION_HOST:
-            {
-                proto::HostSessionData session_data;
-
-                for (const auto& host_id : static_cast<SessionHost*>(session)->hostIdList())
-                    session_data.add_host_id(host_id);
-
-                item->set_session_data(session_data.SerializeAsString());
-            }
-            break;
-
-            case proto::ROUTER_SESSION_RELAY:
-            {
-                proto::RelaySessionData session_data;
-                session_data.set_pool_size(key_factory_->countForRelay(session->sessionId()));
-
-                const std::optional<proto::RelayStat>& in_relay_stat =
-                    static_cast<SessionRelay*>(session)->relayStat();
-                if (in_relay_stat.has_value())
-                {
-                    proto::RelaySessionData::RelayStat* out_relay_stat =
-                        session_data.mutable_relay_stat();
-
-                    out_relay_stat->set_uptime(in_relay_stat->uptime());
-                    out_relay_stat->mutable_peer_connection()->CopyFrom(
-                        in_relay_stat->peer_connection());
-                }
-
-                item->set_session_data(session_data.SerializeAsString());
-            }
-            break;
-
-            default:
-                break;
-        }
-    }
-
-    result.set_error_code(proto::SessionList::SUCCESS);
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Server::stopSession(Session::SessionId session_id)
-{
-    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
-    {
-        Session* session = *it;
-
-        if (session->sessionId() == session_id)
-        {
-            session->deleteLater();
-            sessions_.erase(it);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::onHostSessionWithId(SessionHost* session)
-{
-    if (!session)
-    {
-        LOG(LS_ERROR) << "Invalid session pointer";
-        return;
-    }
-
-    for (auto it = sessions_.begin(); it != sessions_.end();)
-    {
-        Session* other_session_ptr = *it;
-
-        if (!other_session_ptr || other_session_ptr->sessionType() != proto::ROUTER_SESSION_HOST)
-        {
-            ++it;
-            continue;
-        }
-
-        SessionHost* other_session = reinterpret_cast<SessionHost*>(other_session_ptr);
-        if (other_session == session)
-        {
-            ++it;
-            continue;
-        }
-
-        bool is_found = false;
-
-        for (const auto& host_id : session->hostIdList())
-        {
-            if (other_session->hasHostId(host_id))
-            {
-                LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
-
-                is_found = true;
-                break;
-            }
-        }
-
-        if (is_found)
-        {
-            other_session_ptr->deleteLater();
-            it = sessions_.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-SessionHost* Server::hostSessionById(base::HostId host_id)
-{
-    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
-    {
-        Session* session = *it;
-
-        if (session->sessionType() == proto::ROUTER_SESSION_HOST &&
-            static_cast<SessionHost*>(session)->hasHostId(host_id))
-        {
-            return static_cast<SessionHost*>(session);
-        }
-    }
-
-    return nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-Session* Server::sessionById(Session::SessionId session_id)
-{
-    for (const auto& session : std::as_const(sessions_))
-    {
-        if (session->sessionId() == session_id)
-            return session;
-    }
-
-    return nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 {
-    for (const auto& session : std::as_const(sessions_))
-    {
-        SessionRelay* relay_session = static_cast<SessionRelay*>(session);
-        if (relay_session->sessionId() == session_id)
-            relay_session->sendKeyUsed(key_id);
-    }
-}
+    QList<Session*> sessions = session_manager_->sessions();
 
-//--------------------------------------------------------------------------------------------------
-void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
-{
-    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
+    for (const auto& session : std::as_const(sessions))
     {
-        Session* session = *it;
-
         if (session->sessionId() == session_id)
         {
-            // Session will be destroyed after completion of the current call.
-            session->deleteLater();
-
-            // Delete a session from the list.
-            sessions_.erase(it);
-            break;
+            SessionRelay* relay_session = static_cast<SessionRelay*>(session);
+            relay_session->sendKeyUsed(key_id);
         }
     }
 }
@@ -410,7 +236,7 @@ void Server::onSessionAuthenticated()
                 if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
                     break;
 
-                session = new SessionClient(this);
+                session = new SessionClient(session_manager_);
             }
             break;
 
@@ -419,7 +245,7 @@ void Server::onSessionAuthenticated()
                 if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
                     break;
 
-                session = new SessionHost(this);
+                session = new SessionHost(session_manager_);
             }
             break;
 
@@ -428,7 +254,7 @@ void Server::onSessionAuthenticated()
                 if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
                     break;
 
-                session = new SessionAdmin(this);
+                session = new SessionAdmin(session_manager_);
             }
             break;
 
@@ -437,7 +263,7 @@ void Server::onSessionAuthenticated()
                 if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
                     break;
 
-                session = new SessionRelay(this);
+                session = new SessionRelay(session_manager_);
             }
             break;
 
@@ -457,7 +283,6 @@ void Server::onSessionAuthenticated()
 
         session->setChannel(session_info.channel);
         session->setDatabaseFactory(database_factory_);
-        session->setServer(this);
         session->setRelayKeyPool(key_factory_->sharedKeyPool());
         session->setVersion(session_info.version);
         session->setOsName(session_info.os_name);
@@ -465,9 +290,7 @@ void Server::onSessionAuthenticated()
         session->setArchitecture(session_info.architecture);
         session->setUserName(session_info.user_name);
 
-        connect(session, &Session::sig_sessionFinished, this, &Server::onSessionFinished);
-
-        sessions_.push_back(session);
+        session_manager_->addSession(session);
         session->start();
     }
 }

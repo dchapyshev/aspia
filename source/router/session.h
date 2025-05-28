@@ -31,7 +31,7 @@ namespace router {
 
 class Database;
 class DatabaseFactory;
-class Server;
+class SessionManager;
 
 class Session : public QObject
 {
@@ -46,7 +46,6 @@ public:
     void setChannel(base::TcpChannel* channel);
     void setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
-    void setServer(Server* server);
 
     void start();
 
@@ -68,7 +67,7 @@ public:
     std::chrono::seconds duration() const;
 
 signals:
-    void sig_sessionFinished(SessionId session_id, proto::RouterSession session_type);
+    void sig_sessionFinished(SessionId session_id);
 
 protected:
     void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
@@ -81,8 +80,9 @@ protected:
     KeyPool& relayKeyPool() { return *relay_key_pool_; }
     const KeyPool& relayKeyPool() const { return *relay_key_pool_; }
 
-    Server& server() { return *server_; }
-    const Server& server() const { return *server_; }
+    SessionManager* sessionManager() const;
+    QList<Session*> sessions() const;
+    Session* sessionById(SessionId session_id) const;
 
 private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
@@ -95,9 +95,9 @@ private:
     time_t start_time_ = 0;
 
     base::TcpChannel* channel_ = nullptr;
+
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::SharedPointer<KeyPool> relay_key_pool_;
-    Server* server_ = nullptr;
 
     QString address_;
     QString username_;

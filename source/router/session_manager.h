@@ -16,38 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_CLIENT_H
-#define ROUTER_SESSION_CLIENT_H
+#ifndef ROUTER_SESSION_MANAGER_H
+#define ROUTER_SESSION_MANAGER_H
 
-#include "proto/router_peer.pb.h"
+#include <QObject>
+
 #include "router/session.h"
 
 namespace router {
 
-class ServerProxy;
-class SessionHost;
-class SharedKeyPool;
+class Session;
 
-class SessionClient final : public Session
+class SessionManager final : public QObject
 {
-public:
-    explicit SessionClient(QObject* parent = nullptr);
-    ~SessionClient() final;
+    Q_OBJECT
 
-protected:
-    // Session implementation.
-    void onSessionReady() final;
-    void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
-    void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
+public:
+    explicit SessionManager(QObject* parent = nullptr);
+    ~SessionManager() final;
+
+    QList<Session*> sessions() const;
+
+    void addSession(Session* session);
+    bool stopSession(Session::SessionId id);
+
+    Session* sessionById(Session::SessionId session_id);
+
+private slots:
+    void onSessionFinished(Session::SessionId session_id);
 
 private:
-    void readConnectionRequest(const proto::ConnectionRequest& request);
-    void readCheckHostStatus(const proto::CheckHostStatus& check_host_status);
-    SessionHost* sessionByHostId(base::HostId host_id);
-
-    DISALLOW_COPY_AND_ASSIGN(SessionClient);
+    QList<Session*> sessions_;
 };
 
 } // namespace router
 
-#endif // ROUTER_SESSION_CLIENT_H
+#endif // ROUTER_SESSION_MANAGER_H

@@ -152,9 +152,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
                 if (!host_id_list_.contains(host_id))
                 {
                     host_id_list_.push_back(host_id);
-
-                    // Notify the server that the ID has been assigned.
-                    server().onHostSessionWithId(this);
+                    removeOtherWithSameId();
                 }
             }
             else
@@ -204,6 +202,42 @@ void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
     }
 
     LOG(LS_ERROR) << "Host ID " << host_id << " NOT found in list";
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionHost::removeOtherWithSameId()
+{
+    QList<Session*> session_list = sessions();
+    SessionId session_for_stopping = 0;
+
+    for (const auto& other_session : std::as_const(session_list))
+    {
+        if (other_session->sessionType() != proto::ROUTER_SESSION_HOST || other_session == this)
+            continue;
+
+        SessionHost* other_host_session = reinterpret_cast<SessionHost*>(other_session);
+        bool is_found = false;
+
+        for (const auto& host_id : std::as_const(host_id_list_))
+        {
+            if (other_host_session->hasHostId(host_id))
+            {
+                LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
+
+                is_found = true;
+                break;
+            }
+        }
+
+        if (is_found)
+        {
+            session_for_stopping = other_session->sessionId();
+            break;
+        }
+    }
+
+    if (session_for_stopping)
+        sessionManager()->stopSession(session_for_stopping);
 }
 
 } // namespace router

@@ -49,6 +49,7 @@ protected:
 private:
     void readHostIdRequest(const proto::HostIdRequest& host_id_request);
     void readResetHostId(const proto::ResetHostId& reset_host_id);
+    void removeOtherWithSameId();
 
     HostIdList host_id_list_;
 

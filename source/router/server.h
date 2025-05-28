@@ -22,11 +22,10 @@
 #include <QList>
 
 #include "base/net/tcp_server.h"
-#include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "proto/router_admin.pb.h"
 #include "router/key_factory.h"
-#include "router/session.h"
+#include "router/session_manager.h"
 
 namespace router {
 
@@ -45,15 +44,10 @@ public:
     bool start();
 
     proto::SessionList sessionList() const;
-    bool stopSession(Session::SessionId session_id);
     void onHostSessionWithId(SessionHost* session);
-
-    SessionHost* hostSessionById(base::HostId host_id);
-    Session* sessionById(Session::SessionId session_id);
 
 private slots:
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
-    void onSessionFinished(Session::SessionId session_id, proto::RouterSession session_type);
     void onSessionAuthenticated();
     void onNewConnection();
 
@@ -62,7 +56,7 @@ private:
     base::TcpServer* server_ = nullptr;
     QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     KeyFactory* key_factory_ = nullptr;
-    QList<Session*> sessions_;
+    SessionManager* session_manager_ = nullptr;
 
     QStringList client_white_list_;
     QStringList host_white_list_;
