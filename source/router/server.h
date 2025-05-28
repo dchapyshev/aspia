@@ -43,9 +43,6 @@ public:
 
     bool start();
 
-    proto::SessionList sessionList() const;
-    void onHostSessionWithId(SessionHost* session);
-
 private slots:
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
     void onSessionAuthenticated();
