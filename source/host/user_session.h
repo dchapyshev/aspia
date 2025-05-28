@@ -19,6 +19,9 @@
 #ifndef HOST_USER_SESSION_H
 #define HOST_USER_SESSION_H
 
+#include <QList>
+#include <QTimer>
+
 #include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
@@ -27,10 +30,7 @@
 #include "host/desktop_session_manager.h"
 #include "host/system_settings.h"
 #include "host/unconfirmed_client_session.h"
-#include "proto/host_internal.pb.h"
-
-#include <QList>
-#include <QTimer>
+#include "proto/host_internal.h"
 
 namespace host {
 
@@ -64,7 +64,6 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    size_t clientsCount() const;
     bool isConnectedToUi() const { return channel_ != nullptr; }
 
     void onClientSession(ClientSession* client_session);
@@ -90,25 +89,19 @@ private slots:
     void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);
     void onDesktopSessionStarted();
     void onDesktopSessionStopped();
-    void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor);
-    void onScreenCaptureError(proto::VideoErrorCode error_code);
-    void onAudioCaptured(const proto::AudioPacket& audio_packet);
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position);
-    void onScreenListChanged(const proto::ScreenList& list);
-    void onScreenTypeChanged(const proto::ScreenType& type);
-    void onClipboardEvent(const proto::ClipboardEvent& event);
 
 private:
     void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
     void sendDisconnectEvent(quint32 session_id);
-    void killClientSession(quint32 id);
+    void stopClientSession(quint32 id);
     void addNewClientSession(ClientSession* client_session);
     void setState(const base::Location& location, State state);
     void onTextChatHasUser(const base::Location& location, bool has_user);
     void onTextChatSessionStarted(quint32 id);
     void onTextChatSessionFinished(quint32 id);
     void mergeAndSendConfiguration();
+    bool hasDesktopClients() const;
 
     base::IpcChannel* channel_ = nullptr;
 
@@ -124,8 +117,7 @@ private:
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
     QList<UnconfirmedClientSession*> pending_clients_;
-    QList<ClientSession*> desktop_clients_;
-    QList<ClientSession*> other_clients_;
+    QList<ClientSession*> clients_;
 
     DesktopSessionManager* desktop_session_ = nullptr;
 

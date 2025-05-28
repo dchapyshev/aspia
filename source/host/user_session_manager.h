@@ -19,13 +19,13 @@
 #ifndef HOST_USER_SESSION_MANAGER_H
 #define HOST_USER_SESSION_MANAGER_H
 
+#include <QObject>
+#include <QList>
+
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
-
-#include <QObject>
-#include <QList>
 
 namespace host {
 

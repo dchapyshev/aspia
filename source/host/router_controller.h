@@ -66,7 +66,6 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::internal::RouterState::State state);
     void hostIdRequest();
-    static const char* routerStateToString(proto::internal::RouterState::State state);
 
     QPointer<base::TcpChannel> channel_;
     QPointer<base::ClientAuthenticator> authenticator_;

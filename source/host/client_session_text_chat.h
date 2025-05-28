@@ -29,7 +29,7 @@ class ClientSessionTextChat final : public ClientSession
     Q_OBJECT
 
 public:
-    explicit ClientSessionTextChat(base::TcpChannel* channel, QObject* parent);
+    ClientSessionTextChat(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionTextChat() final;
 
     void sendTextChat(const proto::TextChat& text_chat);

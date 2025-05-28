@@ -262,7 +262,7 @@ void RouterController::delayedConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
-    LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
+    LOG(LS_INFO) << "Router state changed: " << state;
 
     router_state_.set_state(state);
     router_state_.set_host_name(address_.toStdString());
@@ -303,29 +303,6 @@ void RouterController::hostIdRequest()
     // Send host ID request.
     LOG(LS_INFO) << "Send ID request to router";
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-const char* RouterController::routerStateToString(proto::internal::RouterState::State state)
-{
-    switch (state)
-    {
-        case proto::internal::RouterState::DISABLED:
-            return "DISABLED";
-
-        case proto::internal::RouterState::CONNECTING:
-            return "CONNECTING";
-
-        case proto::internal::RouterState::CONNECTED:
-            return "CONNECTED";
-
-        case proto::internal::RouterState::FAILED:
-            return "FAILED";
-
-        default:
-            return "UNKNOWN";
-    }
 }
 
 } // namespace host

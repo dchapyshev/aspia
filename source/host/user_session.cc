@@ -21,7 +21,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/desktop/frame.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 
@@ -30,28 +29,6 @@
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-const char* routerStateToString(proto::internal::RouterState::State state)
-{
-    switch (state)
-    {
-        case proto::internal::RouterState::DISABLED:
-            return "DISABLED";
-        case proto::internal::RouterState::CONNECTING:
-            return "CONNECTING";
-        case proto::internal::RouterState::CONNECTED:
-            return "CONNECTED";
-        case proto::internal::RouterState::FAILED:
-            return "FAILED";
-        default:
-            return "UNKNOWN";
-    }
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, QObject* parent)
@@ -106,8 +83,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, 
 //--------------------------------------------------------------------------------------------------
 UserSession::~UserSession()
 {
-    LOG(LS_INFO) << "Dtor (sid=" << session_id_
-                 << " type=" << typeToString(type_)
+    LOG(LS_INFO) << "Dtor (sid=" << session_id_ << " type=" << typeToString(type_)
                  << " state=" << stateToString(state_) << ")";
 }
 
@@ -161,20 +137,6 @@ void UserSession::start()
             this, &UserSession::onDesktopSessionStarted);
     connect(desktop_session_, &DesktopSessionManager::sig_desktopSessionStopped,
             this, &UserSession::onDesktopSessionStopped);
-    connect(desktop_session_, &DesktopSessionManager::sig_screenCaptured,
-            this, &UserSession::onScreenCaptured);
-    connect(desktop_session_, &DesktopSessionManager::sig_screenCaptureError,
-            this, &UserSession::onScreenCaptureError);
-    connect(desktop_session_, &DesktopSessionManager::sig_audioCaptured,
-            this, &UserSession::onAudioCaptured);
-    connect(desktop_session_, &DesktopSessionManager::sig_cursorPositionChanged,
-            this, &UserSession::onCursorPositionChanged);
-    connect(desktop_session_, &DesktopSessionManager::sig_screenListChanged,
-            this, &UserSession::onScreenListChanged);
-    connect(desktop_session_, &DesktopSessionManager::sig_screenTypeChanged,
-            this, &UserSession::onScreenTypeChanged);
-    connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
-            this, &UserSession::onClipboardEvent);
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
@@ -229,14 +191,8 @@ void UserSession::restart(base::IpcChannel* channel)
         channel_->setParent(this);
         channel_->resume();
 
-        auto send_connection_list = [this](const QList<ClientSession*>& list)
-        {
-            for (const auto& client : list)
-                sendConnectEvent(*client);
-        };
-
-        send_connection_list(desktop_clients_);
-        send_connection_list(other_clients_);
+        for (const auto& client : std::as_const(clients_))
+            sendConnectEvent(*client);
 
         onTextChatHasUser(FROM_HERE, true);
     }
@@ -249,12 +205,6 @@ void UserSession::restart(base::IpcChannel* channel)
 
     emit sig_routerStateRequested();
     emit sig_credentialsRequested();
-}
-
-//--------------------------------------------------------------------------------------------------
-size_t UserSession::clientsCount() const
-{
-    return desktop_clients_.size() + other_clients_.size();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,7 +322,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
             LOG(LS_INFO) << "User session ID changed from " << session_id_ << " to " << session_id;
             session_id_ = session_id;
 
-            for (const auto& client : std::as_const(desktop_clients_))
+            for (const auto& client : std::as_const(clients_))
                 client->setSessionId(session_id);
 
             desktop_dettach_timer_->stop();
@@ -461,9 +411,7 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
         return;
     }
 
-    LOG(LS_INFO) << "Router: " << router_state.host_name() << ":" << router_state.host_port()
-                 << " (state=" << routerStateToString(router_state.state())
-                 << " sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Router: " << router_state << " sid=" << session_id_ << ")";
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state);
@@ -524,41 +472,35 @@ void UserSession::onClientSessionConfigured()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionFinished()
 {
-    auto delete_finished = [this](QList<ClientSession*>* list)
-    {
-        for (auto it = list->begin(); it != list->end();)
-        {
-            ClientSession* client_session = *it;
-
-            if (client_session->state() != ClientSession::State::FINISHED)
-            {
-                ++it;
-                continue;
-            }
-
-            LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
-                         << " finished. Delete it (sid=" << session_id_ << ")";
-
-            if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
-                onTextChatSessionFinished(client_session->id());
-
-            // Notification of the UI about disconnecting the client.
-            sendDisconnectEvent(client_session->id());
-
-            // Session will be destroyed after completion of the current call.
-            client_session->deleteLater();
-
-            // Delete a session from the list.
-            it = list->erase(it);
-        }
-    };
-
     LOG(LS_INFO) << "Client session finished (sid=" << session_id_ << ")";
 
-    delete_finished(&desktop_clients_);
-    delete_finished(&other_clients_);
+    for (auto it = clients_.begin(); it != clients_.end();)
+    {
+        ClientSession* client_session = *it;
 
-    if (desktop_clients_.empty())
+        if (client_session->state() != ClientSession::State::FINISHED)
+        {
+            ++it;
+            continue;
+        }
+
+        LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
+                     << " finished. Delete it (sid=" << session_id_ << ")";
+
+        if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+            onTextChatSessionFinished(client_session->id());
+
+        // Notification of the UI about disconnecting the client.
+        sendDisconnectEvent(client_session->id());
+
+        // Session will be destroyed after completion of the current call.
+        client_session->deleteLater();
+
+        // Delete a session from the list.
+        it = clients_.erase(it);
+    }
+
+    if (!hasDesktopClients())
     {
         LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent (sid=" << session_id_ << ")";
         desktop_session_->control(proto::internal::DesktopControl::DISABLE);
@@ -600,7 +542,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
         return;
     }
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT && client->id() != id)
         {
@@ -683,7 +625,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
             LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
                          << control.unsigned_integer() << ")";
-            killClientSession(static_cast<quint32>(control.unsigned_integer()));
+            stopClientSession(static_cast<quint32>(control.unsigned_integer()));
         }
         break;
 
@@ -708,10 +650,13 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             {
                 QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
                 {
-                    for (const auto& client : std::as_const(desktop_clients_))
+                    for (const auto& client : std::as_const(clients_))
                     {
-                        static_cast<ClientSessionDesktop*>(client)->setVideoErrorCode(
-                            proto::VIDEO_ERROR_CODE_PAUSED);
+                        ClientSessionDesktop* desktop_client =
+                            dynamic_cast<ClientSessionDesktop*>(client);
+
+                        if (desktop_client)
+                            desktop_client->setVideoErrorCode(proto::VIDEO_ERROR_CODE_PAUSED);
                     }
                 });
             }
@@ -770,7 +715,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
 
-        for (const auto& client : std::as_const(other_clients_))
+        for (const auto& client : std::as_const(clients_))
         {
             if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
             {
@@ -813,7 +758,7 @@ void UserSession::onDesktopSessionStarted()
     LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
 
     proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
-    if (desktop_clients_.empty())
+    if (!hasDesktopClients())
     {
         LOG(LS_INFO) << "No desktop clients. Disable session (sid=" << session_id_ << ")";
         action = proto::internal::DesktopControl::DISABLE;
@@ -834,92 +779,20 @@ void UserSession::onDesktopSessionStopped()
 {
     LOG(LS_INFO) << "Desktop session is disconnected (sid=" << session_id_ << ")";
 
-    if (type_ == Type::RDP)
+    if (type_ != Type::RDP)
+        return;
+
+    LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid=" << session_id_ << ")";
+
+    auto it = clients_.begin();
+    while (it != clients_.end())
     {
-        LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid=" << session_id_ << ")";
-
-        desktop_clients_.clear();
-
-        for (auto it = other_clients_.begin(); it != other_clients_.end();)
-        {
-            if ((*it)->sessionType() == proto::SESSION_TYPE_FILE_TRANSFER)
-                it = other_clients_.erase(it);
-            else
-                ++it;
-        }
-
-        onSessionDettached(FROM_HERE);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
-{
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->encodeScreen(frame, cursor);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
-{
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->setVideoErrorCode(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
-{
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->encodeAudio(audio_packet);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
-{
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->setCursorPosition(cursor_position);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenListChanged(const proto::ScreenList& list)
-{
-    LOG(LS_INFO) << "Screen list changed (sid=" << session_id_ << ")";
-    LOG(LS_INFO) << "Primary screen: " << list.primary_screen();
-    LOG(LS_INFO) << "Current screen: " << list.current_screen();
-
-    for (int i = 0; i < list.screen_size(); ++i)
-    {
-        const proto::Screen& screen = list.screen(i);
-        const proto::Point& dpi = screen.dpi();
-        const proto::Point& position = screen.position();
-        const proto::Resolution& resolution = screen.resolution();
-
-        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
-                     << " title=" << screen.title()
-                     << " dpi=" << dpi.x() << "x" << dpi.y()
-                     << " pos=" << position.x() << "x" << position.y()
-                     << " res=" << resolution.width() << "x" << resolution.height();
+        ClientSession* session = *it;
+        session->deleteLater();
+        it = clients_.erase(it);
     }
 
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->setScreenList(list);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
-{
-    LOG(LS_INFO) << "Screen type changed (type=" << type.type() << " name=" << type.name()
-    << " sid=" << session_id_ << ")";
-
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->setScreenType(type);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    for (const auto& client : std::as_const(desktop_clients_))
-        static_cast<ClientSessionDesktop*>(client)->injectClipboardEvent(event);
+    onSessionDettached(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -942,8 +815,12 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     // Stop one-time desktop clients.
-    for (const auto& client : std::as_const(desktop_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
+        ClientSessionDesktop* desktop_client = dynamic_cast<ClientSessionDesktop*>(client);
+        if (!desktop_client)
+            continue;
+
         const QString& user_name = client->userName();
         if (user_name.startsWith("#"))
         {
@@ -954,7 +831,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     // Stop all file transfer clients.
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_FILE_TRANSFER)
             continue;
@@ -1040,25 +917,19 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::killClientSession(quint32 id)
+void UserSession::stopClientSession(quint32 id)
 {
-    auto stop_by_id = [](QList<ClientSession*>* list, quint32 id)
+    LOG(LS_INFO) << "Stop client session with ID: " << id << " (sid=" << session_id_ << ")";
+
+    for (const auto& client_session : std::as_const(clients_))
     {
-        for (const auto& client_session : std::as_const(*list))
+        if (client_session->id() == id)
         {
-            if (client_session->id() == id)
-            {
-                LOG(LS_INFO) << "Client session with id " << id << " found in list. Stop it";
-                client_session->stop();
-                break;
-            }
+            LOG(LS_INFO) << "Client session with id " << id << " found in list. Stop it";
+            client_session->stop();
+            break;
         }
-    };
-
-    LOG(LS_INFO) << "Kill client session with ID: " << id << " (sid=" << session_id_ << ")";
-
-    stop_by_id(&desktop_clients_, id);
-    stop_by_id(&other_clients_, id);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1073,31 +944,45 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         {
             LOG(LS_INFO) << "New desktop session (sid=" << session_id_ << ")";
 
-            bool enable_required = desktop_clients_.empty();
+            bool enable_required = !hasDesktopClients();
 
-            desktop_clients_.append(client_session);
+            clients_.append(client_session);
 
-            ClientSessionDesktop* desktop_client_session =
-                static_cast<ClientSessionDesktop*>(client_session);
+            ClientSessionDesktop* desktop_client = static_cast<ClientSessionDesktop*>(client_session);
 
-            connect(desktop_client_session, &ClientSessionDesktop::sig_control,
+            connect(desktop_client, &ClientSessionDesktop::sig_control,
                     desktop_session_, &DesktopSessionManager::control);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_selectScreen,
+            connect(desktop_client, &ClientSessionDesktop::sig_selectScreen,
                     desktop_session_, &DesktopSessionManager::selectScreen);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_captureScreen,
+            connect(desktop_client, &ClientSessionDesktop::sig_captureScreen,
                     desktop_session_, &DesktopSessionManager::captureScreen);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_captureFpsChanged,
+            connect(desktop_client, &ClientSessionDesktop::sig_captureFpsChanged,
                     desktop_session_, &DesktopSessionManager::setScreenCaptureFps);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_injectKeyEvent,
+            connect(desktop_client, &ClientSessionDesktop::sig_injectKeyEvent,
                     desktop_session_, &DesktopSessionManager::injectKeyEvent);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_injectTextEvent,
+            connect(desktop_client, &ClientSessionDesktop::sig_injectTextEvent,
                     desktop_session_, &DesktopSessionManager::injectTextEvent);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_injectMouseEvent,
+            connect(desktop_client, &ClientSessionDesktop::sig_injectMouseEvent,
                     desktop_session_, &DesktopSessionManager::injectMouseEvent);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_injectTouchEvent,
+            connect(desktop_client, &ClientSessionDesktop::sig_injectTouchEvent,
                     desktop_session_, &DesktopSessionManager::injectTouchEvent);
-            connect(desktop_client_session, &ClientSessionDesktop::sig_injectClipboardEvent,
+            connect(desktop_client, &ClientSessionDesktop::sig_injectClipboardEvent,
                     desktop_session_, &DesktopSessionManager::injectClipboardEvent);
+
+            connect(desktop_session_, &DesktopSessionManager::sig_screenCaptured,
+                    desktop_client, &ClientSessionDesktop::encodeScreen);
+            connect(desktop_session_, &DesktopSessionManager::sig_screenCaptureError,
+                    desktop_client, &ClientSessionDesktop::setVideoErrorCode);
+            connect(desktop_session_, &DesktopSessionManager::sig_audioCaptured,
+                    desktop_client, &ClientSessionDesktop::encodeAudio);
+            connect(desktop_session_, &DesktopSessionManager::sig_cursorPositionChanged,
+                    desktop_client, &ClientSessionDesktop::setCursorPosition);
+            connect(desktop_session_, &DesktopSessionManager::sig_screenListChanged,
+                    desktop_client, &ClientSessionDesktop::setScreenList);
+            connect(desktop_session_, &DesktopSessionManager::sig_screenTypeChanged,
+                    desktop_client, &ClientSessionDesktop::setScreenType);
+            connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
+                    desktop_client, &ClientSessionDesktop::injectClipboardEvent);
 
             if (enable_required)
             {
@@ -1110,28 +995,28 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
             LOG(LS_INFO) << "New file transfer session (sid=" << session_id_ << ")";
-            other_clients_.append(std::move(client_session));
+            clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
         {
             LOG(LS_INFO) << "New system info session (sid=" << session_id_ << ")";
-            other_clients_.append(std::move(client_session));
+            clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
         {
             LOG(LS_INFO) << "New text chat session (sid=" << session_id_ << ")";
-            other_clients_.append(std::move(client_session));
+            clients_.append(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_PORT_FORWARDING:
         {
             LOG(LS_INFO) << "New port forwarding session (sid=" << session_id_ << ")";
-            other_clients_.append(std::move(client_session));
+            clients_.append(std::move(client_session));
         }
         break;
 
@@ -1165,7 +1050,7 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         onTextChatSessionStarted(client_session->id());
 
         bool has_user = channel_ != nullptr;
-        for (const auto& client : std::as_const(other_clients_))
+        for (const auto& client : std::as_const(clients_))
         {
             if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
                 continue;
@@ -1190,7 +1075,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
     LOG(LS_INFO) << "User state changed (has_user=" << has_user << " sid=" << session_id_
                  << " from=" << location.toString() << ")";
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
@@ -1213,7 +1098,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
@@ -1239,7 +1124,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         }
     }
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
@@ -1267,7 +1152,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
     outgoing_message_.Clear();
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
@@ -1290,7 +1175,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         }
     }
 
-    for (const auto& client : std::as_const(other_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
             continue;
@@ -1314,7 +1199,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::mergeAndSendConfiguration()
 {
-    if (desktop_clients_.isEmpty())
+    if (!hasDesktopClients())
     {
         LOG(LS_INFO) << "No desktop clients (sid=" << session_id_ << ")";
         return;
@@ -1325,10 +1210,13 @@ void UserSession::mergeAndSendConfiguration()
     DesktopSession::Config system_config;
     memset(&system_config, 0, sizeof(system_config));
 
-    for (const auto& client : std::as_const(desktop_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
-        const DesktopSession::Config& client_config =
-            static_cast<ClientSessionDesktop*>(client)->desktopSessionConfig();
+        ClientSessionDesktop* desktop_client = dynamic_cast<ClientSessionDesktop*>(client);
+        if (!desktop_client)
+            continue;
+
+        const DesktopSession::Config& client_config = desktop_client->desktopSessionConfig();
 
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.
@@ -1361,6 +1249,23 @@ void UserSession::mergeAndSendConfiguration()
 
     desktop_session_->configure(system_config);
     desktop_session_->captureScreen();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSession::hasDesktopClients() const
+{
+    for (const auto& session : std::as_const(clients_))
+    {
+        proto::SessionType session_type = session->sessionType();
+
+        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // namespace host
