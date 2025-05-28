@@ -1549,27 +1549,27 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="59"/>
+        <location filename="../fast_connect_dialog.cc" line="60"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="104"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>Список введенных адреснов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="108"/>
+        <location filename="../fast_connect_dialog.cc" line="109"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="109"/>
+        <location filename="../fast_connect_dialog.cc" line="110"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>

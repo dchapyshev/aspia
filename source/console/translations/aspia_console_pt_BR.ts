@@ -1522,27 +1522,27 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="59"/>
+        <location filename="../fast_connect_dialog.cc" line="60"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="104"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>A lista de endereços inseridos será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="108"/>
+        <location filename="../fast_connect_dialog.cc" line="109"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="109"/>
+        <location filename="../fast_connect_dialog.cc" line="110"/>
         <source>No</source>
         <translation>Não</translation>
     </message>

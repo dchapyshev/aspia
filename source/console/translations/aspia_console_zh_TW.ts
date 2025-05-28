@@ -1507,12 +1507,12 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="104"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>輸入的位址列表將被清除。是否繼續？</translation>
     </message>
@@ -1533,17 +1533,17 @@
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="59"/>
+        <location filename="../fast_connect_dialog.cc" line="60"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="108"/>
+        <location filename="../fast_connect_dialog.cc" line="109"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="109"/>
+        <location filename="../fast_connect_dialog.cc" line="110"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>

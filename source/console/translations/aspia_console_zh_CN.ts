@@ -1472,27 +1472,27 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="59"/>
+        <location filename="../fast_connect_dialog.cc" line="60"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="104"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="108"/>
+        <location filename="../fast_connect_dialog.cc" line="109"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="109"/>
+        <location filename="../fast_connect_dialog.cc" line="110"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
