@@ -23,6 +23,7 @@
 #include "base/serialization.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
+#include "proto/text_stream.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
@@ -31,9 +32,9 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-UserSession::UserSession(base::SessionId session_id, base::IpcChannel* channel, QObject* parent)
+UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_channel, QObject* parent)
     : QObject(parent),
-      channel_(channel),
+      ipc_channel_(ipc_channel),
       ui_attach_timer_(new QTimer(this)),
       desktop_dettach_timer_(new QTimer(this)),
       session_id_(session_id)
@@ -128,7 +129,7 @@ const char* UserSession::stateToString(State state)
 void UserSession::start()
 {
     LOG(LS_INFO) << "User session started "
-                 << (channel_ ? "WITH" : "WITHOUT")
+                 << (ipc_channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI (sid=" << session_id_ << ")";
 
     desktop_session_ = new DesktopSessionManager(this);
@@ -140,17 +141,17 @@ void UserSession::start()
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
-    if (channel_)
+    if (ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        connect(channel_, &base::IpcChannel::sig_disconnected,
+        connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
                 this, &UserSession::onIpcDisconnected);
-        connect(channel_, &base::IpcChannel::sig_messageReceived,
+        connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
                 this, &UserSession::onIpcMessageReceived);
 
-        channel_->setParent(this);
-        channel_->resume();
+        ipc_channel_->setParent(this);
+        ipc_channel_->resume();
 
         onTextChatHasUser(FROM_HERE, true);
     }
@@ -168,10 +169,10 @@ void UserSession::start()
 //--------------------------------------------------------------------------------------------------
 void UserSession::restart(base::IpcChannel* channel)
 {
-    channel_ = channel;
+    ipc_channel_ = channel;
 
     LOG(LS_INFO) << "User session restarted "
-                 << (channel_ ? "WITH" : "WITHOUT")
+                 << (ipc_channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI (sid=" << session_id_ << ")";
 
     ui_attach_timer_->stop();
@@ -179,17 +180,17 @@ void UserSession::restart(base::IpcChannel* channel)
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
-    if (channel_)
+    if (ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel exists (sid=" << session_id_ << ")";
 
-        connect(channel_, &base::IpcChannel::sig_disconnected,
+        connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
                 this, &UserSession::onIpcDisconnected);
-        connect(channel_, &base::IpcChannel::sig_messageReceived,
+        connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
                 this, &UserSession::onIpcMessageReceived);
 
-        channel_->setParent(this);
-        channel_->resume();
+        ipc_channel_->setParent(this);
+        ipc_channel_->resume();
 
         for (const auto& client : std::as_const(clients_))
             sendConnectEvent(*client);
@@ -227,7 +228,7 @@ void UserSession::onClientSession(ClientSession* client_session)
         LOG(LS_INFO) << "User confirmation of connection is required (state="
                      << stateToString(state_) << " sid=" << session_id_ << ")";
 
-        if (state_ == State::STARTED && !channel_)
+        if (state_ == State::STARTED && !ipc_channel_)
         {
             if (no_user_action_ == SystemSettings::NoUserAction::ACCEPT)
             {
@@ -264,10 +265,10 @@ void UserSession::onClientSession(ClientSession* client_session)
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
             pending_clients_.push_back(unconfirmed_client_session);
 
-            if (channel_)
+            if (ipc_channel_)
             {
                 LOG(LS_INFO) << "Sending connect request to UI process (sid=" << session_id_ << ")";
-                channel_->send(base::serialize(outgoing_message_));
+                ipc_channel_->send(base::serialize(outgoing_message_));
             }
             else
             {
@@ -405,7 +406,7 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 {
     LOG(LS_INFO) << "Router state changed (sid=" << session_id_ << ")";
 
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
         return;
@@ -415,7 +416,7 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 
     emit sig_credentialsRequested();
 }
@@ -425,7 +426,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
 {
     LOG(LS_INFO) << "Send credentials for host ID: " << host_id << " (sid=" << session_id_ << ")";
 
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
         return;
@@ -449,7 +450,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
         credentials->set_password(password.toStdString());
 #endif // defined(Q_OS_WINDOWS)
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -516,7 +517,7 @@ void UserSession::onClientSessionFinished()
 void UserSession::onClientSessionVideoRecording(
     const QString& computer_name, const QString& user_name, bool started)
 {
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel not exists (sid=" << session_id_ << ")";
         return;
@@ -530,13 +531,13 @@ void UserSession::onClientSessionVideoRecording(
     video_recording_state->set_user_name(user_name.toStdString());
     video_recording_state->set_started(started);
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat)
 {
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel not exists (sid=" << session_id_ << ")";
         return;
@@ -553,7 +554,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -807,11 +808,11 @@ void UserSession::onSessionDettached(const base::Location& location)
     LOG(LS_INFO) << "Dettach session (sid=" << session_id_
                  << " from=" << location.toString() << ")";
 
-    if (channel_)
+    if (ipc_channel_)
     {
         LOG(LS_INFO) << "Post task to delete IPC channel (sid=" << session_id_ << ")";
-        channel_->deleteLater();
-        channel_ = nullptr;
+        ipc_channel_->deleteLater();
+        ipc_channel_ = nullptr;
     }
 
     // Stop one-time desktop clients.
@@ -870,7 +871,7 @@ void UserSession::onSessionDettached(const base::Location& location)
 //--------------------------------------------------------------------------------------------------
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
         return;
@@ -896,13 +897,13 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::sendDisconnectEvent(quint32 session_id)
 {
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_ERROR) << "No active IPC channel (sid=" << session_id_ << ")";
         return;
@@ -913,7 +914,7 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_id(session_id);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1049,7 +1050,7 @@ void UserSession::addNewClientSession(ClientSession* client_session)
     {
         onTextChatSessionStarted(client_session->id());
 
-        bool has_user = channel_ != nullptr;
+        bool has_user = ipc_channel_ != nullptr;
         for (const auto& client : std::as_const(clients_))
         {
             if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
@@ -1107,7 +1108,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         {
             ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
 
-            if (!channel_)
+            if (!ipc_channel_)
                 text_chat_client->sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
 
             proto::TextChatStatus* text_chat_status =
@@ -1136,13 +1137,13 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         }
     }
 
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel not exists (sid=" << session_id_ << ")";
         return;
     }
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1187,13 +1188,13 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         }
     }
 
-    if (!channel_)
+    if (!ipc_channel_)
     {
         LOG(LS_INFO) << "IPC channel not exists (sid=" << session_id_ << ")";
         return;
     }
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------

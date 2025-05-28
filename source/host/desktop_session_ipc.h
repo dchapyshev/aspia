@@ -34,7 +34,7 @@ class DesktopSessionIpc final : public DesktopSession
     Q_OBJECT
 
 public:
-    DesktopSessionIpc(base::IpcChannel* channel, QObject* parent = nullptr);
+    DesktopSessionIpc(base::IpcChannel* ipc_channel, QObject* parent = nullptr);
     ~DesktopSessionIpc() final;
 
     // DesktopSession implementation.
@@ -63,7 +63,7 @@ private:
     base::SharedPointer<base::SharedMemory> sharedBuffer(int shared_buffer_id);
 
     base::SessionId session_id_ = base::kInvalidSessionId;
-    base::IpcChannel* channel_ = nullptr;
+    base::IpcChannel* ipc_channel_ = nullptr;
     SharedBuffers shared_buffers_;
     base::SharedMemoryFrame last_frame_;
     base::MouseCursor last_mouse_cursor_;

@@ -26,6 +26,7 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/shared_memory.h"
 #include "host/system_settings.h"
+#include "proto/text_stream.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"
@@ -40,32 +41,6 @@
 #include <QCoreApplication>
 
 namespace host {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-const char* controlActionToString(proto::internal::DesktopControl::Action action)
-{
-    switch (action)
-    {
-        case proto::internal::DesktopControl::ENABLE:
-            return "ENABLE";
-
-        case proto::internal::DesktopControl::DISABLE:
-            return "DISABLE";
-
-        case proto::internal::DesktopControl::LOCK:
-            return "LOCK";
-
-        case proto::internal::DesktopControl::LOGOFF:
-            return "LOGOFF";
-
-        default:
-            return "Unknown control action";
-    }
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
@@ -420,8 +395,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_.has_control())
     {
-        LOG(LS_INFO) << "Control received: "
-                     << controlActionToString(incoming_message_.control().action());
+        LOG(LS_INFO) << "Control received: " << incoming_message_.control().action();
 
         switch (incoming_message_.control().action())
         {

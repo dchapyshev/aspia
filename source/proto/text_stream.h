@@ -16,16 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PROTO_HOST_INTERNAL_H
-#define PROTO_HOST_INTERNAL_H
+#ifndef PROTO_TEXT_STREAM_H
+#define PROTO_TEXT_STREAM_H
 
-#include <QMetaType>
+#include <QTextStream>
 
+#include "proto/desktop.pb.h"
+#include "proto/desktop_internal.pb.h"
 #include "proto/host_internal.pb.h"
+#include "proto/router_common.pb.h"
 
-Q_DECLARE_METATYPE(proto::internal::Credentials)
-Q_DECLARE_METATYPE(proto::internal::CredentialsRequest::Type)
-Q_DECLARE_METATYPE(proto::internal::RouterState)
-Q_DECLARE_METATYPE(proto::internal::ConnectConfirmationRequest)
+QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& state);
+QTextStream& operator<<(QTextStream& out, proto::RouterSession session_type);
+QTextStream& operator<<(QTextStream& out, proto::internal::DesktopControl::Action action);
+QTextStream& operator<<(QTextStream& out, proto::AudioEncoding encoding);
+QTextStream& operator<<(QTextStream& out, proto::VideoEncoding encoding);
+QTextStream& operator<<(QTextStream& out, proto::VideoErrorCode error_code);
+QTextStream& operator<<(QTextStream& out, proto::SessionType session_type);
 
-#endif // PROTO_HOST_INTERNAL_H
+#endif // PROTO_TEXT_STREAM_H

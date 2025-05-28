@@ -34,6 +34,7 @@
 #include "common/ui/session_type.h"
 #include "console/application.h"
 #include "console/computer_factory.h"
+#include "proto/text_stream.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -151,8 +152,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     state_.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Session type changed: "
-                 << common::sessionTypeToString(state_.session_type);
+    LOG(LS_INFO) << "[ACTION] Session type changed: " << state_.session_type;
 
     if (ui.checkbox_use_session_params->isChecked())
     {

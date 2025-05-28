@@ -80,7 +80,7 @@ private:
 
     QPointer<RouterController> router_controller_;
 
-    base::TcpServer* server_ = nullptr;
+    base::TcpServer* tcp_server_ = nullptr;
     base::ServerAuthenticatorManager* authenticator_manager_ = nullptr;
     UserSessionManager* user_session_manager_ = nullptr;
 

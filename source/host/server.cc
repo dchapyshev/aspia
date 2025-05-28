@@ -54,7 +54,7 @@ Server::Server(QObject* parent)
     : QObject(parent),
       update_timer_(new QTimer(this)),
       settings_watcher_(new QFileSystemWatcher(this)),
-      server_(new base::TcpServer(this)),
+      tcp_server_(new base::TcpServer(this)),
       authenticator_manager_(new base::ServerAuthenticatorManager(this)),
       user_session_manager_(new UserSessionManager(this)),
       password_expire_timer_(new QTimer(this))
@@ -75,7 +75,7 @@ Server::Server(QObject* parent)
     connect(user_session_manager_, &UserSessionManager::sig_changeOneTimeSessions,
             this, &Server::onChangeOneTimeSessions);
 
-    connect(server_, &base::TcpServer::sig_newConnection,
+    connect(tcp_server_, &base::TcpServer::sig_newConnection,
             this, &Server::onNewDirectConnection);
 }
 
@@ -109,7 +109,7 @@ void Server::start()
     user_session_manager_->start();
 
     addFirewallRules();
-    server_->start(settings_.tcpPort());
+    tcp_server_->start(settings_.tcpPort());
 
     updateOneTimeCredentials(FROM_HERE);
     reloadUserList();
@@ -249,14 +249,14 @@ void Server::onNewDirectConnection()
 {
     LOG(LS_INFO) << "New DIRECT connection";
 
-    if (!server_)
+    if (!tcp_server_)
     {
         LOG(LS_ERROR) << "No TCP server instance";
         return;
     }
 
-    while (server_->hasPendingConnections())
-        startAuthentication(server_->nextPendingConnection());
+    while (tcp_server_->hasPendingConnections())
+        startAuthentication(tcp_server_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------

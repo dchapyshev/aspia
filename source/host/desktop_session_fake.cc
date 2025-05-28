@@ -19,6 +19,7 @@
 #include "host/desktop_session_fake.h"
 
 #include "base/logging.h"
+#include "proto/text_stream.h"
 
 namespace host {
 
@@ -45,7 +46,7 @@ void DesktopSessionFake::start()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "CONTROL with action: " << controlActionToString(action);
+    LOG(LS_INFO) << "CONTROL with action: " << action;
 
     switch (action)
     {

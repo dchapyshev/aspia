@@ -30,6 +30,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
+#include "proto/text_stream.h"
 
 namespace client {
 
@@ -51,63 +52,6 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
     return static_cast<size_t>(
         (kAlpha * static_cast<double>(bytes)) +
         ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
-}
-
-//--------------------------------------------------------------------------------------------------
-const char* audioEncodingToString(proto::AudioEncoding encoding)
-{
-    switch (encoding)
-    {
-        case proto::AUDIO_ENCODING_OPUS:
-            return "AUDIO_ENCODING_OPUS";
-
-        case proto::AUDIO_ENCODING_RAW:
-            return "AUDIO_ENCODING_RAW";
-
-        default:
-            return "AUDIO_ENCODING_UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-const char* videoEncodingToString(proto::VideoEncoding encoding)
-{
-    switch (encoding)
-    {
-        case proto::VIDEO_ENCODING_VP8:
-            return "VIDEO_ENCODING_VP8";
-
-        case proto::VIDEO_ENCODING_VP9:
-            return "VIDEO_ENCODING_VP9";
-
-        case proto::VIDEO_ENCODING_ZSTD:
-            return "VIDEO_ENCODING_ZSTD";
-
-        default:
-            return "VIDEO_ENCODING_UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
-{
-    switch (error_code)
-    {
-        case proto::VIDEO_ERROR_CODE_OK:
-            return "VIDEO_ERROR_CODE_OK";
-
-        case proto::VIDEO_ERROR_CODE_TEMPORARY:
-            return "VIDEO_ERROR_CODE_TEMPORARY";
-
-        case proto::VIDEO_ERROR_CODE_PERMANENT:
-            return "VIDEO_ERROR_CODE_PERMANENT";
-
-        case proto::VIDEO_ERROR_CODE_PAUSED:
-            return "VIDEO_ERROR_CODE_PAUSED";
-
-        default:
-            return "VIDEO_ERROR_CODE_UNKNOWN";
-    }
 }
 
 } // namespace
@@ -568,15 +512,14 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     proto::VideoErrorCode error_code = packet.error_code();
     if (error_code != proto::VIDEO_ERROR_CODE_OK)
     {
-        LOG(LS_ERROR) << "Video error detected: " << videoErrorCodeToString(error_code);
+        LOG(LS_ERROR) << "Video error detected: " << error_code;
         emit sig_frameError(error_code);
         return;
     }
 
     if (video_encoding_ != packet.encoding())
     {
-        LOG(LS_INFO) << "Video encoding changed from: " << videoEncodingToString(video_encoding_)
-                     << " to: " << videoEncodingToString(packet.encoding());
+        LOG(LS_INFO) << "Video encoding changed from: " << video_encoding_ << " to: " << packet.encoding();
 
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
@@ -674,7 +617,7 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
         audio_decoder_ = std::make_unique<base::AudioDecoder>();
         audio_encoding_ = packet.encoding();
 
-        LOG(LS_INFO) << "Audio encoding changed to: " << audioEncodingToString(audio_encoding_);
+        LOG(LS_INFO) << "Audio encoding changed to: " << audio_encoding_;
     }
 
     if (!audio_decoder_)

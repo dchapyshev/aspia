@@ -22,6 +22,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
+#include "proto/text_stream.h"
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
 #include "router/session_admin.h"
@@ -32,32 +33,6 @@
 #include "router/user_list_db.h"
 
 namespace router {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-const char* sessionTypeToString(proto::RouterSession session_type)
-{
-    switch (session_type)
-    {
-        case proto::ROUTER_SESSION_CLIENT:
-            return "ROUTER_SESSION_CLIENT";
-
-        case proto::ROUTER_SESSION_HOST:
-            return "ROUTER_SESSION_HOST";
-
-        case proto::ROUTER_SESSION_ADMIN:
-            return "ROUTER_SESSION_ADMIN";
-
-        case proto::ROUTER_SESSION_RELAY:
-            return "ROUTER_SESSION_RELAY";
-
-        default:
-            return "ROUTER_SESSION_UNKNOWN";
-    }
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 Server::Server(QObject* parent)
@@ -219,7 +194,7 @@ void Server::onSessionAuthenticated()
         proto::RouterSession session_type =
             static_cast<proto::RouterSession>(session_info.session_type);
 
-        LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
+        LOG(LS_INFO) << "New session: " << session_type << " (" << address << ")";
 
         if (session_info.version >= base::kVersion_2_6_0)
         {

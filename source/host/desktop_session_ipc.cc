@@ -21,18 +21,19 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/desktop/mouse_cursor.h"
+#include "proto/text_stream.h"
 
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* channel, QObject* parent)
+DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* ipc_channel, QObject* parent)
     : DesktopSession(parent),
-      channel_(channel)
+      ipc_channel_(ipc_channel)
 {
-    DCHECK(channel_);
+    DCHECK(ipc_channel_);
 
-    channel_->setParent(this);
-    session_id_ = channel_->peerSessionId();
+    ipc_channel_->setParent(this);
+    session_id_ = ipc_channel_->peerSessionId();
 
     LOG(LS_INFO) << "Ctor (sid=" << session_id_ << ")";
 }
@@ -48,24 +49,23 @@ void DesktopSessionIpc::start()
 {
     LOG(LS_INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
 
-    connect(channel_, &base::IpcChannel::sig_disconnected,
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionIpc::onIpcDisconnected);
-    connect(channel_, &base::IpcChannel::sig_messageReceived,
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopSessionIpc::onIpcMessageReceived);
 
-    channel_->resume();
+    ipc_channel_->resume();
     emit sig_desktopSessionStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action)
-                 << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Send CONTROL with action: " << action << " (sid=" << session_id_ << ")";
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_control()->set_action(action);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void DesktopSessionIpc::configure(const Config& config)
     configure->set_clear_clipboard(config.clear_clipboard);
     configure->set_cursor_position(config.cursor_position);
 
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ void DesktopSessionIpc::captureScreen()
     {
         outgoing_message_.Clear();
         outgoing_message_.mutable_next_screen_capture()->set_update_interval(0);
-        channel_->send(base::serialize(outgoing_message_));
+        ipc_channel_->send(base::serialize(outgoing_message_));
     }
 }
 
@@ -144,7 +144,7 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_key_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_text_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_mouse_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void DesktopSessionIpc::injectTouchEvent(const proto::TouchEvent &event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_touch_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_.Clear();
     outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,7 +307,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_next_screen_capture()->set_update_interval(update_interval_.count());
-    channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 //--------------------------------------------------------------------------------------------------

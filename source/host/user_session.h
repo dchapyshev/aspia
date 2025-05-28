@@ -52,7 +52,7 @@ public:
         FINISHED = 2
     };
 
-    UserSession(base::SessionId session_id, base::IpcChannel* channel, QObject* parent = nullptr);
+    UserSession(base::SessionId session_id, base::IpcChannel* ipc_channel, QObject* parent = nullptr);
     ~UserSession() final;
 
     static const char* typeToString(Type type);
@@ -64,7 +64,7 @@ public:
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
-    bool isConnectedToUi() const { return channel_ != nullptr; }
+    bool isConnectedToUi() const { return ipc_channel_ != nullptr; }
 
     void onClientSession(ClientSession* client_session);
     void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
@@ -103,7 +103,7 @@ private:
     void mergeAndSendConfiguration();
     bool hasDesktopClients() const;
 
-    base::IpcChannel* channel_ = nullptr;
+    base::IpcChannel* ipc_channel_ = nullptr;
 
     Type type_;
     State state_ = State::DETTACHED;

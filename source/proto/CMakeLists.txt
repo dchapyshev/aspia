@@ -31,7 +31,6 @@ list(APPEND SOURCE_PROTO
     meta_types.cc
     meta_types.h
     port_forwarding.proto
-    host_internal.cc
     host_internal.h
     host_internal.proto
     relay_peer.proto
@@ -45,7 +44,9 @@ list(APPEND SOURCE_PROTO
     task_manager.h
     task_manager.proto
     text_chat.h
-    text_chat.proto)
+    text_chat.proto
+    text_stream.cc
+    text_stream.h)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 

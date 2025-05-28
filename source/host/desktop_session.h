@@ -72,8 +72,6 @@ public:
     virtual void injectTouchEvent(const proto::TouchEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
-    static const char* controlActionToString(proto::internal::DesktopControl::Action action);
-
 signals:
     void sig_desktopSessionStarted();
     void sig_desktopSessionStopped();

@@ -26,27 +26,4 @@ DesktopSession::DesktopSession(QObject* parent)
     // Nothing
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-const char* DesktopSession::controlActionToString(proto::internal::DesktopControl::Action action)
-{
-    switch (action)
-    {
-        case proto::internal::DesktopControl::ENABLE:
-            return "ENABLE";
-
-        case proto::internal::DesktopControl::DISABLE:
-            return "DISABLE";
-
-        case proto::internal::DesktopControl::LOGOFF:
-            return "LOGOFF";
-
-        case proto::internal::DesktopControl::LOCK:
-            return "LOCK";
-
-        default:
-            return "UNKNOWN";
-    }
-}
-
 } // namespace host

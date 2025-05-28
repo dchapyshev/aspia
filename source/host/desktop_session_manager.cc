@@ -206,14 +206,14 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
-    server_ = new base::IpcServer(this);
+    ipc_server_ = new base::IpcServer(this);
 
-    connect(server_, &base::IpcServer::sig_newConnection,
+    connect(ipc_server_, &base::IpcServer::sig_newConnection,
             this, &DesktopSessionManager::onNewIpcConnection);
-    connect(server_, &base::IpcServer::sig_errorOccurred,
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
             this, &DesktopSessionManager::onErrorOccurred);
 
-    if (!server_->start(channel_id))
+    if (!ipc_server_->start(channel_id))
     {
         LOG(LS_ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
 
@@ -385,22 +385,22 @@ void DesktopSessionManager::onNewIpcConnection()
 {
     LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 
-    if (!server_)
+    if (!ipc_server_)
     {
         LOG(LS_ERROR) << "No IPC server instance!";
         return;
     }
 
-    if (!server_->hasPendingConnections())
+    if (!ipc_server_->hasPendingConnections())
     {
         LOG(LS_ERROR) << "No pending connections in IPC server";
         return;
     }
 
-    base::IpcChannel* channel = server_->nextPendingConnection();
+    base::IpcChannel* channel = ipc_server_->nextPendingConnection();
 
     session_attach_timer_->stop();
-    server_->deleteLater();
+    ipc_server_->deleteLater();
 
     session_ = new DesktopSessionIpc(channel, this);
 

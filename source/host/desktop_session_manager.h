@@ -98,7 +98,7 @@ private:
     void startDesktopSession();
     static const char* stateToString(State state);
 
-    QPointer<base::IpcServer> server_;
+    QPointer<base::IpcServer> ipc_server_;
     QPointer<DesktopSession> session_;
     QPointer<QTimer> session_attach_timer_;
 
