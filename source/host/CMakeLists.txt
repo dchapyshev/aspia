@@ -55,6 +55,8 @@ list(APPEND SOURCE_HOST_CORE
     input_injector.h
     integrity_check.cc
     integrity_check.h
+    print_debug_info.cc
+    print_debug_info.h
     router_controller.cc
     router_controller.h
     server.cc

@@ -18,13 +18,15 @@
 
 #include "host/service_main.h"
 
+#include <QCommandLineParser>
+
 #include "base/application.h"
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/meta_types.h"
-#include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
+#include "host/print_debug_info.h"
 #include "host/host_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
@@ -32,13 +34,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"
-#include "base/win/session_info.h"
-#include "base/win/session_enumerator.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QCommandLineParser>
-#include <QProcessEnvironment>
-#include <QSysInfo>
 
 namespace host {
 
@@ -126,96 +122,6 @@ int removeService(QTextStream& out)
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-void printDebugInfo()
-{
-    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
-                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
-#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
-#endif
-    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
-                 << " (version: " << base::SysInfo::operatingSystemVersion()
-                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
-                 << " (vendor: " << base::SysInfo::processorVendor()
-                 << " packages: " << base::SysInfo::processorPackages()
-                 << " cores: " << base::SysInfo::processorCores()
-                 << " threads: " << base::SysInfo::processorThreads() << ")";
-
-    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
-    LOG(LS_INFO) << "Environment variables: "
-                 << QProcessEnvironment::systemEnvironment().toStringList();
-
-#if defined(Q_OS_WINDOWS)
-    MEMORYSTATUSEX memory_status;
-    memset(&memory_status, 0, sizeof(memory_status));
-    memory_status.dwLength = sizeof(memory_status);
-
-    if (GlobalMemoryStatusEx(&memory_status))
-    {
-        static const quint32 kMB = 1024 * 1024;
-
-        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
-        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
-        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
-                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
-    }
-    else
-    {
-        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
-    }
-
-    DWORD session_id = 0;
-    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
-    }
-    else
-    {
-        base::SessionInfo session_info(session_id);
-        if (!session_info.isValid())
-        {
-            LOG(LS_ERROR) << "Unable to get session info";
-        }
-        else
-        {
-            LOG(LS_INFO) << "Process session ID: " << session_id;
-            LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
-            LOG(LS_INFO) << "Session connect state: "
-                         << base::SessionInfo::connectStateToString(session_info.connectState());
-            LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
-            LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
-        }
-    }
-
-    wchar_t username[64] = { 0 };
-    DWORD username_size = sizeof(username) / sizeof(username[0]);
-    if (!GetUserNameW(username, &username_size))
-    {
-        PLOG(LS_ERROR) << "GetUserNameW failed";
-    }
-
-    LOG(LS_INFO) << "Running as user: '" << username << "'";
-    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
-
-    LOG(LS_INFO) << "Active sessions";
-    LOG(LS_INFO) << "#####################################################";
-    for (base::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-    {
-        LOG(LS_INFO) << enumerator.sessionName() << " (id=" << enumerator.sessionId()
-        << " host='" << enumerator.hostName() << "', user='" << enumerator.userName()
-        << "', domain='" << enumerator.domainName() << "', locked="
-        << enumerator.isUserLocked() << ")";
-    }
-    LOG(LS_INFO) << "#####################################################";
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
 int hostServiceMain(int& argc, char* argv[])
 {
     base::LoggingSettings logging_settings;
@@ -236,7 +142,7 @@ int hostServiceMain(int& argc, char* argv[])
         return 1;
     }
 
-    printDebugInfo();
+    host::printDebugInfo();
 
     QCommandLineParser parser;
 

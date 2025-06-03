@@ -20,9 +20,9 @@
 
 #include "base/logging.h"
 #include "base/meta_types.h"
-#include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
+#include "host/print_debug_info.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -35,18 +35,11 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
 #include "base/win/desktop.h"
-#include "base/win/session_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QSysInfo>
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
-#include <QProcess>
-#else
-#include <QProcessEnvironment>
-#endif
 
 namespace {
 
@@ -86,120 +79,6 @@ bool waitForValidInputDesktop()
     return true;
 }
 
-void printDebugInfo()
-{
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
-                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
-#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
-#endif
-    LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
-    LOG(LS_INFO) << "Command line: " << base::GuiApplication::arguments();
-    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
-                 << " (version: " << base::SysInfo::operatingSystemVersion()
-                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
-                 << " (vendor: " << base::SysInfo::processorVendor()
-                 << " packages: " << base::SysInfo::processorPackages()
-                 << " cores: " << base::SysInfo::processorCores()
-                 << " threads: " << base::SysInfo::processorThreads() << ")";
-
-#if defined(Q_OS_WINDOWS)
-    MEMORYSTATUSEX memory_status;
-    memset(&memory_status, 0, sizeof(memory_status));
-    memory_status.dwLength = sizeof(memory_status);
-
-    if (GlobalMemoryStatusEx(&memory_status))
-    {
-        static const quint32 kMB = 1024 * 1024;
-
-        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
-        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
-        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
-                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
-    }
-    else
-    {
-        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
-    }
-
-    DWORD session_id = 0;
-    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
-    }
-    else
-    {
-        base::SessionInfo session_info(session_id);
-        if (!session_info.isValid())
-        {
-            LOG(LS_ERROR) << "Unable to get session info";
-        }
-        else
-        {
-            LOG(LS_INFO) << "Process session ID: " << session_id;
-            LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
-            LOG(LS_INFO) << "Session connect state: "
-                         << base::SessionInfo::connectStateToString(session_info.connectState());
-            LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
-            LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
-            LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
-        }
-    }
-
-    wchar_t username[64] = { 0 };
-    DWORD username_size = sizeof(username) / sizeof(username[0]);
-    if (!GetUserNameW(username, &username_size))
-    {
-        PLOG(LS_ERROR) << "GetUserNameW failed";
-    }
-
-    SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
-    PSID admins_group = nullptr;
-    BOOL is_user_admin = AllocateAndInitializeSid(&nt_authority,
-                                                  2,
-                                                  SECURITY_BUILTIN_DOMAIN_RID,
-                                                  DOMAIN_ALIAS_RID_ADMINS,
-                                                  0, 0, 0, 0, 0, 0,
-                                                  &admins_group);
-    if (is_user_admin)
-    {
-        if (!CheckTokenMembership(nullptr, admins_group, &is_user_admin))
-        {
-            PLOG(LS_ERROR) << "CheckTokenMembership failed";
-            is_user_admin = FALSE;
-        }
-        FreeSid(admins_group);
-    }
-    else
-    {
-        PLOG(LS_ERROR) << "AllocateAndInitializeSid failed";
-    }
-
-    LOG(LS_INFO) << "Running as user: '" << username << "'";
-    LOG(LS_INFO) << "Member of admins group: " << (is_user_admin ? "Yes" : "No");
-    LOG(LS_INFO) << "Process elevated: " << (base::isProcessElevated() ? "Yes" : "No");
-    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
-    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
-#endif // defined(Q_OS_WINDOWS)
-
-    LOG(LS_INFO) << "Environment variables";
-    LOG(LS_INFO) << "#####################################################";
-#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
-    QStringList env = QProcess::systemEnvironment();
-#else
-    QStringList env = QProcessEnvironment::systemEnvironment().toStringList();
-#endif
-    for (int i = 0; i < env.size(); ++i)
-    {
-        LOG(LS_INFO) << env[i];
-    }
-    LOG(LS_INFO) << "#####################################################";
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -233,7 +112,7 @@ int hostMain(int argc, char* argv[])
     host::Application application(argc, argv);
     host::Application::setQuitOnLastWindowClosed(false);
 
-    printDebugInfo();
+    host::printDebugInfo();
 
     QCommandLineOption hidden_option("hidden",
         base::GuiApplication::translate("HostMain", "Launch the application hidden."));
