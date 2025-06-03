@@ -42,7 +42,7 @@ QVersionNumber parse(const proto::Version& version);
 class SerializerImpl
 {
 public:
-    static constexpr int kBufferCount = 16;
+    static constexpr int kBufferCount = 8;
 
     const QByteArray& serialize(const google::protobuf::MessageLite& message) const
     {
