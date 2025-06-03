@@ -40,7 +40,7 @@ class DesktopSessionManager final : public QObject
     Q_OBJECT
 
 public:
-    static const int kDefaultScreenCaptureFps = 20;
+    static const int kDefaultScreenCaptureFps = 24;
     static const int kMinScreenCaptureFps = 1;
     static const int kMaxScreenCaptureFpsHighEnd = 30;
     static const int kMaxScreenCaptureFpsLowEnd = 20;
