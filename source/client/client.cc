@@ -19,7 +19,6 @@
 #include "client/client.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 
@@ -214,7 +213,7 @@ const char* Client::statusToString(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
+void Client::sendMessage(quint8 channel_id, const QByteArray& message)
 {
     if (!tcp_channel_)
     {
@@ -222,7 +221,7 @@ void Client::sendMessage(quint8 channel_id, const google::protobuf::MessageLite&
         return;
     }
 
-    tcp_channel_->send(channel_id, base::serialize(message));
+    tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------

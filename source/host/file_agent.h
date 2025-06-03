@@ -20,6 +20,7 @@
 #define HOST_FILE_AGENT_H
 
 #include "base/macros_magic.h"
+#include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/file_worker.h"
 
@@ -43,8 +44,8 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
     common::FileWorker* worker_ = nullptr;
 
-    proto::FileRequest request_;
-    proto::FileReply reply_;
+    base::Parser<proto::FileRequest> request_;
+    base::Serializer<proto::FileReply> reply_;
 
     DISALLOW_COPY_AND_ASSIGN(FileAgent);
 };

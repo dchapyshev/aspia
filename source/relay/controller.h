@@ -19,13 +19,14 @@
 #ifndef RELAY_CONTROLLER_H
 #define RELAY_CONTROLLER_H
 
+#include <QPointer>
+#include <QTimer>
+
+#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_relay.pb.h"
 #include "relay/sessions_worker.h"
 #include "relay/key_factory.h"
-
-#include <QPointer>
-#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;
@@ -77,8 +78,8 @@ private:
     KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;
 
-    proto::RouterToRelay incoming_message_;
-    proto::RelayToRouter outgoing_message_;
+    base::Parser<proto::RouterToRelay> incoming_message_;
+    base::Serializer<proto::RelayToRouter> outgoing_message_;
 
     int session_count_ = 0;
 

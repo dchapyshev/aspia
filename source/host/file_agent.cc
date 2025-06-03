@@ -39,6 +39,7 @@ FileAgent::~FileAgent()
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileAgent::start(const QString& channel_id)
 {
     LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
@@ -67,17 +68,14 @@ void FileAgent::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void FileAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
-    request_.Clear();
-    reply_.Clear();
-
-    if (!base::parse(buffer, &request_))
+    if (!request_.parse(buffer))
     {
         LOG(LS_ERROR) << "Unable to parse message";
         return;
     }
 
-    worker_->doRequest(request_, &reply_);
-    ipc_channel_->send(base::serialize(reply_));
+    worker_->doRequest(request_.message(), &reply_.newMessage());
+    ipc_channel_->send(reply_.serialize());
 }
 
 } // namespace host

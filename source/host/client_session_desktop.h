@@ -20,6 +20,7 @@
 #define HOST_CLIENT_SESSION_DESKTOP_H
 
 #include "base/macros_magic.h"
+#include "base/serialization.h"
 #include "base/desktop/geometry.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
@@ -120,8 +121,8 @@ private:
     QPointer<TaskManager> task_manager_;
 #endif // defined(Q_OS_WINDOWS)
 
-    proto::ClientToHost incoming_message_;
-    proto::HostToClient outgoing_message_;
+    base::Parser<proto::ClientToHost> incoming_message_;
+    base::Serializer<proto::HostToClient> outgoing_message_;
 
     StatCounter stat_counter_;
 

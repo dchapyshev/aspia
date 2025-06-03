@@ -20,7 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 #include "proto/text_stream.h"
@@ -246,9 +245,8 @@ void UserSession::onClientSession(ClientSession* client_session)
         {
             LOG(LS_INFO) << "New unconfirmed client session (sid=" << session_id_ << ")";
 
-            outgoing_message_.Clear();
             proto::internal::ConnectConfirmationRequest* request =
-                outgoing_message_.mutable_connect_confirmation_request();
+                outgoing_message_.newMessage().mutable_connect_confirmation_request();
 
             request->set_id(client_session->id());
             request->set_session_type(client_session->sessionType());
@@ -268,7 +266,7 @@ void UserSession::onClientSession(ClientSession* client_session)
             if (ipc_channel_)
             {
                 LOG(LS_INFO) << "Sending connect request to UI process (sid=" << session_id_ << ")";
-                ipc_channel_->send(base::serialize(outgoing_message_));
+                ipc_channel_->send(outgoing_message_.serialize());
             }
             else
             {
@@ -414,9 +412,8 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 
     LOG(LS_INFO) << "Router: " << router_state << " sid=" << session_id_ << ")";
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_router_state()->CopyFrom(router_state);
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
+    ipc_channel_->send(outgoing_message_.serialize());
 
     emit sig_credentialsRequested();
 }
@@ -438,9 +435,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
         return;
     }
 
-    outgoing_message_.Clear();
-
-    proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
+    proto::internal::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
     credentials->set_host_id(host_id);
 
 #if defined(Q_OS_WINDOWS)
@@ -450,7 +445,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
         credentials->set_password(password.toStdString());
 #endif // defined(Q_OS_WINDOWS)
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -523,15 +518,13 @@ void UserSession::onClientSessionVideoRecording(
         return;
     }
 
-    outgoing_message_.Clear();
-
     proto::internal::VideoRecordingState* video_recording_state =
-        outgoing_message_.mutable_video_recording_state();
+        outgoing_message_.newMessage().mutable_video_recording_state();
     video_recording_state->set_computer_name(computer_name.toStdString());
     video_recording_state->set_user_name(user_name.toStdString());
     video_recording_state->set_started(started);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -552,9 +545,8 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
         }
     }
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -568,17 +560,15 @@ void UserSession::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 {
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
+    if (!incoming_message_.parse(buffer))
     {
         LOG(LS_ERROR) << "Invalid message from UI (sid=" << session_id_ << ")";
         return;
     }
 
-    if (incoming_message_.has_credentials_request())
+    if (incoming_message_->has_credentials_request())
     {
-        const proto::internal::CredentialsRequest& request = incoming_message_.credentials_request();
+        const proto::internal::CredentialsRequest& request = incoming_message_->credentials_request();
         proto::internal::CredentialsRequest::Type type = request.type();
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
@@ -592,15 +582,15 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             LOG(LS_INFO) << "Credentials update requested (sid=" << session_id_ << ")";
         }
     }
-    else if (incoming_message_.has_one_time_sessions())
+    else if (incoming_message_->has_one_time_sessions())
     {
-        quint32 sessions = incoming_message_.one_time_sessions().sessions();
+        quint32 sessions = incoming_message_->one_time_sessions().sessions();
         emit sig_changeOneTimeSessions(sessions);
     }
-    else if (incoming_message_.has_connect_confirmation())
+    else if (incoming_message_->has_connect_confirmation())
     {
         proto::internal::ConnectConfirmation connect_confirmation =
-            incoming_message_.connect_confirmation();
+            incoming_message_->connect_confirmation();
 
         LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
                      << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
@@ -610,109 +600,109 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
         else
             onUnconfirmedSessionFinished(connect_confirmation.id(), true);
     }
-    else if (incoming_message_.has_control())
+    else if (incoming_message_->has_control())
     {
-        const proto::internal::ServiceControl& control = incoming_message_.control();
+        const proto::internal::ServiceControl& control = incoming_message_->control();
 
         switch (control.code())
         {
-        case proto::internal::ServiceControl::CODE_KILL:
-        {
-            if (!control.has_unsigned_integer())
+            case proto::internal::ServiceControl::CODE_KILL:
             {
-                LOG(LS_ERROR) << "Invalid parameter for CODE_KILL (sid=" << session_id_ << ")";
-                return;
-            }
-
-            LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
-                         << control.unsigned_integer() << ")";
-            stopClientSession(static_cast<quint32>(control.unsigned_integer()));
-        }
-        break;
-
-        case proto::internal::ServiceControl::CODE_PAUSE:
-        {
-            if (!control.has_boolean())
-            {
-                LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE (sid=" << session_id_ << ")";
-                return;
-            }
-
-            bool is_paused = control.boolean();
-
-            LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
-                         << is_paused << ")";
-
-            desktop_session_->setPaused(is_paused);
-            desktop_session_->control(is_paused ?
-                proto::internal::DesktopControl::DISABLE : proto::internal::DesktopControl::ENABLE);
-
-            if (is_paused)
-            {
-                QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
+                if (!control.has_unsigned_integer())
                 {
-                    for (const auto& client : std::as_const(clients_))
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_KILL (sid=" << session_id_ << ")";
+                    return;
+                }
+
+                LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
+                             << control.unsigned_integer() << ")";
+                stopClientSession(static_cast<quint32>(control.unsigned_integer()));
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_PAUSE:
+            {
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE (sid=" << session_id_ << ")";
+                    return;
+                }
+
+                bool is_paused = control.boolean();
+
+                LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
+                             << is_paused << ")";
+
+                desktop_session_->setPaused(is_paused);
+                desktop_session_->control(is_paused ?
+                    proto::internal::DesktopControl::DISABLE : proto::internal::DesktopControl::ENABLE);
+
+                if (is_paused)
+                {
+                    QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
                     {
-                        ClientSessionDesktop* desktop_client =
-                            dynamic_cast<ClientSessionDesktop*>(client);
+                        for (const auto& client : std::as_const(clients_))
+                        {
+                            ClientSessionDesktop* desktop_client =
+                                dynamic_cast<ClientSessionDesktop*>(client);
 
-                        if (desktop_client)
-                            desktop_client->setVideoErrorCode(proto::VIDEO_ERROR_CODE_PAUSED);
-                    }
-                });
+                            if (desktop_client)
+                                desktop_client->setVideoErrorCode(proto::VIDEO_ERROR_CODE_PAUSED);
+                        }
+                    });
+                }
+                else
+                {
+                    mergeAndSendConfiguration();
+                }
             }
-            else
-            {
-                mergeAndSendConfiguration();
-            }
-        }
-        break;
+            break;
 
-        case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
-        {
-            if (!control.has_boolean())
+            case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
             {
-                LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid=" << session_id_ << ")";
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid=" << session_id_ << ")";
+                    return;
+                }
+
+                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
+                             << " lock_mouse=" << control.boolean() << ")";
+
+                desktop_session_->setMouseLock(control.boolean());
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
+            {
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid=" << session_id_ << ")";
+                    return;
+                }
+
+                LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
+                             << " lock_keyboard=" << control.boolean() << ")";
+
+                desktop_session_->setKeyboardLock(control.boolean());
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_VOICE_CHAT:
+            {
+                // TODO
+                NOTIMPLEMENTED();
+            }
+            break;
+
+            default:
+            {
+                LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid=" << session_id_ << ")";
                 return;
             }
-
-            LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
-                         << " lock_mouse=" << control.boolean() << ")";
-
-            desktop_session_->setMouseLock(control.boolean());
-        }
-        break;
-
-        case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
-        {
-            if (!control.has_boolean())
-            {
-                LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid=" << session_id_ << ")";
-                return;
-            }
-
-            LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
-                         << " lock_keyboard=" << control.boolean() << ")";
-
-            desktop_session_->setKeyboardLock(control.boolean());
-        }
-        break;
-
-        case proto::internal::ServiceControl::CODE_VOICE_CHAT:
-        {
-            // TODO
-            NOTIMPLEMENTED();
-        }
-        break;
-
-        default:
-        {
-            LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid=" << session_id_ << ")";
-            return;
-        }
         }
     }
-    else if (incoming_message_.has_text_chat())
+    else if (incoming_message_->has_text_chat())
     {
         LOG(LS_INFO) << "Text chat message (sid=" << session_id_ << ")";
 
@@ -721,7 +711,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
             if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
             {
                 ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
-                text_chat_session->sendTextChat(incoming_message_.text_chat());
+                text_chat_session->sendTextChat(incoming_message_->text_chat());
             }
         }
     }
@@ -889,15 +879,14 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id()
                  << " (sid=" << session_id_ << ")";
 
-    outgoing_message_.Clear();
-    proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
+    proto::internal::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
 
     event->set_computer_name(client_session.computerName().toStdString());
     event->set_display_name(client_session.displayName().toStdString());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -912,9 +901,8 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
     LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id
                  << " (sid=" << session_id_ << ")";
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_disconnect_event()->set_id(session_id);
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    outgoing_message_.newMessage().mutable_disconnect_event()->set_id(session_id);
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1097,8 +1085,6 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 {
     LOG(LS_INFO) << "Text chat session started: " << id << " (sid=" << session_id_ << ")";
 
-    outgoing_message_.Clear();
-
     for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
@@ -1112,7 +1098,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
                 text_chat_client->sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
 
             proto::TextChatStatus* text_chat_status =
-                 outgoing_message_.mutable_text_chat()->mutable_chat_status();
+                 outgoing_message_.newMessage().mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
 
             QString display_name = text_chat_client->displayName();
@@ -1133,7 +1119,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         if (client->id() != id)
         {
             ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
-            text_chat_session->sendTextChat(outgoing_message_.text_chat());
+            text_chat_session->sendTextChat(outgoing_message_.message().text_chat());
         }
     }
 
@@ -1143,15 +1129,13 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         return;
     }
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionFinished(quint32 id)
 {
     LOG(LS_INFO) << "Text chat session finished: " << id << " (sid=" << session_id_ << ")";
-
-    outgoing_message_.Clear();
 
     for (const auto& client : std::as_const(clients_))
     {
@@ -1163,7 +1147,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
             ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
 
             proto::TextChatStatus* text_chat_status =
-                outgoing_message_.mutable_text_chat()->mutable_chat_status();
+                outgoing_message_.newMessage().mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
 
             QString display_name = text_chat_session->displayName();
@@ -1184,7 +1168,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         if (client->id() != id)
         {
             ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
-            text_chat_session->sendTextChat(outgoing_message_.text_chat());
+            text_chat_session->sendTextChat(outgoing_message_.message().text_chat());
         }
     }
 
@@ -1194,7 +1178,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         return;
     }
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------

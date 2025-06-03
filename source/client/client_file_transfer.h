@@ -19,6 +19,7 @@
 #ifndef CLIENT_CLIENT_FILE_TRANSFER_H
 #define CLIENT_CLIENT_FILE_TRANSFER_H
 
+#include "base/serialization.h"
 #include "client/client.h"
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
@@ -79,6 +80,8 @@ private:
 
     QPointer<FileRemover> remover_;
     QPointer<FileTransfer> transfer_;
+
+    base::SerializerImpl serializer_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientFileTransfer);
 };

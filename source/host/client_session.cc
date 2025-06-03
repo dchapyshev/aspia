@@ -19,7 +19,6 @@
 #include "host/client_session.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
 #include "host/client_session_port_forwarding.h"
@@ -152,15 +151,9 @@ void ClientSession::setSessionId(base::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(QByteArray&& buffer)
+void ClientSession::sendMessage(const QByteArray& buffer)
 {
-    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, std::move(buffer));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(const google::protobuf::MessageLite& message)
-{
-    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

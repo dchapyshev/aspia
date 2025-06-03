@@ -39,7 +39,7 @@ ClientTextChat::~ClientTextChat()
 //--------------------------------------------------------------------------------------------------
 void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
 {
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, text_chat);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(text_chat));
 }
 
 //--------------------------------------------------------------------------------------------------

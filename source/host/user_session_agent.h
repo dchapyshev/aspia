@@ -19,11 +19,12 @@
 #ifndef HOST_USER_SESSION_AGENT_H
 #define HOST_USER_SESSION_AGENT_H
 
-#include "base/ipc/ipc_channel.h"
-#include "proto/host_internal.h"
-
 #include <QPointer>
 #include <QVector>
+
+#include "base/serialization.h"
+#include "base/ipc/ipc_channel.h"
+#include "proto/host_internal.h"
 
 namespace host {
 
@@ -89,8 +90,8 @@ private slots:
 private:
     QPointer<base::IpcChannel> ipc_channel_;
 
-    proto::internal::ServiceToUi incoming_message_;
-    proto::internal::UiToService outgoing_message_;
+    base::Parser<proto::internal::ServiceToUi> incoming_message_;
+    base::Serializer<proto::internal::UiToService> outgoing_message_;
 
     ClientList clients_;
 

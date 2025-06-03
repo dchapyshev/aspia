@@ -19,6 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
+#include "base/serialization.h"
 #include "base/thread.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -46,7 +47,7 @@ private slots:
 private:
     Thread thread_;
     std::unique_ptr<AudioCapturer> capturer_;
-    proto::internal::DesktopToService outgoing_message_;
+    base::Serializer<proto::internal::DesktopToService> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(AudioCapturerWrapper);
 };

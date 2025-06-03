@@ -30,22 +30,22 @@ package proto.internal;
 
 message DesktopFrame
 {
-    uint32 capturer_type     = 1;
-    int32 shared_buffer_id   = 2;
-    int32 width              = 3;
-    int32 height             = 4;
-    repeated Rect dirty_rect = 5;
+    fixed32 capturer_type     = 1;
+    sfixed32 shared_buffer_id = 2;
+    sfixed32 width            = 3;
+    sfixed32 height           = 4;
+    repeated Rect dirty_rect  = 5;
 }
 
 message MouseCursor
 {
-    int32 width     = 1;
-    int32 height    = 2;
-    int32 hotspot_x = 3;
-    int32 hotspot_y = 4;
-    int32 dpi_x     = 5;
-    int32 dpi_y     = 6;
-    bytes data      = 7;
+    sfixed32 width     = 1;
+    sfixed32 height    = 2;
+    sfixed32 hotspot_x = 3;
+    sfixed32 hotspot_y = 4;
+    sfixed32 dpi_x     = 5;
+    sfixed32 dpi_y     = 6;
+    bytes data         = 7;
 }
 
 message SharedBuffer
@@ -57,7 +57,7 @@ message SharedBuffer
     }
 
     Type type = 1;
-    int32 shared_buffer_id = 2;
+    sfixed32 shared_buffer_id = 2;
 }
 
 message ScreenCaptured
@@ -69,7 +69,7 @@ message ScreenCaptured
 
 message NextScreenCapture
 {
-    int64 update_interval = 1;
+    sfixed64 update_interval = 1;
 }
 
 message SelectSource

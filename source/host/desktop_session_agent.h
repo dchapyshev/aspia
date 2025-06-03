@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QTimer>
 
+#include "base/serialization.h"
 #include "base/thread.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/screen_capturer_wrapper.h"
@@ -96,8 +97,8 @@ private:
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
-    proto::internal::ServiceToDesktop incoming_message_;
-    proto::internal::DesktopToService outgoing_message_;
+    base::Parser<proto::internal::ServiceToDesktop> incoming_message_;
+    base::Serializer<proto::internal::DesktopToService> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };

@@ -19,7 +19,6 @@
 #include "client/client_file_transfer.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "common/file_task_factory.h"
 
 namespace client {
@@ -199,7 +198,8 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front().request());
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION,
+                serializer_.serialize(remote_task_queue_.front().request()));
 }
 
 //--------------------------------------------------------------------------------------------------

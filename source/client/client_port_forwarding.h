@@ -19,6 +19,7 @@
 #ifndef CLIENT_CLIENT_PORT_FORWARDING_H
 #define CLIENT_CLIENT_PORT_FORWARDING_H
 
+#include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "client/client.h"
 #include "proto/port_forwarding.pb.h"
@@ -87,8 +88,8 @@ private:
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     std::unique_ptr<asio::ip::tcp::socket> socket_;
 
-    proto::port_forwarding::HostToClient incoming_message_;
-    proto::port_forwarding::ClientToHost outgoing_message_;
+    base::Parser<proto::port_forwarding::HostToClient> incoming_message_;
+    base::Serializer<proto::port_forwarding::ClientToHost> outgoing_message_;
 
     class Handler;
     base::SharedPointer<Handler> handler_;

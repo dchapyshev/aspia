@@ -19,7 +19,6 @@
 #include "base/audio/audio_capturer_wrapper.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/audio/audio_capturer.h"
 
 namespace base {
@@ -65,8 +64,8 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
 
     capturer_->start([this](std::unique_ptr<proto::AudioPacket> packet)
     {
-        outgoing_message_.set_allocated_audio_packet(packet.release());
-        emit sig_sendMessage(base::serialize(outgoing_message_));
+        outgoing_message_.newMessage().set_allocated_audio_packet(packet.release());
+        emit sig_sendMessage(outgoing_message_.serialize());
     });
 }
 

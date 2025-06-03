@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/location.h"
+#include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.pb.h"
@@ -77,8 +78,8 @@ private:
     class Handler;
     base::SharedPointer<Handler> handler_;
 
-    proto::port_forwarding::ClientToHost incoming_message_;
-    proto::port_forwarding::HostToClient outgoing_message_;
+    base::Parser<proto::port_forwarding::ClientToHost> incoming_message_;
+    base::Serializer<proto::port_forwarding::HostToClient> outgoing_message_;
 
     std::queue<std::string> write_queue_;
 

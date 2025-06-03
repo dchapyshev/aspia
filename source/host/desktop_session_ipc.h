@@ -21,6 +21,7 @@
 
 #include <QMap>
 
+#include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "base/desktop/shared_memory_frame.h"
 #include "base/ipc/ipc_channel.h"
@@ -71,8 +72,8 @@ private:
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 
-    proto::internal::ServiceToDesktop outgoing_message_;
-    proto::internal::DesktopToService incoming_message_;
+    base::Serializer<proto::internal::ServiceToDesktop> outgoing_message_;
+    base::Parser<proto::internal::DesktopToService> incoming_message_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);
 };

@@ -20,6 +20,7 @@
 #define CLIENT_CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
+#include "base/serialization.h"
 #include "base/desktop/geometry.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
@@ -29,8 +30,6 @@
 #include "proto/desktop_extensions.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
-
-#include <filesystem>
 
 #include <QPointer>
 
@@ -142,8 +141,8 @@ private:
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 
-    proto::HostToClient incoming_message_;
-    proto::ClientToHost outgoing_message_;
+    base::Parser<proto::HostToClient> incoming_message_;
+    base::Serializer<proto::ClientToHost> outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     proto::AudioEncoding audio_encoding_ = proto::AUDIO_ENCODING_UNKNOWN;

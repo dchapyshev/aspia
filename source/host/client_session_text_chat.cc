@@ -42,7 +42,7 @@ ClientSessionTextChat::~ClientSessionTextChat()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
 {
-    sendMessage(text_chat);
+    sendMessage(base::serialize(text_chat));
 }
 
 //--------------------------------------------------------------------------------------------------

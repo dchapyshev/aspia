@@ -22,7 +22,6 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
-#include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/codec/audio_encoder.h"
 #include "base/codec/cursor_encoder.h"
@@ -100,7 +99,7 @@ void ClientSessionDesktop::onStarted()
     }
 
     // Create a capabilities.
-    proto::DesktopCapabilities* capabilities = outgoing_message_.mutable_capabilities();
+    proto::DesktopCapabilities* capabilities = outgoing_message_.newMessage().mutable_capabilities();
 
     // Add supported extensions and video encodings.
     capabilities->set_extensions(extensions);
@@ -139,21 +138,19 @@ void ClientSessionDesktop::onStarted()
     LOG(LS_INFO) << "OS type: " << capabilities->os_type();
 
     // Send the request.
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 {
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
+    if (!incoming_message_.parse(buffer))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;
     }
 
-    if (incoming_message_.has_mouse_event())
+    if (incoming_message_->has_mouse_event())
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
@@ -167,7 +164,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             return;
         }
 
-        const proto::MouseEvent& mouse_event = incoming_message_.mouse_event();
+        const proto::MouseEvent& mouse_event = incoming_message_->mouse_event();
 
         int pos_x = static_cast<int>(
             static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
@@ -182,11 +179,11 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
         emit sig_injectMouseEvent(out_mouse_event);
         stat_counter_.addMouseEvent();
     }
-    else if (incoming_message_.has_key_event())
+    else if (incoming_message_->has_key_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            emit sig_injectKeyEvent(incoming_message_.key_event());
+            emit sig_injectKeyEvent(incoming_message_->key_event());
             stat_counter_.addKeyboardEvent();
         }
         else
@@ -194,11 +191,11 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             LOG(LS_ERROR) << "Key event for non-desktop-manage session";
         }
     }
-    else if (incoming_message_.has_touch_event())
+    else if (incoming_message_->has_touch_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            emit sig_injectTouchEvent(incoming_message_.touch_event());
+            emit sig_injectTouchEvent(incoming_message_->touch_event());
             stat_counter_.addTouchEvent();
         }
         else
@@ -206,11 +203,11 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             LOG(LS_ERROR) << "Touch event for non-desktop-manage session";
         }
     }
-    else if (incoming_message_.has_text_event())
+    else if (incoming_message_->has_text_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            emit sig_injectTextEvent(incoming_message_.text_event());
+            emit sig_injectTextEvent(incoming_message_->text_event());
             stat_counter_.addTextEvent();
         }
         else
@@ -218,11 +215,11 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             LOG(LS_ERROR) << "Text event for non-desktop-manage session";
         }
     }
-    else if (incoming_message_.has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            emit sig_injectClipboardEvent(incoming_message_.clipboard_event());
+            emit sig_injectClipboardEvent(incoming_message_->clipboard_event());
             stat_counter_.addIncomingClipboardEvent();
         }
         else
@@ -230,13 +227,13 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             LOG(LS_ERROR) << "Clipboard event for non-desktop-manage session";
         }
     }
-    else if (incoming_message_.has_extension())
+    else if (incoming_message_->has_extension())
     {
-        readExtension(incoming_message_.extension());
+        readExtension(incoming_message_->extension());
     }
-    else if (incoming_message_.has_config())
+    else if (incoming_message_->has_config())
     {
-        readConfig(incoming_message_.config());
+        readConfig(incoming_message_->config());
     }
     else
     {
@@ -249,13 +246,11 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
-    outgoing_message_.Clear();
-
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
 }
 #endif // defined(Q_OS_WINDOWS)
 
@@ -265,7 +260,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
     if (critical_overflow_)
         return;
 
-    outgoing_message_.Clear();
+    proto::HostToClient& message = outgoing_message_.newMessage();
 
     if (!is_video_paused_ && frame && video_encoder_)
     {
@@ -308,7 +303,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             return;
         }
 
-        proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
+        proto::VideoPacket* packet = message.mutable_video_packet();
 
         // Encode the frame into a video packet.
         if (!video_encoder_->encode(scaled_frame, packet))
@@ -341,18 +336,18 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
     if (cursor && cursor_encoder_)
     {
-        if (!cursor_encoder_->encode(*cursor, outgoing_message_.mutable_cursor_shape()))
-            outgoing_message_.clear_cursor_shape();
+        if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
+            message.clear_cursor_shape();
     }
 
-    if (outgoing_message_.has_video_packet() || outgoing_message_.has_cursor_shape())
+    if (message.has_video_packet() || message.has_cursor_shape())
     {
-        sendMessage(outgoing_message_);
+        sendMessage(outgoing_message_.serialize());
 
-        if (outgoing_message_.has_video_packet())
+        if (message.has_video_packet())
         {
             video_encoder_->setEncodeBuffer(
-                std::move(*outgoing_message_.mutable_video_packet()->mutable_data()));
+                std::move(*message.mutable_video_packet()->mutable_data()));
             stat_counter_.addVideoPacket();
         }
     }
@@ -367,12 +362,10 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     if (is_audio_paused_ || !audio_encoder_)
         return;
 
-    outgoing_message_.Clear();
-
-    if (!audio_encoder_->encode(audio_packet, outgoing_message_.mutable_audio_packet()))
+    if (!audio_encoder_->encode(audio_packet, outgoing_message_.newMessage().mutable_audio_packet()))
         return;
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
     stat_counter_.addAudioPacket();
 }
 
@@ -387,9 +380,8 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
         return;
     }
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_video_packet()->set_error_code(error_code);
-    sendMessage(outgoing_message_);
+    outgoing_message_.newMessage().mutable_video_packet()->set_error_code(error_code);
+    sendMessage(outgoing_message_.serialize());
     stat_counter_.addVideoError();
 }
 
@@ -399,18 +391,16 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     if (!desktop_session_config_.cursor_position)
         return;
 
-    outgoing_message_.Clear();
-
     int pos_x = static_cast<int>(
         static_cast<double>(cursor_position.x()) * scale_reducer_->scaleFactorX() / 100.0);
     int pos_y = static_cast<int>(
         static_cast<double>(cursor_position.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-    proto::CursorPosition* position = outgoing_message_.mutable_cursor_position();
+    proto::CursorPosition* position = outgoing_message_.newMessage().mutable_cursor_position();
     position->set_x(pos_x);
     position->set_y(pos_y);
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
     stat_counter_.addCursorPosition();
 }
 
@@ -419,12 +409,11 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
     LOG(LS_INFO) << "Send screen list to client";
 
-    outgoing_message_.Clear();
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,12 +421,11 @@ void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
 {
     LOG(LS_INFO) << "Send screen type to client";
 
-    outgoing_message_.Clear();
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kScreenTypeExtension);
     extension->set_data(type.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -445,9 +433,8 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
 {
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        outgoing_message_.Clear();
-        outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(outgoing_message_);
+        outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(outgoing_message_.serialize());
         stat_counter_.addOutgoingClipboardEvent();
     }
     else
@@ -800,12 +787,11 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(system_info_request, &system_info);
 
-    outgoing_message_.Clear();
-    proto::DesktopExtension* desktop_extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(outgoing_message_.serialize());
 #endif // defined(Q_OS_WINDOWS)
 }
 

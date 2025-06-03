@@ -61,7 +61,7 @@ void ClientSessionSystemInfo::onReceived(const QByteArray& buffer)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    sendMessage(system_info);
+    sendMessage(base::serialize(system_info));
 #endif // defined(Q_OS_WINDOWS)
 }
 

@@ -19,6 +19,7 @@
 #include "host/client_session_file_transfer.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "proto/file_transfer.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -319,13 +320,13 @@ void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
         proto::FileReply reply;
         reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
 
-        sendMessage(reply);
+        sendMessage(base::serialize(reply));
         return;
     }
 
     if (ipc_channel_)
     {
-        ipc_channel_->send(QByteArray(buffer));
+        ipc_channel_->send(buffer);
     }
     else
     {
@@ -343,7 +344,7 @@ void ClientSessionFileTransfer::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 {
-    sendMessage(QByteArray(buffer));
+    sendMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,7 +380,7 @@ void ClientSessionFileTransfer::onIpcNewConnection()
     ipc_channel_->resume();
 
     for (auto& message : pending_messages_)
-        ipc_channel_->send(std::move(message));
+        ipc_channel_->send(message);
 
     pending_messages_.clear();
 }

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_MEMORY_BYTE_ARRAY_H
-#define BASE_MEMORY_BYTE_ARRAY_H
+#ifndef BASE_SERIALIZATION_H
+#define BASE_SERIALIZATION_H
 
 #include <QByteArray>
 #include <QVersionNumber>
@@ -33,12 +33,96 @@ QByteArray serialize(const google::protobuf::MessageLite& message);
 template <class T>
 bool parse(const QByteArray& buffer, T* message)
 {
-    return message->ParseFromArray(buffer.data(), static_cast<int>(buffer.size()));
+    return message->ParseFromArray(buffer.data(), buffer.size());
 }
 
 proto::Version serialize(const QVersionNumber& version);
 QVersionNumber parse(const proto::Version& version);
 
+class SerializerImpl
+{
+public:
+    static constexpr int kBufferCount = 16;
+
+    const QByteArray& serialize(const google::protobuf::MessageLite& message) const
+    {
+        const int size = static_cast<int>(message.ByteSizeLong());
+        if (!size)
+        {
+            static QByteArray kEmptyBuffer;
+            return kEmptyBuffer;
+        }
+
+        QByteArray& buffer = buffers_[buffer_index_];
+        buffer_index_ = (buffer_index_ + 1) % kBufferCount;
+
+        if (buffer.capacity() < size)
+            buffer.reserve(size);
+
+        buffer.resize(size);
+        message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
+
+        return buffer;
+    }
+
+private:
+    mutable QByteArray buffers_[kBufferCount];
+    mutable int buffer_index_ = 0;
+};
+
+template <typename T>
+class Serializer
+{
+public:
+    const T& message() const
+    {
+        return message_;
+    }
+
+    T& newMessage()
+    {
+        message_.Clear();
+        return message_;
+    }
+
+    const QByteArray& serialize() const
+    {
+        return impl_.serialize(message_);
+    }
+
+private:
+    SerializerImpl impl_;
+    T message_;
+};
+
+template <typename T>
+class Parser
+{
+public:
+    bool parse(const QByteArray& buffer)
+    {
+        return message_.ParseFromArray(buffer.data(), buffer.size());
+    }
+
+    const T& message() const
+    {
+        return message_;
+    }
+
+    const T* operator->() const
+    {
+        return &message_;
+    }
+
+    T* operator->()
+    {
+        return &message_;
+    }
+
+private:
+    T message_;
+};
+
 } // namespace base
 
-#endif // BASE_MEMORY_BYTE_ARRAY_H
+#endif // BASE_SERIALIZATION_H

@@ -87,9 +87,7 @@ protected:
     virtual void onStarted() = 0;
     virtual void onReceived(const QByteArray& buffer) = 0;
 
-    void sendMessage(QByteArray&& buffer);
-    void sendMessage(const google::protobuf::MessageLite& message);
-
+    void sendMessage(const QByteArray& buffer);
     size_t pendingMessages() const;
 
 private slots:

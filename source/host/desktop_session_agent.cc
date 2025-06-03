@@ -19,7 +19,6 @@
 #include "host/desktop_session_agent.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/mouse_cursor.h"
@@ -145,13 +144,13 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
     LOG(LS_INFO) << "Shared memory created: " << id;
 
-    outgoing_message_.Clear();
+    proto::internal::SharedBuffer* shared_buffer =
+        outgoing_message_.newMessage().mutable_shared_buffer();
 
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,22 +158,20 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << id;
 
-    outgoing_message_.Clear();
+    proto::internal::SharedBuffer* shared_buffer =
+        outgoing_message_.newMessage().mutable_shared_buffer();
 
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
-    outgoing_message_.Clear();
-
-    proto::ScreenList* screen_list = outgoing_message_.mutable_screen_list();
+    proto::ScreenList* screen_list = outgoing_message_.newMessage().mutable_screen_list();
     screen_list->set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
@@ -207,28 +204,24 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
-    outgoing_message_.Clear();
-
-    proto::CursorPosition* cursor_position = outgoing_message_.mutable_cursor_position();
+    proto::CursorPosition* cursor_position = outgoing_message_.newMessage().mutable_cursor_position();
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenTypeChanged(
     base::ScreenCapturer::ScreenType type, const QString& name)
 {
-    outgoing_message_.Clear();
-
-    proto::ScreenType* screen_type = outgoing_message_.mutable_screen_type();
+    proto::ScreenType* screen_type = outgoing_message_.newMessage().mutable_screen_type();
     screen_type->set_name(name.toStdString());
 
     switch (type)
@@ -254,7 +247,7 @@ void DesktopSessionAgent::onScreenTypeChanged(
             break;
     }
 
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,81 +264,79 @@ void DesktopSessionAgent::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
+    if (!incoming_message_.parse(buffer))
     {
         LOG(LS_ERROR) << "Invalid message from service";
         return;
     }
 
-    if (incoming_message_.has_next_screen_capture())
+    if (incoming_message_->has_next_screen_capture())
     {
         scheduleNextCapture(std::chrono::milliseconds(
-            incoming_message_.next_screen_capture().update_interval()));
+            incoming_message_->next_screen_capture().update_interval()));
     }
-    else if (incoming_message_.has_mouse_event())
+    else if (incoming_message_->has_mouse_event())
     {
         if (input_injector_)
         {
-            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
+            input_injector_->injectMouseEvent(incoming_message_->mouse_event());
         }
         else
         {
             LOG(LS_ERROR) << "Input injector NOT initialized";
         }
     }
-    else if (incoming_message_.has_key_event())
+    else if (incoming_message_->has_key_event())
     {
         if (input_injector_)
         {
-            input_injector_->injectKeyEvent(incoming_message_.key_event());
+            input_injector_->injectKeyEvent(incoming_message_->key_event());
         }
         else
         {
             LOG(LS_ERROR) << "Input injector NOT initialized";
         }
     }
-    else if (incoming_message_.has_touch_event())
+    else if (incoming_message_->has_touch_event())
     {
         if (input_injector_)
         {
-            input_injector_->injectTouchEvent(incoming_message_.touch_event());
+            input_injector_->injectTouchEvent(incoming_message_->touch_event());
         }
         else
         {
             LOG(LS_ERROR) << "Input injector NOT initialized";
         }
     }
-    else if (incoming_message_.has_text_event())
+    else if (incoming_message_->has_text_event())
     {
         if (input_injector_)
         {
-            input_injector_->injectTextEvent(incoming_message_.text_event());
+            input_injector_->injectTextEvent(incoming_message_->text_event());
         }
         else
         {
             LOG(LS_ERROR) << "Input injector NOT initialized";
         }
     }
-    else if (incoming_message_.has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
         if (clipboard_monitor_)
         {
-            clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
+            clipboard_monitor_->injectClipboardEvent(incoming_message_->clipboard_event());
         }
         else
         {
             LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
         }
     }
-    else if (incoming_message_.has_select_source())
+    else if (incoming_message_->has_select_source())
     {
         LOG(LS_INFO) << "Select source received";
 
         if (screen_capturer_)
         {
-            const proto::Screen& screen = incoming_message_.select_source().screen();
+            const proto::Screen& screen = incoming_message_->select_source().screen();
             const proto::Resolution& resolution = screen.resolution();
 
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
@@ -356,9 +347,9 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             LOG(LS_ERROR) << "Screen capturer NOT initialized";
         }
     }
-    else if (incoming_message_.has_configure())
+    else if (incoming_message_->has_configure())
     {
-        const proto::internal::Configure& config = incoming_message_.configure();
+        const proto::internal::Configure& config = incoming_message_->configure();
 
         LOG(LS_INFO) << "Configure received";
         LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
@@ -393,11 +384,11 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         lock_at_disconnect_ = config.lock_at_disconnect();
         clear_clipboard_ = config.clear_clipboard();
     }
-    else if (incoming_message_.has_control())
+    else if (incoming_message_->has_control())
     {
-        LOG(LS_INFO) << "Control received: " << incoming_message_.control().action();
+        LOG(LS_INFO) << "Control received: " << incoming_message_->control().action();
 
-        switch (incoming_message_.control().action())
+        switch (incoming_message_->control().action())
         {
             case proto::internal::DesktopControl::ENABLE:
                 setEnabled(true);
@@ -442,9 +433,8 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     LOG(LS_INFO) << "Send clipboard event";
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    ipc_channel_->send(base::serialize(outgoing_message_));
+    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
+    ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -571,8 +561,8 @@ void DesktopSessionAgent::captureScreen()
 
     base::ScreenCapturer::Error error = screen_capturer_->captureFrame(&frame, &cursor);
 
-    outgoing_message_.Clear();
-    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
+    proto::internal::ScreenCaptured* screen_captured =
+        outgoing_message_.newMessage().mutable_screen_captured();
 
     if (error != base::ScreenCapturer::Error::SUCCEEDED)
     {
@@ -591,7 +581,7 @@ void DesktopSessionAgent::captureScreen()
             return;
         }
 
-        ipc_channel_->send(base::serialize(outgoing_message_));
+        ipc_channel_->send(outgoing_message_.serialize());
         return;
     }
 
@@ -644,7 +634,7 @@ void DesktopSessionAgent::captureScreen()
     {
         // If a frame or cursor was captured, send a message to the service. The next capture
         // will be scheduled after the response from the service.
-        ipc_channel_->send(base::serialize(outgoing_message_));
+        ipc_channel_->send(outgoing_message_.serialize());
     }
     else
     {

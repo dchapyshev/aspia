@@ -22,6 +22,7 @@
 #include <QList>
 #include <QTimer>
 
+#include "base/serialization.h"
 #include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
@@ -121,8 +122,8 @@ private:
 
     DesktopSessionManager* desktop_session_ = nullptr;
 
-    proto::internal::UiToService incoming_message_;
-    proto::internal::ServiceToUi outgoing_message_;
+    base::Parser<proto::internal::UiToService> incoming_message_;
+    base::Serializer<proto::internal::ServiceToUi> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSession);
 };

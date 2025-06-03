@@ -83,7 +83,7 @@ protected:
     virtual void onSessionMessageWritten(size_t pending) = 0;
 
     // Sends outgoing message.
-    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(quint8 channel_id, const QByteArray& message);
 
     // Methods for obtaining network metrics.
     qint64 totalRx() const;
