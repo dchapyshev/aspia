@@ -258,18 +258,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="272"/>
-        <location filename="../host_main.cc" line="289"/>
+        <location filename="../host_main.cc" line="151"/>
+        <location filename="../host_main.cc" line="168"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="273"/>
+        <location filename="../host_main.cc" line="152"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="290"/>
+        <location filename="../host_main.cc" line="169"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -277,32 +277,32 @@
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host_main.cc" line="239"/>
+        <location filename="../host_main.cc" line="118"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="241"/>
+        <location filename="../host_main.cc" line="120"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="243"/>
+        <location filename="../host_main.cc" line="122"/>
         <source>Import parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="245"/>
+        <location filename="../host_main.cc" line="124"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="247"/>
+        <location filename="../host_main.cc" line="126"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="249"/>
+        <location filename="../host_main.cc" line="128"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
