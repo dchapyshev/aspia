@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "host/host_storage.h"
 #include "proto/router_peer.pb.h"
 
@@ -106,17 +105,13 @@ void RouterController::onTcpConnected()
             connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
-            if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
-            {
-                LOG(LS_INFO) << "Using channel id support";
-                tcp_channel_->setChannelIdSupport(true);
-            }
-
             LOG(LS_INFO) << "Router connected";
             routerStateChanged(proto::internal::RouterState::CONNECTED);
 
             // Now the session will receive incoming messages.
+            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
+
             hostIdRequest();
         }
         else

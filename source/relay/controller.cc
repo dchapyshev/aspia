@@ -19,7 +19,6 @@
 #include "relay/controller.h"
 
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_common.pb.h"
@@ -198,15 +197,10 @@ void Controller::onTcpConnected()
             connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Controller::onTcpMessageReceived);
 
-            if (authenticator_->peerVersion() >= base::kVersion_2_6_0)
-            {
-                LOG(LS_INFO) << "Using channel id support";
-                tcp_channel_->setChannelIdSupport(true);
-            }
-
             LOG(LS_INFO) << "Authentication complete (session count: " << session_count_ << ")";
 
             // Now the session will receive incoming messages.
+            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
 
             sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));

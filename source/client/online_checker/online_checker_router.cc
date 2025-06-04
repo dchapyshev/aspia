@@ -21,7 +21,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.pb.h"
 
@@ -98,14 +97,8 @@ void OnlineCheckerRouter::onTcpConnected()
             connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &OnlineCheckerRouter::onTcpMessageReceived);
 
-            const QVersionNumber& router_version = authenticator_->peerVersion();
-            if (router_version >= base::kVersion_2_6_0)
-            {
-                LOG(LS_INFO) << "Using channel id support";
-                tcp_channel_->setChannelIdSupport(true);
-            }
-
             // Now the session will receive incoming messages.
+            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
 
             checkNextComputer();

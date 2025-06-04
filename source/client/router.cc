@@ -262,13 +262,8 @@ void Router::onTcpConnected()
                     this, &Router::onTcpMessageReceived);
 
             const QVersionNumber& router_version = authenticator_->peerVersion();
-            if (router_version >= base::kVersion_2_6_0)
-            {
-                LOG(LS_INFO) << "Using channel id support";
-                tcp_channel_->setChannelIdSupport(true);
-            }
-
             const QVersionNumber& client_version = base::kCurrentVersion;
+
             if (router_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
@@ -280,6 +275,7 @@ void Router::onTcpConnected()
                 emit sig_connected(router_version);
 
                 // Now the session will receive incoming messages.
+                tcp_channel_->setChannelIdSupport(true);
                 tcp_channel_->resume();
             }
         }

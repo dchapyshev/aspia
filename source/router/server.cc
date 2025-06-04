@@ -19,7 +19,6 @@
 #include "router/server.h"
 
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "proto/text_stream.h"
@@ -190,17 +189,13 @@ void Server::onSessionAuthenticated()
         base::ServerAuthenticatorManager::SessionInfo session_info =
             authenticator_manager_->nextReadySession();
 
+        session_info.channel->setChannelIdSupport(true);
+
         QString address = session_info.channel->peerAddress();
         proto::RouterSession session_type =
             static_cast<proto::RouterSession>(session_info.session_type);
 
         LOG(LS_INFO) << "New session: " << session_type << " (" << address << ")";
-
-        if (session_info.version >= base::kVersion_2_6_0)
-        {
-            LOG(LS_INFO) << "Using channel id support";
-            session_info.channel->setChannelIdSupport(true);
-        }
 
         Session* session = nullptr;
 

@@ -374,12 +374,6 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 {
     CHECK_NE(error_code, proto::VIDEO_ERROR_CODE_OK);
 
-    if (clientVersion() < base::kVersion_2_6_0)
-    {
-        // Old version Client does not work with error codes.
-        return;
-    }
-
     outgoing_message_.newMessage().mutable_video_packet()->set_error_code(error_code);
     sendMessage(outgoing_message_.serialize());
     stat_counter_.addVideoError();

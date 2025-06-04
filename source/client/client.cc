@@ -441,12 +441,6 @@ void Client::startAuthentication()
             const QVersionNumber& host_version = authenticator_->peerVersion();
             session_state_->setHostVersion(host_version);
 
-            if (host_version >= base::kVersion_2_6_0)
-            {
-                LOG(LS_INFO) << "Using channel id support";
-                tcp_channel_->setChannelIdSupport(true);
-            }
-
             const QVersionNumber& client_version = base::kCurrentVersion;
             if (host_version > client_version)
             {
@@ -465,6 +459,7 @@ void Client::startAuthentication()
                 emit sig_showSessionWindow();
 
                 // Now the session will receive incoming messages.
+                tcp_channel_->setChannelIdSupport(true);
                 tcp_channel_->resume();
             }
         }
