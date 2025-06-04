@@ -21,7 +21,6 @@
 
 #include "base/aligned_memory.h"
 #include "base/macros_magic.h"
-#include "build/build_config.h"
 
 #include <functional>
 #include <memory>
@@ -105,11 +104,11 @@ private:
     // ARM, NEON support is chosen at compile time based on compilation flags.
     static float Convolve_C(const float* input_ptr, const float* k1,
                             const float* k2, double kernel_interpolation_factor);
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     static float Convolve_SSE(const float* input_ptr, const float* k1,
                               const float* k2,
                               double kernel_interpolation_factor);
-#elif defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
     static float Convolve_NEON(const float* input_ptr, const float* k1,
                                const float* k2,
                                double kernel_interpolation_factor);

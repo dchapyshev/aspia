@@ -18,8 +18,6 @@
 
 #include "base/debug.h"
 
-#include "build/build_config.h"
-
 #include <QtGlobal>
 
 #if defined(Q_OS_WINDOWS)
@@ -52,7 +50,7 @@ void debugPrint(const char* str)
 //--------------------------------------------------------------------------------------------------
 void debugBreak()
 {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 
 #if defined(Q_CC_MSVC)
     __debugbreak();
@@ -70,13 +68,13 @@ void debugBreak()
 #define Compiller support not implemented
 #endif // Q_CC_*
 
-#elif defined(ARCH_CPU_ARM64)
+#elif defined(Q_PROCESSOR_ARM_64)
     asm("brk 0");
-#elif defined(ARCH_CPU_ARMEL)
+#elif defined(Q_PROCESSOR_ARM_32)
     asm("break 2");
-#else // ARCH_CPU_*
+#else // Q_PROCESSOR_*
 #error CPU family support not implemented
-#endif // ARCH_CPU_*
+#endif // Q_PROCESSOR_*
 }
 
 } // namespace base

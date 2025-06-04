@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "build/build_config.h"
-
 namespace base {
 
 enum
@@ -32,7 +30,7 @@ enum
     DMF_ESCAPE_BASE_3_VB = 24
 };
 
-#if (ARCH_CPU_64_BITS == 1)
+#if defined(Q_PROCESSOR_X86_64)
 
 #define CLIENT_64BIT   0x8000
 
@@ -52,7 +50,7 @@ enum
     DMF_ESCAPE_BASE_3 = DMF_ESCAPE_BASE_3_VB,
 };
 
-#endif // ARCH_CPU_*_BITS
+#endif
 
 typedef enum
 {

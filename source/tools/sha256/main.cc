@@ -16,7 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "build/build_config.h"
 #include "tools/sha256/sha256.h"
 
 #include <array>

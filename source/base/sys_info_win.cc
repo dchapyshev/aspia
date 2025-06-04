@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
-#include "build/build_config.h"
 
 #include <LM.h>
 
@@ -159,10 +158,10 @@ QString SysInfo::operatingSystemName()
 
     REGSAM access = KEY_READ;
 
-#if (ARCH_CPU_X86 == 1)
+#if defined(Q_PROCESSOR_X86_32)
     if (isWow64Process())
         access |= KEY_WOW64_64KEY;
-#endif // (ARCH_CPU_X86 == 1)
+#endif
 
     LONG status = key.open(HKEY_LOCAL_MACHINE,
                            "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
@@ -230,7 +229,7 @@ QString SysInfo::operatingSystemKey()
 
     REGSAM access = KEY_READ;
 
-#if (ARCH_CPU_X86 == 1)
+#if defined(Q_PROCESSOR_X86_32)
     if (isWow64Process())
         access |= KEY_WOW64_64KEY;
 #endif
@@ -273,7 +272,7 @@ qint64 SysInfo::operatingSystemInstallDate()
 
     REGSAM access = KEY_READ;
 
-#if (ARCH_CPU_X86 == 1)
+#if defined(Q_PROCESSOR_X86_32)
     if (isWow64Process())
         access |= KEY_WOW64_64KEY;
 #endif

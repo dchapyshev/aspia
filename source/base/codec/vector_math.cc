@@ -18,13 +18,14 @@
 
 #include "base/codec/vector_math.h"
 
+#include <QtGlobal>
+
 #include "base/logging.h"
-#include "build/build_config.h"
 
 #include <algorithm>
 
 // NaCl does not allow intrinsics.
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 #include <xmmintrin.h>
 // Don't use custom SSE versions where the auto-vectorized C version performs better, which is
 // anywhere clang is used.
@@ -38,7 +39,7 @@
 #define FMUL_FUNC FMUL_C
 #endif
 #define EWMAAndMaxPower_FUNC EWMAAndMaxPower_SSE
-#elif defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
 #include <arm_neon.h>
 #define FMAC_FUNC FMAC_NEON
 #define FMUL_FUNC FMUL_NEON
@@ -82,7 +83,7 @@ std::pair<float, float> EWMAAndMaxPower_C(
     return result;
 }
 
-#if defined(ARCH_CPU_X86_FAMILY) && !defined(OS_NACL)
+#if defined(Q_PROCESSOR_X86)
 //--------------------------------------------------------------------------------------------------
 void FMUL_SSE(const float src[], float scale, int len, float dest[])
 {
@@ -194,7 +195,7 @@ std::pair<float, float> EWMAAndMaxPower_SSE(
 }
 #endif
 
-#if defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+#if defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
 //--------------------------------------------------------------------------------------------------
 void FMAC_NEON(const float src[], float scale, int len, float dest[])
 {

@@ -95,10 +95,10 @@
 #include <cstring>
 #include <limits>
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 #include <xmmintrin.h>
 #define CONVOLVE_FUNC Convolve_SSE
-#elif defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
 #include <arm_neon.h>
 #define CONVOLVE_FUNC Convolve_NEON
 #else
@@ -115,7 +115,7 @@ class ScopedSubnormalFloatDisabler
 public:
     ScopedSubnormalFloatDisabler()
     {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
         // Turn on "subnormals are zero" and "flush to zero" CSR flags.
         orig_state_ = _mm_getcsr();
         _mm_setcsr(orig_state_ | 0x8040);
@@ -124,13 +124,13 @@ public:
 
     ~ScopedSubnormalFloatDisabler()
     {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
         _mm_setcsr(orig_state_);
 #endif
     }
 
 private:
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     unsigned int orig_state_;
 #endif
     DISALLOW_COPY_AND_ASSIGN(ScopedSubnormalFloatDisabler);
@@ -391,7 +391,7 @@ float SincResampler::Convolve_C(const float* input_ptr, const float* k1,
         kernel_interpolation_factor * sum2);
 }
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 //--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_SSE(const float* input_ptr, const float* k1,
                                   const float* k2,
@@ -434,7 +434,7 @@ float SincResampler::Convolve_SSE(const float* input_ptr, const float* k1,
 
     return result;
 }
-#elif defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+#elif defined(Q_PROCESSOR_ARM) && defined(USE_NEON)
 //--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_NEON(const float* input_ptr, const float* k1,
                                    const float* k2,

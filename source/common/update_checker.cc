@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/net/curl_util.h"
-#include "build/build_config.h"
 
 #include <QVersionNumber>
 
@@ -106,13 +105,13 @@ void UpdateChecker::run()
 #endif
 
     QString arch;
-#if defined(ARCH_CPU_X86_64)
+#if defined(Q_PROCESSOR_X86_64)
     arch = "x86_64";
-#elif defined(ARCH_CPU_X86)
+#elif defined(Q_PROCESSOR_X86_32)
     arch = "x86";
-#elif defined(ARCH_CPU_ARMEL)
+#elif defined(Q_PROCESSOR_ARM_32)
     arch = "arm";
-#elif defined(ARCH_CPU_ARM64)
+#elif defined(Q_PROCESSOR_ARM_64)
     arch = "arm64";
 #else
 #error Unknown architecture

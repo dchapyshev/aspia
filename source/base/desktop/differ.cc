@@ -56,8 +56,6 @@ quint8 diffPartialBlock(const quint8* prev_image,
     return 0U;
 }
 
-
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -101,14 +99,14 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
 {
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
         LOG(LS_INFO) << "SSE2 differ loaded";
 
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
             return diffFullBlock_32bpp_32x32_SSE2;
-#endif // defined(ARCH_CPU_X86_FAMILY)
+#endif // defined(Q_PROCESSOR_X86)
     }
     else
     {

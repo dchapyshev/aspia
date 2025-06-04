@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/win/registry.h"
-#include "build/build_config.h"
 
 namespace base {
 
@@ -110,7 +109,7 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
         ++user_key_iterator;
     }
 
-#if (ARCH_CPU_X86 == 1)
+#if defined(Q_PROCESSOR_X86_32)
 
     BOOL is_wow64;
 
@@ -138,7 +137,7 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
         }
     }
 
-#elif (ARCH_CPU_X86_64 == 1)
+#elif defined(Q_PROCESSOR_X86_64)
 
     RegistryKeyIterator machine32_key_iterator(HKEY_LOCAL_MACHINE,
                                                kUninstallKeyPath,

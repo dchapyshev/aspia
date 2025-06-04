@@ -30,7 +30,7 @@ namespace base {
 // static
 QString SysInfo::processorName()
 {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     CpuidUtil cpuidUtil;
     cpuidUtil.get(static_cast<int>(0x80000000));
 
@@ -79,7 +79,7 @@ QString SysInfo::processorName()
 // static
 QString SysInfo::processorVendor()
 {
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
     CpuidUtil cpuidUtil;
     cpuidUtil.get(0x00000000);
 

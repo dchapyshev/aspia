@@ -18,15 +18,15 @@
 
 #include "base/cpuid_util.h"
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 
 #include "base/bitset.h"
 
-#if defined(CC_MSVC)
+#if defined(Q_CC_MSVC)
 #include <intrin.h>
 #else
 #include <cpuid.h>
-#endif // CC_MSVC
+#endif // Q_CC_MSVC
 
 namespace base {
 
@@ -58,7 +58,7 @@ CpuidUtil& CpuidUtil::operator=(const CpuidUtil& other)
 //--------------------------------------------------------------------------------------------------
 void CpuidUtil::get(int leaf, int subleaf)
 {
-#if defined(CC_MSVC)
+#if defined(Q_CC_MSVC)
     int cpu_info[4];
     __cpuidex(cpu_info, leaf, subleaf);
 #else
@@ -86,4 +86,4 @@ bool CpuidUtil::hasAesNi()
 
 } // namespace base
 
-#endif // defined(ARCH_CPU_X86_FAMILY)
+#endif // defined(Q_PROCESSOR_X86)

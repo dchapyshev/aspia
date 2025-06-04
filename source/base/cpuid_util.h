@@ -21,11 +21,9 @@
 
 #include <QtGlobal>
 
-#include "build/build_config.h"
+#if defined(Q_PROCESSOR_X86)
 
-#if defined(ARCH_CPU_X86_FAMILY)
-
-#if !defined(CC_MSVC)
+#if !defined(Q_CC_MSVC)
 #include <climits>
 #endif
 
@@ -59,5 +57,5 @@ private:
 
 } // namespace base
 
-#endif // defined(ARCH_CPU_X86_FAMILY)
+#endif // defined(Q_PROCESSOR_X86)
 #endif // BASE_CPUID_UTIL_H

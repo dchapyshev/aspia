@@ -19,9 +19,9 @@
 #ifndef BASE_POSIX_EINTR_WRAPPER_H
 #define BASE_POSIX_EINTR_WRAPPER_H
 
-#include "build/build_config.h"
+#include <QtGlobal>
 
-#if defined(OS_POSIX)
+#if defined(Q_OS_UNIX)
 
 #include <errno.h>
 
@@ -63,12 +63,12 @@
     eintr_wrapper_result; \
 })
 
-#else // !OS_POSIX
+#else // !Q_OS_UNIX
 
 #define HANDLE_EINTR(x) (x)
 #define IGNORE_EINTR(x) (x)
 
-#endif // !OS_POSIX
+#endif // !Q_OS_UNIX
 
 #endif // BASE_POSIX_EINTR_WRAPPER_H
 

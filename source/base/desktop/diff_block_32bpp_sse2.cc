@@ -18,18 +18,18 @@
 
 #include "base/desktop/diff_block_32bpp_sse2.h"
 
-#if defined(ARCH_CPU_X86_FAMILY)
-#if defined(CC_MSVC)
+#if defined(Q_PROCESSOR_X86)
+#if defined(Q_CC_MSVC)
 #include <intrin.h>
 #else
 #include <mmintrin.h>
 #include <emmintrin.h>
-#endif // defined(CC_*)
-#endif // defined(ARCH_CPU_X86_FAMILY)
+#endif // defined(Q_CC_*)
+#endif // defined(Q_PROCESSOR_X86)
 
 namespace base {
 
-#if defined(ARCH_CPU_X86_FAMILY)
+#if defined(Q_PROCESSOR_X86)
 
 //--------------------------------------------------------------------------------------------------
 quint8 diffFullBlock_32bpp_32x32_SSE2(
@@ -121,6 +121,6 @@ quint8 diffFullBlock_32bpp_16x16_SSE2(
     return 0U;
 }
 
-#endif // defined(ARCH_CPU_X86_FAMILY)
+#endif // defined(Q_PROCESSOR_X86)
 
 } // namespace base

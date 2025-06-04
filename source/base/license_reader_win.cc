@@ -18,10 +18,8 @@
 
 #include "base/license_reader.h"
 
-#include "base/logging.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
-#include "build/build_config.h"
 
 namespace base {
 
@@ -405,7 +403,7 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 //--------------------------------------------------------------------------------------------------
 void readLicensesInformation(proto::system_info::Licenses* licenses)
 {
-#if (ARCH_CPU_X86 == 1)
+#if defined(Q_PROCESSOR_X86_32)
     BOOL is_wow64;
 
     // If the x86 application is running in a x64 system.
@@ -416,7 +414,7 @@ void readLicensesInformation(proto::system_info::Licenses* licenses)
         addVisualStudio(licenses, KEY_WOW64_64KEY);
         addVMWareProducts(licenses, KEY_WOW64_64KEY);
     }
-#elif (ARCH_CPU_X86_64 == 1)
+#elif defined(Q_PROCESSOR_X86_64)
     // If the x64 application is running in a x64 system we always read 32-bit keys.
     addMsProducts(licenses, KEY_WOW64_32KEY);
     addVisualStudio(licenses, KEY_WOW64_32KEY);
