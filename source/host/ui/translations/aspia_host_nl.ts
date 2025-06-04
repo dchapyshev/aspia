@@ -278,18 +278,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="151"/>
-        <location filename="../host_main.cc" line="168"/>
+        <location filename="../host_main.cc" line="149"/>
+        <location filename="../host_main.cc" line="166"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="152"/>
+        <location filename="../host_main.cc" line="150"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Applicatie integriteits controle gefaald. Missende of ontbrekende onderdelen.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="169"/>
+        <location filename="../host_main.cc" line="167"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
@@ -301,32 +301,32 @@
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host_main.cc" line="118"/>
+        <location filename="../host_main.cc" line="117"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="120"/>
+        <location filename="../host_main.cc" line="119"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="122"/>
+        <location filename="../host_main.cc" line="121"/>
         <source>Import parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="124"/>
+        <location filename="../host_main.cc" line="123"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="126"/>
+        <location filename="../host_main.cc" line="125"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="128"/>
+        <location filename="../host_main.cc" line="127"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
