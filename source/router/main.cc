@@ -16,8 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include <QCommandLineParser>
+#include <QDir>
+#include <QFileInfo>
+#include <QSysInfo>
+#include <QStandardPaths>
+
 #include "base/asio_event_dispatcher.h"
-#include "base/meta_types.h"
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
@@ -35,12 +40,6 @@
 #else
 #include "router/server.h"
 #endif
-
-#include <QCommandLineParser>
-#include <QDir>
-#include <QFileInfo>
-#include <QSysInfo>
-#include <QStandardPaths>
 
 namespace {
 
@@ -292,7 +291,6 @@ int main(int argc, char* argv[])
 #endif // defined(Q_OS_WINDOWS)
     else
     {
-        base::registerMetaTypes();
         proto::registerMetaTypes();
 
         return router::Service().exec(application);

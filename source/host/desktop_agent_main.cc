@@ -22,7 +22,6 @@
 
 #include "base/application.h"
 #include "base/asio_event_dispatcher.h"
-#include "base/meta_types.h"
 #include "base/logging.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
@@ -60,7 +59,6 @@ int desktopAgentMain(int& argc, char* argv[])
         return 1;
     }
 
-    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     host::DesktopSessionAgent desktop_agent;

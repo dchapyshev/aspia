@@ -16,16 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include <QCommandLineParser>
+#include <QSysInfo>
+
 #include "base/logging.h"
-#include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
 #include "proto/meta_types.h"
-
-#include <QCommandLineParser>
-#include <QSysInfo>
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -42,7 +41,6 @@ int main(int argc, char *argv[])
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);

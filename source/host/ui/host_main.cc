@@ -18,8 +18,11 @@
 
 #include "host/ui/host_main.h"
 
+#include <QCommandLineParser>
+#include <QMessageBox>
+#include <QSysInfo>
+
 #include "base/logging.h"
-#include "base/meta_types.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/print_debug_info.h"
@@ -36,10 +39,6 @@
 #include "base/win/process_util.h"
 #include "base/win/desktop.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QCommandLineParser>
-#include <QMessageBox>
-#include <QSysInfo>
 
 namespace {
 
@@ -139,7 +138,6 @@ int hostMain(int argc, char* argv[])
 
     parser.process(application);
 
-    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     if (!host::integrityCheck())

@@ -23,7 +23,6 @@
 #include "base/application.h"
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/meta_types.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/print_debug_info.h"
@@ -199,7 +198,6 @@ int hostServiceMain(int& argc, char* argv[])
 #endif // defined(Q_OS_WINDOWS)
     else
     {
-        base::registerMetaTypes();
         proto::registerMetaTypes();
 
         return Service().exec(application);

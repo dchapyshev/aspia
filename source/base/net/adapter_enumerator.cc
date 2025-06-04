@@ -269,7 +269,7 @@ QString AdapterEnumerator::dhcp4Server() const
     return addressToString(adapter_->Dhcpv4Server);
 #else
     NOTIMPLEMENTED();
-    return std::string();
+    return QString();
 #endif
 }
 

@@ -18,8 +18,11 @@
 
 #include "client/client_main.h"
 
+#include <QCommandLineParser>
+#include <QMessageBox>
+#include <QSysInfo>
+
 #include "base/logging.h"
-#include "base/meta_types.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "client/config_factory.h"
@@ -31,10 +34,6 @@
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/text_chat/text_chat_session_window.h"
 #include "proto/meta_types.h"
-
-#include <QCommandLineParser>
-#include <QMessageBox>
-#include <QSysInfo>
 
 //--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
@@ -373,7 +372,6 @@ int clientMain(int argc, char* argv[])
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    base::registerMetaTypes();
     proto::registerMetaTypes();
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
