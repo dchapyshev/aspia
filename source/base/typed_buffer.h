@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_MEMORY_TYPED_BUFFER_H
-#define BASE_MEMORY_TYPED_BUFFER_H
+#ifndef BASE_TYPED_BUFFER_H
+#define BASE_TYPED_BUFFER_H
 
 #include <QtGlobal>
 
@@ -118,4 +118,4 @@ private:
 
 } // namespace base
 
-#endif // BASE_MEMORY_TYPED_BUFFER_H
+#endif // BASE_TYPED_BUFFER_H

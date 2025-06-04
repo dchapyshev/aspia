@@ -19,8 +19,8 @@
 #ifndef BASE_CODEC_SINC_RESAMPLER_H
 #define BASE_CODEC_SINC_RESAMPLER_H
 
+#include "base/aligned_memory.h"
 #include "base/macros_magic.h"
-#include "base/memory/aligned_memory.h"
 #include "build/build_config.h"
 
 #include <functional>

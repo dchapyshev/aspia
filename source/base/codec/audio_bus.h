@@ -21,8 +21,8 @@
 
 #include <QVector>
 
+#include "base/aligned_memory.h"
 #include "base/macros_magic.h"
-#include "base/memory/aligned_memory.h"
 
 #include <memory>
 

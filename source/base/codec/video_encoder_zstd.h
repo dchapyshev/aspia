@@ -19,8 +19,8 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 #define BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 
+#include "base/aligned_memory.h"
 #include "base/macros_magic.h"
-#include "base/memory/aligned_memory.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/region.h"

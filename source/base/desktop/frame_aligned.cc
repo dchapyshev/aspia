@@ -18,7 +18,7 @@
 
 #include "base/desktop/frame_aligned.h"
 
-#include "base/memory/aligned_memory.h"
+#include "base/aligned_memory.h"
 
 namespace base {
 

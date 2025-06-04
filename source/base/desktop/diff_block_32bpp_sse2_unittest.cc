@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/memory/aligned_memory.h"
+#include "base/aligned_memory.h"
 #include "base/desktop/diff_block_32bpp_sse2.h"
 
 #include <gtest/gtest.h>

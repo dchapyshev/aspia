@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_SECURITY_HELPERS_H
 #define BASE_WIN_SECURITY_HELPERS_H
 
-#include "base/memory/typed_buffer.h"
-
 #include <QString>
 #include <qt_windows.h>
+
+#include "base/typed_buffer.h"
 
 namespace base {
 

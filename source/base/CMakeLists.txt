@@ -17,6 +17,8 @@
 #
 
 list(APPEND SOURCE_BASE
+    aligned_memory.cc
+    aligned_memory.h
     application.h
     applications_reader.h
     asio_event_dispatcher.cc
@@ -62,6 +64,7 @@ list(APPEND SOURCE_BASE
     thread.h
     translations.cc
     translations.h
+    typed_buffer.h
     version_constants.cc
     version_constants.h
     xml_settings.cc
@@ -98,6 +101,7 @@ if (APPLE)
 endif()
 
 list(APPEND SOURCE_BASE_TESTS
+    aligned_memory_unittest.cc
     bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
     tests_main.cc)
@@ -457,14 +461,6 @@ if (APPLE)
         mac/scoped_cftyperef.h)
 endif()
 
-list(APPEND SOURCE_BASE_MEMORY
-    memory/aligned_memory.cc
-    memory/aligned_memory.h
-    memory/typed_buffer.h)
-
-list(APPEND SOURCE_BASE_MEMORY_TESTS
-    memory/aligned_memory_unittest.cc)
-
 list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.cc
     net/adapter_enumerator.h
@@ -618,7 +614,6 @@ source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
-source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
 
@@ -655,7 +650,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MAC}
-    ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
@@ -695,7 +689,6 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_CRYPTO_TESTS}
     ${SOURCE_BASE_DESKTOP_TESTS}
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
-    ${SOURCE_BASE_MEMORY_TESTS}
     ${SOURCE_BASE_NET_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
