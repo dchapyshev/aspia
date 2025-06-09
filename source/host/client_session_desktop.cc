@@ -540,9 +540,9 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
     desktop_session_config_.disable_font_smoothing =
         (config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING);
     desktop_session_config_.disable_effects =
-        (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS);
+        (config.flags() & proto::desktop::DISABLE_EFFECTS);
     desktop_session_config_.disable_wallpaper =
-        (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER);
+        (config.flags() & proto::desktop::DISABLE_WALLPAPER);
     desktop_session_config_.block_input =
         (config.flags() & proto::desktop::BLOCK_REMOTE_INPUT);
     desktop_session_config_.lock_at_disconnect =

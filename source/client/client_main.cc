@@ -226,11 +226,11 @@ bool parseDesktopEffectsValue(const QString& value, proto::desktop::Config& conf
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() | proto::desktop::DISABLE_DESKTOP_EFFECTS);
+            config.set_flags(config.flags() | proto::desktop::DISABLE_EFFECTS);
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_DESKTOP_EFFECTS));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_EFFECTS));
         }
         else
         {
@@ -249,11 +249,11 @@ bool parseDesktopWallpaperValue(const QString& value, proto::desktop::Config& co
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() | proto::desktop::DISABLE_DESKTOP_WALLPAPER);
+            config.set_flags(config.flags() | proto::desktop::DISABLE_WALLPAPER);
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_DESKTOP_WALLPAPER));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_WALLPAPER));
         }
         else
         {

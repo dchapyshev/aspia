@@ -37,7 +37,7 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 
     static const quint32 kDefaultFlags =
         proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER |
+        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER |
         proto::desktop::CLEAR_CLIPBOARD;
 
     config->set_flags(kDefaultFlags);
@@ -55,7 +55,7 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);

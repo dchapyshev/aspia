@@ -180,10 +180,10 @@ void ComputerGroupDialogDesktop::restoreSettings(
     if (desktop_config.flags() & proto::desktop::CURSOR_POSITION)
         ui.checkbox_cursor_position->setChecked(true);
 
-    if (desktop_config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+    if (desktop_config.flags() & proto::desktop::DISABLE_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (desktop_config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+    if (desktop_config.flags() & proto::desktop::DISABLE_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 
     if (desktop_config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING)
@@ -265,10 +265,10 @@ void ComputerGroupDialogDesktop::saveSettings(
         flags |= proto::desktop::ENABLE_CLIPBOARD;
 
     if (ui.checkbox_desktop_effects->isChecked())
-        flags |= proto::desktop::DISABLE_DESKTOP_EFFECTS;
+        flags |= proto::desktop::DISABLE_EFFECTS;
 
     if (ui.checkbox_desktop_wallpaper->isChecked())
-        flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+        flags |= proto::desktop::DISABLE_WALLPAPER;
 
     if (ui.checkbox_font_smoothing->isChecked())
         flags |= proto::desktop::DISABLE_FONT_SMOOTHING;
