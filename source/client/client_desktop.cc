@@ -142,12 +142,10 @@ void ClientDesktop::onSessionMessageWritten(size_t pending)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    std::optional<proto::desktop::ClipboardEvent> out_event =
-        input_event_filter_.sendClipboardEvent(event);
-    if (!out_event.has_value())
+    if (!input_event_filter_.sendClipboardEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(*out_event);
+    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
@@ -316,33 +314,30 @@ void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
 {
-    std::optional<proto::desktop::KeyEvent> out_event = input_event_filter_.keyEvent(event);
-    if (!out_event.has_value())
+    if (!input_event_filter_.keyEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_key_event()->CopyFrom(*out_event);
+    outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
 {
-    std::optional<proto::desktop::TextEvent> out_event = input_event_filter_.textEvent(event);
-    if (!out_event.has_value())
+    if (!input_event_filter_.textEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_text_event()->CopyFrom(*out_event);
+    outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
 {
-    std::optional<proto::desktop::MouseEvent> out_event = input_event_filter_.mouseEvent(event);
-    if (!out_event.has_value())
+    if (!input_event_filter_.mouseEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(*out_event);
+    outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
@@ -670,11 +665,10 @@ void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& eve
         return;
     }
 
-    std::optional<proto::desktop::ClipboardEvent> out_event = input_event_filter_.readClipboardEvent(event);
-    if (!out_event.has_value())
+    if (!input_event_filter_.readClipboardEvent(event))
         return;
 
-    clipboard_monitor_->injectClipboardEvent(*out_event);
+    clipboard_monitor_->injectClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

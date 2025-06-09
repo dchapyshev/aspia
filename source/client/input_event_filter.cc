@@ -49,13 +49,13 @@ void InputEventFilter::setNetworkOverflow(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::desktop::MouseEvent> InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
+bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::nullopt;
+        return false;
 
     if (network_overflow_)
-        return std::nullopt;
+        return false;
 
     qint32 delta_x = std::abs(event.x() - last_pos_x_);
     qint32 delta_y = std::abs(event.y() - last_pos_y_);
@@ -70,73 +70,69 @@ std::optional<proto::desktop::MouseEvent> InputEventFilter::mouseEvent(const pro
         last_mask_ = event.mask() & ~kWheelMask;
 
         ++send_mouse_count_;
-        return event;
+        return true;
     }
     else
     {
         ++drop_mouse_count_;
     }
 
-    return std::nullopt;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::desktop::KeyEvent> InputEventFilter::keyEvent(
-    const proto::desktop::KeyEvent& event)
+bool InputEventFilter::keyEvent(const proto::desktop::KeyEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::nullopt;
+        return false;
 
     if (network_overflow_)
-        return std::nullopt;
+        return false;
 
     ++send_key_count_;
-    return event;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::desktop::TextEvent> InputEventFilter::textEvent(
-    const proto::desktop::TextEvent& event)
+bool InputEventFilter::textEvent(const proto::desktop::TextEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::nullopt;
+        return false;
 
     if (network_overflow_)
-        return std::nullopt;
+        return false;
 
     ++send_text_count_;
-    return event;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::desktop::ClipboardEvent> InputEventFilter::readClipboardEvent(
-    const proto::desktop::ClipboardEvent& event)
+bool InputEventFilter::readClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::nullopt;
+        return false;
 
     if (!clipboard_enabled_)
-        return std::nullopt;
+        return false;
 
     ++read_clipboard_count_;
-    return event;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::desktop::ClipboardEvent> InputEventFilter::sendClipboardEvent(
-    const proto::desktop::ClipboardEvent& event)
+bool InputEventFilter::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        return std::nullopt;
+        return false;
 
     if (network_overflow_)
-        return std::nullopt;
+        return false;
 
     if (!clipboard_enabled_)
-        return std::nullopt;
+        return false;
 
     ++send_clipboard_count_;
-    return event;
+    return true;
 }
 
 } // namespace client

@@ -22,8 +22,6 @@
 #include "proto/common.h"
 #include "proto/desktop.h"
 
-#include <optional>
-
 namespace client {
 
 class InputEventFilter
@@ -36,14 +34,12 @@ public:
     void setClipboardEnabled(bool enable);
     void setNetworkOverflow(bool enable);
 
-    std::optional<proto::desktop::MouseEvent> mouseEvent(const proto::desktop::MouseEvent& event);
-    std::optional<proto::desktop::KeyEvent> keyEvent(const proto::desktop::KeyEvent& event);
-    std::optional<proto::desktop::TextEvent> textEvent(const proto::desktop::TextEvent& event);
+    bool mouseEvent(const proto::desktop::MouseEvent& event);
+    bool keyEvent(const proto::desktop::KeyEvent& event);
+    bool textEvent(const proto::desktop::TextEvent& event);
 
-    std::optional<proto::desktop::ClipboardEvent> readClipboardEvent(
-        const proto::desktop::ClipboardEvent& event);
-    std::optional<proto::desktop::ClipboardEvent> sendClipboardEvent(
-        const proto::desktop::ClipboardEvent& event);
+    bool readClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    bool sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
     int sendMouseCount() const { return send_mouse_count_; }
     int dropMouseCount() const { return drop_mouse_count_; }
