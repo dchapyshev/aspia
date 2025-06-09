@@ -43,8 +43,6 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
     config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
-    config->set_update_interval(30);
-    config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);
     config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 }
@@ -60,8 +58,6 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
     config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
-    config->set_update_interval(30);
-    config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);
     config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
 }

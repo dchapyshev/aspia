@@ -305,16 +305,16 @@ message Capabilities
 
 enum ConfigFlags
 {
-    NO_FLAGS                  = 0;
-    ENABLE_CURSOR_SHAPE       = 1;
-    ENABLE_CLIPBOARD          = 2;
-    DISABLE_DESKTOP_EFFECTS   = 4;
-    DISABLE_DESKTOP_WALLPAPER = 8;
-    DISABLE_FONT_SMOOTHING    = 16;
-    BLOCK_REMOTE_INPUT        = 32;
-    LOCK_AT_DISCONNECT        = 64;
-    CURSOR_POSITION           = 128;
-    CLEAR_CLIPBOARD           = 256;
+    NO_FLAGS               = 0;
+    ENABLE_CURSOR_SHAPE    = 1;
+    ENABLE_CLIPBOARD       = 2;
+    DISABLE_EFFECTS        = 4;
+    DISABLE_WALLPAPER      = 8;
+    DISABLE_FONT_SMOOTHING = 16;
+    BLOCK_REMOTE_INPUT     = 32;
+    LOCK_AT_DISCONNECT     = 64;
+    CURSOR_POSITION        = 128;
+    CLEAR_CLIPBOARD        = 256;
 }
 
 message Config
@@ -322,9 +322,9 @@ message Config
     uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
     PixelFormat pixel_format     = 3;
-    uint32 update_interval       = 4; // Deprecated. Must be equal to 30.
+    // Field 4 is deprecated.
     uint32 compress_ratio        = 5;
-    uint32 scale_factor          = 6; // Deprecated. Must be equal to 100.
+    // Field 6 is deprecated.
     AudioEncoding audio_encoding = 7;
 }
 

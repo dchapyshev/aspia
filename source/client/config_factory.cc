@@ -117,9 +117,6 @@ void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
-    config->set_scale_factor(100);
-    config->set_update_interval(30);
-
     if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
         config->set_compress_ratio(kDefCompressRatio);
 
