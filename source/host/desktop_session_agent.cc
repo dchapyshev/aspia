@@ -171,31 +171,31 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
-    proto::ScreenList* screen_list = outgoing_message_.newMessage().mutable_screen_list();
+    proto::desktop::ScreenList* screen_list = outgoing_message_.newMessage().mutable_screen_list();
     screen_list->set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
     {
-        proto::Resolution* resolution = screen_list->add_resolution();
+        proto::desktop::Resolution* resolution = screen_list->add_resolution();
         resolution->set_width(resolition_item.width());
         resolution->set_height(resolition_item.height());
     }
 
     for (const auto& screen_item : list.screens)
     {
-        proto::Screen* screen = screen_list->add_screen();
+        proto::desktop::Screen* screen = screen_list->add_screen();
         screen->set_id(screen_item.id);
         screen->set_title(screen_item.title.toStdString());
 
-        proto::Point* position = screen->mutable_position();
+        proto::desktop::Point* position = screen->mutable_position();
         position->set_x(screen_item.position.x());
         position->set_y(screen_item.position.y());
 
-        proto::Resolution* resolution = screen->mutable_resolution();
+        proto::desktop::Resolution* resolution = screen->mutable_resolution();
         resolution->set_width(screen_item.resolution.width());
         resolution->set_height(screen_item.resolution.height());
 
-        proto::Point* dpi = screen->mutable_dpi();
+        proto::desktop::Point* dpi = screen->mutable_dpi();
         dpi->set_x(screen_item.dpi.x());
         dpi->set_y(screen_item.dpi.y());
 
@@ -210,7 +210,9 @@ void DesktopSessionAgent::onScreenListChanged(
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
-    proto::CursorPosition* cursor_position = outgoing_message_.newMessage().mutable_cursor_position();
+    proto::desktop::CursorPosition* cursor_position =
+        outgoing_message_.newMessage().mutable_cursor_position();
+
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
@@ -221,29 +223,29 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 void DesktopSessionAgent::onScreenTypeChanged(
     base::ScreenCapturer::ScreenType type, const QString& name)
 {
-    proto::ScreenType* screen_type = outgoing_message_.newMessage().mutable_screen_type();
+    proto::desktop::ScreenType* screen_type = outgoing_message_.newMessage().mutable_screen_type();
     screen_type->set_name(name.toStdString());
 
     switch (type)
     {
         case base::ScreenCapturer::ScreenType::DESKTOP:
-            screen_type->set_type(proto::ScreenType::TYPE_DESKTOP);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
             break;
 
         case base::ScreenCapturer::ScreenType::LOCK:
-            screen_type->set_type(proto::ScreenType::TYPE_LOCK);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOCK);
             break;
 
         case base::ScreenCapturer::ScreenType::LOGIN:
-            screen_type->set_type(proto::ScreenType::TYPE_LOGIN);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOGIN);
             break;
 
         case base::ScreenCapturer::ScreenType::OTHER:
-            screen_type->set_type(proto::ScreenType::TYPE_OTHER);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_OTHER);
             break;
 
         default:
-            screen_type->set_type(proto::ScreenType::TYPE_UNKNOWN);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
             break;
     }
 
@@ -336,8 +338,8 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 
         if (screen_capturer_)
         {
-            const proto::Screen& screen = incoming_message_->select_source().screen();
-            const proto::Resolution& resolution = screen.resolution();
+            const proto::desktop::Screen& screen = incoming_message_->select_source().screen();
+            const proto::desktop::Resolution& resolution = screen.resolution();
 
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
                                                screen.id()), base::Size(resolution.width(), resolution.height()));
@@ -429,7 +431,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
+void DesktopSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     LOG(LS_INFO) << "Send clipboard event";
 
@@ -569,11 +571,11 @@ void DesktopSessionAgent::captureScreen()
         switch (error)
         {
         case base::ScreenCapturer::Error::PERMANENT:
-            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_PERMANENT);
+            screen_captured->set_error_code(proto::desktop::VIDEO_ERROR_CODE_PERMANENT);
             break;
 
         case base::ScreenCapturer::Error::TEMPORARY:
-            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_TEMPORARY);
+            screen_captured->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
             break;
 
         default:
@@ -606,7 +608,7 @@ void DesktopSessionAgent::captureScreen()
 
         for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
         {
-            proto::Rect* dirty_rect = serialized_frame->add_dirty_rect();
+            proto::desktop::Rect* dirty_rect = serialized_frame->add_dirty_rect();
             base::Rect rect = it.rect();
 
             dirty_rect->set_x(rect.x());

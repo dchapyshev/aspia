@@ -150,18 +150,18 @@ Rect alignRect(const Rect& rect)
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
-    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8));
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
-    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9));
+    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
+VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
     : VideoEncoder(encoding)
 {
     memset(&config_, 0, sizeof(config_));
@@ -169,7 +169,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
+bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 
@@ -182,7 +182,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
         createImage(frame_size, &image_, &image_buffer_);
         createActiveMap(frame_size);
 
-        if (encoding() == proto::VIDEO_ENCODING_VP8)
+        if (encoding() == proto::desktop::VIDEO_ENCODING_VP8)
         {
             if (!createVp8Codec(frame_size))
             {
@@ -192,7 +192,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
         }
         else
         {
-            DCHECK_EQ(encoding(), proto::VIDEO_ENCODING_VP9);
+            DCHECK_EQ(encoding(), proto::desktop::VIDEO_ENCODING_VP9);
 
             if (!createVp9Codec(frame_size))
             {
@@ -499,14 +499,14 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
 
 //--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::prepareImageAndActiveMap(
-    bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
+    bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     Rect image_rect = Rect::makeWH(static_cast<qint32>(image_->w), static_cast<qint32>(image_->h));
     Region updated_region;
 
     if (!is_key_frame)
     {
-        const int padding = ((encoding() == proto::VIDEO_ENCODING_VP9) ? 8 : 3);
+        const int padding = ((encoding() == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
 
         for (Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
         {
@@ -561,7 +561,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 
         addRectToActiveMap(rect);
 
-        proto::Rect* dirty_rect = packet->add_dirty_rect();
+        proto::desktop::Rect* dirty_rect = packet->add_dirty_rect();
         dirty_rect->set_x(rect.x());
         dirty_rect->set_y(rect.y());
         dirty_rect->set_width(width);

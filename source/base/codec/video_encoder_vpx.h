@@ -39,7 +39,7 @@ public:
     static std::unique_ptr<VideoEncoderVPX> createVP8();
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    bool encode(const Frame* frame, proto::VideoPacket* packet) final;
+    bool encode(const Frame* frame, proto::desktop::VideoPacket* packet) final;
 
     bool setMinQuantizer(quint32 min_quantizer);
     quint32 minQuantizer() const;
@@ -47,12 +47,13 @@ public:
     quint32 maxQuantizer() const;
 
 private:
-    explicit VideoEncoderVPX(proto::VideoEncoding encoding);
+    explicit VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
 
     void createActiveMap(const Size& size);
     bool createVp8Codec(const Size& size);
     bool createVp9Codec(const Size& size);
-    void prepareImageAndActiveMap(bool is_key_frame, const Frame* frame, proto::VideoPacket* packet);
+    void prepareImageAndActiveMap(
+        bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet);
     void addRectToActiveMap(const Rect& rect);
     void clearActiveMap();
 

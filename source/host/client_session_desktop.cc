@@ -99,7 +99,7 @@ void ClientSessionDesktop::onStarted()
     }
 
     // Create a capabilities.
-    proto::DesktopCapabilities* capabilities = outgoing_message_.newMessage().mutable_capabilities();
+    proto::desktop::Capabilities* capabilities = outgoing_message_.newMessage().mutable_capabilities();
 
     // Add supported extensions and video encodings.
     capabilities->set_extensions(extensions);
@@ -107,13 +107,13 @@ void ClientSessionDesktop::onStarted()
     capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
 
 #if defined(Q_OS_WINDOWS)
-    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+    capabilities->set_os_type(proto::desktop::Capabilities::OS_TYPE_WINDOWS);
 #elif defined(Q_OS_LINUX)
-    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
+    capabilities->set_os_type(proto::desktop::Capabilities::OS_TYPE_LINUX);
 
     auto add_flag = [capabilities](const char* name, bool value)
     {
-        proto::DesktopCapabilities::Flag* flag = capabilities->add_flag();
+        proto::desktop::Capabilities::Flag* flag = capabilities->add_flag();
         flag->set_name(name);
         flag->set_value(value);
     };
@@ -164,14 +164,14 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
             return;
         }
 
-        const proto::MouseEvent& mouse_event = incoming_message_->mouse_event();
+        const proto::desktop::MouseEvent& mouse_event = incoming_message_->mouse_event();
 
         int pos_x = static_cast<int>(
             static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
         int pos_y = static_cast<int>(
             static_cast<double>(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
 
-        proto::MouseEvent out_mouse_event;
+        proto::desktop::MouseEvent out_mouse_event;
         out_mouse_event.set_mask(mouse_event.mask());
         out_mouse_event.set_x(pos_x);
         out_mouse_event.set_y(pos_y);
@@ -246,7 +246,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
-    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
@@ -260,7 +260,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
     if (critical_overflow_)
         return;
 
-    proto::HostToClient& message = outgoing_message_.newMessage();
+    proto::desktop::HostToClient& message = outgoing_message_.newMessage();
 
     if (!is_video_paused_ && frame && video_encoder_)
     {
@@ -303,7 +303,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             return;
         }
 
-        proto::VideoPacket* packet = message.mutable_video_packet();
+        proto::desktop::VideoPacket* packet = message.mutable_video_packet();
 
         // Encode the frame into a video packet.
         if (!video_encoder_->encode(scaled_frame, packet))
@@ -314,13 +314,13 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
         if (packet->has_format())
         {
-            proto::VideoPacketFormat* format = packet->mutable_format();
+            proto::desktop::VideoPacketFormat* format = packet->mutable_format();
 
             // In video packets that contain the format, we pass the screen capture type.
             format->set_capturer_type(frame->capturerType());
 
             // Real screen size.
-            proto::Size* screen_size = format->mutable_screen_size();
+            proto::desktop::Size* screen_size = format->mutable_screen_size();
             screen_size->set_width(frame->size().width());
             screen_size->set_height(frame->size().height());
 
@@ -354,7 +354,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
+void ClientSessionDesktop::encodeAudio(const proto::desktop::AudioPacket& audio_packet)
 {
     if (critical_overflow_)
         return;
@@ -370,9 +370,9 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
+void ClientSessionDesktop::setVideoErrorCode(proto::desktop::VideoErrorCode error_code)
 {
-    CHECK_NE(error_code, proto::VIDEO_ERROR_CODE_OK);
+    CHECK_NE(error_code, proto::desktop::VIDEO_ERROR_CODE_OK);
 
     outgoing_message_.newMessage().mutable_video_packet()->set_error_code(error_code);
     sendMessage(outgoing_message_.serialize());
@@ -380,7 +380,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
+void ClientSessionDesktop::setCursorPosition(const proto::desktop::CursorPosition& cursor_position)
 {
     if (!desktop_session_config_.cursor_position)
         return;
@@ -390,7 +390,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     int pos_y = static_cast<int>(
         static_cast<double>(cursor_position.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-    proto::CursorPosition* position = outgoing_message_.newMessage().mutable_cursor_position();
+    proto::desktop::CursorPosition* position = outgoing_message_.newMessage().mutable_cursor_position();
     position->set_x(pos_x);
     position->set_y(pos_y);
 
@@ -399,11 +399,11 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
+void ClientSessionDesktop::setScreenList(const proto::desktop::ScreenList& list)
 {
     LOG(LS_INFO) << "Send screen list to client";
 
-    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
@@ -411,11 +411,11 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
+void ClientSessionDesktop::setScreenType(const proto::desktop::ScreenType& type)
 {
     LOG(LS_INFO) << "Send screen type to client";
 
-    proto::DesktopExtension* extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kScreenTypeExtension);
     extension->set_data(type.SerializeAsString());
 
@@ -423,7 +423,7 @@ void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
+void ClientSessionDesktop::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -438,7 +438,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
+void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
     {
@@ -483,19 +483,19 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
+void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
 {
     switch (config.video_encoding())
     {
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             video_encoder_ = base::VideoEncoderVPX::createVP8();
             break;
 
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             video_encoder_ = base::VideoEncoderVPX::createVP9();
             break;
 
-        case proto::VIDEO_ENCODING_ZSTD:
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
             video_encoder_ = base::VideoEncoderZstd::create(
                 base::PixelFormat::fromProto(config.pixel_format()), static_cast<int>(config.compress_ratio()));
             break;
@@ -516,7 +516,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
     switch (config.audio_encoding())
     {
-        case proto::AUDIO_ENCODING_OPUS:
+        case proto::desktop::AUDIO_ENCODING_OPUS:
             audio_encoder_ = std::make_unique<base::AudioEncoder>();
             break;
 
@@ -529,7 +529,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     }
 
     cursor_encoder_.reset();
-    if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
+    if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
         LOG(LS_INFO) << "Cursor shape enabled. Init cursor encoder";
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
@@ -538,19 +538,19 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     scale_reducer_ = std::make_unique<base::ScaleReducer>();
 
     desktop_session_config_.disable_font_smoothing =
-        (config.flags() & proto::DISABLE_FONT_SMOOTHING);
+        (config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING);
     desktop_session_config_.disable_effects =
-        (config.flags() & proto::DISABLE_DESKTOP_EFFECTS);
+        (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS);
     desktop_session_config_.disable_wallpaper =
-        (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER);
+        (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER);
     desktop_session_config_.block_input =
-        (config.flags() & proto::BLOCK_REMOTE_INPUT);
+        (config.flags() & proto::desktop::BLOCK_REMOTE_INPUT);
     desktop_session_config_.lock_at_disconnect =
-        (config.flags() & proto::LOCK_AT_DISCONNECT);
+        (config.flags() & proto::desktop::LOCK_AT_DISCONNECT);
     desktop_session_config_.clear_clipboard =
-        (config.flags() & proto::CLEAR_CLIPBOARD);
+        (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     desktop_session_config_.cursor_position =
-        (config.flags() & proto::CURSOR_POSITION);
+        (config.flags() & proto::desktop::CURSOR_POSITION);
 
     LOG(LS_INFO) << "Client configuration changed";
     LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
@@ -571,7 +571,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
 {
     LOG(LS_INFO) << "Select screen request";
 
-    proto::Screen screen;
+    proto::desktop::Screen screen;
 
     if (!screen.ParseFromString(data))
     {
@@ -586,7 +586,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 {
-    proto::PreferredSize preferred_size;
+    proto::desktop::PreferredSize preferred_size;
 
     if (!preferred_size.ParseFromString(data))
     {
@@ -614,7 +614,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
 {
-    proto::Pause pause;
+    proto::desktop::Pause pause;
 
     if (!pause.ParseFromString(data))
     {
@@ -640,7 +640,7 @@ void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
 {
-    proto::Pause pause;
+    proto::desktop::Pause pause;
 
     if (!pause.ParseFromString(data))
     {
@@ -661,7 +661,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         return;
     }
 
-    proto::PowerControl power_control;
+    proto::desktop::PowerControl power_control;
 
     if (!power_control.ParseFromString(data))
     {
@@ -671,7 +671,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
     switch (power_control.action())
     {
-        case proto::PowerControl::ACTION_SHUTDOWN:
+        case proto::desktop::PowerControl::ACTION_SHUTDOWN:
         {
             LOG(LS_INFO) << "SHUTDOWN command";
 
@@ -682,7 +682,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         }
         break;
 
-        case proto::PowerControl::ACTION_REBOOT:
+        case proto::desktop::PowerControl::ACTION_REBOOT:
         {
             LOG(LS_INFO) << "REBOOT command";
 
@@ -693,7 +693,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         }
         break;
 
-        case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
+        case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
 #if defined(Q_OS_WINDOWS)
             LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
@@ -727,14 +727,14 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         }
         break;
 
-        case proto::PowerControl::ACTION_LOGOFF:
+        case proto::desktop::PowerControl::ACTION_LOGOFF:
         {
             LOG(LS_INFO) << "LOGOFF command";
             emit sig_control(proto::internal::DesktopControl::LOGOFF);
         }
         break;
 
-        case proto::PowerControl::ACTION_LOCK:
+        case proto::desktop::PowerControl::ACTION_LOCK:
         {
             LOG(LS_INFO) << "LOCK command";
             emit sig_control(proto::internal::DesktopControl::LOCK);
@@ -781,7 +781,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(system_info_request, &system_info);
 
-    proto::DesktopExtension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::Extension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
@@ -792,7 +792,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 {
-    proto::VideoRecording video_recording;
+    proto::desktop::VideoRecording video_recording;
 
     if (!video_recording.ParseFromString(data))
     {
@@ -804,11 +804,11 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 
     switch (video_recording.action())
     {
-        case proto::VideoRecording::ACTION_STARTED:
+        case proto::desktop::VideoRecording::ACTION_STARTED:
             started = true;
         break;
 
-        case proto::VideoRecording::ACTION_STOPPED:
+        case proto::desktop::VideoRecording::ACTION_STOPPED:
             started = false;
             break;
 

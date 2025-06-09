@@ -29,9 +29,9 @@
 QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& state);
 QTextStream& operator<<(QTextStream& out, proto::RouterSession session_type);
 QTextStream& operator<<(QTextStream& out, proto::internal::DesktopControl::Action action);
-QTextStream& operator<<(QTextStream& out, proto::AudioEncoding encoding);
-QTextStream& operator<<(QTextStream& out, proto::VideoEncoding encoding);
-QTextStream& operator<<(QTextStream& out, proto::VideoErrorCode error_code);
+QTextStream& operator<<(QTextStream& out, proto::desktop::AudioEncoding encoding);
+QTextStream& operator<<(QTextStream& out, proto::desktop::VideoEncoding encoding);
+QTextStream& operator<<(QTextStream& out, proto::desktop::VideoErrorCode error_code);
 QTextStream& operator<<(QTextStream& out, proto::SessionType session_type);
 
 #endif // PROTO_TEXT_STREAM_H

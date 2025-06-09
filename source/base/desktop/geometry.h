@@ -145,8 +145,8 @@ public:
     static Size fromQSize(const QSize& size);
     QSize toQSize();
 
-    static Size fromProto(const proto::Size& size);
-    proto::Size toProto();
+    static Size fromProto(const proto::desktop::Size& size);
+    proto::desktop::Size toProto();
 
     Size& operator=(const Size& other);
 
@@ -254,8 +254,8 @@ public:
     static Rect fromQRect(const QRect& rect);
     QRect toQRect();
 
-    static Rect fromProto(const proto::Rect& rect);
-    proto::Rect toProto();
+    static Rect fromProto(const proto::desktop::Rect& rect);
+    proto::desktop::Rect toProto();
 
     Rect& operator=(const Rect& other);
 

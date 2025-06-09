@@ -38,7 +38,7 @@ public:
     static std::unique_ptr<VideoEncoderZstd> create(
         const PixelFormat& target_format, int compression_ratio);
 
-    bool encode(const Frame* frame, proto::VideoPacket* packet) final;
+    bool encode(const Frame* frame, proto::desktop::VideoPacket* packet) final;
 
     bool setCompressRatio(int compression_ratio);
     int compressRatio() const;

@@ -29,9 +29,9 @@
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
 
-namespace proto {
+namespace proto::desktop {
 class VideoPacket;
-} // namespace proto
+} // namespace proto::desktop
 
 namespace base {
 
@@ -43,7 +43,7 @@ public:
     WebmVideoEncoder();
     ~WebmVideoEncoder();
 
-    bool encode(const Frame& frame, proto::VideoPacket* packet);
+    bool encode(const Frame& frame, proto::desktop::VideoPacket* packet);
 
 private:
     void createImage();

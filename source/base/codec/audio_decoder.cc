@@ -32,8 +32,8 @@ const std::chrono::milliseconds kMaxFrameSizeMs { 120 };
 // Hosts will never generate more than 100 frames in a single packet.
 const int kMaxFramesPerPacket = 100;
 
-const proto::AudioPacket::SamplingRate kSamplingRate =
-    proto::AudioPacket::SAMPLING_RATE_48000;
+const proto::desktop::AudioPacket::SamplingRate kSamplingRate =
+    proto::desktop::AudioPacket::SAMPLING_RATE_48000;
 
 } // namespace
 
@@ -70,7 +70,7 @@ void AudioDecoder::destroyDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioDecoder::resetForPacket(const proto::AudioPacket& packet)
+bool AudioDecoder::resetForPacket(const proto::desktop::AudioPacket& packet)
 {
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
@@ -95,9 +95,9 @@ bool AudioDecoder::resetForPacket(const proto::AudioPacket& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<proto::AudioPacket> AudioDecoder::decode(const proto::AudioPacket& packet)
+std::unique_ptr<proto::desktop::AudioPacket> AudioDecoder::decode(const proto::desktop::AudioPacket& packet)
 {
-    if (packet.encoding() != proto::AUDIO_ENCODING_OPUS)
+    if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS)
     {
         LOG(LS_ERROR) << "Received an audio packet with encoding "
                       << packet.encoding() << " when an OPUS packet was expected.";
@@ -114,10 +114,10 @@ std::unique_ptr<proto::AudioPacket> AudioDecoder::decode(const proto::AudioPacke
         return nullptr;
 
     // Create a new packet of decoded data.
-    std::unique_ptr<proto::AudioPacket> decoded_packet(new proto::AudioPacket());
-    decoded_packet->set_encoding(proto::AUDIO_ENCODING_RAW);
+    std::unique_ptr<proto::desktop::AudioPacket> decoded_packet(new proto::desktop::AudioPacket());
+    decoded_packet->set_encoding(proto::desktop::AUDIO_ENCODING_RAW);
     decoded_packet->set_sampling_rate(kSamplingRate);
-    decoded_packet->set_bytes_per_sample(proto::AudioPacket::BYTES_PER_SAMPLE_2);
+    decoded_packet->set_bytes_per_sample(proto::desktop::AudioPacket::BYTES_PER_SAMPLE_2);
     decoded_packet->set_channels(packet.channels());
 
     int max_frame_samples = static_cast<int>(

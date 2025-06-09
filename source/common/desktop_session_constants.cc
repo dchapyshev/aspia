@@ -49,8 +49,9 @@ const char kSupportedExtensionsForView[] =
 #endif
 
 const quint32 kSupportedVideoEncodings =
-    proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
-const quint32 kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
+    proto::desktop::VIDEO_ENCODING_VP8 | proto::desktop::VIDEO_ENCODING_VP9 |
+    proto::desktop::VIDEO_ENCODING_ZSTD;
+const quint32 kSupportedAudioEncodings = proto::desktop::AUDIO_ENCODING_OPUS;
 
 const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
 const char kFlagDisableAudio[] = "disable_audio";

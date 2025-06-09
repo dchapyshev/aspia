@@ -33,10 +33,10 @@ public:
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::VideoPacket& packet, Frame* frame) final;
+    bool decode(const proto::desktop::VideoPacket& packet, Frame* frame) final;
 
 private:
-    explicit VideoDecoderVPX(proto::VideoEncoding encoding);
+    explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);
 
     ScopedVpxCodec codec_;
 

@@ -36,14 +36,14 @@ public:
     void start() final;
     void control(proto::internal::DesktopControl::Action action) final;
     void configure(const Config& config) final;
-    void selectScreen(const proto::Screen& screen) final;
+    void selectScreen(const proto::desktop::Screen& screen) final;
     void captureScreen() final;
     void setScreenCaptureFps(int fps) final;
-    void injectKeyEvent(const proto::KeyEvent& event) final;
-    void injectTextEvent(const proto::TextEvent& event) final;
-    void injectMouseEvent(const proto::MouseEvent& event) final;
-    void injectTouchEvent(const proto::TouchEvent& event) final;
-    void injectClipboardEvent(const proto::ClipboardEvent& event) final;
+    void injectKeyEvent(const proto::desktop::KeyEvent& event) final;
+    void injectTextEvent(const proto::desktop::TextEvent& event) final;
+    void injectMouseEvent(const proto::desktop::MouseEvent& event) final;
+    void injectTouchEvent(const proto::desktop::TouchEvent& event) final;
+    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionFake);

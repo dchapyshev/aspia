@@ -30,11 +30,11 @@ package proto.internal;
 
 message DesktopFrame
 {
-    fixed32 capturer_type     = 1;
-    sfixed32 shared_buffer_id = 2;
-    sfixed32 width            = 3;
-    sfixed32 height           = 4;
-    repeated Rect dirty_rect  = 5;
+    fixed32 capturer_type            = 1;
+    sfixed32 shared_buffer_id        = 2;
+    sfixed32 width                   = 3;
+    sfixed32 height                  = 4;
+    repeated desktop.Rect dirty_rect = 5;
 }
 
 message MouseCursor
@@ -62,9 +62,9 @@ message SharedBuffer
 
 message ScreenCaptured
 {
-    VideoErrorCode error_code = 1;
-    DesktopFrame frame        = 2;
-    MouseCursor mouse_cursor  = 3;
+    desktop.VideoErrorCode error_code = 1;
+    DesktopFrame frame                = 2;
+    MouseCursor mouse_cursor          = 3;
 }
 
 message NextScreenCapture
@@ -74,7 +74,7 @@ message NextScreenCapture
 
 message SelectSource
 {
-    Screen screen = 1;
+    desktop.Screen screen = 1;
 }
 
 message Configure
@@ -104,24 +104,24 @@ message DesktopControl
 
 message ServiceToDesktop
 {
-    DesktopControl control                = 1;
-    Configure configure                   = 2;
-    SelectSource select_source            = 3;
-    NextScreenCapture next_screen_capture = 4;
-    KeyEvent key_event                    = 5;
-    TextEvent text_event                  = 6;
-    MouseEvent mouse_event                = 7;
-    TouchEvent touch_event                = 8;
-    ClipboardEvent clipboard_event        = 9;
+    DesktopControl control                 = 1;
+    Configure configure                    = 2;
+    SelectSource select_source             = 3;
+    NextScreenCapture next_screen_capture  = 4;
+    desktop.KeyEvent key_event             = 5;
+    desktop.TextEvent text_event           = 6;
+    desktop.MouseEvent mouse_event         = 7;
+    desktop.TouchEvent touch_event         = 8;
+    desktop.ClipboardEvent clipboard_event = 9;
 }
 
 message DesktopToService
 {
-    ScreenList screen_list         = 1;
-    SharedBuffer shared_buffer     = 2;
-    ScreenCaptured screen_captured = 3;
-    AudioPacket audio_packet       = 4;
-    ClipboardEvent clipboard_event = 5;
-    CursorPosition cursor_position = 6;
-    ScreenType screen_type         = 7;
+    desktop.ScreenList screen_list         = 1;
+    SharedBuffer shared_buffer             = 2;
+    ScreenCaptured screen_captured         = 3;
+    desktop.AudioPacket audio_packet       = 4;
+    desktop.ClipboardEvent clipboard_event = 5;
+    desktop.CursorPosition cursor_position = 6;
+    desktop.ScreenType screen_type         = 7;
 }

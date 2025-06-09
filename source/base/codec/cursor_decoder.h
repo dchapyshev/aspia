@@ -37,13 +37,13 @@ public:
     CursorDecoder();
     ~CursorDecoder();
 
-    std::shared_ptr<MouseCursor> decode(const proto::CursorShape& cursor_shape);
+    std::shared_ptr<MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
 
     int cachedCursors() const;
     int takenCursorsFromCache() const;
 
 private:
-    QByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
+    QByteArray decompressCursor(const proto::desktop::CursorShape& cursor_shape) const;
 
     QVector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;

@@ -52,7 +52,7 @@ public:
 
     base::Frame* desktopFrame();
     void setDesktopFrame(std::shared_ptr<base::Frame> frame);
-    void setDesktopFrameError(proto::VideoErrorCode error_code);
+    void setDesktopFrameError(proto::desktop::VideoErrorCode error_code);
     void drawDesktopFrame();
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
     void setCursorPosition(const QPoint& cursor_position);
@@ -73,8 +73,8 @@ public slots:
     void userLeftFromWindow();
 
 signals:
-    void sig_mouseEvent(const proto::MouseEvent& event);
-    void sig_keyEvent(const proto::KeyEvent& event);
+    void sig_mouseEvent(const proto::desktop::MouseEvent& event);
+    void sig_keyEvent(const proto::desktop::KeyEvent& event);
 
 protected:
     // QWidget implementation.
@@ -109,8 +109,8 @@ private:
 #endif // defined(Q_OS_MACOS)
 
     QPointer<QTimer> error_timer_;
-    proto::VideoErrorCode last_error_code_ = proto::VIDEO_ERROR_CODE_OK;
-    proto::VideoErrorCode current_error_code_ = proto::VIDEO_ERROR_CODE_OK;
+    proto::desktop::VideoErrorCode last_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
+    proto::desktop::VideoErrorCode current_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
     std::unique_ptr<QImage> error_image_;
 
     std::shared_ptr<base::Frame> frame_;

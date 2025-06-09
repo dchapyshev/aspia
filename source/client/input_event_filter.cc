@@ -49,7 +49,7 @@ void InputEventFilter::setNetworkOverflow(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::MouseEvent& event)
+std::optional<proto::desktop::MouseEvent> InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;
@@ -63,7 +63,7 @@ std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::Mouse
     if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
     {
         static const quint32 kWheelMask =
-            proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
+            proto::desktop::MouseEvent::WHEEL_DOWN | proto::desktop::MouseEvent::WHEEL_UP;
 
         last_pos_x_ = event.x();
         last_pos_y_ = event.y();
@@ -81,7 +81,8 @@ std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::Mouse
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent& event)
+std::optional<proto::desktop::KeyEvent> InputEventFilter::keyEvent(
+    const proto::desktop::KeyEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;
@@ -94,7 +95,8 @@ std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent&
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEvent& event)
+std::optional<proto::desktop::TextEvent> InputEventFilter::textEvent(
+    const proto::desktop::TextEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;
@@ -107,8 +109,8 @@ std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEve
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(
-    const proto::ClipboardEvent& event)
+std::optional<proto::desktop::ClipboardEvent> InputEventFilter::readClipboardEvent(
+    const proto::desktop::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;
@@ -121,8 +123,8 @@ std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<proto::ClipboardEvent> InputEventFilter::sendClipboardEvent(
-    const proto::ClipboardEvent& event)
+std::optional<proto::desktop::ClipboardEvent> InputEventFilter::sendClipboardEvent(
+    const proto::desktop::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;

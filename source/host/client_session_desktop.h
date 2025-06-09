@@ -53,25 +53,25 @@ public:
     ~ClientSessionDesktop() final;
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
-    void encodeAudio(const proto::AudioPacket& audio_packet);
-    void setVideoErrorCode(proto::VideoErrorCode error_code);
-    void setCursorPosition(const proto::CursorPosition& cursor_position);
-    void setScreenList(const proto::ScreenList& list);
-    void setScreenType(const proto::ScreenType& type);
-    void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void encodeAudio(const proto::desktop::AudioPacket& audio_packet);
+    void setVideoErrorCode(proto::desktop::VideoErrorCode error_code);
+    void setCursorPosition(const proto::desktop::CursorPosition& cursor_position);
+    void setScreenList(const proto::desktop::ScreenList& list);
+    void setScreenType(const proto::desktop::ScreenType& type);
+    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
 
 signals:
     void sig_control(proto::internal::DesktopControl::Action action);
-    void sig_selectScreen(const proto::Screen& screen);
+    void sig_selectScreen(const proto::desktop::Screen& screen);
     void sig_captureScreen();
     void sig_captureFpsChanged(int fps);
-    void sig_injectKeyEvent(const proto::KeyEvent& event);
-    void sig_injectTextEvent(const proto::TextEvent& event);
-    void sig_injectMouseEvent(const proto::MouseEvent& event);
-    void sig_injectTouchEvent(const proto::TouchEvent& event);
-    void sig_injectClipboardEvent(const proto::ClipboardEvent& event);
+    void sig_injectKeyEvent(const proto::desktop::KeyEvent& event);
+    void sig_injectTextEvent(const proto::desktop::TextEvent& event);
+    void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
+    void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
+    void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 protected:
     // ClientSession implementation.
@@ -84,8 +84,8 @@ private slots:
 #endif // defined(Q_OS_WINDOWS)
 
 private:
-    void readExtension(const proto::DesktopExtension& extension);
-    void readConfig(const proto::DesktopConfig& config);
+    void readExtension(const proto::desktop::Extension& extension);
+    void readConfig(const proto::desktop::Config& config);
     void readSelectScreenExtension(const std::string& data);
     void readPreferredSizeExtension(const std::string& data);
     void readVideoPauseExtension(const std::string& data);
@@ -121,8 +121,8 @@ private:
     QPointer<TaskManager> task_manager_;
 #endif // defined(Q_OS_WINDOWS)
 
-    base::Parser<proto::ClientToHost> incoming_message_;
-    base::Serializer<proto::HostToClient> outgoing_message_;
+    base::Parser<proto::desktop::ClientToHost> incoming_message_;
+    base::Serializer<proto::desktop::HostToClient> outgoing_message_;
 
     StatCounter stat_counter_;
 

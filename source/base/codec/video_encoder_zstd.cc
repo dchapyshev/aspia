@@ -39,7 +39,7 @@ quint8* outputBuffer(std::string* data, size_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to)
+void serializePixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
 
@@ -53,7 +53,7 @@ void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to)
 }
 
 //--------------------------------------------------------------------------------------------------
-void serializeRect(const Rect& from, proto::Rect* to)
+void serializeRect(const Rect& from, proto::desktop::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -65,7 +65,7 @@ void serializeRect(const Rect& from, proto::Rect* to)
 
 //--------------------------------------------------------------------------------------------------
 VideoEncoderZstd::VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio)
-    : VideoEncoder(proto::VIDEO_ENCODING_ZSTD),
+    : VideoEncoder(proto::desktop::VIDEO_ENCODING_ZSTD),
       target_format_(target_format),
       compress_ratio_(compression_ratio),
       stream_(ZSTD_createCStream())
@@ -129,7 +129,7 @@ bool VideoEncoderZstd::compressPacket(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
+bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 

@@ -70,7 +70,7 @@ void ClipboardMonitor::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
+void ClipboardMonitor::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     emit sig_injectClipboardEventPrivate(event);
 }

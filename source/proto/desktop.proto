@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package proto.desktop;
 
 message KeyEvent
 {
@@ -275,13 +275,13 @@ message AudioPacket
     Channels channels               = 6;
 }
 
-message DesktopExtension
+message Extension
 {
     string name = 1;
     bytes data  = 2;
 }
 
-message DesktopCapabilities
+message Capabilities
 {
     enum OsType
     {
@@ -303,7 +303,7 @@ message DesktopCapabilities
     repeated Flag flag     = 5;
 }
 
-enum DesktopFlags
+enum ConfigFlags
 {
     NO_FLAGS                  = 0;
     ENABLE_CURSOR_SHAPE       = 1;
@@ -317,7 +317,7 @@ enum DesktopFlags
     CLEAR_CLIPBOARD           = 256;
 }
 
-message DesktopConfig
+message Config
 {
     uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
@@ -330,13 +330,13 @@ message DesktopConfig
 
 message HostToClient
 {
-    VideoPacket video_packet         = 1;
-    AudioPacket audio_packet         = 2;
-    CursorShape cursor_shape         = 3;
-    ClipboardEvent clipboard_event   = 4;
-    DesktopExtension extension       = 5;
-    DesktopCapabilities capabilities = 6;
-    CursorPosition cursor_position   = 7;
+    VideoPacket video_packet       = 1;
+    AudioPacket audio_packet       = 2;
+    CursorShape cursor_shape       = 3;
+    ClipboardEvent clipboard_event = 4;
+    Extension extension            = 5;
+    Capabilities capabilities      = 6;
+    CursorPosition cursor_position = 7;
 }
 
 message ClientToHost
@@ -346,7 +346,7 @@ message ClientToHost
     TouchEvent touch_event         = 3;
     TextEvent text_event           = 4;
     ClipboardEvent clipboard_event = 5;
-    DesktopExtension extension     = 6;
-    DesktopConfig config           = 7;
+    Extension extension            = 6;
+    Config config                  = 7;
     AudioPacket audio_packet       = 8;
 }

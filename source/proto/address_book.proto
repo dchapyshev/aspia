@@ -36,8 +36,8 @@ enum EncryptionType
 
 message SessionConfig
 {
-    DesktopConfig desktop_manage           = 1;
-    DesktopConfig desktop_view             = 2;
+    desktop.Config desktop_manage          = 1;
+    desktop.Config desktop_view            = 2;
     port_forwarding.Config port_forwarding = 3;
 }
 

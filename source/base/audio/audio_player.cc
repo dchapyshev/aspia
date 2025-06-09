@@ -51,7 +51,7 @@ std::unique_ptr<AudioPlayer> AudioPlayer::create()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioPlayer::addPacket(std::unique_ptr<proto::AudioPacket> packet)
+void AudioPlayer::addPacket(std::unique_ptr<proto::desktop::AudioPacket> packet)
 {
     std::scoped_lock lock(incoming_queue_lock_);
     incoming_queue_.emplace(std::move(packet));

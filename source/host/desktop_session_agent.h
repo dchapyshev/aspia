@@ -64,7 +64,7 @@ private slots:
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
-    void onClipboardEvent(const proto::ClipboardEvent& event);
+    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
     void setEnabled(bool enable);

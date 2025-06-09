@@ -42,7 +42,7 @@ WebmFileWriter::~WebmFileWriter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
+void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
 {
     if (packet.encoding() != last_video_encoding_ || packet.has_format())
     {
@@ -50,8 +50,8 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
 
         switch (packet.encoding())
         {
-            case proto::VIDEO_ENCODING_VP8:
-            case proto::VIDEO_ENCODING_VP9:
+            case proto::desktop::VIDEO_ENCODING_VP8:
+            case proto::desktop::VIDEO_ENCODING_VP9:
                 break;
 
             default:
@@ -76,7 +76,7 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
         }
 
         const char* video_codec_id = mkvmuxer::Tracks::kVp8CodecId;
-        if (packet.encoding() == proto::VIDEO_ENCODING_VP9)
+        if (packet.encoding() == proto::desktop::VIDEO_ENCODING_VP9)
             video_codec_id = mkvmuxer::Tracks::kVp9CodecId;
 
         if (!muxer_->addVideoTrack(packet.format().video_rect().width(),
@@ -87,8 +87,8 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
             return;
         }
 
-        if (!muxer_->addAudioTrack(proto::AudioPacket::SAMPLING_RATE_48000,
-                                   proto::AudioPacket::CHANNELS_STEREO,
+        if (!muxer_->addAudioTrack(proto::desktop::AudioPacket::SAMPLING_RATE_48000,
+                                   proto::desktop::AudioPacket::CHANNELS_STEREO,
                                    mkvmuxer::Tracks::kOpusCodecId))
         {
             LOG(LS_ERROR) << "WebmFileMuxer::addAudioTrack failed";
@@ -121,11 +121,11 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
+void WebmFileWriter::addAudioPacket(const proto::desktop::AudioPacket& packet)
 {
-    if (packet.encoding() != proto::AUDIO_ENCODING_OPUS ||
-        packet.channels() != proto::AudioPacket::CHANNELS_STEREO ||
-        packet.sampling_rate() != proto::AudioPacket::SAMPLING_RATE_48000)
+    if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS ||
+        packet.channels() != proto::desktop::AudioPacket::CHANNELS_STEREO ||
+        packet.sampling_rate() != proto::desktop::AudioPacket::SAMPLING_RATE_48000)
     {
         // Unsupported audio packet.
         return;
@@ -210,7 +210,7 @@ bool WebmFileWriter::init()
 //--------------------------------------------------------------------------------------------------
 void WebmFileWriter::close()
 {
-    last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
+    last_video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     video_start_time_.reset();
     audio_start_time_.reset();
 

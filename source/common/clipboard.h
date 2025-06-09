@@ -35,11 +35,11 @@ public:
 
 public slots:
     void start();
-    void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void clearClipboard();
 
 signals:
-    void sig_clipboardEvent(const proto::ClipboardEvent& event);
+    void sig_clipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 protected:
     virtual void init() = 0;

@@ -42,11 +42,11 @@ public:
     proto::SessionType sessionType() const;
     void setSessionType(proto::SessionType session_type);
 
-    proto::DesktopConfig desktopManageConfig() const;
-    void setDesktopManageConfig(const proto::DesktopConfig& config);
+    proto::desktop::Config desktopManageConfig() const;
+    void setDesktopManageConfig(const proto::desktop::Config& config);
 
-    proto::DesktopConfig desktopViewConfig() const;
-    void setDesktopViewConfig(const proto::DesktopConfig& config);
+    proto::desktop::Config desktopViewConfig() const;
+    void setDesktopViewConfig(const proto::desktop::Config& config);
 
     bool showIconsInMenus() const;
     void setShowIconsInMenus(bool enable);

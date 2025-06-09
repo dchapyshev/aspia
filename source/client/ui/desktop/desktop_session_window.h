@@ -47,7 +47,7 @@ class DesktopSessionWindow final : public SessionWindow
 
 public:
     DesktopSessionWindow(proto::SessionType session_type,
-                    const proto::DesktopConfig& desktop_config,
+                    const proto::desktop::Config& desktop_config,
                     QWidget* parent = nullptr);
     ~DesktopSessionWindow() final;
 
@@ -57,29 +57,29 @@ public:
 public slots:
     void onShowWindow();
     void onConfigRequired();
-    void onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities);
-    void onScreenListChanged(const proto::ScreenList& screen_list);
-    void onScreenTypeChanged(const proto::ScreenType& screen_type);
-    void onCursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities);
+    void onScreenListChanged(const proto::desktop::ScreenList& screen_list);
+    void onScreenTypeChanged(const proto::desktop::ScreenType& screen_type);
+    void onCursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
     void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
     void onMetricsChanged(const client::ClientDesktop::Metrics& metrics);
-    void onFrameError(proto::VideoErrorCode error_code);
+    void onFrameError(proto::desktop::VideoErrorCode error_code);
     void onFrameChanged(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
     void onDrawFrame();
     void onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
 signals:
-    void sig_desktopConfigChanged(const proto::DesktopConfig& config);
-    void sig_screenSelected(const proto::Screen& screen);
+    void sig_desktopConfigChanged(const proto::desktop::Config& config);
+    void sig_screenSelected(const proto::desktop::Screen& screen);
     void sig_preferredSizeChanged(int width, int height);
     void sig_videoPaused(bool enable);
     void sig_audioPaused(bool enable);
     void sig_videoRecording(bool enable, const QString& file_path);
-    void sig_keyEvent(const proto::KeyEvent& event);
-    void sig_textEvent(const proto::TextEvent& event);
-    void sig_mouseEvent(const proto::MouseEvent& event);
-    void sig_powerControl(proto::PowerControl::Action action);
+    void sig_keyEvent(const proto::desktop::KeyEvent& event);
+    void sig_textEvent(const proto::desktop::TextEvent& event);
+    void sig_mouseEvent(const proto::desktop::MouseEvent& event);
+    void sig_powerControl(proto::desktop::PowerControl::Action action);
     void sig_remoteUpdate();
     void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);
@@ -99,9 +99,9 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) final;
 
 private slots:
-    void onMouseEvent(const proto::MouseEvent& event);
+    void onMouseEvent(const proto::desktop::MouseEvent& event);
     void changeSettings();
-    void onConfigChanged(const proto::DesktopConfig& config);
+    void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
     void takeScreenshot();
     void scaleDesktop();
@@ -112,7 +112,7 @@ private slots:
 
 private:
     const proto::SessionType session_type_;
-    proto::DesktopConfig desktop_config_;
+    proto::desktop::Config desktop_config_;
 
     quint32 video_encodings_ = 0;
 

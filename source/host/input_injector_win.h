@@ -38,10 +38,10 @@ public:
     // InputInjector implementation.
     void setScreenOffset(const base::Point& offset) final;
     void setBlockInput(bool enable) final;
-    void injectKeyEvent(const proto::KeyEvent& event) final;
-    void injectTextEvent(const proto::TextEvent& event) final;
-    void injectMouseEvent(const proto::MouseEvent& event) final;
-    void injectTouchEvent(const proto::TouchEvent& event) final;
+    void injectKeyEvent(const proto::desktop::KeyEvent& event) final;
+    void injectTextEvent(const proto::desktop::TextEvent& event) final;
+    void injectMouseEvent(const proto::desktop::MouseEvent& event) final;
+    void injectTouchEvent(const proto::desktop::TouchEvent& event) final;
 
 private:
     void beforeInput();

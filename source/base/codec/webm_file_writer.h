@@ -39,8 +39,8 @@ public:
     WebmFileWriter(const QString& path, const QString& name);
     ~WebmFileWriter();
 
-    void addVideoPacket(const proto::VideoPacket& packet);
-    void addAudioPacket(const proto::AudioPacket& packet);
+    void addVideoPacket(const proto::desktop::VideoPacket& packet);
+    void addAudioPacket(const proto::desktop::AudioPacket& packet);
 
 private:
     bool init();
@@ -59,7 +59,7 @@ private:
     std::optional<TimePoint> video_start_time_;
     std::optional<TimePoint> audio_start_time_;
 
-    proto::VideoEncoding last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
+    proto::desktop::VideoEncoding last_video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
 
     DISALLOW_COPY_AND_ASSIGN(WebmFileWriter);
 };

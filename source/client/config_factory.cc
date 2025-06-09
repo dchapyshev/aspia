@@ -25,8 +25,8 @@ namespace client {
 
 namespace {
 
-const proto::VideoEncoding kDefaultVideoEncoding = proto::VIDEO_ENCODING_VP8;
-const proto::AudioEncoding kDefaultAudioEncoding = proto::AUDIO_ENCODING_OPUS;
+const proto::desktop::VideoEncoding kDefaultVideoEncoding = proto::desktop::VIDEO_ENCODING_VP8;
+const proto::desktop::AudioEncoding kDefaultAudioEncoding = proto::desktop::AUDIO_ENCODING_OPUS;
 
 const int kDefCompressRatio = 8;
 const int kMinCompressRatio = 1;
@@ -36,18 +36,18 @@ const int kMaxCompressRatio = 22;
 
 //--------------------------------------------------------------------------------------------------
 // static
-proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
+proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
 {
-    proto::DesktopConfig config;
+    proto::desktop::Config config;
     setDefaultDesktopManageConfig(&config);
     return config;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-proto::DesktopConfig ConfigFactory::defaultDesktopViewConfig()
+proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
 {
-    proto::DesktopConfig config;
+    proto::desktop::Config config;
     setDefaultDesktopViewConfig(&config);
     return config;
 }
@@ -63,13 +63,14 @@ proto::port_forwarding::Config ConfigFactory::defaultPortForwardingConfig()
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
+void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
-        proto::DISABLE_DESKTOP_WALLPAPER | proto::CLEAR_CLIPBOARD;
+        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
+        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER |
+        proto::desktop::CLEAR_CLIPBOARD;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
@@ -82,12 +83,12 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
+void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
@@ -112,7 +113,7 @@ void ConfigFactory::setDefaultPortForwardingConfig(proto::port_forwarding::Confi
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
+void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
@@ -122,7 +123,7 @@ void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
     if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
         config->set_compress_ratio(kDefCompressRatio);
 
-    if (config->audio_encoding() == proto::AUDIO_ENCODING_DEFAULT)
+    if (config->audio_encoding() == proto::desktop::AUDIO_ENCODING_DEFAULT)
         config->set_audio_encoding(kDefaultAudioEncoding);
 }
 

@@ -86,14 +86,14 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* audioEncodingToString(proto::AudioEncoding encoding)
+const char* audioEncodingToString(proto::desktop::AudioEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::AUDIO_ENCODING_OPUS:
+        case proto::desktop::AUDIO_ENCODING_OPUS:
             return "AUDIO_ENCODING_OPUS";
 
-        case proto::AUDIO_ENCODING_RAW:
+        case proto::desktop::AUDIO_ENCODING_RAW:
             return "AUDIO_ENCODING_RAW";
 
         default:
@@ -102,17 +102,17 @@ const char* audioEncodingToString(proto::AudioEncoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* videoEncodingToString(proto::VideoEncoding encoding)
+const char* videoEncodingToString(proto::desktop::VideoEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             return "VIDEO_ENCODING_VP8";
 
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             return "VIDEO_ENCODING_VP9";
 
-        case proto::VIDEO_ENCODING_ZSTD:
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
             return "VIDEO_ENCODING_ZSTD";
 
         default:
@@ -121,20 +121,20 @@ const char* videoEncodingToString(proto::VideoEncoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
+const char* videoErrorCodeToString(proto::desktop::VideoErrorCode error_code)
 {
     switch (error_code)
     {
-        case proto::VIDEO_ERROR_CODE_OK:
+        case proto::desktop::VIDEO_ERROR_CODE_OK:
             return "VIDEO_ERROR_CODE_OK";
 
-        case proto::VIDEO_ERROR_CODE_TEMPORARY:
+        case proto::desktop::VIDEO_ERROR_CODE_TEMPORARY:
             return "VIDEO_ERROR_CODE_TEMPORARY";
 
-        case proto::VIDEO_ERROR_CODE_PERMANENT:
+        case proto::desktop::VIDEO_ERROR_CODE_PERMANENT:
             return "VIDEO_ERROR_CODE_PERMANENT";
 
-        case proto::VIDEO_ERROR_CODE_PAUSED:
+        case proto::desktop::VIDEO_ERROR_CODE_PAUSED:
             return "VIDEO_ERROR_CODE_PAUSED";
 
         default:
@@ -192,19 +192,19 @@ QTextStream& operator<<(QTextStream& out, proto::internal::DesktopControl::Actio
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, proto::AudioEncoding encoding)
+QTextStream& operator<<(QTextStream& out, proto::desktop::AudioEncoding encoding)
 {
     return out << audioEncodingToString(encoding);
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, proto::VideoEncoding encoding)
+QTextStream& operator<<(QTextStream& out, proto::desktop::VideoEncoding encoding)
 {
     return out << videoEncodingToString(encoding);
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, proto::VideoErrorCode error_code)
+QTextStream& operator<<(QTextStream& out, proto::desktop::VideoErrorCode error_code)
 {
     return out << videoErrorCodeToString(error_code);
 }

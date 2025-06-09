@@ -67,15 +67,15 @@ public:
 public slots:
     void control(proto::internal::DesktopControl::Action action);
     void configure(const host::DesktopSession::Config& config);
-    void selectScreen(const proto::Screen& screen);
+    void selectScreen(const proto::desktop::Screen& screen);
     void captureScreen();
     void setScreenCaptureFps(int fps);
 
-    void injectKeyEvent(const proto::KeyEvent& event);
-    void injectTextEvent(const proto::TextEvent& event);
-    void injectMouseEvent(const proto::MouseEvent& event);
-    void injectTouchEvent(const proto::TouchEvent& event);
-    void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void injectKeyEvent(const proto::desktop::KeyEvent& event);
+    void injectTextEvent(const proto::desktop::TextEvent& event);
+    void injectMouseEvent(const proto::desktop::MouseEvent& event);
+    void injectTouchEvent(const proto::desktop::TouchEvent& event);
+    void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
     void onNewIpcConnection();
     void onErrorOccurred();
@@ -84,12 +84,12 @@ signals:
     void sig_desktopSessionStarted();
     void sig_desktopSessionStopped();
     void sig_screenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor);
-    void sig_screenCaptureError(proto::VideoErrorCode error_code);
-    void sig_audioCaptured(const proto::AudioPacket& audio_packet);
-    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
-    void sig_screenListChanged(const proto::ScreenList& list);
-    void sig_screenTypeChanged(const proto::ScreenType& type);
-    void sig_clipboardEvent(const proto::ClipboardEvent& event);
+    void sig_screenCaptureError(proto::desktop::VideoErrorCode error_code);
+    void sig_audioCaptured(const proto::desktop::AudioPacket& audio_packet);
+    void sig_cursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
+    void sig_screenListChanged(const proto::desktop::ScreenList& list);
+    void sig_screenTypeChanged(const proto::desktop::ScreenType& type);
+    void sig_clipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };

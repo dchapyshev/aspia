@@ -90,12 +90,12 @@ void ClientSettings::setSessionType(proto::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::DesktopConfig ClientSettings::desktopManageConfig() const
+proto::desktop::Config ClientSettings::desktopManageConfig() const
 {
     QByteArray buffer = settings_.value(kDesktopManageConfigParam).toByteArray();
     if (!buffer.isEmpty())
     {
-        proto::DesktopConfig config;
+        proto::desktop::Config config;
         if (config.ParseFromArray(buffer.data(), buffer.size()))
             return config;
     }
@@ -104,7 +104,7 @@ proto::DesktopConfig ClientSettings::desktopManageConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setDesktopManageConfig(const proto::DesktopConfig& config)
+void ClientSettings::setDesktopManageConfig(const proto::desktop::Config& config)
 {
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));
@@ -114,12 +114,12 @@ void ClientSettings::setDesktopManageConfig(const proto::DesktopConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::DesktopConfig ClientSettings::desktopViewConfig() const
+proto::desktop::Config ClientSettings::desktopViewConfig() const
 {
     QByteArray buffer = settings_.value(kDesktopViewConfigParam).toByteArray();
     if (!buffer.isEmpty())
     {
-        proto::DesktopConfig config;
+        proto::desktop::Config config;
         if (config.ParseFromArray(buffer.data(), buffer.size()))
             return config;
     }
@@ -128,7 +128,7 @@ proto::DesktopConfig ClientSettings::desktopViewConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setDesktopViewConfig(const proto::DesktopConfig& config)
+void ClientSettings::setDesktopViewConfig(const proto::desktop::Config& config)
 {
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));

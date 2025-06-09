@@ -35,7 +35,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* frame)
+bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image, Frame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
@@ -51,7 +51,7 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        const proto::Rect& dirty_rect = packet.dirty_rect(i);
+        const proto::desktop::Rect& dirty_rect = packet.dirty_rect(i);
         Rect rect = Rect::makeXYWH(
             dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height());
 
@@ -82,18 +82,18 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
 {
-    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP8));
+    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 {
-    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP9));
+    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
+VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
 {
     quint32 thread_count = QThread::idealThreadCount();
     if (thread_count >= 8)
@@ -115,11 +115,11 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 
     switch (encoding)
     {
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             algo = vpx_codec_vp8_dx();
             break;
 
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             algo = vpx_codec_vp9_dx();
             break;
 
@@ -139,7 +139,7 @@ VideoDecoderVPX::~VideoDecoderVPX()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
+bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =

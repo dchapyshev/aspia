@@ -87,11 +87,11 @@ WebmVideoEncoder::~WebmVideoEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
+bool WebmVideoEncoder::encode(const Frame& frame, proto::desktop::VideoPacket* packet)
 {
     DCHECK(packet);
 
-    packet->set_encoding(proto::VIDEO_ENCODING_VP8);
+    packet->set_encoding(proto::desktop::VIDEO_ENCODING_VP8);
 
     if (last_frame_size_ != frame.size())
     {
@@ -106,7 +106,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
             return false;
         }
 
-        proto::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
+        proto::desktop::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
         video_rect->set_width(last_frame_size_.width());
         video_rect->set_height(last_frame_size_.height());
     }

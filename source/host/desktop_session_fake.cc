@@ -51,7 +51,7 @@ void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
     switch (action)
     {
         case proto::internal::DesktopControl::ENABLE:
-            emit sig_screenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
+            emit sig_screenCaptureError(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
             break;
 
         default:
@@ -66,7 +66,7 @@ void DesktopSessionFake::configure(const Config& /* config */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
+void DesktopSessionFake::selectScreen(const proto::desktop::Screen& /* screen */)
 {
     // Nothing
 }
@@ -74,7 +74,7 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::captureScreen()
 {
-    emit sig_screenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
+    emit sig_screenCaptureError(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,30 +84,30 @@ void DesktopSessionFake::setScreenCaptureFps(int /* fps */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
+void DesktopSessionFake::injectKeyEvent(const proto::desktop::KeyEvent& /* event */)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::injectTextEvent(const proto::TextEvent& /* event */)
+void DesktopSessionFake::injectTextEvent(const proto::desktop::TextEvent& /* event */)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::injectMouseEvent(const proto::MouseEvent& /* event */)
+void DesktopSessionFake::injectMouseEvent(const proto::desktop::MouseEvent& /* event */)
 {
     // Nothing
 }
 
-void DesktopSessionFake::injectTouchEvent(const proto::TouchEvent& /* event */)
+void DesktopSessionFake::injectTouchEvent(const proto::desktop::TouchEvent& /* event */)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* event */)
+void DesktopSessionFake::injectClipboardEvent(const proto::desktop::ClipboardEvent& /* event */)
 {
     // Nothing
 }

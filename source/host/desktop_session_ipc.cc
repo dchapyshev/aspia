@@ -84,7 +84,7 @@ void DesktopSessionIpc::configure(const Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
+void DesktopSessionIpc::selectScreen(const proto::desktop::Screen& screen)
 {
     LOG(LS_INFO) << "Send SELECT_SCREEN (sid=" << session_id_ << ")";
 
@@ -134,35 +134,35 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
+void DesktopSessionIpc::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
+void DesktopSessionIpc::injectTextEvent(const proto::desktop::TextEvent& event)
 {
     outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
+void DesktopSessionIpc::injectMouseEvent(const proto::desktop::MouseEvent& event)
 {
     outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::injectTouchEvent(const proto::TouchEvent &event)
+void DesktopSessionIpc::injectTouchEvent(const proto::desktop::TouchEvent &event)
 {
     outgoing_message_.newMessage().mutable_touch_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
+void DesktopSessionIpc::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -260,7 +260,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
             for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             {
-                const proto::Rect& dirty_rect = serialized_frame.dirty_rect(i);
+                const proto::desktop::Rect& dirty_rect = serialized_frame.dirty_rect(i);
                 updated_region->addRect(base::Rect::makeXYWH(
                     dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height()));
             }
@@ -287,7 +287,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         mouse_cursor = &last_mouse_cursor_;
     }
 
-    if (screen_captured.error_code() == proto::VIDEO_ERROR_CODE_OK)
+    if (screen_captured.error_code() == proto::desktop::VIDEO_ERROR_CODE_OK)
         emit sig_screenCaptured(frame, mouse_cursor);
     else
         emit sig_screenCaptureError(screen_captured.error_code());

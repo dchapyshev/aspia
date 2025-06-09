@@ -34,7 +34,7 @@ public:
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
-    bool decode(const proto::VideoPacket& packet, Frame* target_frame) final;
+    bool decode(const proto::desktop::VideoPacket& packet, Frame* target_frame) final;
 
 private:
     VideoDecoderZstd();

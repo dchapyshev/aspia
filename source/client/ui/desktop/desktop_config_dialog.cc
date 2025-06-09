@@ -39,15 +39,15 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
-const char* videoEncodingToString(proto::VideoEncoding encoding)
+const char* videoEncodingToString(proto::desktop::VideoEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::VIDEO_ENCODING_ZSTD:
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
             return "VIDEO_ENCODING_ZSTD";
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             return "VIDEO_ENCODING_VP8";
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             return "VIDEO_ENCODING_VP9";
         default:
             return "Unknown";
@@ -58,7 +58,7 @@ const char* videoEncodingToString(proto::VideoEncoding encoding)
 
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
-                                         const proto::DesktopConfig& config,
+                                         const proto::desktop::Config& config,
                                          quint32 video_encodings,
                                          QWidget* parent)
     : QDialog(parent),
@@ -76,14 +76,14 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     QComboBox* combo_codec = ui->combo_codec;
 
-    if (video_encodings & proto::VIDEO_ENCODING_VP9)
-        combo_codec->addItem("VP9", proto::VIDEO_ENCODING_VP9);
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP9)
+        combo_codec->addItem("VP9", proto::desktop::VIDEO_ENCODING_VP9);
 
-    if (video_encodings & proto::VIDEO_ENCODING_VP8)
-        combo_codec->addItem("VP8", proto::VIDEO_ENCODING_VP8);
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP8)
+        combo_codec->addItem("VP8", proto::desktop::VIDEO_ENCODING_VP8);
 
-    if (video_encodings & proto::VIDEO_ENCODING_ZSTD)
-        combo_codec->addItem("ZSTD", proto::VIDEO_ENCODING_ZSTD);
+    if (video_encodings & proto::desktop::VIDEO_ENCODING_ZSTD)
+        combo_codec->addItem("ZSTD", proto::desktop::VIDEO_ENCODING_ZSTD);
 
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)
@@ -120,24 +120,24 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     ui->slider_compress_ratio->setValue(static_cast<int>(config_.compress_ratio()));
     onCompressionRatioChanged(static_cast<int>(config_.compress_ratio()));
 
-    if (config_.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
+    if (config_.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
         ui->checkbox_audio->setChecked(true);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config_.flags() & proto::LOCK_AT_DISCONNECT)
+        if (config_.flags() & proto::desktop::LOCK_AT_DISCONNECT)
             ui->checkbox_lock_at_disconnect->setChecked(true);
 
-        if (config_.flags() & proto::BLOCK_REMOTE_INPUT)
+        if (config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
             ui->checkbox_block_remote_input->setChecked(true);
 
-        if (config_.flags() & proto::ENABLE_CURSOR_SHAPE)
+        if (config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
             ui->checkbox_cursor_shape->setChecked(true);
 
-        if (config_.flags() & proto::ENABLE_CLIPBOARD)
+        if (config_.flags() & proto::desktop::ENABLE_CLIPBOARD)
             ui->checkbox_clipboard->setChecked(true);
 
-        if (config_.flags() & proto::CLEAR_CLIPBOARD)
+        if (config_.flags() & proto::desktop::CLEAR_CLIPBOARD)
             ui->checkbox_clear_clipboard->setChecked(true);
     }
     else
@@ -148,16 +148,16 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
         ui->checkbox_clear_clipboard->hide();
     }
 
-    if (config_.flags() & proto::CURSOR_POSITION)
+    if (config_.flags() & proto::desktop::CURSOR_POSITION)
         ui->checkbox_enable_cursor_pos->setChecked(true);
 
-    if (config_.flags() & proto::DISABLE_DESKTOP_EFFECTS)
+    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
         ui->checkbox_desktop_effects->setChecked(true);
 
-    if (config_.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
+    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
         ui->checkbox_desktop_wallpaper->setChecked(true);
 
-    if (config_.flags() & proto::DISABLE_FONT_SMOOTHING)
+    if (config_.flags() & proto::desktop::DISABLE_FONT_SMOOTHING)
         ui->checkbox_font_smoothing->setChecked(true);
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -255,12 +255,12 @@ void DesktopConfigDialog::enableBlockInputFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
-    proto::VideoEncoding encoding =
-        static_cast<proto::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
+    proto::desktop::VideoEncoding encoding =
+        static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
 
     LOG(LS_INFO) << "[ACTION] Codec changed: " << videoEncodingToString(encoding);
 
-    bool has_pixel_format = (encoding == proto::VIDEO_ENCODING_ZSTD);
+    bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);
 
     ui->label_color_depth->setEnabled(has_pixel_format);
     ui->combobox_color_depth->setEnabled(has_pixel_format);
@@ -284,12 +284,12 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(LS_INFO) << "[ACTION] Accepted by user";
 
-        proto::VideoEncoding video_encoding =
-            static_cast<proto::VideoEncoding>(ui->combo_codec->currentData().toInt());
+        proto::desktop::VideoEncoding video_encoding =
+            static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->currentData().toInt());
 
         config_.set_video_encoding(video_encoding);
 
-        if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
+        if (video_encoding == proto::desktop::VIDEO_ENCODING_ZSTD)
         {
             base::PixelFormat pixel_format;
 
@@ -325,38 +325,38 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         if (ui->checkbox_audio->isChecked())
-            config_.set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+            config_.set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
         else
-            config_.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
+            config_.set_audio_encoding(proto::desktop::AUDIO_ENCODING_UNKNOWN);
 
         quint32 flags = 0;
 
         if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
-            flags |= proto::ENABLE_CURSOR_SHAPE;
+            flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
 
         if (ui->checkbox_enable_cursor_pos->isChecked())
-            flags |= proto::CURSOR_POSITION;
+            flags |= proto::desktop::CURSOR_POSITION;
 
         if (ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled())
-            flags |= proto::ENABLE_CLIPBOARD;
+            flags |= proto::desktop::ENABLE_CLIPBOARD;
 
         if (ui->checkbox_desktop_effects->isChecked())
-            flags |= proto::DISABLE_DESKTOP_EFFECTS;
+            flags |= proto::desktop::DISABLE_DESKTOP_EFFECTS;
 
         if (ui->checkbox_desktop_wallpaper->isChecked())
-            flags |= proto::DISABLE_DESKTOP_WALLPAPER;
+            flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
         if (ui->checkbox_font_smoothing->isChecked())
-            flags |= proto::DISABLE_FONT_SMOOTHING;
+            flags |= proto::desktop::DISABLE_FONT_SMOOTHING;
 
         if (ui->checkbox_block_remote_input->isChecked())
-            flags |= proto::BLOCK_REMOTE_INPUT;
+            flags |= proto::desktop::BLOCK_REMOTE_INPUT;
 
         if (ui->checkbox_lock_at_disconnect->isChecked())
-            flags |= proto::LOCK_AT_DISCONNECT;
+            flags |= proto::desktop::LOCK_AT_DISCONNECT;
 
         if (ui->checkbox_clear_clipboard->isChecked())
-            flags |= proto::CLEAR_CLIPBOARD;
+            flags |= proto::desktop::CLEAR_CLIPBOARD;
 
         config_.set_flags(flags);
 

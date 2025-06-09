@@ -27,14 +27,14 @@ namespace base {
 const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoder::VideoEncoder(proto::VideoEncoding encoding)
+VideoEncoder::VideoEncoder(proto::desktop::VideoEncoding encoding)
     : encoding_(encoding)
 {
     encode_buffer_.reserve(kInitialEncodeBufferSize);
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoder::fillPacketInfo(const Frame* frame, proto::VideoPacket* packet)
+void VideoEncoder::fillPacketInfo(const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     packet->set_encoding(encoding_);
 
@@ -42,7 +42,7 @@ void VideoEncoder::fillPacketInfo(const Frame* frame, proto::VideoPacket* packet
     {
         last_size_ = frame->size();
 
-        proto::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
+        proto::desktop::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
         video_rect->set_width(last_size_.width());
         video_rect->set_height(last_size_.height());
     }

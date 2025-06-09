@@ -33,7 +33,8 @@ class AudioCapturer : public QObject
     Q_OBJECT
 
 public:
-    using PacketCapturedCallback = std::function<void(std::unique_ptr<proto::AudioPacket> packet)>;
+    using PacketCapturedCallback =
+        std::function<void(std::unique_ptr<proto::desktop::AudioPacket> packet)>;
 
     explicit AudioCapturer(QObject* parent)
         : QObject(parent)

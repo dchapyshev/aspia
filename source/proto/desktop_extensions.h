@@ -23,17 +23,17 @@
 
 #include "proto/desktop_extensions.pb.h"
 
-Q_DECLARE_METATYPE(proto::Resolution)
-Q_DECLARE_METATYPE(proto::Point)
-Q_DECLARE_METATYPE(proto::Screen)
-Q_DECLARE_METATYPE(proto::ScreenList)
-Q_DECLARE_METATYPE(proto::PreferredSize)
-Q_DECLARE_METATYPE(proto::Pause)
-Q_DECLARE_METATYPE(proto::PowerControl)
-Q_DECLARE_METATYPE(proto::PowerControl::Action)
-Q_DECLARE_METATYPE(proto::VideoRecording)
-Q_DECLARE_METATYPE(proto::VideoRecording::Action)
-Q_DECLARE_METATYPE(proto::ScreenType)
-Q_DECLARE_METATYPE(proto::ScreenType::Type)
+Q_DECLARE_METATYPE(proto::desktop::Resolution)
+Q_DECLARE_METATYPE(proto::desktop::Point)
+Q_DECLARE_METATYPE(proto::desktop::Screen)
+Q_DECLARE_METATYPE(proto::desktop::ScreenList)
+Q_DECLARE_METATYPE(proto::desktop::PreferredSize)
+Q_DECLARE_METATYPE(proto::desktop::Pause)
+Q_DECLARE_METATYPE(proto::desktop::PowerControl)
+Q_DECLARE_METATYPE(proto::desktop::PowerControl::Action)
+Q_DECLARE_METATYPE(proto::desktop::VideoRecording)
+Q_DECLARE_METATYPE(proto::desktop::VideoRecording::Action)
+Q_DECLARE_METATYPE(proto::desktop::ScreenType)
+Q_DECLARE_METATYPE(proto::desktop::ScreenType::Type)
 
 #endif // PROTO_DESKTOP_EXTENSIONS_H

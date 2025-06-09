@@ -30,8 +30,8 @@ namespace base {
 namespace {
 
 // Opus doesn't support 44100 sampling rate so we always resample to 48kHz.
-const proto::AudioPacket::SamplingRate kOpusSamplingRate =
-    proto::AudioPacket::SAMPLING_RATE_48000;
+const proto::desktop::AudioPacket::SamplingRate kOpusSamplingRate =
+    proto::desktop::AudioPacket::SAMPLING_RATE_48000;
 
 // Opus supports frame sizes of 2.5, 5, 10, 20, 40 and 60 ms. We use 20 ms
 // frames to balance latency and efficiency.
@@ -41,8 +41,8 @@ const std::chrono::milliseconds kFrameSizeMs { 20 };
 const int kFrameSamples = static_cast<const int>(
     kOpusSamplingRate * kFrameSizeMs / std::chrono::milliseconds(1000));
 
-const proto::AudioPacket::BytesPerSample kBytesPerSample =
-    proto::AudioPacket::BYTES_PER_SAMPLE_2;
+const proto::desktop::AudioPacket::BytesPerSample kBytesPerSample =
+    proto::desktop::AudioPacket::BYTES_PER_SAMPLE_2;
 
 //--------------------------------------------------------------------------------------------------
 bool isSupportedSampleRate(int rate)
@@ -112,7 +112,7 @@ void AudioEncoder::destroyEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioEncoder::resetForPacket(const proto::AudioPacket& packet)
+bool AudioEncoder::resetForPacket(const proto::desktop::AudioPacket& packet)
 {
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
@@ -186,9 +186,10 @@ bool AudioEncoder::setBitrate(int bitrate)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioEncoder::encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet)
+bool AudioEncoder::encode(
+    const proto::desktop::AudioPacket& input_packet, proto::desktop::AudioPacket* output_packet)
 {
-    DCHECK_EQ(proto::AUDIO_ENCODING_RAW, input_packet.encoding());
+    DCHECK_EQ(proto::desktop::AUDIO_ENCODING_RAW, input_packet.encoding());
     DCHECK_EQ(1, input_packet.data_size());
     DCHECK_EQ(kBytesPerSample, input_packet.bytes_per_sample());
 
@@ -203,7 +204,7 @@ bool AudioEncoder::encode(const proto::AudioPacket& input_packet, proto::AudioPa
     const qint16* next_sample = reinterpret_cast<const qint16*>(input_packet.data(0).data());
 
     // Create a new packet of encoded data.
-    output_packet->set_encoding(proto::AUDIO_ENCODING_OPUS);
+    output_packet->set_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
     output_packet->set_sampling_rate(kOpusSamplingRate);
     output_packet->set_channels(channels_);
 

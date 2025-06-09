@@ -31,23 +31,23 @@ class VideoEncoder
 public:
     static const size_t kInitialEncodeBufferSize;
 
-    explicit VideoEncoder(proto::VideoEncoding encoding);
+    explicit VideoEncoder(proto::desktop::VideoEncoding encoding);
     virtual ~VideoEncoder() = default;
 
-    virtual bool encode(const Frame* frame, proto::VideoPacket* packet) = 0;
+    virtual bool encode(const Frame* frame, proto::desktop::VideoPacket* packet) = 0;
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
     bool isKeyFrameRequired() const { return key_frame_required_; }
     void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
 
-    proto::VideoEncoding encoding() const { return encoding_; }
+    proto::desktop::VideoEncoding encoding() const { return encoding_; }
 
 protected:
-    void fillPacketInfo(const Frame* frame, proto::VideoPacket* packet);
+    void fillPacketInfo(const Frame* frame, proto::desktop::VideoPacket* packet);
     std::string* encodeBuffer() { return &encode_buffer_; }
 
 private:
-    const proto::VideoEncoding encoding_;
+    const proto::desktop::VideoEncoding encoding_;
     Size last_size_;
     bool key_frame_required_ = false;
     std::string encode_buffer_;

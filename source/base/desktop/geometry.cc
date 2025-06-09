@@ -59,15 +59,15 @@ QSize Size::toQSize()
 
 //--------------------------------------------------------------------------------------------------
 // static
-Size Size::fromProto(const proto::Size& size)
+Size Size::fromProto(const proto::desktop::Size& size)
 {
     return Size(size.width(), size.height());
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::Size Size::toProto()
+proto::desktop::Size Size::toProto()
 {
-    proto::Size size;
+    proto::desktop::Size size;
     size.set_width(width_);
     size.set_height(height_);
     return size;
@@ -227,15 +227,15 @@ QRect Rect::toQRect()
 
 //--------------------------------------------------------------------------------------------------
 // static
-Rect Rect::fromProto(const proto::Rect& rect)
+Rect Rect::fromProto(const proto::desktop::Rect& rect)
 {
     return Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::Rect Rect::toProto()
+proto::desktop::Rect Rect::toProto()
 {
-    proto::Rect rect;
+    proto::desktop::Rect rect;
     rect.set_x(x());
     rect.set_y(y());
     rect.set_width(width());

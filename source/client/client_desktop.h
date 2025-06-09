@@ -89,16 +89,16 @@ public:
     };
 
 public slots:
-    void setDesktopConfig(const proto::DesktopConfig& config);
-    void setCurrentScreen(const proto::Screen& screen);
+    void setDesktopConfig(const proto::desktop::Config& config);
+    void setCurrentScreen(const proto::desktop::Screen& screen);
     void setPreferredSize(int width, int height);
     void setVideoPause(bool enable);
     void setAudioPause(bool enable);
     void setVideoRecording(bool enable, const QString& file_path);
-    void onKeyEvent(const proto::KeyEvent& event);
-    void onTextEvent(const proto::TextEvent& event);
-    void onMouseEvent(const proto::MouseEvent& event);
-    void onPowerControl(proto::PowerControl::Action action);
+    void onKeyEvent(const proto::desktop::KeyEvent& event);
+    void onTextEvent(const proto::desktop::TextEvent& event);
+    void onMouseEvent(const proto::desktop::MouseEvent& event);
+    void onPowerControl(proto::desktop::PowerControl::Action action);
     void onRemoteUpdate();
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
@@ -106,14 +106,14 @@ public slots:
 
 signals:
     void sig_configRequired();
-    void sig_capabilities(const proto::DesktopCapabilities& capabilities);
-    void sig_screenListChanged(const proto::ScreenList& screen_list);
-    void sig_screenTypeChanged(const proto::ScreenType& screen_type);
-    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
+    void sig_capabilities(const proto::desktop::Capabilities& capabilities);
+    void sig_screenListChanged(const proto::desktop::ScreenList& screen_list);
+    void sig_screenTypeChanged(const proto::desktop::ScreenType& screen_type);
+    void sig_cursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
     void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
     void sig_taskManager(const proto::task_manager::HostToClient& message);
     void sig_metrics(const client::ClientDesktop::Metrics& metrics);
-    void sig_frameError(proto::VideoErrorCode error_code);
+    void sig_frameError(proto::desktop::VideoErrorCode error_code);
     void sig_frameChanged(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
@@ -125,27 +125,27 @@ protected:
     void onSessionMessageWritten(size_t pending) final;
 
 private slots:
-    void onClipboardEvent(const proto::ClipboardEvent& event);
+    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
-    void readCapabilities(const proto::DesktopCapabilities& capabilities);
-    void readVideoPacket(const proto::VideoPacket& packet);
-    void readAudioPacket(const proto::AudioPacket& packet);
-    void readCursorShape(const proto::CursorShape& cursor_shape);
-    void readCursorPosition(const proto::CursorPosition& cursor_position);
-    void readClipboardEvent(const proto::ClipboardEvent& event);
-    void readExtension(const proto::DesktopExtension& extension);
+    void readCapabilities(const proto::desktop::Capabilities& capabilities);
+    void readVideoPacket(const proto::desktop::VideoPacket& packet);
+    void readAudioPacket(const proto::desktop::AudioPacket& packet);
+    void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
+    void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
+    void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void readExtension(const proto::desktop::Extension& extension);
 
     bool started_ = false;
 
     std::shared_ptr<base::Frame> desktop_frame_;
-    proto::DesktopConfig desktop_config_;
+    proto::desktop::Config desktop_config_;
 
-    base::Parser<proto::HostToClient> incoming_message_;
-    base::Serializer<proto::ClientToHost> outgoing_message_;
+    base::Parser<proto::desktop::HostToClient> incoming_message_;
+    base::Serializer<proto::desktop::ClientToHost> outgoing_message_;
 
-    proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
-    proto::AudioEncoding audio_encoding_ = proto::AUDIO_ENCODING_UNKNOWN;
+    proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
+    proto::desktop::AudioEncoding audio_encoding_ = proto::desktop::AUDIO_ENCODING_UNKNOWN;
 
     std::unique_ptr<base::VideoDecoder> video_decoder_;
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;

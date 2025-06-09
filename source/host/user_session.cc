@@ -647,7 +647,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                                 dynamic_cast<ClientSessionDesktop*>(client);
 
                             if (desktop_client)
-                                desktop_client->setVideoErrorCode(proto::VIDEO_ERROR_CODE_PAUSED);
+                                desktop_client->setVideoErrorCode(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
                         }
                     });
                 }

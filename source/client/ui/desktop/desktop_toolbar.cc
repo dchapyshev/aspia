@@ -294,7 +294,7 @@ void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
+void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
     LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()
                  << " resolutions: " << screen_list.resolution_size() << ")";
@@ -310,7 +310,7 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
-        const proto::Screen& screen = screen_list.screen(i);
+        const proto::desktop::Screen& screen = screen_list.screen(i);
 
         if (screen_list.current_screen() == screen.id())
         {
@@ -326,7 +326,7 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
     {
         for (int i = 0; i < screen_list.screen_size(); ++i)
         {
-            const proto::Screen& screen = screen_list.screen(i);
+            const proto::desktop::Screen& screen = screen_list.screen(i);
             bool is_primary = screen.id() == screen_list.primary_screen();
 
             SelectScreenAction* action =
@@ -415,11 +415,11 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setScreenType(const proto::ScreenType& screen_type)
+void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type)
 {
     if (is_remote_update_enabled_)
     {
-        bool show_update_button = screen_type.type() == proto::ScreenType::TYPE_DESKTOP;
+        bool show_update_button = screen_type.type() == proto::desktop::ScreenType::TYPE_DESKTOP;
 
         LOG(LS_INFO) << "Show update button: " << show_update_button
                      << " (type=" << screen_type.type() << " name=" << screen_type.name() << ")";
@@ -586,7 +586,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Shutdown accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_SHUTDOWN, false);
+            emit sig_powerControl(proto::desktop::PowerControl::ACTION_SHUTDOWN, false);
         }
         else
         {
@@ -617,7 +617,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             settings.setWaitForHost(wait);
 
             LOG(LS_INFO) << "[ACTION] Reboot accepted by user (wait=" << wait << ")";
-            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT, wait);
+            emit sig_powerControl(proto::desktop::PowerControl::ACTION_REBOOT, wait);
         }
         else
         {
@@ -648,7 +648,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             settings.setWaitForHost(wait);
 
             LOG(LS_INFO) << "[ACTION] Reboot (safe mode) accepted by user (wait=" << wait << ")";
-            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE, wait);
+            emit sig_powerControl(proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE, wait);
         }
         else
         {
@@ -669,7 +669,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Logoff accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_LOGOFF, false);
+            emit sig_powerControl(proto::desktop::PowerControl::ACTION_LOGOFF, false);
         }
         else
         {
@@ -690,7 +690,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(LS_INFO) << "[ACTION] Lock accepted by user";
-            emit sig_powerControl(proto::PowerControl::ACTION_LOCK, false);
+            emit sig_powerControl(proto::desktop::PowerControl::ACTION_LOCK, false);
         }
         else
         {
@@ -714,7 +714,7 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
     LOG(LS_INFO) << "[ACTION] Resolution selected: "
                  << resolution.width() << "x" << resolution.height();
 
-    proto::Screen screen;
+    proto::desktop::Screen screen;
     screen.set_id(current_screen_id_);
     screen.mutable_resolution()->set_width(resolution.width());
     screen.mutable_resolution()->set_height(resolution.height());
@@ -725,12 +725,12 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onChangeScreenAction(QAction* action)
 {
-    const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
+    const proto::desktop::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
 
     LOG(LS_INFO) << "[ACTION] Screen selected (id=" << screen.id() << " title="
                  << screen.title() << ")";
 
-    proto::Screen out_screen;
+    proto::desktop::Screen out_screen;
     out_screen.set_id(screen.id());
     out_screen.set_title(screen.title());
 

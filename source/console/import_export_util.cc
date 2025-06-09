@@ -44,11 +44,11 @@ constexpr int kDefaultCompressRatio = 8;
 //--------------------------------------------------------------------------------------------------
 bool isValidVideoEncoding(int video_encoding)
 {
-    switch (static_cast<proto::VideoEncoding>(video_encoding))
+    switch (static_cast<proto::desktop::VideoEncoding>(video_encoding))
     {
-        case proto::VIDEO_ENCODING_ZSTD:
-        case proto::VIDEO_ENCODING_VP8:
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_ZSTD:
+        case proto::desktop::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             return true;
 
         default:
@@ -59,11 +59,11 @@ bool isValidVideoEncoding(int video_encoding)
 //--------------------------------------------------------------------------------------------------
 bool isValidAudioEncoding(int audio_encoding)
 {
-    switch (static_cast<proto::AudioEncoding>(audio_encoding))
+    switch (static_cast<proto::desktop::AudioEncoding>(audio_encoding))
     {
-        case proto::AUDIO_ENCODING_UNKNOWN:
-        case proto::AUDIO_ENCODING_DEFAULT:
-        case proto::AUDIO_ENCODING_OPUS:
+        case proto::desktop::AUDIO_ENCODING_UNKNOWN:
+        case proto::desktop::AUDIO_ENCODING_DEFAULT:
+        case proto::desktop::AUDIO_ENCODING_OPUS:
             return true;
 
         default:
@@ -181,7 +181,7 @@ proto::address_book::InheritConfig readInheritConfig(
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::PixelFormat readPixelFormat(QJsonObject& json_pixel_format)
+proto::desktop::PixelFormat readPixelFormat(QJsonObject& json_pixel_format)
 {
     base::PixelFormat pixel_format;
     pixel_format.setBitsPerPixel(json_pixel_format["bits_per_pixel"].toInt());
@@ -194,7 +194,7 @@ proto::PixelFormat readPixelFormat(QJsonObject& json_pixel_format)
     pixel_format.setGreenShift(json_pixel_format["green_shift"].toInt());
     pixel_format.setBlueShift(json_pixel_format["blue_shift"].toInt());
 
-    proto::PixelFormat proto_pixel_format;
+    proto::desktop::PixelFormat proto_pixel_format;
 
     if (pixel_format != base::PixelFormat::ARGB() && pixel_format != base::PixelFormat::RGB565() &&
         pixel_format != base::PixelFormat::RGB332() && pixel_format != base::PixelFormat::RGB222() &&
@@ -218,7 +218,7 @@ proto::PixelFormat readPixelFormat(QJsonObject& json_pixel_format)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::DesktopConfig readDesktopConfig(const QJsonObject& json_desktop_config)
+proto::desktop::Config readDesktopConfig(const QJsonObject& json_desktop_config)
 {
     int flags = json_desktop_config["flags"].toInt();
 
@@ -226,7 +226,7 @@ proto::DesktopConfig readDesktopConfig(const QJsonObject& json_desktop_config)
     if (!isValidVideoEncoding(video_encoding))
     {
         LOG(LS_ERROR) << "Invalid video encoding: " << video_encoding;
-        video_encoding = static_cast<int>(proto::VIDEO_ENCODING_VP8);
+        video_encoding = static_cast<int>(proto::desktop::VIDEO_ENCODING_VP8);
     }
 
     int compress_ratio = json_desktop_config["compress_ratio"].toInt();
@@ -240,17 +240,17 @@ proto::DesktopConfig readDesktopConfig(const QJsonObject& json_desktop_config)
     if (!isValidAudioEncoding(audio_encoding))
     {
         LOG(LS_ERROR) << "Invalid audio encoding: " << audio_encoding;
-        audio_encoding = static_cast<int>(proto::AUDIO_ENCODING_OPUS);
+        audio_encoding = static_cast<int>(proto::desktop::AUDIO_ENCODING_OPUS);
     }
 
     QJsonObject json_pixel_format = json_desktop_config["pixel_format"].toObject();
-    proto::PixelFormat pixel_format = readPixelFormat(json_pixel_format);
+    proto::desktop::PixelFormat pixel_format = readPixelFormat(json_pixel_format);
 
-    proto::DesktopConfig desktop_config;
+    proto::desktop::Config desktop_config;
     desktop_config.set_flags(flags);
-    desktop_config.set_video_encoding(static_cast<proto::VideoEncoding>(video_encoding));
+    desktop_config.set_video_encoding(static_cast<proto::desktop::VideoEncoding>(video_encoding));
     desktop_config.set_compress_ratio(compress_ratio);
-    desktop_config.set_audio_encoding(static_cast<proto::AudioEncoding>(audio_encoding));
+    desktop_config.set_audio_encoding(static_cast<proto::desktop::AudioEncoding>(audio_encoding));
     desktop_config.mutable_pixel_format()->CopyFrom(pixel_format);
 
     return desktop_config;
@@ -260,10 +260,10 @@ proto::DesktopConfig readDesktopConfig(const QJsonObject& json_desktop_config)
 proto::address_book::SessionConfig readSessionConfig(const QJsonObject& json_session_config)
 {
     QJsonObject json_desktop_manage = json_session_config["desktop_manage"].toObject();
-    proto::DesktopConfig desktop_manage = readDesktopConfig(json_desktop_manage);
+    proto::desktop::Config desktop_manage = readDesktopConfig(json_desktop_manage);
 
     QJsonObject json_desktop_view = json_session_config["desktop_view"].toObject();
-    proto::DesktopConfig desktop_view = readDesktopConfig(json_desktop_view);
+    proto::desktop::Config desktop_view = readDesktopConfig(json_desktop_view);
 
     proto::address_book::SessionConfig session_config;
     session_config.mutable_desktop_manage()->CopyFrom(desktop_manage);
@@ -410,7 +410,7 @@ int readComputerGroup(
     return count;
 }
 
-QJsonObject writePixelFormat(const proto::PixelFormat& pixel_format)
+QJsonObject writePixelFormat(const proto::desktop::PixelFormat& pixel_format)
 {
     QJsonObject json_pixel_format;
 
@@ -428,7 +428,7 @@ QJsonObject writePixelFormat(const proto::PixelFormat& pixel_format)
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject writeDesktopConfig(const proto::DesktopConfig& desktop_config)
+QJsonObject writeDesktopConfig(const proto::desktop::Config& desktop_config)
 {
     QJsonObject json_desktop_config;
 

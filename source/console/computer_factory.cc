@@ -31,17 +31,18 @@ const int kDefCompressRatio = 8;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
+void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::ENABLE_CLIPBOARD | proto::ENABLE_CURSOR_SHAPE | proto::DISABLE_DESKTOP_EFFECTS |
-        proto::DISABLE_DESKTOP_WALLPAPER | proto::CLEAR_CLIPBOARD;
+        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
+        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER |
+        proto::desktop::CLEAR_CLIPBOARD;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VIDEO_ENCODING_VP8);
-    config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+    config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
+    config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);
@@ -49,16 +50,16 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
+void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
+        proto::desktop::DISABLE_DESKTOP_EFFECTS | proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VIDEO_ENCODING_VP8);
-    config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+    config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
+    config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
     config->set_compress_ratio(kDefCompressRatio);

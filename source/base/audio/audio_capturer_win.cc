@@ -59,7 +59,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWin::AudioCapturerWin(QObject* parent)
     : AudioCapturer(parent),
-      sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
+      sampling_rate_(proto::desktop::AudioPacket::SAMPLING_RATE_INVALID),
       capture_timer_(new QTimer(this)),
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
@@ -212,7 +212,7 @@ bool AudioCapturerWin::initialize()
     LOG(LS_INFO) << "Audio device sample rate: " << wave_format_ex_->nSamplesPerSec;
     LOG(LS_INFO) << "Audio device channels: " << wave_format_ex_->nChannels;
 
-    sampling_rate_ = static_cast<proto::AudioPacket::SamplingRate>(
+    sampling_rate_ = static_cast<proto::desktop::AudioPacket::SamplingRate>(
         wave_format_ex_->nSamplesPerSec);
 
     wave_format_ex_->wBitsPerSample = kBitsPerSample;
@@ -326,17 +326,17 @@ void AudioCapturerWin::doCapture()
 
         if (volume_filter_.apply(reinterpret_cast<qint16*>(data), frames))
         {
-            std::unique_ptr<proto::AudioPacket> packet(new proto::AudioPacket());
+            std::unique_ptr<proto::desktop::AudioPacket> packet(new proto::desktop::AudioPacket());
             packet->add_data(data, frames * wave_format_ex_->nBlockAlign);
-            packet->set_encoding(proto::AUDIO_ENCODING_RAW);
+            packet->set_encoding(proto::desktop::AUDIO_ENCODING_RAW);
             packet->set_sampling_rate(sampling_rate_);
-            packet->set_bytes_per_sample(proto::AudioPacket::BYTES_PER_SAMPLE_2);
+            packet->set_bytes_per_sample(proto::desktop::AudioPacket::BYTES_PER_SAMPLE_2);
             // Only the count of channels is taken into account now, we should also
             // consider dwChannelMask.
             // TODO(zijiehe): Convert dwChannelMask to layout and pass it to
             // AudioPump. So the stream can be downmixed properly with both number and
             // layouts of speakers.
-            packet->set_channels(static_cast<proto::AudioPacket::Channels>(
+            packet->set_channels(static_cast<proto::desktop::AudioPacket::Channels>(
                 wave_format_ex_->nChannels));
 
             callback_(std::move(packet));

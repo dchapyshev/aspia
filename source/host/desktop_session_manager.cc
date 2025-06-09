@@ -309,7 +309,7 @@ void DesktopSessionManager::configure(const DesktopSession::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::selectScreen(const proto::Screen& screen)
+void DesktopSessionManager::selectScreen(const proto::desktop::Screen& screen)
 {
     if (is_paused_ || !session_)
         return;
@@ -336,7 +336,7 @@ void DesktopSessionManager::setScreenCaptureFps(int fps)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::injectKeyEvent(const proto::KeyEvent& event)
+void DesktopSessionManager::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_ || !session_)
         return;
@@ -345,7 +345,7 @@ void DesktopSessionManager::injectKeyEvent(const proto::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::injectTextEvent(const proto::TextEvent& event)
+void DesktopSessionManager::injectTextEvent(const proto::desktop::TextEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_ || !session_)
         return;
@@ -354,7 +354,7 @@ void DesktopSessionManager::injectTextEvent(const proto::TextEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::injectMouseEvent(const proto::MouseEvent& event)
+void DesktopSessionManager::injectMouseEvent(const proto::desktop::MouseEvent& event)
 {
     if (is_mouse_locked_ || is_paused_ || !session_)
         return;
@@ -363,7 +363,7 @@ void DesktopSessionManager::injectMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::injectTouchEvent(const proto::TouchEvent &event)
+void DesktopSessionManager::injectTouchEvent(const proto::desktop::TouchEvent &event)
 {
     if (is_mouse_locked_ || is_paused_ || !session_)
         return;
@@ -372,7 +372,7 @@ void DesktopSessionManager::injectTouchEvent(const proto::TouchEvent &event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionManager::injectClipboardEvent(const proto::ClipboardEvent& event)
+void DesktopSessionManager::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (is_paused_ || !session_)
         return;

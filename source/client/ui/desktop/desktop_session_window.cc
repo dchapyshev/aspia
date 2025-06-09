@@ -75,7 +75,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
-                                           const proto::DesktopConfig& desktop_config,
+                                           const proto::desktop::Config& desktop_config,
                                            QWidget* parent)
     : SessionWindow(nullptr, parent),
       session_type_(session_type),
@@ -110,7 +110,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
     connect(scroll_timer_, &QTimer::timeout, this, &DesktopSessionWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::changeSettings);
@@ -142,12 +142,12 @@ DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
             this, &DesktopSessionWindow::sig_screenSelected);
 
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
-            this, [this](proto::PowerControl::Action action, bool wait)
+            this, [this](proto::desktop::PowerControl::Action action, bool wait)
     {
         switch (action)
         {
-            case proto::PowerControl::ACTION_REBOOT:
-            case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
+            case proto::desktop::PowerControl::ACTION_REBOOT:
+            case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
                 sessionState()->setAutoReconnect(wait);
                 break;
 
@@ -398,7 +398,7 @@ void DesktopSessionWindow::onConfigRequired()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilities& capabilities)
+void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities)
 {
     video_encodings_ = capabilities.video_encodings();
 
@@ -421,11 +421,11 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilitie
     toolbar_->enableTaskManager(extensions.contains(common::kTaskManagerExtension));
     toolbar_->enableVideoPauseFeature(extensions.contains(common::kVideoPauseExtension));
     toolbar_->enableAudioPauseFeature(extensions.contains(common::kAudioPauseExtension));
-    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::desktop::Capabilities::OS_TYPE_WINDOWS);
 
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
-        const proto::DesktopCapabilities::Flag& flag = capabilities.flag(i);
+        const proto::desktop::Capabilities::Flag& flag = capabilities.flag(i);
         const std::string& name = flag.name();
         bool value = flag.value();
 
@@ -481,19 +481,19 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::DesktopCapabilitie
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onScreenListChanged(const proto::ScreenList& screen_list)
+void DesktopSessionWindow::onScreenListChanged(const proto::desktop::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onScreenTypeChanged(const proto::ScreenType& screen_type)
+void DesktopSessionWindow::onScreenTypeChanged(const proto::desktop::ScreenType& screen_type)
 {
     toolbar_->setScreenType(screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+void DesktopSessionWindow::onCursorPositionChanged(const proto::desktop::CursorPosition& cursor_position)
 {
     base::Frame* frame = desktop_->desktopFrame();
     if (!frame)
@@ -547,7 +547,7 @@ void DesktopSessionWindow::onMetricsChanged(const client::ClientDesktop::Metrics
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onFrameError(proto::VideoErrorCode error_code)
+void DesktopSessionWindow::onFrameError(proto::desktop::VideoErrorCode error_code)
 {
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
@@ -932,7 +932,7 @@ bool DesktopSessionWindow::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onMouseEvent(const proto::MouseEvent& event)
+void DesktopSessionWindow::onMouseEvent(const proto::desktop::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
 
@@ -997,7 +997,7 @@ void DesktopSessionWindow::onMouseEvent(const proto::MouseEvent& event)
         double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
-        proto::MouseEvent out_event;
+        proto::desktop::MouseEvent out_event;
 
         out_event.set_mask(event.mask());
         out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
@@ -1041,7 +1041,7 @@ void DesktopSessionWindow::changeSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onConfigChanged(const proto::DesktopConfig& desktop_config)
+void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop_config)
 {
     LOG(LS_INFO) << "Desktop config changed";
 
@@ -1049,8 +1049,8 @@ void DesktopSessionWindow::onConfigChanged(const proto::DesktopConfig& desktop_c
 
     emit sig_desktopConfigChanged(desktop_config);
 
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
-    if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
+    if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         desktop_->setCursorShape(QPixmap(), QPoint());
 }
 
@@ -1229,7 +1229,7 @@ void DesktopSessionWindow::onPasteKeystrokes()
             return;
         }
 
-        proto::TextEvent event;
+        proto::desktop::TextEvent event;
         event.set_text(text.toStdString());
 
         emit sig_textEvent(event);

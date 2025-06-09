@@ -201,7 +201,7 @@ bool PixelFormat::operator!=(const PixelFormat& other) const
 
 //--------------------------------------------------------------------------------------------------
 // static
-PixelFormat PixelFormat::fromProto(const proto::PixelFormat& format)
+PixelFormat PixelFormat::fromProto(const proto::desktop::PixelFormat& format)
 {
     return base::PixelFormat(
         static_cast<quint8>(format.bits_per_pixel()),
@@ -214,9 +214,9 @@ PixelFormat PixelFormat::fromProto(const proto::PixelFormat& format)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::PixelFormat PixelFormat::toProto()
+proto::desktop::PixelFormat PixelFormat::toProto()
 {
-    proto::PixelFormat format;
+    proto::desktop::PixelFormat format;
     format.set_bits_per_pixel(bits_per_pixel_);
     format.set_red_max(red_max_);
     format.set_green_max(green_max_);

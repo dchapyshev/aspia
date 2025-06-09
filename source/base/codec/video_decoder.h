@@ -32,9 +32,9 @@ class VideoDecoder
 public:
     virtual ~VideoDecoder() = default;
 
-    static std::unique_ptr<VideoDecoder> create(proto::VideoEncoding encoding);
+    static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
 
-    virtual bool decode(const proto::VideoPacket& packet, Frame* frame) = 0;
+    virtual bool decode(const proto::desktop::VideoPacket& packet, Frame* frame) = 0;
 };
 
 } // namespace base

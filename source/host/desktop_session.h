@@ -61,27 +61,27 @@ public:
 
     virtual void control(proto::internal::DesktopControl::Action action) = 0;
     virtual void configure(const Config& config) = 0;
-    virtual void selectScreen(const proto::Screen& screen) = 0;
+    virtual void selectScreen(const proto::desktop::Screen& screen) = 0;
     virtual void captureScreen() = 0;
 
     virtual void setScreenCaptureFps(int fps) = 0;
 
-    virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
-    virtual void injectTextEvent(const proto::TextEvent& event) = 0;
-    virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
-    virtual void injectTouchEvent(const proto::TouchEvent& event) = 0;
-    virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
+    virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
+    virtual void injectTextEvent(const proto::desktop::TextEvent& event) = 0;
+    virtual void injectMouseEvent(const proto::desktop::MouseEvent& event) = 0;
+    virtual void injectTouchEvent(const proto::desktop::TouchEvent& event) = 0;
+    virtual void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) = 0;
 
 signals:
     void sig_desktopSessionStarted();
     void sig_desktopSessionStopped();
     void sig_screenCaptured(const base::Frame* frame, const base::MouseCursor* mouse_cursor);
-    void sig_screenCaptureError(proto::VideoErrorCode error_code);
-    void sig_audioCaptured(const proto::AudioPacket& audio_packet);
-    void sig_cursorPositionChanged(const proto::CursorPosition& cursor_position);
-    void sig_screenListChanged(const proto::ScreenList& list);
-    void sig_screenTypeChanged(const proto::ScreenType& type);
-    void sig_clipboardEvent(const proto::ClipboardEvent& event);
+    void sig_screenCaptureError(proto::desktop::VideoErrorCode error_code);
+    void sig_audioCaptured(const proto::desktop::AudioPacket& audio_packet);
+    void sig_cursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
+    void sig_screenListChanged(const proto::desktop::ScreenList& list);
+    void sig_screenTypeChanged(const proto::desktop::ScreenType& type);
+    void sig_clipboardEvent(const proto::desktop::ClipboardEvent& event);
 };
 
 } // namespace host

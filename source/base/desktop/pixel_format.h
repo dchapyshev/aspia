@@ -104,8 +104,8 @@ public:
     bool operator==(const PixelFormat& other) const;
     bool operator!=(const PixelFormat& other) const;
 
-    static PixelFormat fromProto(const proto::PixelFormat& format);
-    proto::PixelFormat toProto();
+    static PixelFormat fromProto(const proto::desktop::PixelFormat& format);
+    proto::desktop::PixelFormat toProto();
 
 private:
     quint8 bits_per_pixel_ = 0;

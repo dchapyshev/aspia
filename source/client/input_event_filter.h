@@ -36,12 +36,14 @@ public:
     void setClipboardEnabled(bool enable);
     void setNetworkOverflow(bool enable);
 
-    std::optional<proto::MouseEvent> mouseEvent(const proto::MouseEvent& event);
-    std::optional<proto::KeyEvent> keyEvent(const proto::KeyEvent& event);
-    std::optional<proto::TextEvent> textEvent(const proto::TextEvent& event);
+    std::optional<proto::desktop::MouseEvent> mouseEvent(const proto::desktop::MouseEvent& event);
+    std::optional<proto::desktop::KeyEvent> keyEvent(const proto::desktop::KeyEvent& event);
+    std::optional<proto::desktop::TextEvent> textEvent(const proto::desktop::TextEvent& event);
 
-    std::optional<proto::ClipboardEvent> readClipboardEvent(const proto::ClipboardEvent& event);
-    std::optional<proto::ClipboardEvent> sendClipboardEvent(const proto::ClipboardEvent& event);
+    std::optional<proto::desktop::ClipboardEvent> readClipboardEvent(
+        const proto::desktop::ClipboardEvent& event);
+    std::optional<proto::desktop::ClipboardEvent> sendClipboardEvent(
+        const proto::desktop::ClipboardEvent& event);
 
     int sendMouseCount() const { return send_mouse_count_; }
     int dropMouseCount() const { return drop_mouse_count_; }
