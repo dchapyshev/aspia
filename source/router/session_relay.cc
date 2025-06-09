@@ -42,14 +42,14 @@ SessionRelay::~SessionRelay()
 void SessionRelay::sendKeyUsed(quint32 key_id)
 {
     outgoing_message_.newMessage().mutable_key_used()->set_key_id(key_id);
-    sendMessage(proto::router::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::disconnectPeerSession(const proto::router::PeerConnectionRequest& request)
 {
     outgoing_message_.newMessage().mutable_peer_connection_request()->CopyFrom(request);
-    sendMessage(proto::router::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -70,7 +70,7 @@ signals:
     void sig_sessionFinished(SessionId session_id);
 
 protected:
-    void sendMessage(quint8 channel_id, const QByteArray& message);
+    void sendMessage(const QByteArray& message);
     std::unique_ptr<Database> openDatabase() const;
 
     virtual void onSessionReady() = 0;

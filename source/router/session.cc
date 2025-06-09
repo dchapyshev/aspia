@@ -167,10 +167,10 @@ std::chrono::seconds Session::duration() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::sendMessage(quint8 channel_id, const QByteArray& message)
+void Session::sendMessage(const QByteArray& message)
 {
     if (tcp_channel_)
-        tcp_channel_->send(channel_id, message);
+        tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -213,7 +213,7 @@ const char* Client::statusToString(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendMessage(quint8 channel_id, const QByteArray& message)
+void Client::sendMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
@@ -221,7 +221,7 @@ void Client::sendMessage(quint8 channel_id, const QByteArray& message)
         return;
     }
 
-    tcp_channel_->send(channel_id, message);
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, message);
 }
 
 //--------------------------------------------------------------------------------------------------

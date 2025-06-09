@@ -198,8 +198,7 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendMessage(proto::peer::CHANNEL_ID_SESSION,
-                serializer_.serialize(remote_task_queue_.front().request()));
+    sendMessage(serializer_.serialize(remote_task_queue_.front().request()));
 }
 
 //--------------------------------------------------------------------------------------------------

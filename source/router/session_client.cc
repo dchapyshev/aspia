@@ -151,7 +151,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     LOG(LS_INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::router::ConnectionOffer::CLIENT);
-    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 
     LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
                  << ": " << host_status->status();
-    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
