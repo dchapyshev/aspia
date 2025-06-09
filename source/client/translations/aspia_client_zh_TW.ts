@@ -3122,79 +3122,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="103"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="104"/>
         <source>Failed to get list of drives: %1</source>
         <translation>無法取得磁碟機列表：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="119"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="121"/>
         <source>Failed to get list of files: %1</source>
         <translation>無法取得檔案列表：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="144"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="146"/>
         <source>Failed to create directory: %1</source>
         <translation>無法建立資料夾：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="156"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="158"/>
         <source>Failed to rename item: %1</source>
         <translation>無法重新命名項目：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="283"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="285"/>
         <source>%1 object(s) selected</source>
         <translation>已選擇 %1 個物件</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="303"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="322"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="305"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="324"/>
         <source>Folder name can not be empty.</source>
         <translation>資料夾名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="309"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="328"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="311"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="330"/>
         <source>Name contains invalid characters.</source>
         <translation>名稱包含無效字元。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="349"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="351"/>
         <source>&amp;Send	F11</source>
         <translation>發送（&amp;S）	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="350"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="352"/>
         <source>&amp;Delete	Delete</source>
         <translation>刪除（&amp;D）	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="360"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="362"/>
         <source>&amp;Create Folder</source>
         <translation>建立資料夾 （&amp;C）</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="424"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>您是否確定要刪除所選項目？</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="462"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="464"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="427"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="428"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>

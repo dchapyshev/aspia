@@ -3290,79 +3290,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="462"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="464"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="103"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="104"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="119"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="121"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="144"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="146"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="156"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="158"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="283"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="285"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="303"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="322"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="305"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="324"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="309"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="328"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="311"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="330"/>
         <source>Name contains invalid characters.</source>
         <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="349"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="351"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="350"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="352"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="360"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="362"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="424"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="427"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="428"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
