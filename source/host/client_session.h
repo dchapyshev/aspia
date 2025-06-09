@@ -25,7 +25,7 @@
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
 #include "proto/common.h"
-#include "proto/desktop_extensions.h"
+#include "proto/desktop.h"
 #include "proto/text_chat.h"
 
 namespace host {

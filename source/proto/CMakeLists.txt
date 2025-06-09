@@ -22,8 +22,6 @@ list(APPEND SOURCE_PROTO
     common.proto
     desktop.h
     desktop.proto
-    desktop_extensions.h
-    desktop_extensions.proto
     desktop_internal.proto
     file_transfer.h
     file_transfer.proto
@@ -51,8 +49,9 @@ list(APPEND SOURCE_PROTO
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
 add_library(aspia_proto STATIC ${SOURCE_PROTO})
+
 protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${SOURCE_PROTO})
+#protobuf_generate(LANGUAGE qt TARGET aspia_proto PLUGIN "protoc-gen-qt=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtprotoc.exe" GENERATE_EXTENSIONS .h .cc ${SOURCE_PROTO})
+
 target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 set_property(TARGET aspia_proto PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_proto PROPERTY AUTOUIC ON)
-set_property(TARGET aspia_proto PROPERTY AUTORCC ON)

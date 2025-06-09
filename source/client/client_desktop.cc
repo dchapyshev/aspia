@@ -705,7 +705,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
             const proto::desktop::Screen& screen = screen_list.screen(i);
             const proto::desktop::Point& dpi = screen.dpi();
             const proto::desktop::Point& position = screen.position();
-            const proto::desktop::Resolution& resolution = screen.resolution();
+            const proto::desktop::Size& resolution = screen.resolution();
 
             LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
                          << " title=" << screen.title()

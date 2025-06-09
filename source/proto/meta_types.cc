@@ -20,7 +20,6 @@
 
 #include "proto/common.h"
 #include "proto/desktop.h"
-#include "proto/desktop_extensions.h"
 #include "proto/file_transfer.h"
 #include "proto/host_internal.h"
 #include "proto/router_admin.h"
@@ -66,9 +65,6 @@ void registerMetaTypes()
     qRegisterMetaType<proto::desktop::Config>("proto::DesktopConfig");
     qRegisterMetaType<proto::desktop::HostToClient>("proto::HostToClient");
     qRegisterMetaType<proto::desktop::ClientToHost>("proto::ClientToHost");
-
-    // desktop_extensions.h
-    qRegisterMetaType<proto::desktop::Resolution>("proto::Resolution");
     qRegisterMetaType<proto::desktop::Point>("proto::Point");
     qRegisterMetaType<proto::desktop::Screen>("proto::Screen");
     qRegisterMetaType<proto::desktop::ScreenList>("proto::ScreenList");

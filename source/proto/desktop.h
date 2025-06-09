@@ -24,6 +24,17 @@
 
 #include "proto/desktop.pb.h"
 
+Q_DECLARE_METATYPE(proto::desktop::Point)
+Q_DECLARE_METATYPE(proto::desktop::Screen)
+Q_DECLARE_METATYPE(proto::desktop::ScreenList)
+Q_DECLARE_METATYPE(proto::desktop::PreferredSize)
+Q_DECLARE_METATYPE(proto::desktop::Pause)
+Q_DECLARE_METATYPE(proto::desktop::PowerControl)
+Q_DECLARE_METATYPE(proto::desktop::PowerControl::Action)
+Q_DECLARE_METATYPE(proto::desktop::VideoRecording)
+Q_DECLARE_METATYPE(proto::desktop::VideoRecording::Action)
+Q_DECLARE_METATYPE(proto::desktop::ScreenType)
+Q_DECLARE_METATYPE(proto::desktop::ScreenType::Type)
 Q_DECLARE_METATYPE(proto::desktop::KeyEvent)
 Q_DECLARE_METATYPE(proto::desktop::TextEvent)
 Q_DECLARE_METATYPE(proto::desktop::MouseEvent)

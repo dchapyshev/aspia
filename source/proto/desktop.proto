@@ -22,6 +22,39 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.desktop;
 
+message Point
+{
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
+message Rect
+{
+    int32 x      = 1;
+    int32 y      = 2;
+    int32 width  = 3;
+    int32 height = 4;
+}
+
+message PixelFormat
+{
+    uint32 bits_per_pixel = 1;
+
+    uint32 red_max   = 2;
+    uint32 green_max = 3;
+    uint32 blue_max  = 4;
+
+    uint32 red_shift   = 5;
+    uint32 green_shift = 6;
+    uint32 blue_shift  = 7;
+}
+
 message KeyEvent
 {
     // The keyboard (Caps/Num) lock states.
@@ -159,33 +192,6 @@ message CursorPosition
     int32 y = 2;
 }
 
-message Size
-{
-    int32 width  = 1;
-    int32 height = 2;
-}
-
-message Rect
-{
-    int32 x      = 1;
-    int32 y      = 2;
-    int32 width  = 3;
-    int32 height = 4;
-}
-
-message PixelFormat
-{
-    uint32 bits_per_pixel = 1;
-
-    uint32 red_max   = 2;
-    uint32 green_max = 3;
-    uint32 blue_max  = 4;
-
-    uint32 red_shift   = 5;
-    uint32 green_shift = 6;
-    uint32 blue_shift  = 7;
-}
-
 // Identifies how the image was encoded.
 enum VideoEncoding
 {
@@ -279,6 +285,90 @@ message Extension
 {
     string name = 1;
     bytes data  = 2;
+}
+
+// Extension name: "select_screen"
+// Sent by client to host for screen or screen resolution selection.
+message Screen
+{
+    int64 id        = 1;
+    string title    = 2;
+    Point position  = 3;
+    Size resolution = 4;
+    Point dpi       = 5;
+}
+
+// Extension name: "select_screen"
+// Sent by host to client. Contains a list of screens on the host.
+message ScreenList
+{
+    repeated Screen screen   = 1; // List of screens on the remote computer.
+    int64 current_screen     = 2; // ID of current screen.
+    int64 primary_screen     = 3; // ID of primary screen.
+    repeated Size resolution = 4; // List of resolutions for current screen.
+}
+
+// Extension name: "preferred_size"
+// Sent by client to host.
+message PreferredSize
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
+// Extension name: "video_pause", "audio_pause"
+// Sent by client to host.
+message Pause
+{
+    bool enable = 1;
+}
+
+// Extension name: "power_control"
+// Sent by client to host.
+message PowerControl
+{
+    enum Action
+    {
+        ACTION_UNKNOWN          = 0;
+        ACTION_SHUTDOWN         = 1;
+        ACTION_REBOOT           = 2;
+        ACTION_LOGOFF           = 3;
+        ACTION_LOCK             = 4;
+        ACTION_REBOOT_SAFE_MODE = 5;
+    }
+
+    Action action = 1;
+}
+
+// Extension name: "video_recording"
+// Sent by host to client and by client to host.
+message VideoRecording
+{
+    enum Action
+    {
+        ACTION_UNKNOWN = 0;
+        ACTION_STARTED = 1;
+        ACTION_STOPPED = 2;
+    }
+
+    Action action = 1;
+}
+
+// Extension name: "screen_type"
+// Sent by host to client.
+message ScreenType
+{
+    enum Type
+    {
+        TYPE_UNKNOWN = 0;
+        TYPE_DESKTOP = 1;
+        TYPE_LOCK    = 2;
+        TYPE_LOGIN   = 3;
+        TYPE_OTHER   = 4;
+    }
+
+    Type type   = 1;
+    string name = 2;
 }
 
 message Capabilities

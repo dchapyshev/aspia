@@ -24,7 +24,6 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop.proto";
-import "desktop_extensions.proto";
 
 package proto.internal;
 

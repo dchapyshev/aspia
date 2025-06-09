@@ -27,7 +27,6 @@
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop.h"
-#include "proto/desktop_extensions.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 

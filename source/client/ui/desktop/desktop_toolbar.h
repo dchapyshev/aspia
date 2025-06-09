@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "client/ui/desktop/desktop_settings.h"
 #include "proto/common.h"
-#include "proto/desktop_extensions.h"
+#include "proto/desktop.h"
 #include "ui_desktop_toolbar.h"
 
 namespace client {

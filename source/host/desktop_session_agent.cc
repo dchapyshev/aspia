@@ -176,7 +176,7 @@ void DesktopSessionAgent::onScreenListChanged(
 
     for (const auto& resolition_item : list.resolutions)
     {
-        proto::desktop::Resolution* resolution = screen_list->add_resolution();
+        proto::desktop::Size* resolution = screen_list->add_resolution();
         resolution->set_width(resolition_item.width());
         resolution->set_height(resolition_item.height());
     }
@@ -191,7 +191,7 @@ void DesktopSessionAgent::onScreenListChanged(
         position->set_x(screen_item.position.x());
         position->set_y(screen_item.position.y());
 
-        proto::desktop::Resolution* resolution = screen->mutable_resolution();
+        proto::desktop::Size* resolution = screen->mutable_resolution();
         resolution->set_width(screen_item.resolution.width());
         resolution->set_height(screen_item.resolution.height());
 
@@ -339,10 +339,10 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         if (screen_capturer_)
         {
             const proto::desktop::Screen& screen = incoming_message_->select_source().screen();
-            const proto::desktop::Resolution& resolution = screen.resolution();
+            const proto::desktop::Size& resolution = screen.resolution();
 
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
-                                               screen.id()), base::Size(resolution.width(), resolution.height()));
+                                           screen.id()), base::Size::fromProto(resolution));
         }
         else
         {
