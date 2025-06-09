@@ -39,18 +39,18 @@ public:
     ~FileWorker();
 
     void doRequest(const common::FileTask& task);
-    void doRequest(const proto::FileRequest& request, proto::FileReply* reply);
+    void doRequest(const proto::file_transfer::Request& request, proto::file_transfer::Reply* reply);
 
 private:
-    void doDriveListRequest(proto::FileReply* reply);
-    void doFileListRequest(const proto::FileListRequest& request, proto::FileReply* reply);
-    void doCreateDirectoryRequest(const proto::CreateDirectoryRequest& request, proto::FileReply* reply);
-    void doRenameRequest(const proto::RenameRequest& request, proto::FileReply* reply);
-    void doRemoveRequest(const proto::RemoveRequest& request, proto::FileReply* reply);
-    void doDownloadRequest(const proto::DownloadRequest& request, proto::FileReply* reply);
-    void doUploadRequest(const proto::UploadRequest& request, proto::FileReply* reply);
-    void doPacketRequest(const proto::FilePacketRequest& request, proto::FileReply* reply);
-    void doPacket(const proto::FilePacket& packet, proto::FileReply* reply);
+    void doDriveListRequest(proto::file_transfer::Reply* reply);
+    void doFileListRequest(const proto::file_transfer::ListRequest& request, proto::file_transfer::Reply* reply);
+    void doCreateDirectoryRequest(const proto::file_transfer::CreateDirectoryRequest& request, proto::file_transfer::Reply* reply);
+    void doRenameRequest(const proto::file_transfer::RenameRequest& request, proto::file_transfer::Reply* reply);
+    void doRemoveRequest(const proto::file_transfer::RemoveRequest& request, proto::file_transfer::Reply* reply);
+    void doDownloadRequest(const proto::file_transfer::DownloadRequest& request, proto::file_transfer::Reply* reply);
+    void doUploadRequest(const proto::file_transfer::UploadRequest& request, proto::file_transfer::Reply* reply);
+    void doPacketRequest(const proto::file_transfer::PacketRequest& request, proto::file_transfer::Reply* reply);
+    void doPacket(const proto::file_transfer::Packet& packet, proto::file_transfer::Reply* reply);
 
     QTimer* idle_timer_ = nullptr;
 

@@ -25,7 +25,7 @@ namespace common {
 
 //--------------------------------------------------------------------------------------------------
 FileTask::FileTask(QPointer<FileTaskFactory> factory,
-                   proto::FileRequest&& request,
+                   proto::file_transfer::Request&& request,
                    Target target)
     : data_(new Data(factory, std::move(request), target))
 {
@@ -43,19 +43,19 @@ FileTask::Target FileTask::target() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const proto::FileRequest& FileTask::request() const
+const proto::file_transfer::Request& FileTask::request() const
 {
     return data_->request;
 }
 
 //--------------------------------------------------------------------------------------------------
-const proto::FileReply& FileTask::reply() const
+const proto::file_transfer::Reply& FileTask::reply() const
 {
     return data_->reply;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTask::onReply(proto::FileReply&& reply)
+void FileTask::onReply(proto::file_transfer::Reply&& reply)
 {
     if (!data_->factory)
         return;

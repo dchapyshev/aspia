@@ -36,7 +36,7 @@ public:
     static std::unique_ptr<FileDepacketizer> create(const QString& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
-    bool writeNextPacket(const proto::FilePacket& packet);
+    bool writeNextPacket(const proto::file_transfer::Packet& packet);
 
 private:
     FileDepacketizer(const QString& file_path, std::unique_ptr<QFile> file);

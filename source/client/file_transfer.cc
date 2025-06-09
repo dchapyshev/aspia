@@ -159,9 +159,9 @@ void FileTransfer::start()
 
     connect(queue_builder_, &FileTransferQueueBuilder::sig_doTask, this, &FileTransfer::sig_doTask);
     connect(queue_builder_, &FileTransferQueueBuilder::sig_finished,
-            this, [this](proto::FileError error_code)
+            this, [this](proto::file_transfer::ErrorCode error_code)
     {
-        if (error_code == proto::FILE_ERROR_SUCCESS)
+        if (error_code == proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             tasks_ = queue_builder_->takeQueue();
             total_size_ = queue_builder_->totalSize();
@@ -177,7 +177,7 @@ void FileTransfer::start()
         }
         else
         {
-            onError(Error::Type::QUEUE, proto::FILE_ERROR_UNKNOWN);
+            onError(Error::Type::QUEUE, proto::file_transfer::ERROR_CODE_UNKNOWN);
         }
 
         queue_builder_->deleteLater();
@@ -254,15 +254,16 @@ FileTransfer::Task& FileTransfer::frontTask()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::targetReply(const proto::FileRequest& request, const proto::FileReply& reply)
+void FileTransfer::targetReply(
+    const proto::file_transfer::Request& request, const proto::file_transfer::Reply& reply)
 {
     if (tasks_.empty())
         return;
 
     if (request.has_create_directory_request())
     {
-        if (reply.error_code() == proto::FILE_ERROR_SUCCESS ||
-            reply.error_code() == proto::FILE_ERROR_PATH_ALREADY_EXISTS)
+        if (reply.error_code() == proto::file_transfer::ERROR_CODE_SUCCESS ||
+            reply.error_code() == proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS)
         {
             doNextTask();
             return;
@@ -272,22 +273,22 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
     }
     else if (request.has_upload_request())
     {
-        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+        if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             Error::Type error_type = Error::Type::CREATE_FILE;
 
-            if (reply.error_code() == proto::FILE_ERROR_PATH_ALREADY_EXISTS)
+            if (reply.error_code() == proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS)
                 error_type = Error::Type::ALREADY_EXISTS;
 
             onError(error_type, reply.error_code(), frontTask().targetPath());
             return;
         }
 
-        emit sig_doTask(task_factory_source_->packetRequest(proto::FilePacketRequest::NO_FLAGS));
+        emit sig_doTask(task_factory_source_->packetRequest(proto::file_transfer::PacketRequest::NO_FLAGS));
     }
     else if (request.has_packet())
     {
-        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+        if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             onError(Error::Type::WRITE_FILE, reply.error_code(), frontTask().targetPath());
             return;
@@ -323,26 +324,27 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             }
         }
 
-        if (request.packet().flags() & proto::FilePacket::LAST_PACKET)
+        if (request.packet().flags() & proto::file_transfer::Packet::LAST_PACKET)
         {
             doNextTask();
             return;
         }
 
-        quint32 flags = proto::FilePacketRequest::NO_FLAGS;
+        quint32 flags = proto::file_transfer::PacketRequest::NO_FLAGS;
         if (is_canceled_)
-            flags = proto::FilePacketRequest::CANCEL;
+            flags = proto::file_transfer::PacketRequest::CANCEL;
 
         emit sig_doTask(task_factory_source_->packetRequest(flags));
     }
     else
     {
-        onError(Error::Type::OTHER, proto::FILE_ERROR_UNKNOWN);
+        onError(Error::Type::OTHER, proto::file_transfer::ERROR_CODE_UNKNOWN);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::FileReply& reply)
+void FileTransfer::sourceReply(
+    const proto::file_transfer::Request& request, const proto::file_transfer::Reply& reply)
 {
     if (tasks_.empty())
     {
@@ -354,7 +356,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
     {
         Task& front_task = frontTask();
 
-        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+        if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             onError(Error::Type::OPEN_FILE, reply.error_code(), front_task.sourcePath());
             return;
@@ -364,7 +366,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
     }
     else if (request.has_packet_request())
     {
-        if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+        if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             onError(Error::Type::READ_FILE, reply.error_code(), frontTask().sourcePath());
             return;
@@ -374,7 +376,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
     }
     else
     {
-        onError(Error::Type::OTHER, proto::FILE_ERROR_UNKNOWN);
+        onError(Error::Type::OTHER, proto::file_transfer::ERROR_CODE_UNKNOWN);
     }
 }
 
@@ -479,7 +481,7 @@ void FileTransfer::doUpdateSpeed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransfer::onError(Error::Type type, proto::FileError code, const QString& path)
+void FileTransfer::onError(Error::Type type, proto::file_transfer::ErrorCode code, const QString& path)
 {
     auto default_action = actions_.find(type);
     if (default_action != actions_.end())

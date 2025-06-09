@@ -41,7 +41,7 @@ public:
     qint64 totalSize() const;
 
 signals:
-    void sig_finished(proto::FileError error_code);
+    void sig_finished(proto::file_transfer::ErrorCode error_code);
     void sig_doTask(const common::FileTask& task);
 
 private slots:
@@ -54,7 +54,7 @@ private:
                         bool is_directory,
                         qint64 size);
     void doPendingTasks();
-    void onAborted(proto::FileError error_code);
+    void onAborted(proto::file_transfer::ErrorCode error_code);
 
     std::unique_ptr<common::FileTaskFactory> task_factory_;
     FileTransfer::TaskList pending_tasks_;

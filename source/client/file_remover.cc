@@ -59,9 +59,9 @@ void FileRemover::start()
 
     connect(queue_builder_, &FileRemoveQueueBuilder::sig_doTask, this, &FileRemover::sig_doTask);
     connect(queue_builder_, &FileRemoveQueueBuilder::sig_finished,
-            this, [this](proto::FileError error_code)
+            this, [this](proto::file_transfer::ErrorCode error_code)
     {
-        if (error_code == proto::FILE_ERROR_SUCCESS)
+        if (error_code == proto::file_transfer::ERROR_CODE_SUCCESS)
         {
             tasks_ = queue_builder_->takeQueue();
             tasks_count_ = tasks_.size();
@@ -118,24 +118,24 @@ void FileRemover::setAction(Action action)
 //--------------------------------------------------------------------------------------------------
 void FileRemover::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task.request();
-    const proto::FileReply& reply = task.reply();
+    const proto::file_transfer::Request& request = task.request();
+    const proto::file_transfer::Reply& reply = task.reply();
 
     if (!request.has_remove_request())
     {
         emit sig_errorOccurred(QString::fromStdString(request.remove_request().path()),
-                               proto::FILE_ERROR_UNKNOWN, ACTION_ABORT);
+                               proto::file_transfer::ERROR_CODE_UNKNOWN, ACTION_ABORT);
         return;
     }
 
-    if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+    if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         quint32 actions;
 
         switch (reply.error_code())
         {
-            case proto::FILE_ERROR_PATH_NOT_FOUND:
-            case proto::FILE_ERROR_ACCESS_DENIED:
+            case proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND:
+            case proto::file_transfer::ERROR_CODE_ACCESS_DENIED:
             {
                 if (failure_action_ != ACTION_ASK)
                 {

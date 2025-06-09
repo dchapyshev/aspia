@@ -40,14 +40,14 @@ public:
 
 signals:
     void sig_doTask(const common::FileTask& task);
-    void sig_finished(proto::FileError error_code);
+    void sig_finished(proto::file_transfer::ErrorCode error_code);
 
 private slots:
     void onTaskDone(const common::FileTask& task);
 
 private:
     void doPendingTasks();
-    void onAborted(proto::FileError error_code);
+    void onAborted(proto::file_transfer::ErrorCode error_code);
 
     std::unique_ptr<common::FileTaskFactory> task_factory_;
 

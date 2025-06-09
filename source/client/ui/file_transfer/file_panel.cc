@@ -96,9 +96,10 @@ FilePanel::~FilePanel()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::onDriveList(proto::FileError error_code, const proto::DriveList& drive_list)
+void FilePanel::onDriveList(
+    proto::file_transfer::ErrorCode error_code, const proto::file_transfer::DriveList& drive_list)
 {
-    if (error_code != proto::FILE_ERROR_SUCCESS)
+    if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to get list of drives: %1").arg(fileErrorToString(error_code)));
     }
@@ -112,9 +113,10 @@ void FilePanel::onDriveList(proto::FileError error_code, const proto::DriveList&
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::onFileList(proto::FileError error_code, const proto::FileList& file_list)
+void FilePanel::onFileList(
+    proto::file_transfer::ErrorCode error_code, const proto::file_transfer::List& file_list)
 {
-    if (error_code != proto::FILE_ERROR_SUCCESS)
+    if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to get list of files: %1").arg(fileErrorToString(error_code)));
         ui.address_bar->setCurrentPath(ui.address_bar->previousPath());
@@ -137,9 +139,9 @@ void FilePanel::onFileList(proto::FileError error_code, const proto::FileList& f
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::onCreateDirectory(proto::FileError error_code)
+void FilePanel::onCreateDirectory(proto::file_transfer::ErrorCode error_code)
 {
-    if (error_code != proto::FILE_ERROR_SUCCESS)
+    if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to create directory: %1").arg(fileErrorToString(error_code)));
     }
@@ -149,9 +151,9 @@ void FilePanel::onCreateDirectory(proto::FileError error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::onRename(proto::FileError error_code)
+void FilePanel::onRename(proto::file_transfer::ErrorCode error_code)
 {
-    if (error_code != proto::FILE_ERROR_SUCCESS)
+    if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to rename item: %1").arg(fileErrorToString(error_code)));
     }

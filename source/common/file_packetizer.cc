@@ -26,7 +26,7 @@ namespace common {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-char* outputBuffer(proto::FilePacket* packet, size_t size)
+char* outputBuffer(proto::file_transfer::Packet* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return packet->mutable_data()->data();
@@ -54,17 +54,18 @@ std::unique_ptr<FilePacketizer> FilePacketizer::create(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
-    const proto::FilePacketRequest& request)
+std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
+    const proto::file_transfer::PacketRequest& request)
 {
     DCHECK(file_->isOpen());
 
     // Create a new file packet.
-    std::unique_ptr<proto::FilePacket> packet = std::make_unique<proto::FilePacket>();
+    std::unique_ptr<proto::file_transfer::Packet> packet =
+        std::make_unique<proto::file_transfer::Packet>();
 
-    if (request.flags() & proto::FilePacketRequest::CANCEL)
+    if (request.flags() & proto::file_transfer::PacketRequest::CANCEL)
     {
-        packet->set_flags(proto::FilePacket::LAST_PACKET);
+        packet->set_flags(proto::file_transfer::Packet::LAST_PACKET);
         return packet;
     }
 
@@ -90,7 +91,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
 
     if (left_size_ == file_size_)
     {
-        packet->set_flags(packet->flags() | proto::FilePacket::FIRST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::Packet::FIRST_PACKET);
 
         // Set file path and size in first packet.
         packet->set_file_size(file_size_);
@@ -103,7 +104,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
         file_size_ = 0;
         file_->close();
 
-        packet->set_flags(packet->flags() | proto::FilePacket::LAST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::Packet::LAST_PACKET);
     }
 
     return packet;

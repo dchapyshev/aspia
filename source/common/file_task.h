@@ -39,28 +39,28 @@ public:
     };
 
     FileTask() = default;
-    FileTask(QPointer<FileTaskFactory> factory, proto::FileRequest&& request, Target target);
+    FileTask(QPointer<FileTaskFactory> factory, proto::file_transfer::Request&& request, Target target);
     ~FileTask();
 
     // Returns the target of the current request. It can be a local computer or a remote computer.
     Target target() const;
 
     // Returns the data of the current request.
-    const proto::FileRequest& request() const;
+    const proto::file_transfer::Request& request() const;
 
     // Returns reply data for the current request.
     // If method setReply has not been called and data has not been set, an empty reply will be
     // returned.
-    const proto::FileReply& reply() const;
+    const proto::file_transfer::Reply& reply() const;
 
     // Sets the reply to the current request. The sender will be notified of this reply.
-    void onReply(proto::FileReply&& reply);
+    void onReply(proto::file_transfer::Reply&& reply);
 
 private:
     class Data
     {
     public:
-        Data(QPointer<FileTaskFactory> factory, proto::FileRequest&& request, Target target)
+        Data(QPointer<FileTaskFactory> factory, proto::file_transfer::Request&& request, Target target)
             : factory(std::move(factory)),
               target(target),
               request(std::move(request))
@@ -70,8 +70,8 @@ private:
 
         QPointer<FileTaskFactory> factory;
         FileTask::Target target;
-        proto::FileRequest request;
-        proto::FileReply reply;
+        proto::file_transfer::Request request;
+        proto::file_transfer::Reply reply;
     };
 
     base::SharedPointer<Data> data_;

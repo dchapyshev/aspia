@@ -44,8 +44,8 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
     common::FileWorker* worker_ = nullptr;
 
-    base::Parser<proto::FileRequest> request_;
-    base::Serializer<proto::FileReply> reply_;
+    base::Parser<proto::file_transfer::Request> request_;
+    base::Serializer<proto::file_transfer::Reply> reply_;
 
     DISALLOW_COPY_AND_ASSIGN(FileAgent);
 };

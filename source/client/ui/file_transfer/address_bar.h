@@ -38,7 +38,7 @@ class AddressBar final : public QComboBox
 public:
     explicit AddressBar(QWidget* parent = nullptr);
 
-    void setDriveList(const proto::DriveList& list);
+    void setDriveList(const proto::file_transfer::DriveList& list);
     void setCurrentPath(const QString& path);
     QString currentPath() const;
     QString previousPath() const;

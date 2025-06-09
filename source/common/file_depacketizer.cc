@@ -60,16 +60,16 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(const QString& file_p
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
+bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
 {
     DCHECK(file_->isOpen());
 
     const size_t packet_size = packet.data().size();
     if (!packet_size)
     {
-        if (packet.flags() & proto::FilePacket::LAST_PACKET)
+        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
         {
-            if (packet.flags() & proto::FilePacket::FIRST_PACKET)
+            if (packet.flags() & proto::file_transfer::Packet::FIRST_PACKET)
             {
                 // Zero-length file received.
                 file_size_ = 0;
@@ -89,7 +89,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
     }
 
     // The first packet must have the full file size.
-    if (packet.flags() & proto::FilePacket::FIRST_PACKET)
+    if (packet.flags() & proto::file_transfer::Packet::FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = file_size_;
@@ -109,7 +109,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
 
     left_size_ -= packet_size;
 
-    if (packet.flags() & proto::FilePacket::LAST_PACKET)
+    if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
     {
         file_size_ = 0;
         file_->close();

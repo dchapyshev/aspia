@@ -35,7 +35,7 @@ public:
 
     void setMimeType(const QString& mime_type);
     QString mimeType() const { return mime_type_; }
-    void setFileList(const proto::FileList& file_list);
+    void setFileList(const proto::file_transfer::List& file_list);
     void setSortOrder(int column, Qt::SortOrder order);
     void clear();
     bool isFolder(const QModelIndex& index) const;

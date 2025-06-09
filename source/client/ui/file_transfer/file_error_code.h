@@ -25,7 +25,7 @@
 
 namespace client {
 
-QString fileErrorToString(proto::FileError error_code);
+QString fileErrorToString(proto::file_transfer::ErrorCode error_code);
 
 } // namespace client
 

@@ -58,16 +58,16 @@ FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
 //--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task.request();
-    const proto::FileReply& reply = task.reply();
+    const proto::file_transfer::Request& request = task.request();
+    const proto::file_transfer::Reply& reply = task.reply();
 
     if (!request.has_file_list_request())
     {
-        onAborted(proto::FILE_ERROR_UNKNOWN);
+        onAborted(proto::file_transfer::ERROR_CODE_UNKNOWN);
         return;
     }
 
-    if (reply.error_code() != proto::FILE_ERROR_SUCCESS)
+    if (reply.error_code() != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         onAborted(reply.error_code());
         return;
@@ -77,7 +77,7 @@ void FileRemoveQueueBuilder::onTaskDone(const common::FileTask& task)
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
-        const proto::FileList::Item& item = reply.file_list().item(i);
+        const proto::file_transfer::List::Item& item = reply.file_list().item(i);
         QString item_path = path + '/' + QString::fromStdString(item.name());
 
         pending_tasks_.push_back(FileRemover::Task(std::move(item_path), item.is_directory()));
@@ -101,11 +101,11 @@ void FileRemoveQueueBuilder::doPendingTasks()
         }
     }
 
-    emit sig_finished(proto::FILE_ERROR_SUCCESS);
+    emit sig_finished(proto::file_transfer::ERROR_CODE_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileRemoveQueueBuilder::onAborted(proto::FileError error_code)
+void FileRemoveQueueBuilder::onAborted(proto::file_transfer::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Aborted: " << error_code;
 

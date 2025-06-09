@@ -118,7 +118,7 @@ void FileTransferSessionWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferSessionWindow::onErrorOccurred(proto::FileError error_code)
+void FileTransferSessionWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
     LOG(LS_ERROR) << "Session error: " << error_code;
     QMessageBox::warning(this,
@@ -130,7 +130,8 @@ void FileTransferSessionWindow::onErrorOccurred(proto::FileError error_code)
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onDriveList(
-    common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
+    common::FileTask::Target target, proto::file_transfer::ErrorCode error_code,
+    const proto::file_transfer::DriveList& drive_list)
 {
     if (target == common::FileTask::Target::LOCAL)
     {
@@ -145,7 +146,8 @@ void FileTransferSessionWindow::onDriveList(
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onFileList(
-    common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
+    common::FileTask::Target target, proto::file_transfer::ErrorCode error_code,
+    const proto::file_transfer::List& file_list)
 {
     if (target == common::FileTask::Target::LOCAL)
     {
@@ -160,7 +162,7 @@ void FileTransferSessionWindow::onFileList(
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onCreateDirectory(
-    common::FileTask::Target target, proto::FileError error_code)
+    common::FileTask::Target target, proto::file_transfer::ErrorCode error_code)
 {
     if (target == common::FileTask::Target::LOCAL)
     {
@@ -175,7 +177,7 @@ void FileTransferSessionWindow::onCreateDirectory(
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onRename(
-    common::FileTask::Target target, proto::FileError error_code)
+    common::FileTask::Target target, proto::file_transfer::ErrorCode error_code)
 {
     if (target == common::FileTask::Target::LOCAL)
     {

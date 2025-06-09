@@ -48,15 +48,15 @@ public slots:
     void onTransferRequest(client::FileTransfer* transfer);
 
 signals:
-    void sig_errorOccurred(proto::FileError error_code);
+    void sig_errorOccurred(proto::file_transfer::ErrorCode error_code);
     void sig_driveListReply(common::FileTask::Target target,
-                            proto::FileError error_code,
-                            const proto::DriveList& drive_list);
+                            proto::file_transfer::ErrorCode error_code,
+                            const proto::file_transfer::DriveList& drive_list);
     void sig_fileListReply(common::FileTask::Target target,
-                      proto::FileError error_code,
-                      const proto::FileList& file_list);
-    void sig_createDirectoryReply(common::FileTask::Target target, proto::FileError error_code);
-    void sig_renameReply(common::FileTask::Target target, proto::FileError error_code);
+                      proto::file_transfer::ErrorCode error_code,
+                      const proto::file_transfer::List& file_list);
+    void sig_createDirectoryReply(common::FileTask::Target target, proto::file_transfer::ErrorCode error_code);
+    void sig_renameReply(common::FileTask::Target target, proto::file_transfer::ErrorCode error_code);
 
 protected:
     // Client implementation.

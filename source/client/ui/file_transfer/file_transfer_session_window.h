@@ -51,15 +51,15 @@ public:
 
 public slots:
     void onShowWindow();
-    void onErrorOccurred(proto::FileError error_code);
+    void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
     void onDriveList(common::FileTask::Target target,
-                     proto::FileError error_code,
-                     const proto::DriveList& drive_list);
+                     proto::file_transfer::ErrorCode error_code,
+                     const proto::file_transfer::DriveList& drive_list);
     void onFileList(common::FileTask::Target target,
-                    proto::FileError error_code,
-                    const proto::FileList& file_list);
-    void onCreateDirectory(common::FileTask::Target target, proto::FileError error_code);
-    void onRename(common::FileTask::Target target, proto::FileError error_code);
+                    proto::file_transfer::ErrorCode error_code,
+                    const proto::file_transfer::List& file_list);
+    void onCreateDirectory(common::FileTask::Target target, proto::file_transfer::ErrorCode error_code);
+    void onRename(common::FileTask::Target target, proto::file_transfer::ErrorCode error_code);
 
     void refresh();
 

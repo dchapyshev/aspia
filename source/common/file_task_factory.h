@@ -24,9 +24,9 @@
 
 #include <QString>
 
-namespace proto {
+namespace proto::file_transfer {
 class FilePacket;
-} // namespace proto
+} // namespace proto::file_transfer
 
 namespace common {
 
@@ -48,14 +48,14 @@ public:
     FileTask download(const QString& file_path);
     FileTask upload(const QString& file_path, bool overwrite);
     FileTask packetRequest(quint32 flags);
-    FileTask packet(const proto::FilePacket& packet);
-    FileTask packet(proto::FilePacket&& packet);
+    FileTask packet(const proto::file_transfer::Packet& packet);
+    FileTask packet(proto::file_transfer::Packet&& packet);
 
 signals:
     void sig_taskDone(const common::FileTask& task);
 
 private:
-    FileTask makeTask(proto::FileRequest&& request);
+    FileTask makeTask(proto::file_transfer::Request&& request);
 
     const FileTask::Target target_;
 

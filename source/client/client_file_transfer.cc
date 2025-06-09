@@ -57,7 +57,7 @@ void ClientFileTransfer::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
 {
-    proto::FileReply reply;
+    proto::file_transfer::Reply reply;
 
     if (!base::parse(buffer, &reply))
     {
@@ -65,7 +65,7 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
         return;
     }
 
-    if (reply.error_code() == proto::FILE_ERROR_NO_LOGGED_ON_USER)
+    if (reply.error_code() == proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER)
     {
         LOG(LS_INFO) << "No logged in user on host side";
         emit sig_errorOccurred(reply.error_code());
@@ -83,7 +83,7 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
     }
     else
     {
-        emit sig_errorOccurred(proto::FILE_ERROR_UNKNOWN);
+        emit sig_errorOccurred(proto::file_transfer::ERROR_CODE_UNKNOWN);
     }
 }
 
@@ -96,8 +96,8 @@ void ClientFileTransfer::onSessionMessageWritten(size_t /* pending */)
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onTaskDone(const common::FileTask& task)
 {
-    const proto::FileRequest& request = task.request();
-    const proto::FileReply& reply = task.reply();
+    const proto::file_transfer::Request& request = task.request();
+    const proto::file_transfer::Reply& reply = task.reply();
 
     if (request.has_drive_list_request())
     {

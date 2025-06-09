@@ -67,14 +67,15 @@ void FileWorker::doRequest(const FileTask& task)
 {
     FileTask localTask(task);
 
-    proto::FileReply reply;
+    proto::file_transfer::Reply reply;
     doRequest(localTask.request(), &reply);
 
     localTask.onReply(std::move(reply));
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRequest(const proto::FileRequest& request, proto::FileReply* reply)
+void FileWorker::doRequest(
+    const proto::file_transfer::Request& request, proto::file_transfer::Reply* reply)
 {
     if (request.has_drive_list_request())
     {
@@ -114,49 +115,49 @@ void FileWorker::doRequest(const proto::FileRequest& request, proto::FileReply* 
     }
     else
     {
-        reply->set_error_code(proto::FILE_ERROR_INVALID_REQUEST);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_INVALID_REQUEST);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doDriveListRequest(proto::FileReply* reply)
+void FileWorker::doDriveListRequest(proto::file_transfer::Reply* reply)
 {
-    proto::DriveList* drive_list = reply->mutable_drive_list();
+    proto::file_transfer::DriveList* drive_list = reply->mutable_drive_list();
 
     QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
 
     for (const auto& volume : std::as_const(volumes))
     {
-        proto::DriveList::Item* item = drive_list->add_item();
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
 #if defined(Q_OS_WINDOWS)
         switch (GetDriveTypeW(qUtf16Printable(volume.rootPath())))
         {
             case DRIVE_REMOVABLE:
-                item->set_type(proto::DriveList::Item::TYPE_REMOVABLE);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
                 break;
 
             case DRIVE_FIXED:
-                item->set_type(proto::DriveList::Item::TYPE_FIXED);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
                 break;
 
             case DRIVE_REMOTE:
-                item->set_type(proto::DriveList::Item::TYPE_REMOTE);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
                 break;
 
             case DRIVE_CDROM:
-                item->set_type(proto::DriveList::Item::TYPE_CDROM);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
                 break;
 
             case DRIVE_RAMDISK:
-                item->set_type(proto::DriveList::Item::TYPE_RAM);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
                 break;
 
             default:
                 break;
         }
 #else
-        item->set_type(proto::DriveList::Item::TYPE_FIXED);
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
 #endif
 
         item->set_path(volume.rootPath().toStdString());
@@ -165,33 +166,34 @@ void FileWorker::doDriveListRequest(proto::FileReply* reply)
     QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     if (!desktop_path.isEmpty())
     {
-        proto::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::DriveList::Item::TYPE_DESKTOP_FOLDER);
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
         item->set_path(desktop_path.toStdString());
     }
 
     QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if (!home_path.isEmpty())
     {
-        proto::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::DriveList::Item::TYPE_HOME_FOLDER);
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
         item->set_path(home_path.toStdString());
     }
 
     if (drive_list->item_size() == 0)
-        reply->set_error_code(proto::FILE_ERROR_NO_DRIVES_FOUND);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_NO_DRIVES_FOUND);
     else
-        reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto::FileReply* reply)
+void FileWorker::doFileListRequest(
+    const proto::file_transfer::ListRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
     if (!QFileInfo::exists(path))
     {
         LOG(LS_WARNING) << "Requested directory not exists: " << path;
-        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
@@ -199,50 +201,51 @@ void FileWorker::doFileListRequest(const proto::FileListRequest& request, proto:
     if (!dir_info.isDir())
     {
         LOG(LS_WARNING) << "Requested directory is not directory: " << path;
-        reply->set_error_code(proto::FILE_ERROR_INVALID_PATH_NAME);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_INVALID_PATH_NAME);
         return;
     }
 
-    proto::FileList* file_list = reply->mutable_file_list();
+    proto::file_transfer::List* file_list = reply->mutable_file_list();
 
     for (base::FileEnumerator enumerator(path); !enumerator.isAtEnd(); enumerator.advance())
     {
         const base::FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
-        proto::FileList::Item* item = file_list->add_item();
+        proto::file_transfer::List::Item* item = file_list->add_item();
 
         item->set_name(file_info.name().toStdString());
         item->set_size(file_info.size());
         item->set_modification_time(file_info.lastWriteTime());
         item->set_is_directory(file_info.isDirectory());
     }
-    reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+    reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& request, proto::FileReply* reply)
+    const proto::file_transfer::CreateDirectoryRequest& request, proto::file_transfer::Reply* reply)
 {
     QString directory_path = QString::fromStdString(request.path());
 
     if (QFileInfo::exists(directory_path))
     {
         LOG(LS_WARNING) << "Directory already exists: " << directory_path;
-        reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
     if (!QDir().mkdir(directory_path))
     {
         LOG(LS_WARNING) << "Unable to create directory: " << directory_path;
-        reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
         return;
     }
 
-    reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+    reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRenameRequest(const proto::RenameRequest& request, proto::FileReply* reply)
+void FileWorker::doRenameRequest(
+    const proto::file_transfer::RenameRequest& request, proto::file_transfer::Reply* reply)
 {
     QString old_name = QString::fromStdString(request.old_name());
     QString new_name = QString::fromStdString(request.new_name());
@@ -250,37 +253,38 @@ void FileWorker::doRenameRequest(const proto::RenameRequest& request, proto::Fil
     if (old_name == new_name)
     {
         LOG(LS_WARNING) << "Name of new and old element is equal: " << old_name;
-        reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
         return;
     }
 
     if (!QFileInfo::exists(old_name))
     {
         LOG(LS_WARNING) << "File being renamed does not exist or cannot be accessed: " << old_name;
-        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
     if (QFileInfo::exists(new_name))
     {
         LOG(LS_WARNING) << "File with the new name already exists: " << new_name;
-        reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
     if (!QFile::rename(old_name, new_name))
     {
         LOG(LS_WARNING) << "Failed to rename file from " << old_name << " to " << new_name;
-        reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
         return;
     }
 
-    reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+    reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
     return;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::FileReply* reply)
+void FileWorker::doRemoveRequest(
+    const proto::file_transfer::RemoveRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
 
@@ -288,7 +292,7 @@ void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::Fil
     if (!path_info.exists(path))
     {
         LOG(LS_WARNING) << "Path to be deleted was not found or could not be accessed: " << path;
-        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
@@ -297,7 +301,7 @@ void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::Fil
         if (!QDir().rmdir(path))
         {
             LOG(LS_WARNING) << "Unable to remove direcotry: " << path;
-            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
             return;
         }
     }
@@ -311,31 +315,33 @@ void FileWorker::doRemoveRequest(const proto::RemoveRequest& request, proto::Fil
         if (!QFile::remove(path))
         {
             LOG(LS_WARNING) << "Unable to remove file: " << path;
-            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
             return;
         }
     }
 
-    reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+    reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doDownloadRequest(const proto::DownloadRequest& request, proto::FileReply* reply)
+void FileWorker::doDownloadRequest(
+    const proto::file_transfer::DownloadRequest& request, proto::file_transfer::Reply* reply)
 {
     packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
     if (!packetizer_)
     {
         LOG(LS_WARNING) << "Unable to open file: " << request.path();
-        reply->set_error_code(proto::FILE_ERROR_FILE_OPEN_ERROR);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_OPEN_ERROR);
     }
     else
     {
-        reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::FileReply* reply)
+void FileWorker::doUploadRequest(
+    const proto::file_transfer::UploadRequest& request, proto::file_transfer::Reply* reply)
 {
     QString file_path = QString::fromStdString(request.path());
 
@@ -346,7 +352,7 @@ void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::Fil
             if (QFileInfo::exists(file_path))
             {
                 LOG(LS_WARNING) << "File already exists: " << file_path;
-                reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
+                reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
                 break;
             }
         }
@@ -355,65 +361,67 @@ void FileWorker::doUploadRequest(const proto::UploadRequest& request, proto::Fil
         if (!depacketizer_)
         {
             LOG(LS_WARNING) << "Unable to create file: " << file_path;
-            reply->set_error_code(proto::FILE_ERROR_FILE_CREATE_ERROR);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_CREATE_ERROR);
             break;
         }
 
-        reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
     }
     while (false);
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doPacketRequest(const proto::FilePacketRequest& request, proto::FileReply* reply)
+void FileWorker::doPacketRequest(
+    const proto::file_transfer::PacketRequest& request, proto::file_transfer::Reply* reply)
 {
     if (!packetizer_)
     {
         // Set the unknown status of the request. The connection will be closed.
-        reply->set_error_code(proto::FILE_ERROR_UNKNOWN);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_UNKNOWN);
         LOG(LS_ERROR) << "Unexpected file packet request";
     }
     else
     {
-        std::unique_ptr<proto::FilePacket> packet = packetizer_->readNextPacket(request);
+        std::unique_ptr<proto::file_transfer::Packet> packet = packetizer_->readNextPacket(request);
         if (!packet)
         {
-            reply->set_error_code(proto::FILE_ERROR_FILE_READ_ERROR);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_READ_ERROR);
             packetizer_.reset();
         }
         else
         {
-            if (packet->flags() & proto::FilePacket::LAST_PACKET)
+            if (packet->flags() & proto::file_transfer::Packet::LAST_PACKET)
                 packetizer_.reset();
 
-            reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
             reply->set_allocated_packet(packet.release());
         }
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doPacket(const proto::FilePacket& packet, proto::FileReply* reply)
+void FileWorker::doPacket(
+    const proto::file_transfer::Packet& packet, proto::file_transfer::Reply* reply)
 {
     if (!depacketizer_)
     {
         // Set the unknown status of the request. The connection will be closed.
-        reply->set_error_code(proto::FILE_ERROR_UNKNOWN);
+        reply->set_error_code(proto::file_transfer::ERROR_CODE_UNKNOWN);
         LOG(LS_ERROR) << "Unexpected file packet";
     }
     else
     {
         if (!depacketizer_->writeNextPacket(packet))
         {
-            reply->set_error_code(proto::FILE_ERROR_FILE_WRITE_ERROR);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_WRITE_ERROR);
             depacketizer_.reset();
         }
         else
         {
-            reply->set_error_code(proto::FILE_ERROR_SUCCESS);
+            reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
         }
 
-        if (packet.flags() & proto::FilePacket::LAST_PACKET)
+        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
             depacketizer_.reset();
     }
 }

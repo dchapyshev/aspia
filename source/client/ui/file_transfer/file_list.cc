@@ -93,7 +93,7 @@ void FileList::showDriveList(AddressBarModel* model)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileList::showFileList(const proto::FileList& file_list)
+void FileList::showFileList(const proto::file_transfer::List& file_list)
 {
     saveColumnsState();
     model_->clear();

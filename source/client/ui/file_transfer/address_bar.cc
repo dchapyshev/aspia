@@ -65,7 +65,7 @@ AddressBar::AddressBar(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AddressBar::setDriveList(const proto::DriveList& list)
+void AddressBar::setDriveList(const proto::file_transfer::DriveList& list)
 {
     model_->setDriveList(list);
     emit sig_pathChanged(currentPath());

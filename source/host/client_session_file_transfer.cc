@@ -317,8 +317,8 @@ void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
-        proto::FileReply reply;
-        reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
+        proto::file_transfer::Reply reply;
+        reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
 
         sendMessage(base::serialize(reply));
         return;

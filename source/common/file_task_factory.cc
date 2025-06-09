@@ -37,7 +37,7 @@ FileTaskFactory::~FileTaskFactory() = default;
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::driveList()
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_drive_list_request()->set_dummy(1);
     return makeTask(std::move(request));
 }
@@ -45,7 +45,7 @@ FileTask FileTaskFactory::driveList()
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::fileList(const QString& path)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_file_list_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
@@ -53,7 +53,7 @@ FileTask FileTaskFactory::fileList(const QString& path)
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::createDirectory(const QString& path)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_create_directory_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
@@ -61,9 +61,9 @@ FileTask FileTaskFactory::createDirectory(const QString& path)
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::rename(const QString& old_name, const QString& new_name)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
 
-    proto::RenameRequest* rename_request = request.mutable_rename_request();
+    proto::file_transfer::RenameRequest* rename_request = request.mutable_rename_request();
     rename_request->set_old_name(old_name.toStdString());
     rename_request->set_new_name(new_name.toStdString());
 
@@ -73,7 +73,7 @@ FileTask FileTaskFactory::rename(const QString& old_name, const QString& new_nam
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::remove(const QString& path)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_remove_request()->set_path(path.toStdString());
     return makeTask(std::move(request));
 }
@@ -81,7 +81,7 @@ FileTask FileTaskFactory::remove(const QString& path)
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::download(const QString& file_path)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_download_request()->set_path(file_path.toStdString());
     return makeTask(std::move(request));
 }
@@ -89,9 +89,9 @@ FileTask FileTaskFactory::download(const QString& file_path)
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::upload(const QString& file_path, bool overwrite)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
 
-    proto::UploadRequest* upload_request = request.mutable_upload_request();
+    proto::file_transfer::UploadRequest* upload_request = request.mutable_upload_request();
     upload_request->set_path(file_path.toStdString());
     upload_request->set_overwrite(overwrite);
 
@@ -101,29 +101,29 @@ FileTask FileTaskFactory::upload(const QString& file_path, bool overwrite)
 //--------------------------------------------------------------------------------------------------
 FileTask FileTaskFactory::packetRequest(quint32 flags)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_packet_request()->set_flags(flags);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-FileTask FileTaskFactory::packet(const proto::FilePacket& packet)
+FileTask FileTaskFactory::packet(const proto::file_transfer::Packet& packet)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     request.mutable_packet()->CopyFrom(packet);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-FileTask FileTaskFactory::packet(proto::FilePacket&& packet)
+FileTask FileTaskFactory::packet(proto::file_transfer::Packet&& packet)
 {
-    proto::FileRequest request;
+    proto::file_transfer::Request request;
     *request.mutable_packet() = std::move(packet);
     return makeTask(std::move(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-FileTask FileTaskFactory::makeTask(proto::FileRequest&& request)
+FileTask FileTaskFactory::makeTask(proto::file_transfer::Request&& request)
 {
     return FileTask(this, std::move(request), target_);
 }

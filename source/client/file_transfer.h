@@ -70,12 +70,12 @@ public:
             ACTION_REPLACE_ALL = 16
         };
 
-        Error() : type_(Type::UNKNOWN), code_(proto::FILE_ERROR_UNKNOWN)
+        Error() : type_(Type::UNKNOWN), code_(proto::file_transfer::ERROR_CODE_UNKNOWN)
         {
             // Nothing
         }
 
-        Error(Type type, proto::FileError code, const QString& path)
+        Error(Type type, proto::file_transfer::ErrorCode code, const QString& path)
             : type_(type),
               code_(code),
               path_(path)
@@ -86,7 +86,7 @@ public:
         ~Error() = default;
 
         Type type() const { return type_; }
-        proto::FileError code() const { return code_; }
+        proto::file_transfer::ErrorCode code() const { return code_; }
         const QString& path() const { return path_; }
 
         quint32 availableActions() const;
@@ -94,7 +94,7 @@ public:
 
     private:
         const Type type_;
-        const proto::FileError code_;
+        const proto::file_transfer::ErrorCode code_;
         const QString path_;
     };
 
@@ -183,12 +183,12 @@ private slots:
 
 private:
     Task& frontTask();
-    void targetReply(const proto::FileRequest& request, const proto::FileReply& reply);
-    void sourceReply(const proto::FileRequest& request, const proto::FileReply& reply);
+    void targetReply(const proto::file_transfer::Request& request, const proto::file_transfer::Reply& reply);
+    void sourceReply(const proto::file_transfer::Request& request, const proto::file_transfer::Reply& reply);
     void doFrontTask(bool overwrite);
     void doNextTask();
     void doUpdateSpeed();
-    void onError(Error::Type type, proto::FileError code, const QString& path = QString());
+    void onError(Error::Type type, proto::file_transfer::ErrorCode code, const QString& path = QString());
     void setActionForErrorType(Error::Type error_type, Error::Action action);
     void onFinished(const base::Location& location);
 

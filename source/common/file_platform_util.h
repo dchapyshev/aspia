@@ -39,7 +39,7 @@ public:
     static QIcon computerIcon();
     static QIcon directoryIcon();
 
-    static QIcon driveIcon(proto::DriveList::Item::Type type);
+    static QIcon driveIcon(proto::file_transfer::DriveList::Item::Type type);
 
     static const QList<QChar>& invalidFileNameCharacters();
     static const QList<QChar>& invalidPathCharacters();

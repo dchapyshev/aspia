@@ -34,10 +34,10 @@ public:
     explicit FilePanel(QWidget* parent = nullptr);
     ~FilePanel() final;
 
-    void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
-    void onFileList(proto::FileError error_code, const proto::FileList& file_list);
-    void onCreateDirectory(proto::FileError error_code);
-    void onRename(proto::FileError error_code);
+    void onDriveList(proto::file_transfer::ErrorCode error_code, const proto::file_transfer::DriveList& drive_list);
+    void onFileList(proto::file_transfer::ErrorCode error_code, const proto::file_transfer::List& file_list);
+    void onCreateDirectory(proto::file_transfer::ErrorCode error_code);
+    void onRename(proto::file_transfer::ErrorCode error_code);
 
     void setPanelName(const QString& name);
     void setMimeType(const QString& mime_type);

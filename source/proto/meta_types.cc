@@ -78,23 +78,23 @@ void registerMetaTypes()
     qRegisterMetaType<proto::desktop::ScreenType::Type>("proto::ScreenType::Type");
 
     // file_transfer.h
-    qRegisterMetaType<proto::DriveList>("proto::DriveList");
-    qRegisterMetaType<proto::DriveList::Item>("proto::DriveList::Item");
-    qRegisterMetaType<proto::DriveList::Item::Type>("proto::DriveList::Item::Type");
-    qRegisterMetaType<proto::DriveListRequest>("proto::DriveListRequest");
-    qRegisterMetaType<proto::FileList>("proto::FileList");
-    qRegisterMetaType<proto::FileList::Item>("proto::FileList::Item");
-    qRegisterMetaType<proto::FileListRequest>("proto::FileListRequest");
-    qRegisterMetaType<proto::UploadRequest>("proto::UploadRequest");
-    qRegisterMetaType<proto::DownloadRequest>("proto::DownloadRequest");
-    qRegisterMetaType<proto::FilePacketRequest>("proto::FilePacketRequest");
-    qRegisterMetaType<proto::FilePacket>("proto::FilePacket");
-    qRegisterMetaType<proto::CreateDirectoryRequest>("proto::CreateDirectoryRequest");
-    qRegisterMetaType<proto::RenameRequest>("proto::RenameRequest");
-    qRegisterMetaType<proto::RemoveRequest>("proto::RemoveRequest");
-    qRegisterMetaType<proto::FileError>("proto::FileError");
-    qRegisterMetaType<proto::FileReply>("proto::FileReply");
-    qRegisterMetaType<proto::FileRequest>("proto::FileRequest");
+    qRegisterMetaType<proto::file_transfer::DriveList>("proto::DriveList");
+    qRegisterMetaType<proto::file_transfer::DriveList::Item>("proto::DriveList::Item");
+    qRegisterMetaType<proto::file_transfer::DriveList::Item::Type>("proto::DriveList::Item::Type");
+    qRegisterMetaType<proto::file_transfer::DriveListRequest>("proto::DriveListRequest");
+    qRegisterMetaType<proto::file_transfer::List>("proto::FileList");
+    qRegisterMetaType<proto::file_transfer::List::Item>("proto::FileList::Item");
+    qRegisterMetaType<proto::file_transfer::ListRequest>("proto::FileListRequest");
+    qRegisterMetaType<proto::file_transfer::UploadRequest>("proto::UploadRequest");
+    qRegisterMetaType<proto::file_transfer::DownloadRequest>("proto::DownloadRequest");
+    qRegisterMetaType<proto::file_transfer::PacketRequest>("proto::FilePacketRequest");
+    qRegisterMetaType<proto::file_transfer::Packet>("proto::FilePacket");
+    qRegisterMetaType<proto::file_transfer::CreateDirectoryRequest>("proto::CreateDirectoryRequest");
+    qRegisterMetaType<proto::file_transfer::RenameRequest>("proto::RenameRequest");
+    qRegisterMetaType<proto::file_transfer::RemoveRequest>("proto::RemoveRequest");
+    qRegisterMetaType<proto::file_transfer::ErrorCode>("proto::FileError");
+    qRegisterMetaType<proto::file_transfer::Reply>("proto::FileReply");
+    qRegisterMetaType<proto::file_transfer::Request>("proto::FileRequest");
 
     // host_internal.h
     qRegisterMetaType<proto::internal::Credentials>("proto::internal::Credentials");

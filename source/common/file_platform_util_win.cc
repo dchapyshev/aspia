@@ -116,32 +116,32 @@ QIcon FilePlatformUtil::directoryIcon()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
+QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type type)
 {
     // Desktop (not present in official header)
     static const SHSTOCKICONID SIID_DESKTOP = static_cast<SHSTOCKICONID>(34);
 
     switch (type)
     {
-        case proto::DriveList::Item::TYPE_FIXED:
+        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
             return stockIcon(SIID_DRIVEFIXED);
 
-        case proto::DriveList::Item::TYPE_CDROM:
+        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
             return stockIcon(SIID_DRIVECD);
 
-        case proto::DriveList::Item::TYPE_REMOVABLE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOVABLE:
             return stockIcon(SIID_DRIVEREMOVE);
 
-        case proto::DriveList::Item::TYPE_REMOTE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
             return stockIcon(SIID_DRIVENET);
 
-        case proto::DriveList::Item::TYPE_RAM:
+        case proto::file_transfer::DriveList::Item::TYPE_RAM:
             return stockIcon(SIID_DRIVERAM);
 
-        case proto::DriveList::Item::TYPE_HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
             return stockIcon(SIID_FOLDER);
 
-        case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             return stockIcon(SIID_DESKTOP);
 
         default:

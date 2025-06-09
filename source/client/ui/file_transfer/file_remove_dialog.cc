@@ -117,7 +117,7 @@ void FileRemoveDialog::setCurrentProgress(const QString& name, int percentage)
 
 //--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::errorOccurred(const QString& path,
-                                     proto::FileError error_code,
+                                     proto::file_transfer::ErrorCode error_code,
                                      quint32 available_actions)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

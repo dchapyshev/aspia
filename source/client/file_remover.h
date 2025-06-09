@@ -81,7 +81,7 @@ signals:
     void sig_finished();
     void sig_progressChanged(const QString& name, int percentage);
     void sig_errorOccurred(const QString& path,
-                           proto::FileError error_code,
+                           proto::file_transfer::ErrorCode error_code,
                            quint32 available_actions);
     void sig_doTask(const common::FileTask& task);
 

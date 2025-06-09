@@ -23,65 +23,65 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-QString fileErrorToString(proto::FileError error_code)
+QString fileErrorToString(proto::file_transfer::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case proto::FILE_ERROR_SUCCESS:
+        case proto::file_transfer::ERROR_CODE_SUCCESS:
             message = QT_TRANSLATE_NOOP("FileError", "Successfully completed");
             break;
 
-        case proto::FILE_ERROR_INVALID_REQUEST:
+        case proto::file_transfer::ERROR_CODE_INVALID_REQUEST:
             message = QT_TRANSLATE_NOOP("FileError", "Invalid request");
             break;
 
-        case proto::FILE_ERROR_INVALID_PATH_NAME:
+        case proto::file_transfer::ERROR_CODE_INVALID_PATH_NAME:
             message = QT_TRANSLATE_NOOP("FileError", "Invalid directory or file name");
             break;
 
-        case proto::FILE_ERROR_PATH_NOT_FOUND:
+        case proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND:
             message = QT_TRANSLATE_NOOP("FileError", "Path not found");
             break;
 
-        case proto::FILE_ERROR_PATH_ALREADY_EXISTS:
+        case proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS:
             message = QT_TRANSLATE_NOOP("FileError", "Path already exists");
             break;
 
-        case proto::FILE_ERROR_NO_DRIVES_FOUND:
+        case proto::file_transfer::ERROR_CODE_NO_DRIVES_FOUND:
             message = QT_TRANSLATE_NOOP("FileError", "No drives found");
             break;
 
-        case proto::FILE_ERROR_DISK_FULL:
+        case proto::file_transfer::ERROR_CODE_DISK_FULL:
             message = QT_TRANSLATE_NOOP("FileError", "Disk full");
             break;
 
-        case proto::FILE_ERROR_ACCESS_DENIED:
+        case proto::file_transfer::ERROR_CODE_ACCESS_DENIED:
             message = QT_TRANSLATE_NOOP("FileError", "Access denied");
             break;
 
-        case proto::FILE_ERROR_FILE_OPEN_ERROR:
+        case proto::file_transfer::ERROR_CODE_FILE_OPEN_ERROR:
             message = QT_TRANSLATE_NOOP("FileError", "Could not open file for reading");
             break;
 
-        case proto::FILE_ERROR_FILE_CREATE_ERROR:
+        case proto::file_transfer::ERROR_CODE_FILE_CREATE_ERROR:
             message = QT_TRANSLATE_NOOP("FileError", "Could not create or replace file");
             break;
 
-        case proto::FILE_ERROR_FILE_WRITE_ERROR:
+        case proto::file_transfer::ERROR_CODE_FILE_WRITE_ERROR:
             message = QT_TRANSLATE_NOOP("FileError", "Could not write to file");
             break;
 
-        case proto::FILE_ERROR_FILE_READ_ERROR:
+        case proto::file_transfer::ERROR_CODE_FILE_READ_ERROR:
             message = QT_TRANSLATE_NOOP("FileError", "Could not read file");
             break;
 
-        case proto::FILE_ERROR_DISK_NOT_READY:
+        case proto::file_transfer::ERROR_CODE_DISK_NOT_READY:
             message = QT_TRANSLATE_NOOP("FileError", "Drive not ready");
             break;
 
-        case proto::FILE_ERROR_NO_LOGGED_ON_USER:
+        case proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER:
             message = QT_TRANSLATE_NOOP("FileError", "No logged in user");
             break;
 

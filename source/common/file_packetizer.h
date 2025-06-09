@@ -38,7 +38,8 @@ public:
     static std::unique_ptr<FilePacketizer> create(const QString& file_path);
 
     // Creates a packet for transferring.
-    std::unique_ptr<proto::FilePacket> readNextPacket(const proto::FilePacketRequest& request);
+    std::unique_ptr<proto::file_transfer::Packet> readNextPacket(
+        const proto::file_transfer::PacketRequest& request);
 
 private:
     explicit FilePacketizer(std::unique_ptr<QFile> file);

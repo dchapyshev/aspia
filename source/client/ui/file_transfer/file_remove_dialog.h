@@ -44,7 +44,7 @@ public slots:
     void stop();
     void setCurrentProgress(const QString& name, int percentage);
     void errorOccurred(const QString& path,
-                       proto::FileError error_code,
+                       proto::file_transfer::ErrorCode error_code,
                        quint32 available_actions);
 
 signals:
