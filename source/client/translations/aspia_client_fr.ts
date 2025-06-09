@@ -2789,22 +2789,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="540"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="541"/>
         <source>The session was paused by a remote user</source>
         <translation>La session a été interrompue par un utilisateur distant</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="544"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="545"/>
         <source>The session is temporarily unavailable</source>
         <translation>La session est temporairement indisponible</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="548"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="549"/>
         <source>The session is permanently unavailable</source>
         <translation>La session est définitivement indisponible</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="552"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="553"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Erreur lors de la réception du flux vidéo: %1</translation>
     </message>
