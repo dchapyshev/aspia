@@ -35,7 +35,7 @@ const size_t kHostKeySize = 512;
 
 //--------------------------------------------------------------------------------------------------
 SessionHost::SessionHost(QObject* parent)
-    : Session(proto::ROUTER_SESSION_HOST, parent)
+    : Session(proto::router::SESSION_TYPE_HOST, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -53,11 +53,11 @@ bool SessionHost::hasHostId(base::HostId host_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
+void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offer)
 {
-    proto::RouterToPeer message;
+    proto::router::RouterToPeer message;
     message.mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ void SessionHost::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::PeerToRouter message;
+    proto::router::PeerToRouter message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from host";
@@ -97,7 +97,7 @@ void SessionHost::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pen
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
+void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
@@ -106,11 +106,11 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         return;
     }
 
-    proto::RouterToPeer message;
-    proto::HostIdResponse* host_id_response = message.mutable_host_id_response();
+    proto::router::RouterToPeer message;
+    proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
     QByteArray key_hash;
 
-    if (host_id_request.type() == proto::HostIdRequest::NEW_ID)
+    if (host_id_request.type() == proto::router::HostIdRequest::NEW_ID)
     {
         // Generate new key.
         std::string key = base::Random::string(kHostKeySize);
@@ -126,7 +126,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
 
         host_id_response->set_key(std::move(key));
     }
-    else if (host_id_request.type() == proto::HostIdRequest::EXISTING_ID)
+    else if (host_id_request.type() == proto::router::HostIdRequest::EXISTING_ID)
     {
         // Using existing key.
         key_hash = base::GenericHash::hash(
@@ -146,7 +146,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         {
             if (host_id != base::kInvalidHostId)
             {
-                host_id_response->set_error_code(proto::HostIdResponse::SUCCESS);
+                host_id_response->set_error_code(proto::router::HostIdResponse::SUCCESS);
                 host_id_response->set_host_id(host_id);
 
                 if (!host_id_list_.contains(host_id))
@@ -157,26 +157,26 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
             }
             else
             {
-                host_id_response->set_error_code(proto::HostIdResponse::UNKNOWN);
+                host_id_response->set_error_code(proto::router::HostIdResponse::UNKNOWN);
                 LOG(LS_ERROR) << "Invalid host id";
             }
         }
         break;
 
         case Database::ErrorCode::NO_HOST_FOUND:
-            host_id_response->set_error_code(proto::HostIdResponse::NO_HOST_FOUND);
+            host_id_response->set_error_code(proto::router::HostIdResponse::NO_HOST_FOUND);
             break;
 
         default:
-            host_id_response->set_error_code(proto::HostIdResponse::UNKNOWN);
+            host_id_response->set_error_code(proto::router::HostIdResponse::UNKNOWN);
             break;
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
+void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_id)
 {
     base::HostId host_id = reset_host_id.host_id();
     if (host_id == base::kInvalidHostId)
@@ -212,7 +212,7 @@ void SessionHost::removeOtherWithSameId()
 
     for (const auto& other_session : std::as_const(session_list))
     {
-        if (other_session->sessionType() != proto::ROUTER_SESSION_HOST || other_session == this)
+        if (other_session->sessionType() != proto::router::SESSION_TYPE_HOST || other_session == this)
             continue;
 
         SessionHost* other_host_session = reinterpret_cast<SessionHost*>(other_session);

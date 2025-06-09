@@ -59,10 +59,10 @@ public slots:
     void onWaitForRouterTimeout();
     void onVersionMismatch(const QVersionNumber& router, const QVersionNumber& client);
     void onAccessDenied(base::Authenticator::ErrorCode error_code);
-    void onSessionList(std::shared_ptr<proto::SessionList> session_list);
-    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result);
-    void onUserList(std::shared_ptr<proto::UserList> user_list);
-    void onUserResult(std::shared_ptr<proto::UserResult> user_result);
+    void onSessionList(std::shared_ptr<proto::router::SessionList> session_list);
+    void onSessionResult(std::shared_ptr<proto::router::SessionResult> session_result);
+    void onUserList(std::shared_ptr<proto::router::UserList> user_list);
+    void onUserResult(std::shared_ptr<proto::router::UserResult> user_result);
 
     static QString delayToString(quint64 delay);
     static QString sizeToString(qint64 size);
@@ -73,8 +73,8 @@ signals:
     void sig_refreshSessionList();
     void sig_stopSession(qint64 session_id);
     void sig_refreshUserList();
-    void sig_addUser(const proto::User& user);
-    void sig_modifyUser(const proto::User& user);
+    void sig_addUser(const proto::router::User& user);
+    void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
     void sig_disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id);
 

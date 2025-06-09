@@ -38,7 +38,7 @@ class Session : public QObject
     Q_OBJECT
 
 public:
-    Session(proto::RouterSession session_type, QObject* parent);
+    Session(proto::router::SessionType session_type, QObject* parent);
     virtual ~Session() override;
 
     using SessionId = qint64;
@@ -60,7 +60,7 @@ public:
     void setUserName(const QString& username);
     const QString& userName() const { return username_; }
 
-    proto::RouterSession sessionType() const { return session_type_; }
+    proto::router::SessionType sessionType() const { return session_type_; }
     SessionId sessionId() const { return session_id_; }
     const QString& address() const { return address_; }
     time_t startTime() const { return start_time_; }
@@ -70,7 +70,7 @@ signals:
     void sig_sessionFinished(SessionId session_id);
 
 protected:
-    void sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message);
+    void sendMessage(quint8 channel_id, const QByteArray& message);
     std::unique_ptr<Database> openDatabase() const;
 
     virtual void onSessionReady() = 0;
@@ -90,7 +90,7 @@ private slots:
     void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
-    const proto::RouterSession session_type_;
+    const proto::router::SessionType session_type_;
     const SessionId session_id_;
     time_t start_time_ = 0;
 

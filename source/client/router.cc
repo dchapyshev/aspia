@@ -109,9 +109,9 @@ void Router::refreshSessionList()
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
     message.mutable_session_list_request()->set_dummy(1);
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -125,13 +125,13 @@ void Router::stopSession(qint64 session_id)
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
-    proto::SessionRequest* request = message.mutable_session_request();
-    request->set_type(proto::SESSION_REQUEST_DISCONNECT);
+    proto::router::SessionRequest* request = message.mutable_session_request();
+    request->set_type(proto::router::SESSION_REQUEST_DISCONNECT);
     request->set_session_id(session_id);
 
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,13 +145,13 @@ void Router::refreshUserList()
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::addUser(const proto::User& user)
+void Router::addUser(const proto::router::User& user)
 {
     LOG(LS_INFO) << "Sending user add request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
@@ -162,17 +162,17 @@ void Router::addUser(const proto::User& user)
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
-    proto::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::USER_REQUEST_ADD);
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_ADD);
     request->mutable_user()->CopyFrom(user);
 
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::modifyUser(const proto::User& user)
+void Router::modifyUser(const proto::router::User& user)
 {
     LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
                  << ", entry_id: " << user.entry_id() << ")";
@@ -183,13 +183,13 @@ void Router::modifyUser(const proto::User& user)
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
-    proto::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::USER_REQUEST_MODIFY);
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_MODIFY);
     request->mutable_user()->CopyFrom(user);
 
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,13 +203,13 @@ void Router::deleteUser(qint64 entry_id)
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
-    proto::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::USER_REQUEST_DELETE);
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_DELETE);
     request->mutable_user()->set_entry_id(entry_id);
 
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,14 +224,14 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
         return;
     }
 
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
-    proto::PeerConnectionRequest* request = message.mutable_peer_connection_request();
+    proto::router::PeerConnectionRequest* request = message.mutable_peer_connection_request();
     request->set_relay_session_id(relay_session_id);
     request->set_peer_session_id(peer_session_id);
-    request->set_type(proto::PEER_CONNECTION_REQUEST_DISCONNECT);
+    request->set_type(proto::router::PEER_CONNECTION_REQUEST_DISCONNECT);
 
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -245,7 +245,7 @@ void Router::onTcpConnected()
 
     authenticator_ = new base::ClientAuthenticator(this);
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
+    authenticator_->setSessionType(proto::router::SESSION_TYPE_ADMIN);
     authenticator_->setUserName(router_username_);
     authenticator_->setPassword(router_password_);
 
@@ -322,7 +322,7 @@ void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::RouterToAdmin message;
+    proto::router::RouterToAdmin message;
 
     if (!base::parse(buffer, &message))
     {
@@ -333,23 +333,23 @@ void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buf
     if (message.has_session_list())
     {
         LOG(LS_INFO) << "Session list received";
-        emit sig_sessionList(std::shared_ptr<proto::SessionList>(message.release_session_list()));
+        emit sig_sessionList(std::shared_ptr<proto::router::SessionList>(message.release_session_list()));
     }
     else if (message.has_session_result())
     {
         LOG(LS_INFO) << "Session result received with code: "
                      << message.session_result().error_code();
-        emit sig_sessionResult(std::shared_ptr<proto::SessionResult>(message.release_session_result()));
+        emit sig_sessionResult(std::shared_ptr<proto::router::SessionResult>(message.release_session_result()));
     }
     else if (message.has_user_list())
     {
         LOG(LS_INFO) << "User list received";
-        emit sig_userList(std::shared_ptr<proto::UserList>(message.release_user_list()));
+        emit sig_userList(std::shared_ptr<proto::router::UserList>(message.release_user_list()));
     }
     else if (message.has_user_result())
     {
         LOG(LS_INFO) << "User result received with code: " << message.user_result().error_code();
-        emit sig_userResult(std::shared_ptr<proto::UserResult>(message.release_user_result()));
+        emit sig_userResult(std::shared_ptr<proto::router::UserResult>(message.release_user_result()));
     }
     else
     {

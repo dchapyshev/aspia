@@ -23,6 +23,6 @@
 
 #include "proto/router_admin.pb.h"
 
-Q_DECLARE_METATYPE(proto::User)
+Q_DECLARE_METATYPE(proto::router::User)
 
 #endif // PROTO_ROUTER_ADMIN_H

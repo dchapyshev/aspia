@@ -357,16 +357,16 @@ void SessionManager::onStatTimeout()
 {
     Session::TimePoint now = Session::Clock::now();
 
-    proto::RelayStat relay_stat;
+    proto::router::RelayStat relay_stat;
     relay_stat.set_uptime(
         std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
 
     for (const auto& session : std::as_const(active_sessions_))
     {
-        proto::PeerConnection* peer_connection = relay_stat.add_peer_connection();
+        proto::router::PeerConnection* peer_connection = relay_stat.add_peer_connection();
 
         peer_connection->set_session_id(session->sessionId());
-        peer_connection->set_status(proto::PeerConnection::PEER_STATUS_ACTIVE);
+        peer_connection->set_status(proto::router::PeerConnection::PEER_STATUS_ACTIVE);
         peer_connection->set_client_address(session->clientAddress().toStdString());
         peer_connection->set_client_user_name(session->clientUserName().toStdString());
         peer_connection->set_host_address(session->hostAddress().toStdString());

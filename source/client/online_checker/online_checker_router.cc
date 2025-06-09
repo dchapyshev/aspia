@@ -85,7 +85,7 @@ void OnlineCheckerRouter::onTcpConnected()
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
     authenticator_->setPassword(router_config_.password);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
+    authenticator_->setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
     connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
@@ -129,7 +129,7 @@ void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode erro
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::RouterToPeer message;
+    proto::router::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
@@ -144,7 +144,7 @@ void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QB
         return;
     }
 
-    bool online = message.host_status().status() == proto::HostStatus::STATUS_ONLINE;
+    bool online = message.host_status().status() == proto::router::HostStatus::STATUS_ONLINE;
     const Computer& computer = computers_.front();
 
     emit sig_checkerResult(computer.computer_id, online);
@@ -168,9 +168,9 @@ void OnlineCheckerRouter::checkNextComputer()
     LOG(LS_INFO) << "Checking status for host id " << computer.host_id
                  << " (computer id: " << computer.computer_id << ")";
 
-    proto::PeerToRouter message;
+    proto::router::PeerToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

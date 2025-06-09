@@ -36,7 +36,7 @@ Session::SessionId createSessionId()
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::Session(proto::RouterSession session_type, QObject* parent)
+Session::Session(proto::router::SessionType session_type, QObject* parent)
     : QObject(parent),
       session_type_(session_type),
       session_id_(createSessionId())
@@ -167,10 +167,10 @@ std::chrono::seconds Session::duration() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::sendMessage(quint8 channel_id, const google::protobuf::MessageLite& message)
+void Session::sendMessage(quint8 channel_id, const QByteArray& message)
 {
     if (tcp_channel_)
-        tcp_channel_->send(channel_id, base::serialize(message));
+        tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
+    if (channel_id == proto::router::ROUTER_CHANNEL_ID_SESSION)
     {
         onSessionMessageReceived(channel_id, buffer);
     }
@@ -196,7 +196,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
-    if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
+    if (channel_id == proto::router::ROUTER_CHANNEL_ID_SESSION)
     {
         onSessionMessageWritten(channel_id, pending);
     }

@@ -41,7 +41,7 @@ public:
 
     using Credentials = KeyPool::Credentials;
 
-    void addKey(Session::SessionId session_id, const proto::RelayKey& key);
+    void addKey(Session::SessionId session_id, const proto::router::RelayKey& key);
     std::optional<Credentials> takeCredentials();
     void removeKeysForRelay(Session::SessionId session_id);
     void clear();

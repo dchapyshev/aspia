@@ -36,7 +36,7 @@ RelayPeerManager::~RelayPeerManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
+void RelayPeerManager::addConnectionOffer(const proto::router::ConnectionOffer& offer)
 {
     RelayPeer* peer = new RelayPeer(this);
 

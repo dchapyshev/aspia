@@ -43,7 +43,7 @@ protected:
 private:
     void onButtonBoxClicked(QAbstractButton* button);
     void setAccountChanged(bool changed);
-    static QString sessionTypeToString(proto::RouterSession session_type);
+    static QString sessionTypeToString(proto::router::SessionType session_type);
 
     Ui::RouterUserDialog ui;
 

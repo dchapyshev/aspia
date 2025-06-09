@@ -41,7 +41,7 @@ base::SharedPointer<KeyPool> KeyFactory::sharedKeyPool()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyFactory::addKey(Session::SessionId session_id, const proto::RelayKey& key)
+void KeyFactory::addKey(Session::SessionId session_id, const proto::router::RelayKey& key)
 {
     pool_->addKey(session_id, key);
 }

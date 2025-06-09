@@ -40,9 +40,9 @@ public:
     explicit RelayPeer(QObject* parent = nullptr);
     ~RelayPeer();
 
-    void start(const proto::ConnectionOffer& offer);
+    void start(const proto::router::ConnectionOffer& offer);
     bool isFinished() const { return is_finished_; }
-    const proto::ConnectionOffer& connectionOffer() const { return connection_offer_; }
+    const proto::router::ConnectionOffer& connectionOffer() const { return connection_offer_; }
 
     TcpChannel* takeChannel();
     bool hasChannel() const;
@@ -55,9 +55,9 @@ private:
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    static QByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
+    static QByteArray authenticationMessage(const proto::router::RelayKey& key, const std::string& secret);
 
-    proto::ConnectionOffer connection_offer_;
+    proto::router::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
     quint32 message_size_ = 0;

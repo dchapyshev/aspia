@@ -157,7 +157,7 @@ bool User::isValid() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-User User::parseFrom(const proto::User& serialized_user)
+User User::parseFrom(const proto::router::User& serialized_user)
 {
     User user;
 
@@ -173,9 +173,9 @@ User User::parseFrom(const proto::User& serialized_user)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::User User::serialize() const
+proto::router::User User::serialize() const
 {
-    proto::User user;
+    proto::router::User user;
 
     user.set_entry_id(entry_id);
     user.set_name(name.toStdString());

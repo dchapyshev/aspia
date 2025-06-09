@@ -52,7 +52,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
         ui.checkbox_disable->setChecked(false);
     }
 
-    auto add_session = [&](proto::RouterSession session_type)
+    auto add_session = [&](proto::router::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
@@ -67,7 +67,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
             else
                 item->setCheckState(0, Qt::Unchecked);
         }
-        else if (session_type == proto::ROUTER_SESSION_CLIENT)
+        else if (session_type == proto::router::SESSION_TYPE_CLIENT)
         {
             item->setCheckState(0, Qt::Checked);
         }
@@ -79,8 +79,8 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(proto::ROUTER_SESSION_CLIENT);
-    add_session(proto::ROUTER_SESSION_ADMIN);
+    add_session(proto::router::SESSION_TYPE_CLIENT);
+    add_session(proto::router::SESSION_TYPE_ADMIN);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
@@ -304,17 +304,17 @@ void RouterUserDialog::setAccountChanged(bool changed)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString RouterUserDialog::sessionTypeToString(proto::RouterSession session_type)
+QString RouterUserDialog::sessionTypeToString(proto::router::SessionType session_type)
 {
     const char* str = nullptr;
 
     switch (session_type)
     {
-        case proto::ROUTER_SESSION_ADMIN:
+        case proto::router::SESSION_TYPE_ADMIN:
             str = QT_TR_NOOP("Administrator");
             break;
 
-        case proto::ROUTER_SESSION_CLIENT:
+        case proto::router::SESSION_TYPE_CLIENT:
             str = QT_TR_NOOP("Client");
             break;
 

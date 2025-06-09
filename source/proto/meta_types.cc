@@ -103,7 +103,7 @@ void registerMetaTypes()
     qRegisterMetaType<proto::internal::ConnectConfirmationRequest>("proto::internal::ConnectConfirmationRequest");
 
     // router_admin.h
-    qRegisterMetaType<proto::User>("proto::User");
+    qRegisterMetaType<proto::router::User>("proto::User");
 
     // system_info.h
     qRegisterMetaType<proto::system_info::SystemInfoRequest>("proto::system_info::SystemInfoRequest");

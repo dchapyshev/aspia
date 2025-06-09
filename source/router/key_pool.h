@@ -39,10 +39,10 @@ public:
     struct Credentials
     {
         qint64 session_id;
-        proto::RelayKey key;
+        proto::router::RelayKey key;
     };
 
-    void addKey(qint64 session_id, const proto::RelayKey& key);
+    void addKey(qint64 session_id, const proto::router::RelayKey& key);
     std::optional<Credentials> takeCredentials();
     void removeKeysForRelay(qint64 session_id);
     void clear();
@@ -56,7 +56,7 @@ private:
     explicit KeyPool(KeyFactory* factory);
     void dettach();
 
-    using Keys = QList<proto::RelayKey>;
+    using Keys = QList<proto::router::RelayKey>;
 
     QMap<qint64, Keys> pool_;
     KeyFactory* factory_;

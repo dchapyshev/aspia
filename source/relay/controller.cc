@@ -185,7 +185,7 @@ void Controller::onTcpConnected()
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(router_public_key_);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_RELAY);
+    authenticator_->setSessionType(proto::router::SESSION_TYPE_RELAY);
 
     connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
@@ -255,11 +255,11 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
     }
     else if (incoming_message_->has_peer_connection_request())
     {
-        const proto::PeerConnectionRequest& request = incoming_message_->peer_connection_request();
+        const proto::router::PeerConnectionRequest& request = incoming_message_->peer_connection_request();
 
         switch (request.type())
         {
-            case proto::PEER_CONNECTION_REQUEST_DISCONNECT:
+            case proto::router::PEER_CONNECTION_REQUEST_DISCONNECT:
                 emit sessions_worker_->sig_disconnectSession(request.peer_session_id());
                 break;
 
@@ -281,12 +281,12 @@ void Controller::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
+void Controller::onSessionStatistics(const proto::router::RelayStat& relay_stat)
 {
     outgoing_message_.newMessage().mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ void Controller::delayedConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Controller::sendKeyPool(quint32 key_count)
 {
-    proto::RelayKeyPool* relay_key_pool = outgoing_message_.newMessage().mutable_key_pool();
+    proto::router::RelayKeyPool* relay_key_pool = outgoing_message_.newMessage().mutable_key_pool();
 
     relay_key_pool->set_peer_host(peer_address_.toStdString());
     relay_key_pool->set_peer_port(peer_port_);
@@ -355,10 +355,10 @@ void Controller::sendKeyPool(quint32 key_count)
         }
 
         // Add the key to the outgoing message.
-        proto::RelayKey* key = relay_key_pool->add_key();
+        proto::router::RelayKey* key = relay_key_pool->add_key();
 
-        key->set_type(proto::RelayKey::TYPE_X25519);
-        key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+        key->set_type(proto::router::RelayKey::TYPE_X25519);
+        key->set_encryption(proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
         key->set_public_key(session_key.publicKey().toStdString());
         key->set_iv(session_key.iv().toStdString());
 
@@ -367,7 +367,7 @@ void Controller::sendKeyPool(quint32 key_count)
     }
 
     // Send a message to the router.
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 } // namespace relay

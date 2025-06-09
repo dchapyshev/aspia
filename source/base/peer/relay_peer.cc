@@ -71,11 +71,11 @@ RelayPeer::~RelayPeer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeer::start(const proto::ConnectionOffer& offer)
+void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 {
     connection_offer_ = offer;
 
-    const proto::RelayCredentials& credentials = connection_offer_.relay();
+    const proto::router::RelayCredentials& credentials = connection_offer_.relay();
 
     message_ = authenticationMessage(credentials.key(), credentials.secret());
 
@@ -217,15 +217,16 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
 
 //--------------------------------------------------------------------------------------------------
 // static
-QByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
+QByteArray RelayPeer::authenticationMessage(
+    const proto::router::RelayKey& key, const std::string& secret)
 {
-    if (key.type() != proto::RelayKey::TYPE_X25519)
+    if (key.type() != proto::router::RelayKey::TYPE_X25519)
     {
         LOG(LS_ERROR) << "Unsupported key type: " << key.type();
         return QByteArray();
     }
 
-    if (key.encryption() != proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
+    if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
     {
         LOG(LS_ERROR) << "Unsupported encryption type: " << key.encryption();
         return QByteArray();

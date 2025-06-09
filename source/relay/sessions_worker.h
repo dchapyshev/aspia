@@ -43,7 +43,7 @@ public slots:
 
 signals:
     void sig_sessionStarted();
-    void sig_sessionStatistics(const proto::RelayStat& relay_stat);
+    void sig_sessionStatistics(const proto::router::RelayStat& relay_stat);
     void sig_sessionFinished();
     void sig_disconnectSession(quint64 session_id);
 

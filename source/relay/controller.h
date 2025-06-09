@@ -50,7 +50,7 @@ private slots:
     void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onSessionStarted();
-    void onSessionStatistics(const proto::RelayStat& relay_stat);
+    void onSessionStatistics(const proto::router::RelayStat& relay_stat);
     void onSessionFinished();
 
 private:
@@ -78,8 +78,8 @@ private:
     KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;
 
-    base::Parser<proto::RouterToRelay> incoming_message_;
-    base::Serializer<proto::RelayToRouter> outgoing_message_;
+    base::Parser<proto::router::RouterToRelay> incoming_message_;
+    base::Serializer<proto::router::RelayToRouter> outgoing_message_;
 
     int session_count_ = 0;
 

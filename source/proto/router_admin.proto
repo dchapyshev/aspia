@@ -23,19 +23,19 @@ option optimize_for = LITE_RUNTIME;
 import "peer_common.proto";
 import "router_common.proto";
 
-package proto;
+package proto.router;
 
 message Session
 {
-    int64 session_id           = 1;
-    RouterSession session_type = 2;
-    bytes session_data         = 3;
-    fixed64 timepoint          = 4;
-    string ip_address          = 5;
-    peer.Version version       = 6;
-    string os_name             = 7;
-    string computer_name       = 8;
-    string architecture        = 9;
+    int64 session_id         = 1;
+    SessionType session_type = 2;
+    bytes session_data       = 3;
+    fixed64 timepoint        = 4;
+    string ip_address        = 5;
+    peer.Version version     = 6;
+    string os_name           = 7;
+    string computer_name     = 8;
+    string architecture      = 9;
 }
 
 enum SessionRequestType

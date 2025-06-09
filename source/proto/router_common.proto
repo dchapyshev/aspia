@@ -20,20 +20,20 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package proto.router;
 
 enum RouterChannelId
 {
     ROUTER_CHANNEL_ID_SESSION = 0;
 }
 
-enum RouterSession
+enum SessionType
 {
-    ROUTER_SESSION_UNKNOWN = 0;
-    ROUTER_SESSION_ADMIN   = 1;
-    ROUTER_SESSION_CLIENT  = 2;
-    ROUTER_SESSION_HOST    = 4;
-    ROUTER_SESSION_RELAY   = 8;
+    SESSION_TYPE_UNKNOWN = 0;
+    SESSION_TYPE_ADMIN   = 1;
+    SESSION_TYPE_CLIENT  = 2;
+    SESSION_TYPE_HOST    = 4;
+    SESSION_TYPE_RELAY   = 8;
 }
 
 message RelayKey

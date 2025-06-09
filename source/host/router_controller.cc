@@ -93,7 +93,7 @@ void RouterController::onTcpConnected()
 
     authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(public_key_);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_HOST);
+    authenticator_->setSessionType(proto::router::SESSION_TYPE_HOST);
 
     connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
@@ -142,7 +142,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::RouterToPeer in_message;
+    proto::router::RouterToPeer in_message;
     if (!base::parse(buffer, &in_message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
@@ -151,24 +151,24 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 
     if (in_message.has_host_id_response())
     {
-        const proto::HostIdResponse& host_id_response = in_message.host_id_response();
+        const proto::router::HostIdResponse& host_id_response = in_message.host_id_response();
 
         switch (host_id_response.error_code())
         {
-            case proto::HostIdResponse::SUCCESS:
+            case proto::router::HostIdResponse::SUCCESS:
                 break;
 
             // The specified host is not in the router's database.
-            case proto::HostIdResponse::NO_HOST_FOUND:
+            case proto::router::HostIdResponse::NO_HOST_FOUND:
             {
                 LOG(LS_INFO) << "Host is not in the router's database. Reset ID";
 
-                proto::PeerToRouter out_message;
-                out_message.mutable_host_id_request()->set_type(proto::HostIdRequest::NEW_ID);
+                proto::router::PeerToRouter out_message;
+                out_message.mutable_host_id_request()->set_type(proto::router::HostIdRequest::NEW_ID);
 
                 // Send host ID request.
                 LOG(LS_INFO) << "Send ID request to router";
-                tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(out_message));
+                tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(out_message));
                 return;
             }
 
@@ -204,10 +204,10 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
     {
         LOG(LS_INFO) << "New connection offer";
 
-        const proto::ConnectionOffer& connection_offer = in_message.connection_offer();
+        const proto::router::ConnectionOffer& connection_offer = in_message.connection_offer();
 
-        if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS &&
-            connection_offer.peer_role() == proto::ConnectionOffer::HOST)
+        if (connection_offer.error_code() == proto::router::ConnectionOffer::SUCCESS &&
+            connection_offer.peer_role() == proto::router::ConnectionOffer::HOST)
         {
             peer_manager_->addConnectionOffer(connection_offer);
         }
@@ -280,24 +280,24 @@ void RouterController::hostIdRequest()
     HostStorage host_key_storage;
     QByteArray host_key = host_key_storage.hostKey();
 
-    proto::PeerToRouter message;
-    proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
+    proto::router::PeerToRouter message;
+    proto::router::HostIdRequest* host_id_request = message.mutable_host_id_request();
 
     if (host_key.isEmpty())
     {
         LOG(LS_INFO) << "Host key is empty. Request for a new ID";
-        host_id_request->set_type(proto::HostIdRequest::NEW_ID);
+        host_id_request->set_type(proto::router::HostIdRequest::NEW_ID);
     }
     else
     {
         LOG(LS_INFO) << "Host key is present. Request for an existing ID";
-        host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
+        host_id_request->set_type(proto::router::HostIdRequest::EXISTING_ID);
         host_id_request->set_key(host_key.toStdString());
     }
 
     // Send host ID request.
     LOG(LS_INFO) << "Send ID request to router";
-    tcp_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 } // namespace host

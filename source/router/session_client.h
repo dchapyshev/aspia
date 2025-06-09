@@ -41,8 +41,8 @@ protected:
     void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
 
 private:
-    void readConnectionRequest(const proto::ConnectionRequest& request);
-    void readCheckHostStatus(const proto::CheckHostStatus& check_host_status);
+    void readConnectionRequest(const proto::router::ConnectionRequest& request);
+    void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     SessionHost* sessionByHostId(base::HostId host_id);
 
     DISALLOW_COPY_AND_ASSIGN(SessionClient);

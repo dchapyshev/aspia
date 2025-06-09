@@ -27,7 +27,7 @@
 #include "proto/router_common.pb.h"
 
 QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& state);
-QTextStream& operator<<(QTextStream& out, proto::RouterSession session_type);
+QTextStream& operator<<(QTextStream& out, proto::router::SessionType session_type);
 QTextStream& operator<<(QTextStream& out, proto::internal::DesktopControl::Action action);
 QTextStream& operator<<(QTextStream& out, proto::desktop::AudioEncoding encoding);
 QTextStream& operator<<(QTextStream& out, proto::desktop::VideoEncoding encoding);

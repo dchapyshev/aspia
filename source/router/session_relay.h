@@ -19,6 +19,7 @@
 #ifndef ROUTER_SESSION_RELAY_H
 #define ROUTER_SESSION_RELAY_H
 
+#include "base/serialization.h"
 #include "proto/router_relay.pb.h"
 #include "router/session.h"
 
@@ -33,9 +34,9 @@ public:
     using PeerData = std::pair<std::string, quint16>;
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
-    const std::optional<proto::RelayStat>& relayStat() const { return relay_stat_; }
+    const std::optional<proto::router::RelayStat>& relayStat() const { return relay_stat_; }
     void sendKeyUsed(quint32 key_id);
-    void disconnectPeerSession(const proto::PeerConnectionRequest& request);
+    void disconnectPeerSession(const proto::router::PeerConnectionRequest& request);
 
 protected:
     // Session implementation.
@@ -44,13 +45,13 @@ protected:
     void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
 
 private:
-    void readKeyPool(const proto::RelayKeyPool& key_pool);
+    void readKeyPool(const proto::router::RelayKeyPool& key_pool);
 
     std::optional<PeerData> peer_data_;
-    std::optional<proto::RelayStat> relay_stat_;
+    std::optional<proto::router::RelayStat> relay_stat_;
 
-    proto::RelayToRouter incoming_message_;
-    proto::RouterToRelay outgoing_message_;
+    base::Parser<proto::router::RelayToRouter> incoming_message_;
+    base::Serializer<proto::router::RouterToRelay> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

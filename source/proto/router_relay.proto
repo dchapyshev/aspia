@@ -22,7 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "router_common.proto";
 
-package proto;
+package proto.router;
 
 message RelayKeyPool
 {

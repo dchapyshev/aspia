@@ -45,9 +45,9 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
     {
         LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
 
-        proto::PeerToRouter message;
+        proto::router::PeerToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
-        router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+        router_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
     });
 }
 
@@ -100,7 +100,7 @@ void RouterController::onTcpConnected()
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
     authenticator_->setPassword(router_config_.password);
-    authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
+    authenticator_->setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
     connect(authenticator_, &base::Authenticator::sig_finished,
             this, [this](base::Authenticator::ErrorCode error_code)
@@ -161,7 +161,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
     Error error;
     error.type = ErrorType::ROUTER;
 
-    proto::RouterToPeer message;
+    proto::router::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
@@ -179,22 +179,22 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             return;
         }
 
-        const proto::ConnectionOffer& connection_offer = message.connection_offer();
+        const proto::router::ConnectionOffer& connection_offer = message.connection_offer();
 
-        if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS ||
-            connection_offer.peer_role() != proto::ConnectionOffer::CLIENT)
+        if (connection_offer.error_code() != proto::router::ConnectionOffer::SUCCESS ||
+            connection_offer.peer_role() != proto::router::ConnectionOffer::CLIENT)
         {
             switch (connection_offer.error_code())
             {
-                case proto::ConnectionOffer::PEER_NOT_FOUND:
+                case proto::router::ConnectionOffer::PEER_NOT_FOUND:
                     error.code.router = ErrorCode::PEER_NOT_FOUND;
                     break;
 
-                case proto::ConnectionOffer::ACCESS_DENIED:
+                case proto::router::ConnectionOffer::ACCESS_DENIED:
                     error.code.router = ErrorCode::ACCESS_DENIED;
                     break;
 
-                case proto::ConnectionOffer::KEY_POOL_EMPTY:
+                case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
                     error.code.router = ErrorCode::KEY_POOL_EMPTY;
                     break;
 
@@ -227,8 +227,8 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
     }
     else if (message.has_host_status())
     {
-        const proto::HostStatus& host_status = message.host_status();
-        if (host_status.status() == proto::HostStatus::STATUS_ONLINE)
+        const proto::router::HostStatus& host_status = message.host_status();
+        if (host_status.status() == proto::router::HostStatus::STATUS_ONLINE)
         {
             LOG(LS_INFO) << "Host is ONLINE now. Sending connection request";
             sendConnectionRequest();
@@ -281,9 +281,9 @@ void RouterController::sendConnectionRequest()
 {
     LOG(LS_INFO) << "Sending connection request (host_id=" << host_id_ << ")";
 
-    proto::PeerToRouter message;
+    proto::router::PeerToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
-    router_channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    router_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

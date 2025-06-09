@@ -38,10 +38,10 @@
 #include <QMessageBox>
 #include <QTimer>
 
-Q_DECLARE_METATYPE(std::shared_ptr<proto::SessionList>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::SessionResult>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::UserList>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::UserResult>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionList>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionResult>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::router::UserList>)
+Q_DECLARE_METATYPE(std::shared_ptr<proto::router::UserResult>)
 
 namespace client {
 
@@ -67,7 +67,7 @@ private:
 class HostTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit HostTreeItem(const proto::Session& session)
+    explicit HostTreeItem(const proto::router::Session& session)
     {
         updateItem(session);
 
@@ -88,12 +88,12 @@ public:
 
     ~HostTreeItem() final = default;
 
-    void updateItem(const proto::Session& updated_session)
+    void updateItem(const proto::router::Session& updated_session)
     {
         session = updated_session;
         QString id;
 
-        proto::HostSessionData session_data;
+        proto::router::HostSessionData session_data;
         if (session_data.ParseFromString(session.session_data()))
         {
             for (int i = 0; i < session_data.host_id_size(); ++i)
@@ -135,7 +135,7 @@ public:
         }
     }
 
-    proto::Session session;
+    proto::router::Session session;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
@@ -144,7 +144,7 @@ private:
 class RelayTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit RelayTreeItem(const proto::Session& session)
+    explicit RelayTreeItem(const proto::router::Session& session)
     {
         updateItem(session);
 
@@ -164,11 +164,11 @@ public:
         setText(6, QString::fromStdString(session.os_name()));
     }
 
-    void updateItem(const proto::Session& updated_session)
+    void updateItem(const proto::router::Session& updated_session)
     {
         session = updated_session;
 
-        proto::RelaySessionData session_data;
+        proto::router::RelaySessionData session_data;
         if (session_data.ParseFromString(session.session_data()))
         {
             setText(2, QString::number(session_data.pool_size()));
@@ -187,7 +187,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::Session session;
+    proto::router::Session session;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);
@@ -196,7 +196,7 @@ private:
 class PeerConnectionTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit PeerConnectionTreeItem(const proto::PeerConnection& connection)
+    explicit PeerConnectionTreeItem(const proto::router::PeerConnection& connection)
     {
         updateItem(connection);
 
@@ -207,7 +207,7 @@ public:
         setText(3, QString::fromStdString(conn.client_address()));
     }
 
-    void updateItem(const proto::PeerConnection& connection)
+    void updateItem(const proto::router::PeerConnection& connection)
     {
         conn = connection;
         setText(4, RouterManagerWindow::sizeToString(conn.bytes_transferred()));
@@ -247,7 +247,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::PeerConnection conn;
+    proto::router::PeerConnection conn;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(PeerConnectionTreeItem);
@@ -256,7 +256,7 @@ private:
 class UserTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit UserTreeItem(const proto::User& user)
+    explicit UserTreeItem(const proto::router::User& user)
         : user(base::User::parseFrom(user))
     {
         setText(0, QString::fromStdString(user.name()));
@@ -657,7 +657,7 @@ void RouterManagerWindow::onAccessDenied(base::Authenticator::ErrorCode error_co
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> session_list)
+void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionList> session_list)
 {
     QTreeWidget* tree_hosts = ui->tree_hosts;
     QTreeWidget* tree_relay = ui->tree_relay;
@@ -665,7 +665,7 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     int host_count = 0;
     int relay_count = 0;
 
-    auto has_session_with_id = [](const proto::SessionList& session_list, qint64 session_id)
+    auto has_session_with_id = [](const proto::router::SessionList& session_list, qint64 session_id)
     {
         for (int i = 0; i < session_list.session_size(); ++i)
         {
@@ -697,11 +697,11 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     // Adding and updating elements in the UI.
     for (int i = 0; i < session_list->session_size(); ++i)
     {
-        const proto::Session& session = session_list->session(i);
+        const proto::router::Session& session = session_list->session(i);
 
         switch (session.session_type())
         {
-            case proto::ROUTER_SESSION_HOST:
+            case proto::router::SESSION_TYPE_HOST:
             {
                 bool found = false;
 
@@ -723,7 +723,7 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
             }
             break;
 
-            case proto::ROUTER_SESSION_RELAY:
+            case proto::router::SESSION_TYPE_RELAY:
             {
                 bool found = false;
 
@@ -766,23 +766,23 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::SessionResult> session_result)
+void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::SessionResult> session_result)
 {
-    if (session_result->error_code() != proto::SessionResult::SUCCESS)
+    if (session_result->error_code() != proto::router::SessionResult::SUCCESS)
     {
         const char* message;
 
         switch (session_result->error_code())
         {
-            case proto::SessionResult::INVALID_REQUEST:
+            case proto::router::SessionResult::INVALID_REQUEST:
                 message = QT_TR_NOOP("Invalid request.");
                 break;
 
-            case proto::SessionResult::INTERNAL_ERROR:
+            case proto::router::SessionResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
 
-            case proto::SessionResult::INVALID_SESSION_ID:
+            case proto::router::SessionResult::INVALID_SESSION_ID:
                 message = QT_TR_NOOP("Invalid session ID was passed.");
                 break;
 
@@ -799,7 +799,7 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::SessionResult> 
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
+void RouterManagerWindow::onUserList(std::shared_ptr<proto::router::UserList> user_list)
 {
     QTreeWidget* tree_users = ui->tree_users;
     tree_users->clear();
@@ -811,23 +811,23 @@ void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
+void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult> user_result)
 {
-    if (user_result->error_code() != proto::UserResult::SUCCESS)
+    if (user_result->error_code() != proto::router::UserResult::SUCCESS)
     {
         const char* message;
 
         switch (user_result->error_code())
         {
-            case proto::UserResult::INTERNAL_ERROR:
+            case proto::router::UserResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
 
-            case proto::UserResult::INVALID_DATA:
+            case proto::router::UserResult::INVALID_DATA:
                 message = QT_TR_NOOP("Invalid data was passed.");
                 break;
 
-            case proto::UserResult::ALREADY_EXISTS:
+            case proto::router::UserResult::ALREADY_EXISTS:
                 message = QT_TR_NOOP("A user with the specified name already exists.");
                 break;
 
@@ -1136,14 +1136,14 @@ void RouterManagerWindow::updateRelayStatistics()
         ui->label_active_conn->setEnabled(true);
         ui->tree_active_conn->setEnabled(true);
 
-        proto::RelaySessionData session_data;
+        proto::router::RelaySessionData session_data;
         if (session_data.ParseFromString(item->session.session_data()))
         {
             if (session_data.has_relay_stat())
             {
-                const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
+                const proto::router::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
 
-                auto has_session_with_id = [](const proto::RelaySessionData::RelayStat& relay_stat,
+                auto has_session_with_id = [](const proto::router::RelaySessionData::RelayStat& relay_stat,
                     quint64 session_id)
                 {
                     for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
@@ -1169,7 +1169,7 @@ void RouterManagerWindow::updateRelayStatistics()
 
                 for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
                 {
-                    const proto::PeerConnection& connection = relay_stat.peer_connection(i);
+                    const proto::router::PeerConnection& connection = relay_stat.peer_connection(i);
 
                     bool found = false;
 
@@ -1522,7 +1522,7 @@ void RouterManagerWindow::saveHostsToFile()
 
     for (int i = 0; i < tree->topLevelItemCount(); ++i)
     {
-        const proto::Session& session =
+        const proto::router::Session& session =
             static_cast<HostTreeItem*>(tree->topLevelItem(i))->session;
 
         QJsonObject host_object;
@@ -1543,7 +1543,7 @@ void RouterManagerWindow::saveHostsToFile()
 
         QJsonArray id_array;
 
-        proto::HostSessionData session_data;
+        proto::router::HostSessionData session_data;
         if (session_data.ParseFromString(session.session_data()))
         {
             for (int i = 0; i < session_data.host_id_size(); ++i)
@@ -1602,7 +1602,7 @@ void RouterManagerWindow::saveRelaysToFile()
 
     for (int i = 0; i < tree->topLevelItemCount(); ++i)
     {
-        const proto::Session& session =
+        const proto::router::Session& session =
             static_cast<RelayTreeItem*>(tree->topLevelItem(i))->session;
 
         QJsonObject relay_object;
@@ -1621,18 +1621,18 @@ void RouterManagerWindow::saveRelaysToFile()
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
         relay_object.insert("connect_time", time);
 
-        proto::RelaySessionData session_data;
+        proto::router::RelaySessionData session_data;
         if (session_data.ParseFromString(session.session_data()))
             relay_object.insert("pool_size", QString::number(session_data.pool_size()));
 
         if (session_data.has_relay_stat())
         {
-            const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
+            const proto::router::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
 
             QJsonArray active_array;
             for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
             {
-                const proto::PeerConnection& conn = relay_stat.peer_connection(i);
+                const proto::router::PeerConnection& conn = relay_stat.peer_connection(i);
 
                 QJsonObject conn_object;
                 conn_object.insert("host_address", QString::fromStdString(conn.host_address()));

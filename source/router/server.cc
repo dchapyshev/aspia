@@ -147,7 +147,7 @@ bool Server::start()
     authenticator_manager_->setUserList(std::move(user_list));
     authenticator_manager_->setAnonymousAccess(
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
-        proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);
+        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
 
     key_factory_ = new KeyFactory(this);
     connect(key_factory_, &KeyFactory::sig_keyUsed, this, &Server::onPoolKeyUsed);
@@ -192,8 +192,8 @@ void Server::onSessionAuthenticated()
         session_info.channel->setChannelIdSupport(true);
 
         QString address = session_info.channel->peerAddress();
-        proto::RouterSession session_type =
-            static_cast<proto::RouterSession>(session_info.session_type);
+        proto::router::SessionType session_type =
+            static_cast<proto::router::SessionType>(session_info.session_type);
 
         LOG(LS_INFO) << "New session: " << session_type << " (" << address << ")";
 
@@ -201,7 +201,7 @@ void Server::onSessionAuthenticated()
 
         switch (session_info.session_type)
         {
-            case proto::ROUTER_SESSION_CLIENT:
+            case proto::router::SESSION_TYPE_CLIENT:
             {
                 if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
                     break;
@@ -210,7 +210,7 @@ void Server::onSessionAuthenticated()
             }
             break;
 
-            case proto::ROUTER_SESSION_HOST:
+            case proto::router::SESSION_TYPE_HOST:
             {
                 if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
                     break;
@@ -219,7 +219,7 @@ void Server::onSessionAuthenticated()
             }
             break;
 
-            case proto::ROUTER_SESSION_ADMIN:
+            case proto::router::SESSION_TYPE_ADMIN:
             {
                 if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
                     break;
@@ -228,7 +228,7 @@ void Server::onSessionAuthenticated()
             }
             break;
 
-            case proto::ROUTER_SESSION_RELAY:
+            case proto::router::SESSION_TYPE_RELAY:
             {
                 if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
                     break;

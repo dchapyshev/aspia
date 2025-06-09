@@ -52,7 +52,7 @@ public slots:
 
 signals:
     void sig_sessionStarted();
-    void sig_sessionStatistics(const proto::RelayStat& relay_stat);
+    void sig_sessionStatistics(const proto::router::RelayStat& relay_stat);
     void sig_sessionFinished();
 
 private slots:

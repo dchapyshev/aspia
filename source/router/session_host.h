@@ -38,7 +38,7 @@ public:
     const HostIdList& hostIdList() const { return host_id_list_; }
     bool hasHostId(base::HostId host_id) const;
 
-    void sendConnectionOffer(const proto::ConnectionOffer& offer);
+    void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
 
 protected:
     // Session implementation.
@@ -47,8 +47,8 @@ protected:
     void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
 
 private:
-    void readHostIdRequest(const proto::HostIdRequest& host_id_request);
-    void readResetHostId(const proto::ResetHostId& reset_host_id);
+    void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
+    void readResetHostId(const proto::router::ResetHostId& reset_host_id);
     void removeOtherWithSameId();
 
     HostIdList host_id_list_;

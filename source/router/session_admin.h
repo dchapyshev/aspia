@@ -40,14 +40,14 @@ protected:
 
 private:
     void doUserListRequest();
-    void doUserRequest(const proto::UserRequest& request);
-    void doSessionListRequest(const proto::SessionListRequest& request);
-    void doSessionRequest(const proto::SessionRequest& request);
-    void doPeerConnectionRequest(const proto::PeerConnectionRequest& request);
+    void doUserRequest(const proto::router::UserRequest& request);
+    void doSessionListRequest(const proto::router::SessionListRequest& request);
+    void doSessionRequest(const proto::router::SessionRequest& request);
+    void doPeerConnectionRequest(const proto::router::PeerConnectionRequest& request);
 
-    proto::UserResult::ErrorCode addUser(const proto::User& user);
-    proto::UserResult::ErrorCode modifyUser(const proto::User& user);
-    proto::UserResult::ErrorCode deleteUser(const proto::User& user);
+    proto::router::UserResult::ErrorCode addUser(const proto::router::User& user);
+    proto::router::UserResult::ErrorCode modifyUser(const proto::router::User& user);
+    proto::router::UserResult::ErrorCode deleteUser(const proto::router::User& user);
 
     DISALLOW_COPY_AND_ASSIGN(SessionAdmin);
 };

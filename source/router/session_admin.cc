@@ -30,7 +30,7 @@ namespace router {
 
 //--------------------------------------------------------------------------------------------------
 SessionAdmin::SessionAdmin(QObject* parent)
-    : Session(proto::ROUTER_SESSION_ADMIN, parent)
+    : Session(proto::router::SESSION_TYPE_ADMIN, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -50,7 +50,7 @@ void SessionAdmin::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::AdminToRouter message;
+    proto::router::AdminToRouter message;
 
     if (!base::parse(buffer, &message))
     {
@@ -100,34 +100,34 @@ void SessionAdmin::doUserListRequest()
         return;
     }
 
-    proto::RouterToAdmin message;
-    proto::UserList* list = message.mutable_user_list();
+    proto::router::RouterToAdmin message;
+    proto::router::UserList* list = message.mutable_user_list();
 
     QVector<base::User> users = database->userList();
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doUserRequest(const proto::UserRequest& request)
+void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
-    proto::RouterToAdmin message;
-    proto::UserResult* result = message.mutable_user_result();
+    proto::router::RouterToAdmin message;
+    proto::router::UserResult* result = message.mutable_user_result();
     result->set_type(request.type());
 
     switch (request.type())
     {
-        case proto::USER_REQUEST_ADD:
+        case proto::router::USER_REQUEST_ADD:
             result->set_error_code(addUser(request.user()));
             break;
 
-        case proto::USER_REQUEST_MODIFY:
+        case proto::router::USER_REQUEST_MODIFY:
             result->set_error_code(modifyUser(request.user()));
             break;
 
-        case proto::USER_REQUEST_DELETE:
+        case proto::router::USER_REQUEST_DELETE:
             result->set_error_code(deleteUser(request.user()));
             break;
 
@@ -136,20 +136,20 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
             return;
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
+void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest& /* request */)
 {
     QList<Session*> session_list = sessions();
 
-    proto::RouterToAdmin message;
-    proto::SessionList* result = message.mutable_session_list();
+    proto::router::RouterToAdmin message;
+    proto::router::SessionList* result = message.mutable_session_list();
 
     for (const auto& session : std::as_const(session_list))
     {
-        proto::Session* item = result->add_session();
+        proto::router::Session* item = result->add_session();
 
         item->set_session_id(session->sessionId());
         item->set_session_type(session->sessionType());
@@ -162,9 +162,9 @@ void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* requ
 
         switch (session->sessionType())
         {
-            case proto::ROUTER_SESSION_HOST:
+            case proto::router::SESSION_TYPE_HOST:
             {
-                proto::HostSessionData session_data;
+                proto::router::HostSessionData session_data;
 
                 for (const auto& host_id : static_cast<SessionHost*>(session)->hostIdList())
                     session_data.add_host_id(host_id);
@@ -173,16 +173,16 @@ void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* requ
             }
             break;
 
-        case proto::ROUTER_SESSION_RELAY:
+        case proto::router::SESSION_TYPE_RELAY:
         {
-            proto::RelaySessionData session_data;
+            proto::router::RelaySessionData session_data;
             session_data.set_pool_size(relayKeyPool().countForRelay(session->sessionId()));
 
-            const std::optional<proto::RelayStat>& in_relay_stat =
+            const std::optional<proto::router::RelayStat>& in_relay_stat =
                 static_cast<SessionRelay*>(session)->relayStat();
             if (in_relay_stat.has_value())
             {
-                proto::RelaySessionData::RelayStat* out_relay_stat =
+                proto::router::RelaySessionData::RelayStat* out_relay_stat =
                     session_data.mutable_relay_stat();
 
                 out_relay_stat->set_uptime(in_relay_stat->uptime());
@@ -199,44 +199,44 @@ void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* requ
         }
     }
 
-    result->set_error_code(proto::SessionList::SUCCESS);
+    result->set_error_code(proto::router::SessionList::SUCCESS);
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
+void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request)
 {
-    proto::RouterToAdmin message;
-    proto::SessionResult* session_result = message.mutable_session_result();
+    proto::router::RouterToAdmin message;
+    proto::router::SessionResult* session_result = message.mutable_session_result();
     session_result->set_type(request.type());
 
-    if (request.type() == proto::SESSION_REQUEST_DISCONNECT)
+    if (request.type() == proto::router::SESSION_REQUEST_DISCONNECT)
     {
         Session::SessionId session_id = request.session_id();
 
         if (!sessionManager()->stopSession(session_id))
         {
             LOG(LS_ERROR) << "Session not found: " << session_id;
-            session_result->set_error_code(proto::SessionResult::INVALID_SESSION_ID);
+            session_result->set_error_code(proto::router::SessionResult::INVALID_SESSION_ID);
         }
         else
         {
             LOG(LS_INFO) << "Session '" << session_id << "' disconnected by " << userName();
-            session_result->set_error_code(proto::SessionResult::SUCCESS);
+            session_result->set_error_code(proto::router::SessionResult::SUCCESS);
         }
     }
     else
     {
         LOG(LS_ERROR) << "Unknown session request: " << request.type();
-        session_result->set_error_code(proto::SessionResult::INVALID_REQUEST);
+        session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, message);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& request)
+void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRequest& request)
 {
     SessionRelay* relay_session =
         dynamic_cast<SessionRelay*>(sessionManager()->sessionById(request.relay_session_id()));
@@ -250,7 +250,7 @@ void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& r
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)
+proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::User& user)
 {
     LOG(LS_INFO) << "User add request: " << user.name();
 
@@ -258,76 +258,76 @@ proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)
     if (!new_user.isValid())
     {
         LOG(LS_ERROR) << "Failed to create user";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!base::User::isValidUserName(new_user.name))
     {
         LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
-        return proto::UserResult::INVALID_DATA;
+        return proto::router::UserResult::INVALID_DATA;
     }
 
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
         LOG(LS_ERROR) << "Failed to connect to database";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!database->addUser(new_user))
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
 
-    return proto::UserResult::SUCCESS;
+    return proto::router::UserResult::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::User& user)
+proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::router::User& user)
 {
     LOG(LS_INFO) << "User modify request: " << user.name();
 
     if (user.entry_id() <= 0)
     {
         LOG(LS_ERROR) << "Invalid user ID: " << user.entry_id();
-        return proto::UserResult::INVALID_DATA;
+        return proto::router::UserResult::INVALID_DATA;
     }
 
     base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
     {
         LOG(LS_ERROR) << "Failed to create user";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!base::User::isValidUserName(new_user.name))
     {
         LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
-        return proto::UserResult::INVALID_DATA;
+        return proto::router::UserResult::INVALID_DATA;
     }
 
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
         LOG(LS_ERROR) << "Failed to connect to database";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!database->modifyUser(new_user))
     {
         LOG(LS_ERROR) << "modifyUser failed";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
-    return proto::UserResult::SUCCESS;
+    return proto::router::UserResult::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
+proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::router::User& user)
 {
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
         LOG(LS_ERROR) << "Failed to connect to database";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     qint64 entry_id = user.entry_id();
@@ -337,10 +337,10 @@ proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
     if (!database->removeUser(entry_id))
     {
         LOG(LS_ERROR) << "removeUser failed";
-        return proto::UserResult::INTERNAL_ERROR;
+        return proto::router::UserResult::INTERNAL_ERROR;
     }
 
-    return proto::UserResult::SUCCESS;
+    return proto::router::UserResult::SUCCESS;
 }
 
 } // namespace router

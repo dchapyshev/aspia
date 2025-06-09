@@ -37,7 +37,7 @@ void KeyPool::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyPool::addKey(Session::SessionId session_id, const proto::RelayKey& key)
+void KeyPool::addKey(Session::SessionId session_id, const proto::router::RelayKey& key)
 {
     auto relay = pool_.find(session_id);
     if (relay == pool_.end())
@@ -80,7 +80,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 
     LOG(LS_INFO) << "Preffered relay: " << preffered_relay.key();
 
-    QList<proto::RelayKey>& keys = preffered_relay.value();
+    QList<proto::router::RelayKey>& keys = preffered_relay.value();
     if (keys.isEmpty())
     {
         LOG(LS_ERROR) << "Empty key pool for relay";

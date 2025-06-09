@@ -52,8 +52,8 @@ public:
     static User create(const QString& name, const QString& password);
     bool isValid() const;
 
-    static User parseFrom(const proto::User& serialized_user);
-    proto::User serialize() const;
+    static User parseFrom(const proto::router::User& serialized_user);
+    proto::router::User serialize() const;
 
     static const User kInvalidUser;
 

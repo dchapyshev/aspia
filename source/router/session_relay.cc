@@ -26,7 +26,7 @@ namespace router {
 
 //--------------------------------------------------------------------------------------------------
 SessionRelay::SessionRelay(QObject* parent)
-    : Session(proto::ROUTER_SESSION_RELAY, parent)
+    : Session(proto::router::SESSION_TYPE_RELAY, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -41,17 +41,15 @@ SessionRelay::~SessionRelay()
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::sendKeyUsed(quint32 key_id)
 {
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_key_used()->set_key_id(key_id);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_);
+    outgoing_message_.newMessage().mutable_key_used()->set_key_id(key_id);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& request)
+void SessionRelay::disconnectPeerSession(const proto::router::PeerConnectionRequest& request)
 {
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_peer_connection_request()->CopyFrom(request);
-    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, outgoing_message_);
+    outgoing_message_.newMessage().mutable_peer_connection_request()->CopyFrom(request);
+    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,21 +61,19 @@ void SessionRelay::onSessionReady()
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
+    if (!incoming_message_.parse(buffer))
     {
         LOG(LS_ERROR) << "Could not read message from relay server";
         return;
     }
 
-    if (incoming_message_.has_key_pool())
+    if (incoming_message_->has_key_pool())
     {
-        readKeyPool(incoming_message_.key_pool());
+        readKeyPool(incoming_message_->key_pool());
     }
-    else if (incoming_message_.has_relay_stat())
+    else if (incoming_message_->has_relay_stat())
     {
-        relay_stat_ = std::move(*incoming_message_.mutable_relay_stat());
+        relay_stat_ = std::move(*incoming_message_->mutable_relay_stat());
     }
     else
     {
@@ -92,7 +88,7 @@ void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
+void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
     KeyPool& pool = relayKeyPool();
 

@@ -42,20 +42,20 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* routerSessionTypeToString(proto::RouterSession session_type)
+const char* routerSessionTypeToString(proto::router::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::ROUTER_SESSION_CLIENT:
+        case proto::router::SESSION_TYPE_CLIENT:
             return "ROUTER_SESSION_CLIENT";
 
-        case proto::ROUTER_SESSION_HOST:
+        case proto::router::SESSION_TYPE_HOST:
             return "ROUTER_SESSION_HOST";
 
-        case proto::ROUTER_SESSION_ADMIN:
+        case proto::router::SESSION_TYPE_ADMIN:
             return "ROUTER_SESSION_ADMIN";
 
-        case proto::ROUTER_SESSION_RELAY:
+        case proto::router::SESSION_TYPE_RELAY:
             return "ROUTER_SESSION_RELAY";
 
         default:
@@ -180,7 +180,7 @@ QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& st
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, proto::RouterSession session_type)
+QTextStream& operator<<(QTextStream& out, proto::router::SessionType session_type)
 {
     return out << routerSessionTypeToString(session_type);
 }
