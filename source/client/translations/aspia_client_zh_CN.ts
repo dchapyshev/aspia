@@ -2968,34 +2968,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="375"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="384"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1102"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1103"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
         <source>Could not save image</source>
         <translation type="unfinished">无法保存图像</translation>
     </message>

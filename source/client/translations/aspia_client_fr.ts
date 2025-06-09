@@ -2673,34 +2673,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
         <source>Warning</source>
         <translation type="unfinished">Attention</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="375"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Aucun encodage vidéo n est pris en charge.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="384"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">L encodage vidéo actuel n est pas pris en charge par l hôte. Veuillez spécifier un autre encodage vidéo.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1102"/>
         <source>Save File</source>
         <translation type="unfinished">Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1103"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1134"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
         <source>Could not save image</source>
         <translation type="unfinished">Impossible d&apos;enregistrer l&apos;image</translation>
     </message>
