@@ -20,8 +20,8 @@
 #define CLIENT_UI_CLIENT_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "proto/common.h"
 #include "proto/desktop.h"
+#include "proto/peer_common.h"
 
 #include <QSettings>
 
@@ -39,8 +39,8 @@ public:
     QStringList addressList() const;
     void setAddressList(const QStringList& list);
 
-    proto::SessionType sessionType() const;
-    void setSessionType(proto::SessionType session_type);
+    proto::peer::SessionType sessionType() const;
+    void setSessionType(proto::peer::SessionType session_type);
 
     proto::desktop::Config desktopManageConfig() const;
     void setDesktopManageConfig(const proto::desktop::Config& config);

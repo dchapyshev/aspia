@@ -79,7 +79,7 @@ public:
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
 
-        proto::Version version = session.version();
+        proto::peer::Version version = session.version();
         setText(4, QString("%1.%2.%3.%4")
             .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
         setText(5, QString::fromStdString(session.architecture()));
@@ -155,7 +155,7 @@ public:
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
 
-        const proto::Version& version = session.version();
+        const proto::peer::Version& version = session.version();
         
         setText(3, QString("%1.%2.%3.%4")
             .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));

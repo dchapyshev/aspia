@@ -21,8 +21,8 @@
 
 #include "base/macros_magic.h"
 #include "client/ui/desktop/desktop_settings.h"
-#include "proto/common.h"
 #include "proto/desktop.h"
+#include "proto/peer_common.h"
 #include "ui_desktop_toolbar.h"
 
 namespace client {
@@ -32,7 +32,7 @@ class DesktopToolBar final : public QFrame
     Q_OBJECT
 
 public:
-    DesktopToolBar(proto::SessionType session_type, QWidget* parent);
+    DesktopToolBar(proto::peer::SessionType session_type, QWidget* parent);
     ~DesktopToolBar() final;
 
     void enableScreenSelect(bool enable);
@@ -69,7 +69,7 @@ signals:
     void sig_autoScrollChanged(bool enabled);
     void sig_keyCombinationsChanged(bool enabled);
     void sig_takeScreenshot();
-    void sig_startSession(proto::SessionType session_type);
+    void sig_startSession(proto::peer::SessionType session_type);
     void sig_powerControl(proto::desktop::PowerControl::Action action, bool wait);
     void sig_startRemoteUpdate();
     void sig_startSystemInfo();
@@ -104,7 +104,7 @@ private slots:
     void onShowRecordSettings();
 
 private:
-    void createAdditionalMenu(proto::SessionType session_type);
+    void createAdditionalMenu(proto::peer::SessionType session_type);
     void showFullScreenButtons(bool show);
     void updateScaleMenu();
     void updateSize();
@@ -112,7 +112,7 @@ private:
 
     Ui::DesktopToolBar ui;
 
-    const proto::SessionType session_type_;
+    const proto::peer::SessionType session_type_;
     bool is_recording_started_ = false;
     bool is_remote_update_enabled_ = false;
 

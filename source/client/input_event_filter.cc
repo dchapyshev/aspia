@@ -29,7 +29,7 @@ InputEventFilter::InputEventFilter() = default;
 InputEventFilter::~InputEventFilter() = default;
 
 //--------------------------------------------------------------------------------------------------
-void InputEventFilter::setSessionType(proto::SessionType session_type)
+void InputEventFilter::setSessionType(proto::peer::SessionType session_type)
 {
     LOG(LS_INFO) << "Session type changed: " << session_type;
     session_type_ = session_type;
@@ -51,7 +51,7 @@ void InputEventFilter::setNetworkOverflow(bool enable)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
 {
-    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (network_overflow_)
@@ -83,7 +83,7 @@ bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::keyEvent(const proto::desktop::KeyEvent& event)
 {
-    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (network_overflow_)
@@ -96,7 +96,7 @@ bool InputEventFilter::keyEvent(const proto::desktop::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::textEvent(const proto::desktop::TextEvent& event)
 {
-    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (network_overflow_)
@@ -109,7 +109,7 @@ bool InputEventFilter::textEvent(const proto::desktop::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::readClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!clipboard_enabled_)
@@ -122,7 +122,7 @@ bool InputEventFilter::readClipboardEvent(const proto::desktop::ClipboardEvent& 
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (network_overflow_)

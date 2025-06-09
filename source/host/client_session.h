@@ -24,8 +24,8 @@
 
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
-#include "proto/common.h"
 #include "proto/desktop.h"
+#include "proto/peer_common.h"
 #include "proto/text_chat.h"
 
 namespace host {
@@ -45,7 +45,7 @@ public:
     };
 
     static ClientSession* create(
-        proto::SessionType session_type, base::TcpChannel* channel, QObject* parent = nullptr);
+        proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent = nullptr);
 
     void start();
     void stop();
@@ -65,7 +65,7 @@ public:
     void setDisplayName(const QString& display_name);
     const QString& displayName() const;
 
-    proto::SessionType sessionType() const { return session_type_; }
+    proto::peer::SessionType sessionType() const { return session_type_; }
 
     void setSessionId(base::SessionId session_id);
     base::SessionId sessionId() const { return session_id_; }
@@ -80,7 +80,7 @@ signals:
     void sig_clientSessionTextChat(quint32 id, const proto::TextChat& text_chat);
 
 protected:
-    ClientSession(proto::SessionType session_type, base::TcpChannel* channel, QObject* parent);
+    ClientSession(proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
@@ -98,7 +98,7 @@ private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
     quint32 id_;
-    proto::SessionType session_type_;
+    proto::peer::SessionType session_type_;
     QVersionNumber version_;
     QString username_;
     QString computer_name_;

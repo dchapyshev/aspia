@@ -19,15 +19,15 @@
 #ifndef COMMON_UI_SESSION_TYPE_H
 #define COMMON_UI_SESSION_TYPE_H
 
-#include "proto/common.h"
-
 #include <QString>
+
+#include "proto/peer_common.h"
 
 namespace common {
 
-const char* sessionTypeToString(proto::SessionType session_type);
+const char* sessionTypeToString(proto::peer::SessionType session_type);
 
-QString sessionTypeToLocalizedString(proto::SessionType session_type);
+QString sessionTypeToLocalizedString(proto::peer::SessionType session_type);
 
 } // namespace common
 

@@ -172,7 +172,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerVersion(const proto::Version& version)
+void Authenticator::setPeerVersion(const proto::peer::Version& version)
 {
     peer_version_ = base::parse(version);
 }

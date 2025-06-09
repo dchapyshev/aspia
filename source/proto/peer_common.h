@@ -16,36 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef PROTO_COMMON_H
+#define PROTO_COMMON_H
 
-option optimize_for = LITE_RUNTIME;
+#include <QMetaType>
 
-package proto;
+#include "proto/peer_common.pb.h"
 
-enum HostChannelId
-{
-    HOST_CHANNEL_ID_SESSION = 0;
-    HOST_CHANNEL_ID_SERVICE = 1;
-}
+Q_DECLARE_METATYPE(proto::peer::HostChannelId)
+Q_DECLARE_METATYPE(proto::peer::SessionType)
+Q_DECLARE_METATYPE(proto::peer::Version)
 
-enum SessionType
-{
-    SESSION_TYPE_UNKNOWN         = 0;
-    SESSION_TYPE_DESKTOP_MANAGE  = 1;
-    SESSION_TYPE_DESKTOP_VIEW    = 2;
-    SESSION_TYPE_FILE_TRANSFER   = 4;
-    SESSION_TYPE_SYSTEM_INFO     = 8;
-    SESSION_TYPE_TEXT_CHAT       = 16;
-    SESSION_TYPE_PORT_FORWARDING = 32;
-
-    // When adding or removing session types, you need to recalculate this value.
-    SESSION_TYPE_ALL            = 63;
-}
-
-message Version
-{
-    uint32 major    = 1;
-    uint32 minor    = 2;
-    uint32 patch    = 3;
-    uint32 revision = 4;
-}
+#endif // PROTO_COMMON_H

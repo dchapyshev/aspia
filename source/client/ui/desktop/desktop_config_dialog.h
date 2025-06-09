@@ -19,11 +19,11 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H
 #define CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H
 
-#include "base/macros_magic.h"
-#include "proto/common.h"
-#include "proto/desktop.h"
-
 #include <QDialog>
+
+#include "base/macros_magic.h"
+#include "proto/desktop.h"
+#include "proto/peer_common.h"
 
 class QAbstractButton;
 
@@ -38,7 +38,7 @@ class DesktopConfigDialog final : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::SessionType session_type,
+    DesktopConfigDialog(proto::peer::SessionType session_type,
                         const proto::desktop::Config& config,
                         quint32 video_encodings,
                         QWidget* parent = nullptr);

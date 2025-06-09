@@ -18,12 +18,12 @@
 
 #include "host/ui/user_dialog.h"
 
-#include "base/logging.h"
-#include "common/ui/session_type.h"
-#include "proto/common.h"
-
 #include <QMessageBox>
 #include <QMouseEvent>
+
+#include "base/logging.h"
+#include "common/ui/session_type.h"
+#include "proto/peer_common.h"
 
 namespace host {
 
@@ -52,7 +52,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.checkbox_disable_user->setChecked(false);
     }
 
-    auto add_session = [&](const QString& icon, proto::SessionType session_type)
+    auto add_session = [&](const QString& icon, proto::peer::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
@@ -76,12 +76,12 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/port-forwarding.png", proto::SESSION_TYPE_PORT_FORWARDING);
+    add_session(":/img/monitor-keyboard.png", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/port-forwarding.png", proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);

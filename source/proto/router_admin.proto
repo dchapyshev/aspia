@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "common.proto";
+import "peer_common.proto";
 import "router_common.proto";
 
 package proto;
@@ -32,7 +32,7 @@ message Session
     bytes session_data         = 3;
     fixed64 timepoint          = 4;
     string ip_address          = 5;
-    Version version            = 6;
+    peer.Version version       = 6;
     string os_name             = 7;
     string computer_name       = 8;
     string architecture        = 9;

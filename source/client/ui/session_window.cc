@@ -290,27 +290,27 @@ void SessionWindow::setClientTitle(const Config& config)
 
     switch (config.session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             session_name = tr("Desktop Manage");
             break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             session_name = tr("Desktop View");
             break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             session_name = tr("File Transfer");
             break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             session_name = tr("System Information");
             break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             session_name = tr("Text Chat");
             break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
             session_name = tr("Port Forwarding");
             break;
 

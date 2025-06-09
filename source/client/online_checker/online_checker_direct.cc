@@ -120,14 +120,14 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     message.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
     message.set_identify(proto::IDENTIFY_SRP);
 
-    proto::Version* version = message.mutable_version();
+    proto::peer::Version* version = message.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
     tcp_channel_->resume();
-    tcp_channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::peer::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

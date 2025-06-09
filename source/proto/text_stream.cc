@@ -143,26 +143,26 @@ const char* videoErrorCodeToString(proto::desktop::VideoErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* sessionTypeToString(proto::SessionType session_type)
+const char* sessionTypeToString(proto::peer::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             return "SESSION_TYPE_DESKTOP_MANAGE";
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             return "SESSION_TYPE_DESKTOP_VIEW";
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return "SESSION_TYPE_FILE_TRANSFER";
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             return "SESSION_TYPE_SYSTEM_INFO";
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             return "SESSION_TYPE_TEXT_CHAT";
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
             return "SESSION_TYPE_PORT_FORWARDING";
 
         default:
@@ -210,7 +210,7 @@ QTextStream& operator<<(QTextStream& out, proto::desktop::VideoErrorCode error_c
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& out, proto::SessionType session_type)
+QTextStream& operator<<(QTextStream& out, proto::peer::SessionType session_type)
 {
     return out << sessionTypeToString(session_type);
 }

@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "common.proto";
+import "peer_common.proto";
 
 package proto;
 
@@ -70,11 +70,11 @@ enum Encryption
 // Client to server.
 message ClientHello
 {
-    uint32 encryption = 1;
-    Identify identify = 2;
-    bytes public_key  = 3;
-    bytes iv          = 4;
-    Version version   = 5;
+    uint32 encryption    = 1;
+    Identify identify    = 2;
+    bytes public_key     = 3;
+    bytes iv             = 4;
+    peer.Version version = 5;
 }
 
 // Server to client.
@@ -82,7 +82,7 @@ message ServerHello
 {
     Encryption encryption = 1;
     bytes iv              = 2;
-    Version version       = 3;
+    peer.Version version  = 3;
 }
 
 // Client to server.
@@ -111,7 +111,7 @@ message SrpClientKeyExchange
 // Server to client.
 message SessionChallenge
 {
-    Version version      = 1; // Deprecated since version 2.7.0. For backward compatibility only.
+    peer.Version version = 1; // Deprecated since version 3.0.0. For backward compatibility only.
     uint32 session_types = 2;
     uint32 cpu_cores     = 3;
     string os_name       = 4;
@@ -123,7 +123,7 @@ message SessionChallenge
 // Client to server.
 message SessionResponse
 {
-    Version version      = 1; // Deprecated since version 2.7.0. For backward compatibility only.
+    peer.Version version = 1; // Deprecated since version 3.0.0. For backward compatibility only.
     uint32 session_type  = 2;
     uint32 cpu_cores     = 3;
     string os_name       = 4;

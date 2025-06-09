@@ -20,7 +20,7 @@
 #define CONSOLE_SETTINGS_H
 
 #include "base/macros_magic.h"
-#include "proto/common.h"
+#include "proto/peer_common.h"
 
 #include <QSettings>
 
@@ -68,8 +68,8 @@ public:
     bool alwaysShowTrayIcon() const;
     void setAlwaysShowTrayIcon(bool enable);
 
-    proto::SessionType sessionType() const;
-    void setSessionType(proto::SessionType session_type);
+    proto::peer::SessionType sessionType() const;
+    void setSessionType(proto::peer::SessionType session_type);
 
     bool checkUpdates() const;
     void setCheckUpdates(bool check);

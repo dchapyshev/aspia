@@ -54,7 +54,7 @@ public:
         quint32 id;
         QString computer_name;
         QString display_name;
-        proto::SessionType session_type;
+        proto::peer::SessionType session_type;
     };
 
     using ClientList = QVector<Client>;

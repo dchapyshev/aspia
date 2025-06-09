@@ -224,7 +224,7 @@ void Server::onSessionAuthenticated()
         }
 
         ClientSession* session = ClientSession::create(
-            static_cast<proto::SessionType>(session_info.session_type), session_info.channel);
+            static_cast<proto::peer::SessionType>(session_info.session_type), session_info.channel);
         if (!session)
         {
             LOG(LS_ERROR) << "Invalid client session";

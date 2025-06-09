@@ -117,7 +117,7 @@ void ClientSessionPortForwarding::Handler::onRead(
 //--------------------------------------------------------------------------------------------------
 ClientSessionPortForwarding::ClientSessionPortForwarding(
     base::TcpChannel* channel, QObject* parent)
-    : ClientSession(proto::SESSION_TYPE_PORT_FORWARDING, channel, parent),
+    : ClientSession(proto::peer::SESSION_TYPE_PORT_FORWARDING, channel, parent),
       socket_(base::AsioEventDispatcher::currentIoContext()),
       resolver_(base::AsioEventDispatcher::currentIoContext()),
       handler_(new Handler(this))

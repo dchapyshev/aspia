@@ -287,7 +287,7 @@ void ClientAuthenticator::sendClientHello()
         client_hello.set_iv(encrypt_iv_.toStdString());
     }
 
-    proto::Version* version = client_hello.mutable_version();
+    proto::peer::Version* version = client_hello.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
@@ -514,7 +514,7 @@ void ClientAuthenticator::sendSessionResponse()
     proto::SessionResponse response;
     response.set_session_type(session_type_);
 
-    proto::Version* version = response.mutable_version();
+    proto::peer::Version* version = response.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);

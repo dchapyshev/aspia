@@ -68,7 +68,7 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
 {
     proto::address_book::Computer computer;
 
-    computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+    computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
     computer.set_port(DEFAULT_HOST_TCP_PORT);
 
     proto::address_book::InheritConfig* inherit = computer.mutable_inherit();

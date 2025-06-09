@@ -169,27 +169,27 @@ MainWindow::MainWindow(const QString& file_path)
 
     switch (settings.sessionType())
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             ui.action_desktop_manage->setChecked(true);
             break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             ui.action_desktop_view->setChecked(true);
             break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
             break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             ui.action_system_info->setChecked(true);
             break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             ui.action_text_chat->setChecked(true);
             break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
             ui.action_port_forwarding->setChecked(true);
             break;
 
@@ -766,7 +766,7 @@ void MainWindow::onDesktopManageConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+            computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -792,7 +792,7 @@ void MainWindow::onDesktopViewConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
+            computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -818,7 +818,7 @@ void MainWindow::onFileTransferConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+            computer.set_session_type(proto::peer::SESSION_TYPE_FILE_TRANSFER);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -844,7 +844,7 @@ void MainWindow::onSystemInfoConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+            computer.set_session_type(proto::peer::SESSION_TYPE_SYSTEM_INFO);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -870,7 +870,7 @@ void MainWindow::onTextChatConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_TEXT_CHAT);
+            computer.set_session_type(proto::peer::SESSION_TYPE_TEXT_CHAT);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -896,7 +896,7 @@ void MainWindow::onPortForwardingConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::SESSION_TYPE_PORT_FORWARDING);
+            computer.set_session_type(proto::peer::SESSION_TYPE_PORT_FORWARDING);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -1172,27 +1172,27 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
 
     if (ui.action_desktop_manage->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
     }
     else if (ui.action_desktop_view->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
     }
     else if (ui.action_file_transfer->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     }
     else if (ui.action_system_info->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     }
     else if (ui.action_text_chat->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_TEXT_CHAT);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_TEXT_CHAT);
     }
     else if (ui.action_port_forwarding->isChecked())
     {
-        computer_to_connect.set_session_type(proto::SESSION_TYPE_PORT_FORWARDING);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_PORT_FORWARDING);
     }
     else
     {
@@ -1462,17 +1462,17 @@ void MainWindow::closeEvent(QCloseEvent* event)
     settings.setPinnedFiles(mru_.pinnedFiles());
 
     if (ui.action_desktop_manage->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
     else if (ui.action_desktop_view->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
+        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
+        settings.setSessionType(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     else if (ui.action_system_info->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_SYSTEM_INFO);
+        settings.setSessionType(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     else if (ui.action_text_chat->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_TEXT_CHAT);
+        settings.setSessionType(proto::peer::SESSION_TYPE_TEXT_CHAT);
     else if (ui.action_port_forwarding->isChecked())
-        settings.setSessionType(proto::SESSION_TYPE_PORT_FORWARDING);
+        settings.setSessionType(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -1725,33 +1725,33 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
     switch (config.session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
             session_window = new client::DesktopSessionWindow(
                 config.session_type, computer.session_config().desktop_manage());
         }
         break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             session_window = new client::DesktopSessionWindow(
                 config.session_type, computer.session_config().desktop_view());
         }
         break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             session_window = new client::FileTransferSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             session_window = new client::SystemInfoSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             session_window = new client::TextChatSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
         {
             session_window = new client::PortForwardingSessionWindow(
                 computer.session_config().port_forwarding());

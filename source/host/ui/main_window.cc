@@ -90,12 +90,12 @@ MainWindow::MainWindow(QWidget* parent)
 
     quint32 one_time_sessions = user_settings.oneTimeSessions();
 
-    ui.action_desktop_manage->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_MANAGE);
-    ui.action_desktop_view->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_VIEW);
-    ui.action_file_transfer->setChecked(one_time_sessions & proto::SESSION_TYPE_FILE_TRANSFER);
-    ui.action_system_info->setChecked(one_time_sessions & proto::SESSION_TYPE_SYSTEM_INFO);
-    ui.action_text_chat->setChecked(one_time_sessions & proto::SESSION_TYPE_TEXT_CHAT);
-    ui.action_port_forwarding->setChecked(one_time_sessions & proto::SESSION_TYPE_PORT_FORWARDING);
+    ui.action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    ui.action_desktop_view->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    ui.action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    ui.action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    ui.action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
+    ui.action_port_forwarding->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
 
@@ -319,7 +319,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     int text_chat_clients = 0;
     for (const auto& client : clients)
     {
-        if (client.session_type == proto::SESSION_TYPE_TEXT_CHAT)
+        if (client.session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
             ++text_chat_clients;
     }
 
@@ -355,7 +355,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
             {
-                QList<quint32> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
+                QList<quint32> sessions = notifier_->sessions(proto::peer::SESSION_TYPE_TEXT_CHAT);
                 for (const auto& session : std::as_const(sessions))
                     onKillSession(session);
             });
@@ -879,22 +879,22 @@ quint32 MainWindow::calcOneTimeSessions()
     quint32 sessions = 0;
 
     if (ui.action_desktop_manage->isChecked())
-        sessions |= proto::SESSION_TYPE_DESKTOP_MANAGE;
+        sessions |= proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
 
     if (ui.action_desktop_view->isChecked())
-        sessions |= proto::SESSION_TYPE_DESKTOP_VIEW;
+        sessions |= proto::peer::SESSION_TYPE_DESKTOP_VIEW;
 
     if (ui.action_file_transfer->isChecked())
-        sessions |= proto::SESSION_TYPE_FILE_TRANSFER;
+        sessions |= proto::peer::SESSION_TYPE_FILE_TRANSFER;
 
     if (ui.action_system_info->isChecked())
-        sessions |= proto::SESSION_TYPE_SYSTEM_INFO;
+        sessions |= proto::peer::SESSION_TYPE_SYSTEM_INFO;
 
     if (ui.action_text_chat->isChecked())
-        sessions |= proto::SESSION_TYPE_TEXT_CHAT;
+        sessions |= proto::peer::SESSION_TYPE_TEXT_CHAT;
 
     if (ui.action_port_forwarding->isChecked())
-        sessions |= proto::SESSION_TYPE_PORT_FORWARDING;
+        sessions |= proto::peer::SESSION_TYPE_PORT_FORWARDING;
 
     return sessions;
 }

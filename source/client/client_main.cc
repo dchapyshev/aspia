@@ -546,29 +546,29 @@ int clientMain(int argc, char* argv[])
 
         if (session_type == "desktop-manage")
         {
-            config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+            config.session_type = proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
             desktop_config = client::ConfigFactory::defaultDesktopManageConfig();
         }
         else if (session_type == "desktop-view")
         {
-            config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+            config.session_type = proto::peer::SESSION_TYPE_DESKTOP_VIEW;
             desktop_config = client::ConfigFactory::defaultDesktopViewConfig();
         }
         else if (session_type == "file-transfer")
         {
-            config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
+            config.session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
         }
         else if (session_type == "system-info")
         {
-            config.session_type = proto::SESSION_TYPE_SYSTEM_INFO;
+            config.session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
         }
         else if (session_type == "text-chat")
         {
-            config.session_type = proto::SESSION_TYPE_TEXT_CHAT;
+            config.session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
         }
         else if (session_type == "port-forwarding")
         {
-            config.session_type = proto::SESSION_TYPE_PORT_FORWARDING;
+            config.session_type = proto::peer::SESSION_TYPE_PORT_FORWARDING;
         }
         else
         {
@@ -703,23 +703,23 @@ int clientMain(int argc, char* argv[])
 
         switch (config.session_type)
         {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
                 session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
                 break;
 
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
                 session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
                 break;
 
-            case proto::SESSION_TYPE_FILE_TRANSFER:
+            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new client::FileTransferSessionWindow();
                 break;
 
-            case proto::SESSION_TYPE_SYSTEM_INFO:
+            case proto::peer::SESSION_TYPE_SYSTEM_INFO:
                 session_window = new client::SystemInfoSessionWindow();
                 break;
 
-            case proto::SESSION_TYPE_TEXT_CHAT:
+            case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 session_window = new client::TextChatSessionWindow();
                 break;
 

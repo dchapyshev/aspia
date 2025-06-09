@@ -32,6 +32,6 @@ QTextStream& operator<<(QTextStream& out, proto::internal::DesktopControl::Actio
 QTextStream& operator<<(QTextStream& out, proto::desktop::AudioEncoding encoding);
 QTextStream& operator<<(QTextStream& out, proto::desktop::VideoEncoding encoding);
 QTextStream& operator<<(QTextStream& out, proto::desktop::VideoErrorCode error_code);
-QTextStream& operator<<(QTextStream& out, proto::SessionType session_type);
+QTextStream& operator<<(QTextStream& out, proto::peer::SessionType session_type);
 
 #endif // PROTO_TEXT_STREAM_H

@@ -57,7 +57,7 @@ const char* videoEncodingToString(proto::desktop::VideoEncoding encoding)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
+DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
                                          const proto::desktop::Config& config,
                                          quint32 video_encodings,
                                          QWidget* parent)
@@ -123,7 +123,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     if (config_.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
         ui->checkbox_audio->setChecked(true);
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config_.flags() & proto::desktop::LOCK_AT_DISCONNECT)
             ui->checkbox_lock_at_disconnect->setChecked(true);

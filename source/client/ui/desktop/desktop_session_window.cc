@@ -74,7 +74,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
+DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type,
                                            const proto::desktop::Config& desktop_config,
                                            QWidget* parent)
     : SessionWindow(nullptr, parent),
@@ -216,7 +216,8 @@ DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    connect(toolbar_, &DesktopToolBar::sig_startSession, this, [this](proto::SessionType session_type)
+    connect(toolbar_, &DesktopToolBar::sig_startSession,
+            this, [this](proto::peer::SessionType session_type)
     {
         Config session_config = sessionState()->config();
         session_config.session_type = session_type;
@@ -225,15 +226,15 @@ DesktopSessionWindow::DesktopSessionWindow(proto::SessionType session_type,
 
         switch (session_config.session_type)
         {
-            case proto::SESSION_TYPE_FILE_TRANSFER:
+            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new FileTransferSessionWindow();
                 break;
 
-            case proto::SESSION_TYPE_TEXT_CHAT:
+            case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 session_window = new TextChatSessionWindow();
                 break;
 
-            case proto::SESSION_TYPE_PORT_FORWARDING:
+            case proto::peer::SESSION_TYPE_PORT_FORWARDING:
                 LOG(LS_ERROR) << "Fix me! Use real config";
                 session_window = new PortForwardingSessionWindow(proto::port_forwarding::Config());
                 break;

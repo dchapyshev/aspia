@@ -23,7 +23,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "common.proto";
+import "peer_common.proto";
 import "text_chat.proto";
 
 package proto.internal;
@@ -53,10 +53,10 @@ message OneTimeSessions
 
 message ConnectEvent
 {
-    uint32 id                = 1;
-    string computer_name     = 2;
-    string display_name      = 3;
-    SessionType session_type = 4;
+    uint32 id                     = 1;
+    string computer_name          = 2;
+    string display_name           = 3;
+    peer.SessionType session_type = 4;
 }
 
 message DisconnectEvent
@@ -82,11 +82,11 @@ message RouterState
 
 message ConnectConfirmationRequest
 {
-    uint32 id                   = 1;
-    uint32 timeout              = 2;
-    string user_name            = 3;
-    string computer_name        = 4;
-    SessionType session_type    = 5;
+    uint32 id                     = 1;
+    uint32 timeout                = 2;
+    string user_name              = 3;
+    string computer_name          = 4;
+    peer.SessionType session_type = 5;
 }
 
 message ConnectConfirmation

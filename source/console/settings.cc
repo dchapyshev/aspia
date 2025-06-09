@@ -206,14 +206,14 @@ void Settings::setAlwaysShowTrayIcon(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::SessionType Settings::sessionType() const
+proto::peer::SessionType Settings::sessionType() const
 {
-    return static_cast<proto::SessionType>(
-        settings_.value(kSessionTypeParam, proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
+    return static_cast<proto::peer::SessionType>(
+        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP_MANAGE).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setSessionType(proto::SessionType session_type)
+void Settings::setSessionType(proto::peer::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, session_type);
 }

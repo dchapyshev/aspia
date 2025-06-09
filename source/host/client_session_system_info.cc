@@ -29,7 +29,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 ClientSessionSystemInfo::ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent)
-    : ClientSession(proto::SESSION_TYPE_SYSTEM_INFO, channel, parent)
+    : ClientSession(proto::peer::SESSION_TYPE_SYSTEM_INFO, channel, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

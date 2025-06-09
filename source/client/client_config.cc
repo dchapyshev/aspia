@@ -25,7 +25,7 @@ namespace client {
 //--------------------------------------------------------------------------------------------------
 Config::Config()
     : port(DEFAULT_HOST_TCP_PORT),
-      session_type(proto::SESSION_TYPE_DESKTOP_MANAGE)
+      session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
 {
     // Nothing
 }

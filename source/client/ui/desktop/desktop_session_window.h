@@ -46,7 +46,7 @@ class DesktopSessionWindow final : public SessionWindow
     Q_OBJECT
 
 public:
-    DesktopSessionWindow(proto::SessionType session_type,
+    DesktopSessionWindow(proto::peer::SessionType session_type,
                     const proto::desktop::Config& desktop_config,
                     QWidget* parent = nullptr);
     ~DesktopSessionWindow() final;
@@ -111,7 +111,7 @@ private slots:
     void onShowHidePanel();
 
 private:
-    const proto::SessionType session_type_;
+    const proto::peer::SessionType session_type_;
     proto::desktop::Config desktop_config_;
 
     quint32 video_encodings_ = 0;

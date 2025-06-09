@@ -116,8 +116,8 @@ ComputerDialog::ComputerDialog(QWidget* parent,
         new ComputerDialogPortForwarding(ITEM_TYPE_PORT_FORWARDING, ui.widget);
 
     general_tab->restoreSettings(parent_name, computer_);
-    desktop_manage_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, computer_);
-    desktop_view_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_VIEW, computer_);
+    desktop_manage_tab->restoreSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE, computer_);
+    desktop_view_tab->restoreSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW, computer_);
     port_forwarding_tab->restoreSettings(computer_);
 
     tabs_.append(general_tab);
@@ -250,12 +250,12 @@ bool ComputerDialog::saveChanges()
         else if (type == ITEM_TYPE_DESKTOP_MANAGE)
         {
             ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
         }
         else if (type == ITEM_TYPE_DESKTOP_VIEW)
         {
             ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW, &computer_);
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW, &computer_);
         }
         else if (type == ITEM_TYPE_PORT_FORWARDING)
         {

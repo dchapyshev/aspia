@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QVersionNumber>
 
-#include "proto/common.h"
+#include "proto/peer_common.h"
 
 #include <google/protobuf/message_lite.h>
 
@@ -36,8 +36,8 @@ bool parse(const QByteArray& buffer, T* message)
     return message->ParseFromArray(buffer.data(), buffer.size());
 }
 
-proto::Version serialize(const QVersionNumber& version);
-QVersionNumber parse(const proto::Version& version);
+proto::peer::Version serialize(const QVersionNumber& version);
+QVersionNumber parse(const proto::peer::Version& version);
 
 class SerializerImpl
 {

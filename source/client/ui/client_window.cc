@@ -235,15 +235,15 @@ void ClientWindow::onAbout()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::sessionTypeChanged(int item_index)
 {
-    proto::SessionType session_type = static_cast<proto::SessionType>(
+    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
     LOG(LS_INFO) << "[ACTION] Session type changed: " << session_type;
 
     switch (session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             ui.button_session_config->setEnabled(true);
             break;
 
@@ -261,13 +261,13 @@ void ClientWindow::sessionConfigButtonPressed()
 {
     LOG(LS_INFO) << "[ACTION] Session config button";
 
-    proto::SessionType session_type = static_cast<proto::SessionType>(
+    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
     ClientSettings settings;
 
     switch (session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
             DesktopConfigDialog dialog(session_type,
                                        settings.desktopManageConfig(),
@@ -279,7 +279,7 @@ void ClientWindow::sessionConfigButtonPressed()
         }
         break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             DesktopConfigDialog dialog(session_type,
                                        settings.desktopViewConfig(),
@@ -372,7 +372,7 @@ void ClientWindow::connectToHost()
     if (host_id_entered)
         config.router_config = std::move(router_config);
 
-    config.session_type = static_cast<proto::SessionType>(
+    config.session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
     config.display_name = settings.displayName();
 
@@ -380,23 +380,23 @@ void ClientWindow::connectToHost()
 
     switch (config.session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             session_window = new DesktopSessionWindow(config.session_type, settings.desktopManageConfig());
             break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             session_window = new DesktopSessionWindow(config.session_type, settings.desktopViewConfig());
             break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             session_window = new FileTransferSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             session_window = new SystemInfoSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             session_window = new TextChatSessionWindow();
             break;
 
@@ -454,10 +454,10 @@ void ClientWindow::createLanguageMenu(const QString& current_locale)
 void ClientWindow::reloadSessionTypes()
 {
     ClientSettings settings;
-    proto::SessionType current_session_type = settings.sessionType();
+    proto::peer::SessionType current_session_type = settings.sessionType();
     QComboBox* combobox = ui.combo_session_type;
 
-    auto add_session = [=](const QString& icon, proto::SessionType session_type)
+    auto add_session = [=](const QString& icon, proto::peer::SessionType session_type)
     {
         combobox->addItem(QIcon(icon),
                           common::sessionTypeToLocalizedString(session_type),
@@ -466,11 +466,11 @@ void ClientWindow::reloadSessionTypes()
 
     combobox->clear();
 
-    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::peer::SESSION_TYPE_TEXT_CHAT);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

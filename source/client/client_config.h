@@ -20,7 +20,7 @@
 #define CLIENT_CLIENT_CONFIG_H
 
 #include "client/router_config.h"
-#include "proto/common.h"
+#include "proto/peer_common.h"
 
 #include <optional>
 
@@ -39,7 +39,7 @@ struct Config
     quint16 port;
     QString username;
     QString password;
-    proto::SessionType session_type;
+    proto::peer::SessionType session_type;
 };
 
 } // namespace client

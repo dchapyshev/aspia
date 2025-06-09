@@ -214,9 +214,9 @@ void UserSession::onClientSession(ClientSession* client_session)
 
     bool confirm_required = true;
 
-    proto::SessionType session_type = client_session->sessionType();
-    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO ||
-        session_type == proto::SESSION_TYPE_PORT_FORWARDING)
+    proto::peer::SessionType session_type = client_session->sessionType();
+    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO ||
+        session_type == proto::peer::SESSION_TYPE_PORT_FORWARDING)
     {
         LOG(LS_INFO) << "Confirmation for system info session NOT required (sid=" << session_id_ << ")";
         confirm_required = false;
@@ -483,7 +483,7 @@ void UserSession::onClientSessionFinished()
         LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
                      << " finished. Delete it (sid=" << session_id_ << ")";
 
-        if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+        if (client_session->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
             onTextChatSessionFinished(client_session->id());
 
         // Notification of the UI about disconnecting the client.
@@ -538,7 +538,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& tex
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT && client->id() != id)
+        if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT && client->id() != id)
         {
             ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
             text_chat_session->sendTextChat(text_chat);
@@ -708,7 +708,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
         for (const auto& client : std::as_const(clients_))
         {
-            if (client->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+            if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
             {
                 ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
                 text_chat_session->sendTextChat(incoming_message_->text_chat());
@@ -824,7 +824,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     // Stop all file transfer clients.
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_FILE_TRANSFER)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_FILE_TRANSFER)
             continue;
 
         LOG(LS_INFO) << "Stop file transfer client (id=" << client->id()
@@ -867,9 +867,9 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
         return;
     }
 
-    proto::SessionType session_type = client_session.sessionType();
-    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO ||
-        session_type == proto::SESSION_TYPE_PORT_FORWARDING)
+    proto::peer::SessionType session_type = client_session.sessionType();
+    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO ||
+        session_type == proto::peer::SESSION_TYPE_PORT_FORWARDING)
     {
         LOG(LS_INFO) << "Notify for " << session_type << " session is NOT required (sid="
                      << session_id_ << ")";
@@ -928,8 +928,8 @@ void UserSession::addNewClientSession(ClientSession* client_session)
 
     switch (client_session->sessionType())
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             LOG(LS_INFO) << "New desktop session (sid=" << session_id_ << ")";
 
@@ -981,28 +981,28 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         }
         break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
         {
             LOG(LS_INFO) << "New file transfer session (sid=" << session_id_ << ")";
             clients_.append(std::move(client_session));
         }
         break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
         {
             LOG(LS_INFO) << "New system info session (sid=" << session_id_ << ")";
             clients_.append(std::move(client_session));
         }
         break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
         {
             LOG(LS_INFO) << "New text chat session (sid=" << session_id_ << ")";
             clients_.append(std::move(client_session));
         }
         break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
         {
             LOG(LS_INFO) << "New port forwarding session (sid=" << session_id_ << ")";
             clients_.append(std::move(client_session));
@@ -1034,14 +1034,14 @@ void UserSession::addNewClientSession(ClientSession* client_session)
     // Notify the UI of a new connection.
     sendConnectEvent(*client_session);
 
-    if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+    if (client_session->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
     {
         onTextChatSessionStarted(client_session->id());
 
         bool has_user = ipc_channel_ != nullptr;
         for (const auto& client : std::as_const(clients_))
         {
-            if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+            if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
                 continue;
 
             ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
@@ -1066,7 +1066,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
@@ -1087,7 +1087,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() == id)
@@ -1113,7 +1113,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() != id)
@@ -1139,7 +1139,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() == id)
@@ -1162,7 +1162,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() != proto::SESSION_TYPE_TEXT_CHAT)
+        if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
         if (client->id() != id)
@@ -1241,10 +1241,10 @@ bool UserSession::hasDesktopClients() const
 {
     for (const auto& session : std::as_const(clients_))
     {
-        proto::SessionType session_type = session->sessionType();
+        proto::peer::SessionType session_type = session->sessionType();
 
-        if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-            session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+        if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+            session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
         {
             return true;
         }

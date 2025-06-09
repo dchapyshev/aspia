@@ -44,27 +44,27 @@ public:
     {
         switch (client.session_type)
         {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
                 setIcon(0, QIcon(":/img/monitor-keyboard.png"));
                 break;
 
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
                 setIcon(0, QIcon(":/img/monitor.png"));
                 break;
 
-            case proto::SESSION_TYPE_FILE_TRANSFER:
+            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 setIcon(0, QIcon(":/img/folder-stand.png"));
                 break;
 
-            case proto::SESSION_TYPE_SYSTEM_INFO:
+            case proto::peer::SESSION_TYPE_SYSTEM_INFO:
                 setIcon(0, QIcon(":/img/computer_info.png"));
                 break;
 
-            case proto::SESSION_TYPE_TEXT_CHAT:
+            case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 setIcon(0, QIcon(":/img/text-chat.png"));
                 break;
 
-            case proto::SESSION_TYPE_PORT_FORWARDING:
+            case proto::peer::SESSION_TYPE_PORT_FORWARDING:
                 setIcon(0, QIcon(":/img/port-forwarding.png"));
                 break;
 
@@ -85,7 +85,7 @@ public:
         }
     }
 
-    proto::SessionType sessionType() const { return session_type_; }
+    proto::peer::SessionType sessionType() const { return session_type_; }
     quint32 id() const { return id_; }
 
     void switchName()
@@ -102,7 +102,7 @@ public:
     }
 
 private:
-    const proto::SessionType session_type_;
+    const proto::peer::SessionType session_type_;
     const quint32 id_;
     const QString display_name_;
     const QString computer_name_;
@@ -207,7 +207,7 @@ NotifierWindow::~NotifierWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<quint32> NotifierWindow::sessions(proto::SessionType session_type)
+QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
 {
     QList<quint32> result;
 
@@ -235,10 +235,10 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
         for (const auto& client : clients)
         {
-            if (client.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
                 has_desktop_manage = true;
 
-            if (client.session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+            if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
                 has_desktop_view = true;
 
             SessionTreeItem* tree_item = new SessionTreeItem(client);

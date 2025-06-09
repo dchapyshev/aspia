@@ -33,7 +33,7 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
+DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* parent)
     : QFrame(parent),
       session_type_(session_type)
 {
@@ -62,7 +62,7 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     scale_ = settings.scale();
 
     // Sending key combinations is available only in desktop management.
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
     else
         ui.action_send_key_combinations->setChecked(false);
@@ -116,32 +116,32 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
 
     createAdditionalMenu(session_type);
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
     }
     else
     {
-        DCHECK(session_type == proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
         ui.action_cad->setVisible(false);
     }
 
     connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
     {
         LOG(LS_INFO) << "[ACTION] File transfer requested";
-        emit sig_startSession(proto::SESSION_TYPE_FILE_TRANSFER);
+        emit sig_startSession(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     });
 
     connect(ui.action_text_chat, &QAction::triggered, this, [this]()
     {
         LOG(LS_INFO) << "[ACTION] Text chat requested";
-        emit sig_startSession(proto::SESSION_TYPE_TEXT_CHAT);
+        emit sig_startSession(proto::peer::SESSION_TYPE_TEXT_CHAT);
     });
 
     connect(ui.action_port_forwarding, &QAction::triggered, this, [this]()
     {
         LOG(LS_INFO) << "[ACTION] Port forwarding requested";
-        emit sig_startSession(proto::SESSION_TYPE_PORT_FORWARDING);
+        emit sig_startSession(proto::peer::SESSION_TYPE_PORT_FORWARDING);
     });
 
     bool is_pinned = settings.isToolBarPinned();
@@ -175,7 +175,7 @@ DesktopToolBar::~DesktopToolBar()
     settings.setPauseAudioWhenMinimizing(ui.action_pause_audio->isChecked());
 
     // Save the parameter only for desktop management.
-    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
@@ -769,7 +769,7 @@ void DesktopToolBar::onShowRecordSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
+void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
 {
     LOG(LS_INFO) << "Create additional menu";
 
@@ -796,7 +796,7 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
 
     additional_menu_->addAction(ui.action_autoscroll);
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         additional_menu_->addAction(ui.action_send_key_combinations);
 
     additional_menu_->addAction(ui.action_pause_video);
@@ -817,7 +817,7 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
     button->setPopupMode(QToolButton::InstantPopup);
 
     // Now we connect all the necessary signals and slots.
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_send_key_combinations, &QAction::triggered,
                 this, [this](bool enable)

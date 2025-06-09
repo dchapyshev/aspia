@@ -414,7 +414,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     internal_state_ = InternalState::SEND_SERVER_HELLO;
     encryption_ = server_hello.encryption();
 
-    proto::Version* version = server_hello.mutable_version();
+    proto::peer::Version* version = server_hello.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
@@ -596,7 +596,7 @@ void ServerAuthenticator::doSessionChallenge()
     proto::SessionChallenge session_challenge;
     session_challenge.set_session_types(session_types_);
 
-    proto::Version* version = session_challenge.mutable_version();
+    proto::peer::Version* version = session_challenge.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);

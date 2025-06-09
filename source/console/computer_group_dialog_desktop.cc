@@ -90,18 +90,18 @@ ComputerGroupDialogDesktop::~ComputerGroupDialogDesktop()
 
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::restoreSettings(
-    proto::SessionType session_type, const proto::address_book::ComputerGroupConfig& group_config)
+    proto::peer::SessionType session_type, const proto::address_book::ComputerGroupConfig& group_config)
 {
     proto::desktop::Config desktop_config;
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         ui.checkbox_inherit_config->setChecked(group_config.inherit().desktop_manage());
         desktop_config = group_config.session_config().desktop_manage();
     }
     else
     {
-        DCHECK_EQ(session_type, proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK_EQ(session_type, proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
         ui.checkbox_inherit_config->setChecked(group_config.inherit().desktop_view());
         desktop_config = group_config.session_config().desktop_view();
@@ -152,7 +152,7 @@ void ComputerGroupDialogDesktop::restoreSettings(
     if (desktop_config.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
         ui.checkbox_audio->setChecked(true);
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (desktop_config.flags() & proto::desktop::LOCK_AT_DISCONNECT)
             ui.checkbox_lock_at_disconnect->setChecked(true);
@@ -192,18 +192,18 @@ void ComputerGroupDialogDesktop::restoreSettings(
 
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::saveSettings(
-    proto::SessionType session_type, proto::address_book::ComputerGroupConfig* group_config)
+    proto::peer::SessionType session_type, proto::address_book::ComputerGroupConfig* group_config)
 {
     proto::desktop::Config* desktop_config;
 
-    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         desktop_config = group_config->mutable_session_config()->mutable_desktop_manage();
         group_config->mutable_inherit()->set_desktop_manage(ui.checkbox_inherit_config->isChecked());
     }
     else
     {
-        DCHECK_EQ(session_type, proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK_EQ(session_type, proto::peer::SESSION_TYPE_DESKTOP_VIEW);
         desktop_config = group_config->mutable_session_config()->mutable_desktop_view();
         group_config->mutable_inherit()->set_desktop_view(ui.checkbox_inherit_config->isChecked());
     }

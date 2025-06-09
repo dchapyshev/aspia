@@ -47,7 +47,7 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
+ClientSessionDesktop::ClientSessionDesktop(proto::peer::SessionType session_type,
                                            base::TcpChannel* channel,
                                            QObject* parent)
     : ClientSession(session_type, channel, parent),
@@ -88,13 +88,13 @@ void ClientSessionDesktop::onStarted()
     const char* extensions;
 
     // Supported extensions are different for managing and viewing the desktop.
-    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         extensions = common::kSupportedExtensionsForManage;
     }
     else
     {
-        DCHECK_EQ(sessionType(), proto::SESSION_TYPE_DESKTOP_VIEW);
+        DCHECK_EQ(sessionType(), proto::peer::SESSION_TYPE_DESKTOP_VIEW);
         extensions = common::kSupportedExtensionsForView;
     }
 
@@ -152,7 +152,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 
     if (incoming_message_->has_mouse_event())
     {
-        if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
             LOG(LS_ERROR) << "Mouse event for non-desktop-manage session";
             return;
@@ -181,7 +181,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_key_event())
     {
-        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
             emit sig_injectKeyEvent(incoming_message_->key_event());
             stat_counter_.addKeyboardEvent();
@@ -193,7 +193,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_touch_event())
     {
-        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
             emit sig_injectTouchEvent(incoming_message_->touch_event());
             stat_counter_.addTouchEvent();
@@ -205,7 +205,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_text_event())
     {
-        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
             emit sig_injectTextEvent(incoming_message_->text_event());
             stat_counter_.addTextEvent();
@@ -217,7 +217,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_clipboard_event())
     {
-        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
             emit sig_injectClipboardEvent(incoming_message_->clipboard_event());
             stat_counter_.addIncomingClipboardEvent();
@@ -425,7 +425,7 @@ void ClientSessionDesktop::setScreenType(const proto::desktop::ScreenType& type)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
         sendMessage(outgoing_message_.serialize());
@@ -655,7 +655,7 @@ void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 {
-    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         LOG(LS_ERROR) << "Power management is only accessible from a desktop manage session";
         return;
@@ -753,7 +753,7 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
 #if defined(Q_OS_WINDOWS)
     LOG(LS_INFO) << "Remote update requested";
 
-    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
         launchUpdater(sessionId());
     }

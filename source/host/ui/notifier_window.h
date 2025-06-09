@@ -32,7 +32,7 @@ public:
     explicit NotifierWindow(QWidget* parent = nullptr);
     ~NotifierWindow() final;
 
-    QList<quint32> sessions(proto::SessionType session_type);
+    QList<quint32> sessions(proto::peer::SessionType session_type);
 
 public slots:
     void onClientListChanged(const host::UserSessionAgent::ClientList& clients);

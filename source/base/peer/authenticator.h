@@ -86,7 +86,7 @@ protected:
     void sendMessage(const google::protobuf::MessageLite& message);
     void sendMessage(const QByteArray& data);
     void finish(const Location& location, ErrorCode error_code);
-    void setPeerVersion(const proto::Version& version);
+    void setPeerVersion(const proto::peer::Version& version);
     void setPeerOsName(const QString& name);
     void setPeerComputerName(const QString& name);
     void setPeerArch(const QString& arch);

@@ -116,9 +116,9 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 
     general_tab->restoreSettings(computer_group_->config());
     desktop_manage_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_group_->config());
+        proto::peer::SESSION_TYPE_DESKTOP_MANAGE, computer_group_->config());
     desktop_view_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_VIEW, computer_group_->config());
+        proto::peer::SESSION_TYPE_DESKTOP_VIEW, computer_group_->config());
     port_forwarding_tab->restoreSettings(computer_group_->config());
 
     tabs_.append(general_tab);
@@ -286,7 +286,7 @@ bool ComputerGroupDialog::saveChanges()
             ComputerGroupDialogDesktop* desktop_tab =
                 static_cast<ComputerGroupDialogDesktop*>(tab);
 
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE,
                 computer_group_->mutable_config());
         }
         else if (type == ITEM_TYPE_DESKTOP_VIEW)
@@ -294,7 +294,7 @@ bool ComputerGroupDialog::saveChanges()
             ComputerGroupDialogDesktop* desktop_tab =
                 static_cast<ComputerGroupDialogDesktop*>(tab);
 
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW,
                 computer_group_->mutable_config());
         }
         else if (type == ITEM_TYPE_PORT_FORWARDING)

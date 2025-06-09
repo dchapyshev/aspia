@@ -78,19 +78,19 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     combo_address->addItems(state_.history);
     combo_address->setCurrentIndex(0);
 
-    auto add_session = [this](const QString& icon, proto::SessionType session_type)
+    auto add_session = [this](const QString& icon, proto::peer::SessionType session_type)
     {
         ui.combo_session_type->addItem(QIcon(icon),
                                        common::sessionTypeToLocalizedString(session_type),
                                        QVariant(session_type));
     };
 
-    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/port-forwarding.png", proto::SESSION_TYPE_PORT_FORWARDING);
+    add_session(":/img/monitor-keyboard.png", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/port-forwarding.png", proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
@@ -149,7 +149,7 @@ FastConnectDialog::~FastConnectDialog()
 //--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
-    state_.session_type = static_cast<proto::SessionType>(
+    state_.session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
     LOG(LS_INFO) << "[ACTION] Session type changed: " << state_.session_type;
@@ -162,8 +162,8 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
 
     switch (state_.session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             ui.button_session_config->setEnabled(true);
             break;
 
@@ -178,12 +178,12 @@ void FastConnectDialog::sessionConfigButtonPressed()
 {
     LOG(LS_INFO) << "[ACTION] Session config button pressed";
 
-    proto::SessionType session_type = static_cast<proto::SessionType>(
+    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
     switch (session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
             client::DesktopConfigDialog dialog(session_type,
                                                state_.desktop_manage_config,
@@ -195,7 +195,7 @@ void FastConnectDialog::sessionConfigButtonPressed()
         }
         break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             client::DesktopConfigDialog dialog(session_type,
                                                state_.desktop_view_config,
@@ -207,7 +207,7 @@ void FastConnectDialog::sessionConfigButtonPressed()
         }
         break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
         {
             // TODO
         }
@@ -283,7 +283,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         client_config.address_or_id = current_address;
     }
 
-    client_config.session_type = static_cast<proto::SessionType>(
+    client_config.session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
     if (ui.checkbox_use_creds->isChecked())
@@ -309,7 +309,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     switch (client_config.session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
             proto::desktop::Config desktop_config;
 
@@ -323,7 +323,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         }
         break;
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             proto::desktop::Config desktop_config;
 
@@ -337,19 +337,19 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         }
         break;
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             session_window = new client::FileTransferSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             session_window = new client::SystemInfoSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
             session_window = new client::TextChatSessionWindow();
             break;
 
-        case proto::SESSION_TYPE_PORT_FORWARDING:
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
         {
             proto::port_forwarding::Config port_forwarding_config;
 
@@ -401,9 +401,9 @@ void FastConnectDialog::readState()
         >> creds_from_address_book >> session_params_from_address_book >> port_forwarding_config;
 
     if (session_type != 0)
-        state_.session_type = static_cast<proto::SessionType>(session_type);
+        state_.session_type = static_cast<proto::peer::SessionType>(session_type);
     else
-        state_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+        state_.session_type = proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
 
     if (!desktop_manage_config.isEmpty())
     {

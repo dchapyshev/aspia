@@ -37,15 +37,15 @@ QByteArray serialize(const google::protobuf::MessageLite& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::Version serialize(const QVersionNumber& version)
+proto::peer::Version serialize(const QVersionNumber& version)
 {
     if (version.segmentCount() != 3)
     {
         LOG(LS_ERROR) << "Invalid version segments count: " << version.segmentCount();
-        return proto::Version();
+        return proto::peer::Version();
     }
 
-    proto::Version proto_version;
+    proto::peer::Version proto_version;
     proto_version.set_major(static_cast<quint32>(version.majorVersion()));
     proto_version.set_minor(static_cast<quint32>(version.minorVersion()));
     proto_version.set_patch(static_cast<quint32>(version.microVersion()));
@@ -54,7 +54,7 @@ proto::Version serialize(const QVersionNumber& version)
 }
 
 //--------------------------------------------------------------------------------------------------
-QVersionNumber parse(const proto::Version& version)
+QVersionNumber parse(const proto::peer::Version& version)
 {
     return QVersionNumber({ static_cast<int>(version.major()),
                             static_cast<int>(version.minor()),

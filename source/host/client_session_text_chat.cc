@@ -28,7 +28,7 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 ClientSessionTextChat::ClientSessionTextChat(
     base::TcpChannel* channel, QObject* parent)
-    : ClientSession(proto::SESSION_TYPE_TEXT_CHAT, channel, parent)
+    : ClientSession(proto::peer::SESSION_TYPE_TEXT_CHAT, channel, parent)
 {
     LOG(LS_INFO) << "Ctor";
 }

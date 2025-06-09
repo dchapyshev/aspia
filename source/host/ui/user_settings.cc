@@ -19,7 +19,7 @@
 #include "host/ui/user_settings.h"
 
 #include "base/xml_settings.h"
-#include "proto/common.h"
+#include "proto/peer_common.h"
 
 #include <QLocale>
 
@@ -96,7 +96,7 @@ void UserSettings::setShowIconsInMenus(bool enable)
 //--------------------------------------------------------------------------------------------------
 quint32 UserSettings::oneTimeSessions() const
 {
-    return settings_.value(kOneTimeSessionsParam, proto::SESSION_TYPE_ALL).toUInt();
+    return settings_.value(kOneTimeSessionsParam, proto::peer::SESSION_TYPE_ALL).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -77,14 +77,14 @@ void ClientSettings::setAddressList(const QStringList& list)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::SessionType ClientSettings::sessionType() const
+proto::peer::SessionType ClientSettings::sessionType() const
 {
-    return static_cast<proto::SessionType>(
-        settings_.value(kSessionTypeParam, proto::SESSION_TYPE_DESKTOP_MANAGE).toUInt());
+    return static_cast<proto::peer::SessionType>(
+        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP_MANAGE).toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setSessionType(proto::SessionType session_type)
+void ClientSettings::setSessionType(proto::peer::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
 }

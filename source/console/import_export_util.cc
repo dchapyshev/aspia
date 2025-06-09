@@ -111,7 +111,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         computer->set_name(computer_name.toStdString());
         computer->set_comment(comment.toStdString());
         computer->set_address(std::string()); // Empty address
-        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
         computer->set_port(DEFAULT_HOST_TCP_PORT);
 
         proto::address_book::InheritConfig* inherit = computer->mutable_inherit();
@@ -146,7 +146,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         computer->set_name(computer_name.toStdString());
         computer->set_comment(comment.toStdString());
         computer->set_address(host_id.toStdString());
-        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
         computer->set_port(DEFAULT_HOST_TCP_PORT);
 
         proto::address_book::InheritConfig* inherit = computer->mutable_inherit();
@@ -359,7 +359,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     computer->set_port(port);
     computer->set_username(username.toStdString());
     computer->set_password(password.toStdString());
-    computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+    computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
     computer->mutable_session_config()->CopyFrom(session_config);
     computer->mutable_inherit()->CopyFrom(inherit);
 }

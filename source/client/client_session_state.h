@@ -19,11 +19,11 @@
 #ifndef CLIENT_CLIENT_SESSION_STATE_H
 #define CLIENT_CLIENT_SESSION_STATE_H
 
+#include <QVersionNumber>
+
 #include "client/client_config.h"
 
 #include <mutex>
-
-#include <QVersionNumber>
 
 namespace client {
 
@@ -38,7 +38,7 @@ public:
 
     bool isConnectionByHostId() const;
 
-    proto::SessionType sessionType() const;
+    proto::peer::SessionType sessionType() const;
     const QString& computerName() const;
     const QString& displayName() const;
     const QString& hostAddress() const;

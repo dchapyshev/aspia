@@ -274,9 +274,9 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     general_tab->restoreSettings(data_->root_group().config());
     desktop_manage_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_MANAGE, data_->root_group().config());
+        proto::peer::SESSION_TYPE_DESKTOP_MANAGE, data_->root_group().config());
     desktop_view_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
+        proto::peer::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
     port_forwarding_tab->restoreSettings(data_->root_group().config());
 
     tabs_.append(general_tab);
@@ -623,7 +623,7 @@ bool AddressBookDialog::saveChanges()
             ComputerGroupDialogDesktop* desktop_tab =
                 static_cast<ComputerGroupDialogDesktop*>(tab);
 
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE,
                 data_->mutable_root_group()->mutable_config());
         }
         else if (type == ITEM_TYPE_DESKTOP_VIEW)
@@ -631,7 +631,7 @@ bool AddressBookDialog::saveChanges()
             ComputerGroupDialogDesktop* desktop_tab =
                 static_cast<ComputerGroupDialogDesktop*>(tab);
 
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW,
                 data_->mutable_root_group()->mutable_config());
         }
         else if (type == ITEM_TYPE_PORT_FORWARDING)

@@ -51,7 +51,7 @@ bool SessionState::isConnectionByHostId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::SessionType SessionState::sessionType() const
+proto::peer::SessionType SessionState::sessionType() const
 {
     return config_.session_type;
 }

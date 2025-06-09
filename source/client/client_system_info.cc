@@ -39,7 +39,7 @@ ClientSystemInfo::~ClientSystemInfo()
 //--------------------------------------------------------------------------------------------------
 void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(request));
+    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, base::serialize(request));
 }
 
 //--------------------------------------------------------------------------------------------------

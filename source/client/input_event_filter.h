@@ -19,8 +19,8 @@
 #ifndef CLIENT_INPUT_EVENT_FILTER_H
 #define CLIENT_INPUT_EVENT_FILTER_H
 
-#include "proto/common.h"
 #include "proto/desktop.h"
+#include "proto/peer_common.h"
 
 namespace client {
 
@@ -30,7 +30,7 @@ public:
     InputEventFilter();
     ~InputEventFilter();
 
-    void setSessionType(proto::SessionType session_type);
+    void setSessionType(proto::peer::SessionType session_type);
     void setClipboardEnabled(bool enable);
     void setNetworkOverflow(bool enable);
 
@@ -49,7 +49,7 @@ public:
     int sendClipboardCount() const { return send_clipboard_count_; }
 
 private:
-    proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
+    proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
     bool clipboard_enabled_ = false;
     bool network_overflow_ = false;
 

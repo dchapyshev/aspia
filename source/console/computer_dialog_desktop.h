@@ -34,9 +34,9 @@ public:
     ComputerDialogDesktop(int type, QWidget* parent);
     ~ComputerDialogDesktop() final = default;
 
-    void restoreSettings(proto::SessionType session_type,
+    void restoreSettings(proto::peer::SessionType session_type,
         const proto::address_book::Computer& computer);
-    void saveSettings(proto::SessionType session_type, proto::address_book::Computer* computer);
+    void saveSettings(proto::peer::SessionType session_type, proto::address_book::Computer* computer);
 
 private slots:
     void onCodecChanged(int item_index);

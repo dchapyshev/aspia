@@ -316,7 +316,7 @@ void ClientPortForwarding::sendPortForwardingRequest()
     request->set_remote_port(remote_port_);
 
     LOG(LS_INFO) << "Sending port forwarding request for " << remote_host_ << ":" << remote_port_;
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -326,7 +326,7 @@ void ClientPortForwarding::sendPortForwardingStart()
     start->set_dummy(1);
 
     LOG(LS_INFO) << "Sending port forwarding start for " << remote_host_ << ":" << remote_port_;
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 void ClientPortForwarding::sendPortForwardingData(const char* buffer, size_t length)
@@ -337,7 +337,7 @@ void ClientPortForwarding::sendPortForwardingData(const char* buffer, size_t len
     data->set_data(buffer, length);
 
     // Send data to client.
-    sendMessage(proto::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------

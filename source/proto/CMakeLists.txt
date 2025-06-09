@@ -18,8 +18,6 @@
 
 list(APPEND SOURCE_PROTO
     address_book.proto
-    common.h
-    common.proto
     desktop.h
     desktop.proto
     desktop_internal.proto
@@ -28,6 +26,8 @@ list(APPEND SOURCE_PROTO
     key_exchange.proto
     meta_types.cc
     meta_types.h
+    peer_common.h
+    peer_common.proto
     port_forwarding.proto
     host_internal.h
     host_internal.proto
