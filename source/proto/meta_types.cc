@@ -114,7 +114,7 @@ void registerMetaTypes()
     qRegisterMetaType<proto::task_manager::HostToClient>("proto::task_manager::HostToClient");
 
     // text_chat.h
-    qRegisterMetaType<proto::TextChat>("proto::TextChat");
+    qRegisterMetaType<proto::text_chat::TextChat>("proto::TextChat");
 }
 
 } // namespace proto

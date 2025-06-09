@@ -209,7 +209,7 @@ void UserSessionAgent::onPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
+void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 {
     LOG(LS_INFO) << "Text chat message";
 

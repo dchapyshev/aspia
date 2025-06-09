@@ -32,8 +32,8 @@ public:
     ClientSessionTextChat(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionTextChat() final;
 
-    void sendTextChat(const proto::TextChat& text_chat);
-    void sendStatus(proto::TextChatStatus::Status status);
+    void sendTextChat(const proto::text_chat::TextChat& text_chat);
+    void sendStatus(proto::text_chat::ChatStatus::Status status);
 
     bool hasUser() const;
     void setHasUser(bool enable);

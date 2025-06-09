@@ -77,7 +77,7 @@ signals:
     void sig_clientSessionFinished();
     void sig_clientSessionVideoRecording(
         const QString& computer_name, const QString& user_name, bool started);
-    void sig_clientSessionTextChat(quint32 id, const proto::TextChat& text_chat);
+    void sig_clientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
 
 protected:
     ClientSession(proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent);

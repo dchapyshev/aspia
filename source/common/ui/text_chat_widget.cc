@@ -98,7 +98,7 @@ TextChatWidget::~TextChatWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::readMessage(const proto::TextChatMessage& message)
+void TextChatWidget::readMessage(const proto::text_chat::Message& message)
 {
     QListWidget* list_messages = ui->list_messages;
     TextChatIncomingMessage* message_widget = new TextChatIncomingMessage(list_messages);
@@ -116,7 +116,7 @@ void TextChatWidget::readMessage(const proto::TextChatMessage& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::readStatus(const proto::TextChatStatus& status)
+void TextChatWidget::readStatus(const proto::text_chat::ChatStatus& status)
 {
     status_clear_timer_->stop();
 
@@ -124,23 +124,23 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
 
     switch (status.status())
     {
-        case proto::TextChatStatus::STATUS_TYPING:
+        case proto::text_chat::ChatStatus::STATUS_TYPING:
             ui->label_status->setText(tr("%1 is typing...").arg(user_name));
             break;
 
-        case proto::TextChatStatus::STATUS_STARTED:
+        case proto::text_chat::ChatStatus::STATUS_STARTED:
             addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::TextChatStatus::STATUS_STOPPED:
+        case proto::text_chat::ChatStatus::STATUS_STOPPED:
             addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::TextChatStatus::STATUS_USER_CONNECTED:
+        case proto::text_chat::ChatStatus::STATUS_USER_CONNECTED:
             addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::TextChatStatus::STATUS_USER_DISCONNECTED:
+        case proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED:
             addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
             break;
 
@@ -172,7 +172,7 @@ bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
             return true;
         }
 
-        onSendStatus(proto::TextChatStatus::STATUS_TYPING);
+        onSendStatus(proto::text_chat::ChatStatus::STATUS_TYPING);
     }
     else if (object == ui->list_messages->horizontalScrollBar() ||
              object == ui->list_messages->verticalScrollBar())
@@ -259,7 +259,7 @@ void TextChatWidget::onSendMessage()
     edit_message->clear();
     edit_message->setFocus();
 
-    proto::TextChatMessage text_chat_message;
+    proto::text_chat::Message text_chat_message;
     text_chat_message.set_timestamp(timestamp);
     text_chat_message.set_source(display_name_.toStdString());
     text_chat_message.set_text(message.toStdString());
@@ -268,9 +268,9 @@ void TextChatWidget::onSendMessage()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
+void TextChatWidget::onSendStatus(proto::text_chat::ChatStatus::Status status)
 {
-    proto::TextChatStatus text_chat_status;
+    proto::text_chat::ChatStatus text_chat_status;
     text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
     text_chat_status.set_source(display_name_.toStdString());
     text_chat_status.set_status(status);

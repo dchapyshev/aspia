@@ -37,14 +37,14 @@ public:
     explicit TextChatWidget(QWidget* parent = nullptr);
     ~TextChatWidget() final;
 
-    void readMessage(const proto::TextChatMessage& message);
-    void readStatus(const proto::TextChatStatus& status);
+    void readMessage(const proto::text_chat::Message& message);
+    void readStatus(const proto::text_chat::ChatStatus& status);
 
     void setDisplayName(const QString& display_name);
 
 signals:
-    void sig_sendMessage(const proto::TextChatMessage& message);
-    void sig_sendStatus(const proto::TextChatStatus& status);
+    void sig_sendMessage(const proto::text_chat::Message& message);
+    void sig_sendStatus(const proto::text_chat::ChatStatus& status);
     void sig_textChatClosed();
 
 protected:
@@ -56,7 +56,7 @@ private:
     void addOutgoingMessage(time_t timestamp, const QString& message);
     void addStatusMessage(const QString& message);
     void onSendMessage();
-    void onSendStatus(proto::TextChatStatus::Status status);
+    void onSendStatus(proto::text_chat::ChatStatus::Status status);
     void onClearHistory();
     void onSaveChat();
     void onUpdateSize();

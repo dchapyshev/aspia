@@ -58,7 +58,7 @@ signals:
     void sig_mouseLock(bool enable);
     void sig_keyboardLock(bool enable);
     void sig_pause(bool enable);
-    void sig_textChat(const proto::TextChat& text_chat);
+    void sig_textChat(const proto::text_chat::TextChat& text_chat);
 
 protected:
     // QMainWindow implementation.
@@ -73,7 +73,7 @@ private slots:
         const proto::internal::ConnectConfirmationRequest& request);
     void onVideoRecordingStateChanged(
         const QString& computer_name, const QString& user_name, bool started);
-    void onTextChat(const proto::TextChat& text_chat);
+    void onTextChat(const proto::text_chat::TextChat& text_chat);
 
     void realClose();
     void onLanguageChanged(QAction* action);

@@ -20,9 +20,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package proto.text_chat;
 
-message TextChatStatus
+message ChatStatus
 {
     enum Status
     {
@@ -40,7 +40,7 @@ message TextChatStatus
     Status status   = 4;
 }
 
-message TextChatMessage
+message Message
 {
     int64 timestamp = 1;
     string source   = 2;
@@ -50,6 +50,6 @@ message TextChatMessage
 
 message TextChat
 {
-    TextChatStatus chat_status   = 1;
-    TextChatMessage chat_message = 2;
+    ChatStatus chat_status = 1;
+    Message chat_message   = 2;
 }

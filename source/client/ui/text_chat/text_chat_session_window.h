@@ -46,10 +46,10 @@ public:
 
 public slots:
     void onShowWindow();
-    void onTextChatMessage(const proto::TextChat& text_chat);
+    void onTextChatMessage(const proto::text_chat::TextChat& text_chat);
 
 signals:
-    void sig_textChatMessage(const proto::TextChat& text_chat);
+    void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
 
 protected:
     // SessionWindow implementation.

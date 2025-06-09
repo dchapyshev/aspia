@@ -40,18 +40,18 @@ ClientSessionTextChat::~ClientSessionTextChat()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
+void ClientSessionTextChat::sendTextChat(const proto::text_chat::TextChat& text_chat)
 {
     sendMessage(base::serialize(text_chat));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
+void ClientSessionTextChat::sendStatus(proto::text_chat::ChatStatus::Status status)
 {
     LOG(LS_INFO) << "Send text chat status";
 
-    proto::TextChat text_chat;
-    proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+    proto::text_chat::TextChat text_chat;
+    proto::text_chat::ChatStatus* text_chat_status = text_chat.mutable_chat_status();
 
     text_chat_status->set_status(status);
     text_chat_status->set_source(base::SysInfo::computerName().toStdString());
@@ -81,7 +81,7 @@ void ClientSessionTextChat::onStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onReceived(const QByteArray& buffer)
 {
-    proto::TextChat text_chat;
+    proto::text_chat::TextChat text_chat;
 
     if (!base::parse(buffer, &text_chat))
     {
@@ -96,7 +96,7 @@ void ClientSessionTextChat::onReceived(const QByteArray& buffer)
     else
     {
         if (text_chat.has_chat_message())
-            sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
+            sendStatus(proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED);
     }
 }
 

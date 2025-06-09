@@ -33,17 +33,17 @@ TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
     ui->setupUi(this);
 
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendMessage,
-            this, [this](const proto::TextChatMessage& message)
+            this, [this](const proto::text_chat::Message& message)
     {
-        proto::TextChat text_chat;
+        proto::text_chat::TextChat text_chat;
         text_chat.mutable_chat_message()->CopyFrom(message);
         emit sig_textChatMessage(text_chat);
     });
 
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendStatus,
-            this, [this](const proto::TextChatStatus& status)
+            this, [this](const proto::text_chat::ChatStatus& status)
     {
-        proto::TextChat text_chat;
+        proto::text_chat::TextChat text_chat;
         text_chat.mutable_chat_status()->CopyFrom(status);
         emit sig_textChatMessage(text_chat);
     });
@@ -84,7 +84,7 @@ void TextChatSessionWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatSessionWindow::onTextChatMessage(const proto::TextChat& text_chat)
+void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
     {

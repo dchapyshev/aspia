@@ -23,6 +23,6 @@
 
 #include "proto/text_chat.pb.h"
 
-Q_DECLARE_METATYPE(proto::TextChat)
+Q_DECLARE_METATYPE(proto::text_chat::TextChat)
 
 #endif // PROTO_TEXT_CHAT_H

@@ -120,26 +120,26 @@ message ServiceControl
 message VideoRecordingState
 {
     string computer_name = 1;
-    string user_name = 2;
-    bool started = 3;
+    string user_name     = 2;
+    bool started         = 3;
 }
 
 message UiToService
 {
-    CredentialsRequest credentials_request = 1;
-    OneTimeSessions one_time_sessions = 2;
+    CredentialsRequest credentials_request   = 1;
+    OneTimeSessions one_time_sessions        = 2;
     ConnectConfirmation connect_confirmation = 3;
-    ServiceControl control = 4;
-    TextChat text_chat = 5;
+    ServiceControl control                   = 4;
+    text_chat.TextChat text_chat             = 5;
 }
 
 message ServiceToUi
 {
-    RouterState router_state         = 1;
-    Credentials credentials          = 2;
-    ConnectEvent connect_event       = 3;
-    DisconnectEvent disconnect_event = 4;
+    RouterState router_state                                = 1;
+    Credentials credentials                                 = 2;
+    ConnectEvent connect_event                              = 3;
+    DisconnectEvent disconnect_event                        = 4;
     ConnectConfirmationRequest connect_confirmation_request = 5;
-    VideoRecordingState video_recording_state = 6;
-    TextChat text_chat = 7;
+    VideoRecordingState video_recording_state               = 6;
+    text_chat.TextChat text_chat                            = 7;
 }

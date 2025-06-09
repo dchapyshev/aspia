@@ -528,7 +528,7 @@ void UserSession::onClientSessionVideoRecording(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSessionTextChat(quint32 id, const proto::TextChat& text_chat)
+void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat)
 {
     if (!ipc_channel_)
     {
@@ -1071,9 +1071,9 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 
         ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
 
-        proto::TextChatStatus::Status status = proto::TextChatStatus::STATUS_USER_CONNECTED;
+        proto::text_chat::ChatStatus::Status status = proto::text_chat::ChatStatus::STATUS_USER_CONNECTED;
         if (!has_user)
-            status = proto::TextChatStatus::STATUS_USER_DISCONNECTED;
+            status = proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED;
 
         text_chat_client->setHasUser(has_user);
         text_chat_client->sendStatus(status);
@@ -1095,11 +1095,11 @@ void UserSession::onTextChatSessionStarted(quint32 id)
             ClientSessionTextChat* text_chat_client = static_cast<ClientSessionTextChat*>(client);
 
             if (!ipc_channel_)
-                text_chat_client->sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
+                text_chat_client->sendStatus(proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED);
 
-            proto::TextChatStatus* text_chat_status =
+            proto::text_chat::ChatStatus* text_chat_status =
                  outgoing_message_.newMessage().mutable_text_chat()->mutable_chat_status();
-            text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
+            text_chat_status->set_status(proto::text_chat::ChatStatus::STATUS_STARTED);
 
             QString display_name = text_chat_client->displayName();
             if (display_name.isEmpty())
@@ -1146,9 +1146,9 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         {
             ClientSessionTextChat* text_chat_session = static_cast<ClientSessionTextChat*>(client);
 
-            proto::TextChatStatus* text_chat_status =
+            proto::text_chat::ChatStatus* text_chat_status =
                 outgoing_message_.newMessage().mutable_text_chat()->mutable_chat_status();
-            text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
+            text_chat_status->set_status(proto::text_chat::ChatStatus::STATUS_STOPPED);
 
             QString display_name = text_chat_session->displayName();
             if (display_name.isEmpty())

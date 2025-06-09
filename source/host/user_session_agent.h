@@ -71,7 +71,7 @@ public slots:
     void onMouseLock(bool enable);
     void onKeyboardLock(bool enable);
     void onPause(bool enable);
-    void onTextChat(const proto::TextChat& text_chat);
+    void onTextChat(const proto::text_chat::TextChat& text_chat);
 
 signals:
     void sig_statusChanged(host::UserSessionAgent::Status status);
@@ -81,7 +81,7 @@ signals:
     void sig_connectConfirmationRequest(const proto::internal::ConnectConfirmationRequest& request);
     void sig_videoRecordingStateChanged(
         const QString& computer_name, const QString& user_name, bool started);
-    void sig_textChat(const proto::TextChat& text_chat);
+    void sig_textChat(const proto::text_chat::TextChat& text_chat);
 
 private slots:
     void onIpcDisconnected();

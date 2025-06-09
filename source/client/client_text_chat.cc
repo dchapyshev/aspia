@@ -37,7 +37,7 @@ ClientTextChat::~ClientTextChat()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
+void ClientTextChat::onTextChatMessage(const proto::text_chat::TextChat& text_chat)
 {
     sendMessage(base::serialize(text_chat));
 }
@@ -51,7 +51,7 @@ void ClientTextChat::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientTextChat::onSessionMessageReceived(const QByteArray& buffer)
 {
-    proto::TextChat text_chat;
+    proto::text_chat::TextChat text_chat;
     if (!base::parse(buffer, &text_chat))
     {
         LOG(LS_ERROR) << "Unable to parse text chat message";

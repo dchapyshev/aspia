@@ -338,17 +338,17 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             text_chat_widget_ = new common::TextChatWidget();
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_sendMessage,
-                    this, [this](const proto::TextChatMessage& message)
+                    this, [this](const proto::text_chat::Message& message)
             {
-                proto::TextChat text_chat;
+                proto::text_chat::TextChat text_chat;
                 text_chat.mutable_chat_message()->CopyFrom(message);
                 emit sig_textChat(text_chat);
             });
 
             connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
-                    this, [this](const proto::TextChatStatus& status)
+                    this, [this](const proto::text_chat::ChatStatus& status)
             {
-                proto::TextChat text_chat;
+                proto::text_chat::TextChat text_chat;
                 text_chat.mutable_chat_status()->CopyFrom(status);
                 emit sig_textChat(text_chat);
             });
@@ -507,7 +507,7 @@ void MainWindow::onVideoRecordingStateChanged(
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onTextChat(const proto::TextChat& text_chat)
+void MainWindow::onTextChat(const proto::text_chat::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
     {
