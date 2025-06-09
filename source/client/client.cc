@@ -319,11 +319,11 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::HOST_CHANNEL_ID_SESSION)
+    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
     {
         onSessionMessageReceived(buffer);
     }
-    else if (channel_id == proto::peer::HOST_CHANNEL_ID_SERVICE)
+    else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
     {
         // TODO
     }
@@ -336,11 +336,11 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
-    if (channel_id == proto::peer::HOST_CHANNEL_ID_SESSION)
+    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
     {
         onSessionMessageWritten(pending);
     }
-    else if (channel_id == proto::peer::HOST_CHANNEL_ID_SERVICE)
+    else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
     {
         // TODO
     }

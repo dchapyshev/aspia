@@ -22,9 +22,9 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.router;
 
-enum RouterChannelId
+enum ChannelId
 {
-    ROUTER_CHANNEL_ID_SESSION = 0;
+    CHANNEL_ID_SESSION = 0;
 }
 
 enum SessionType

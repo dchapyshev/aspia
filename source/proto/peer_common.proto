@@ -22,10 +22,10 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.peer;
 
-enum HostChannelId
+enum ChannelId
 {
-    HOST_CHANNEL_ID_SESSION = 0;
-    HOST_CHANNEL_ID_SERVICE = 1;
+    CHANNEL_ID_SESSION = 0;
+    CHANNEL_ID_SERVICE = 1;
 }
 
 enum SessionType

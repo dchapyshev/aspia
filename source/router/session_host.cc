@@ -57,7 +57,7 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 {
     proto::router::RouterToPeer message;
     message.mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
             break;
     }
 
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

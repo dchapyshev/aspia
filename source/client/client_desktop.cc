@@ -146,7 +146,7 @@ void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event
         return;
 
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ void ClientDesktop::setDesktopConfig(const proto::desktop::Config& desktop_confi
     outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
 
     LOG(LS_INFO) << "Send new config to host";
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ void ClientDesktop::setCurrentScreen(const proto::desktop::Screen& screen)
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ void ClientDesktop::setPreferredSize(int width, int height)
     extension->set_name(common::kPreferredSizeExtension);
     extension->set_data(preferred_size.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ void ClientDesktop::setVideoPause(bool enable)
     extension->set_name(common::kVideoPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ void ClientDesktop::setAudioPause(bool enable)
     extension->set_name(common::kAudioPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -308,7 +308,7 @@ void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
     extension->set_name(common::kVideoRecordingExtension);
     extension->set_data(video_recording.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,7 +328,7 @@ void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -338,7 +338,7 @@ void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,14 +358,14 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
     extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRemoteUpdate()
 {
     outgoing_message_.newMessage().mutable_extension()->set_name(common::kRemoteUpdateExtension);
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequ
     extension->set_name(common::kSystemInfoExtension);
     extension->set_data(request.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& messa
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
-    sendMessage(proto::peer::HOST_CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    sendMessage(proto::peer::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------

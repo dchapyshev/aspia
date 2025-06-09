@@ -111,7 +111,7 @@ void Router::refreshSessionList()
 
     proto::router::AdminToRouter message;
     message.mutable_session_list_request()->set_dummy(1);
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void Router::stopSession(qint64 session_id)
     request->set_type(proto::router::SESSION_REQUEST_DISCONNECT);
     request->set_session_id(session_id);
 
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ void Router::refreshUserList()
 
     proto::router::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void Router::addUser(const proto::router::User& user)
     request->set_type(proto::router::USER_REQUEST_ADD);
     request->mutable_user()->CopyFrom(user);
 
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ void Router::modifyUser(const proto::router::User& user)
     request->set_type(proto::router::USER_REQUEST_MODIFY);
     request->mutable_user()->CopyFrom(user);
 
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ void Router::deleteUser(qint64 entry_id)
     request->set_type(proto::router::USER_REQUEST_DELETE);
     request->mutable_user()->set_entry_id(entry_id);
 
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
     request->set_peer_session_id(peer_session_id);
     request->set_type(proto::router::PEER_CONNECTION_REQUEST_DISCONNECT);
 
-    tcp_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

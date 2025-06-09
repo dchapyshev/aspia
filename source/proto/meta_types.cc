@@ -32,7 +32,7 @@ namespace proto {
 void registerMetaTypes()
 {
     // common.h
-    qRegisterMetaType<proto::peer::HostChannelId>("proto::HostChannelId");
+    qRegisterMetaType<proto::peer::ChannelId>("proto::HostChannelId");
     qRegisterMetaType<proto::peer::SessionType>("proto::SessionType");
     qRegisterMetaType<proto::peer::Version>("proto::Version");
 

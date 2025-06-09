@@ -127,7 +127,7 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     version->set_revision(GIT_COMMIT_COUNT);
 
     tcp_channel_->resume();
-    tcp_channel_->send(proto::peer::HOST_CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

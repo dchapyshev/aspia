@@ -107,7 +107,7 @@ void SessionAdmin::doUserListRequest()
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             return;
     }
 
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
 
     result->set_error_code(proto::router::SessionList::SUCCESS);
 
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

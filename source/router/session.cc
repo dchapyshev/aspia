@@ -183,7 +183,7 @@ void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::router::ROUTER_CHANNEL_ID_SESSION)
+    if (channel_id == proto::router::CHANNEL_ID_SESSION)
     {
         onSessionMessageReceived(channel_id, buffer);
     }
@@ -196,7 +196,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
 {
-    if (channel_id == proto::router::ROUTER_CHANNEL_ID_SESSION)
+    if (channel_id == proto::router::CHANNEL_ID_SESSION)
     {
         onSessionMessageWritten(channel_id, pending);
     }

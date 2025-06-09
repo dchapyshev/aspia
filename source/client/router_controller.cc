@@ -47,7 +47,7 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
 
         proto::router::PeerToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
-        router_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+        router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
     });
 }
 
@@ -283,7 +283,7 @@ void RouterController::sendConnectionRequest()
 
     proto::router::PeerToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
-    router_channel_->send(proto::router::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
+    router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

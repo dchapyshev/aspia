@@ -153,7 +153,7 @@ void ClientSession::setSessionId(base::SessionId session_id)
 //--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(const QByteArray& buffer)
 {
-    tcp_channel_->send(proto::peer::HOST_CHANNEL_ID_SESSION, buffer);
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,11 +175,11 @@ void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code
 //--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::HOST_CHANNEL_ID_SESSION)
+    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
     {
         onReceived(buffer);
     }
-    else if (channel_id == proto::peer::HOST_CHANNEL_ID_SERVICE)
+    else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
     {
         // TODO
     }

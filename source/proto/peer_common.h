@@ -23,7 +23,7 @@
 
 #include "proto/peer_common.pb.h"
 
-Q_DECLARE_METATYPE(proto::peer::HostChannelId)
+Q_DECLARE_METATYPE(proto::peer::ChannelId)
 Q_DECLARE_METATYPE(proto::peer::SessionType)
 Q_DECLARE_METATYPE(proto::peer::Version)
 
