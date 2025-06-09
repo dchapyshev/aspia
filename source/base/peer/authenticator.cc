@@ -215,7 +215,7 @@ bool Authenticator::onSessionKeyChanged()
     std::unique_ptr<MessageEncryptor> encryptor;
     std::unique_ptr<MessageDecryptor> decryptor;
 
-    if (encryption_ == proto::ENCRYPTION_AES256_GCM)
+    if (encryption_ == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
         encryptor = MessageEncryptorOpenssl::createForAes256Gcm(
             session_key_, encrypt_iv_);
@@ -224,7 +224,7 @@ bool Authenticator::onSessionKeyChanged()
     }
     else
     {
-        DCHECK_EQ(encryption_, proto::ENCRYPTION_CHACHA20_POLY1305);
+        DCHECK_EQ(encryption_, proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
 
         encryptor = MessageEncryptorOpenssl::createForChaCha20Poly1305(
             session_key_, encrypt_iv_);

@@ -59,8 +59,8 @@ public:
 
     void start(TcpChannel* tcp_channel);
 
-    [[nodiscard]] proto::Identify identify() const { return identify_; }
-    [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
+    [[nodiscard]] proto::key_exchange::Identify identify() const { return identify_; }
+    [[nodiscard]] proto::key_exchange::Encryption encryption() const { return encryption_; }
     [[nodiscard]] const QVersionNumber& peerVersion() const { return peer_version_; }
     [[nodiscard]] const QString& peerOsName() const { return peer_os_name_; }
     [[nodiscard]] const QString& peerComputerName() const { return peer_computer_name_; }
@@ -94,8 +94,8 @@ protected:
 
     [[nodiscard]] bool onSessionKeyChanged();
 
-    proto::Encryption encryption_ = proto::ENCRYPTION_UNKNOWN;
-    proto::Identify identify_ = proto::IDENTIFY_SRP;
+    proto::key_exchange::Encryption encryption_ = proto::key_exchange::ENCRYPTION_UNKNOWN;
+    proto::key_exchange::Identify identify_ = proto::key_exchange::IDENTIFY_SRP;
     QByteArray session_key_;
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;

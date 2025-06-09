@@ -91,7 +91,7 @@ void RouterController::onTcpConnected()
 
     authenticator_ = new base::ClientAuthenticator(this);
 
-    authenticator_->setIdentify(proto::IDENTIFY_ANONYMOUS);
+    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
     authenticator_->setPeerPublicKey(public_key_);
     authenticator_->setSessionType(proto::router::SESSION_TYPE_HOST);
 

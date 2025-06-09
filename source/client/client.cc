@@ -418,7 +418,7 @@ void Client::startAuthentication()
     tcp_channel_->setReadBufferSize(kReadBufferSize);
 
     authenticator_ = new base::ClientAuthenticator(this);
-    authenticator_->setIdentify(proto::IDENTIFY_SRP);
+    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
     authenticator_->setUserName(session_state_->hostUserName());
     authenticator_->setPassword(session_state_->hostPassword());
     authenticator_->setSessionType(static_cast<quint32>(session_state_->sessionType()));

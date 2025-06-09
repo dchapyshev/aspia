@@ -22,7 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "peer_common.proto";
 
-package proto;
+package proto.key_exchange;
 
 // 1. After the connection is established, the client sends message |ClientHello| to the server.
 //    Field |methods| contains supported methods.

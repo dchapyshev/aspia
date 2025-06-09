@@ -33,7 +33,7 @@ public:
     ~ClientAuthenticator() final;
 
     void setPeerPublicKey(const QByteArray& public_key);
-    void setIdentify(proto::Identify identify);
+    void setIdentify(proto::key_exchange::Identify identify);
     void setUserName(const QString& username);
     void setPassword(const QString& password);
     void setSessionType(quint32 session_type);

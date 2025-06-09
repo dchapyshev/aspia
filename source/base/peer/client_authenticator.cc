@@ -94,7 +94,7 @@ void ClientAuthenticator::setPeerPublicKey(const QByteArray& public_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticator::setIdentify(proto::Identify identify)
+void ClientAuthenticator::setIdentify(proto::key_exchange::Identify identify)
 {
     identify_ = identify;
 }
@@ -140,7 +140,7 @@ void ClientAuthenticator::onReceived(const QByteArray& buffer)
         {
             if (readServerHello(buffer))
             {
-                if (identify_ == proto::IDENTIFY_ANONYMOUS)
+                if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
                 {
                     internal_state_ = InternalState::READ_SESSION_CHALLENGE;
                 }
@@ -228,19 +228,19 @@ void ClientAuthenticator::onWritten()
 void ClientAuthenticator::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.
-    if (identify_ == proto::IDENTIFY_ANONYMOUS && peer_public_key_.isEmpty())
+    if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS && peer_public_key_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
     }
 
-    proto::ClientHello client_hello;
+    proto::key_exchange::ClientHello client_hello;
 
-    quint32 encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
+    quint32 encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
 
 #if defined(Q_PROCESSOR_X86)
     if (CpuidUtil::hasAesNi())
-        encryption |= proto::ENCRYPTION_AES256_GCM;
+        encryption |= proto::key_exchange::ENCRYPTION_AES256_GCM;
 #endif
 
     client_hello.set_encryption(encryption);
@@ -302,7 +302,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerHello";
 
-    proto::ServerHello server_hello;
+    proto::key_exchange::ServerHello server_hello;
     if (!parse(buffer, &server_hello))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -341,8 +341,8 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     encryption_ = server_hello.encryption();
     switch (encryption_)
     {
-        case proto::ENCRYPTION_AES256_GCM:
-        case proto::ENCRYPTION_CHACHA20_POLY1305:
+        case proto::key_exchange::ENCRYPTION_AES256_GCM:
+        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
             break;
 
         default:
@@ -370,7 +370,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendIdentify()
 {
-    proto::SrpIdentify identify;
+    proto::key_exchange::SrpIdentify identify;
     identify.set_username(username_.toStdString());
 
     LOG(LS_INFO) << "Sending: Identify";
@@ -382,7 +382,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerKeyExchange";
 
-    proto::SrpServerKeyExchange server_key_exchange;
+    proto::key_exchange::SrpServerKeyExchange server_key_exchange;
     if (!parse(buffer, &server_key_exchange))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -443,7 +443,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientKeyExchange()
 {
-    proto::SrpClientKeyExchange client_key_exchange;
+    proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(encrypt_iv_.toStdString());
 
@@ -456,7 +456,7 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionChallenge";
 
-    proto::SessionChallenge challenge;
+    proto::key_exchange::SessionChallenge challenge;
     if (!parse(buffer, &challenge))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -511,7 +511,7 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendSessionResponse()
 {
-    proto::SessionResponse response;
+    proto::key_exchange::SessionResponse response;
     response.set_session_type(session_type_);
 
     proto::peer::Version* version = response.mutable_version();

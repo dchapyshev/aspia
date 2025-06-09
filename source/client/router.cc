@@ -244,7 +244,7 @@ void Router::onTcpConnected()
     timeout_timer_->stop();
 
     authenticator_ = new base::ClientAuthenticator(this);
-    authenticator_->setIdentify(proto::IDENTIFY_SRP);
+    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::router::SESSION_TYPE_ADMIN);
     authenticator_->setUserName(router_username_);
     authenticator_->setPassword(router_password_);

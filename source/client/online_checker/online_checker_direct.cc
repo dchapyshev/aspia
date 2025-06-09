@@ -115,10 +115,10 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     LOG(LS_INFO) << "Connection to " << address_ << ":" << port_
                  << " established (computer: " << computer_id_ << ")";
 
-    proto::ClientHello message;
+    proto::key_exchange::ClientHello message;
 
-    message.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
-    message.set_identify(proto::IDENTIFY_SRP);
+    message.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+    message.set_identify(proto::key_exchange::IDENTIFY_SRP);
 
     proto::peer::Version* version = message.mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
@@ -141,7 +141,7 @@ void OnlineCheckerDirect::Instance::onTcpDisconnected(
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::ServerHello message;
+    proto::key_exchange::ServerHello message;
 
     if (!base::parse(buffer, &message))
     {
@@ -151,7 +151,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */
 
     switch (message.encryption())
     {
-        case proto::ENCRYPTION_CHACHA20_POLY1305:
+        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
         {
             LOG(LS_INFO) << "Message received for computer: " << computer_id_;
             onFinished(FROM_HERE, true);

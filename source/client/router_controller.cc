@@ -97,7 +97,7 @@ void RouterController::onTcpConnected()
 
     authenticator_ = new base::ClientAuthenticator(this);
 
-    authenticator_->setIdentify(proto::IDENTIFY_SRP);
+    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
     authenticator_->setUserName(router_config_.username);
     authenticator_->setPassword(router_config_.password);
     authenticator_->setSessionType(proto::router::SESSION_TYPE_CLIENT);

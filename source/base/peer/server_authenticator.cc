@@ -39,14 +39,14 @@ namespace {
 constexpr size_t kIvSize = 12;
 
 //--------------------------------------------------------------------------------------------------
-const char* identifyToString(proto::Identify identify)
+const char* identifyToString(proto::key_exchange::Identify identify)
 {
     switch (identify)
     {
-        case proto::IDENTIFY_ANONYMOUS:
+        case proto::key_exchange::IDENTIFY_ANONYMOUS:
             return "IDENTIFY_ANONYMOUS";
 
-        case proto::IDENTIFY_SRP:
+        case proto::key_exchange::IDENTIFY_SRP:
             return "IDENTIFY_SRP";
 
         default:
@@ -231,13 +231,13 @@ void ServerAuthenticator::onWritten()
 
             switch (identify_)
             {
-                case proto::IDENTIFY_SRP:
+                case proto::key_exchange::IDENTIFY_SRP:
                 {
                     internal_state_ = InternalState::READ_IDENTIFY;
                 }
                 break;
 
-                case proto::IDENTIFY_ANONYMOUS:
+                case proto::key_exchange::IDENTIFY_ANONYMOUS:
                 {
                     internal_state_ = InternalState::SEND_SESSION_CHALLENGE;
                     doSessionChallenge();
@@ -276,7 +276,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientHello";
 
-    proto::ClientHello client_hello;
+    proto::key_exchange::ClientHello client_hello;
     if (!parse(buffer, &client_hello))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -314,16 +314,16 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     LOG(LS_INFO) << "Supported by client:";
 
-    if (encryption & proto::ENCRYPTION_AES256_GCM)
+    if (encryption & proto::key_exchange::ENCRYPTION_AES256_GCM)
         LOG(LS_INFO) << "ENCRYPTION_AES256_GCM";
 
-    if (encryption & proto::ENCRYPTION_CHACHA20_POLY1305)
+    if (encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
         LOG(LS_INFO) << "ENCRYPTION_CHACHA20_POLY1305";
 
     LOG(LS_INFO) << "Identify: " << identifyToString(client_hello.identify());
 
-    if (!(encryption & proto::ENCRYPTION_AES256_GCM) &&
-        !(encryption & proto::ENCRYPTION_CHACHA20_POLY1305))
+    if (!(encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) &&
+        !(encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305))
     {
         // No encryption methods supported.
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -334,10 +334,10 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     switch (identify_)
     {
         // SRP is always supported.
-        case proto::IDENTIFY_SRP:
+        case proto::key_exchange::IDENTIFY_SRP:
             break;
 
-        case proto::IDENTIFY_ANONYMOUS:
+        case proto::key_exchange::IDENTIFY_ANONYMOUS:
         {
             // If anonymous method is not allowed.
             if (anonymous_access_ != AnonymousAccess::ENABLE)
@@ -356,7 +356,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         }
     }
 
-    proto::ServerHello server_hello ;
+    proto::key_exchange::ServerHello server_hello ;
 
     if (key_pair_.isValid())
     {
@@ -396,18 +396,18 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     has_aes_ni = CpuidUtil::hasAesNi();
 #endif
 
-    if ((encryption & proto::ENCRYPTION_AES256_GCM) && has_aes_ni)
+    if ((encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) && has_aes_ni)
     {
         LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
-        server_hello.set_encryption(proto::ENCRYPTION_AES256_GCM);
+        server_hello.set_encryption(proto::key_exchange::ENCRYPTION_AES256_GCM);
     }
     else
     {
         LOG(LS_INFO) << "Using ChaCha20+Poly1305";
         // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
         // support AES.
-        server_hello.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
+        server_hello.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
     }
 
     // Now we are in the authentication phase.
@@ -429,7 +429,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: Identify";
 
-    proto::SrpIdentify identify;
+    proto::key_exchange::SrpIdentify identify;
     if (!parse(buffer, &identify))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -520,7 +520,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     internal_state_ = InternalState::SEND_SERVER_KEY_EXCHANGE;
     encrypt_iv_ = Random::byteArray(kIvSize);
 
-    proto::SrpServerKeyExchange server_key_exchange;
+    proto::key_exchange::SrpServerKeyExchange server_key_exchange;
 
     server_key_exchange.set_number(N_.toStdString());
     server_key_exchange.set_generator(g_.toStdString());
@@ -537,7 +537,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientKeyExchange";
 
-    proto::SrpClientKeyExchange client_key_exchange;
+    proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     if (!parse(buffer, &client_key_exchange))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -563,8 +563,8 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
     switch (encryption_)
     {
         // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-        case proto::ENCRYPTION_AES256_GCM:
-        case proto::ENCRYPTION_CHACHA20_POLY1305:
+        case proto::key_exchange::ENCRYPTION_AES256_GCM:
+        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
         {
             GenericHash hash(GenericHash::BLAKE2s256);
 
@@ -593,7 +593,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::doSessionChallenge()
 {
-    proto::SessionChallenge session_challenge;
+    proto::key_exchange::SessionChallenge session_challenge;
     session_challenge.set_session_types(session_types_);
 
     proto::peer::Version* version = session_challenge.mutable_version();
@@ -616,7 +616,7 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
 
-    proto::SessionResponse response;
+    proto::key_exchange::SessionResponse response;
     if (!parse(buffer, &response))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
