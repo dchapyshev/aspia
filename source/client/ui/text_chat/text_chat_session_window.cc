@@ -41,7 +41,7 @@ TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
     });
 
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendStatus,
-            this, [this](const proto::text_chat::ChatStatus& status)
+            this, [this](const proto::text_chat::Status& status)
     {
         proto::text_chat::TextChat text_chat;
         text_chat.mutable_chat_status()->CopyFrom(status);

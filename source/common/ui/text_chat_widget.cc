@@ -116,36 +116,36 @@ void TextChatWidget::readMessage(const proto::text_chat::Message& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::readStatus(const proto::text_chat::ChatStatus& status)
+void TextChatWidget::readStatus(const proto::text_chat::Status& status)
 {
     status_clear_timer_->stop();
 
     QString user_name = QString::fromStdString(status.source());
 
-    switch (status.status())
+    switch (status.code())
     {
-        case proto::text_chat::ChatStatus::STATUS_TYPING:
+        case proto::text_chat::Status::CODE_TYPING:
             ui->label_status->setText(tr("%1 is typing...").arg(user_name));
             break;
 
-        case proto::text_chat::ChatStatus::STATUS_STARTED:
+        case proto::text_chat::Status::CODE_STARTED:
             addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::ChatStatus::STATUS_STOPPED:
+        case proto::text_chat::Status::CODE_STOPPED:
             addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::ChatStatus::STATUS_USER_CONNECTED:
+        case proto::text_chat::Status::CODE_USER_CONNECTED:
             addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED:
+        case proto::text_chat::Status::CODE_USER_DISCONNECTED:
             addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
             break;
 
         default:
-            LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.status());
+            LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.code());
             return;
     }
 
@@ -172,7 +172,7 @@ bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
             return true;
         }
 
-        onSendStatus(proto::text_chat::ChatStatus::STATUS_TYPING);
+        onSendStatus(proto::text_chat::Status::CODE_TYPING);
     }
     else if (object == ui->list_messages->horizontalScrollBar() ||
              object == ui->list_messages->verticalScrollBar())
@@ -268,12 +268,12 @@ void TextChatWidget::onSendMessage()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onSendStatus(proto::text_chat::ChatStatus::Status status)
+void TextChatWidget::onSendStatus(proto::text_chat::Status::Code code)
 {
-    proto::text_chat::ChatStatus text_chat_status;
+    proto::text_chat::Status text_chat_status;
     text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
     text_chat_status.set_source(display_name_.toStdString());
-    text_chat_status.set_status(status);
+    text_chat_status.set_code(code);
 
     emit sig_sendStatus(text_chat_status);
 }

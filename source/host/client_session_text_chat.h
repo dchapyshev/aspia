@@ -33,7 +33,7 @@ public:
     ~ClientSessionTextChat() final;
 
     void sendTextChat(const proto::text_chat::TextChat& text_chat);
-    void sendStatus(proto::text_chat::ChatStatus::Status status);
+    void sendStatus(proto::text_chat::Status::Code code);
 
     bool hasUser() const;
     void setHasUser(bool enable);

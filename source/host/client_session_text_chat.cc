@@ -46,14 +46,14 @@ void ClientSessionTextChat::sendTextChat(const proto::text_chat::TextChat& text_
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::sendStatus(proto::text_chat::ChatStatus::Status status)
+void ClientSessionTextChat::sendStatus(proto::text_chat::Status::Code code)
 {
     LOG(LS_INFO) << "Send text chat status";
 
     proto::text_chat::TextChat text_chat;
-    proto::text_chat::ChatStatus* text_chat_status = text_chat.mutable_chat_status();
+    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
 
-    text_chat_status->set_status(status);
+    text_chat_status->set_code(code);
     text_chat_status->set_source(base::SysInfo::computerName().toStdString());
 
     sendTextChat(text_chat);
@@ -96,7 +96,7 @@ void ClientSessionTextChat::onReceived(const QByteArray& buffer)
     else
     {
         if (text_chat.has_chat_message())
-            sendStatus(proto::text_chat::ChatStatus::STATUS_USER_DISCONNECTED);
+            sendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
     }
 }
 

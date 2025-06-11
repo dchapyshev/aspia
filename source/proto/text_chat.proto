@@ -22,22 +22,22 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.text_chat;
 
-message ChatStatus
+message Status
 {
-    enum Status
+    enum Code
     {
-        STATUS_UNKNOWN           = 0;
-        STATUS_STARTED           = 1;
-        STATUS_STOPPED           = 2;
-        STATUS_TYPING            = 3;
-        STATUS_USER_DISCONNECTED = 4;
-        STATUS_USER_CONNECTED    = 5;
+        CODE_UNKNOWN           = 0;
+        CODE_STARTED           = 1;
+        CODE_STOPPED           = 2;
+        CODE_TYPING            = 3;
+        CODE_USER_DISCONNECTED = 4;
+        CODE_USER_CONNECTED    = 5;
     }
 
     int64 timestamp = 1;
     string source   = 2;
     string target   = 3;
-    Status status   = 4;
+    Code code       = 4;
 }
 
 message Message
@@ -50,6 +50,6 @@ message Message
 
 message TextChat
 {
-    ChatStatus chat_status = 1;
+    Status chat_status = 1;
     Message chat_message   = 2;
 }
