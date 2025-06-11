@@ -27,7 +27,6 @@
 Q_DECLARE_METATYPE(proto::desktop::Point)
 Q_DECLARE_METATYPE(proto::desktop::Screen)
 Q_DECLARE_METATYPE(proto::desktop::ScreenList)
-Q_DECLARE_METATYPE(proto::desktop::PreferredSize)
 Q_DECLARE_METATYPE(proto::desktop::Pause)
 Q_DECLARE_METATYPE(proto::desktop::PowerControl)
 Q_DECLARE_METATYPE(proto::desktop::PowerControl::Action)

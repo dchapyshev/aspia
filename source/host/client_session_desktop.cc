@@ -586,7 +586,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 {
-    proto::desktop::PreferredSize preferred_size;
+    proto::desktop::Size preferred_size;
 
     if (!preferred_size.ParseFromString(data))
     {

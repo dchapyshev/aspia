@@ -68,7 +68,6 @@ void registerMetaTypes()
     qRegisterMetaType<proto::desktop::Point>("proto::Point");
     qRegisterMetaType<proto::desktop::Screen>("proto::Screen");
     qRegisterMetaType<proto::desktop::ScreenList>("proto::ScreenList");
-    qRegisterMetaType<proto::desktop::PreferredSize>("proto::PreferredSize");
     qRegisterMetaType<proto::desktop::Pause>("proto::Pause");
     qRegisterMetaType<proto::desktop::PowerControl>("proto::PowerControl");
     qRegisterMetaType<proto::desktop::PowerControl::Action>("proto::PowerControl::Action");

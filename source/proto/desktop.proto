@@ -308,14 +308,6 @@ message ScreenList
     repeated Size resolution = 4; // List of resolutions for current screen.
 }
 
-// Extension name: "preferred_size"
-// Sent by client to host.
-message PreferredSize
-{
-    int32 width  = 1;
-    int32 height = 2;
-}
-
 // Extension name: "video_pause", "audio_pause"
 // Sent by client to host.
 message Pause

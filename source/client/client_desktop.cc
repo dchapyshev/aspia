@@ -196,7 +196,7 @@ void ClientDesktop::setPreferredSize(int width, int height)
 {
     LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
 
-    proto::desktop::PreferredSize preferred_size;
+    proto::desktop::Size preferred_size;
     preferred_size.set_width(width);
     preferred_size.set_height(height);
 
