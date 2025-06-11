@@ -209,7 +209,7 @@ void PendingSession::onErrorOccurred(const base::Location& location, const std::
 //--------------------------------------------------------------------------------------------------
 void PendingSession::onMessage()
 {
-    proto::PeerToRelay message;
+    proto::relay::PeerToRelay message;
     if (!message.ParseFromArray(buffer_.data(), static_cast<int>(buffer_.size())))
     {
         onErrorOccurred(FROM_HERE, std::error_code());

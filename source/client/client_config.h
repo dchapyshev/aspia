@@ -20,7 +20,7 @@
 #define CLIENT_CLIENT_CONFIG_H
 
 #include "client/router_config.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 #include <optional>
 

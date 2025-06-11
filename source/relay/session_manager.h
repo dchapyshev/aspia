@@ -56,7 +56,7 @@ signals:
     void sig_sessionFinished();
 
 private slots:
-    void onPendingSessionReady(relay::PendingSession* session, const proto::PeerToRelay& message);
+    void onPendingSessionReady(relay::PendingSession* session, const proto::relay::PeerToRelay& message);
     void onPendingSessionFailed(relay::PendingSession* session);
     void onSessionFinished(relay::Session* session);
 

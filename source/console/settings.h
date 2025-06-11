@@ -19,10 +19,10 @@
 #ifndef CONSOLE_SETTINGS_H
 #define CONSOLE_SETTINGS_H
 
-#include "base/macros_magic.h"
-#include "proto/peer_common.h"
-
 #include <QSettings>
+
+#include "base/macros_magic.h"
+#include "proto/peer.h"
 
 namespace console {
 

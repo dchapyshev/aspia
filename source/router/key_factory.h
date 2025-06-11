@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 #include "base/shared_pointer.h"
-#include "proto/router_common.pb.h"
+#include "proto/router.pb.h"
 #include "router/key_pool.h"
 #include "router/session.h"
 

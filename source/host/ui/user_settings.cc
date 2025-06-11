@@ -19,7 +19,7 @@
 #include "host/ui/user_settings.h"
 
 #include "base/xml_settings.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 #include <QLocale>
 

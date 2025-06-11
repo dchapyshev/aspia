@@ -37,7 +37,7 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     ++session_id;
     session_id_ = session_id;
 
-    proto::PeerToRelay::Secret secret_message;
+    proto::relay::PeerToRelay::Secret secret_message;
     if (base::parse(secret, &secret_message))
     {
         client_address_ = QString::fromStdString(secret_message.client_address());

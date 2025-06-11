@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router_common.pb.h"
+#include "proto/router.pb.h"
 #include "relay/settings.h"
 
 namespace relay {

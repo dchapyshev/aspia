@@ -20,7 +20,7 @@
 #define CLIENT_INPUT_EVENT_FILTER_H
 
 #include "proto/desktop.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 namespace client {
 

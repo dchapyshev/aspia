@@ -26,15 +26,15 @@ list(APPEND SOURCE_PROTO
     key_exchange.proto
     meta_types.cc
     meta_types.h
-    peer_common.h
-    peer_common.proto
+    peer.h
+    peer.proto
     port_forwarding.proto
     host_internal.h
     host_internal.proto
     relay_peer.proto
+    router.proto
     router_admin.h
     router_admin.proto
-    router_common.proto
     router_peer.proto
     router_relay.proto
     system_info.h

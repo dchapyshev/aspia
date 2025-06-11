@@ -282,7 +282,7 @@ QByteArray RelayPeer::authenticationMessage(
         return QByteArray();
     }
 
-    proto::PeerToRelay message;
+    proto::relay::PeerToRelay message;
 
     message.set_key_id(key.key_id());
     message.set_public_key(key_pair.publicKey().toStdString());

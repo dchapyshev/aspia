@@ -24,7 +24,7 @@
 #include "proto/desktop.pb.h"
 #include "proto/desktop_internal.pb.h"
 #include "proto/host_internal.pb.h"
-#include "proto/router_common.pb.h"
+#include "proto/router.pb.h"
 
 QTextStream& operator<<(QTextStream& out, const proto::internal::RouterState& state);
 QTextStream& operator<<(QTextStream& out, proto::router::SessionType session_type);

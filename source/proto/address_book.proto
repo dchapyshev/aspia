@@ -21,7 +21,7 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop.proto";
-import "peer_common.proto";
+import "peer.proto";
 import "port_forwarding.proto";
 
 package proto.address_book;

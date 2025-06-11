@@ -68,7 +68,7 @@ public:
 
 signals:
     // Called when received authentication data from a peer.
-    void sig_pendingSessionReady(relay::PendingSession* session, const proto::PeerToRelay& message);
+    void sig_pendingSessionReady(relay::PendingSession* session, const proto::relay::PeerToRelay& message);
 
     // Called when an error has occurred.
     void sig_pendingSessionFailed(relay::PendingSession* session);

@@ -23,7 +23,7 @@
 
 #include "base/logging.h"
 #include "common/ui/session_type.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 namespace host {
 

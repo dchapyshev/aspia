@@ -21,7 +21,7 @@
 
 #include <QMetaType>
 
-#include "proto/peer_common.pb.h"
+#include "proto/peer.pb.h"
 
 Q_DECLARE_METATYPE(proto::peer::ChannelId)
 Q_DECLARE_METATYPE(proto::peer::SessionType)

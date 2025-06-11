@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package proto.relay;
 
 // Sent from peer to relay for authentication.
 // If the authentication failed, then the connection should be dropped.

@@ -30,7 +30,7 @@ const std::chrono::minutes kIdleTimerInterval { 1 };
 
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-QByteArray decryptSecret(const proto::PeerToRelay& message, const KeyPool::Key& key)
+QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const KeyPool::Key& key)
 {
     if (key.first.isEmpty() || key.second.isEmpty())
     {
@@ -217,7 +217,7 @@ void SessionManager::disconnectSession(quint64 session_id)
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::onPendingSessionReady(
-    PendingSession* pending_session, const proto::PeerToRelay& message)
+    PendingSession* pending_session, const proto::relay::PeerToRelay& message)
 {
     LOG(LS_INFO) << "Pending session ready for key_id: " << message.key_id();
 

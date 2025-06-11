@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/peer/user.h"
-#include "proto/router_common.pb.h"
+#include "proto/router.pb.h"
 #include "ui_router_user_dialog.h"
 
 namespace client {

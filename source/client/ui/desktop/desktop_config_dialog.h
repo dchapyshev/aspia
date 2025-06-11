@@ -23,7 +23,7 @@
 
 #include "base/macros_magic.h"
 #include "proto/desktop.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 class QAbstractButton;
 

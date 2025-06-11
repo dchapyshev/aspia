@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "router_common.proto";
+import "router.proto";
 
 package proto.router;
 

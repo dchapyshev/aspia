@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 namespace common {
 

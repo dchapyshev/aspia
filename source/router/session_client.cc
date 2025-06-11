@@ -131,7 +131,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                     offer_credentials->set_port(relay->peerData()->second);
                     offer_credentials->mutable_key()->Swap(&credentials->key);
 
-                    proto::PeerToRelay::Secret secret;
+                    proto::relay::PeerToRelay::Secret secret;
                     secret.set_random_data(base::Random::string(16));
                     secret.set_client_address(address().toStdString());
                     secret.set_client_user_name(userName().toStdString());

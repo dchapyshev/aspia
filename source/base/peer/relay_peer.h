@@ -25,7 +25,7 @@
 #include "base/location.h"
 #include "base/macros_magic.h"
 #include "base/net/tcp_channel.h"
-#include "proto/router_common.pb.h"
+#include "proto/router.pb.h"
 #include "proto/router_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>

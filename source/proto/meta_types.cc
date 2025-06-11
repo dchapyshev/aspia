@@ -21,7 +21,7 @@
 #include "proto/desktop.h"
 #include "proto/file_transfer.h"
 #include "proto/host_internal.h"
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"

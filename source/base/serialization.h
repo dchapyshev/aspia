@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QVersionNumber>
 
-#include "proto/peer_common.h"
+#include "proto/peer.h"
 
 #include <google/protobuf/message_lite.h>
 
