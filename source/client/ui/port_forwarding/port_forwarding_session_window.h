@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "client/client_port_forwarding.h"
 #include "client/ui/session_window.h"
-#include "proto/port_forwarding.pb.h"
+#include "proto/port_forwarding.h"
 
 namespace Ui {
 class PortForwardingSessionWindow;

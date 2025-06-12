@@ -21,7 +21,7 @@
 
 #include "base/serialization.h"
 #include "base/thread.h"
-#include "proto/desktop_internal.pb.h"
+#include "proto/desktop_internal.h"
 
 namespace base {
 

@@ -23,7 +23,7 @@
 #include <QList>
 
 #include "base/macros_magic.h"
-#include "proto/router.pb.h"
+#include "proto/router.h"
 
 #include <optional>
 

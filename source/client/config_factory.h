@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "proto/desktop.h"
-#include "proto/port_forwarding.pb.h"
+#include "proto/port_forwarding.h"
 
 namespace client {
 

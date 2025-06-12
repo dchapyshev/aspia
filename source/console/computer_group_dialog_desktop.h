@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "console/computer_group_dialog_tab.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 #include "ui_computer_group_dialog_desktop.h"
 
 namespace console {

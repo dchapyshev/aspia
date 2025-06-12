@@ -19,11 +19,11 @@
 #ifndef HOST_DESKTOP_SESSION_H
 #define HOST_DESKTOP_SESSION_H
 
+#include <QObject>
+
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
-#include "proto/desktop_internal.pb.h"
-
-#include <QObject>
+#include "proto/desktop_internal.h"
 
 namespace host {
 

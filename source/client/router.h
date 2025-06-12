@@ -19,11 +19,11 @@
 #ifndef CLIENT_ROUTER_H
 #define CLIENT_ROUTER_H
 
+#include <QTimer>
+
 #include "base/macros_magic.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_admin.h"
-
-#include <QTimer>
 
 namespace client {
 

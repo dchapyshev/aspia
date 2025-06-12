@@ -26,7 +26,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/serialization.h"
-#include "proto/relay_peer.pb.h"
+#include "proto/relay_peer.h"
 
 #include <asio/connect.hpp>
 #include <asio/write.hpp>

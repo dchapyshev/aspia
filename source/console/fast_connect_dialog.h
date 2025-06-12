@@ -19,12 +19,12 @@
 #ifndef CONSOLE_FAST_CONNECT_DIALOG_H
 #define CONSOLE_FAST_CONNECT_DIALOG_H
 
+#include <QDialog>
+
 #include "base/macros_magic.h"
 #include "client/client_config.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 #include "ui_fast_connect_dialog.h"
-
-#include <QDialog>
 
 class QAbstractButton;
 

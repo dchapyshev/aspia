@@ -19,10 +19,10 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_WIDGET_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_WIDGET_H
 
-#include "proto/system_info.pb.h"
-
 #include <QWidget>
 #include <QTreeWidgetItem>
+
+#include "proto/system_info.h"
 
 namespace client {
 

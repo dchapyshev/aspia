@@ -18,14 +18,14 @@
 
 #include "client/online_checker/online_checker_direct.h"
 
+#include <QPointer>
+#include <QTimer>
+
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/net/tcp_channel.h"
-#include "proto/key_exchange.pb.h"
-
-#include <QPointer>
-#include <QTimer>
+#include "proto/key_exchange.h"
 
 namespace client {
 

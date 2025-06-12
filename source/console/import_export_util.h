@@ -19,7 +19,7 @@
 #ifndef CONSOLE_IMPORT_EXPORT_UTIL_H
 #define CONSOLE_IMPORT_EXPORT_UTIL_H
 
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 
 #include <QJsonDocument>
 

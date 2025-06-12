@@ -20,7 +20,7 @@
 #define CONSOLE_ADDRESS_BOOK_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 #include "ui_address_book_dialog.h"
 
 namespace console {

@@ -23,7 +23,7 @@
 
 #include "base/net/tcp_server.h"
 #include "base/peer/server_authenticator_manager.h"
-#include "proto/router_admin.pb.h"
+#include "proto/router_admin.h"
 #include "router/key_factory.h"
 #include "router/session_manager.h"
 

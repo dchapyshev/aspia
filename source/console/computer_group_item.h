@@ -20,7 +20,7 @@
 #define CONSOLE_COMPUTER_GROUP_ITEM_H
 
 #include "console/computer_item.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 
 namespace console {
 

@@ -22,7 +22,7 @@
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_session.h"
-#include "proto/desktop_internal.pb.h"
+#include "proto/desktop_internal.h"
 
 #include <QPointer>
 #include <QTimer>

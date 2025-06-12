@@ -19,13 +19,13 @@
 #ifndef CONSOLE_STATUSBAR_H
 #define CONSOLE_STATUSBAR_H
 
-#include "base/macros_magic.h"
-#include "proto/address_book.pb.h"
-
 #include <QLabel>
 #include <QPointer>
 #include <QStatusBar>
 #include <QTimer>
+
+#include "base/macros_magic.h"
+#include "proto/address_book.h"
 
 namespace console {
 

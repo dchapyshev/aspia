@@ -19,13 +19,13 @@
 #ifndef CLIENT_ROUTER_CONTROLLER_H
 #define CLIENT_ROUTER_CONTROLLER_H
 
+#include <QTimer>
+
 #include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "client/router_config.h"
-
-#include <QTimer>
 
 namespace base {
 class ClientAuthenticator;

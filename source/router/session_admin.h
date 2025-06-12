@@ -19,7 +19,7 @@
 #ifndef ROUTER_SESSION_ADMIN_H
 #define ROUTER_SESSION_ADMIN_H
 
-#include "proto/router_admin.pb.h"
+#include "proto/router_admin.h"
 #include "router/session.h"
 
 namespace router {

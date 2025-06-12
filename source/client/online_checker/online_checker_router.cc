@@ -22,7 +22,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router_peer.pb.h"
+#include "proto/router_peer.h"
 
 namespace client {
 

@@ -19,7 +19,7 @@
 #ifndef BASE_APPLICATIONS_READER_H
 #define BASE_APPLICATIONS_READER_H
 
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 namespace base {
 

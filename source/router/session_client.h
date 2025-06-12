@@ -19,7 +19,7 @@
 #ifndef ROUTER_SESSION_CLIENT_H
 #define ROUTER_SESSION_CLIENT_H
 
-#include "proto/router_peer.pb.h"
+#include "proto/router_peer.h"
 #include "router/session.h"
 
 namespace router {

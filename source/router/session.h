@@ -24,7 +24,7 @@
 
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
-#include "proto/router.pb.h"
+#include "proto/router.h"
 #include "router/key_pool.h"
 
 namespace router {

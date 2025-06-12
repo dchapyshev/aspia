@@ -29,7 +29,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop_internal.pb.h"
+#include "proto/desktop_internal.h"
 
 namespace base {
 

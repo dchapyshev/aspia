@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
-#include "proto/router.pb.h"
+#include "proto/router.h"
 
 namespace client {
 

@@ -24,7 +24,7 @@
 #include <QVersionNumber>
 
 #include "base/net/tcp_channel.h"
-#include "proto/key_exchange.pb.h"
+#include "proto/key_exchange.h"
 
 namespace base {
 

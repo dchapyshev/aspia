@@ -24,7 +24,7 @@
 
 #include "base/serialization.h"
 #include "base/net/tcp_channel.h"
-#include "proto/router_relay.pb.h"
+#include "proto/router_relay.h"
 #include "relay/sessions_worker.h"
 #include "relay/key_factory.h"
 

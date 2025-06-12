@@ -19,10 +19,10 @@
 #ifndef CONSOLE_COMPUTER_ITEM_H
 #define CONSOLE_COMPUTER_ITEM_H
 
-#include "base/macros_magic.h"
-#include "proto/address_book.pb.h"
-
 #include <QTreeWidget>
+
+#include "base/macros_magic.h"
+#include "proto/address_book.h"
 
 namespace console {
 

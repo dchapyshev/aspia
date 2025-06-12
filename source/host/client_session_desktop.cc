@@ -34,7 +34,7 @@
 #include "host/desktop_session_manager.h"
 #include "host/service_constants.h"
 #include "host/host_storage.h"
-#include "proto/desktop_internal.pb.h"
+#include "proto/desktop_internal.h"
 #include "proto/task_manager.h"
 #include "proto/text_chat.h"
 

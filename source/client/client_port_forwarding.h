@@ -19,15 +19,15 @@
 #ifndef CLIENT_CLIENT_PORT_FORWARDING_H
 #define CLIENT_CLIENT_PORT_FORWARDING_H
 
+#include <QPointer>
+#include <QTimer>
+
 #include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "client/client.h"
-#include "proto/port_forwarding.pb.h"
+#include "proto/port_forwarding.h"
 
 #include <queue>
-
-#include <QPointer>
-#include <QTimer>
 
 namespace client {
 

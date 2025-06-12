@@ -20,7 +20,7 @@
 #define CONSOLE_COMPUTER_DIALOG_H
 
 #include "console/settings.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 #include "ui_computer_dialog.h"
 
 #include <optional>

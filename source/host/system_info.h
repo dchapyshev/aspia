@@ -19,7 +19,7 @@
 #ifndef HOST_SYSTEM_INFO_H
 #define HOST_SYSTEM_INFO_H
 
-#include "proto/system_info.pb.h"
+#include "proto/system_info.h"
 
 namespace host {
 

@@ -20,7 +20,7 @@
 #define CONSOLE_COMPUTER_FACTORY_H
 
 #include "base/macros_magic.h"
-#include "proto/address_book.pb.h"
+#include "proto/address_book.h"
 
 namespace console {
 

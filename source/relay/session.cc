@@ -21,7 +21,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "proto/relay_peer.pb.h"
+#include "proto/relay_peer.h"
 
 #include <asio/write.hpp>
 

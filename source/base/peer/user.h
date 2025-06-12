@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QString>
 
-#include "proto/router_admin.pb.h"
+#include "proto/router_admin.h"
 
 namespace base {
 

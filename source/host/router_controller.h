@@ -27,7 +27,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer_manager.h"
-#include "proto/host_internal.pb.h"
+#include "proto/host_internal.h"
 
 namespace host {
 

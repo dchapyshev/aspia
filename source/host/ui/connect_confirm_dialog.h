@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "proto/host_internal.pb.h"
+#include "proto/host_internal.h"
 #include "ui_connect_confirm_dialog.h"
 
 namespace host {

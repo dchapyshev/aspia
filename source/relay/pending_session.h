@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/peer/host_id.h"
-#include "proto/relay_peer.pb.h"
+#include "proto/relay_peer.h"
 
 #include <asio/ip/tcp.hpp>
 

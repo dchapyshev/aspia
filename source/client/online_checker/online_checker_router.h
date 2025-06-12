@@ -19,12 +19,12 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
-#include "base/net/tcp_channel.h"
-#include "client/router_config.h"
-
 #include <QQueue>
 #include <QPointer>
 #include <QTimer>
+
+#include "base/net/tcp_channel.h"
+#include "client/router_config.h"
 
 namespace base {
 class ClientAuthenticator;

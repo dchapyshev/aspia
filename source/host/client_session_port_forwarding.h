@@ -24,7 +24,7 @@
 #include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "host/client_session.h"
-#include "proto/port_forwarding.pb.h"
+#include "proto/port_forwarding.h"
 
 #include <array>
 #include <queue>

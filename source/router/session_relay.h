@@ -20,7 +20,7 @@
 #define ROUTER_SESSION_RELAY_H
 
 #include "base/serialization.h"
-#include "proto/router_relay.pb.h"
+#include "proto/router_relay.h"
 #include "router/session.h"
 
 namespace router {

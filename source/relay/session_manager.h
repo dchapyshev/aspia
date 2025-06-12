@@ -22,8 +22,8 @@
 #include <QList>
 #include <QTimer>
 
-#include "proto/relay_peer.pb.h"
-#include "proto/router_relay.pb.h"
+#include "proto/relay_peer.h"
+#include "proto/router_relay.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/key_pool.h"
