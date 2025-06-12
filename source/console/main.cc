@@ -24,7 +24,6 @@
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
-#include "proto/meta_types.h"
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -40,8 +39,6 @@ int main(int argc, char *argv[])
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
-
-    proto::registerMetaTypes();
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

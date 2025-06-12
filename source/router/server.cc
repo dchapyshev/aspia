@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
-#include "proto/text_stream.h"
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
 #include "router/session_admin.h"

@@ -29,7 +29,6 @@
 #include "host/host_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
-#include "proto/meta_types.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"
@@ -198,8 +197,6 @@ int hostServiceMain(int& argc, char* argv[])
 #endif // defined(Q_OS_WINDOWS)
     else
     {
-        proto::registerMetaTypes();
-
         return Service().exec(application);
     }
 }

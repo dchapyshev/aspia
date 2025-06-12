@@ -33,7 +33,6 @@
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/text_chat/text_chat_session_window.h"
-#include "proto/meta_types.h"
 
 //--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
@@ -371,8 +370,6 @@ int clientMain(int argc, char* argv[])
     logging_settings.min_log_level = base::LOG_LS_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
-
-    proto::registerMetaTypes();
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

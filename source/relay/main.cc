@@ -22,7 +22,6 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "build/version.h"
-#include "proto/meta_types.h"
 #include "relay/service.h"
 #include "relay/settings.h"
 
@@ -117,8 +116,6 @@ int main(int argc, char* argv[])
 #endif // defined(Q_OS_WINDOWS)
     else
     {
-        proto::registerMetaTypes();
-
         return relay::Service().exec(application);
     }
 }

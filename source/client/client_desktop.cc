@@ -29,7 +29,6 @@
 #include "base/desktop/mouse_cursor.h"
 #include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
-#include "proto/text_stream.h"
 
 namespace client {
 

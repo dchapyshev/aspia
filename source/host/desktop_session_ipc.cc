@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
-#include "proto/text_stream.h"
 
 namespace host {
 

@@ -26,7 +26,6 @@
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 #include "host/print_debug_info.h"
-#include "proto/meta_types.h"
 
 //--------------------------------------------------------------------------------------------------
 int desktopAgentMain(int& argc, char* argv[])
@@ -58,8 +57,6 @@ int desktopAgentMain(int& argc, char* argv[])
         LOG(LS_ERROR) << "Parameter channel_id is not specified";
         return 1;
     }
-
-    proto::registerMetaTypes();
 
     host::DesktopSessionAgent desktop_agent;
     desktop_agent.start(parser.value(channel_id_option));

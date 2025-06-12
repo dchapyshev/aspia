@@ -18,6 +18,9 @@
 
 #include "console/fast_connect_dialog.h"
 
+#include <QMessageBox>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -34,10 +37,6 @@
 #include "common/ui/session_type.h"
 #include "console/application.h"
 #include "console/computer_factory.h"
-#include "proto/text_stream.h"
-
-#include <QMessageBox>
-#include <QTimer>
 
 namespace console {
 

@@ -18,40 +18,41 @@
 
 list(APPEND SOURCE_PROTO
     address_book.proto
-    desktop.h
     desktop.proto
     desktop_internal.proto
-    file_transfer.h
     file_transfer.proto
     key_exchange.proto
-    meta_types.cc
-    meta_types.h
-    peer.h
     peer.proto
     port_forwarding.proto
-    host_internal.h
     host_internal.proto
     relay_peer.proto
     router.proto
-    router_admin.h
     router_admin.proto
     router_peer.proto
     router_relay.proto
-    system_info.h
     system_info.proto
-    task_manager.h
     task_manager.proto
-    text_chat.h
-    text_chat.proto
-    text_stream.cc
-    text_stream.h)
+    text_chat.proto)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
 add_library(aspia_proto STATIC ${SOURCE_PROTO})
+add_dependencies(aspia_proto qtprotoc)
 
+# Generate standard files (.pb.h, .pb.cc).
 protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${SOURCE_PROTO})
-#protobuf_generate(LANGUAGE qt TARGET aspia_proto PLUGIN "protoc-gen-qt=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtprotoc.exe" GENERATE_EXTENSIONS .h .cc ${SOURCE_PROTO})
+
+if (WIN32)
+    set(QTPROTOC_FILENAME "qtprotoc.exe")
+else()
+    set(QTPROTOC_FILENAME "qtprotoc")
+endif()
+
+# Generate files with Qt meta types.
+protobuf_generate(LANGUAGE qt
+                  TARGET aspia_proto
+                  PLUGIN "protoc-gen-qt=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${QTPROTOC_FILENAME}"
+                  GENERATE_EXTENSIONS .h .cc
+                  ${SOURCE_PROTO})
 
 target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
-set_property(TARGET aspia_proto PROPERTY AUTOMOC ON)

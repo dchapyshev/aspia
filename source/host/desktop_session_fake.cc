@@ -19,7 +19,6 @@
 #include "host/desktop_session_fake.h"
 
 #include "base/logging.h"
-#include "proto/text_stream.h"
 
 namespace host {
 

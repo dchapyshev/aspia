@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
-#include "proto/text_stream.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
@@ -410,7 +409,8 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
         return;
     }
 
-    LOG(LS_INFO) << "Router: " << router_state << " sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Router: " << router_state.host_name() << ":" << router_state.host_port() << " "
+                 << router_state.state() << " sid=" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
     ipc_channel_->send(outgoing_message_.serialize());

@@ -25,7 +25,6 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/shared_memory.h"
 #include "host/system_settings.h"
-#include "proto/text_stream.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"

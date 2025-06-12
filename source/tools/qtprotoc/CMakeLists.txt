@@ -16,7 +16,5 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-if (WIN32)
-    add_subdirectory(qtprotoc)
-    add_subdirectory(sha256)
-endif()
+add_executable(qtprotoc main.cc)
+target_link_libraries(qtprotoc PRIVATE protobuf::libprotoc)

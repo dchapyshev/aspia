@@ -33,7 +33,6 @@
 #include "host/ui/main_window.h"
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
-#include "proto/meta_types.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
@@ -137,8 +136,6 @@ int hostMain(int argc, char* argv[])
     parser.addVersionOption();
 
     parser.process(application);
-
-    proto::registerMetaTypes();
 
     if (!host::integrityCheck())
     {
