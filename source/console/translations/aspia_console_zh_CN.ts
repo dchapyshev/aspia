@@ -523,17 +523,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="64"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="70"/>
+        <location filename="../main.cc" line="67"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="71"/>
+        <location filename="../main.cc" line="68"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>
@@ -1472,43 +1472,43 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="60"/>
+        <location filename="../fast_connect_dialog.cc" line="59"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <location filename="../fast_connect_dialog.cc" line="104"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="106"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="109"/>
+        <location filename="../fast_connect_dialog.cc" line="108"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="110"/>
+        <location filename="../fast_connect_dialog.cc" line="109"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="251"/>
-        <location filename="../fast_connect_dialog.cc" line="270"/>
+        <location filename="../fast_connect_dialog.cc" line="250"/>
+        <location filename="../fast_connect_dialog.cc" line="269"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="252"/>
+        <location filename="../fast_connect_dialog.cc" line="251"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>已指定按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="271"/>
+        <location filename="../fast_connect_dialog.cc" line="270"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>

@@ -27,32 +27,32 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="44"/>
+        <location filename="../client_main.cc" line="43"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="397"/>
+        <location filename="../client_main.cc" line="394"/>
         <source>Remote computer address.</source>
         <translation>远程计算机地址。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="401"/>
+        <location filename="../client_main.cc" line="398"/>
         <source>Remote computer port.</source>
         <translation>远程计算机端口。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="406"/>
+        <location filename="../client_main.cc" line="403"/>
         <source>Name of host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="410"/>
+        <location filename="../client_main.cc" line="407"/>
         <source>Name of user.</source>
         <translation>用户名。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="411"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,108 +61,108 @@
         <translation type="vanished">会话类型。 可能的值：桌面管理，桌面视图，文件传输。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="415"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="419"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="427"/>
+        <location filename="../client_main.cc" line="424"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="431"/>
+        <location filename="../client_main.cc" line="428"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="435"/>
+        <location filename="../client_main.cc" line="432"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="439"/>
+        <location filename="../client_main.cc" line="436"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="443"/>
+        <location filename="../client_main.cc" line="440"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="447"/>
+        <location filename="../client_main.cc" line="444"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="451"/>
+        <location filename="../client_main.cc" line="448"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="455"/>
+        <location filename="../client_main.cc" line="452"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="459"/>
+        <location filename="../client_main.cc" line="456"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="463"/>
+        <location filename="../client_main.cc" line="460"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="467"/>
+        <location filename="../client_main.cc" line="464"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="471"/>
+        <location filename="../client_main.cc" line="468"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="475"/>
+        <location filename="../client_main.cc" line="472"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="479"/>
+        <location filename="../client_main.cc" line="476"/>
         <source>Router address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="483"/>
+        <location filename="../client_main.cc" line="480"/>
         <source>Router port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="488"/>
+        <location filename="../client_main.cc" line="485"/>
         <source>Router name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="492"/>
+        <location filename="../client_main.cc" line="489"/>
         <source>Router password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="496"/>
+        <location filename="../client_main.cc" line="493"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="43"/>
-        <location filename="../client_main.cc" line="687"/>
+        <location filename="../client_main.cc" line="42"/>
+        <location filename="../client_main.cc" line="684"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -171,7 +171,7 @@
         <translation type="vanished">输入了错误的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="688"/>
+        <location filename="../client_main.cc" line="685"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
