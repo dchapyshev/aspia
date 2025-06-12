@@ -68,35 +68,6 @@ std::string makeIncludeGuardMacro(const std::string& filename)
 }
 
 //--------------------------------------------------------------------------------------------------
-void beginNamespace(google::protobuf::io::Printer& p, const std::string& package)
-{
-    if (package.empty())
-        return;
-
-    std::string ns;
-
-    for (char c : package)
-        ns += (c == '.') ? "::" : std::string(1, c);
-
-    p.Print("namespace $NS$ {\n", "NS", ns);
-    p.Print("\n");
-}
-
-//--------------------------------------------------------------------------------------------------
-void endNamespace(google::protobuf::io::Printer& p, const std::string& package)
-{
-    if (package.empty())
-        return;
-
-    std::string ns;
-
-    for (char c : package)
-        ns += (c == '.') ? "::" : std::string(1, c);
-
-    p.Print("} // namespace $NS$\n", "NS", ns);
-}
-
-//--------------------------------------------------------------------------------------------------
 class MetatypeGenerator : public google::protobuf::compiler::CodeGenerator
 {
 public:
@@ -112,8 +83,6 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
                                  google::protobuf::compiler::GeneratorContext* context,
                                  std::string* error) const
 {
-    const std::string& package = file->package();
-
     std::string header_name = file->name();
     std::size_t last_dot = header_name.rfind('.');
     if (last_dot != std::string::npos)
@@ -155,7 +124,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     header.Print("#ifndef $GUARD$\n#define $GUARD$\n", "GUARD", include_guard);
     header.Print("\n");
     header.Print("#include <QMetaType>\n"
-                 "#include <QString>\n"
+                 "#include <QTextStream>\n"
                  "\n");
     header.Print("#include \"proto/$PB_HEADER$\"\n", "PB_HEADER", pb_header);
     header.Print("\n");
@@ -164,16 +133,11 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
         header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", type);
     header.Print("\n");
 
-    beginNamespace(header, package);
-
     for (const auto* e : enum_descriptors)
     {
         const std::string cpp_enum_type = getQualifiedCppTypeName(e->full_name());
-        header.Print("QString toString($TYPE$ value);\n", "TYPE", cpp_enum_type);
+        header.Print("QTextStream& operator<<(QTextStream& stream, $TYPE$ value);\n", "TYPE", cpp_enum_type);
     }
-
-    header.Print("\n");
-    endNamespace(header, package);
 
     header.Print("\n#endif  // $GUARD$\n", "GUARD", include_guard);
 
@@ -204,13 +168,11 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
                  "\n"
                  "} // namespace\n\n");
 
-    beginNamespace(source, package);
-
     for (const auto* e : enum_descriptors)
     {
         const std::string cpp_enum_type = getQualifiedCppTypeName(e->full_name());
 
-        source.Print("QString toString($TYPE$ value)\n", "TYPE", cpp_enum_type);
+        source.Print("QTextStream& operator<<(QTextStream& stream, $TYPE$ value)\n", "TYPE", cpp_enum_type);
         source.Print("{\n");
         source.Print("    switch (value)\n"
                      "    {\n");
@@ -223,17 +185,15 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
             std::string full_enum_const = full_enum_scope + "::" + val->name();
 
             source.Print("        case $CONST$:\n", "CONST", full_enum_const);
-            source.Print("            return \"$CONST$\";\n", "CONST", full_enum_const);
+            source.Print("            return stream << \"$CONST$\";\n", "CONST", val->name());
         }
 
         source.Print("        default:\n");
-        source.Print("            return \"$TYPE$(unknown)\";\n", "TYPE", cpp_enum_type);
+        source.Print("            return stream << \"$TYPE$(unknown)\";\n", "TYPE", cpp_enum_type);
         source.Print("    }\n");
         source.Print("}\n");
         source.Print("\n");
     }
-
-    endNamespace(source, package);
 
     return true;
 }
