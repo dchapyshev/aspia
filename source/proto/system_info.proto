@@ -96,8 +96,8 @@ message Printers
     message Printer
     {
         string name       = 1;
-        bool default      = 2;
-        bool shared       = 3;
+        bool is_default   = 2;
+        bool is_shared    = 3;
         string port       = 4;
         string driver     = 5;
         uint32 jobs_count = 6;

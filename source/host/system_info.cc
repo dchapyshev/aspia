@@ -77,8 +77,8 @@ void fillPrinters(proto::system_info::SystemInfo* system_info)
             system_info->mutable_printers()->add_printer();
 
         printer->set_name(enumerator.name().toStdString());
-        printer->set_default_(enumerator.isDefault());
-        printer->set_shared(enumerator.isShared());
+        printer->set_is_default(enumerator.isDefault());
+        printer->set_is_shared(enumerator.isShared());
         printer->set_port(enumerator.portName().toStdString());
         printer->set_driver(enumerator.driverName().toStdString());
         printer->set_jobs_count(static_cast<quint32>(enumerator.jobsCount()));

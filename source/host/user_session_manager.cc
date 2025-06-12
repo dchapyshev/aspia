@@ -289,7 +289,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "Router state changed (state=" << router_state.state() << ")";
+    LOG(LS_INFO) << "Router state changed (" << router_state << ")";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))

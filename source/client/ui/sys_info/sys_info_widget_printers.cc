@@ -135,7 +135,7 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
         const proto::system_info::Printers::Printer& printer = printers.printer(i);
         QList<QTreeWidgetItem*> group;
 
-        group << mk(tr("Default"), printer.default_() ? tr("Yes") : tr("No"));
+        group << mk(tr("Default"), printer.is_default() ? tr("Yes") : tr("No"));
 
         if (!printer.port().empty())
             group << mk(tr("Port"), printer.port());
@@ -143,9 +143,9 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
         if (!printer.driver().empty())
             group << mk(tr("Driver"), printer.driver());
 
-        group << mk(tr("Shared"), printer.shared() ? tr("Yes") : tr("No"));
+        group << mk(tr("Shared"), printer.is_shared() ? tr("Yes") : tr("No"));
 
-        if (printer.shared() && !printer.share_name().empty())
+        if (printer.is_shared() && !printer.share_name().empty())
             group << mk(tr("Share Name"), printer.share_name());
 
         group << mk(tr("Jobs Count"), QString::number(printer.jobs_count()));

@@ -281,7 +281,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     else if (incoming_message_->has_router_state())
     {
         const proto::internal::RouterState router_state = incoming_message_->router_state();
-        LOG(LS_INFO) << "Router state received (state=" << router_state.state() << ")";
+        LOG(LS_INFO) << "Router state received (" << router_state << ")";
         emit sig_routerStateChanged(router_state);
     }
     else if (incoming_message_->has_text_chat())
@@ -293,10 +293,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         const proto::internal::VideoRecordingState& video_recording_state =
             incoming_message_->video_recording_state();
 
-        LOG(LS_INFO) << "Video recording state changed (computer_name="
-                     << video_recording_state.computer_name() << " user_name="
-                     << video_recording_state.user_name() << " started="
-                     << video_recording_state.started() << ")";
+        LOG(LS_INFO) << "Video recording state changed (" << video_recording_state  << ")";
 
         emit sig_videoRecordingStateChanged(
             QString::fromStdString(video_recording_state.computer_name()),
