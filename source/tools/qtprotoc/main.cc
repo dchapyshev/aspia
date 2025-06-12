@@ -126,7 +126,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     header.Print("#include <QMetaType>\n"
                  "#include <QTextStream>\n"
                  "\n");
-    header.Print("#include \"proto/$PB_HEADER$\"\n", "PB_HEADER", pb_header);
+    header.Print("#include \"proto/$PB_HEADER$\" // IWYU pragma: export\n", "PB_HEADER", pb_header);
     header.Print("\n");
 
     for (const std::string& type : all_types)
