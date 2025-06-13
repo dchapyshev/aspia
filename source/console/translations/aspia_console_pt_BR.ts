@@ -1377,17 +1377,17 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../computer_group_dialog.cc" line="65"/>
+        <location filename="../computer_group_dialog.cc" line="64"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="81"/>
+        <location filename="../computer_group_dialog.cc" line="80"/>
         <source>General</source>
         <translation>Geral</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="85"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Sessions</source>
         <translation>Sessões</translation>
     </message>
@@ -1400,22 +1400,22 @@
         <translation type="vanished">Visualizar</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="92"/>
+        <location filename="../computer_group_dialog.cc" line="91"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Controle da Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="96"/>
+        <location filename="../computer_group_dialog.cc" line="95"/>
         <source>Desktop View</source>
         <translation type="unfinished">Visualizar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="100"/>
+        <location filename="../computer_group_dialog.cc" line="99"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="246"/>
+        <location filename="../computer_group_dialog.cc" line="245"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
@@ -1423,12 +1423,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="255"/>
+        <location filename="../computer_group_dialog.cc" line="254"/>
         <source>Name can not be empty.</source>
         <translation>O nome não pode estar vazio.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="264"/>
+        <location filename="../computer_group_dialog.cc" line="263"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
@@ -1436,7 +1436,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="223"/>
+        <location filename="../computer_group_dialog.cc" line="222"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>

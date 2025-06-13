@@ -1400,17 +1400,17 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../computer_group_dialog.cc" line="65"/>
+        <location filename="../computer_group_dialog.cc" line="64"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="81"/>
+        <location filename="../computer_group_dialog.cc" line="80"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="85"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
@@ -1423,22 +1423,22 @@
         <translation type="vanished">Просмотр</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="92"/>
+        <location filename="../computer_group_dialog.cc" line="91"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="96"/>
+        <location filename="../computer_group_dialog.cc" line="95"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="100"/>
+        <location filename="../computer_group_dialog.cc" line="99"/>
         <source>Port Forwarding</source>
         <translation>Перенаправление портов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="246"/>
+        <location filename="../computer_group_dialog.cc" line="245"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -1447,12 +1447,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="255"/>
+        <location filename="../computer_group_dialog.cc" line="254"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="264"/>
+        <location filename="../computer_group_dialog.cc" line="263"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -1461,7 +1461,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="223"/>
+        <location filename="../computer_group_dialog.cc" line="222"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

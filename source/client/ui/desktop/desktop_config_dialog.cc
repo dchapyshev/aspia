@@ -18,13 +18,13 @@
 
 #include "client/ui/desktop/desktop_config_dialog.h"
 
+#include <QPushButton>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/desktop/pixel_format.h"
 #include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
-
-#include <QPushButton>
-#include <QTimer>
 
 namespace client {
 

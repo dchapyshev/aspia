@@ -19,13 +19,13 @@
 #ifndef CONSOLE_COMPUTER_DIALOG_H
 #define CONSOLE_COMPUTER_DIALOG_H
 
+#include <QDialog>
+
 #include "console/settings.h"
 #include "proto/address_book.h"
 #include "ui_computer_dialog.h"
 
 #include <optional>
-
-#include <QDialog>
 
 class QAbstractButton;
 
