@@ -89,10 +89,10 @@ ScopedMMCSSRegistration::ScopedMMCSSRegistration(const wchar_t* task_name)
     {
         const DWORD priority_class = GetPriorityClass(GetCurrentProcess());
         const int priority = GetThreadPriority(GetCurrentThread());
-        LOG(LS_INFO) << "priority class: "
+        LOG(LS_INFO) << "priority class:"
             << priorityClassToString(priority_class) << "("
             << priority_class << ")";
-        LOG(LS_INFO) << "priority: " << priorityToString(priority) << "(" << priority << ")";
+        LOG(LS_INFO) << "priority:" << priorityToString(priority) << "(" << priority << ")";
     }
 }
 

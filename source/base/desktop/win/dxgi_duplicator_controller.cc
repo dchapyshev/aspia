@@ -220,7 +220,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
         LOG(LS_ERROR) << "Invalid monitor id:" << monitor_id
-                        << " (screen count=" << screen_count << ")";
+                        << "(screen count=" << screen_count << ")";
         return Result::INVALID_MONITOR_ID;
     }
 
@@ -293,7 +293,7 @@ bool DxgiDuplicatorController::doInitialize()
         DxgiAdapterDuplicator::ErrorCode error_code = duplicator.initialize();
         if (error_code != ErrorCode::SUCCESS)
         {
-            LOG(LS_ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
+            LOG(LS_ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter" << i;
 
             if (error_code == ErrorCode::CRITICAL_ERROR)
             {
@@ -504,8 +504,8 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
         if (Clock::now() - start_ms > timeout_ms)
         {
-            LOG(LS_ERROR) << "Failed to capture " << frames_to_skip << " frames within "
-                          << timeout_ms.count() << " milliseconds";
+            LOG(LS_ERROR) << "Failed to capture" << frames_to_skip << "frames within"
+                          << timeout_ms.count() << "milliseconds";
             return false;
         }
     }

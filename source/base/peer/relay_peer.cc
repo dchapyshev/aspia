@@ -81,7 +81,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 
     QString host = QString::fromStdString(credentials.host());
 
-    LOG(LS_INFO) << "Start resolving for " << host << ":" << credentials.port();
+    LOG(LS_INFO) << "Start resolving for" << host << ":" << credentials.port();
 
     resolver_.async_resolve(host.toLocal8Bit().data(),
                             std::to_string(credentials.port()),
@@ -95,7 +95,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
             return;
         }
 
-        LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
+        LOG(LS_INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
         LOG(LS_INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
@@ -115,7 +115,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
                 return;
             }
 
-            LOG(LS_INFO) << "Connected to: " << endpoint.address().to_string();
+            LOG(LS_INFO) << "Connected to:" << endpoint.address().to_string();
             onConnected();
         });
     });
@@ -209,7 +209,7 @@ void RelayPeer::onConnected()
 //--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Failed to connect to relay server: " << error_code << " ("
+    LOG(LS_ERROR) << "Failed to connect to relay server:" << error_code << "("
                   << location.toString() << ")";
     is_finished_ = true;
     emit sig_connectionError();
@@ -222,13 +222,13 @@ QByteArray RelayPeer::authenticationMessage(
 {
     if (key.type() != proto::router::RelayKey::TYPE_X25519)
     {
-        LOG(LS_ERROR) << "Unsupported key type: " << key.type();
+        LOG(LS_ERROR) << "Unsupported key type:" << key.type();
         return QByteArray();
     }
 
     if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
     {
-        LOG(LS_ERROR) << "Unsupported encryption type: " << key.encryption();
+        LOG(LS_ERROR) << "Unsupported encryption type:" << key.encryption();
         return QByteArray();
     }
 

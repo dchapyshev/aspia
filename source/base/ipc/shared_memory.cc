@@ -115,7 +115,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        LOG(LS_ERROR) << "Already exists shared memory: " << path;
+        LOG(LS_ERROR) << "Already exists shared memory:" << path;
         return false;
     }
 
@@ -123,7 +123,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
         file, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, nullptr);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "SetSecurityInfo failed: " << SystemError::toString(error_code);
+        LOG(LS_ERROR) << "SetSecurityInfo failed:" << SystemError::toString(error_code);
         return false;
     }
 

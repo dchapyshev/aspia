@@ -88,7 +88,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 
     helper->is_mapped_ = true;
 
-    LOG(LS_INFO) << "MV2 helper created with rect: " << screen_rect;
+    LOG(LS_INFO) << "MV2 helper created with rect:" << screen_rect;
     return helper;
 }
 
@@ -156,7 +156,7 @@ bool Mv2Helper::update(bool load)
         CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
-        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed: " << status;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed:" << status;
         return false;
     }
 

@@ -95,7 +95,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::desktop::VideoPacket* p
 
     if (last_frame_size_ != frame.size())
     {
-        LOG(LS_INFO) << "Frame size changed from " << last_frame_size_ << " to " << frame.size();
+        LOG(LS_INFO) << "Frame size changed from" << last_frame_size_ << "to" << frame.size();
         last_frame_size_ = frame.size();
 
         createImage();
@@ -234,7 +234,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed:" << ret;
         return false;
     }
 
@@ -242,14 +242,14 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed:" << ret;
         return false;
     }
 

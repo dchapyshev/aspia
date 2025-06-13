@@ -152,7 +152,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
             return false;
 
         default:
-            LOG(LS_ERROR) << "An error occurred while waiting for the process to complete: " << ret;
+            LOG(LS_ERROR) << "An error occurred while waiting for the process to complete:" << ret;
             return false;
     }
 
@@ -165,7 +165,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
 
     if (exit_code != 0)
     {
-        LOG(LS_ERROR) << "Process ended with exit code: " << exit_code;
+        LOG(LS_ERROR) << "Process ended with exit code:" << exit_code;
         return false;
     }
 
@@ -185,14 +185,14 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
         LONG status = key.create(HKEY_LOCAL_MACHINE, key_path, KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "create failed: " << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(LS_ERROR) << "create failed:" << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
 
         status = key.writeValue("", "Service");
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "writeValue failed: "
+            LOG(LS_ERROR) << "writeValue failed:"
                           << base::SystemError::toString(static_cast<ULONG>(status));
         }
     }
@@ -207,7 +207,7 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
 
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "RegDeleteTreeW failed: "
+            LOG(LS_ERROR) << "RegDeleteTreeW failed:"
                           << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }

@@ -75,7 +75,7 @@ bool CursorEncoder::compressCursor(
 
     if (mouse_cursor.width() <= 0 || mouse_cursor.height() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid cursor size: "
+        LOG(LS_ERROR) << "Invalid cursor size:"
                       << mouse_cursor.width() << "x" << mouse_cursor.height();
         return false;
     }
@@ -90,8 +90,8 @@ bool CursorEncoder::compressCursor(
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initCStream failed: " << ZSTD_getErrorName(ret)
-                      << " (" << ret << ")";
+        LOG(LS_ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret)
+                      << "(" << ret << ")";
         return false;
     }
 
@@ -109,8 +109,7 @@ bool CursorEncoder::compressCursor(
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret)
-                          << " (" << ret << ")";
+            LOG(LS_ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
             return false;
         }
     }
@@ -118,8 +117,7 @@ bool CursorEncoder::compressCursor(
     ret = ZSTD_endStream(stream_.get(), &output);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_endStream failed: " << ZSTD_getErrorName(ret)
-                      << " (" << ret << ")";
+        LOG(LS_ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return false;
     }
 
@@ -137,7 +135,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)
     {
-        LOG(LS_ERROR) << "Wrong size of cursor: " << size.width() << "x" << size.height();
+        LOG(LS_ERROR) << "Wrong size of cursor:" << size.width() << "x" << size.height();
         return false;
     }
 

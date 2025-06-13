@@ -124,7 +124,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
             break;
 
         default:
-            LOG(LS_FATAL) << "Unsupported video encoding: " << encoding;
+            LOG(LS_FATAL) << "Unsupported video encoding:" << encoding;
             return;
     }
 
@@ -153,8 +153,8 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* f
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        LOG(LS_ERROR) << "Decoding failed: " << (error ? error : "(NULL)") << "\n"
-                      << "Details: " << (error_detail ? error_detail : "(NULL)");
+        LOG(LS_ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
+                      << "Details:" << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 

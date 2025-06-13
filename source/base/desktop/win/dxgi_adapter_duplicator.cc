@@ -84,8 +84,8 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
         if (error.Error() != S_OK || !output)
         {
-            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns an unexpected result "
-                          << error.ErrorMessage() << " with error code "
+            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns an unexpected result"
+                          << error.ErrorMessage() << "with error code"
                           << error.Error();
             continue;
         }
@@ -109,7 +109,7 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
                 DxgiOutputDuplicator duplicator(device_, output1, desc);
                 if (!duplicator.initialize())
                 {
-                    LOG(LS_ERROR) << "Failed to initialize DxgiOutputDuplicator on output " << i;
+                    LOG(LS_ERROR) << "Failed to initialize DxgiOutputDuplicator on output" << i;
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
@@ -120,16 +120,16 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
             else
             {
                 LOG(LS_ERROR) << (desc.AttachedToDesktop ? "Attached" : "Detached")
-                              << " output " << i << " ("
-                              << desc.DesktopCoordinates.top << ", "
+                              << "output" << i << "("
+                              << desc.DesktopCoordinates.top << ","
                               << desc.DesktopCoordinates.left << ") - ("
-                              << desc.DesktopCoordinates.bottom << ", "
+                              << desc.DesktopCoordinates.bottom << ","
                               << desc.DesktopCoordinates.right << ") is ignored";
             }
         }
         else
         {
-            LOG(LS_ERROR) << "Failed to get output description of device " << i << ", ignore";
+            LOG(LS_ERROR) << "Failed to get output description of device" << i << ", ignore";
         }
     }
 

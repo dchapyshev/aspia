@@ -52,7 +52,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size: " << key.size() << " IV size: " << iv.size();
+        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 
@@ -74,7 +74,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size: " << key.size() << " IV size: " << iv.size();
+        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 

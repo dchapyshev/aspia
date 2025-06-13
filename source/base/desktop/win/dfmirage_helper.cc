@@ -96,7 +96,7 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 
     helper->is_mapped_ = true;
 
-    LOG(LS_INFO) << "DFMirage helper created with rect: " << screen_rect;
+    LOG(LS_INFO) << "DFMirage helper created with rect:" << screen_rect;
     return helper;
 }
 
@@ -175,7 +175,7 @@ bool DFMirageHelper::update(bool load)
         CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
-        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed: " << status;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed:" << status;
         return false;
     }
 
@@ -199,7 +199,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             reinterpret_cast<LPSTR>(&get_changes_buffer_));
         if (ret <= 0)
         {
-            LOG(LS_ERROR) << "ExtEscape failed: " << ret;
+            LOG(LS_ERROR) << "ExtEscape failed:" << ret;
             return false;
         }
     }
@@ -211,7 +211,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             0, nullptr);
         if (ret <= 0)
         {
-            LOG(LS_ERROR) << "ExtEscape failed: " << ret;
+            LOG(LS_ERROR) << "ExtEscape failed:" << ret;
         }
 
         memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));

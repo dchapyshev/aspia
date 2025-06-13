@@ -78,7 +78,7 @@ VirtualDisplay::VirtualDisplay()
         &create_info, 0, nullptr, creationCallback, &create_event_, &sw_device_);
     if (FAILED(error.Error()))
     {
-        LOG(LS_ERROR) << "SwCreateDevice failed: " << error.ErrorMessage() << " (" << error.Error() << ")";
+        LOG(LS_ERROR) << "SwCreateDevice failed:" << error.ErrorMessage() << "(" << error.Error() << ")";
         return;
     }
 

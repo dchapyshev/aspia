@@ -112,7 +112,7 @@ bool DxgiOutputDuplicator::initialize()
 {
     if (duplicateOutput())
     {
-        LOG(LS_INFO) << "Image in system memory: " << desc_.DesktopImageInSystemMemory;
+        LOG(LS_INFO) << "Image in system memory:" << desc_.DesktopImageInSystemMemory;
 
         if (desc_.DesktopImageInSystemMemory)
             texture_.reset(new DxgiTextureMapping(duplication_.Get()));
@@ -153,8 +153,8 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 continue;
             }
 
-            LOG(LS_ERROR) << "Failed to duplicate output from IDXGIOutput1, error "
-                          << error.ErrorMessage() << ", with code " << error.Error();
+            LOG(LS_ERROR) << "Failed to duplicate output from IDXGIOutput1, error"
+                          << error.ErrorMessage() << ", with code" << error.Error();
             return false;
         }
         else
@@ -185,10 +185,10 @@ bool DxgiOutputDuplicator::duplicateOutput()
         static_cast<int>(desc_.ModeDesc.Height) != desktop_rect_.height())
     {
         LOG(LS_ERROR) << "IDXGIDuplicateOutput does not return a same size as its "
-                         "IDXGIOutput1, size returned by IDXGIDuplicateOutput is "
-                      << desc_.ModeDesc.Width << " x " << desc_.ModeDesc.Height
-                      << ", size returned by IDXGIOutput1 is " << desktop_rect_.width()
-                      << " x " << desktop_rect_.height();
+                         "IDXGIOutput1, size returned by IDXGIDuplicateOutput is"
+                      << desc_.ModeDesc.Width << "x" << desc_.ModeDesc.Height
+                      << ", size returned by IDXGIOutput1 is" << desktop_rect_.width()
+                      << "x" << desktop_rect_.height();
         return false;
     }
 
@@ -206,8 +206,8 @@ bool DxgiOutputDuplicator::releaseFrame()
     _com_error error = duplication_->ReleaseFrame();
     if (error.Error() != S_OK)
     {
-        LOG(LS_ERROR) << "Failed to release frame from IDXGIOutputDuplication, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to release frame from IDXGIOutputDuplication, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -239,8 +239,8 @@ bool DxgiOutputDuplicator::duplicate(
                                                       resource.GetAddressOf());
     if (error.Error() != S_OK && error.Error() != DXGI_ERROR_WAIT_TIMEOUT)
     {
-        LOG(LS_ERROR) << "Failed to capture frame, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to capture frame, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -261,8 +261,8 @@ bool DxgiOutputDuplicator::duplicate(
                                                            shape_info);
         if (FAILED(hr.Error()))
         {
-            LOG(LS_ERROR) << "Failed to capture cursor, error "
-                          << error.ErrorMessage() << ", code " << error.Error();
+            LOG(LS_ERROR) << "Failed to capture cursor, error"
+                          << error.ErrorMessage() << ", code" << error.Error();
             buffer->clear();
         }
     }
@@ -431,8 +431,8 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         static_cast<UINT>(metadata_.size()), move_rects, &buff_size);
     if (error.Error() != S_OK)
     {
-        LOG(LS_ERROR) << "Failed to get move rectangles, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to get move rectangles, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -444,8 +444,8 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         static_cast<UINT>(metadata_.size()) - buff_size, dirty_rects, &buff_size);
     if (error.Error() != S_OK)
     {
-        LOG(LS_ERROR) << "Failed to get dirty rectangles, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to get dirty rectangles, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -481,9 +481,9 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         else
         {
             LOG(LS_INFO) << "Unmoved move_rect detected, ["
-                         << move_rects->DestinationRect.left << ", "
+                         << move_rects->DestinationRect.left << ","
                          << move_rects->DestinationRect.top << "] - ["
-                         << move_rects->DestinationRect.right << ", "
+                         << move_rects->DestinationRect.right << ","
                          << move_rects->DestinationRect.bottom << "].";
         }
 

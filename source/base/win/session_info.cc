@@ -139,7 +139,7 @@ QString SessionInfo::clientName() const
     if (!WTSQuerySessionInformationW(
         WTS_CURRENT_SERVER_HANDLE, sessionId(), WTSClientName, &client_name, &size))
     {
-        LOG(LS_ERROR) << "WTSQuerySessionInformationW() failed: " << ::GetLastError();
+        LOG(LS_ERROR) << "WTSQuerySessionInformationW() failed:" << ::GetLastError();
         return QString();
     }
 

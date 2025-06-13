@@ -149,8 +149,8 @@ bool GuiApplication::isRunning()
 
     if (!server_->listen(server_name_))
     {
-        LOG(LS_ERROR) << "IPC server is not running on channel "
-                      << server_->serverName() << ": " << server_->errorString();
+        LOG(LS_ERROR) << "IPC server is not running on channel"
+                      << server_->serverName() << ":" << server_->errorString();
     }
     else
     {
@@ -260,7 +260,7 @@ void GuiApplication::onNewConnection()
 
     if (!remaining || remaining > kMaxMessageSize)
     {
-        LOG(LS_ERROR) << "Message has an incorrect size: " << remaining;
+        LOG(LS_ERROR) << "Message has an incorrect size:" << remaining;
         return;
     }
 

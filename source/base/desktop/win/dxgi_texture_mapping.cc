@@ -49,8 +49,8 @@ bool DxgiTextureMapping::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_in
     if (error.Error() != S_OK)
     {
         *rect() = { 0 };
-        LOG(LS_ERROR) << "Failed to map the IDXGIOutputDuplication to a bitmap, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to map the IDXGIOutputDuplication to a bitmap, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 

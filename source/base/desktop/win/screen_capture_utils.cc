@@ -75,7 +75,7 @@ Point dpiByRect(const Rect& rect)
             HRESULT hr = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "GetDpiForMonitor failed: "
+                LOG(LS_ERROR) << "GetDpiForMonitor failed:"
                               << SystemError(static_cast<DWORD>(hr)).toString();
             }
             else

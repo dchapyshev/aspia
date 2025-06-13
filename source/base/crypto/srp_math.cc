@@ -34,8 +34,8 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 {
     if (!x.isValid() || !y.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (x=" << x.isValid() << " y=" << y.isValid()
-                      << " N=" << N.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (x=" << x.isValid() << "y=" << y.isValid()
+                      << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -69,7 +69,7 @@ BigNum calc_k(const BigNum& N, const BigNum& g)
 {
     if (!N.isValid() || !g.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << " g=" << g.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << "g=" << g.isValid() << ")";
         return BigNum();
     }
 
@@ -85,8 +85,8 @@ BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
 {
     if (!A.isValid() || !B.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << " B=" << B.isValid()
-                      << " N=" << N.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << "B=" << B.isValid()
+                      << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -100,8 +100,8 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 {
     if (!b.isValid() || !N.isValid() || !g.isValid() || !v.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (b=" << b.isValid() << " N=" << N.isValid()
-                      << " g=" << g.isValid() << " v=" << v.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (b=" << b.isValid() << "N=" << N.isValid()
+                      << "g=" << g.isValid() << "v=" << v.isValid() << ")";
         return BigNum();
     }
 
@@ -168,8 +168,8 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.isEmpty()
-                      << " p=" << p.isEmpty() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
+                      << "p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
@@ -182,8 +182,8 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QByteArray& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << " I=" << I.isEmpty()
-                      << " p=" << p.isEmpty() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
+                      << "p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
@@ -211,8 +211,8 @@ BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
 {
     if (!a.isValid() || !N.isValid() || !g.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (a=" << a.isValid() << " N=" << N.isValid()
-                      << " g=" << g.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (a=" << a.isValid() << "N=" << N.isValid()
+                      << "g=" << g.isValid() << ")";
         return BigNum();
     }
 
@@ -242,8 +242,8 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
 {
     if (!A.isValid() || !v.isValid() || !u.isValid() || !b.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << " v=" << v.isValid()
-                      << " u=" << u.isValid() << " b=" << b.isValid() << " N=" << N.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << "v=" << v.isValid()
+                      << "u=" << u.isValid() << "b=" << b.isValid() << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -292,9 +292,9 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
 {
     if (!N.isValid() || !B.isValid() || !g.isValid() || !x.isValid() || !a.isValid() || !u.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << " B=" << B.isValid()
-                      << " g=" << g.isValid() << " x=" << x.isValid() << " a=" << a.isValid()
-                      << " u=" << u.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << "B=" << B.isValid()
+                      << "g=" << g.isValid() << "x=" << x.isValid() << "a=" << a.isValid()
+                      << "u=" << u.isValid() << ")";
         return BigNum();
     }
 
@@ -312,7 +312,7 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
     if (!tmp.isValid() || !tmp2.isValid() || !tmp3.isValid())
     {
         LOG(LS_ERROR) << "BigNum::create failed (tmp=" << tmp.isValid()
-                      << " tmp2=" << tmp2.isValid() << " tmp3=" << tmp3.isValid() << ")";
+                      << "tmp2=" << tmp2.isValid() << "tmp3=" << tmp3.isValid() << ")";
         return BigNum();
     }
 
@@ -375,7 +375,7 @@ bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
 {
     if (!B.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (B=" << B.isValid() << " N=" << N.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (B=" << B.isValid() << "N=" << N.isValid() << ")";
         return false;
     }
 
@@ -411,8 +411,8 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << " p=" << p.isEmpty()
-                      << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
+                      << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
         return BigNum();
     }
 
@@ -443,8 +443,8 @@ BigNum SrpMath::calc_v(const QString& I, const QByteArray& p, const BigNum& s,
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << " p=" << p.isEmpty()
-                      << " N=" << N.isValid() << " g=" << g.isValid() << " s=" << s.isValid() << ")";
+        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
+                      << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
         return BigNum();
     }
 

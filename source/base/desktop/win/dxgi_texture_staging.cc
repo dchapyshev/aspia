@@ -79,16 +79,16 @@ bool DxgiTextureStaging::initializeStage(ID3D11Texture2D* texture)
         &desc, nullptr, stage_.GetAddressOf());
     if (error.Error() != S_OK || !stage_)
     {
-        LOG(LS_ERROR) << "Failed to create a new ID3D11Texture2D as stage, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to create a new ID3D11Texture2D as stage, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
     error = stage_.As(&surface_);
     if (error.Error() != S_OK || !surface_)
     {
-        LOG(LS_ERROR) << "Failed to convert ID3D11Texture2D to IDXGISurface, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to convert ID3D11Texture2D to IDXGISurface, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -130,8 +130,8 @@ bool DxgiTextureStaging::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_in
     if (error.Error() != S_OK)
     {
         *rect() = { 0 };
-        LOG(LS_ERROR) << "Failed to map the IDXGISurface to a bitmap, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to map the IDXGISurface to a bitmap, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 

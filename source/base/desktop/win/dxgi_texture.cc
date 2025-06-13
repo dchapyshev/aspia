@@ -66,8 +66,8 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
                                                 reinterpret_cast<void**>(texture.GetAddressOf()));
     if (error.Error() != S_OK || !texture)
     {
-        LOG(LS_ERROR) << "Failed to convert IDXGIResource to ID3D11Texture2D, error "
-                      << error.ErrorMessage() << ", code " << error.Error();
+        LOG(LS_ERROR) << "Failed to convert IDXGIResource to ID3D11Texture2D, error"
+                      << error.ErrorMessage() << ", code" << error.Error();
         return false;
     }
 
@@ -76,7 +76,7 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
 
     if (desc.Format != DXGI_FORMAT_B8G8R8A8_UNORM)
     {
-        LOG(LS_ERROR) << "Texture with unsupported format: " << desc.Format;
+        LOG(LS_ERROR) << "Texture with unsupported format:" << desc.Format;
         return false;
     }
 

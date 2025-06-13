@@ -55,7 +55,7 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
 
     if (cursor_shape.width() <= 0 || cursor_shape.height() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid cursor size: "
+        LOG(LS_ERROR) << "Invalid cursor size:"
                       << cursor_shape.width() << "x" << cursor_shape.height();
         return QByteArray();
     }
@@ -68,8 +68,8 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret)
-                      << " (" << ret << ")";
+        LOG(LS_ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret)
+                      << "(" << ret << ")";
         return QByteArray();
     }
 
@@ -81,8 +81,8 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
         ret = ZSTD_decompressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret)
-                          << " (" << ret << ")";
+            LOG(LS_ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret)
+                          << "(" << ret << ")";
             return QByteArray();
         }
     }
@@ -116,7 +116,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
         {
-            LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
+            LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor:"
                           << size.width() << "x" << size.height();
             return nullptr;
         }
@@ -143,7 +143,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
             if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
             {
-                LOG(LS_ERROR) << "Invalid cache size: " << cache_size;
+                LOG(LS_ERROR) << "Invalid cache size:" << cache_size;
                 return nullptr;
             }
 
@@ -173,7 +173,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
     if (cache_index >= cache_.size())
     {
-        LOG(LS_ERROR) << "Invalid cache index: " << cache_index;
+        LOG(LS_ERROR) << "Invalid cache index:" << cache_index;
         return nullptr;
     }
 

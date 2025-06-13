@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_PIXEL_FORMAT_H
 #define BASE_DESKTOP_PIXEL_FORMAT_H
 
-#include <QTextStream>
+#include <QDebug>
 
 #include "proto/desktop.h"
 
@@ -120,7 +120,7 @@ private:
     quint8 blue_shift_ = 0;
 };
 
-QTextStream& operator<<(QTextStream& stream, const PixelFormat& pixel_format);
+QDebug operator<<(QDebug stream, const PixelFormat& pixel_format);
 
 } // namespace base
 

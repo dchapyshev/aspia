@@ -131,7 +131,7 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
 {
     if (current_resolution_ == resolution)
     {
-        LOG(LS_INFO) << "Screen #" << screen_id_ << " already has specified resolution ("
+        LOG(LS_INFO) << "Screen #" << screen_id_ << "already has specified resolution ("
                      << resolution << ")";
         return false;
     }
@@ -139,8 +139,7 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
     DEVMODEW mode;
     if (!modeForResolution(resolution, &mode))
     {
-        LOG(LS_ERROR) << "Specified mode " << resolution << " for screen "
-                      << screen_id_ << " not found";
+        LOG(LS_ERROR) << "Specified mode" << resolution << "for screen" << screen_id_ << "not found";
         return false;
     }
 
@@ -186,8 +185,8 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     // Ignore modes missing the fields that we expect.
     if (!isModeValid(candidate_mode))
     {
-        LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                     << candidate_mode.dmPelsHeight << ": invalid fields " << Qt::hex
+        LOG(LS_INFO) << "Ignoring mode" << candidate_mode.dmPelsWidth << "x"
+                     << candidate_mode.dmPelsHeight << ": invalid fields" << Qt::hex
                      << candidate_mode.dmFields;
         return;
     }
@@ -195,9 +194,9 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     // Ignore modes with differing bits-per-pixel.
     if (candidate_mode.dmBitsPerPel != current_mode.dmBitsPerPel)
     {
-        LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                     << candidate_mode.dmPelsHeight << ": mismatched BPP: expected "
-                     << current_mode.dmFields << " but got " << current_mode.dmFields;
+        LOG(LS_INFO) << "Ignoring mode" << candidate_mode.dmPelsWidth << "x"
+                     << candidate_mode.dmPelsHeight << ": mismatched BPP: expected"
+                     << current_mode.dmFields << "but got" << current_mode.dmFields;
         return;
     }
 
@@ -215,7 +214,7 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
             candidate_mode.dmDisplayOrientation == current_mode.dmDisplayOrientation;
         if (best_mode_matches_current_orientation && !candidate_mode_matches_current_orientation)
         {
-            LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
+            LOG(LS_INFO) << "Ignoring mode" << candidate_mode.dmPelsWidth << "x"
                          << candidate_mode.dmPelsHeight
                          << ": mode matching current orientation already found.";
             return;
@@ -265,7 +264,7 @@ QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found:" << screen_id;
         return {};
     }
 
@@ -278,7 +277,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found:" << screen_id;
         return false;
     }
 
@@ -291,7 +290,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found:" << screen_id;
         return;
     }
 

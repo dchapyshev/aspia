@@ -31,7 +31,7 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
                                   IID_PPV_ARGS(&device_enumerator));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
     }
 
     if (hr == CO_E_NOTINITIALIZED && allow_reinitialize)
@@ -45,7 +45,7 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
                                   CLSCTX_ALL, IID_PPV_ARGS(&device_enumerator));
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "CoCreateInstance failed: " << SystemError(hr).toString();
+                LOG(LS_ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
             }
         }
     }
@@ -78,7 +78,7 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
         eRender, eConsole, audio_endpoint_device.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IMMDeviceEnumerator::GetDefaultAudioEndpoint failed: "
+        LOG(LS_ERROR) << "IMMDeviceEnumerator::GetDefaultAudioEndpoint failed:"
                       << SystemError(hr).toString();
     }
 
@@ -106,7 +106,7 @@ Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
                                         nullptr, &audio_client);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IMMDevice::Activate(IAudioClient) failed: "
+        LOG(LS_ERROR) << "IMMDevice::Activate(IAudioClient) failed:"
                       << SystemError(hr).toString();
     }
     return audio_client;
@@ -122,7 +122,7 @@ Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* clie
     HRESULT hr = client->GetService(IID_PPV_ARGS(&audio_render_client));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioRenderClient) failed: "
+        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioRenderClient) failed:"
                       << SystemError(hr).toString();
         return Microsoft::WRL::ComPtr<IAudioRenderClient>();
     }
@@ -137,7 +137,7 @@ Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioCli
     HRESULT hr = client->GetService(IID_PPV_ARGS(&audio_session_control));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioControl) failed: "
+        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioControl) failed:"
                       << SystemError(hr).toString();
         return Microsoft::WRL::ComPtr<IAudioSessionControl>();
     }
@@ -198,7 +198,7 @@ bool sharedModeInitialize(IAudioClient* client,
                                     reinterpret_cast<const WAVEFORMATEX*>(format), nullptr);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Initialize failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::Initialize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -209,7 +209,7 @@ bool sharedModeInitialize(IAudioClient* client,
         hr = client->SetEventHandle(event_handle);
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "IAudioClient::SetEventHandle failed: " << SystemError(hr).toString();
+            LOG(LS_ERROR) << "IAudioClient::SetEventHandle failed:" << SystemError(hr).toString();
             return false;
         }
     }
@@ -224,7 +224,7 @@ bool sharedModeInitialize(IAudioClient* client,
     hr = client->GetBufferSize(&buffer_size_in_frames);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -266,7 +266,7 @@ bool isFormatSupported(IAudioClient* client,
     }
     else
     {
-        LOG(LS_ERROR) << "IAudioClient::IsFormatSupported failed: "
+        LOG(LS_ERROR) << "IAudioClient::IsFormatSupported failed:"
                       << SystemError(hr).toString();
     }
 
@@ -283,7 +283,7 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     HRESULT hr = client->GetBufferSize(&endpoint_buffer_size);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -293,20 +293,20 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     hr = client->GetCurrentPadding(&num_queued_frames);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed: "
+        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed:"
                       << SystemError(hr).toString();
         return false;
     }
-    LOG(LS_INFO) << "num_queued_frames: " << num_queued_frames;
+    LOG(LS_INFO) << "num_queued_frames:" << num_queued_frames;
 
     BYTE* data = nullptr;
     int num_frames_to_fill = endpoint_buffer_size - num_queued_frames;
-    LOG(LS_INFO) << "num_frames_to_fill: " << num_frames_to_fill;
+    LOG(LS_INFO) << "num_frames_to_fill:" << num_frames_to_fill;
 
     hr = render_client->GetBuffer(num_frames_to_fill, &data);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -315,7 +315,7 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     hr = render_client->ReleaseBuffer(num_frames_to_fill, AUDCLNT_BUFFERFLAGS_SILENT);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed: "
+        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed:"
                       << SystemError(hr).toString();
         return false;
     }

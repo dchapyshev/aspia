@@ -111,8 +111,7 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
         context_.GetAddressOf());
     if (error.Error() != S_OK || !d3d_device_ || !context_)
     {
-        LOG(LS_ERROR) << "D3D11CreateDeivce returns error "
-                      << error.ErrorMessage() << " with code "
+        LOG(LS_ERROR) << "D3D11CreateDeivce returns error" << error.ErrorMessage() << "with code"
                       << error.Error();
         return false;
     }
@@ -124,8 +123,8 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
 
     if (SUCCEEDED(adapter->GetDesc(&adapter_description)))
     {
-        LOG(LS_INFO) << "Adapter #" << index << ": '" << adapter_description.Description
-                     << "' (DirectX feature level: '" << featureLevelToString(feature_level) << "')";
+        LOG(LS_INFO) << "Adapter #" << index << ":" << adapter_description.Description
+                     << "(DirectX feature level:" << featureLevelToString(feature_level) << ")";
     }
     else
     {
@@ -163,8 +162,8 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
                                           reinterpret_cast<void**>(factory.GetAddressOf()));
     if (error.Error() != S_OK || !factory)
     {
-        LOG(LS_ERROR) << "Cannot create IDXGIFactory1. Error "
-                      << error.ErrorMessage() << " with code " << error.Error();
+        LOG(LS_ERROR) << "Cannot create IDXGIFactory1. Error" << error.ErrorMessage() << "with code"
+                      << error.Error();
         return std::vector<D3dDevice>();
     }
 
@@ -197,13 +196,13 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
                 hr = output->GetDesc(&desc);
                 if (hr != S_OK)
                 {
-                    LOG(LS_INFO) << "Unable to get output " << j << " description for adapter #" << i;
+                    LOG(LS_INFO) << "Unable to get output" << j << "description for adapter #" << i;
                 }
                 else
                 {
                     if (!desc.AttachedToDesktop)
                     {
-                        LOG(LS_INFO) << "Output " << j << " not attached to desktop for adapter #" << i;
+                        LOG(LS_INFO) << "Output" << j << "not attached to desktop for adapter #" << i;
                     }
                     else
                     {
@@ -215,7 +214,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
 
             if (!adapter_used)
             {
-                LOG(LS_INFO) << "Adapter #" << i << " not used";
+                LOG(LS_INFO) << "Adapter #" << i << "not used";
                 continue;
             }
 
@@ -226,7 +225,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
             if (device.initialize(i, adapter))
             {
                 result.emplace_back(std::move(device));
-                LOG(LS_INFO) << "Adapter #" << i << " is initialized";
+                LOG(LS_INFO) << "Adapter #" << i << "is initialized";
             }
             else
             {
@@ -241,8 +240,8 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
         }
         else
         {
-            LOG(LS_ERROR) << "IDXGIFactory1::EnumAdapters returns an unexpected error "
-                          << error.ErrorMessage() << " with code " << error.Error();
+            LOG(LS_ERROR) << "IDXGIFactory1::EnumAdapters returns an unexpected error"
+                          << error.ErrorMessage() << "with code" << error.Error();
         }
     }
 

@@ -55,7 +55,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
     SharedMemory* shared_memory = shared_memory_factory->create(buffer_size);
     if (!shared_memory)
     {
-        LOG(LS_ERROR) << "SharedMemoryFactory::create failed for size: " << buffer_size;
+        LOG(LS_ERROR) << "SharedMemoryFactory::create failed for size:" << buffer_size;
         return nullptr;
     }
 
@@ -71,7 +71,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
     SharedMemory* shared_memory = shared_memory_factory->open(id);
     if (!shared_memory)
     {
-        LOG(LS_ERROR) << "SharedMemoryFactory::open failed for id: " << id;
+        LOG(LS_ERROR) << "SharedMemoryFactory::open failed for id:" << id;
         return nullptr;
     }
 

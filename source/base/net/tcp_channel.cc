@@ -110,7 +110,7 @@ QString TcpChannel::peerAddress() const
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get peer address: " << error_code;
+            LOG(LS_ERROR) << "Unable to get peer address:" << error_code;
             return QString();
         }
 
@@ -137,7 +137,7 @@ QString TcpChannel::peerAddress() const
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get peer address: " << error_code;
+        LOG(LS_ERROR) << "Unable to get peer address:" << error_code;
         return QString();
     }
 }
@@ -151,7 +151,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
+    LOG(LS_INFO) << "Start resolving for" << host << ":" << service;
 
     resolver_->async_resolve(host, service,
         [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
@@ -162,7 +162,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             return;
         }
 
-        LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
+        LOG(LS_INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
             [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
@@ -187,7 +187,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
                 return;
             }
 
-            LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
+            LOG(LS_INFO) << "Connected to endpoint:" << endpoint.address().to_string()
                          << ":" << endpoint.port();
             setConnected(true);
             emit sig_connected();
@@ -269,7 +269,7 @@ bool TcpChannel::setReadBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set read buffer size: " << error_code;
+        LOG(LS_ERROR) << "Failed to set read buffer size:" << error_code;
         return false;
     }
 
@@ -286,7 +286,7 @@ bool TcpChannel::setWriteBufferSize(size_t size)
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to set write buffer size: " << error_code;
+        LOG(LS_ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
@@ -348,7 +348,7 @@ void TcpChannel::setConnected(bool connected)
     socket_.set_option(option, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << error_code;
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
     }
 
     keep_alive_counter_.resize(sizeof(quint32));
@@ -378,15 +378,15 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(LS_ERROR) << "Asio error: " << error_code;
+    LOG(LS_ERROR) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(LS_ERROR) << "Connection finished with error " << errorToString(error_code)
-                  << " from: " << location.toString();
+    LOG(LS_ERROR) << "Connection finished with error" << errorToString(error_code)
+                  << "from:" << location.toString();
 
     disconnectFrom();
     emit sig_disconnected(error_code);
@@ -475,7 +475,7 @@ void TcpChannel::doWrite()
 
         if (target_data_size > kMaxMessageSize)
         {
-            LOG(LS_ERROR) << "Too big outgoing message: " << target_data_size;
+            LOG(LS_ERROR) << "Too big outgoing message:" << target_data_size;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -580,7 +580,7 @@ void TcpChannel::doReadSize()
 
             if (message_size > kMaxMessageSize)
             {
-                LOG(LS_ERROR) << "Too big incoming message: " << message_size;
+                LOG(LS_ERROR) << "Too big incoming message:" << message_size;
                 onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
@@ -675,7 +675,7 @@ void TcpChannel::doReadServiceHeader()
         ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
         if (header->length > kMaxMessageSize)
         {
-            LOG(LS_INFO) << "Too big service message: " << header->length;
+            LOG(LS_INFO) << "Too big service message:" << header->length;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -773,8 +773,8 @@ void TcpChannel::doReadServiceData(size_t length)
                     Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
                         Clock::now() - keep_alive_timestamp_);
 
-                    DLOG(LS_INFO) << "Ping result: " << ping_time.count() << " ms ("
-                                  << keep_alive_counter_.size() << " bytes)";
+                    DLOG(LS_INFO) << "Ping result:" << ping_time.count() << "ms ("
+                                  << keep_alive_counter_.size() << "bytes)";
                 }
 
                 // The user can disable keep alive. Restart the timer only if keep alive is enabled.

@@ -56,7 +56,7 @@ Translations::Translations()
             locale_name = locale_name.right(2);
         }
 
-        LOG(LS_INFO) << "Added: " << qm_file << " (" << locale_name << ")";
+        LOG(LS_INFO) << "Added:" << qm_file << locale_name;
 
         if (locale_list_.contains(locale_name))
             locale_list_[locale_name].push_back(qm_file);
@@ -119,7 +119,7 @@ void Translations::installTranslators(const QString& locale)
 {
     removeTranslators();
 
-    LOG(LS_INFO) << "Install translators for: " << locale;
+    LOG(LS_INFO) << "Install translators for:" << locale;
 
     auto file_list = locale_list_.constFind(locale);
     if (file_list == locale_list_.constEnd())

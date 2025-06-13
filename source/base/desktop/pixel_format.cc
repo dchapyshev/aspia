@@ -228,7 +228,7 @@ proto::desktop::PixelFormat PixelFormat::toProto()
 }
 
 //--------------------------------------------------------------------------------------------------
-QTextStream& operator<<(QTextStream& stream, const PixelFormat& pixel_format)
+QDebug operator<<(QDebug stream, const PixelFormat& pixel_format)
 {
     return stream << "PixelFormat("
                   << "bpp=" << pixel_format.bitsPerPixel()

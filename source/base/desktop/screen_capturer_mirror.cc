@@ -108,7 +108,7 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
     {
-        LOG(LS_ERROR) << "Invalid screen id passed: " << screen_id;
+        LOG(LS_ERROR) << "Invalid screen id passed:" << screen_id;
         return false;
     }
 

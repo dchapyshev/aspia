@@ -110,7 +110,7 @@ bool AudioOutputWin::start()
     if (FAILED(hr))
     {
         stopThread();
-        LOG(LS_ERROR) << "IAudioClient::Start failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::Start failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -136,7 +136,7 @@ bool AudioOutputWin::stop()
     HRESULT hr = audio_client_->Stop();
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Stop failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
     }
 
     // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
@@ -146,7 +146,7 @@ bool AudioOutputWin::stop()
     hr = audio_client_->Reset();
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Reset failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::Reset failed:" << SystemError(hr).toString();
     }
 
     // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
@@ -220,7 +220,7 @@ void AudioOutputWin::threadRun()
         HRESULT hr = audio_client_->Stop();
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "IAudioClient::Stop failed: " << SystemError(hr).toString();
+            LOG(LS_ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
         }
     }
 }
@@ -304,7 +304,7 @@ bool AudioOutputWin::init()
     if (FAILED(audio_session_control->GetState(&state)))
         return false;
 
-    LOG(LS_INFO) << "Audio session state: " << sessionStateToString(state);
+    LOG(LS_INFO) << "Audio session state:" << sessionStateToString(state);
 
     // Register the client to receive notifications of session events, including changes in the
     // stream state.
@@ -339,7 +339,7 @@ bool AudioOutputWin::handleDataRequest()
 
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -359,7 +359,7 @@ bool AudioOutputWin::handleDataRequest()
     hr = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed: " << SystemError(hr).toString();
+        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -371,7 +371,7 @@ bool AudioOutputWin::handleDataRequest()
     hr = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed: "
+        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed:"
                       << SystemError(hr).toString();
         return false;
     }

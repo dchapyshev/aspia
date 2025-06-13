@@ -49,7 +49,7 @@ void TcpServer::start(quint16 port, const QString& iface)
         return;
     }
 
-    LOG(LS_INFO) << "Listen interface: " << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
+    LOG(LS_INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
 
     asio::ip::address listen_address;
     asio::error_code error_code;
@@ -59,7 +59,7 @@ void TcpServer::start(quint16 port, const QString& iface)
         listen_address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Invalid listen address: " << iface << " (" << error_code << ")";
+            LOG(LS_ERROR) << "Invalid listen address:" << iface << "(" << error_code << ")";
             return;
         }
     }
@@ -73,28 +73,28 @@ void TcpServer::start(quint16 port, const QString& iface)
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor::open failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::open failed:" << error_code;
         return;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor::set_option failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::set_option failed:" << error_code;
         return;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor::bind failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::bind failed:" << error_code;
         return;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor::listen failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor::listen failed:" << error_code;
         return;
     }
 
@@ -131,7 +131,7 @@ bool TcpServer::isValidListenInterface(const QString& iface)
     asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Invalid interface address: " << error_code;
+        LOG(LS_ERROR) << "Invalid interface address:" << error_code;
         return false;
     }
 
@@ -148,7 +148,7 @@ void TcpServer::doAccept()
             if (error_code == asio::error::operation_aborted)
                 return;
 
-            LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
+            LOG(LS_ERROR) << "Error while accepting connection:" << error_code;
 
             static const int kMaxErrorCount = 50;
 

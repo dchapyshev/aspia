@@ -41,7 +41,7 @@ proto::peer::Version serialize(const QVersionNumber& version)
 {
     if (version.segmentCount() != 3)
     {
-        LOG(LS_ERROR) << "Invalid version segments count: " << version.segmentCount();
+        LOG(LS_ERROR) << "Invalid version segments count:" << version.segmentCount();
         return proto::peer::Version();
     }
 

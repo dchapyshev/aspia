@@ -31,7 +31,7 @@ WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)
     : path_(path),
       name_(name)
 {
-    LOG(LS_INFO) << "Ctor (path=" << path << " name=" << name.data() << ")";
+    LOG(LS_INFO) << "Ctor (path=" << path << "name=" << name.data() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ bool WebmFileWriter::init()
 
     if (!directory.exists())
     {
-        LOG(LS_INFO) << "Path '" << path_ << "' not exists yet";
+        LOG(LS_INFO) << "Path" << path_ << "not exists yet";
 
         if (directory.mkpath(path_))
         {
@@ -175,14 +175,14 @@ bool WebmFileWriter::init()
     }
     else
     {
-        LOG(LS_INFO) << "Path '" << path_ << "' already exists";
+        LOG(LS_INFO) << "Path" << path_ << "already exists";
     }
 
     QString time = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss.zzz"));
     QString file_name = QString("/%1-%2.%3.webm").arg(name_, time).arg(file_counter_);
     QString file_path = path_ + file_name;
 
-    LOG(LS_INFO) << "New video file: " << file_path;
+    LOG(LS_INFO) << "New video file:" << file_path;
 
 #if defined(Q_OS_WINDOWS)
     if (fopen_s(&file_, file_path.toLocal8Bit().data(), "wb") != 0)

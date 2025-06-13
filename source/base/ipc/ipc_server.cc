@@ -178,26 +178,26 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     acceptor_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_->open failed:" << error_code;
         return false;
     }
 
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_->bind failed:" << error_code;
         return false;
     }
 
     std::string command_line = fmt::format("chmod 777 {}", channel_file.data());
 
     int ret = system(command_line.c_str());
-    LOG(LS_INFO) << "Set security attributes: " << command_line << " (ret: " << ret << ")";
+    LOG(LS_INFO) << "Set security attributes:" << command_line << "(ret:" << ret << ")";
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_->listen failed:" << error_code;
         return false;
     }
 
@@ -222,7 +222,7 @@ void IpcServer::Listener::onNewConnetion(
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code: " << error_code;
+        LOG(LS_ERROR) << "Error code:" << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -244,7 +244,7 @@ void IpcServer::Listener::onNewConnetion(
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code: " << error_code;
+        LOG(LS_ERROR) << "Error code:" << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }

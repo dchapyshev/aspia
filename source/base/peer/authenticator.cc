@@ -67,7 +67,7 @@ void Authenticator::start(TcpChannel* tcp_channel)
     tcp_channel_ = tcp_channel;
     DCHECK(tcp_channel_);
 
-    LOG(LS_INFO) << "Authentication started for: " << tcp_channel_->peerAddress();
+    LOG(LS_INFO) << "Authentication started for:" << tcp_channel_->peerAddress();
     state_ = State::PENDING;
 
     // If authentication does not complete within the specified time interval, an error will be
@@ -166,7 +166,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    LOG(LS_INFO) << "Authenticator finished with code: " << errorToString(error_code)
+    LOG(LS_INFO) << "Authenticator finished with code:" << errorToString(error_code)
                  << " (" << location.toString() << ")";
     emit sig_finished(error_code);
 }
@@ -252,7 +252,7 @@ bool Authenticator::onSessionKeyChanged()
 //--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error:" << NetworkChannel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 

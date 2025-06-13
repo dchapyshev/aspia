@@ -39,7 +39,7 @@ EVP_CIPHER_CTX_ptr createCipher(std::string_view key, const char* iv, int type)
 {
     if (key.size() != kKeySize)
     {
-        LOG(LS_ERROR) << "Wrong key size: " << key.size();
+        LOG(LS_ERROR) << "Wrong key size:" << key.size();
         return nullptr;
     }
 

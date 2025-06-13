@@ -69,7 +69,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret);
+        LOG(LS_ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret);
         return false;
     }
 
@@ -98,7 +98,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
             ret = ZSTD_decompressStream(stream_.get(), &output, &input);
             if (ZSTD_isError(ret))
             {
-                LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+                LOG(LS_ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret);
                 return false;
             }
 

@@ -65,7 +65,7 @@ bool DeviceEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            LOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed: "
+            LOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed:"
                           << SystemError(error_code).toString();
         }
 
@@ -159,7 +159,7 @@ QString DeviceEnumerator::driverRegistryString(const QString& key_name) const
     LONG status = driver_key.readValue(key_name, value, &value_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read key value: "
+        LOG(LS_ERROR) << "Unable to read key value:"
                       << SystemError(static_cast<DWORD>(status)).toString();
         return QString();
     }
@@ -184,7 +184,7 @@ DWORD DeviceEnumerator::driverRegistryDW(const QString& key_name) const
     LONG status = driver_key.readValueDW(key_name, &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read key value: "
+        LOG(LS_ERROR) << "Unable to read key value"
                       << SystemError(static_cast<DWORD>(status)).toString();
         return 0;
     }

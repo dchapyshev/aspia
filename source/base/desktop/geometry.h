@@ -19,9 +19,9 @@
 #ifndef BASE_DESKTOP_GEOMETRY_H
 #define BASE_DESKTOP_GEOMETRY_H
 
+#include <QDebug>
 #include <QRect>
 #include <QMetaType>
-#include <QTextStream>
 
 #include "proto/desktop.h"
 
@@ -278,9 +278,9 @@ private:
     qint32 bottom_ = 0;
 };
 
-QTextStream& operator<<(QTextStream& stream, const Rect& rect);
-QTextStream& operator<<(QTextStream& stream, const Point& point);
-QTextStream& operator<<(QTextStream& stream, const Size& size);
+QDebug operator<<(QDebug stream, const Rect& rect);
+QDebug operator<<(QDebug stream, const Point& point);
+QDebug operator<<(QDebug stream, const Size& size);
 
 } // namespace base
 

@@ -168,7 +168,7 @@ QString SysInfo::operatingSystemName()
                            access);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to open registry key: " << SystemError::toString(status);
+        LOG(LS_ERROR) << "Unable to open registry key:" << SystemError::toString(status);
         return QString();
     }
 
@@ -177,7 +177,7 @@ QString SysInfo::operatingSystemName()
     status = key.readValue("ProductName", &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read registry key: " << SystemError::toString(status);
+        LOG(LS_ERROR) << "Unable to read registry key:" << SystemError::toString(status);
         return QString();
     }
 
@@ -364,7 +364,7 @@ QString SysInfo::computerWorkgroup()
     DWORD ret = NetGetJoinInformation(nullptr, &buffer, &buffer_type);
     if (ret != NERR_Success)
     {
-        LOG(LS_ERROR) << "NetGetJoinInformation failed: " << ret;
+        LOG(LS_ERROR) << "NetGetJoinInformation failed:" << ret;
         return QString();
     }
 

@@ -163,7 +163,7 @@ ServiceThread::~ServiceThread()
 //--------------------------------------------------------------------------------------------------
 void ServiceThread::setStatus(DWORD status)
 {
-    LOG(LS_INFO) << "Service status changed: " << serviceStateToString(status);
+    LOG(LS_INFO) << "Service status changed:" << serviceStateToString(status);
 
     status_.dwServiceType = SERVICE_WIN32;
     status_.dwControlsAccepted = 0;
@@ -242,7 +242,7 @@ void ServiceThread::run()
         }
         else
         {
-            LOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed: "
+            LOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed:"
                           << SystemError::toString(error_code);
             self->startup_state = State::ERROR_OCCURRED;
         }

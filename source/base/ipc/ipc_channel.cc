@@ -140,8 +140,8 @@ bool IpcChannel::connectTo(const QString& channel_id)
 
         if (error_code != ERROR_PIPE_BUSY)
         {
-            LOG(LS_ERROR) << "Failed to connect to the named pipe: "
-                          << SystemError::toString(error_code) << " (channel_name="
+            LOG(LS_ERROR) << "Failed to connect to the named pipe:"
+                          << SystemError::toString(error_code) << "(channel_name="
                           << channel_name_ << ")";
             return false;
         }
@@ -157,7 +157,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
     stream_.assign(handle.release(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to assign handle: " << error_code;
+        LOG(LS_ERROR) << "Failed to assign handle:" << error_code;
         return false;
     }
 
@@ -171,7 +171,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
     stream_.connect(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to connect: " << error_code;
+        LOG(LS_ERROR) << "Unable to connect:" << error_code;
         return false;
     }
 
@@ -263,8 +263,8 @@ QString IpcChannel::channelName(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': " << error_code
-                  << " (location=" << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code
+                  << "(location=" << location.toString() << ")";
 
     disconnectFrom();
     emit sig_disconnected();

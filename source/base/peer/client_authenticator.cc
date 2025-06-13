@@ -336,7 +336,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         }
     }
 
-    LOG(LS_INFO) << "Encryption: " << server_hello.encryption();
+    LOG(LS_INFO) << "Encryption:" << server_hello.encryption();
 
     encryption_ = server_hello.encryption();
     switch (encryption_)
@@ -391,8 +391,8 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 
     if (server_key_exchange.salt().empty() || server_key_exchange.b().empty())
     {
-        LOG(LS_ERROR) << "Salt size: " << server_key_exchange.salt().size();
-        LOG(LS_ERROR) << "B size: " << server_key_exchange.b().size();
+        LOG(LS_ERROR) << "Salt size:" << server_key_exchange.salt().size();
+        LOG(LS_ERROR) << "B size:" << server_key_exchange.b().size();
 
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -500,9 +500,9 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(challenge.arch()));
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
 
-    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << " name=" << peerComputerName()
-                 << " os=" << peerOsName() << " cores=" << challenge.cpu_cores()
-                 << " arch=" << peerArch() << " display_name=" << peerDisplayName()
+    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << "name=" << peerComputerName()
+                 << "os=" << peerOsName() << "cores=" << challenge.cpu_cores()
+                 << "arch=" << peerArch() << "display_name=" << peerDisplayName()
                  << ")";
 
     return true;

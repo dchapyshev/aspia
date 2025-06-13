@@ -46,9 +46,9 @@ bool screenListFromDeviceNames(const QStringList& device_names,
     for (const auto& screen : std::as_const(gdi_screens.screens))
         max_screen_id = std::max(max_screen_id, screen.id);
 
-    LOG(LS_INFO) << "Device names count: " << device_names.size()
-                 << ", GDI count: " << gdi_screens.screens.size()
-                 << ", max screen id: " << max_screen_id;
+    LOG(LS_INFO) << "Device names count:" << device_names.size()
+                 << ", GDI count:" << gdi_screens.screens.size()
+                 << ", max screen id:" << max_screen_id;
 
     for (int device_index = 0; device_index < device_names.size(); ++device_index)
     {
@@ -67,7 +67,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
 
         if (!device_found)
         {
-            LOG(LS_ERROR) << "Device '" << device_name << "' NOT found in list ("
+            LOG(LS_ERROR) << "Device" << device_name << "NOT found in list ("
                           << device_index << ")";
 
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
@@ -77,7 +77,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
         }
         else
         {
-            LOG(LS_INFO) << "Device '" << device_name << "' found in list (" << device_index << ")";
+            LOG(LS_INFO) << "Device" << device_name << "found in list (" << device_index << ")";
         }
     }
 
@@ -100,13 +100,13 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
     {
         if (screen_list.screens[i].id == id)
         {
-            LOG(LS_INFO) << "Screen with ID " << id << " found ("
+            LOG(LS_INFO) << "Screen with ID" << id << "found ("
                          << screen_list.screens[i].title << ")";
             return static_cast<int>(i);
         }
     }
 
-    LOG(LS_ERROR) << "Screen with ID " << id << " NOT found";
+    LOG(LS_ERROR) << "Screen with ID" << id << "NOT found";
     return -1;
 }
 
@@ -174,7 +174,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
-    LOG(LS_INFO) << "Select screen with ID: " << screen_id;
+    LOG(LS_INFO) << "Select screen with ID:" << screen_id;
 
     if (screen_id == kFullDesktopScreenId)
     {
@@ -237,7 +237,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
     if (result != DuplicateResult::SUCCEEDED)
     {
-        LOG(LS_ERROR) << "DxgiDuplicatorController failed to capture desktop, error code "
+        LOG(LS_ERROR) << "DxgiDuplicatorController failed to capture desktop, error code"
                       << DxgiDuplicatorController::resultName(result);
     }
 
@@ -269,7 +269,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
         case DuplicateResult::INVALID_MONITOR_ID:
         {
-            LOG(LS_ERROR) << "Invalid monitor id " << current_screen_index_;
+            LOG(LS_ERROR) << "Invalid monitor id" << current_screen_index_;
             *error = Error::PERMANENT;
             return nullptr;
         }
@@ -282,8 +282,8 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
             if (temporary_error_count_ >= kMaxTemporaryErrorCount)
             {
-                LOG(LS_ERROR) << "More than " << kMaxTemporaryErrorCount
-                              << " temporary capture errors detected";
+                LOG(LS_ERROR) << "More than" << kMaxTemporaryErrorCount
+                              << "temporary capture errors detected";
                 *error = Error::PERMANENT;
             }
             else
@@ -304,7 +304,7 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
     {
         Point position = cursor_->nativePosition();
 
-        for (const auto& item : dpi_for_rect_)
+        for (const auto& item : std::as_const(dpi_for_rect_))
         {
             const Rect& rect = item.first;
 

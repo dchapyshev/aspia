@@ -101,7 +101,7 @@ bool ScreenCapturerGdi::screenList(ScreenList* screens)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 {
-    LOG(LS_INFO) << "Select screen with ID: " << screen_id;
+    LOG(LS_INFO) << "Select screen with ID:" << screen_id;
 
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
     {
@@ -283,7 +283,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
     {
-        LOG(LS_INFO) << "Desktop rect changed from " << desktop_dc_rect_ << " to " << desktop_rect;
+        LOG(LS_INFO) << "Desktop rect changed from" << desktop_dc_rect_ << "to" << desktop_rect;
 
         desktop_dc_.close();
         memory_dc_.reset();

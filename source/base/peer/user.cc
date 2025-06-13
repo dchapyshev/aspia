@@ -125,7 +125,7 @@ User User::create(const QString& name, const QString& password)
     std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
     {
-        LOG(LS_ERROR) << "Pair not found for group: " << kDefaultGroup;
+        LOG(LS_ERROR) << "Pair not found for group:" << kDefaultGroup;
         return User();
     }
 

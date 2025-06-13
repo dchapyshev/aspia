@@ -443,7 +443,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Username: '" << user_name_ << "'";
+    LOG(LS_INFO) << "Username:" << user_name_;
 
     do
     {
@@ -468,12 +468,12 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
         if (user.isValid())
         {
-            LOG(LS_INFO) << "User '" << user_name_ << "' found (enabled: "
+            LOG(LS_INFO) << "User" << user_name_ << "found (enabled:"
                          << ((user.flags & User::ENABLED) != 0) << ")";
         }
         else
         {
-            LOG(LS_INFO) << "User '" << user_name_ << "' NOT found";
+            LOG(LS_INFO) << "User" << user_name_ << "NOT found";
         }
 
         if (user.isValid() && (user.flags & User::ENABLED))
@@ -491,7 +491,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
             }
             else
             {
-                LOG(LS_ERROR) << "User '" << user.name << "' has an invalid SRP group";
+                LOG(LS_ERROR) << "User" << user.name << "has an invalid SRP group";
             }
         }
 
@@ -656,9 +656,9 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(response.display_name()));
 
     LOG(LS_INFO) << "Client (session_type=" << response.session_type()
-                 << " version=" << peerVersion().toString() << " name=" << peerComputerName()
-                 << " os=" << peerOsName() << " cores=" << response.cpu_cores()
-                 << " arch=" << peerArch() << " display_name=" << peerDisplayName()
+                 << "version=" << peerVersion().toString() << "name=" << peerComputerName()
+                 << "os=" << peerOsName() << "cores=" << response.cpu_cores()
+                 << "arch=" << peerArch() << "display_name=" << peerDisplayName()
                  << ")";
 
     BitSet<quint32> session_type = response.session_type();
