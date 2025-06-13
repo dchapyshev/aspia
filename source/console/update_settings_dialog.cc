@@ -18,11 +18,11 @@
 
 #include "console/update_settings_dialog.h"
 
+#include <QPushButton>
+
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "console/settings.h"
-
-#include <QPushButton>
 
 namespace console {
 

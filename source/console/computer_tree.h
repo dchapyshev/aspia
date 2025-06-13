@@ -19,9 +19,9 @@
 #ifndef CONSOLE_COMPUTER_TREE_H
 #define CONSOLE_COMPUTER_TREE_H
 
-#include "base/macros_magic.h"
-
 #include <QTreeWidget>
+
+#include "base/macros_magic.h"
 
 namespace console {
 

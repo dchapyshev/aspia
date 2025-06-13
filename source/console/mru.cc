@@ -18,8 +18,6 @@
 
 #include "console/mru.h"
 
-#include "build/build_config.h"
-
 namespace console {
 
 namespace {

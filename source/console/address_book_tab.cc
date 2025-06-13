@@ -18,6 +18,11 @@
 
 #include "console/address_book_tab.h"
 
+#include <QFileDialog>
+#include <QMenu>
+#include <QMessageBox>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor_chacha20_poly1305.h"
@@ -32,11 +37,6 @@
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
 #include "console/settings.h"
-
-#include <QFileDialog>
-#include <QMenu>
-#include <QMessageBox>
-#include <QTimer>
 
 namespace console {
 

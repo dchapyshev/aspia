@@ -18,6 +18,21 @@
 
 #include "client/ui/desktop/desktop_session_window.h"
 
+#include <QApplication>
+#include <QBrush>
+#include <QClipboard>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QMessageBox>
+#include <QPalette>
+#include <QResizeEvent>
+#include <QPropertyAnimation>
+#include <QScreen>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QTimer>
+#include <QWindow>
+
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/desktop/frame_qimage.h"
@@ -36,21 +51,6 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QApplication>
-#include <QBrush>
-#include <QClipboard>
-#include <QFileDialog>
-#include <QHBoxLayout>
-#include <QMessageBox>
-#include <QPalette>
-#include <QResizeEvent>
-#include <QPropertyAnimation>
-#include <QScreen>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QTimer>
-#include <QWindow>
 
 Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
 Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)

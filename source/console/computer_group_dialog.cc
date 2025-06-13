@@ -18,16 +18,15 @@
 
 #include "console/computer_group_dialog.h"
 
+#include <QAbstractButton>
+#include <QDateTime>
+#include <QMessageBox>
+
 #include "base/logging.h"
-#include "base/crypto/secure_memory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
 #include "console/computer_group_dialog_port_forwarding.h"
-
-#include <QAbstractButton>
-#include <QDateTime>
-#include <QMessageBox>
 
 namespace console {
 

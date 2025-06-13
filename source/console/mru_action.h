@@ -19,9 +19,9 @@
 #ifndef CONSOLE_MRU_ACTION_H
 #define CONSOLE_MRU_ACTION_H
 
-#include "base/macros_magic.h"
-
 #include <QAction>
+
+#include "base/macros_magic.h"
 
 namespace console {
 

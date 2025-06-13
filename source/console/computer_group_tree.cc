@@ -17,11 +17,12 @@
 //
 
 #include "console/computer_group_tree.h"
-#include "console/computer_mime_data.h"
 
 #include <QApplication>
 #include <QDropEvent>
 #include <QUuid>
+
+#include "console/computer_mime_data.h"
 
 namespace console {
 

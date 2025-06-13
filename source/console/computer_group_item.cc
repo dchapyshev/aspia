@@ -18,10 +18,10 @@
 
 #include "console/computer_group_item.h"
 
-#include "console/computer_factory.h"
-
 #include <QApplication>
 #include <QCollator>
+
+#include "console/computer_factory.h"
 
 namespace console {
 

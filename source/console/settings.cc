@@ -18,11 +18,11 @@
 
 #include "console/settings.h"
 
-#include "base/xml_settings.h"
-#include "build/build_config.h"
-
 #include <QDir>
 #include <QLocale>
+
+#include "base/xml_settings.h"
+#include "build/build_config.h"
 
 namespace console {
 

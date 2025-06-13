@@ -18,11 +18,11 @@
 
 #include "console/computer_group_dialog_general.h"
 
-#include "base/logging.h"
-#include "base/peer/user.h"
-
 #include <QMessageBox>
 #include <QTimer>
+
+#include "base/logging.h"
+#include "base/peer/user.h"
 
 namespace console {
 

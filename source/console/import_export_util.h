@@ -19,9 +19,9 @@
 #ifndef CONSOLE_IMPORT_EXPORT_UTIL_H
 #define CONSOLE_IMPORT_EXPORT_UTIL_H
 
-#include "proto/address_book.h"
-
 #include <QJsonDocument>
+
+#include "proto/address_book.h"
 
 namespace console {
 
