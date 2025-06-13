@@ -322,7 +322,7 @@ ProcessMonitor::ProcessMonitor()
         SystemBasicInformation, &basic_info, sizeof(basic_info), nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed:" << status;
     }
     else
     {
@@ -338,7 +338,7 @@ ProcessMonitor::ProcessMonitor()
            nullptr);
         if (!NT_SUCCESS(status))
         {
-            LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
+            LOG(LS_ERROR) << "NtQuerySystemInformation failed:" << status;
         }
         else
         {
@@ -394,7 +394,7 @@ int ProcessMonitor::calcCpuUsage()
        nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed:" << status;
         return 0;
     }
 
@@ -503,7 +503,7 @@ bool ProcessMonitor::updateSnapshot()
 
             if (status != STATUS_INFO_LENGTH_MISMATCH)
             {
-                LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
+                LOG(LS_ERROR) << "NtQuerySystemInformation failed:" << status;
                 return false;
             }
         }

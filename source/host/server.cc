@@ -92,7 +92,7 @@ void Server::start()
     LOG(LS_INFO) << "Starting the host server";
 
     QString settings_file_path = settings_.filePath();
-    LOG(LS_INFO) << "Configuration file path: " << settings_file_path;
+    LOG(LS_INFO) << "Configuration file path:" << settings_file_path;
 
     if (!QFileInfo::exists(settings_file_path))
     {
@@ -126,8 +126,8 @@ void Server::start()
 //--------------------------------------------------------------------------------------------------
 void Server::setSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
-                 << " session_id: " << session_id << ")";
+    LOG(LS_INFO) << "Session event (status:" << static_cast<int>(status)
+                 << "session_id:" << session_id << ")";
     user_session_manager_->onUserSessionEvent(status, session_id);
 }
 
@@ -135,7 +135,7 @@ void Server::setSessionEvent(base::SessionStatus status, base::SessionId session
 void Server::setPowerEvent(quint32 power_event)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(LS_INFO) << "Power event: " << power_event;
+    LOG(LS_INFO) << "Power event:" << power_event;
 
     switch (power_event)
     {
@@ -219,8 +219,8 @@ void Server::onSessionAuthenticated()
         const QVersionNumber& host_version = base::kCurrentVersion;
         if (host_version > session_info.version)
         {
-            LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                          << " client: " << session_info.version.toString() << ")";
+            LOG(LS_ERROR) << "Version mismatch (host:" << host_version.toString()
+                          << "client:" << session_info.version.toString() << ")";
         }
 
         ClientSession* session = ClientSession::create(
@@ -265,7 +265,7 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
 //--------------------------------------------------------------------------------------------------
 void Server::onHostIdAssigned(base::HostId host_id)
 {
-    LOG(LS_INFO) << "New host ID assigned: " << host_id;
+    LOG(LS_INFO) << "New host ID assigned:" << host_id;
     user_session_manager_->onUpdateCredentials(host_id, one_time_password_);
 }
 
@@ -305,7 +305,7 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > current_version)
             {
-                LOG(LS_INFO) << "New version available: " << update_version.toString();
+                LOG(LS_INFO) << "New version available:" << update_version.toString();
 
                 update_downloader_ = new common::HttpFileDownloader(this);
 
@@ -333,7 +333,7 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
-    LOG(LS_ERROR) << "Unable to download update: " << error_code;
+    LOG(LS_ERROR) << "Unable to download update:" << error_code;
     update_downloader_->deleteLater();
     update_downloader_ = nullptr;
 }
@@ -358,7 +358,7 @@ void Server::onFileDownloaderCompleted()
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
-            LOG(LS_ERROR) << "Unable to write file '" << file_path << "'";
+            LOG(LS_ERROR) << "Unable to write file" << file_path;
         }
         else
         {
@@ -370,11 +370,11 @@ void Server::onFileDownloaderCompleted()
 
             if (base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
             {
-                LOG(LS_INFO) << "Update process started (cmd: " << arguments << ")";
+                LOG(LS_INFO) << "Update process started (cmd:" << arguments << ")";
             }
             else
             {
-                LOG(LS_ERROR) << "Unable to create update process (cmd: " << arguments << ")";
+                LOG(LS_ERROR) << "Unable to create update process (cmd:" << arguments << ")";
 
                 // If the update fails, delete the temporary file.
                 if (!QFile::remove(file_path))
@@ -393,7 +393,7 @@ void Server::onFileDownloaderCompleted()
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderProgress(int percentage)
 {
-    LOG(LS_INFO) << "Update downloading progress: " << percentage << "%";
+    LOG(LS_INFO) << "Update downloading progress:" << percentage << "%";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ void Server::addFirewallRules()
         return;
     }
 
-    LOG(LS_INFO) << "Rule is added to the firewall (TCP " << tcp_port << ")";
+    LOG(LS_INFO) << "Rule is added to the firewall (TCP" << tcp_port << ")";
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -590,7 +590,7 @@ void Server::checkForUpdates()
     qint64 last_timepoint = storage.lastUpdateCheck();
     qint64 current_timepoint = std::time(nullptr);
 
-    LOG(LS_INFO) << "Last timepoint: " << last_timepoint << ", current: " << current_timepoint;
+    LOG(LS_INFO) << "Last timepoint:" << last_timepoint << ", current:" << current_timepoint;
 
     qint64 time_diff = current_timepoint - last_timepoint;
     if (time_diff <= 0)
@@ -632,7 +632,7 @@ void Server::checkForUpdates()
 //--------------------------------------------------------------------------------------------------
 void Server::updateOneTimeCredentials(const base::Location &location)
 {
-    LOG(LS_INFO) << "Updating credentials (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Updating credentials (from:" << location.toString() << ")";
 
     if (settings_.oneTimePassword())
     {
@@ -688,8 +688,8 @@ base::User Server::createOneTimeUser() const
     user.sessions = one_time_sessions_;
     user.flags = base::User::ENABLED;
 
-    LOG(LS_INFO) << "One time user '" << username << "' created (host_id=" << host_id
-                 << " sessions=" << one_time_sessions_ << ")";
+    LOG(LS_INFO) << "One time user" << username << "created (host_id=" << host_id
+                 << "sessions=" << one_time_sessions_ << ")";
     return user;
 }
 

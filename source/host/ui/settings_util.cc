@@ -35,7 +35,7 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
 {
     QString target_path = SystemSettings().filePath();
 
-    LOG(LS_INFO) << "Import settings from '" << path << "' to '" << target_path << "'";
+    LOG(LS_INFO) << "Import settings from" << path << "to" << target_path;
 
     bool result = copySettings(path, target_path, silent, parent);
 
@@ -56,7 +56,7 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
 {
     QString source_path = SystemSettings().filePath();
 
-    LOG(LS_INFO) << "Export settings from '" << source_path << "' to '" << path << "'";
+    LOG(LS_INFO) << "Export settings from" << source_path << "to" << path;
 
     bool result = copySettings(source_path, path, silent, parent);
 
@@ -95,13 +95,13 @@ bool SettingsUtil::copySettings(const QString& source_path,
     else
     {
         qint64 file_size = QFileInfo(source_path).size();
-        LOG(LS_INFO) << "Source settings file exist (" << file_size << " bytes)";
+        LOG(LS_INFO) << "Source settings file exist (" << file_size << "bytes)";
     }
 
     QFile source_file(source_path);
     if (!source_file.open(QFile::ReadOnly))
     {
-        LOG(LS_ERROR) << "Unable to open source file: " << source_file.errorString();
+        LOG(LS_ERROR) << "Unable to open source file:" << source_file.errorString();
 
         if (!silent)
         {
@@ -117,7 +117,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
     QSettings::SettingsMap settings_map;
     if (!base::XmlSettings::readFunc(source_file, settings_map))
     {
-        LOG(LS_ERROR) << "Failed to read source file: " << source_path;
+        LOG(LS_ERROR) << "Failed to read source file:" << source_path;
 
         if (!silent)
         {
@@ -132,7 +132,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
     }
     else
     {
-        LOG(LS_INFO) << "File read successfully: " << source_path;
+        LOG(LS_INFO) << "File read successfully:" << source_path;
     }
 
     if (QFileInfo::exists(target_path))
@@ -164,7 +164,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
     QFile target_file(target_path);
     if (!target_file.open(QFile::ReadWrite))
     {
-        LOG(LS_ERROR) << "Unable to open target file: " << target_file.errorString();
+        LOG(LS_ERROR) << "Unable to open target file:" << target_file.errorString();
 
         if (!silent)
         {
@@ -179,7 +179,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
     if (!base::XmlSettings::writeFunc(target_file, settings_map))
     {
-        LOG(LS_ERROR) << "Failed to write destination file: " << target_path;
+        LOG(LS_ERROR) << "Failed to write destination file:" << target_path;
 
         if (!silent)
         {
@@ -193,7 +193,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
     }
     else
     {
-        LOG(LS_INFO) << "File written successfully: " << target_path;
+        LOG(LS_INFO) << "File written successfully:" << target_path;
     }
 
     return true;

@@ -69,7 +69,7 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     SystemSettings settings;
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
-    LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
+    LOG(LS_INFO) << "Preferred video capturer:" << static_cast<int>(preferred_video_capturer_);
 
 #if defined(Q_OS_WINDOWS)
     ui_thread_.start();
@@ -92,13 +92,13 @@ DesktopSessionAgent::~DesktopSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::start(const QString& channel_id)
 {
-    LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
+    LOG(LS_INFO) << "Starting (channel_id=" << channel_id << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
     if (!ipc_channel_->connectTo(channel_id))
     {
-        LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id.data() << ")";
+        LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id << ")";
         return;
     }
 
@@ -141,7 +141,7 @@ void DesktopSessionAgent::onAfterThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
-    LOG(LS_INFO) << "Shared memory created: " << id;
+    LOG(LS_INFO) << "Shared memory created:" << id;
 
     proto::internal::SharedBuffer* shared_buffer =
         outgoing_message_.newMessage().mutable_shared_buffer();
@@ -155,7 +155,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
-    LOG(LS_INFO) << "Shared memory destroyed: " << id;
+    LOG(LS_INFO) << "Shared memory destroyed:" << id;
 
     proto::internal::SharedBuffer* shared_buffer =
         outgoing_message_.newMessage().mutable_shared_buffer();
@@ -353,13 +353,13 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         const proto::internal::Configure& config = incoming_message_->configure();
 
         LOG(LS_INFO) << "Configure received";
-        LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
-        LOG(LS_INFO) << "Disable effects: " << config.disable_effects();
-        LOG(LS_INFO) << "Disable font smoothing: " << config.disable_font_smoothing();
-        LOG(LS_INFO) << "Block input: " << config.block_input();
-        LOG(LS_INFO) << "Lock at disconnect: " << config.lock_at_disconnect();
-        LOG(LS_INFO) << "Clear clipboard: " << config.clear_clipboard();
-        LOG(LS_INFO) << "Cursor position: " << config.cursor_position();
+        LOG(LS_INFO) << "Disable wallpaper:" << config.disable_wallpaper();
+        LOG(LS_INFO) << "Disable effects:" << config.disable_effects();
+        LOG(LS_INFO) << "Disable font smoothing:" << config.disable_font_smoothing();
+        LOG(LS_INFO) << "Block input:" << config.block_input();
+        LOG(LS_INFO) << "Lock at disconnect:" << config.lock_at_disconnect();
+        LOG(LS_INFO) << "Clear clipboard:" << config.clear_clipboard();
+        LOG(LS_INFO) << "Cursor position:" << config.cursor_position();
 
         if (screen_capturer_)
         {
@@ -387,7 +387,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_control())
     {
-        LOG(LS_INFO) << "Control received: " << incoming_message_->control().action();
+        LOG(LS_INFO) << "Control received:" << incoming_message_->control().action();
 
         switch (incoming_message_->control().action())
         {
@@ -445,7 +445,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
     if (is_session_enabled_ == enable)
     {
-        LOG(LS_INFO) << "Session already " << (enable ? "enabled" : "disabled");
+        LOG(LS_INFO) << "Session already" << (enable ? "enabled" : "disabled");
         return;
     }
 

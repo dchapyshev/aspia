@@ -59,7 +59,7 @@ void DesktopSessionIpc::start()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "Send CONTROL with action: " << action << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Send CONTROL with action:" << action << "(sid=" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_control()->set_action(action);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -125,7 +125,7 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
     if (fps > 60 || fps < 1)
     {
-        LOG(LS_ERROR) << "Invalid fps: " << fps << " (sid=" << session_id_ << ")";
+        LOG(LS_ERROR) << "Invalid fps:" << fps << "(sid=" << session_id_ << ")";
         return;
     }
 
@@ -299,15 +299,15 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Shared memory created:" << shared_buffer_id << "(sid=" << session_id_ << ")";
 
     base::SharedMemory* shared_memory =
         base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
     {
-        LOG(LS_ERROR) << "Failed to create the shared buffer " << shared_buffer_id
-                      << " (sid=" << session_id_ << ")";
+        LOG(LS_ERROR) << "Failed to create the shared buffer" << shared_buffer_id
+                      << "(sid=" << session_id_ << ")";
         return;
     }
 
@@ -317,7 +317,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Shared memory destroyed:" << shared_buffer_id << "(sid=" << session_id_ << ")";
 
     shared_buffers_.remove(shared_buffer_id);
 
@@ -334,8 +334,8 @@ base::SharedPointer<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shar
     auto result = shared_buffers_.find(shared_buffer_id);
     if (result == shared_buffers_.end())
     {
-        LOG(LS_ERROR) << "Failed to find the shared buffer " << shared_buffer_id
-                      << " (sid=" << session_id_ << ")";
+        LOG(LS_ERROR) << "Failed to find the shared buffer" << shared_buffer_id
+                      << "(sid=" << session_id_ << ")";
         return nullptr;
     }
 

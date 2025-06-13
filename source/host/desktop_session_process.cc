@@ -250,7 +250,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     if (session_id == base::kInvalidSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
-                      << session_id << " channel_id=" << channel_id << ")";
+                      << session_id << "channel_id=" << channel_id << ")";
         return nullptr;
     }
 
@@ -258,14 +258,14 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session ("
-                      << "session_id=" << session_id << " channel_id=" << channel_id << ")";
+                      << "session_id=" << session_id << "channel_id=" << channel_id << ")";
         return nullptr;
     }
 
     base::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
-        LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << " channel_id="
+        LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << "channel_id="
                       << channel_id << ")";
         return nullptr;
     }
@@ -276,7 +276,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(LS_ERROR) << "startProcessWithToken failed (session_id=" << session_id << " channel_id="
+        LOG(LS_ERROR) << "startProcessWithToken failed (session_id=" << session_id << "channel_id="
                       << channel_id << ")";
         return nullptr;
     }
@@ -320,7 +320,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
                         filePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
-        LOG(LS_INFO) << "Start desktop session agent: " << command_line;
+        LOG(LS_INFO) << "Start desktop session agent:" << command_line;
 
         char sh_name[] = "sh";
         char sh_arguments[] = "-c";
@@ -343,7 +343,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
                     filePath().c_str(),
                     base::local8BitFromUtf16(channel_id));
 
-    LOG(LS_INFO) << "Start desktop session agent: " << command_line;
+    LOG(LS_INFO) << "Start desktop session agent:" << command_line;
 
     char sh_name[] = "sh";
     char sh_arguments[] = "-c";

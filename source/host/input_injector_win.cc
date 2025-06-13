@@ -118,7 +118,7 @@ InputInjectorWin::~InputInjectorWin()
         }
         else
         {
-            LOG(LS_ERROR) << "Invalid key code: " << key;
+            LOG(LS_ERROR) << "Invalid key code:" << key;
         }
     }
 }
@@ -163,7 +163,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
     int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (scancode == common::KeycodeConverter::invalidNativeKeycode())
     {
-        LOG(LS_ERROR) << "Invalid key code: " << event.usb_keycode();
+        LOG(LS_ERROR) << "Invalid key code:" << event.usb_keycode();
         return;
     }
 
@@ -228,7 +228,7 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (full_size.width() <= 1 || full_size.height() <= 1)
     {
-        LOG(LS_ERROR) << "Invalid screen size: " << full_size;
+        LOG(LS_ERROR) << "Invalid screen size:" << full_size;
         return;
     }
 

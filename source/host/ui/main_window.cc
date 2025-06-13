@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
-        LOG(LS_INFO) << "[ACTION] Show icons in menus changed: " << enable;
+        LOG(LS_INFO) << "[ACTION] Show icons in menus changed:" << enable;
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
 
@@ -325,7 +325,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
     if (text_chat_clients > 0)
     {
-        LOG(LS_INFO) << "Text chat clients: " << text_chat_clients;
+        LOG(LS_INFO) << "Text chat clients:" << text_chat_clients;
 
         if (text_chat_widget_)
         {
@@ -485,7 +485,7 @@ void MainWindow::onConnectConfirmationRequest(
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
-    LOG(LS_INFO) << "[ACTION] User " << (accept ? "ACCEPT" : "REJECT") << " connection request";
+    LOG(LS_INFO) << "[ACTION] User" << (accept ? "ACCEPT" : "REJECT") << "connection request";
     emit sig_connectConfirmation(request.id(), accept);
 }
 
@@ -494,7 +494,7 @@ void MainWindow::onVideoRecordingStateChanged(
     const QString& computer_name, const QString& user_name, bool started)
 {
     LOG(LS_INFO) << "Video recoring state changed (user_name=" << user_name
-                 << " started=" << started << ")";
+                 << "started=" << started << ")";
 
     QString message;
 
@@ -545,7 +545,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-    LOG(LS_INFO) << "[ACTION] Language changed: " << new_locale;
+    LOG(LS_INFO) << "[ACTION] Language changed:" << new_locale;
 
     Application* application = Application::instance();
 
@@ -633,8 +633,8 @@ void MainWindow::onSettings()
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                 this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
         {
-            LOG(LS_INFO) << "Process finished with exit code: " << exit_code
-                         << " (status: " << exit_status << ")";
+            LOG(LS_INFO) << "Process finished with exit code:" << exit_code
+                         << "(status:" << exit_status << ")";
 
             process->deleteLater();
             ui.action_settings->setEnabled(true);
@@ -749,7 +749,7 @@ void MainWindow::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onKillSession(quint32 session_id)
 {
-    LOG(LS_INFO) << "Killing session with ID: " << session_id;
+    LOG(LS_INFO) << "Killing session with ID:" << session_id;
     emit sig_killClient(session_id);
 }
 

@@ -69,7 +69,7 @@ public:
                 break;
 
             default:
-                LOG(LS_FATAL) << "Unexpected session type: " << client.session_type;
+                LOG(LS_FATAL) << "Unexpected session type:" << client.session_type;
                 return;
         }
 
@@ -224,7 +224,7 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
-    LOG(LS_INFO) << "Client list changed: " << clients.size();
+    LOG(LS_INFO) << "Client list changed:" << clients.size();
 
     if (!clients.empty())
     {
@@ -291,7 +291,7 @@ void NotifierWindow::onLockMouse()
 {
     is_mouse_locked_ = !is_mouse_locked_;
 
-    LOG(LS_INFO) << "[ACTION] Lock mouse: " << is_mouse_locked_;
+    LOG(LS_INFO) << "[ACTION] Lock mouse:" << is_mouse_locked_;
 
     QString icon;
     QString tooltip;
@@ -318,7 +318,7 @@ void NotifierWindow::onLockKeyboard()
 {
     is_keyboard_locked_ = !is_keyboard_locked_;
 
-    LOG(LS_INFO) << "[ACTION] Lock keyboard: " << is_keyboard_locked_;
+    LOG(LS_INFO) << "[ACTION] Lock keyboard:" << is_keyboard_locked_;
 
     QString icon;
     QString tooltip;
@@ -345,7 +345,7 @@ void NotifierWindow::onPause()
 {
     is_paused_ = !is_paused_;
 
-    LOG(LS_INFO) << "[ACTION] Pause: " << is_paused_;
+    LOG(LS_INFO) << "[ACTION] Pause:" << is_paused_;
 
     QString icon;
     QString tooltip;
@@ -377,7 +377,7 @@ void NotifierWindow::onStop()
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
         {
-            LOG(LS_INFO) << "Disconnect session with ID: " << item->id();
+            LOG(LS_INFO) << "Disconnect session with ID:" << item->id();
             emit sig_killSession(item->id());
         }
     }
@@ -461,7 +461,7 @@ void NotifierWindow::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::moveEvent(QMoveEvent* event)
 {
-    LOG(LS_INFO) << "Notifier moved to: " << event->pos() << " (from: " << event->oldPos() << ")";
+    LOG(LS_INFO) << "Notifier moved to:" << event->pos() << "(from:" << event->oldPos() << ")";
     QWidget::moveEvent(event);
 }
 
@@ -491,8 +491,8 @@ void NotifierWindow::updateWindowPosition()
     int x = available_rect.x() + (available_rect.width() - window_size.width());
     int y = available_rect.y() + (available_rect.height() - window_size.height());
 
-    LOG(LS_INFO) << "Notifier window size: " << window_size;
-    LOG(LS_INFO) << "Notifier window moved to: " << x << "x" << y;
+    LOG(LS_INFO) << "Notifier window size:" << window_size;
+    LOG(LS_INFO) << "Notifier window moved to:" << x << "x" << y;
 
     move(x, y);
 }
@@ -510,8 +510,8 @@ void NotifierWindow::showNotifier()
         QPoint window_pos = window_rect_.topLeft();
         QSize window_size = window_rect_.size();
 
-        LOG(LS_INFO) << "Notifier window size: " << window_size;
-        LOG(LS_INFO) << "Notifier window moved to: " << window_pos;
+        LOG(LS_INFO) << "Notifier window size:" << window_size;
+        LOG(LS_INFO) << "Notifier window moved to:" << window_pos;
 
         move(window_pos);
         setFixedSize(window_size);
@@ -539,8 +539,8 @@ void NotifierWindow::hideNotifier()
     QPoint window_pos(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
     QSize window_size(window_rect_.width() - content_size.width(), window_rect_.height());
 
-    LOG(LS_INFO) << "Notifier window size: " << window_size;
-    LOG(LS_INFO) << "Notifier window moved to: " << window_pos;
+    LOG(LS_INFO) << "Notifier window size:" << window_size;
+    LOG(LS_INFO) << "Notifier window moved to:" << window_pos;
 
     move(window_pos);
     setFixedSize(window_size);
@@ -573,7 +573,7 @@ QRect NotifierWindow::currentAvailableRect()
                QSize(work_area.right - work_area.left, work_area.bottom - work_area.top) /
                    device_pixel_ratio);
 
-    LOG(LS_INFO) << "Available rect: " << rect << " pixel ratio: " << device_pixel_ratio;
+    LOG(LS_INFO) << "Available rect:" << rect << "pixel ratio:" << device_pixel_ratio;
     return rect;
 #else
     QScreen* primary_screen = QApplication::primaryScreen();

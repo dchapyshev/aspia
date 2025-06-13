@@ -73,15 +73,15 @@ void ClientSessionDesktop::onStarted()
 
     if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
     {
-        LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
+        LOG(LS_INFO) << "Overflow detection enabled (current FPS:"
                      << qApp->property("SCREEN_CAPTURE_FPS").toInt()
-                     << ", max FPS: " << max_fps_ << ")";
+                     << ", max FPS:" << max_fps_ << ")";
 
         overflow_detection_timer_->start(std::chrono::milliseconds(1000));
     }
     else
     {
-        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS: "
+        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS:"
                      << qApp->property("SCREEN_CAPTURE_FPS").toInt() << ")";
     }
 
@@ -132,10 +132,10 @@ void ClientSessionDesktop::onStarted()
 #endif
 
     LOG(LS_INFO) << "Sending config request";
-    LOG(LS_INFO) << "Supported extensions: " << capabilities->extensions();
-    LOG(LS_INFO) << "Supported video encodings: " << capabilities->video_encodings();
-    LOG(LS_INFO) << "Supported audio encodings: " << capabilities->audio_encodings();
-    LOG(LS_INFO) << "OS type: " << capabilities->os_type();
+    LOG(LS_INFO) << "Supported extensions:" << capabilities->extensions();
+    LOG(LS_INFO) << "Supported video encodings:" << capabilities->video_encodings();
+    LOG(LS_INFO) << "Supported audio encodings:" << capabilities->audio_encodings();
+    LOG(LS_INFO) << "OS type:" << capabilities->os_type();
 
     // Send the request.
     sendMessage(outgoing_message_.serialize());
@@ -325,11 +325,11 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             screen_size->set_height(frame->size().height());
 
             LOG(LS_INFO) << "Video packet has format";
-            LOG(LS_INFO) << "Capturer type: " << base::ScreenCapturer::typeToString(
+            LOG(LS_INFO) << "Capturer type:" << base::ScreenCapturer::typeToString(
                 static_cast<base::ScreenCapturer::Type>(frame->capturerType()));
-            LOG(LS_INFO) << "Screen size: " << screen_size->width() << "x"
+            LOG(LS_INFO) << "Screen size:" << screen_size->width() << "x"
                          << screen_size->height();
-            LOG(LS_INFO) << "Video size: " << format->video_rect().width() << "x"
+            LOG(LS_INFO) << "Video size:" << format->video_rect().width() << "x"
                          << format->video_rect().height();
         }
     }
@@ -478,7 +478,7 @@ void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extens
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown extension: " << extension.name();
+        LOG(LS_ERROR) << "Unknown extension:" << extension.name();
     }
 }
 
@@ -503,7 +503,7 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
         default:
         {
             // No supported video encoding.
-            LOG(LS_ERROR) << "Unsupported video encoding: " << config.video_encoding();
+            LOG(LS_ERROR) << "Unsupported video encoding:" << config.video_encoding();
         }
         break;
     }
@@ -522,7 +522,7 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
 
         default:
         {
-            LOG(LS_ERROR) << "Unsupported audio encoding: " << config.audio_encoding();
+            LOG(LS_ERROR) << "Unsupported audio encoding:" << config.audio_encoding();
             audio_encoder_.reset();
         }
         break;
@@ -553,15 +553,15 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
         (config.flags() & proto::desktop::CURSOR_POSITION);
 
     LOG(LS_INFO) << "Client configuration changed";
-    LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
-    LOG(LS_INFO) << "Enable cursor shape: " << (cursor_encoder_ != nullptr);
-    LOG(LS_INFO) << "Disable font smoothing: " << desktop_session_config_.disable_font_smoothing;
-    LOG(LS_INFO) << "Disable desktop effects: " << desktop_session_config_.disable_effects;
-    LOG(LS_INFO) << "Disable desktop wallpaper: " << desktop_session_config_.disable_wallpaper;
-    LOG(LS_INFO) << "Block input: " << desktop_session_config_.block_input;
-    LOG(LS_INFO) << "Lock at disconnect: " << desktop_session_config_.lock_at_disconnect;
-    LOG(LS_INFO) << "Clear clipboard: " << desktop_session_config_.clear_clipboard;
-    LOG(LS_INFO) << "Cursor position: " << desktop_session_config_.cursor_position;
+    LOG(LS_INFO) << "Video encoding:" << config.video_encoding();
+    LOG(LS_INFO) << "Enable cursor shape:" << (cursor_encoder_ != nullptr);
+    LOG(LS_INFO) << "Disable font smoothing:" << desktop_session_config_.disable_font_smoothing;
+    LOG(LS_INFO) << "Disable desktop effects:" << desktop_session_config_.disable_effects;
+    LOG(LS_INFO) << "Disable desktop wallpaper:" << desktop_session_config_.disable_wallpaper;
+    LOG(LS_INFO) << "Block input:" << desktop_session_config_.block_input;
+    LOG(LS_INFO) << "Lock at disconnect:" << desktop_session_config_.lock_at_disconnect;
+    LOG(LS_INFO) << "Clear clipboard:" << desktop_session_config_.clear_clipboard;
+    LOG(LS_INFO) << "Cursor position:" << desktop_session_config_.cursor_position;
 
     emit sig_clientSessionConfigured();
 }
@@ -599,13 +599,11 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
     if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
         preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
     {
-        LOG(LS_ERROR) << "Invalid preferred size: "
-                      << preferred_size.width() << "x" << preferred_size.height();
+        LOG(LS_ERROR) << "Invalid preferred size:" << preferred_size;
         return;
     }
 
-    LOG(LS_INFO) << "Preferred size changed: "
-                 << preferred_size.width() << "x" << preferred_size.height();
+    LOG(LS_INFO) << "Preferred size changed:" << preferred_size;
 
     preferred_size_.set(preferred_size.width(), preferred_size.height());
     emit sig_captureScreen();
@@ -623,7 +621,7 @@ void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
     }
 
     is_video_paused_ = pause.enable();
-    LOG(LS_INFO) << "Video paused: " << is_video_paused_;
+    LOG(LS_INFO) << "Video paused:" << is_video_paused_;
 
     if (!is_video_paused_)
     {
@@ -649,7 +647,7 @@ void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
     }
 
     is_audio_paused_ = pause.enable();
-    LOG(LS_INFO) << "Audio paused: " << is_audio_paused_;
+    LOG(LS_INFO) << "Audio paused:" << is_audio_paused_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -742,7 +740,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         break;
 
         default:
-            LOG(LS_ERROR) << "Unhandled power control action: " << power_control.action();
+            LOG(LS_ERROR) << "Unhandled power control action:" << power_control.action();
             break;
     }
 }
@@ -813,7 +811,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unknown video recording action: " << video_recording.action();
+            LOG(LS_ERROR) << "Unknown video recording action:" << video_recording.action();
             return;
     }
 
@@ -860,7 +858,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Critical overflow: " << pending << " (" << write_overflow_count_ << ")";
+        LOG(LS_INFO) << "Critical overflow:" << pending << "(" << write_overflow_count_ << ")";
 
         downStepOverflow();
     }
@@ -869,7 +867,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Overflow: " << pending << " (" << write_overflow_count_ << ")";
+        LOG(LS_INFO) << "Overflow:" << pending << "(" << write_overflow_count_ << ")";
 
         if (pending > last_pending_count_ || write_overflow_count_ > 10)
             downStepOverflow();
@@ -886,7 +884,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 1;
         write_overflow_count_ = 0;
 
-        LOG(LS_INFO) << "Overflow finished: " << pending;
+        LOG(LS_INFO) << "Overflow finished:" << pending;
     }
     else if (write_normal_count_ > 0)
     {
@@ -898,7 +896,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
             int new_max_fps = std::min(max_fps_ + 1, DesktopSessionManager::maxCaptureFps());
             if (new_max_fps != max_fps_)
             {
-                LOG(LS_INFO) << "Max FPS: " << max_fps_ << " to " << new_max_fps;
+                LOG(LS_INFO) << "Max FPS:" << max_fps_ << "to" << new_max_fps;
                 max_fps_ = new_max_fps;
             }
         }
@@ -927,13 +925,13 @@ void ClientSessionDesktop::downStepOverflow()
 
         if (critical_overflow_ && new_fps != max_fps_)
         {
-            LOG(LS_INFO) << "Max FPS: " << max_fps_ << " to " << new_fps;
+            LOG(LS_INFO) << "Max FPS:" << max_fps_ << "to" << new_fps;
             max_fps_ = new_fps;
         }
 
         if (new_fps != fps)
         {
-            LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
+            LOG(LS_INFO) << "FPS:" << fps << "to" << new_fps;
             emit sig_captureFpsChanged(new_fps);
         }
     }
@@ -970,7 +968,7 @@ void ClientSessionDesktop::downStepOverflow()
 
         if (new_forced_size != forced_size_)
         {
-            LOG(LS_INFO) << "Forced size: " << forced_size_ << " to " << new_forced_size;
+            LOG(LS_INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
             forced_size_ = new_forced_size;
         }
     }
@@ -985,7 +983,7 @@ void ClientSessionDesktop::upStepOverflow()
     {
         new_fps = fps + 1;
 
-        LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
+        LOG(LS_INFO) << "FPS:" << fps << "to" << new_fps;
         emit sig_captureFpsChanged(new_fps);
     }
 
@@ -1022,7 +1020,7 @@ void ClientSessionDesktop::upStepOverflow()
 
         if (new_forced_size != forced_size_)
         {
-            LOG(LS_INFO) << "Forced size: " << forced_size_ << " to " << new_forced_size;
+            LOG(LS_INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
             forced_size_ = new_forced_size;
         }
     }

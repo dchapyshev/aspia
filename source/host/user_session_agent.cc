@@ -80,7 +80,7 @@ void UserSessionAgent::onConnectToService()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
-    LOG(LS_INFO) << "Update credentials request: " << request_type;
+    LOG(LS_INFO) << "Update credentials request:" << request_type;
 
     if (!ipc_channel_)
     {
@@ -98,7 +98,7 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
-    LOG(LS_INFO) << "One-time sessions changed: " << sessions;
+    LOG(LS_INFO) << "One-time sessions changed:" << sessions;
 
     if (!ipc_channel_)
     {
@@ -116,7 +116,7 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKillClient(quint32 id)
 {
-    LOG(LS_INFO) << "Kill client request: " << id;
+    LOG(LS_INFO) << "Kill client request:" << id;
 
     if (!ipc_channel_)
     {
@@ -135,7 +135,7 @@ void UserSessionAgent::onKillClient(quint32 id)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
-    LOG(LS_INFO) << "Connect confirmation (id=" << id << " accept=" << accept << ")";
+    LOG(LS_INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
 
     if (!ipc_channel_)
     {
@@ -154,7 +154,7 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onMouseLock(bool enable)
 {
-    LOG(LS_INFO) << "Mouse lock: " << enable;
+    LOG(LS_INFO) << "Mouse lock:" << enable;
 
     if (!ipc_channel_)
     {
@@ -173,7 +173,7 @@ void UserSessionAgent::onMouseLock(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
-    LOG(LS_INFO) << "Keyboard lock: " << enable;
+    LOG(LS_INFO) << "Keyboard lock:" << enable;
 
     if (!ipc_channel_)
     {
@@ -192,7 +192,7 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onPause(bool enable)
 {
-    LOG(LS_INFO) << "Pause: " << enable;
+    LOG(LS_INFO) << "Pause:" << enable;
 
     if (!ipc_channel_)
     {
@@ -245,7 +245,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             incoming_message_->connect_confirmation_request();
 
         LOG(LS_INFO) << "Connect confirmation request received (id=" << request.id()
-                     << " computer_name=" << request.computer_name() << " user_name="
+                     << "computer_name=" << request.computer_name() << "user_name="
                      << request.user_name() << ")";
 
         emit sig_connectConfirmationRequest(request);

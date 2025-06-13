@@ -57,20 +57,20 @@ bool integrityCheck()
 
         if (!file_info.exists(file_path))
         {
-            LOG(LS_ERROR) << "File '" << file_path << "' does not exist";
+            LOG(LS_ERROR) << "File" << file_path << "does not exist";
             return false;
         }
 
         if (!file_info.isFile() || file_info.isShortcut() || file_info.isSymLink())
         {
-            LOG(LS_ERROR) << "File '" << file_path << "' is not a file";
+            LOG(LS_ERROR) << "File" << file_path << "is not a file";
             return false;
         }
 
         qint64 file_size = file_info.size();
         if (file_size < kMinFileSize)
         {
-            LOG(LS_ERROR) << "File '" << file_path << "' is not the correct size: " << file_size;
+            LOG(LS_ERROR) << "File" << file_path << "is not the correct size: " << file_size;
             return false;
         }
     }

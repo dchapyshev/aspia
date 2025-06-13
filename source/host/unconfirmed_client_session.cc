@@ -53,7 +53,7 @@ UnconfirmedClientSession::~UnconfirmedClientSession()
 //--------------------------------------------------------------------------------------------------
 void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeout)
 {
-    LOG(LS_INFO) << "Timeout changed: " << timeout.count();
+    LOG(LS_INFO) << "Timeout changed:" << timeout.count();
 
     if (timeout <= std::chrono::milliseconds(0))
     {

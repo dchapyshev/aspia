@@ -41,22 +41,22 @@ namespace host {
 
 void printDebugInfo(quint32 features)
 {
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
+    LOG(LS_INFO) << "Version:" << ASPIA_VERSION_STRING
                  << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
+    LOG(LS_INFO) << "Git branch:" << GIT_CURRENT_BRANCH;
+    LOG(LS_INFO) << "Git commit:" << GIT_COMMIT_HASH;
 #endif
-    LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
-    LOG(LS_INFO) << "Command line: " << base::GuiApplication::arguments();
-    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
-                 << " (version: " << base::SysInfo::operatingSystemVersion()
-                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
-                 << " (vendor: " << base::SysInfo::processorVendor()
-                 << " packages: " << base::SysInfo::processorPackages()
-                 << " cores: " << base::SysInfo::processorCores()
-                 << " threads: " << base::SysInfo::processorThreads() << ")";
+    LOG(LS_INFO) << "Qt version:" << QT_VERSION_STR;
+    LOG(LS_INFO) << "Command line:" << base::GuiApplication::arguments();
+    LOG(LS_INFO) << "OS:" << base::SysInfo::operatingSystemName()
+                 << "(version:" << base::SysInfo::operatingSystemVersion()
+                 <<  "arch:" << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "CPU:" << base::SysInfo::processorName()
+                 << "(vendor:" << base::SysInfo::processorVendor()
+                 << "packages:" << base::SysInfo::processorPackages()
+                 << "cores:" << base::SysInfo::processorCores()
+                 << "threads:" << base::SysInfo::processorThreads() << ")";
 
 #if defined(Q_OS_WINDOWS)
     MEMORYSTATUSEX memory_status;
@@ -67,12 +67,12 @@ void printDebugInfo(quint32 features)
     {
         static const quint32 kMB = 1024 * 1024;
 
-        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
-        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
-                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
-        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
-                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
+        LOG(LS_INFO) << "Total physical memory:" << (memory_status.ullTotalPhys / kMB)
+                     << "MB (free:" << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(LS_INFO) << "Total page file:" << (memory_status.ullTotalPageFile / kMB)
+                     << "MB (free:" << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(LS_INFO) << "Total virtual memory:" << (memory_status.ullTotalVirtual / kMB)
+                     << "MB (free:" << (memory_status.ullAvailVirtual / kMB) << "MB)";
     }
     else
     {
@@ -93,13 +93,13 @@ void printDebugInfo(quint32 features)
         }
         else
         {
-            LOG(LS_INFO) << "Process session ID: " << session_id;
-            LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
-            LOG(LS_INFO) << "Session connect state: "
+            LOG(LS_INFO) << "Process session ID:" << session_id;
+            LOG(LS_INFO) << "Running in user session:" << session_info.userName();
+            LOG(LS_INFO) << "Session connect state:"
                          << base::SessionInfo::connectStateToString(session_info.connectState());
-            LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
-            LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
-            LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
+            LOG(LS_INFO) << "WinStation name:" << session_info.winStationName();
+            LOG(LS_INFO) << "Domain name:" << session_info.domain();
+            LOG(LS_INFO) << "User Locked:" << session_info.isUserLocked();
         }
     }
 
@@ -132,14 +132,14 @@ void printDebugInfo(quint32 features)
         PLOG(LS_ERROR) << "AllocateAndInitializeSid failed";
     }
 
-    LOG(LS_INFO) << "Running as user: '" << username << "'";
-    LOG(LS_INFO) << "Member of admins group: " << (is_user_admin ? "Yes" : "No");
-    LOG(LS_INFO) << "Process elevated: " << (base::isProcessElevated() ? "Yes" : "No");
-    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
-    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+    LOG(LS_INFO) << "Running as user:" << username;
+    LOG(LS_INFO) << "Member of admins group:" << (is_user_admin ? "Yes" : "No");
+    LOG(LS_INFO) << "Process elevated:" << (base::isProcessElevated() ? "Yes" : "No");
+    LOG(LS_INFO) << "Active console session ID:" << WTSGetActiveConsoleSessionId();
+    LOG(LS_INFO) << "Computer name:" << base::SysInfo::computerName();
 #endif // defined(Q_OS_WINDOWS)
 
-    LOG(LS_INFO) << "Environment variables: " << QProcessEnvironment::systemEnvironment().toStringList();
+    LOG(LS_INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
 
     if (features & INCLUDE_VIDEO_ADAPTERS)
     {
@@ -150,7 +150,7 @@ void printDebugInfo(quint32 features)
                                              reinterpret_cast<void**>(factory.GetAddressOf()));
         if (error.Error() != S_OK || !factory)
         {
-            LOG(LS_INFO) << "CreateDXGIFactory failed: " << error.ErrorMessage();
+            LOG(LS_INFO) << "CreateDXGIFactory failed:" << error.ErrorMessage();
         }
         else
         {
@@ -170,10 +170,10 @@ void printDebugInfo(quint32 features)
                 {
                     static const quint32 kMB = 1024 * 1024;
 
-                    LOG(LS_INFO) << adapter_desc.Description << " ("
-                                 << "video memory: " << (adapter_desc.DedicatedVideoMemory / kMB) << "MB"
-                                 << ", system memory: " << (adapter_desc.DedicatedSystemMemory / kMB) << "MB"
-                                 << ", shared memory: " << (adapter_desc.SharedSystemMemory / kMB) << "MB"
+                    LOG(LS_INFO) << adapter_desc.Description << "("
+                                 << "video memory:" << (adapter_desc.DedicatedVideoMemory / kMB) << "MB"
+                                 << ", system memory:" << (adapter_desc.DedicatedSystemMemory / kMB) << "MB"
+                                 << ", shared memory:" << (adapter_desc.SharedSystemMemory / kMB) << "MB"
                                  << ")";
                 }
 
@@ -205,7 +205,7 @@ void printDebugInfo(quint32 features)
                 }
             }
 
-            LOG(LS_INFO) << window_station_name << " (desktops: " << desktops << ")";
+            LOG(LS_INFO) << window_station_name << "(desktops:" << desktops << ")";
         }
         LOG(LS_INFO) << "#####################################################";
     }

@@ -175,7 +175,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
     {
         const proto::port_forwarding::Request& request = incoming_message_->request();
 
-        LOG(LS_INFO) << "Port forwarding request received (host: " << request.remote_host()
+        LOG(LS_INFO) << "Port forwarding request received (host:" << request.remote_host()
                      << " port: " << request.remote_port() << ")";
 
         if (request.remote_port() == 0 || request.remote_port() > 65535)
@@ -191,7 +191,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
         if (host.empty())
             host = "127.0.0.1";
 
-        LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
+        LOG(LS_INFO) << "Start resolving for" << host << ":" << service;
         state_ = State::RESOLVING;
 
         resolver_.async_resolve(host, service,
@@ -223,7 +223,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionPortForwarding::onError(const base::Location& location)
 {
-    LOG(LS_ERROR) << "Error occurred (from: " << location.toString() << ")";
+    LOG(LS_ERROR) << "Error occurred (from:" << location.toString() << ")";
 
     state_ = State::DISCONNECTED;
     if (handler_)
@@ -255,12 +255,12 @@ void ClientSessionPortForwarding::onResolved(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to resolve: " << error_code;
+        LOG(LS_ERROR) << "Unable to resolve:" << error_code;
         onError(FROM_HERE);
         return;
     }
 
-    LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
+    LOG(LS_INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
     state_ = State::CONNECTING;
 
     asio::async_connect(socket_, endpoints,
@@ -284,12 +284,12 @@ void ClientSessionPortForwarding::onConnected(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to connect: " << error_code;
+        LOG(LS_ERROR) << "Unable to connect:" << error_code;
         onError(FROM_HERE);
         return;
     }
 
-    LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
+    LOG(LS_INFO) << "Connected to endpoint:" << endpoint.address().to_string()
                  << ":" << endpoint.port();
     state_ = State::CONNECTED;
 
@@ -302,7 +302,7 @@ void ClientSessionPortForwarding::onWrite(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to write: " << error_code;
+        LOG(LS_ERROR) << "Unable to write:" << error_code;
         onError(FROM_HERE);
         return;
     }
@@ -322,7 +322,7 @@ void ClientSessionPortForwarding::onRead(
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to read: " << error_code;
+        LOG(LS_ERROR) << "Unable to read:" << error_code;
         onError(FROM_HERE);
         return;
     }
@@ -370,7 +370,7 @@ void ClientSessionPortForwarding::sendPortForwardingResult(
     proto::port_forwarding::Result* result = outgoing_message_.newMessage().mutable_result();
     result->set_error_code(error_code);
 
-    LOG(LS_INFO) << "Sending port forwarding result: " << error_code;
+    LOG(LS_INFO) << "Sending port forwarding result:" << error_code;
     sendMessage(outgoing_message_.serialize());
 }
 

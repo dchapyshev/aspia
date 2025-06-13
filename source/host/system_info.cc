@@ -1011,7 +1011,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
 
     const std::string& category = request.category();
 
-    LOG(LS_INFO) << "Requested system info category: " << category;
+    LOG(LS_INFO) << "Requested system info category:" << category;
 
     system_info->mutable_footer()->set_category(category);
 
@@ -1097,7 +1097,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown system info category: " << category;
+        LOG(LS_ERROR) << "Unknown system info category:" << category;
     }
 }
 

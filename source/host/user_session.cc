@@ -62,7 +62,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_chann
     }
     else
     {
-        LOG(LS_INFO) << "Console session ID: " << console_session_id;
+        LOG(LS_INFO) << "Console session ID:" << console_session_id;
     }
 
     if (session_id_ != console_session_id)
@@ -71,7 +71,7 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_chann
     type_ = UserSession::Type::CONSOLE;
 #endif
 
-    LOG(LS_INFO) << "Ctor (sid=" << session_id_ << " type=" << typeToString(type_) << ")";
+    LOG(LS_INFO) << "Ctor (sid=" << session_id_ << "type=" << typeToString(type_) << ")";
 
     SystemSettings settings;
     connection_confirmation_ = settings.connConfirm();
@@ -126,9 +126,9 @@ const char* UserSession::stateToString(State state)
 //--------------------------------------------------------------------------------------------------
 void UserSession::start()
 {
-    LOG(LS_INFO) << "User session started "
+    LOG(LS_INFO) << "User session started"
                  << (ipc_channel_ ? "WITH" : "WITHOUT")
-                 << " connection to UI (sid=" << session_id_ << ")";
+                 << "connection to UI (sid=" << session_id_ << ")";
 
     desktop_session_ = new DesktopSessionManager(this);
 
@@ -169,9 +169,9 @@ void UserSession::restart(base::IpcChannel* channel)
 {
     ipc_channel_ = channel;
 
-    LOG(LS_INFO) << "User session restarted "
+    LOG(LS_INFO) << "User session restarted"
                  << (ipc_channel_ ? "WITH" : "WITHOUT")
-                 << " connection to UI (sid=" << session_id_ << ")";
+                 << "connection to UI (sid=" << session_id_ << ")";
 
     ui_attach_timer_->stop();
     desktop_dettach_timer_->stop();
@@ -224,7 +224,7 @@ void UserSession::onClientSession(ClientSession* client_session)
     if (connection_confirmation_ && confirm_required)
     {
         LOG(LS_INFO) << "User confirmation of connection is required (state="
-                     << stateToString(state_) << " sid=" << session_id_ << ")";
+                     << stateToString(state_) << "sid=" << session_id_ << ")";
 
         if (state_ == State::STARTED && !ipc_channel_)
         {
@@ -291,10 +291,10 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
     status_str = QString::number(static_cast<int>(status));
 #endif
 
-    LOG(LS_INFO) << "Session event: " << status_str
-                 << " (event_id=" << session_id << " current_id=" << session_id_
-                 << " type=" << typeToString(type_)
-                 << " state=" << stateToString(state_) << ")";
+    LOG(LS_INFO) << "Session event:" << status_str
+                 << "(event_id=" << session_id << "current_id=" << session_id_
+                 << "type=" << typeToString(type_)
+                 << "state=" << stateToString(state_) << ")";
 
     switch (status)
     {
@@ -317,7 +317,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
                 LOG(LS_ERROR) << "CONSOLE_CONNECT for RDP session detected (sid=" << session_id_ << ")";
             }
 
-            LOG(LS_INFO) << "User session ID changed from " << session_id_ << " to " << session_id;
+            LOG(LS_INFO) << "User session ID changed from" << session_id_ << "to" << session_id;
             session_id_ = session_id;
 
             for (const auto& client : std::as_const(clients_))
@@ -420,7 +420,7 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    LOG(LS_INFO) << "Send credentials for host ID: " << host_id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Send credentials for host ID:" << host_id << "(sid=" << session_id_ << ")";
 
     if (!ipc_channel_)
     {
@@ -479,8 +479,8 @@ void UserSession::onClientSessionFinished()
             continue;
         }
 
-        LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
-                     << " finished. Delete it (sid=" << session_id_ << ")";
+        LOG(LS_INFO) << "Client session with id" << client_session->sessionId()
+                     << "finished. Delete it (sid=" << session_id_ << ")";
 
         if (client_session->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
             onTextChatSessionFinished(client_session->id());
@@ -591,8 +591,8 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
         proto::internal::ConnectConfirmation connect_confirmation =
             incoming_message_->connect_confirmation();
 
-        LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << " accept="
-                     << connect_confirmation.accept_connection() << " sid=" << session_id_ << ")";
+        LOG(LS_INFO) << "Connect confirmation (id=" << connect_confirmation.id() << "accept="
+                     << connect_confirmation.accept_connection() << "sid=" << session_id_ << ")";
 
         if (connect_confirmation.accept_connection())
             onUnconfirmedSessionFinished(connect_confirmation.id(), false);
@@ -613,7 +613,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                     return;
                 }
 
-                LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << " client_id="
+                LOG(LS_INFO) << "ServiceControl::CODE_KILL (sid=" << session_id_ << "client_id="
                              << control.unsigned_integer() << ")";
                 stopClientSession(static_cast<quint32>(control.unsigned_integer()));
             }
@@ -629,7 +629,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
                 bool is_paused = control.boolean();
 
-                LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << " paused="
+                LOG(LS_INFO) << "ServiceControl::CODE_PAUSE (sid=" << session_id_ << "paused="
                              << is_paused << ")";
 
                 desktop_session_->setPaused(is_paused);
@@ -666,7 +666,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                 }
 
                 LOG(LS_INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid=" << session_id_
-                             << " lock_mouse=" << control.boolean() << ")";
+                             << "lock_mouse=" << control.boolean() << ")";
 
                 desktop_session_->setMouseLock(control.boolean());
             }
@@ -681,7 +681,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                 }
 
                 LOG(LS_INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid=" << session_id_
-                             << " lock_keyboard=" << control.boolean() << ")";
+                             << "lock_keyboard=" << control.boolean() << ")";
 
                 desktop_session_->setKeyboardLock(control.boolean());
             }
@@ -696,7 +696,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 
             default:
             {
-                LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid=" << session_id_ << ")";
+                LOG(LS_ERROR) << "Unhandled control code:" << control.code() << "(sid=" << session_id_ << ")";
                 return;
             }
         }
@@ -723,7 +723,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
 {
-    LOG(LS_INFO) << "Client session '" << id << "' is " << (is_rejected ? "rejected" : "accepted")
+    LOG(LS_INFO) << "Client session" << id << "is" << (is_rejected ? "rejected" : "accepted")
                  << " (sid=" << session_id_ << ")";
 
     for (auto it = pending_clients_.begin(), it_end = pending_clients_.end(); it != it_end; ++it)
@@ -795,7 +795,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     LOG(LS_INFO) << "Dettach session (sid=" << session_id_
-                 << " from=" << location.toString() << ")";
+                 << "from=" << location.toString() << ")";
 
     if (ipc_channel_)
     {
@@ -815,7 +815,7 @@ void UserSession::onSessionDettached(const base::Location& location)
         if (user_name.startsWith("#"))
         {
             LOG(LS_INFO) << "Stop one-time desktop client (id=" << client->id()
-                         << " user_name=" << user_name << " sid=" << session_id_ << ")";
+                         << "user_name=" << user_name << "sid=" << session_id_ << ")";
             client->stop();
         }
     }
@@ -827,7 +827,7 @@ void UserSession::onSessionDettached(const base::Location& location)
             continue;
 
         LOG(LS_INFO) << "Stop file transfer client (id=" << client->id()
-                     << " user_name=" << client->userName() << " sid=" << session_id_ << ")";
+                     << "user_name=" << client->userName() << "sid=" << session_id_ << ")";
         client->stop();
     }
 
@@ -870,13 +870,13 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO ||
         session_type == proto::peer::SESSION_TYPE_PORT_FORWARDING)
     {
-        LOG(LS_INFO) << "Notify for " << session_type << " session is NOT required (sid="
+        LOG(LS_INFO) << "Notify for" << session_type << "session is NOT required (sid="
                      << session_id_ << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id()
-                 << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Sending connect event for session ID" << client_session.id()
+                 << "(sid=" << session_id_ << ")";
 
     proto::internal::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
 
@@ -897,8 +897,8 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
         return;
     }
 
-    LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id
-                 << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Sending disconnect event for session ID" << session_id
+                 << "(sid=" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_disconnect_event()->set_id(session_id);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -907,13 +907,13 @@ void UserSession::sendDisconnectEvent(quint32 session_id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::stopClientSession(quint32 id)
 {
-    LOG(LS_INFO) << "Stop client session with ID: " << id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Stop client session with ID:" << id << "(sid=" << session_id_ << ")";
 
     for (const auto& client_session : std::as_const(clients_))
     {
         if (client_session->id() == id)
         {
-            LOG(LS_INFO) << "Client session with id " << id << " found in list. Stop it";
+            LOG(LS_INFO) << "Client session with id" << id << "found in list. Stop it";
             client_session->stop();
             break;
         }
@@ -1052,16 +1052,16 @@ void UserSession::addNewClientSession(ClientSession* client_session)
 //--------------------------------------------------------------------------------------------------
 void UserSession::setState(const base::Location& location, State state)
 {
-    LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
-                 << " (sid=" << session_id_ << " from=" << location.toString() << ")";
+    LOG(LS_INFO) << "State changed from" << stateToString(state_) << "to" << stateToString(state)
+                 << "(sid=" << session_id_ << "from=" << location.toString() << ")";
     state_ = state;
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatHasUser(const base::Location& location, bool has_user)
 {
-    LOG(LS_INFO) << "User state changed (has_user=" << has_user << " sid=" << session_id_
-                 << " from=" << location.toString() << ")";
+    LOG(LS_INFO) << "User state changed (has_user=" << has_user << "sid=" << session_id_
+                 << "from=" << location.toString() << ")";
 
     for (const auto& client : std::as_const(clients_))
     {
@@ -1082,7 +1082,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionStarted(quint32 id)
 {
-    LOG(LS_INFO) << "Text chat session started: " << id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Text chat session started:" << id << "(sid=" << session_id_ << ")";
 
     for (const auto& client : std::as_const(clients_))
     {
@@ -1134,7 +1134,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionFinished(quint32 id)
 {
-    LOG(LS_INFO) << "Text chat session finished: " << id << " (sid=" << session_id_ << ")";
+    LOG(LS_INFO) << "Text chat session finished:" << id << "(sid=" << session_id_ << ")";
 
     for (const auto& client : std::as_const(clients_))
     {

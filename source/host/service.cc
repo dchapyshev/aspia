@@ -136,8 +136,8 @@ void Service::onStop()
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event detected (status: " << base::sessionStatusToString(status)
-                 << ", session_id: " << session_id << ")";
+    LOG(LS_INFO) << "Session event detected (status:" << base::sessionStatusToString(status)
+                 << ", session_id:" << session_id << ")";
 
     if (server_)
     {
@@ -152,7 +152,7 @@ void Service::onSessionEvent(base::SessionStatus status, base::SessionId session
 //--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(quint32 event)
 {
-    LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);
+    LOG(LS_INFO) << "Power event detected:" << powerEventToString(event);
 
     if (server_)
     {

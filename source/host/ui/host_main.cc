@@ -57,7 +57,7 @@ bool waitForValidInputDesktop()
                 wchar_t desktop_name[100] = { 0 };
                 if (input_desktop.name(desktop_name, sizeof(desktop_name)))
                 {
-                    LOG(LS_INFO) << "Attached to desktop: " << desktop_name;
+                    LOG(LS_INFO) << "Attached to desktop:" << desktop_name;
                 }
                 break;
             }

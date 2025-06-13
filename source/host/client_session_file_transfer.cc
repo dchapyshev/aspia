@@ -209,7 +209,7 @@ void ClientSessionFileTransfer::onStarted()
 
     if (!ipc_server_->start(channel_id))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server (channel_id: " << channel_id << ")";
+        LOG(LS_ERROR) << "Failed to start IPC server (channel_id:" << channel_id << ")";
         onError(FROM_HERE);
         return;
     }
@@ -240,7 +240,7 @@ void ClientSessionFileTransfer::onStarted()
 
     QString command_line = agentFilePath() + " --channel_id " + channel_id;
 
-    LOG(LS_INFO) << "Starting agent process with command line: " << command_line;
+    LOG(LS_INFO) << "Starting agent process with command line:" << command_line;
 
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
@@ -286,7 +286,7 @@ void ClientSessionFileTransfer::onStarted()
                         agentFilePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
-        LOG(LS_INFO) << "Start file transfer session agent: " << command_line;
+        LOG(LS_INFO) << "Start file transfer session agent:" << command_line;
 
         char sh_name[] = "sh";
         char sh_arguments[] = "-c";
@@ -394,7 +394,7 @@ void ClientSessionFileTransfer::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onError(const base::Location& location)
 {
-    LOG(LS_ERROR) << "Error occurred (from: " << location.toString() << ")";
+    LOG(LS_ERROR) << "Error occurred (from:" << location.toString() << ")";
     stop();
 }
 

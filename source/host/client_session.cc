@@ -81,7 +81,7 @@ ClientSession* ClientSession::create(
             return new ClientSessionPortForwarding(channel, parent);
 
         default:
-            LOG(LS_ERROR) << "Unknown session type: " << session_type;
+            LOG(LS_ERROR) << "Unknown session type:" << session_type;
             return nullptr;
     }
 }
@@ -165,7 +165,7 @@ size_t ClientSession::pendingMessages() const
 //--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_ERROR) << "Client disconnected with error: "
+    LOG(LS_ERROR) << "Client disconnected with error:"
                   << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
@@ -185,7 +185,7 @@ void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 

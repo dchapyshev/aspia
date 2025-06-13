@@ -59,7 +59,7 @@ void RouterController::start(const QString& address, quint16 port, const QByteAr
     port_ = port;
     public_key_ = public_key;
 
-    LOG(LS_INFO) << "Starting host controller for router: " << address_ << ":" << port_;
+    LOG(LS_INFO) << "Starting host controller for router:" << address_ << ":" << port_;
     connectToRouter();
 }
 
@@ -116,7 +116,7 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed: "
+            LOG(LS_ERROR) << "Authentication failed:"
                           << base::Authenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
@@ -173,7 +173,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             }
 
             default:
-                LOG(LS_ERROR) << "Unknown error code: " << host_id_response.error_code();
+                LOG(LS_ERROR) << "Unknown error code:" << host_id_response.error_code();
                 return;
         }
 
@@ -193,7 +193,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             host_key_storage.setHostKey(host_key);
         }
 
-        LOG(LS_INFO) << "Host ID received: " << host_id_;
+        LOG(LS_INFO) << "Host ID received:" << host_id_;
 
         if (host_key_storage.lastHostId() != host_id_)
             host_key_storage.setLastHostId(host_id_);
@@ -250,14 +250,14 @@ void RouterController::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void RouterController::delayedConnectToRouter()
 {
-    LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
+    LOG(LS_INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
     reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
-    LOG(LS_INFO) << "Router state changed: " << state;
+    LOG(LS_INFO) << "Router state changed:" << state;
 
     router_state_.set_state(state);
     router_state_.set_host_name(address_.toStdString());

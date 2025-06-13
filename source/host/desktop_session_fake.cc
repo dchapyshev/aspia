@@ -45,7 +45,7 @@ void DesktopSessionFake::start()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "CONTROL with action: " << action;
+    LOG(LS_INFO) << "CONTROL with action:" << action;
 
     switch (action)
     {

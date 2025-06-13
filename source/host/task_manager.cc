@@ -76,13 +76,13 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
-                    LOG(LS_ERROR) << "Unable to open service: " << message.service_request().name();
+                    LOG(LS_ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
                 if (!controller.start())
                 {
-                    LOG(LS_ERROR) << "Unable to start service: " << message.service_request().name();
+                    LOG(LS_ERROR) << "Unable to start service:" << message.service_request().name();
                     return;
                 }
 
@@ -96,13 +96,13 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
-                    LOG(LS_ERROR) << "Unable to open service: " << message.service_request().name();
+                    LOG(LS_ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
                 if (!controller.stop())
                 {
-                    LOG(LS_ERROR) << "Unable to stop service: " << message.service_request().name();
+                    LOG(LS_ERROR) << "Unable to stop service:" << message.service_request().name();
                     return;
                 }
 
@@ -112,7 +112,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             default:
             {
-                LOG(LS_ERROR) << "Unknown command for service request: "
+                LOG(LS_ERROR) << "Unknown command for service request:"
                               << message.service_request().command();
             }
             break;
@@ -154,7 +154,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             default:
             {
-                LOG(LS_ERROR) << "Unknown command for user request: "
+                LOG(LS_ERROR) << "Unknown command for user request:"
                               << message.user_request().command();
             }
             break;

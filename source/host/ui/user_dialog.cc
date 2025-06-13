@@ -149,7 +149,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!base::User::isValidUserName(username))
             {
-                LOG(LS_ERROR) << "Invalid user name: " << username;
+                LOG(LS_ERROR) << "Invalid user name:" << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The user name can not be empty and can contain only alphabet"
@@ -162,7 +162,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
-                LOG(LS_ERROR) << "User name already exists: " << username;
+                LOG(LS_ERROR) << "User name already exists:" << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),
