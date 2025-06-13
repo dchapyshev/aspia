@@ -143,7 +143,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state)
     {
-        LOG(LS_INFO) << "Application state changed: " << applicationStateToString(state);
+        LOG(LS_INFO) << "Application state changed:" << applicationStateToString(state);
         if (state != Qt::ApplicationActive)
         {
             releaseKeyboardButtons();
@@ -177,7 +177,7 @@ void DesktopWidget::setDesktopFrameError(proto::desktop::VideoErrorCode error_co
     if (last_error_code_ == error_code)
         return;
 
-    LOG(LS_INFO) << "Video error detected: " << error_code;
+    LOG(LS_INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
     if (error_timer_)
@@ -796,7 +796,7 @@ CGEventRef DesktopWidget::keyboardFilterProc(
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to convert key code: " << key_code;
+            LOG(LS_ERROR) << "Unable to convert key code:" << key_code;
         }
     }
 

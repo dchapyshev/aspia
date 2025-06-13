@@ -282,7 +282,7 @@ void Client::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Connection terminated:" << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
@@ -329,7 +329,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 
@@ -346,7 +346,7 @@ void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel:" << channel_id;
     }
 }
 
@@ -407,7 +407,7 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
 //--------------------------------------------------------------------------------------------------
 void Client::startAuthentication()
 {
-    LOG(LS_INFO) << "Start authentication for '" << session_state_->hostUserName() << "'";
+    LOG(LS_INFO) << "Start authentication for" << session_state_->hostUserName();
 
     session_state_->setReconnecting(false);
     reconnect_timer_->stop();
@@ -444,8 +444,8 @@ void Client::startAuthentication()
             const QVersionNumber& client_version = base::kCurrentVersion;
             if (host_version > client_version)
             {
-                LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                              << " client: " << client_version.toString();
+                LOG(LS_ERROR) << "Version mismatch. Host:" << host_version.toString()
+                              << "Client:" << client_version.toString();
                 emit sig_statusChanged(Status::VERSION_MISMATCH);
             }
             else
@@ -465,7 +465,7 @@ void Client::startAuthentication()
         }
         else
         {
-            LOG(LS_INFO) << "Failed authentication: "
+            LOG(LS_INFO) << "Failed authentication:"
                          << base::Authenticator::errorToString(error_code);
             emit sig_statusChanged(Status::ACCESS_DENIED, QVariant::fromValue(error_code));
         }

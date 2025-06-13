@@ -100,8 +100,8 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 {
     QModelIndex index;
 
-    LOG(LS_INFO) << "Previous path: " << previous_path_;
-    LOG(LS_INFO) << "New path: " << path;
+    LOG(LS_INFO) << "Previous path:" << previous_path_;
+    LOG(LS_INFO) << "New path:" << path;
 
     previous_path_ = current_path_;
 
@@ -116,7 +116,7 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 
         if (!common::FilePlatformUtil::isValidPath(normalized_path))
         {
-            LOG(LS_ERROR) << "Invalid path entered: " << normalized_path;
+            LOG(LS_ERROR) << "Invalid path entered:" << normalized_path;
             emit sig_invalidPathEntered();
             return QModelIndex();
         }

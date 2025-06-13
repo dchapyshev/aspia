@@ -48,7 +48,7 @@ OnlineChecker::~OnlineChecker()
 void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
                                    const ComputerList& computers)
 {
-    LOG(LS_INFO) << "Start online checker (total computers: " << computers.size() << ")";
+    LOG(LS_INFO) << "Start online checker (total computers:" << computers.size() << ")";
 
     router_config_ = router_config;
 
@@ -85,7 +85,7 @@ void OnlineChecker::onBeforeThreadRunning()
     {
         if (!router_computers_.empty())
         {
-            LOG(LS_INFO) << "Computers for ROUTER checking: " << router_computers_.size();
+            LOG(LS_INFO) << "Computers for ROUTER checking:" << router_computers_.size();
 
             router_checker_ = new OnlineCheckerRouter(*router_config_);
 
@@ -112,7 +112,7 @@ void OnlineChecker::onBeforeThreadRunning()
 
     if (!direct_computers_.empty())
     {
-        LOG(LS_INFO) << "Computers for DIRECT checking: " << direct_computers_.size();
+        LOG(LS_INFO) << "Computers for DIRECT checking:" << direct_computers_.size();
 
         direct_checker_ = new OnlineCheckerDirect();
 

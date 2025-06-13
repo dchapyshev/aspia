@@ -579,7 +579,7 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
         {
             if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
             {
-                LOG(LS_ERROR) << "Unknown error code: " << static_cast<int>(error_code);
+                LOG(LS_ERROR) << "Unknown error code:" << static_cast<int>(error_code);
             }
 
             message = QT_TR_NOOP("An unknown error occurred.");
@@ -1509,7 +1509,7 @@ void RouterManagerWindow::saveHostsToFile()
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_INFO) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_INFO) << "Unable to open file:" << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1560,7 +1560,7 @@ void RouterManagerWindow::saveHostsToFile()
     qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
-        LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
+        LOG(LS_INFO) << "Unable to write file:" << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
@@ -1589,7 +1589,7 @@ void RouterManagerWindow::saveRelaysToFile()
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_INFO) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_INFO) << "Unable to open file:" << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1659,7 +1659,7 @@ void RouterManagerWindow::saveRelaysToFile()
     qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
-        LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
+        LOG(LS_INFO) << "Unable to write file:" << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),

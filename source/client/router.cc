@@ -89,7 +89,7 @@ void Router::connectToRouter(const QString& address, quint16 port)
     router_address_ = address;
     router_port_ = port;
 
-    LOG(LS_INFO) << "Connecting to router " << router_address_ << ":" << router_port_;
+    LOG(LS_INFO) << "Connecting to router" << router_address_ << ":" << router_port_;
 
     emit sig_connecting();
 
@@ -117,7 +117,7 @@ void Router::refreshSessionList()
 //--------------------------------------------------------------------------------------------------
 void Router::stopSession(qint64 session_id)
 {
-    LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
+    LOG(LS_INFO) << "Sending disconnect request (session_id:" << session_id << ")";
 
     if (!tcp_channel_)
     {
@@ -153,8 +153,8 @@ void Router::refreshUserList()
 //--------------------------------------------------------------------------------------------------
 void Router::addUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "Sending user add request (username: " << user.name()
-                 << ", entry_id: " << user.entry_id() << ")";
+    LOG(LS_INFO) << "Sending user add request (username:" << user.name()
+                 << ", entry_id:" << user.entry_id() << ")";
 
     if (!tcp_channel_)
     {
@@ -174,8 +174,8 @@ void Router::addUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::modifyUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "Sending user modify request (username: " << user.name()
-                 << ", entry_id: " << user.entry_id() << ")";
+    LOG(LS_INFO) << "Sending user modify request (username:" << user.name()
+                 << ", entry_id:" << user.entry_id() << ")";
 
     if (!tcp_channel_)
     {
@@ -195,7 +195,7 @@ void Router::modifyUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::deleteUser(qint64 entry_id)
 {
-    LOG(LS_INFO) << "Sending user delete request (entry_id: " << entry_id << ")";
+    LOG(LS_INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
 
     if (!tcp_channel_)
     {
@@ -215,8 +215,8 @@ void Router::deleteUser(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id)
 {
-    LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
-                 << " (relay: " << relay_session_id << ")";
+    LOG(LS_INFO) << "Sending disconnect for peer session:" << peer_session_id
+                 << "(relay:" << relay_session_id << ")";
 
     if (!tcp_channel_)
     {
@@ -266,8 +266,8 @@ void Router::onTcpConnected()
 
             if (router_version > client_version)
             {
-                LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
-                << " client: " << client_version.toString();
+                LOG(LS_ERROR) << "Version mismatch (router:" << router_version.toString()
+                              << "client:" << client_version.toString();
                 emit sig_versionMismatch(router_version, client_version);
             }
             else
@@ -297,7 +297,7 @@ void Router::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Router disconnected:" << base::NetworkChannel::errorToString(error_code);
     emit sig_disconnected(error_code);
 
     if (isAutoReconnect())
@@ -337,7 +337,7 @@ void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buf
     }
     else if (message.has_session_result())
     {
-        LOG(LS_INFO) << "Session result received with code: "
+        LOG(LS_INFO) << "Session result received with code:"
                      << message.session_result().error_code();
         emit sig_sessionResult(std::shared_ptr<proto::router::SessionResult>(message.release_session_result()));
     }
@@ -348,7 +348,7 @@ void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buf
     }
     else if (message.has_user_result())
     {
-        LOG(LS_INFO) << "User result received with code: " << message.user_result().error_code();
+        LOG(LS_INFO) << "User result received with code:" << message.user_result().error_code();
         emit sig_userResult(std::shared_ptr<proto::router::UserResult>(message.release_user_result()));
     }
     else

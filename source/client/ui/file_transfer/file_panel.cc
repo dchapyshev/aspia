@@ -378,7 +378,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::toChildFolder(const QString& child_name)
 {
-    LOG(LS_INFO) << "toChildFolder called: " << child_name.toStdString();
+    LOG(LS_INFO) << "toChildFolder called:" << child_name.toStdString();
 
     ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
     ui.action_up->setEnabled(true);

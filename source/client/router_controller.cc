@@ -65,7 +65,7 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
 
-    LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << " wait_for_host="
+    LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << "wait_for_host="
                  << wait_for_host_ << ")";
 
     router_channel_ = new base::TcpChannel(this);

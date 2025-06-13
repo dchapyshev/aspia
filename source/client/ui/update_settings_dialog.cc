@@ -55,7 +55,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 
     connect(ui.checkbox_custom_server, &QCheckBox::toggled, this, [this](bool checked)
     {
-        LOG(LS_INFO) << "[ACTION] Custom server checkbox: " << checked;
+        LOG(LS_INFO) << "[ACTION] Custom server checkbox:" << checked;
         ui.edit_server->setEnabled(checked);
 
         if (!checked)

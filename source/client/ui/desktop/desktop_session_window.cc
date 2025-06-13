@@ -476,7 +476,7 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
         }
         else
         {
-            LOG(LS_ERROR) << "Unknown flag '" << name << "' with value: " << value;
+            LOG(LS_ERROR) << "Unknown flag" << name << "with value" << value;
         }
     }
 }
@@ -559,7 +559,7 @@ void DesktopSessionWindow::onFrameChanged(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
-    LOG(LS_INFO) << "Screen size changed: " << screen_size_;
+    LOG(LS_INFO) << "Screen size changed:" << screen_size_;
 
     bool has_old_frame = desktop_->desktopFrame() != nullptr;
 
@@ -729,7 +729,7 @@ void DesktopSessionWindow::changeEvent(QEvent* event)
     {
         bool is_minimized = isMinimized();
 
-        LOG(LS_INFO) << "Window minimized: " << is_minimized;
+        LOG(LS_INFO) << "Window minimized:" << is_minimized;
 
         if (is_minimized)
         {
@@ -1074,9 +1074,9 @@ void DesktopSessionWindow::autosizeWindow()
         QSize remote_screen_size = scaledSize(screen_size_, toolbar_->scale());
 
         LOG(LS_INFO) << "Show normal (screen_size=" << screen_size_
-                     << " local_screen_rect=" << local_screen_rect
-                     << " window_size=" << window_size
-                     << " remote_screen_size=" << remote_screen_size
+                     << "local_screen_rect=" << local_screen_rect
+                     << "window_size=" << window_size
+                     << "remote_screen_size=" << remote_screen_size
                      << ")";
         showNormal();
 
@@ -1087,8 +1087,8 @@ void DesktopSessionWindow::autosizeWindow()
     else
     {
         LOG(LS_INFO) << "Show maximized (screen_size=" << screen_size_
-                     << " local_screen_rect=" << local_screen_rect
-                     << " window_size=" << window_size
+                     << "local_screen_rect=" << local_screen_rect
+                     << "window_size=" << window_size
                      << ")";
         showMaximized();
     }
@@ -1136,7 +1136,7 @@ void DesktopSessionWindow::takeScreenshot()
     }
     else
     {
-        LOG(LS_INFO) << "Image saved to file: " << file_path.toStdString();
+        LOG(LS_INFO) << "Image saved to file:" << file_path;
     }
 }
 
@@ -1157,8 +1157,8 @@ void DesktopSessionWindow::scaleDesktop()
     if (scale != -1)
     {
         target_size = scaledSize(source_size, scale);
-        LOG(LS_INFO) << "Scaling enabled (source_size=" << source_size << " target_size="
-                     << target_size << " scale=" << scale << ")";
+        LOG(LS_INFO) << "Scaling enabled (source_size=" << source_size << "target_size="
+                     << target_size << "scale=" << scale << ")";
     }
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));

@@ -182,7 +182,7 @@ DesktopToolBar::~DesktopToolBar()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableScreenSelect(bool enable)
 {
-    LOG(LS_INFO) << "enableScreenSelect: " << enable;
+    LOG(LS_INFO) << "enableScreenSelect:" << enable;
     // By default, we disable the monitor selection menu. Selection will be enabled when receiving
     // a list of monitors.
     updateSize();
@@ -191,7 +191,7 @@ void DesktopToolBar::enableScreenSelect(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePowerControl(bool enable)
 {
-    LOG(LS_INFO) << "enablePowerControl: " << enable;
+    LOG(LS_INFO) << "enablePowerControl:" << enable;
 
     ui.action_power_control->setVisible(enable);
     ui.action_power_control->setEnabled(enable);
@@ -227,7 +227,7 @@ void DesktopToolBar::enablePowerControl(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableSystemInfo(bool enable)
 {
-    LOG(LS_INFO) << "enableSystemInfo: " << enable;
+    LOG(LS_INFO) << "enableSystemInfo:" << enable;
     ui.action_system_info->setVisible(enable);
     ui.action_system_info->setEnabled(enable);
     updateSize();
@@ -236,7 +236,7 @@ void DesktopToolBar::enableSystemInfo(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTextChat(bool enable)
 {
-    LOG(LS_INFO) << "enableTextChat: " << enable;
+    LOG(LS_INFO) << "enableTextChat:" << enable;
     ui.action_text_chat->setVisible(enable);
     ui.action_text_chat->setEnabled(enable);
     updateSize();
@@ -245,7 +245,7 @@ void DesktopToolBar::enableTextChat(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableRemoteUpdate(bool enable)
 {
-    LOG(LS_INFO) << "enableRemoteUpdate: " << enable;
+    LOG(LS_INFO) << "enableRemoteUpdate:" << enable;
     is_remote_update_enabled_ = enable;
     ui.action_update->setVisible(enable);
     ui.action_update->setEnabled(enable);
@@ -255,7 +255,7 @@ void DesktopToolBar::enableRemoteUpdate(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTaskManager(bool enable)
 {
-    LOG(LS_INFO) << "enableTaskManager: " << enable;
+    LOG(LS_INFO) << "enableTaskManager:" << enable;
     ui.action_task_manager->setVisible(enable);
     ui.action_task_manager->setEnabled(enable);
     updateSize();
@@ -264,7 +264,7 @@ void DesktopToolBar::enableTaskManager(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableVideoPauseFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableVideoPauseFeature: " << enable;
+    LOG(LS_INFO) << "enableVideoPauseFeature:" << enable;
     ui.action_pause_video->setVisible(enable);
     ui.action_pause_video->setEnabled(enable);
 }
@@ -272,7 +272,7 @@ void DesktopToolBar::enableVideoPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableAudioPauseFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableAudioPauseFeature: " << enable;
+    LOG(LS_INFO) << "enableAudioPauseFeature:" << enable;
     ui.action_pause_audio->setVisible(enable);
     ui.action_pause_audio->setEnabled(enable);
 }
@@ -280,7 +280,7 @@ void DesktopToolBar::enableAudioPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableCtrlAltDelFeature: " << enable;
+    LOG(LS_INFO) << "enableCtrlAltDelFeature:" << enable;
     ui.action_cad->setVisible(enable);
     ui.action_cad->setEnabled(enable);
     updateSize();
@@ -289,15 +289,15 @@ void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
-    LOG(LS_INFO) << "enablePasteAsKeystrokesFeature: " << enable;
+    LOG(LS_INFO) << "enablePasteAsKeystrokesFeature:" << enable;
     ui.action_paste_clipboard_as_keystrokes->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
-    LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()
-                 << " resolutions: " << screen_list.resolution_size() << ")";
+    LOG(LS_INFO) << "Setting up a new list of screens (screens:" << screen_list.screen_size()
+                 << "resolutions:" << screen_list.resolution_size() << ")";
 
     for (int i = 0; i < screen_actions_.size(); ++i)
         delete screen_actions_[i];
@@ -421,8 +421,8 @@ void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type
     {
         bool show_update_button = screen_type.type() == proto::desktop::ScreenType::TYPE_DESKTOP;
 
-        LOG(LS_INFO) << "Show update button: " << show_update_button
-                     << " (type=" << screen_type.type() << " name=" << screen_type.name() << ")";
+        LOG(LS_INFO) << "Show update button:" << show_update_button
+                     << "(type=" << screen_type.type() << "name=" << screen_type.name() << ")";
 
         ui.action_update->setVisible(show_update_button);
         updateSize();
@@ -432,7 +432,7 @@ void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::startRecording(bool enable)
 {
-    LOG(LS_INFO) << "[ACTION] Start recording: " << enable;
+    LOG(LS_INFO) << "[ACTION] Start recording:" << enable;
 
     if (enable)
     {
@@ -534,7 +534,7 @@ void DesktopToolBar::onHideTimer()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onFullscreenButton(bool checked)
 {
-    LOG(LS_INFO) << "[ACTION] Full screen button clicked: " << checked;
+    LOG(LS_INFO) << "[ACTION] Full screen button clicked:" << checked;
 
     if (checked)
         ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-actual.png"));
@@ -706,12 +706,12 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 
     if (resolution == current_resolution_)
     {
-        LOG(LS_INFO) << "Resolution not changed: "
+        LOG(LS_INFO) << "Resolution not changed:"
                      << resolution.width() << "x" << resolution.height();
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Resolution selected: "
+    LOG(LS_INFO) << "[ACTION] Resolution selected:"
                  << resolution.width() << "x" << resolution.height();
 
     proto::desktop::Screen screen;
@@ -727,7 +727,7 @@ void DesktopToolBar::onChangeScreenAction(QAction* action)
 {
     const proto::desktop::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
 
-    LOG(LS_INFO) << "[ACTION] Screen selected (id=" << screen.id() << " title="
+    LOG(LS_INFO) << "[ACTION] Screen selected (id=" << screen.id() << "title="
                  << screen.title() << ")";
 
     proto::desktop::Screen out_screen;
@@ -822,7 +822,7 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
         connect(ui.action_send_key_combinations, &QAction::triggered,
                 this, [this](bool enable)
         {
-            LOG(LS_INFO) << "[ACTION] Send key combinations changed: " << enable;
+            LOG(LS_INFO) << "[ACTION] Send key combinations changed:" << enable;
             emit sig_keyCombinationsChanged(enable);
         });
     }
@@ -847,7 +847,7 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
         else
             return;
 
-        LOG(LS_INFO) << "[ACTION] Scale chenged: " << scale_;
+        LOG(LS_INFO) << "[ACTION] Scale chenged:" << scale_;
 
         emit sig_scaleChanged();
     });
@@ -877,19 +877,19 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
                 scale_ = 100;
         }
 
-        LOG(LS_INFO) << "[ACTION] Fit window changed (checked=" << checked << " scale=" << scale_ << ")";
+        LOG(LS_INFO) << "[ACTION] Fit window changed (checked=" << checked << "scale=" << scale_ << ")";
 
         emit sig_scaleChanged();
     });
 
     connect(ui.action_pause_video, &QAction::triggered, this, [this](bool enable)
     {
-        LOG(LS_INFO) << "[ACTION] Video pause changed: " << enable;
+        LOG(LS_INFO) << "[ACTION] Video pause changed:" << enable;
         emit sig_videoPauseChanged(enable);
     });
     connect(ui.action_pause_audio, &QAction::triggered, this, [this](bool enable)
     {
-        LOG(LS_INFO) << "[ACTION] Audio pause changed: " << enable;
+        LOG(LS_INFO) << "[ACTION] Audio pause changed:" << enable;
         emit sig_audioPauseChanged(enable);
     });
     connect(ui.action_screenshot, &QAction::triggered, this, [this]()
@@ -910,7 +910,7 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::showFullScreenButtons(bool show)
 {
-    LOG(LS_INFO) << "Show full screen buttons: " << show;
+    LOG(LS_INFO) << "Show full screen buttons:" << show;
 
     // MacOS does not have the ability to minimize a window from full screen mode. Therefore, for
     // MacOS we disable the minimize button from full screen mode.

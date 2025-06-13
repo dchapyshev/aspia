@@ -110,7 +110,7 @@ void SessionWindow::closeEvent(QCloseEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
 {
-    LOG(LS_INFO) << "Client status changed: " << Client::statusToString(status);
+    LOG(LS_INFO) << "Client status changed:" << Client::statusToString(status);
 
     switch (status)
     {
@@ -388,7 +388,7 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
         {
             if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
             {
-                LOG(LS_ERROR) << "Unknown error code: " << static_cast<int>(error_code);
+                LOG(LS_ERROR) << "Unknown error code:" << static_cast<int>(error_code);
             }
 
             message = QT_TR_NOOP("An unknown error occurred.");

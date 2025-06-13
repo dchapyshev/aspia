@@ -107,7 +107,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
 //--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onAborted(proto::file_transfer::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Aborted: " << error_code;
+    LOG(LS_INFO) << "Aborted:" << error_code;
 
     pending_tasks_.clear();
     tasks_.clear();

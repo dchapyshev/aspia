@@ -209,7 +209,7 @@ void FileTransfer::stop()
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action action)
 {
-    LOG(LS_INFO) << "Set action for error " << static_cast<int>(error_type) << ": "
+    LOG(LS_INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
                  << static_cast<int>(action);
     actions_[error_type] = action;
 }
@@ -383,7 +383,7 @@ void FileTransfer::sourceReply(
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::setAction(Error::Type error_type, Error::Action action)
 {
-    LOG(LS_INFO) << "Set action for error " << static_cast<int>(error_type) << ": "
+    LOG(LS_INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
                  << static_cast<int>(action);
 
     switch (action)
@@ -496,7 +496,7 @@ void FileTransfer::onError(Error::Type type, proto::file_transfer::ErrorCode cod
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "File transfer finished (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "File transfer finished (from:" << location.toString() << ")";
 
     speed_update_timer_->stop();
     emit sig_finished();

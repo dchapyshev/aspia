@@ -909,8 +909,8 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
 
     if (process_list.process_size() != ui.tree_processes->topLevelItemCount())
     {
-        LOG(LS_ERROR) << "Number of processes mismatch (expected: "
-                      << process_list.process_size() << " actual: "
+        LOG(LS_ERROR) << "Number of processes mismatch (expected:"
+                      << process_list.process_size() << "actual:"
                       << ui.tree_processes->topLevelItemCount() << ")";
     }
 

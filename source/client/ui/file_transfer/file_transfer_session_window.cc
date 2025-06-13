@@ -120,7 +120,7 @@ void FileTransferSessionWindow::onShowWindow()
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
-    LOG(LS_ERROR) << "Session error: " << error_code;
+    LOG(LS_ERROR) << "Session error:" << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("Session error: %1").arg(fileErrorToString(error_code)),

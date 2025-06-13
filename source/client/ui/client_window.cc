@@ -69,7 +69,7 @@ ClientWindow::ClientWindow(QWidget* parent)
     ui.action_show_icons_in_menus->setChecked(settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
-        LOG(LS_INFO) << "[ACTION] Show icons in menus: " << enable;
+        LOG(LS_INFO) << "[ACTION] Show icons in menus:" << enable;
 
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
@@ -182,7 +182,7 @@ void ClientWindow::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > current_version)
             {
-                LOG(LS_INFO) << "New version available: " << update_version.toString();
+                LOG(LS_INFO) << "New version available:" << update_version.toString();
                 common::UpdateDialog(update_info, this).exec();
             }
         }
@@ -201,7 +201,7 @@ void ClientWindow::onLanguageChanged(QAction* action)
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
     client::Application* application = client::Application::instance();
 
-    LOG(LS_INFO) << "[ACTION] Language changed: " << new_locale.toStdString();
+    LOG(LS_INFO) << "[ACTION] Language changed:" << new_locale.toStdString();
 
     ClientSettings settings;
     settings.setLocale(new_locale);
@@ -238,7 +238,7 @@ void ClientWindow::sessionTypeChanged(int item_index)
     proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Session type changed: " << session_type;
+    LOG(LS_INFO) << "[ACTION] Session type changed:" << session_type;
 
     switch (session_type)
     {

@@ -125,7 +125,7 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
-    LOG(LS_INFO) << "[ACTION] Show passowrd button toggled: " << checked;
+    LOG(LS_INFO) << "[ACTION] Show passowrd button toggled:" << checked;
 
     if (checked)
     {
@@ -145,7 +145,7 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 {
-    LOG(LS_INFO) << "[ACTION] One time password toggled: " << checked;
+    LOG(LS_INFO) << "[ACTION] One time password toggled:" << checked;
 
     ui.label_username->setVisible(!checked);
     ui.edit_username->setVisible(!checked);

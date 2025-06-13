@@ -136,7 +136,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidUserName(username))
         {
-            LOG(LS_ERROR) << "Invalid user name: " << username;
+            LOG(LS_ERROR) << "Invalid user name:" << username;
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The user name can not be empty and can contain only alphabet"
@@ -152,7 +152,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (username.compare(users_.at(i), Qt::CaseInsensitive) == 0)
             {
-                LOG(LS_ERROR) << "User name already exists: " << username;
+                LOG(LS_ERROR) << "User name already exists:" << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),

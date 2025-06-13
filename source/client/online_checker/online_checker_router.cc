@@ -105,7 +105,7 @@ void OnlineCheckerRouter::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed: "
+            LOG(LS_ERROR) << "Authentication failed:"
                           << base::Authenticator::errorToString(error_code);
             onFinished(FROM_HERE);
         }
@@ -165,8 +165,8 @@ void OnlineCheckerRouter::checkNextComputer()
 
     const auto& computer = computers_.front();
 
-    LOG(LS_INFO) << "Checking status for host id " << computer.host_id
-                 << " (computer id: " << computer.computer_id << ")";
+    LOG(LS_INFO) << "Checking status for host id" << computer.host_id
+                 << "(computer id:" << computer.computer_id << ")";
 
     proto::router::PeerToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
@@ -176,7 +176,7 @@ void OnlineCheckerRouter::checkNextComputer()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Finished (from:" << location.toString() << ")";
 
     if (tcp_channel_)
     {

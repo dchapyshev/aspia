@@ -468,7 +468,7 @@ void SystemInfoSessionWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /
         {
             current_widget_ = i;
 
-            LOG(LS_INFO) << "Current category changed: " << category << " (" << i << ")";
+            LOG(LS_INFO) << "Current category changed:" << category << "(" << i << ")";
 
             layout_->addWidget(widget);
             widget->setVisible(true);

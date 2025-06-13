@@ -116,8 +116,8 @@ void ClientPortForwarding::setPortForwardingConfig(const proto::port_forwarding:
     local_port_ = config.local_port();
     command_line_ = QString::fromStdString(config.command_line());
 
-    LOG(LS_INFO) << "Session config received (remote host: " << remote_host_ << " remote port: "
-                 << remote_port_ << " local port: " << local_port_ << " command line: "
+    LOG(LS_INFO) << "Session config received (remote host:" << remote_host_ << "remote port:"
+                 << remote_port_ << "local port:" << local_port_ << "command line:"
                  << command_line_ << ")";
 }
 
@@ -167,7 +167,7 @@ void ClientPortForwarding::onSessionMessageReceived(const QByteArray& buffer)
 
         if (result.error_code() != proto::port_forwarding::Result::SUCCESS)
         {
-            LOG(LS_ERROR) << "Error when connecting on remote side: " << result.error_code();
+            LOG(LS_ERROR) << "Error when connecting on remote side:" << result.error_code();
             return;
         }
 
@@ -182,32 +182,32 @@ void ClientPortForwarding::onSessionMessageReceived(const QByteArray& buffer)
         acceptor_->open(endpoint.protocol(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->open failed: " << error_code;
+            LOG(LS_ERROR) << "acceptor_->open failed:" << error_code;
             return;
         }
 
         acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->set_option failed: " << error_code;
+            LOG(LS_ERROR) << "acceptor_->set_option failed:" << error_code;
             return;
         }
 
         acceptor_->bind(endpoint, error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->bind failed: " << error_code;
+            LOG(LS_ERROR) << "acceptor_->bind failed:" << error_code;
             return;
         }
 
         acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "acceptor_->listen failed: " << error_code;
+            LOG(LS_ERROR) << "acceptor_->listen failed:" << error_code;
             return;
         }
 
-        LOG(LS_INFO) << "Waiting for incomming connection on port " << local_port_;
+        LOG(LS_INFO) << "Waiting for incomming connection on port" << local_port_;
         state_ = State::ACCEPTING;
         acceptor_->async_accept(
             std::bind(&Handler::onAccept, handler_, std::placeholders::_1, std::placeholders::_2));
@@ -230,11 +230,11 @@ void ClientPortForwarding::onAccept(const std::error_code& error_code, asio::ip:
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
+        LOG(LS_ERROR) << "Error while accepting connection:" << error_code;
         return;
     }
 
-    LOG(LS_INFO) << "Connection accepted on local port " << local_port_;
+    LOG(LS_INFO) << "Connection accepted on local port" << local_port_;
     state_ = State::CONNECTED;
     socket_ = std::make_unique<asio::ip::tcp::socket>(std::move(socket));
 
@@ -249,7 +249,7 @@ void ClientPortForwarding::onWrite(const std::error_code& error_code, size_t byt
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to write: " << error_code << " (" << error_code.value() << ")";
+        LOG(LS_ERROR) << "Unable to write:" << error_code << "(" << error_code.value() << ")";
         return;
     }
 
@@ -269,7 +269,7 @@ void ClientPortForwarding::onRead(const std::error_code& error_code, size_t byte
 {
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to read: " << error_code;
+        LOG(LS_ERROR) << "Unable to read:" << error_code;
         return;
     }
 
@@ -315,7 +315,7 @@ void ClientPortForwarding::sendPortForwardingRequest()
     proto::port_forwarding::Request* request = outgoing_message_.newMessage().mutable_request();
     request->set_remote_port(remote_port_);
 
-    LOG(LS_INFO) << "Sending port forwarding request for " << remote_host_ << ":" << remote_port_;
+    LOG(LS_INFO) << "Sending port forwarding request for" << remote_host_ << ":" << remote_port_;
     sendMessage(outgoing_message_.serialize());
 }
 
@@ -325,7 +325,7 @@ void ClientPortForwarding::sendPortForwardingStart()
     proto::port_forwarding::Start* start = outgoing_message_.newMessage().mutable_start();
     start->set_dummy(1);
 
-    LOG(LS_INFO) << "Sending port forwarding start for " << remote_host_ << ":" << remote_port_;
+    LOG(LS_INFO) << "Sending port forwarding start for" << remote_host_ << ":" << remote_port_;
     sendMessage(outgoing_message_.serialize());
 }
 
@@ -344,7 +344,7 @@ void ClientPortForwarding::sendPortForwardingData(const char* buffer, size_t len
 // static
 void ClientPortForwarding::startCommandLine(const QString& command_line)
 {
-    LOG(LS_INFO) << "Starting command line: " << command_line.data();
+    LOG(LS_INFO) << "Starting command line:" << command_line.data();
 
     if (command_line.isEmpty())
     {

@@ -58,7 +58,7 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
             return;
         }
 
-        LOG(LS_INFO) << "[ACTION] Directory selected: " << path.toStdString();
+        LOG(LS_INFO) << "[ACTION] Directory selected:" << path.toStdString();
         ui.edit_dir->setText(path);
     });
 

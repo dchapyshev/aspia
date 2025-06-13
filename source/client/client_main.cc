@@ -378,17 +378,17 @@ int clientMain(int argc, char* argv[])
 
     client::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
-                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
+    LOG(LS_INFO) << "Version:" << ASPIA_VERSION_STRING
+                 << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
+    LOG(LS_INFO) << "Git branch:" << GIT_CURRENT_BRANCH;
+    LOG(LS_INFO) << "Git commit:" << GIT_COMMIT_HASH;
 #endif
-    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
-                 << " (version: " << base::SysInfo::operatingSystemVersion()
-                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
-    LOG(LS_INFO) << "Command line: " << application.arguments();
+    LOG(LS_INFO) << "OS:" << base::SysInfo::operatingSystemName()
+                 << "(version:" << base::SysInfo::operatingSystemVersion()
+                 <<  "arch:" << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "Qt version:" << QT_VERSION_STR;
+    LOG(LS_INFO) << "Command line:" << application.arguments();
 
     QCommandLineOption address_option("address",
         QApplication::translate("Client", "Remote computer address."),
@@ -569,7 +569,7 @@ int clientMain(int argc, char* argv[])
         }
         else
         {
-            LOG(LS_ERROR) << "Unknown session type specified: " << session_type;
+            LOG(LS_ERROR) << "Unknown session type specified:" << session_type;
             onInvalidValue("session-type",
                            "desktop-manage, desktop-view, file-transfer, system-info, text-chat");
             return 1;
