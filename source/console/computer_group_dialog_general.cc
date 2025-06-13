@@ -96,7 +96,7 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
 
     if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
-        LOG(LS_INFO) << "Invalid user name: " << username;
+        LOG(LS_INFO) << "Invalid user name:" << username;
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
         ui.edit_username->setFocus();
@@ -118,7 +118,7 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
 {
-    LOG(LS_INFO) << "[ACTION] Show password: " << checked;
+    LOG(LS_INFO) << "[ACTION] Show password:" << checked;
     if (checked)
     {
         ui.edit_password->setEchoMode(QLineEdit::Normal);

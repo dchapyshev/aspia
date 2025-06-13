@@ -242,7 +242,7 @@ bool ComputerGroupDialog::saveChanges()
     QString name = ui.edit_name->text();
     if (name.length() > kMaxNameLength)
     {
-        LOG(LS_ERROR) << "Too long name: " << name.length();
+        LOG(LS_ERROR) << "Too long name:" << name.length();
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", kMaxNameLength));
         ui.edit_name->setFocus();
@@ -260,7 +260,7 @@ bool ComputerGroupDialog::saveChanges()
     QString comment = ui.edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
-        LOG(LS_ERROR) << "Too long comment: " << comment.length();
+        LOG(LS_ERROR) << "Too long comment:" << comment.length();
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", kMaxCommentLength));
         ui.edit_comment->setFocus();

@@ -54,7 +54,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
             break;
 
         default:
-            LOG(LS_FATAL) << "Unknown encryption type: " << encryption_type;
+            LOG(LS_FATAL) << "Unknown encryption type:" << encryption_type;
             break;
     }
 

@@ -94,7 +94,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
     QString computer_name = host["computer_name"].toString();
     if (computer_name.size() < kMinNameLength || computer_name.size() > kMaxNameLength)
     {
-        LOG(LS_ERROR) << "Invalid computer name length: " << computer_name.size();
+        LOG(LS_ERROR) << "Invalid computer name length:" << computer_name.size();
         return 0;
     }
 
@@ -138,7 +138,7 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         QString host_id = host_ids[i].toString();
         if (!isHostId(host_id))
         {
-            LOG(LS_INFO) << "Invalid host id: " << host_id.toStdString();
+            LOG(LS_INFO) << "Invalid host id:" << host_id;
             continue;
         }
 
@@ -200,7 +200,7 @@ proto::desktop::PixelFormat readPixelFormat(QJsonObject& json_pixel_format)
         pixel_format != base::PixelFormat::RGB332() && pixel_format != base::PixelFormat::RGB222() &&
         pixel_format != base::PixelFormat::RGB111())
     {
-        LOG(LS_ERROR) << "Invalid pixel format: " << pixel_format;
+        LOG(LS_ERROR) << "Invalid pixel format:" << pixel_format;
         pixel_format = base::PixelFormat::RGB332();
     }
 
@@ -225,21 +225,21 @@ proto::desktop::Config readDesktopConfig(const QJsonObject& json_desktop_config)
     int video_encoding = json_desktop_config["video_encoding"].toInt();
     if (!isValidVideoEncoding(video_encoding))
     {
-        LOG(LS_ERROR) << "Invalid video encoding: " << video_encoding;
+        LOG(LS_ERROR) << "Invalid video encoding:" << video_encoding;
         video_encoding = static_cast<int>(proto::desktop::VIDEO_ENCODING_VP8);
     }
 
     int compress_ratio = json_desktop_config["compress_ratio"].toInt();
     if (compress_ratio < kMinCompressRatio || compress_ratio > kMaxCompressRatio)
     {
-        LOG(LS_ERROR) << "Invalid compress ratio: " << compress_ratio;
+        LOG(LS_ERROR) << "Invalid compress ratio:" << compress_ratio;
         compress_ratio = kDefaultCompressRatio;
     }
 
     int audio_encoding = json_desktop_config["audio_encoding"].toInt();
     if (!isValidAudioEncoding(audio_encoding))
     {
-        LOG(LS_ERROR) << "Invalid audio encoding: " << audio_encoding;
+        LOG(LS_ERROR) << "Invalid audio encoding:" << audio_encoding;
         audio_encoding = static_cast<int>(proto::desktop::AUDIO_ENCODING_OPUS);
     }
 
@@ -287,7 +287,7 @@ proto::address_book::ComputerGroupConfig readComputerGroupConfig(
 
     if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
-        LOG(LS_ERROR) << "Invalid user name: " << username.toStdString();
+        LOG(LS_ERROR) << "Invalid user name:" << username.toStdString();
         username.clear();
     }
 
@@ -306,14 +306,14 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     QString name = json_computer["name"].toString();
     if (name.size() < kMinNameLength || name.size() > kMaxNameLength)
     {
-        LOG(LS_ERROR) << "Invalid 'name' length: " << name.size();
+        LOG(LS_ERROR) << "Invalid 'name' length:" << name.size();
         return;
     }
 
     QString comment = json_computer["comment"].toString();
     if (comment.size() > kMaxCommentLength)
     {
-        LOG(LS_ERROR) << "Too long 'comment' length: " << comment.size();
+        LOG(LS_ERROR) << "Too long 'comment' length:" << comment.size();
         return;
     }
 
@@ -328,7 +328,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
 
         if (!addr.isValid())
         {
-            LOG(LS_ERROR) << "Invalid 'address': " << address.toStdString();
+            LOG(LS_ERROR) << "Invalid 'address':" << address.toStdString();
             return;
         }
     }
@@ -336,7 +336,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     QString username = json_computer["username"].toString();
     if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
-        LOG(LS_ERROR) << "Invalid 'username': " << username.toStdString();
+        LOG(LS_ERROR) << "Invalid 'username':" << username.toStdString();
         return;
     }
 
@@ -371,14 +371,14 @@ int readComputerGroup(
     QString name = json_computer_group["name"].toString();
     if (name.size() < kMinNameLength || name.size() > kMaxNameLength)
     {
-        LOG(LS_ERROR) << "Invalid 'name' length: " << name.size();
+        LOG(LS_ERROR) << "Invalid 'name' length:" << name.size();
         return 0;
     }
 
     QString comment = json_computer_group["comment"].toString();
     if (comment.size() > kMaxCommentLength)
     {
-        LOG(LS_ERROR) << "Too long 'comment' length: " << comment.size();
+        LOG(LS_ERROR) << "Too long 'comment' length:" << comment.size();
         return 0;
     }
 
@@ -568,7 +568,7 @@ void importComputersFromJson(
         count = readComputerGroup(json_computer_group, parent_computer_group);
     }
 
-    LOG(LS_INFO) << "Imported computers: " << count;
+    LOG(LS_INFO) << "Imported computers:" << count;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -578,7 +578,7 @@ QJsonDocument exportComputersToJson(const proto::address_book::ComputerGroup& co
     int count = 0;
 
     root_object.insert("computer_group", writeComputerGroup(computer_group, &count));
-    LOG(LS_INFO) << "Exported computers: " << count;
+    LOG(LS_INFO) << "Exported computers:" << count;
 
     return QJsonDocument(root_object);
 }

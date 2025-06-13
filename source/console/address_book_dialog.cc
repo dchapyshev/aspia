@@ -403,7 +403,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
+            LOG(LS_FATAL) << "Unexpected encryption type:" << encryption_type;
             break;
     }
 }
@@ -562,7 +562,7 @@ bool AddressBookDialog::saveChanges()
         break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
+            LOG(LS_FATAL) << "Unexpected encryption type:" << encryption_type;
             return false;
     }
 

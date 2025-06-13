@@ -276,7 +276,7 @@ void MainWindow::showConsole()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::openAddressBook(const QString& file_path)
 {
-    LOG(LS_INFO) << "Open address book: " << file_path;
+    LOG(LS_INFO) << "Open address book:" << file_path;
     showConsole();
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -597,7 +597,7 @@ void MainWindow::onImportComputers()
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for reading."),
@@ -620,7 +620,7 @@ void MainWindow::onImportComputers()
     QJsonDocument json = QJsonDocument::fromJson(json_buffer, &parse_error);
     if (parse_error.error != QJsonParseError::NoError)
     {
-        LOG(LS_ERROR) << "Unable to parse JSON document: " << parse_error.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to parse JSON document:" << parse_error.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()),
@@ -674,7 +674,7 @@ void MainWindow::onExportComputers()
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -687,7 +687,7 @@ void MainWindow::onExportComputers()
     qint64 written = file.write(json.toJson());
     if (written <= 0)
     {
-        LOG(LS_ERROR) << "Unable to write file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to write file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
@@ -913,7 +913,7 @@ void MainWindow::onPortForwardingConnect()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCurrentTabChanged(int index)
 {
-    LOG(LS_INFO) << "[ACTION] Current tab changed to: " << index;
+    LOG(LS_INFO) << "[ACTION] Current tab changed to:" << index;
 
     if (index == -1)
     {
@@ -964,7 +964,7 @@ void MainWindow::onCurrentTabChanged(int index)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCloseTab(int index)
 {
-    LOG(LS_INFO) << "[ACTION] Close tab: " << index;
+    LOG(LS_INFO) << "[ACTION] Close tab:" << index;
 
     if (index == -1)
         return;
@@ -1499,7 +1499,7 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > current_version)
             {
-                LOG(LS_INFO) << "New version available: " << update_version.toString();
+                LOG(LS_INFO) << "New version available:" << update_version.toString();
                 common::UpdateDialog(update_info, this).exec();
             }
         }

@@ -34,21 +34,6 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
-const char* videoEncodingToString(proto::desktop::VideoEncoding encoding)
-{
-    switch (encoding)
-    {
-    case proto::desktop::VIDEO_ENCODING_ZSTD:
-        return "VIDEO_ENCODING_ZSTD";
-    case proto::desktop::VIDEO_ENCODING_VP8:
-        return "VIDEO_ENCODING_VP8";
-    case proto::desktop::VIDEO_ENCODING_VP9:
-        return "VIDEO_ENCODING_VP9";
-    default:
-        return "Unknown";
-    }
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -275,7 +260,7 @@ void ComputerDialogDesktop::onCodecChanged(int item_index)
     proto::desktop::VideoEncoding encoding =
         static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Video encoding changed: " << videoEncodingToString(encoding);
+    LOG(LS_INFO) << "[ACTION] Video encoding changed:" << encoding;
 
     bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);
 
@@ -290,7 +275,7 @@ void ComputerDialogDesktop::onCodecChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void ComputerDialogDesktop::onCompressionRatioChanged(int value)
 {
-    LOG(LS_INFO) << "[ACTION] Compression ratio changed: " << value;
+    LOG(LS_INFO) << "[ACTION] Compression ratio changed:" << value;
     ui.label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 

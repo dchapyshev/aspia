@@ -200,7 +200,7 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 // static
 AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* parent)
 {
-    LOG(LS_INFO) << "Open address book from file: '" << file_path.toStdString() << "'";
+    LOG(LS_INFO) << "Open address book from file:" << file_path;
 
     if (file_path.isEmpty())
     {
@@ -211,7 +211,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
         showOpenError(parent, tr("Unable to open address book file \"%1\".").arg(file_path));
         return nullptr;
     }
@@ -262,7 +262,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         break;
 
         default:
-            LOG(LS_ERROR) << "Unexpected encryption type: " << address_book_file.encryption_type();
+            LOG(LS_ERROR) << "Unexpected encryption type:" << address_book_file.encryption_type();
             break;
     }
 
@@ -760,14 +760,14 @@ void AddressBookTab::startOnlineChecker()
         ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
         if (!computer_item)
         {
-            LOG(LS_ERROR) << "Unable to get computer item: " << i;
+            LOG(LS_ERROR) << "Unable to get computer item:" << i;
             continue;
         }
 
         proto::address_book::Computer* computer = computer_item->computer();
         if (!computer)
         {
-            LOG(LS_ERROR) << "Unable to get computer: " << i;
+            LOG(LS_ERROR) << "Unable to get computer:" << i;
             continue;
         }
 
@@ -1067,7 +1067,7 @@ void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 
     if (!item)
     {
-        LOG(LS_ERROR) << "Computer with id " << computer_id << " not found in list";
+        LOG(LS_ERROR) << "Computer with id" << computer_id << "not found in list";
         return;
     }
 
@@ -1191,7 +1191,7 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 //--------------------------------------------------------------------------------------------------
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
-    LOG(LS_INFO) << "Save address book to file: '" << file_path.toStdString() << "'";
+    LOG(LS_INFO) << "Save address book to file:" << file_path;
 
     std::string serialized_data = data_.SerializeAsString();
     std::unique_ptr<base::DataCryptor> cryptor;
@@ -1207,7 +1207,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             break;
 
         default:
-            LOG(LS_FATAL) << "Unknown encryption type: " << file_.encryption_type();
+            LOG(LS_FATAL) << "Unknown encryption type:" << file_.encryption_type();
             return false;
     }
 
@@ -1233,7 +1233,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             return false;
         }
 
-        LOG(LS_INFO) << "Selected file path: " << path.toStdString();
+        LOG(LS_INFO) << "Selected file path:" << path;
         settings.setLastDirectory(QFileInfo(path).absolutePath());
     }
 
@@ -1254,7 +1254,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     if (bytes_written != static_cast<qint64>(buffer.size()))
     {
-        LOG(LS_ERROR) << "Unable to write file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to write file:" << file.errorString();
         showSaveError(this, tr("Unable to write address book file."));
         return false;
     }

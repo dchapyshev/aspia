@@ -151,7 +151,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     state_.session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Session type changed: " << state_.session_type;
+    LOG(LS_INFO) << "[ACTION] Session type changed:" << state_.session_type;
 
     if (ui.checkbox_use_session_params->isChecked())
     {
