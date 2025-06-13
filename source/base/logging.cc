@@ -66,7 +66,7 @@ QMutex g_log_file_lock;
 //--------------------------------------------------------------------------------------------------
 const QString& severityName(LoggingSeverity severity)
 {
-    static const QString kLogSeverityNames[] = { "🔵", "🟠", "🔴", "⛔️" };
+    static const QString kLogSeverityNames[] = { "INFO", "WARNING", "ERROR", "FATAL" };
     static const QString kUnknown("UNKNOWN");
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
@@ -515,7 +515,7 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
         file.remove_prefix(last_slash_pos + 1);
 
     stream_ << severityName(severity_)
-            << QDateTime::currentDateTime().toString("hh:mm:ss.zzz")
+            << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss.zzz")
             << QThread::currentThreadId()
             << file.data() << ':' << line << function.data() << "]";
 }
