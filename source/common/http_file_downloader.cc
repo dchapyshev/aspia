@@ -123,7 +123,7 @@ void HttpFileDownloader::run()
 
         if (error_code)
         {
-            LOG(LS_ERROR) << "curl_multi_poll failed: " << curl_multi_strerror(error_code)
+            LOG(LS_ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
                           << " (" << error_code << ")";
             break;
         }
@@ -146,7 +146,7 @@ void HttpFileDownloader::run()
         }
         else
         {
-            LOG(LS_INFO) << "Download is finished: " << data_.size() << " bytes";
+            LOG(LS_INFO) << "Download is finished:" << data_.size() << "bytes";
             emit sig_downloadCompleted();
         }
     }

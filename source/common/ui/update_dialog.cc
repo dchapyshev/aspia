@@ -148,7 +148,7 @@ void UpdateDialog::onUpdateNow()
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
         {
-            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+            LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An error occurred while installing the update: %1")
@@ -193,7 +193,7 @@ void UpdateDialog::onUpdateNow()
                     QString file_name = file.fileName();
                     if (!QFile::remove(file_name))
                     {
-                        LOG(LS_ERROR) << "Unable to remove file: " << file_name.toStdString();
+                        LOG(LS_ERROR) << "Unable to remove file:" << file_name;
                     }
                 }
             }
@@ -228,7 +228,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > base::kCurrentVersion)
             {
-                LOG(LS_INFO) << "New version available: " << update_version.toString();
+                LOG(LS_INFO) << "New version available:" << update_version.toString();
 
                 ui->label_available->setText(update_version.toString());
                 ui->edit_description->setText(update_info_.description());
@@ -240,7 +240,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
             }
             else
             {
-                LOG(LS_INFO) << "New version less then current: " << update_version.toString();
+                LOG(LS_INFO) << "New version less then current:" << update_version.toString();
 
                 ui->label_available->setText(base::kCurrentVersion.toString());
                 ui->edit_description->setText(tr("No updates available."));

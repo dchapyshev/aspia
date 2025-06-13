@@ -67,7 +67,7 @@ DownloadDialog::~DownloadDialog()
 //--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderError(int error_code)
 {
-    LOG(LS_ERROR) << "Error while downloading update: " << error_code;
+    LOG(LS_ERROR) << "Error while downloading update:" << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("An error occurred while downloading the update: %1").arg(error_code),

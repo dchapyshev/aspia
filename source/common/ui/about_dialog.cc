@@ -263,12 +263,12 @@ void AboutDialog::onServiceContextMenu(const QPoint& pos)
             return;
         }
 
-        LOG(LS_INFO) << "Selected file path: " << file_path.toStdString();
+        LOG(LS_INFO) << "Selected file path:" << file_path.toStdString();
 
         QFile file(file_path);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+            LOG(LS_ERROR) << "Unable to open file:" << file.errorString().toStdString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Could not open file for writing."),

@@ -145,7 +145,7 @@ void TextChatWidget::readStatus(const proto::text_chat::Status& status)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.code());
+            LOG(LS_ERROR) << "Unhandled status code:" << status.code();
             return;
     }
 
@@ -244,7 +244,7 @@ void TextChatWidget::onSendMessage()
 
     if (message.length() > kMaxMessageLength)
     {
-        LOG(LS_ERROR) << "Too long message: " << message.length();
+        LOG(LS_ERROR) << "Too long message:" << message.length();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The message is too long. The maximum message length is %n "
@@ -305,12 +305,12 @@ void TextChatWidget::onSaveChat()
         return;
     }
 
-    LOG(LS_INFO) << "Selected file path: " << file_path.toStdString();
+    LOG(LS_INFO) << "Selected file path:" << file_path;
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file: " << file.errorString().toStdString();
+        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),

@@ -139,7 +139,7 @@ void UpdateChecker::run()
 
     QByteArray url = unicode_url.toLocal8Bit();
 
-    LOG(LS_INFO) << "Start checking for updates. Url: " << unicode_url;
+    LOG(LS_INFO) << "Start checking for updates. Url:" << unicode_url;
 
     base::ScopedCURL curl;
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
@@ -177,8 +177,8 @@ void UpdateChecker::run()
 
         if (error_code)
         {
-            LOG(LS_ERROR) << "curl_multi_poll failed: " << curl_multi_strerror(error_code)
-                          << " (" << error_code << ")";
+            LOG(LS_ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
+                          << "(" << error_code << ")";
             response.clear();
             break;
         }
@@ -196,7 +196,7 @@ void UpdateChecker::run()
 
     if (!interrupted_.load(std::memory_order_relaxed))
     {
-        LOG(LS_INFO) << "Checking is finished: " << response.toStdString();
+        LOG(LS_INFO) << "Checking is finished:" << response;
         emit sig_checkedFinished(response);
     }
 

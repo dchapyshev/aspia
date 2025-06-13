@@ -54,7 +54,7 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         return UpdateInfo();
     }
 
-    LOG(LS_INFO) << "XML: " << QString::fromUtf8(buffer);
+    LOG(LS_INFO) << "XML:" << QString::fromUtf8(buffer);
 
     if (!buffer.startsWith('<'))
     {
@@ -106,7 +106,7 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 
     if (xml.hasError())
     {
-        LOG(LS_ERROR) << "Error parsing XML: " << xml.errorString();
+        LOG(LS_ERROR) << "Error parsing XML:" << xml.errorString();
     }
     else if (update_info.description_.size() > kMaxDescriptionLength)
     {
