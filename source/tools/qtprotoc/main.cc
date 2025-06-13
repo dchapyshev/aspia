@@ -88,7 +88,7 @@ void generateEnumOperator(
 {
     const std::string cpp_enum_type = qualifiedCppTypeName(descriptor->full_name());
 
-    source.Print("QTextStream& operator<<(QTextStream& stream, $TYPE$ value)\n", "TYPE", cpp_enum_type);
+    source.Print("QDebug operator<<(QDebug stream, $TYPE$ value)\n", "TYPE", cpp_enum_type);
     source.Print("{\n");
     source.Print("    switch (value)\n"
                  "    {\n");
@@ -117,7 +117,7 @@ void generateMessageOperator(
 {
     std::string cpp_type = qualifiedCppTypeName(descriptor->full_name());
 
-    source.Print("QTextStream& operator<<(QTextStream& stream, const $TYPE$& msg)\n{\n", "TYPE", cpp_type);
+    source.Print("QDebug operator<<(QDebug stream, const $TYPE$& msg)\n{\n", "TYPE", cpp_type);
     source.Print("    stream << \"$NAME$ {\";\n", "NAME", descriptor->name());
 
     for (int i = 0; i < descriptor->field_count(); ++i)
@@ -139,7 +139,7 @@ void generateMessageOperator(
             }
             else if (field->type() == google::protobuf::FieldDescriptor::TYPE_BYTES)
             {
-                source.Print("        stream << \" $FIELD$ #\" << i << \": \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)));\n",
+                source.Print("        stream << \" $FIELD$ #\" << i << \": \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)).toHex());\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
             else
@@ -229,8 +229,8 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
 
     header.Print("#ifndef $GUARD$\n#define $GUARD$\n", "GUARD", include_guard);
     header.Print("\n");
-    header.Print("#include <QMetaType>\n"
-                 "#include <QTextStream>\n"
+    header.Print("#include <QDebug>\n"
+                 "#include <QMetaType>\n"
                  "\n");
     header.Print("#include \"proto/$PB_HEADER$\" // IWYU pragma: export\n", "PB_HEADER", pb_header);
 
@@ -243,11 +243,15 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     }
     header.Print("\n");
 
-    header.Print("// Meta types declaration.\n");
-    for (const auto* msg : messages)
-        header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", qualifiedCppTypeName(msg->full_name()));
+    header.Print("// Meta type declarations for enumerations.\n");
     for (const auto* e : enums)
         header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", qualifiedCppTypeName(e->full_name()));
+
+    header.Print("\n");
+
+    header.Print("// Meta type declarations for messages.\n");
+    for (const auto* msg : messages)
+        header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", qualifiedCppTypeName(msg->full_name()));
 
     header.Print("\n");
 
@@ -255,7 +259,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     for (const auto* e : enums)
     {
         const std::string cpp_enum_type = qualifiedCppTypeName(e->full_name());
-        header.Print("QTextStream& operator<<(QTextStream& stream, $TYPE$ value);\n", "TYPE", cpp_enum_type);
+        header.Print("QDebug operator<<(QDebug stream, $TYPE$ value);\n", "TYPE", cpp_enum_type);
     }
 
     header.Print("\n");
@@ -264,7 +268,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     for (const auto* msg : messages)
     {
         const std::string cpp_enum_type = qualifiedCppTypeName(msg->full_name());
-        header.Print("QTextStream& operator<<(QTextStream& stream, const $TYPE$& value);\n", "TYPE", cpp_enum_type);
+        header.Print("QDebug operator<<(QDebug stream, const $TYPE$& value);\n", "TYPE", cpp_enum_type);
     }
 
     header.Print("\n#endif // $GUARD$\n", "GUARD", include_guard);
