@@ -18,10 +18,10 @@
 
 #include "common/update_checker.h"
 
+#include <QVersionNumber>
+
 #include "base/logging.h"
 #include "base/net/curl_util.h"
-
-#include <QVersionNumber>
 
 namespace common {
 

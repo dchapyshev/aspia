@@ -19,13 +19,13 @@
 #ifndef COMMON_FILE_PLATFORM_UTIL_H
 #define COMMON_FILE_PLATFORM_UTIL_H
 
+#include <QIcon>
+#include <QString>
+
 #include "base/macros_magic.h"
 #include "proto/file_transfer.h"
 
 #include <utility>
-
-#include <QIcon>
-#include <QString>
 
 namespace common {
 

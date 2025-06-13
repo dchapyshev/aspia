@@ -18,11 +18,11 @@
 
 #include "client/ui/update_settings_dialog.h"
 
+#include <QPushButton>
+
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "client/ui/client_settings.h"
-
-#include <QPushButton>
 
 namespace client {
 

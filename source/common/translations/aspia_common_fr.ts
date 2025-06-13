@@ -483,73 +483,73 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../ui/update_dialog.cc" line="59"/>
+        <location filename="../ui/update_dialog.cc" line="58"/>
         <source>Receiving information...</source>
         <translation>Réception d informations en cours...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="114"/>
+        <location filename="../ui/update_dialog.cc" line="113"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Annulation de la vérification des mises à jour. Veuillez patienter.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="212"/>
+        <location filename="../ui/update_dialog.cc" line="211"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="213"/>
+        <location filename="../ui/update_dialog.cc" line="212"/>
         <source>Error retrieving update information.</source>
         <translation>Erreur de récupération des informations de mise à jour.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="223"/>
-        <location filename="../ui/update_dialog.cc" line="246"/>
+        <location filename="../ui/update_dialog.cc" line="222"/>
+        <location filename="../ui/update_dialog.cc" line="245"/>
         <source>No updates available.</source>
         <translation>Aucune mise à jour n est disponible.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="128"/>
+        <location filename="../ui/update_dialog.cc" line="127"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Une mise à jour sera téléchargée. Une fois le téléchargement terminé, l application se fermera automatiquement.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="130"/>
+        <location filename="../ui/update_dialog.cc" line="129"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Toutes les sessions connectées seront interrompues. Vous ne pourrez pas établir de connexion tant que la mise à jour ne sera pas terminée.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="132"/>
+        <location filename="../ui/update_dialog.cc" line="131"/>
         <source>All unsaved data will be lost.</source>
         <translation>Toutes les données non sauvegardées seront perdues.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="133"/>
+        <location filename="../ui/update_dialog.cc" line="132"/>
         <source>Continue?</source>
         <translation>Continuer?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="136"/>
+        <location filename="../ui/update_dialog.cc" line="135"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="141"/>
+        <location filename="../ui/update_dialog.cc" line="140"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="142"/>
+        <location filename="../ui/update_dialog.cc" line="141"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="153"/>
+        <location filename="../ui/update_dialog.cc" line="152"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="154"/>
+        <location filename="../ui/update_dialog.cc" line="153"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Une erreur s est produite lors de l installation de la mise à jour: %1</translation>
     </message>

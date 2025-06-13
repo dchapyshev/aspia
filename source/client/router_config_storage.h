@@ -19,10 +19,10 @@
 #ifndef CLIENT_ROUTER_CONFIG_STORAGE_H
 #define CLIENT_ROUTER_CONFIG_STORAGE_H
 
+#include <QSettings>
+
 #include "base/macros_magic.h"
 #include "client/router_config.h"
-
-#include <QSettings>
 
 namespace client {
 

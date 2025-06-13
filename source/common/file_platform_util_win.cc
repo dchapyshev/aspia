@@ -18,13 +18,13 @@
 
 #include "common/file_platform_util.h"
 
-#include "base/win/scoped_user_object.h"
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtWin>
 #else
 #include <QImage>
 #endif
+
+#include "base/win/scoped_user_object.h"
 
 #include <shellapi.h>
 

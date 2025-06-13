@@ -19,10 +19,11 @@
 #ifndef COMMON_FILE_PACKETIZER_H
 #define COMMON_FILE_PACKETIZER_H
 
+#include <QFile>
+
 #include "base/macros_magic.h"
 #include "proto/file_transfer.h"
 
-#include <QFile>
 #include <memory>
 
 namespace common {

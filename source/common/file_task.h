@@ -19,11 +19,11 @@
 #ifndef COMMON_FILE_TASK_H
 #define COMMON_FILE_TASK_H
 
-#include "base/shared_pointer.h"
-#include "proto/file_transfer.h"
-
 #include <QMetaType>
 #include <QPointer>
+
+#include "base/shared_pointer.h"
+#include "proto/file_transfer.h"
 
 namespace common {
 

@@ -18,10 +18,6 @@
 
 #include "common/ui/about_dialog.h"
 
-#include "build/version.h"
-#include "base/logging.h"
-#include "ui_about_dialog.h"
-
 #include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
@@ -30,6 +26,10 @@
 #include <QScreen>
 #include <QSysInfo>
 #include <QTextStream>
+
+#include "build/version.h"
+#include "base/logging.h"
+#include "ui_about_dialog.h"
 
 #include <asio/version.hpp>
 #include <curl/curl.h>

@@ -19,6 +19,8 @@
 #ifndef CLIENT_CLIENT_DESKTOP_H
 #define CLIENT_CLIENT_DESKTOP_H
 
+#include <QPointer>
+
 #include "base/macros_magic.h"
 #include "base/serialization.h"
 #include "base/desktop/geometry.h"
@@ -29,8 +31,6 @@
 #include "proto/desktop.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
-
-#include <QPointer>
 
 namespace base {
 class AudioDecoder;

@@ -18,9 +18,9 @@
 
 #include "common/update_info.h"
 
-#include "base/logging.h"
-
 #include <QXmlStreamReader>
+
+#include "base/logging.h"
 
 namespace common {
 

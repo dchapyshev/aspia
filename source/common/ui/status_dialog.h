@@ -19,9 +19,9 @@
 #ifndef COMMON_UI_STATUS_DIALOG_H
 #define COMMON_UI_STATUS_DIALOG_H
 
-#include "base/macros_magic.h"
-
 #include <QDialog>
+
+#include "base/macros_magic.h"
 
 namespace Ui {
 class StatusDialog;

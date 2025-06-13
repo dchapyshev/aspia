@@ -19,13 +19,13 @@
 #ifndef CLIENT_FILE_REMOVER_H
 #define CLIENT_FILE_REMOVER_H
 
-#include "base/location.h"
-#include "common/file_task_factory.h"
-#include "proto/file_transfer.h"
-
 #include <QObject>
 #include <QPointer>
 #include <QQueue>
+
+#include "base/location.h"
+#include "common/file_task_factory.h"
+#include "proto/file_transfer.h"
 
 namespace client {
 

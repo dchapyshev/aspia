@@ -19,13 +19,13 @@
 #ifndef COMMON_UI_DOWNLOAD_DIALOG_H
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
-#include "base/macros_magic.h"
-#include "common/http_file_downloader.h"
-#include "ui_download_dialog.h"
-
 #include <QFile>
 #include <QPointer>
 #include <QThread>
+
+#include "base/macros_magic.h"
+#include "common/http_file_downloader.h"
+#include "ui_download_dialog.h"
 
 namespace common {
 

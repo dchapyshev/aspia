@@ -19,15 +19,15 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
-#include "client/client_config.h"
-#include "client/client_session_state.h"
-#include "client/router_controller.h"
-#include "base/net/tcp_channel.h"
-
 #include <QObject>
 #include <QPointer>
 #include <QTimer>
 #include <QVariant>
+
+#include "client/client_config.h"
+#include "client/client_session_state.h"
+#include "client/router_controller.h"
+#include "base/net/tcp_channel.h"
 
 namespace base {
 class ClientAuthenticator;

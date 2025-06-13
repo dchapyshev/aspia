@@ -19,9 +19,9 @@
 #ifndef COMMON_CLIPBOARD_H
 #define COMMON_CLIPBOARD_H
 
-#include "proto/desktop.h"
-
 #include <QObject>
+
+#include "proto/desktop.h"
 
 namespace common {
 

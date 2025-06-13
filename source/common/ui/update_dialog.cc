@@ -18,21 +18,20 @@
 
 #include "common/ui/update_dialog.h"
 
+#include <QCloseEvent>
+#include <QDir>
+#include <QMessageBox>
+#include <QTemporaryFile>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "build/build_config.h"
 #include "common/ui/download_dialog.h"
 #include "ui_update_dialog.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QCloseEvent>
-#include <QDir>
-#include <QMessageBox>
-#include <QTemporaryFile>
-#include <QTimer>
 
 namespace common {
 

@@ -19,9 +19,9 @@
 #ifndef COMMON_KEYCODE_CONVERTER_H
 #define COMMON_KEYCODE_CONVERTER_H
 
-#include "base/macros_magic.h"
-
 #include <QtGlobal>
+
+#include "base/macros_magic.h"
 
 namespace common {
 

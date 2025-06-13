@@ -19,9 +19,9 @@
 #ifndef COMMON_UI_LANGUAGE_ACTION_H
 #define COMMON_UI_LANGUAGE_ACTION_H
 
-#include "base/macros_magic.h"
-
 #include <QAction>
+
+#include "base/macros_magic.h"
 
 namespace common {
 

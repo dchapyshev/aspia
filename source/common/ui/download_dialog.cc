@@ -18,12 +18,12 @@
 
 #include "common/ui/download_dialog.h"
 
-#include "base/logging.h"
-
 #include <QAbstractButton>
 #include <QFile>
 #include <QPushButton>
 #include <QMessageBox>
+
+#include "base/logging.h"
 
 namespace common {
 

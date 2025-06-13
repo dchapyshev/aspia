@@ -17,7 +17,6 @@
 //
 
 #include "common/keycode_converter.h"
-#include "build/build_config.h"
 
 #include <QKeyEvent>
 

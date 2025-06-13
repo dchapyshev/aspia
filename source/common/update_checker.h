@@ -19,10 +19,10 @@
 #ifndef COMMON_UPDATE_CHECKER_H
 #define COMMON_UPDATE_CHECKER_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
 #include <QThread>
+
+#include "base/macros_magic.h"
 
 namespace common {
 

@@ -19,10 +19,10 @@
 #ifndef COMMON_HTTP_FILE_DOWNLOADER_H
 #define COMMON_HTTP_FILE_DOWNLOADER_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
 #include <QThread>
+
+#include "base/macros_magic.h"
 
 namespace common {
 

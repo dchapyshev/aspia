@@ -19,11 +19,11 @@
 #ifndef COMMON_UI_UPDATE_DIALOG_H
 #define COMMON_UI_UPDATE_DIALOG_H
 
+#include <QDialog>
+
 #include "base/macros_magic.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
-
-#include <QDialog>
 
 namespace Ui {
 class UpdateDialog;

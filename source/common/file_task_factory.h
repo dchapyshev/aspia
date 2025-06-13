@@ -19,10 +19,10 @@
 #ifndef CLIENT_FILE_TASK_FACTORY_H
 #define CLIENT_FILE_TASK_FACTORY_H
 
+#include <QString>
+
 #include "base/macros_magic.h"
 #include "common/file_task.h"
-
-#include <QString>
 
 namespace proto::file_transfer {
 class FilePacket;
