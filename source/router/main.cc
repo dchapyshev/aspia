@@ -73,8 +73,8 @@ int generateAndPrintKeys(QTextStream& out)
     if (!generateKeys(&private_key, &public_key))
         return 1;
 
-    out << "Private key: " << private_key.toHex().toStdString() << Qt::endl;
-    out << "Public key: " << public_key.toHex().toStdString() << Qt::endl;
+    out << "Private key: " << private_key.toHex() << Qt::endl;
+    out << "Public key: " << public_key.toHex() << Qt::endl;
 
     return 0;
 }
@@ -87,7 +87,7 @@ int createConfig(QTextStream& out)
     router::Settings settings;
     QString settings_file_path = settings.filePath();
 
-    out << "Settings file path: " << settings_file_path.toStdString() << Qt::endl;
+    out << "Settings file path: " << settings_file_path << Qt::endl;
 
     if (!settings.isEmpty())
     {
@@ -256,9 +256,9 @@ int main(int argc, char* argv[])
 
     parser.process(application);
 
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING
-                 << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
-    LOG(LS_INFO) << "Command line: " << base::Application::arguments();
+    LOG(LS_INFO) << "Version:" << ASPIA_VERSION_STRING
+                 << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
+    LOG(LS_INFO) << "Command line:" << base::Application::arguments();
 
     QTextStream out(stdout, QIODevice::WriteOnly);
 

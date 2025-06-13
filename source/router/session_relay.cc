@@ -92,7 +92,7 @@ void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
     KeyPool& pool = relayKeyPool();
 
-    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
+    LOG(LS_INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
 
     peer_data_.emplace(std::make_pair(
         key_pool.peer_host(), static_cast<quint16>(key_pool.peer_port())));

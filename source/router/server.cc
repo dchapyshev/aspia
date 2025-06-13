@@ -93,7 +93,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Client white list is not empty. Allowed clients: " << client_white_list_;
+        LOG(LS_INFO) << "Client white list is not empty. Allowed clients:" << client_white_list_;
     }
 
     host_white_list_ = settings.hostWhiteList();
@@ -103,7 +103,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts: " << host_white_list_;
+        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts:" << host_white_list_;
     }
 
     admin_white_list_ = settings.adminWhiteList();
@@ -113,7 +113,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins: " << admin_white_list_;
+        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins:" << admin_white_list_;
     }
 
     relay_white_list_ = settings.relayWhiteList();
@@ -123,7 +123,7 @@ bool Server::start()
     }
     else
     {
-        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays: " << relay_white_list_;
+        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays:" << relay_white_list_;
     }
 
     QByteArray seed_key = settings.seedKey();
@@ -194,7 +194,7 @@ void Server::onSessionAuthenticated()
         proto::router::SessionType session_type =
             static_cast<proto::router::SessionType>(session_info.session_type);
 
-        LOG(LS_INFO) << "New session: " << session_type << " (" << address << ")";
+        LOG(LS_INFO) << "New session:" << session_type << "(" << address << ")";
 
         Session* session = nullptr;
 
@@ -246,7 +246,7 @@ void Server::onSessionAuthenticated()
 
         if (!session)
         {
-            LOG(LS_ERROR) << "Connection rejected for '" << address << "'";
+            LOG(LS_ERROR) << "Connection rejected for" << address;
             return;
         }
 
@@ -276,7 +276,7 @@ void Server::onNewConnection()
     while (tcp_server_->hasPendingConnections())
     {
         base::TcpChannel* channel = tcp_server_->nextPendingConnection();
-        LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+        LOG(LS_INFO) << "New connection:" << channel->peerAddress();
         authenticator_manager_->addNewChannel(channel);
     }
 }

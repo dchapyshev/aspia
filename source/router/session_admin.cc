@@ -132,7 +132,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unknown request type: " << request.type();
+            LOG(LS_ERROR) << "Unknown request type:" << request.type();
             return;
     }
 
@@ -217,18 +217,18 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
 
         if (!sessionManager()->stopSession(session_id))
         {
-            LOG(LS_ERROR) << "Session not found: " << session_id;
+            LOG(LS_ERROR) << "Session not found:" << session_id;
             session_result->set_error_code(proto::router::SessionResult::INVALID_SESSION_ID);
         }
         else
         {
-            LOG(LS_INFO) << "Session '" << session_id << "' disconnected by " << userName();
+            LOG(LS_INFO) << "Session '" << session_id << "' disconnected by" << userName();
             session_result->set_error_code(proto::router::SessionResult::SUCCESS);
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown session request: " << request.type();
+        LOG(LS_ERROR) << "Unknown session request:" << request.type();
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
@@ -242,7 +242,7 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
         dynamic_cast<SessionRelay*>(sessionManager()->sessionById(request.relay_session_id()));
     if (!relay_session)
     {
-        LOG(LS_ERROR) << "Relay with id " << request.relay_session_id() << " not found";
+        LOG(LS_ERROR) << "Relay with id" << request.relay_session_id() << "not found";
         return;
     }
 
@@ -252,7 +252,7 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "User add request: " << user.name();
+    LOG(LS_INFO) << "User add request:" << user.name();
 
     base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
@@ -263,7 +263,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::
 
     if (!base::User::isValidUserName(new_user.name))
     {
-        LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
+        LOG(LS_ERROR) << "Invalid user name:" << new_user.name;
         return proto::router::UserResult::INVALID_DATA;
     }
 
@@ -283,11 +283,11 @@ proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "User modify request: " << user.name();
+    LOG(LS_INFO) << "User modify request:" << user.name();
 
     if (user.entry_id() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid user ID: " << user.entry_id();
+        LOG(LS_ERROR) << "Invalid user ID:" << user.entry_id();
         return proto::router::UserResult::INVALID_DATA;
     }
 
@@ -300,7 +300,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::route
 
     if (!base::User::isValidUserName(new_user.name))
     {
-        LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
+        LOG(LS_ERROR) << "Invalid user name:" << new_user.name;
         return proto::router::UserResult::INVALID_DATA;
     }
 
@@ -332,7 +332,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::route
 
     qint64 entry_id = user.entry_id();
 
-    LOG(LS_INFO) << "User remove request: " << entry_id;
+    LOG(LS_INFO) << "User remove request:" << entry_id;
 
     if (!database->removeUser(entry_id))
     {

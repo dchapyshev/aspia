@@ -134,7 +134,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown request type: " << host_id_request.type();
+        LOG(LS_ERROR) << "Unknown request type:" << host_id_request.type();
         return;
     }
 
@@ -195,13 +195,13 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
     {
         if (*it == host_id)
         {
-            LOG(LS_INFO) << "Host ID " << host_id << " remove from list";
+            LOG(LS_INFO) << "Host ID" << host_id << "remove from list";
             host_id_list_.erase(it);
             return;
         }
     }
 
-    LOG(LS_ERROR) << "Host ID " << host_id << " NOT found in list";
+    LOG(LS_ERROR) << "Host ID" << host_id << "NOT found in list";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ void SessionHost::removeOtherWithSameId()
         {
             if (other_host_session->hasHostId(host_id))
             {
-                LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
+                LOG(LS_INFO) << "Detected previous connection with ID" << host_id;
 
                 is_found = true;
                 break;

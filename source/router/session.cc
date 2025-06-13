@@ -176,7 +176,7 @@ void Session::sendMessage(const QByteArray& message)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error:" << base::NetworkChannel::errorToString(error_code);
     emit sig_sessionFinished(session_id_);
 }
 
@@ -189,7 +189,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 
@@ -202,7 +202,7 @@ void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel:" << channel_id;
     }
 }
 

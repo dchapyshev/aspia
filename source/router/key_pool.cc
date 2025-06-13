@@ -46,7 +46,7 @@ void KeyPool::addKey(Session::SessionId session_id, const proto::router::RelayKe
         relay = pool_.insert(session_id, Keys());
     }
 
-    LOG(LS_INFO) << "Added key with id " << key.key_id() << " for host '" << session_id << "'";
+    LOG(LS_INFO) << "Added key with id" << key.key_id() << "for host" << session_id;
     relay.value().append(key);
 }
 
@@ -78,7 +78,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
         return std::nullopt;
     }
 
-    LOG(LS_INFO) << "Preffered relay: " << preffered_relay.key();
+    LOG(LS_INFO) << "Preffered relay:" << preffered_relay.key();
 
     QList<proto::router::RelayKey>& keys = preffered_relay.value();
     if (keys.isEmpty())
@@ -109,7 +109,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 //--------------------------------------------------------------------------------------------------
 void KeyPool::removeKeysForRelay(Session::SessionId session_id)
 {
-    LOG(LS_INFO) << "All keys for relay '" << session_id << "' removed";
+    LOG(LS_INFO) << "All keys for relay" << session_id << "removed";
     pool_.remove(session_id);
 }
 

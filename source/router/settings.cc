@@ -177,7 +177,7 @@ void Settings::setWhiteList(const QString& key, const WhiteList& value)
         }
         else
         {
-            LOG(LS_ERROR) << "Invalid IP address '" << entry << "' in " << key;
+            LOG(LS_ERROR) << "Invalid IP address" << entry << "in" << key;
         }
     }
 
@@ -201,7 +201,7 @@ Settings::WhiteList Settings::whiteList(const QString& key) const
         }
         else
         {
-            LOG(LS_ERROR) << "Invalid IP address '" << *it << "' in " << key;
+            LOG(LS_ERROR) << "Invalid IP address" << *it << "in" << key;
             it = result.erase(it);
         }
     }

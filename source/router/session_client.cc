@@ -80,7 +80,7 @@ void SessionClient::onSessionMessageWritten(quint8 /* channel_id */, size_t /* p
 //--------------------------------------------------------------------------------------------------
 void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
-    LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
+    LOG(LS_INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
     proto::router::RouterToPeer message;
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
@@ -88,12 +88,12 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     SessionHost* host = sessionByHostId(request.host_id());
     if (!host)
     {
-        LOG(LS_ERROR) << "Host with id " << request.host_id() << " NOT found!";
+        LOG(LS_ERROR) << "Host with id" << request.host_id() << "NOT found!";
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
     }
     else
     {
-        LOG(LS_INFO) << "Host with id " << request.host_id() << " found";
+        LOG(LS_INFO) << "Host with id" << request.host_id() << "found";
 
         std::optional<KeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
         if (!credentials.has_value())
@@ -106,7 +106,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
             SessionRelay* relay = static_cast<SessionRelay*>(sessionById(credentials->session_id));
             if (!relay)
             {
-                LOG(LS_ERROR) << "No relay with session id " << credentials->session_id;
+                LOG(LS_ERROR) << "No relay with session id" << credentials->session_id;
                 offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
             }
             else
@@ -114,7 +114,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                 const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
                 if (!peer_data.has_value())
                 {
-                    LOG(LS_ERROR) << "No peer data for relay with session id "
+                    LOG(LS_ERROR) << "No peer data for relay with session id"
                                   << credentials->session_id;
                     offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
                 }
@@ -165,8 +165,8 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
     else
         host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
 
-    LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
-                 << ": " << host_status->status();
+    LOG(LS_INFO) << "Sending host status for host ID" << check_host_status.host_id()
+                 << ":" << host_status->status();
     sendMessage(base::serialize(message));
 }
 
