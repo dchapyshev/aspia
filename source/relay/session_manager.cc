@@ -98,7 +98,7 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
         asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get endpoint for accepted connection: " << error_code;
+            LOG(LS_ERROR) << "Unable to get endpoint for accepted connection:" << error_code;
         }
         else
         {
@@ -108,7 +108,7 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get address for pending session: " << error_code;
+        LOG(LS_ERROR) << "Unable to get address for pending session:" << error_code;
     }
 
     return QString();
@@ -160,28 +160,28 @@ void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.open failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_.open failed:" << error_code;
         return;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.set_option failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_.set_option failed:" << error_code;
         return;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.bind failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_.bind failed:" << error_code;
         return;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_.listen failed: " << error_code;
+        LOG(LS_ERROR) << "acceptor_.listen failed:" << error_code;
         return;
     }
 
@@ -201,7 +201,7 @@ void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
 //--------------------------------------------------------------------------------------------------
 void SessionManager::disconnectSession(quint64 session_id)
 {
-    LOG(LS_INFO) << "Disconnect session by session id: " << session_id;
+    LOG(LS_INFO) << "Disconnect session by session id:" << session_id;
 
     for (const auto& session : std::as_const(active_sessions_))
     {
@@ -212,14 +212,14 @@ void SessionManager::disconnectSession(quint64 session_id)
         }
     }
 
-    LOG(LS_ERROR) << "Session with id " << session_id << " not found";
+    LOG(LS_ERROR) << "Session with id" << session_id << "not found";
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::onPendingSessionReady(
     PendingSession* pending_session, const proto::relay::PeerToRelay& message)
 {
-    LOG(LS_INFO) << "Pending session ready for key_id: " << message.key_id();
+    LOG(LS_INFO) << "Pending session ready for key_id:" << message.key_id();
 
     // Looking for a key with the specified identifier.
     std::optional<KeyPool::Key> key = shared_key_pool_->key(message.key_id(), message.public_key());
@@ -237,7 +237,7 @@ void SessionManager::onPendingSessionReady(
             {
                 if (pending_session->isPeerFor(*other_pending_session))
                 {
-                    LOG(LS_INFO) << "Both peers are connected with key " << message.key_id();
+                    LOG(LS_INFO) << "Both peers are connected with key" << message.key_id();
 
                     // Delete the key from the pool. It can no longer be used.
                     shared_key_pool_->removeKey(message.key_id());
@@ -272,7 +272,7 @@ void SessionManager::onPendingSessionReady(
     }
     else
     {
-        LOG(LS_ERROR) << "Key with id " << message.key_id() << " NOT found!";
+        LOG(LS_ERROR) << "Key with id" << message.key_id() << "NOT found!";
     }
 
     // The key was not found in the pool.
@@ -300,7 +300,7 @@ void SessionManager::doAccept(SessionManager* self)
     {
         if (!error_code)
         {
-            LOG(LS_INFO) << "New accepted connection: " << peerAddress(socket);
+            LOG(LS_INFO) << "New accepted connection:" << peerAddress(socket);
 
             PendingSession* session = new PendingSession(std::move(socket), self);
 
@@ -318,7 +318,7 @@ void SessionManager::doAccept(SessionManager* self)
             if (error_code == asio::error::operation_aborted)
                 return;
 
-            LOG(LS_ERROR) << "Error while accepting connection: " << error_code;
+            LOG(LS_ERROR) << "Error while accepting connection:" << error_code;
         }
 
         // Waiting for the next connection.
@@ -349,7 +349,7 @@ void SessionManager::onIdleTimeout()
         }
     }
 
-    LOG(LS_INFO) << "Sessions ended by timeout: " << count;
+    LOG(LS_INFO) << "Sessions ended by timeout:" << count;
 }
 
 //--------------------------------------------------------------------------------------------------

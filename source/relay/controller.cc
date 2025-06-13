@@ -78,9 +78,9 @@ Controller::Controller(QObject* parent)
     router_port_ = settings.routerPort();
     router_public_key_ = settings.routerPublicKey();
 
-    LOG(LS_INFO) << "Router address: " << router_address_;
-    LOG(LS_INFO) << "Router port: " << router_port_;
-    LOG(LS_INFO) << "Router public key: " << router_public_key_.toHex().toStdString();
+    LOG(LS_INFO) << "Router address:" << router_address_;
+    LOG(LS_INFO) << "Router port:" << router_port_;
+    LOG(LS_INFO) << "Router public key:" << router_public_key_.toHex().toStdString();
 
     // Peers settings.
     listen_interface_ = settings.listenInterface();
@@ -91,13 +91,13 @@ Controller::Controller(QObject* parent)
     statistics_enabled_ = settings.isStatisticsEnabled();
     statistics_interval_ = settings.statisticsInterval();
 
-    LOG(LS_INFO) << "Listen interface: " << listen_interface_;
-    LOG(LS_INFO) << "Peer address: " << peer_address_;
-    LOG(LS_INFO) << "Peer port: " << peer_port_;
-    LOG(LS_INFO) << "Peer idle timeout: " << peer_idle_timeout_.count();
-    LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
-    LOG(LS_INFO) << "Statistics enabled: " << statistics_enabled_;
-    LOG(LS_INFO) << "Statistics interval: " << statistics_interval_.count();
+    LOG(LS_INFO) << "Listen interface:" << listen_interface_;
+    LOG(LS_INFO) << "Peer address:" << peer_address_;
+    LOG(LS_INFO) << "Peer port:" << peer_port_;
+    LOG(LS_INFO) << "Peer idle timeout:" << peer_idle_timeout_.count();
+    LOG(LS_INFO) << "Max peer count:" << max_peer_count_;
+    LOG(LS_INFO) << "Statistics enabled:" << statistics_enabled_;
+    LOG(LS_INFO) << "Statistics interval:" << statistics_interval_.count();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void Controller::onTcpConnected()
             connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Controller::onTcpMessageReceived);
 
-            LOG(LS_INFO) << "Authentication complete (session count: " << session_count_ << ")";
+            LOG(LS_INFO) << "Authentication complete (session count:" << session_count_ << ")";
 
             // Now the session will receive incoming messages.
             tcp_channel_->setChannelIdSupport(true);
@@ -207,7 +207,7 @@ void Controller::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed: "
+            LOG(LS_ERROR) << "Authentication failed:"
                           << base::Authenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
@@ -222,7 +222,7 @@ void Controller::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "The connection to the router has been lost: "
+    LOG(LS_INFO) << "The connection to the router has been lost:"
                  << base::NetworkChannel::errorToString(error_code);
 
     // Clearing the key pool.
@@ -264,7 +264,7 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
                 break;
 
             default:
-                LOG(LS_ERROR) << "Unsupported request type: " << request.type();
+                LOG(LS_ERROR) << "Unsupported request type:" << request.type();
                 break;
         }
     }
@@ -296,7 +296,7 @@ void Controller::onSessionFinished()
 
     if (session_count_ < 0)
     {
-        LOG(LS_ERROR) << "Invalid value for session count: " << session_count_;
+        LOG(LS_ERROR) << "Invalid value for session count:" << session_count_;
         session_count_ = 0;
     }
 
@@ -311,7 +311,7 @@ void Controller::onPoolKeyExpired(quint32 key_id)
 {
     // The key has expired and has been removed from the pool.
     // Add a new key to the pool and send it to the router.
-    LOG(LS_INFO) << "Key with id " << key_id << " has expired and removed from pool";
+    LOG(LS_INFO) << "Key with id" << key_id << "has expired and removed from pool";
     sendKeyPool(1);
 }
 
@@ -332,7 +332,7 @@ void Controller::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Controller::delayedConnectToRouter()
 {
-    LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
+    LOG(LS_INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
     reconnect_timer_->start(kReconnectTimeout);
 }
 

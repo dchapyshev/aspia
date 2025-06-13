@@ -71,8 +71,8 @@ void Session::start()
 void Session::stop()
 {
     disconnect();
-    LOG(LS_INFO) << "Session stopped (duration: " << duration(Clock::now()).count()
-                 << " seconds, bytes transferred: " << bytesTransferred() << ")";
+    LOG(LS_INFO) << "Session stopped (duration:" << duration(Clock::now()).count()
+                 << "seconds, bytes transferred:" << bytesTransferred() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ void Session::doReadSome(Session* session, int source)
 //--------------------------------------------------------------------------------------------------
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Connection finished: " << error_code << " (" << location.toString() << ")";
+    LOG(LS_ERROR) << "Connection finished:" << error_code << "(" << location.toString() << ")";
     emit sig_sessionFinished(this);
     stop();
 }

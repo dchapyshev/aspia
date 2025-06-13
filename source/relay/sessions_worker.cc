@@ -76,7 +76,7 @@ void SessionsWorker::onBeforeThreadRunning()
             listen_interface_.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get listen address: " << error_code;
+            LOG(LS_ERROR) << "Unable to get listen address:" << error_code;
             return;
         }
     }
