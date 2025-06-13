@@ -19,10 +19,10 @@
 #ifndef BASE_LOGGING_H
 #define BASE_LOGGING_H
 
+#include <QDebug>
 #include <QRect>
 #include <QString>
 #include <QStringList>
-#include <QTextStream>
 
 #include "base/scoped_clear_last_error.h"
 #include "base/system_error.h"
@@ -214,7 +214,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 #define PLOG_IF(severity, condition) \
   LAZY_STREAM(PLOG_STREAM(severity), LOG_IS_ON(severity) && (condition))
 
-extern QTextStream* g_swallow_stream;
+extern QDebug* g_swallow_stream;
 
 // Note that g_swallow_stream is used instead of an arbitrary LOG() stream to avoid the creation of
 // an object with a non-trivial destructor (LogMessage).
@@ -223,7 +223,7 @@ extern QTextStream* g_swallow_stream;
 // clearly never executed. Using a simpler object to be &'d with Voidify() avoids these extra
 // instructions.
 // Using a simpler POD object with a templated operator<< also works to avoid these instructions.
-// However, this causes warnings on statically defined implementations of operator<<(QTextStream, ...)
+// However, this causes warnings on statically defined implementations of operator<<(QDebug, ...)
 // in some .cc files, because they become defined-but-unreferenced functions. A reinterpret_cast of
 // 0 to an ostream* also is not suitable, because some compilers warn of undefined behavior.
 #define EAT_STREAM_PARAMETERS \
@@ -280,7 +280,7 @@ struct SupportsOstreamOperator : std::false_type {};
 
 template <typename T>
 struct SupportsOstreamOperator<T, decltype(
-    void(std::declval<QTextStream&>() << std::declval<T>()))> : std::true_type {};
+    void(std::declval<QDebug&>() << std::declval<T>()))> : std::true_type {};
 
 template<typename T>
 inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::value;
@@ -290,7 +290,7 @@ inline constexpr bool SupportsOstreamOperator_v = SupportsOstreamOperator<T>::va
 template <typename T>
 inline std::enable_if_t<
     SupportsOstreamOperator_v<const T&> && !std::is_function_v<std::remove_pointer_t<T>>, void>
-makeCheckOpValueString(QTextStream* os, const T& v)
+makeCheckOpValueString(QDebug* os, const T& v)
 {
     (*os) << v;
 }
@@ -301,7 +301,7 @@ makeCheckOpValueString(QTextStream* os, const T& v)
 // pointers, so this is a no-op for MSVC.)
 template <typename T>
 inline std::enable_if_t<std::is_function_v<std::remove_pointer_t<T>>, void>
-makeCheckOpValueString(QTextStream* os, const T& v)
+makeCheckOpValueString(QDebug* os, const T& v)
 {
     (*os) << reinterpret_cast<const void*>(v);
 }
@@ -310,13 +310,13 @@ makeCheckOpValueString(QTextStream* os, const T& v)
 // operator<< overload was declared).
 template <typename T>
 inline std::enable_if_t<!SupportsOstreamOperator_v<const T&> && std::is_enum_v<T>, void>
-makeCheckOpValueString(QTextStream* os, const T& v)
+makeCheckOpValueString(QDebug* os, const T& v)
 {
     (*os) << static_cast<std::underlying_type_t<T>>(v);
 }
 
 // We need an explicit overload for std::nullptr_t.
-void makeCheckOpValueString(QTextStream* os, std::nullptr_t p);
+void makeCheckOpValueString(QDebug* os, std::nullptr_t p);
 
 // Build the error message string.  This is separate from the "Impl" function template because it
 // is not performance critical and so can be out of line, while the "Impl" code should be inline.
@@ -327,7 +327,7 @@ QString* makeCheckOpString(const t1& v1, const t2& v2, const char* names)
     QString string;
 
     {
-        QTextStream ss(&string);
+        QDebug ss(&string);
         ss << names << " (";
         makeCheckOpValueString(&ss, v1);
         ss << " vs. ";
@@ -518,7 +518,7 @@ public:
 
     ~LogMessage();
 
-    QTextStream& stream() { return stream_; }
+    QDebug& stream() { return stream_; }
 
     LoggingSeverity severity() { return severity_; }
 
@@ -527,7 +527,7 @@ private:
 
     LoggingSeverity severity_;
     QString string_;
-    QTextStream stream_;
+    QDebug stream_;
 
     ScopedClearLastError last_error_;
 
@@ -541,7 +541,7 @@ class LogMessageVoidify
 public:
     LogMessageVoidify() = default;
     // This has to be an operator with a precedence lower than << but higher than ?:
-    void operator&(QTextStream&) { }
+    void operator&(QDebug) { }
 };
 
 // Appends a formatted system message of the GetLastError() type.
@@ -554,7 +554,7 @@ public:
     // Appends the error message before destructing the encapsulated class.
     ~ErrorLogMessage();
 
-    QTextStream& stream() { return log_message_.stream(); }
+    QDebug& stream() { return log_message_.stream(); }
 
 private:
     SystemError error_;
@@ -584,26 +584,22 @@ private:
 } // namespace base
 
 #if defined(Q_OS_WINDOWS)
-QTextStream& operator<<(QTextStream& out, const wchar_t* wstr);
-QTextStream& operator<<(QTextStream& out, const std::wstring& wstr);
+QDebug operator<<(QDebug out, const wchar_t* wstr);
+QDebug operator<<(QDebug out, const std::wstring& wstr);
 #endif // defined(Q_OS_WINDOWS)
 
-QTextStream& operator<<(QTextStream& out, const char8_t* ustr);
-QTextStream& operator<<(QTextStream& out, const std::u8string& ustr);
+QDebug operator<<(QDebug out, const char8_t* ustr);
+QDebug operator<<(QDebug out, const std::u8string& ustr);
 
-QTextStream& operator<<(QTextStream& out, const char16_t* ustr);
-QTextStream& operator<<(QTextStream& out, const std::u16string& ustr);
+QDebug operator<<(QDebug out, const char16_t* ustr);
+QDebug operator<<(QDebug out, const std::u16string& ustr);
 
-QTextStream& operator<<(QTextStream& out, const std::filesystem::path& path);
-QTextStream& operator<<(QTextStream& out, const std::error_code& error);
+QDebug operator<<(QDebug out, const std::filesystem::path& path);
+QDebug operator<<(QDebug out, const std::error_code& error);
 
-QTextStream& operator<<(QTextStream& out, const QStringList& qstrlist);
+QDebug operator<<(QDebug out, const QStringList& qstrlist);
 
-QTextStream& operator<<(QTextStream& out, const QPoint& qpoint);
-QTextStream& operator<<(QTextStream& out, const QRect& qrect);
-QTextStream& operator<<(QTextStream& out, const QSize& qsize);
-
-QTextStream& operator<<(QTextStream& out, Qt::HANDLE handle);
+QDebug operator<<(QDebug out, Qt::HANDLE handle);
 
 // The NOTIMPLEMENTED() macro annotates codepaths which have not been implemented yet. If output
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.
