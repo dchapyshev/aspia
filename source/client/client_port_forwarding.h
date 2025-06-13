@@ -106,4 +106,6 @@ private:
 
 } // namespace client
 
+Q_DECLARE_METATYPE(client::ClientPortForwarding::Statistics)
+
 #endif // CLIENT_CLIENT_PORT_FORWARDING_H

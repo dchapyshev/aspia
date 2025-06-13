@@ -52,9 +52,6 @@
 #include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
 
-Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
-Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)
-
 namespace client {
 
 namespace {

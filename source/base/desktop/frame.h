@@ -95,4 +95,6 @@ private:
 
 } // namespace base
 
+Q_DECLARE_METATYPE(std::shared_ptr<base::Frame>)
+
 #endif // BASE_DESKTOP_FRAME_H

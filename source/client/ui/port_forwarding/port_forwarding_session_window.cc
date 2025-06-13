@@ -22,8 +22,6 @@
 #include "client/client_port_forwarding.h"
 #include "ui_port_forwarding_session_window.h"
 
-Q_DECLARE_METATYPE(client::ClientPortForwarding::Statistics)
-
 namespace client {
 
 //--------------------------------------------------------------------------------------------------

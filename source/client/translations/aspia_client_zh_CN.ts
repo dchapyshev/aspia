@@ -2883,37 +2883,37 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="73"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="58"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="96"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="81"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="97"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="82"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="98"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="83"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="99"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="84"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="100"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="85"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="277"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="262"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2968,34 +2968,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="374"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="383"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="371"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="380"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="375"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="384"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1102"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1099"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1104"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1135"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Could not save image</source>
         <translation type="unfinished">无法保存图像</translation>
     </message>

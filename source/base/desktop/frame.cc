@@ -24,6 +24,22 @@
 
 namespace base {
 
+namespace {
+
+void registerMetaTypes()
+{
+    qRegisterMetaType<std::shared_ptr<base::Frame>>("std::shared_ptr<base::Frame>");
+}
+
+struct Registrator
+{
+    Registrator() { registerMetaTypes(); }
+};
+
+static volatile Registrator registrator;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 // static
 const float Frame::kStandardDPI = 96.0;

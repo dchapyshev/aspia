@@ -74,4 +74,7 @@ private:
 
 } // namespace base
 
+Q_DECLARE_METATYPE(base::MouseCursor)
+Q_DECLARE_METATYPE(std::shared_ptr<base::MouseCursor>)
+
 #endif // BASE_DESKTOP_MOUSE_CURSOR_H

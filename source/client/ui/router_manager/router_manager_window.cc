@@ -18,15 +18,6 @@
 
 #include "client/ui/router_manager/router_manager_window.h"
 
-#include "base/logging.h"
-#include "base/peer/user.h"
-#include "base/gui_application.h"
-#include "client/router.h"
-#include "client/ui/client_settings.h"
-#include "client/ui/router_manager/router_user_dialog.h"
-#include "common/ui/status_dialog.h"
-#include "ui_router_manager_window.h"
-
 #include <QClipboard>
 #include <QCollator>
 #include <QDateTime>
@@ -37,6 +28,15 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QTimer>
+
+#include "base/logging.h"
+#include "base/peer/user.h"
+#include "base/gui_application.h"
+#include "client/router.h"
+#include "client/ui/client_settings.h"
+#include "client/ui/router_manager/router_user_dialog.h"
+#include "common/ui/status_dialog.h"
+#include "ui_router_manager_window.h"
 
 Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionList>)
 Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionResult>)

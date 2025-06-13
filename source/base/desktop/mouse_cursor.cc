@@ -20,6 +20,23 @@
 
 namespace base {
 
+namespace {
+
+void registerMetaTypes()
+{
+    qRegisterMetaType<base::MouseCursor>("base::MouseCursor");
+    qRegisterMetaType<std::shared_ptr<base::MouseCursor>>("std::shared_ptr<base::MouseCursor>");
+}
+
+struct Registrator
+{
+    Registrator() { registerMetaTypes(); }
+};
+
+static volatile Registrator registrator;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 MouseCursor::MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
     : image_(std::move(image)),
