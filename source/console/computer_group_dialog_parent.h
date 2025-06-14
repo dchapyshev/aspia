@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_GROUP_DIALOG_PARENT_H
 #define CONSOLE_COMPUTER_GROUP_DIALOG_PARENT_H
 
-#include "base/macros_magic.h"
 #include "console/computer_group_dialog_tab.h"
 #include "ui_computer_group_dialog_parent.h"
 
@@ -35,8 +34,7 @@ public:
 
 private:
     Ui::ComputerGroupDialogParent ui;
-
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialogParent);
+    Q_DISABLE_COPY(ComputerGroupDialogParent)
 };
 
 } // namespace console

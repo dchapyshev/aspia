@@ -3216,34 +3216,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="371"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="380"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1098"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1099"/>
         <source>Save File</source>
         <translation type="unfinished">Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1100"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Could not save image</source>
         <translation type="unfinished">Не удалось сохранить изображение</translation>
     </message>
@@ -4400,17 +4400,17 @@
 <context>
     <name>client::SelectScreenAction</name>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="37"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="36"/>
         <source>Full Desktop</source>
         <translation>Весь рабочий стол</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="50"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="52"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
@@ -5215,37 +5215,37 @@
 <context>
     <name>client::SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="137"/>
         <source>License Type</source>
         <translation>Тип лицензии</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
         <translation>Версия лицензии</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="145"/>
         <source>Organization</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="149"/>
         <source>Owner</source>
         <translation>Владелец</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product ID</source>
         <translation>ID продукта</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="157"/>
         <source>Product Key</source>
         <translation>Ключ продукта</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="162"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="161"/>
         <source>Unknown Field</source>
         <translation>Неизвестное поле</translation>
     </message>
@@ -5253,85 +5253,85 @@
 <context>
     <name>client::SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="145"/>
         <source>Full Name</source>
         <translation>Полное имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="148"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="151"/>
         <source>Home Directory</source>
         <translation>Домашняя директория</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Disabled</source>
         <translation>Отключен</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Password Can&apos;t Change</source>
         <translation>Пароль не может быть изменен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Password Expired</source>
         <translation>Пароль просрочен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <source>Don&apos;t Expire Password</source>
         <translation>Срок действия пароля не ограничен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
         <source>Lockout</source>
         <translation>Заблокирован</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Never</source>
         <translation>Никогда</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="169"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
         <source>Last Logon</source>
         <translation>Последний вход</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="166"/>
         <source>Number Logons</source>
         <translation>Количество входов</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="171"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="167"/>
         <source>Bad Password Count</source>
         <translation>Неправильных вводов пароля</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="179"/>
         <source>Groups</source>
         <translation>Группы</translation>
     </message>
@@ -5339,27 +5339,27 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
         <translation>Имя монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
         <translation>ID монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
         <translation>Серийный номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
         <translation>Версия EDID</translation>
     </message>
@@ -5376,7 +5376,7 @@
         <translation type="vanished">Год производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="180"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
         <translation>Гамма</translation>
     </message>
@@ -5393,7 +5393,7 @@
         <translation type="vanished">Вертикальный размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
         <translation>Размер диагонали</translation>
     </message>
@@ -5426,7 +5426,7 @@
         <translation type="vanished">Минимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
@@ -5435,113 +5435,113 @@
         <translation type="vanished">Максимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
         <translation>Дата производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
         <translation>Неделя %1 / %2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
         <translation>Размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="199"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
         <translation>Частота строк</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 кГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
         <translation>Частота кадров</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="214"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Гц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
         <translation>Пиксельная частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
         <translation>Максимальная пиксельная частота</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
         <translation>Поддерживаемые возможности</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="248"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
         <translation>Поддерживаемые видеорежимы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
         <translation>Тип входного сигнала</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation>Цифровой</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation>Аналоговый</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="300"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="299"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -5549,67 +5549,67 @@
 <context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="138"/>
         <source>Adapter Name</source>
         <translation>Имя адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="141"/>
         <source>Interface Type</source>
         <translation>Тип интерфейса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Connection Speed</source>
         <translation>Скорость соединения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="147"/>
         <source>MAC Address</source>
         <translation>MAC адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>DHCP Enabled</source>
         <translation>DHCP включен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP сервер #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server</source>
         <translation>DHCP сервер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address #%1</source>
         <translation>Адрес #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway #%1</source>
         <translation>Шлюз #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
@@ -5617,32 +5617,32 @@
 <context>
     <name>client::SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="132"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="135"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="138"/>
         <source>Local Path</source>
         <translation>Локальный путь</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="140"/>
         <source>Current Uses</source>
         <translation>Количество использований</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="143"/>
         <source>Not limited</source>
         <translation>Не ограничено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Maximum Uses</source>
         <translation>Максимум использований</translation>
     </message>
@@ -5650,22 +5650,22 @@
 <context>
     <name>client::SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="145"/>
         <source>Power Source</source>
         <translation>Источник питания</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="147"/>
         <source>Battery Status</source>
         <translation>Состояние батареи</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="153"/>
         <source>Battery Life Percent</source>
         <translation>Уровень заряда</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="159"/>
         <source>Full Battery Life Time</source>
         <translation>Полное время работы</translation>
     </message>
@@ -5674,150 +5674,150 @@
         <translation type="vanished">%1 с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="166"/>
         <source>Remaining Battery Life Time</source>
         <translation>Оставшееся время работы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="182"/>
         <source>Device Name</source>
         <translation>Имя устройства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="185"/>
         <source>Manufacturer</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="188"/>
         <source>Manufacture Date</source>
         <translation>Дата производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="191"/>
         <source>Unique Id</source>
         <translation>Уникальный идентификатор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="194"/>
         <source>Serial Number</source>
         <translation>Серийный номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="198"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="197"/>
         <source>Tempareture</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
         <source>Design Capacity</source>
         <translation>Исходная емкость</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>%1 mWh</source>
         <translation>%1 мВт/ч</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="203"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
         <source>Full Charged Capacity</source>
         <translation>Полная емкость</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="209"/>
         <source>Depreciation</source>
         <translation>Степень износа</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>Current Capacity</source>
         <translation>Текущая емкость</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>Voltage</source>
         <translation>Напряжение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>%1 mV</source>
         <translation>%1 мВ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="307"/>
         <source>Charging</source>
         <translation>Зарядка</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="305"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="304"/>
         <source>Critical</source>
         <translation>Критическое</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>Discharging</source>
         <translation>Разрядка</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Power OnLine</source>
         <translation>Питание от сети</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="234"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="239"/>
         <source>Battery #%1</source>
         <translation>Батарея #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="281"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="280"/>
         <source>DC Battery</source>
         <translation>Батарея постоянного тока</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="283"/>
         <source>AC Line</source>
         <translation>Линия переменного тока</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="287"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="299"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <source>High</source>
         <translation>Высокий заряд</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="301"/>
         <source>Low</source>
         <translation>Низкий заряд</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>No Battery</source>
         <translation>Нет батареи</translation>
     </message>
@@ -5825,44 +5825,44 @@
 <context>
     <name>client::SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="140"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="143"/>
         <source>Driver</source>
         <translation>Драйвер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Shared</source>
         <translation>Общий доступ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="148"/>
         <source>Share Name</source>
         <translation>Имя общего ресурса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="150"/>
         <source>Jobs Count</source>
         <translation>Количество заданий</translation>
     </message>
@@ -5870,12 +5870,12 @@
 <context>
     <name>client::SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="142"/>
         <source>System Idle Process</source>
         <translation>Бездействие системы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>Unknown Process</source>
         <translation>Неизвестный процесс</translation>
     </message>
@@ -5952,178 +5952,178 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="152"/>
         <source>Host Version</source>
         <translation>Версия Хоста</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
         <source>Client Version</source>
         <translation>Версия Клиента</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
         <source>Router Version</source>
         <translation>Версия Маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
         <source>Aspia Information</source>
         <translation>Информация о Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="166"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="165"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="137"/>
         <source>Domain</source>
         <translation>Домен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="140"/>
         <source>Workgroup</source>
         <translation>Рабочая группа</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="143"/>
         <source>Uptime</source>
         <translation>Время работы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="146"/>
         <source>Computer</source>
         <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="169"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="241"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="240"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="172"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="171"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="174"/>
         <source>License Key</source>
         <translation>Лицензионный ключ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="178"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="177"/>
         <source>Install Date</source>
         <translation>Дата установки</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="182"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="265"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="264"/>
         <source>Manufacturer</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="196"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="211"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="210"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="200"/>
         <source>Motherboard</source>
         <translation>Материнская плата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="214"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="238"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="237"/>
         <source>Vendor</source>
         <translation>Поставщик</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="217"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="216"/>
         <source>Packages</source>
         <translation>Сокетов</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Cores</source>
         <translation>Ядер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="223"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Threads</source>
         <translation>Потоков</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="227"/>
         <source>Processor</source>
         <translation>Процессор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="243"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="268"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="267"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>Speed</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="274"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="273"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Form Factor</source>
         <translation>Форм-фактор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="280"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="279"/>
         <source>Part Number</source>
         <translation>Номер партии</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
         <source>Installed</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="355"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="293"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="323"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="322"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 свободно)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="333"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="332"/>
         <source>Logical Drives</source>
         <translation>Логические диски</translation>
     </message>
@@ -6235,52 +6235,52 @@
 <context>
     <name>client::SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="130"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="133"/>
         <source>Adapter String</source>
         <translation>Строка адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="136"/>
         <source>BIOS String</source>
         <translation>Строка BIOS</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="139"/>
         <source>Chip Type</source>
         <translation>Тип чипа</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="142"/>
         <source>DAC Type</source>
         <translation>Тип ЦАП</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>Memory Size</source>
         <translation>Размер памяти</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="148"/>
         <source>Driver Date</source>
         <translation>Дата драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="151"/>
         <source>Driver Version</source>
         <translation>Версия драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="154"/>
         <source>Driver Provider</source>
         <translation>Поставщик драйвера</translation>
     </message>

@@ -22,7 +22,6 @@
 #include <QByteArray>
 #include <QVector>
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/desktop/mouse_cursor.h"
 #include "proto/desktop.h"
@@ -50,7 +49,7 @@ private:
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
+    Q_DISABLE_COPY(CursorDecoder)
 };
 
 } // namespace base

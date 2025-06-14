@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-#include "base/macros_magic.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_admin.h"
 
@@ -84,7 +83,7 @@ private:
     bool auto_reconnect_ = true;
     bool reconnect_in_progress_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(Router);
+    Q_DISABLE_COPY(Router)
 };
 
 } // namespace client

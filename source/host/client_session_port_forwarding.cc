@@ -61,8 +61,7 @@ public:
 
 private:
     ClientSessionPortForwarding* parent_;
-
-    DISALLOW_COPY_AND_ASSIGN(Handler);
+    Q_DISABLE_COPY(Handler);
 };
 
 //--------------------------------------------------------------------------------------------------

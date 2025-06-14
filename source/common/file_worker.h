@@ -21,12 +21,11 @@
 
 #include <QObject>
 
-#include "base/macros_magic.h"
+#include <memory>
+
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
 #include "common/file_task.h"
-
-#include <memory>
 
 namespace common {
 
@@ -57,7 +56,7 @@ private:
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileWorker);
+    Q_DISABLE_COPY(FileWorker)
 };
 
 } // namespace common

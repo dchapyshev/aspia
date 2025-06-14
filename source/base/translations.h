@@ -23,8 +23,6 @@
 #include <QStringList>
 #include <QVector>
 
-#include "base/macros_magic.h"
-
 #include <utility>
 
 class QTranslator;
@@ -50,7 +48,7 @@ private:
     QHash<QString, QStringList> locale_list_;
     QVector<QTranslator*> translator_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(Translations);
+    Q_DISABLE_COPY(Translations)
 };
 
 } // namespace base

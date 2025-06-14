@@ -44,7 +44,7 @@ private:
 
     QImage image_;
 
-    DISALLOW_COPY_AND_ASSIGN(FrameQImage);
+    Q_DISABLE_COPY(FrameQImage)
 };
 
 } // namespace base

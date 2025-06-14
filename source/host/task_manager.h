@@ -19,11 +19,11 @@
 #ifndef HOST_TASK_MANAGER_H
 #define HOST_TASK_MANAGER_H
 
-#include "base/macros_magic.h"
-#include "proto/task_manager.h"
-
 #include <QObject>
+
 #include <memory>
+
+#include "proto/task_manager.h"
 
 namespace host {
 
@@ -50,7 +50,7 @@ private:
 
     std::unique_ptr<ProcessMonitor> process_monitor_;
 
-    DISALLOW_COPY_AND_ASSIGN(TaskManager);
+    Q_DISABLE_COPY(TaskManager)
 };
 
 } // namespace host

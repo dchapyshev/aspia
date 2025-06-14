@@ -111,7 +111,7 @@ private:
 
     THREAD_CHECKER(thread_checker_);
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerMac);
+    Q_DISABLE_COPY(ScreenCapturerMac)
 };
 
 } // namespace base

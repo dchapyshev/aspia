@@ -19,7 +19,6 @@
 #ifndef CONSOLE_OPEN_ADDRESS_BOOK_DIALOG_H
 #define CONSOLE_OPEN_ADDRESS_BOOK_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "proto/address_book.h"
 #include "ui_open_address_book_dialog.h"
 
@@ -43,8 +42,7 @@ private slots:
 
 private:
     Ui::OpenAddressBookDialog ui;
-
-    DISALLOW_COPY_AND_ASSIGN(OpenAddressBookDialog);
+    Q_DISABLE_COPY(OpenAddressBookDialog)
 };
 
 } // namespace console

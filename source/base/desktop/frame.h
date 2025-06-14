@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_FRAME_H
 #define BASE_DESKTOP_FRAME_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/pixel_format.h"
 #include "base/desktop/region.h"
 
@@ -90,7 +89,7 @@ private:
     Point dpi_;
     quint32 capturer_type_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Frame);
+    Q_DISABLE_COPY(Frame)
 };
 
 } // namespace base

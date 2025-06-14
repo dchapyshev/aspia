@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_HDC_H
 #define BASE_WIN_SCOPED_HDC_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -62,7 +61,7 @@ private:
     HWND hwnd_ = nullptr;
     HDC hdc_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedGetDC);
+    Q_DISABLE_COPY(ScopedGetDC)
 };
 
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from
@@ -101,7 +100,7 @@ private:
 
     HDC hdc_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
+    Q_DISABLE_COPY(ScopedCreateDC)
 };
 
 } // namespace base

@@ -21,8 +21,6 @@
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
-
 namespace Ui {
 class AboutDialog;
 } // namespace Ui
@@ -43,7 +41,7 @@ private slots:
 private:
     std::unique_ptr<Ui::AboutDialog> ui;
 
-    DISALLOW_COPY_AND_ASSIGN(AboutDialog);
+    Q_DISABLE_COPY(AboutDialog)
 };
 
 } // namespace common

@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_ITEM_DELEGATE_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_ITEM_DELEGATE_H
 
-#include "base/macros_magic.h"
-
 #include <QStyledItemDelegate>
 
 namespace client {
@@ -48,7 +46,7 @@ signals:
     void sig_editFinished();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FileItemDelegate);
+    Q_DISABLE_COPY(FileItemDelegate)
 };
 
 } // namespace client

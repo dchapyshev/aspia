@@ -27,8 +27,6 @@
 #include <QDir>
 #endif
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 // We use the native implementation of getting the list of files in a directory because QDir tries
@@ -72,7 +70,7 @@ private:
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
 #endif
 
-    DISALLOW_COPY_AND_ASSIGN(FileEnumerator);
+    Q_DISABLE_COPY(FileEnumerator)
 };
 
 }  // namespace base

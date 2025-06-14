@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_WTS_MEMORY_H
 #define BASE_WIN_SCOPED_WTS_MEMORY_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 #include <WtsApi32.h>
 
@@ -85,7 +84,7 @@ private:
 
     T* memory_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
+    Q_DISABLE_COPY(ScopedWtsMemory)
 };
 
 } // namespace base

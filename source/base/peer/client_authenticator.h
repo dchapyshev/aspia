@@ -79,7 +79,7 @@ private:
     BigNum a_;
     BigNum A_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientAuthenticator);
+    Q_DISABLE_COPY(ClientAuthenticator)
 };
 
 } // namespace base

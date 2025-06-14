@@ -19,8 +19,6 @@
 #ifndef HOST_PROCESS_MONITOR_H
 #define HOST_PROCESS_MONITOR_H
 
-#include "base/macros_magic.h"
-
 #include <QByteArray>
 #include <QMap>
 #include <QString>
@@ -79,7 +77,7 @@ private:
     qint64 prev_cpu_idle_time_[kMaxCpuCount];
     qint64 prev_cpu_total_time_[kMaxCpuCount];
 
-    DISALLOW_COPY_AND_ASSIGN(ProcessMonitor);
+    Q_DISABLE_COPY(ProcessMonitor)
 };
 
 } // namespace host

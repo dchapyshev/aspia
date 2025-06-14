@@ -21,8 +21,6 @@
 
 #include <QAbstractEventDispatcher>
 
-#include "base/macros_magic.h"
-
 #include <asio/io_context.hpp>
 #include <asio/steady_timer.hpp>
 
@@ -97,7 +95,7 @@ private:
     std::unordered_map<int, TimerData> timers_;
     asio::steady_timer timer_;
 
-    DISALLOW_COPY_AND_ASSIGN(AsioEventDispatcher);
+    Q_DISABLE_COPY(AsioEventDispatcher)
 };
 
 } // namespace base

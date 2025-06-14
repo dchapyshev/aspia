@@ -37,7 +37,7 @@ public:
     void injectTouchEvent(const proto::TouchEvent& event) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(InputInjectorMac);
+    Q_DISABLE_COPY(InputInjectorMac)
 };
 
 } // namespace host

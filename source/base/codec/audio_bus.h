@@ -22,7 +22,6 @@
 #include <QVector>
 
 #include "base/aligned_memory.h"
-#include "base/macros_magic.h"
 
 #include <memory>
 
@@ -216,7 +215,7 @@ private:
     // Protect SetChannelData() and set_frames() for use by CreateWrapper().
     bool can_set_channel_data_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioBus);
+    Q_DISABLE_COPY(AudioBus)
 };
 
 // Delegates to FromInterleavedPartial()

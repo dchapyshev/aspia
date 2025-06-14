@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_DESKTOP_RESIZER_X11_H
 #define BASE_DESKTOP_DESKTOP_RESIZER_X11_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/desktop_resizer.h"
 
 namespace base {
@@ -37,7 +36,7 @@ public:
     void restoreResulution() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(DesktopResizerX11);
+    Q_DISABLE_COPY(DesktopResizerX11)
 };
 
 } // namespace base

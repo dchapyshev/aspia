@@ -19,7 +19,6 @@
 #ifndef HOST_DESKTOP_SESSION_FAKE_H
 #define HOST_DESKTOP_SESSION_FAKE_H
 
-#include "base/macros_magic.h"
 #include "host/desktop_session.h"
 
 namespace host {
@@ -46,7 +45,7 @@ public:
     void injectClipboardEvent(const proto::desktop::ClipboardEvent& event) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionFake);
+    Q_DISABLE_COPY(DesktopSessionFake)
 };
 
 } // namespace host

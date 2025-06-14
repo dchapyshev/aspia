@@ -22,7 +22,6 @@
 #include <QList>
 #include <QTimer>
 
-#include "base/macros_magic.h"
 #include "base/location.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
@@ -58,7 +57,7 @@ private:
     QList<QByteArray> pending_messages_;
     bool has_logged_on_user_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
+    Q_DISABLE_COPY(ClientSessionFileTransfer)
 };
 
 } // namespace host

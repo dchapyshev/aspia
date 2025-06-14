@@ -19,7 +19,8 @@
 #ifndef ROUTER_DATABASE_FACTORY_SQLITE_H
 #define ROUTER_DATABASE_FACTORY_SQLITE_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
+
 #include "router/database_factory.h"
 
 namespace router {
@@ -34,7 +35,7 @@ public:
     std::unique_ptr<Database> openDatabase() const final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(DatabaseFactorySqlite);
+    Q_DISABLE_COPY(DatabaseFactorySqlite)
 };
 
 } // namespace router

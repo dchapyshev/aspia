@@ -81,7 +81,7 @@ private:
 
     std::unique_ptr<char[]> play_buffer_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioOutputPulse);
+    Q_DISABLE_COPY(AudioOutputPulse)
 };
 
 } // namespace base

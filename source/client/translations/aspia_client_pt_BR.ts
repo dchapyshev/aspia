@@ -2936,34 +2936,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="371"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="380"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Warning</source>
         <translation type="unfinished">Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1098"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1099"/>
         <source>Save File</source>
         <translation type="unfinished">Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1100"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Could not save image</source>
         <translation type="unfinished">Não foi possível salvar a imagem</translation>
     </message>
@@ -3976,17 +3976,17 @@
 <context>
     <name>client::SelectScreenAction</name>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="37"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="36"/>
         <source>Full Desktop</source>
         <translation>Área de Trabalho Completa</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="50"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished">Monitor %1 (primário)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="52"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation type="unfinished">Monitor %1</translation>
     </message>
@@ -4676,37 +4676,37 @@
 <context>
     <name>client::SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="137"/>
         <source>License Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="145"/>
         <source>Organization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="149"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="157"/>
         <source>Product Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="162"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="161"/>
         <source>Unknown Field</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4714,85 +4714,85 @@
 <context>
     <name>client::SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="145"/>
         <source>Full Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="148"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="151"/>
         <source>Home Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Password Can&apos;t Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Password Expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <source>Don&apos;t Expire Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
         <source>Lockout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="169"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
         <source>Last Logon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="166"/>
         <source>Number Logons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="171"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="167"/>
         <source>Bad Password Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="179"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4800,153 +4800,153 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="180"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="199"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="214"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
         <translation type="unfinished">%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="248"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="300"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="299"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4954,67 +4954,67 @@
 <context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="138"/>
         <source>Adapter Name</source>
         <translation type="unfinished">Nome do adaptador</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="141"/>
         <source>Interface Type</source>
         <translation type="unfinished">Tipo de interface</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Connection Speed</source>
         <translation type="unfinished">Velocidade de conexão</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="147"/>
         <source>MAC Address</source>
         <translation type="unfinished">Endereço MAC</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>DHCP Enabled</source>
         <translation type="unfinished">DHCP ativo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server #%1</source>
         <translation type="unfinished">Servidor DHCP #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server</source>
         <translation type="unfinished">Servidor DHCP</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address #%1</source>
         <translation type="unfinished">Endereço #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address</source>
         <translation type="unfinished">Endereço</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway #%1</source>
         <translation type="unfinished">Gateway #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway</source>
         <translation type="unfinished">Gateway</translation>
     </message>
@@ -5022,32 +5022,32 @@
 <context>
     <name>client::SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="132"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="135"/>
         <source>Type</source>
         <translation type="unfinished">Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="138"/>
         <source>Local Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="140"/>
         <source>Current Uses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="143"/>
         <source>Not limited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Maximum Uses</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5055,170 +5055,170 @@
 <context>
     <name>client::SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="145"/>
         <source>Power Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="147"/>
         <source>Battery Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="153"/>
         <source>Battery Life Percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="159"/>
         <source>Full Battery Life Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="166"/>
         <source>Remaining Battery Life Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="182"/>
         <source>Device Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="185"/>
         <source>Manufacturer</source>
         <translation type="unfinished">Fabricante</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="188"/>
         <source>Manufacture Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="191"/>
         <source>Unique Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="194"/>
         <source>Serial Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="198"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="197"/>
         <source>Tempareture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
         <source>Design Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>%1 mWh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="203"/>
         <source>Type</source>
         <translation type="unfinished">Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
         <source>Full Charged Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="209"/>
         <source>Depreciation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>Current Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>Voltage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>%1 mV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="307"/>
         <source>Charging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="305"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="304"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>Discharging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Power OnLine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="234"/>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="239"/>
         <source>Battery #%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="281"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="280"/>
         <source>DC Battery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="283"/>
         <source>AC Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="287"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="299"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="301"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>No Battery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5226,44 +5226,44 @@
 <context>
     <name>client::SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
         <source>Default</source>
         <translation type="unfinished">Padrão</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="140"/>
         <source>Port</source>
         <translation type="unfinished">Porta</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="143"/>
         <source>Driver</source>
         <translation type="unfinished">Driver</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Shared</source>
         <translation type="unfinished">Compartilhado</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="148"/>
         <source>Share Name</source>
         <translation type="unfinished">Nome de compartilhamento</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="150"/>
         <source>Jobs Count</source>
         <translation type="unfinished">Contador de serviços</translation>
     </message>
@@ -5271,12 +5271,12 @@
 <context>
     <name>client::SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="142"/>
         <source>System Idle Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5353,178 +5353,178 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="152"/>
         <source>Host Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
         <source>Client Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
         <source>Router Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
         <source>Aspia Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="166"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="165"/>
         <source>Name</source>
         <translation type="unfinished">Nome</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="137"/>
         <source>Domain</source>
         <translation type="unfinished">Domínio</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="140"/>
         <source>Workgroup</source>
         <translation type="unfinished">Grupo de trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="143"/>
         <source>Uptime</source>
         <translation type="unfinished">Tempo de atividade</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="146"/>
         <source>Computer</source>
         <translation type="unfinished">Computador</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="169"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="241"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="240"/>
         <source>Version</source>
         <translation type="unfinished">Versão</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="172"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="171"/>
         <source>Architecture</source>
         <translation type="unfinished">Arquitetura</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="174"/>
         <source>License Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="178"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="177"/>
         <source>Install Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="182"/>
         <source>Operating System</source>
         <translation type="unfinished">Sistema Operacional</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="265"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="264"/>
         <source>Manufacturer</source>
         <translation type="unfinished">Fabricante</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="196"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="211"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="210"/>
         <source>Model</source>
         <translation type="unfinished">Modelo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="200"/>
         <source>Motherboard</source>
         <translation type="unfinished">Placa mãe</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="214"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="238"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="237"/>
         <source>Vendor</source>
         <translation type="unfinished">Fornecedor</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="217"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="216"/>
         <source>Packages</source>
         <translation type="unfinished">Pacotes</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Cores</source>
         <translation type="unfinished">Núcleos</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="223"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Threads</source>
         <translation type="unfinished">Threads</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="227"/>
         <source>Processor</source>
         <translation type="unfinished">Processador</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="243"/>
         <source>Date</source>
         <translation type="unfinished">Data</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="268"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="267"/>
         <source>Size</source>
         <translation type="unfinished">Tamanho</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>Speed</source>
         <translation type="unfinished">Velocidade</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>%1 MHz</source>
         <translation type="unfinished">%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="274"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="273"/>
         <source>Type</source>
         <translation type="unfinished">Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Form Factor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="280"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="279"/>
         <source>Part Number</source>
         <translation type="unfinished">Part Number</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
         <source>Installed</source>
         <translation type="unfinished">Instalado</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="355"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="293"/>
         <source>Memory</source>
         <translation type="unfinished">Memória</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="323"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="322"/>
         <source>%1 (%2 free)</source>
         <translation type="unfinished">%1 (%2 livre)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="333"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="332"/>
         <source>Logical Drives</source>
         <translation type="unfinished">Unidades lógicas</translation>
     </message>
@@ -5612,52 +5612,52 @@
 <context>
     <name>client::SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="130"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="133"/>
         <source>Adapter String</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="136"/>
         <source>BIOS String</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="139"/>
         <source>Chip Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="142"/>
         <source>DAC Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>Memory Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>%1 bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="148"/>
         <source>Driver Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="151"/>
         <source>Driver Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="154"/>
         <source>Driver Provider</source>
         <translation type="unfinished"></translation>
     </message>

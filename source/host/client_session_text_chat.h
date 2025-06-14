@@ -19,7 +19,6 @@
 #ifndef HOST_CLIENT_SESSION_TEXT_CHAT_H
 #define HOST_CLIENT_SESSION_TEXT_CHAT_H
 
-#include "base/macros_magic.h"
 #include "host/client_session.h"
 
 namespace host {
@@ -46,7 +45,7 @@ protected:
 private:
     bool has_user_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionTextChat);
+    Q_DISABLE_COPY(ClientSessionTextChat)
 };
 
 } // namespace host

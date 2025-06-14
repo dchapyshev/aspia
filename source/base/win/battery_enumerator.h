@@ -65,7 +65,7 @@ private:
     mutable Device battery_;
     mutable DWORD battery_tag_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(BatteryEnumerator);
+    Q_DISABLE_COPY(BatteryEnumerator)
 };
 
 } // namespace base

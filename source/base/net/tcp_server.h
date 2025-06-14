@@ -22,9 +22,9 @@
 #include <QQueue>
 #include <QObject>
 
-#include "base/net/tcp_channel.h"
-
 #include <asio/ip/address.hpp>
+
+#include "base/net/tcp_channel.h"
 
 namespace base {
 
@@ -56,7 +56,7 @@ private:
 
     QQueue<TcpChannel*> pending_;
 
-    DISALLOW_COPY_AND_ASSIGN(TcpServer);
+    Q_DISABLE_COPY(TcpServer)
 };
 
 } // namespace base

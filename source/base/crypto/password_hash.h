@@ -21,8 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class PasswordHash
@@ -38,7 +36,7 @@ public:
     static std::string hash(Type type, const QString& password, std::string_view salt);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(PasswordHash);
+    Q_DISABLE_COPY(PasswordHash)
 };
 
 } // namespace base

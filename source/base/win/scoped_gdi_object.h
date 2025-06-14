@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_GDI_OBJECT_H
 #define BASE_WIN_SCOPED_GDI_OBJECT_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -67,7 +66,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedGDIObject);
+    Q_DISABLE_COPY(ScopedGDIObject)
 };
 
 // The traits class that uses DeleteObject() to close a handle.

@@ -19,7 +19,8 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
 #define BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
+
 #include "base/crypto/data_cryptor.h"
 
 namespace base {
@@ -34,7 +35,7 @@ public:
     bool decrypt(std::string_view in, std::string* out) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(DataCryptorFake);
+    Q_DISABLE_COPY(DataCryptorFake)
 };
 
 } // namespace base

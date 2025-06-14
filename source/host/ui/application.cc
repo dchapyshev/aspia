@@ -53,8 +53,7 @@ public:
 
 private:
     EventFilter() = default;
-
-    DISALLOW_COPY_AND_ASSIGN(EventFilter);
+    Q_DISABLE_COPY(EventFilter)
 };
 
 //--------------------------------------------------------------------------------------------------

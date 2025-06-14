@@ -21,10 +21,9 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-#include "base/win/scoped_object.h"
-
 #include <memory>
+
+#include "base/win/scoped_object.h"
 
 namespace base {
 
@@ -55,7 +54,7 @@ private:
     quint32 num_entries_ = 0;
     quint32 pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ConnectEnumerator);
+    Q_DISABLE_COPY(ConnectEnumerator)
 };
 
 } // namespace base

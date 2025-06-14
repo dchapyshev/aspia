@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "base/macros_magic.h"
-
 #include <chrono>
 #include <memory>
 
@@ -80,7 +78,7 @@ private:
     quint64 video_track_num_ = 0;
     bool initialized_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(WebmFileMuxer);
+    Q_DISABLE_COPY(WebmFileMuxer)
 };
 
 } // namespace base

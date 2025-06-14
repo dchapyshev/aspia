@@ -69,7 +69,7 @@ public:
 private:
     ScopedWtsMemory<WTSINFOEXW> info_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionInfo);
+    Q_DISABLE_COPY(SessionInfo)
 };
 
 } // namespace base

@@ -19,8 +19,6 @@
 #ifndef BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
 #define BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
 
-#include "base/macros_magic.h"
-
 #include <functional>
 #include <memory>
 
@@ -46,7 +44,7 @@ private:
     class Watcher;
     std::unique_ptr<Watcher> impl_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileDescriptorWatcher);
+    Q_DISABLE_COPY(FileDescriptorWatcher)
 };
 
 } // namespace base

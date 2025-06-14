@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_USER_OBJECT_H
 #define BASE_WIN_SCOPED_USER_OBJECT_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -77,7 +76,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedUserObject);
+    Q_DISABLE_COPY(ScopedUserObject)
 };
 
 // The traits class that uses DestroyWindow() to close a handle.

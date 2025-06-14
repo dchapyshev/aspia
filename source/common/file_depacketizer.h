@@ -21,10 +21,9 @@
 
 #include <QFile>
 
-#include "base/macros_magic.h"
-#include "proto/file_transfer.h"
-
 #include <memory>
+
+#include "proto/file_transfer.h"
 
 namespace common {
 
@@ -47,7 +46,7 @@ private:
     quint64 file_size_ = 0;
     quint64 left_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
+    Q_DISABLE_COPY(FileDepacketizer)
 };
 
 } // namespace common

@@ -21,10 +21,10 @@
 
 #include <QObject>
 
+#include <optional>
+
 #include "relay/key_pool.h"
 #include "relay/session_key.h"
-
-#include <optional>
 
 namespace relay {
 
@@ -52,7 +52,7 @@ signals:
 private:
     std::shared_ptr<KeyPool> pool_;
 
-    DISALLOW_COPY_AND_ASSIGN(KeyFactory);
+    Q_DISABLE_COPY(KeyFactory)
 };
 
 } // namespace relay

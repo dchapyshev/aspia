@@ -68,7 +68,7 @@ private:
     ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    DISALLOW_COPY_AND_ASSIGN(ServiceController);
+    Q_DISABLE_COPY(ServiceController)
 };
 
 } // namespace base

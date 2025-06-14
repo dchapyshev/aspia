@@ -21,14 +21,13 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
+#include <memory>
+
 #include "base/session_id.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <memory>
 
 namespace ipc {
 class Channel;
@@ -65,7 +64,7 @@ private:
     const pid_t pid_;
 #endif // defined(Q_OS_LINUX)
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionProcess);
+    Q_DISABLE_COPY(DesktopSessionProcess)
 };
 
 } // namespace host

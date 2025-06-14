@@ -19,11 +19,11 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_SESSION_WINDOW_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_SESSION_WINDOW_H
 
+#include <QPointer>
+
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "client/ui/session_window.h"
-
-#include <QPointer>
 
 namespace Ui {
 class FileTransferSessionWindow;
@@ -102,7 +102,7 @@ private:
     QPointer<FileRemoveDialog> remove_dialog_;
     QPointer<FileTransferDialog> transfer_dialog_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTransferSessionWindow);
+    Q_DISABLE_COPY(FileTransferSessionWindow)
 };
 
 } // namespace client

@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
 #include "client/client_config.h"
 #include "proto/address_book.h"
 #include "ui_fast_connect_dialog.h"
@@ -65,7 +64,7 @@ private:
     std::optional<client::RouterConfig> router_config_;
     State state_;
 
-    DISALLOW_COPY_AND_ASSIGN(FastConnectDialog);
+    Q_DISABLE_COPY(FastConnectDialog)
 };
 
 } // namespace console

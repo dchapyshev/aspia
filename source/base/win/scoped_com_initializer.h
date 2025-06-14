@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_COM_INITIALIZER_H
 #define BASE_WIN_SCOPED_COM_INITIALIZER_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <objbase.h>
 
 namespace base {
@@ -53,7 +52,7 @@ private:
 
     HRESULT hr_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
+    Q_DISABLE_COPY(ScopedCOMInitializer)
 };
 
 } // namespace base

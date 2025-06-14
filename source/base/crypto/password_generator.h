@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class PasswordGenerator
@@ -53,7 +51,7 @@ private:
     quint32 characters_ = kDefaultCharacters;
     QString::size_type length_ = kDefaultLength;
 
-    DISALLOW_COPY_AND_ASSIGN(PasswordGenerator);
+    Q_DISABLE_COPY(PasswordGenerator)
 };
 
 } // namespace base

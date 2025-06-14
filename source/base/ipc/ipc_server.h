@@ -27,8 +27,6 @@
 #include <array>
 #include <memory>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class IpcChannel;
@@ -71,7 +69,7 @@ private:
     std::array<std::shared_ptr<Listener>, kListenersCount> listeners_;
     QQueue<IpcChannel*> pending_;
 
-    DISALLOW_COPY_AND_ASSIGN(IpcServer);
+    Q_DISABLE_COPY(IpcServer)
 };
 
 } // namespace base

@@ -19,10 +19,10 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_LIST_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_LIST_H
 
+#include <QTreeView>
+
 #include "client/file_transfer.h"
 #include "proto/file_transfer.h"
-
-#include <QTreeView>
 
 namespace client {
 
@@ -65,7 +65,7 @@ private:
     QByteArray drive_list_state_;
     QByteArray file_list_state_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileList);
+    Q_DISABLE_COPY(FileList)
 };
 
 } // namespace client

@@ -19,7 +19,6 @@
 #ifndef HOST_FILE_AGENT_H
 #define HOST_FILE_AGENT_H
 
-#include "base/macros_magic.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/file_worker.h"
@@ -47,7 +46,7 @@ private:
     base::Parser<proto::file_transfer::Request> request_;
     base::Serializer<proto::file_transfer::Reply> reply_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileAgent);
+    Q_DISABLE_COPY(FileAgent)
 };
 
 } // namespace host

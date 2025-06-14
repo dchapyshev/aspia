@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include "base/macros_magic.h"
 #include "proto/desktop.h"
 
 struct OpusDecoder;
@@ -45,7 +44,7 @@ private:
     int channels_ = 0;
     OpusDecoder* decoder_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioDecoder);
+    Q_DISABLE_COPY(AudioDecoder)
 };
 
 } // namespace base

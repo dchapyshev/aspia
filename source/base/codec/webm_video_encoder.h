@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/desktop/geometry.h"
 
@@ -57,6 +56,8 @@ private:
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;
+
+    Q_DISABLE_COPY(WebmVideoEncoder)
 };
 
 } // namespace base

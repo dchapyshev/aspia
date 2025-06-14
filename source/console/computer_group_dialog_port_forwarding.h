@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_GROUP_DIALOG_PORT_FORWARDING_H
 #define CONSOLE_COMPUTER_GROUP_DIALOG_PORT_FORWARDING_H
 
-#include "base/macros_magic.h"
 #include "console/computer_group_dialog_tab.h"
 #include "proto/address_book.h"
 #include "ui_computer_group_dialog_port_forwarding.h"
@@ -39,8 +38,7 @@ public:
 
 private:
     Ui::ComputerGroupDialogPortForwarding ui;
-
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialogPortForwarding);
+    Q_DISABLE_COPY(ComputerGroupDialogPortForwarding)
 };
 
 } // namespace console

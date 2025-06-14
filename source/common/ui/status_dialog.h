@@ -21,8 +21,6 @@
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
-
 namespace Ui {
 class StatusDialog;
 } // namespace Ui
@@ -48,7 +46,7 @@ protected:
 private:
     std::unique_ptr<Ui::StatusDialog> ui;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
+    Q_DISABLE_COPY(StatusDialog)
 };
 
 } // namespace common

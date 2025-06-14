@@ -19,8 +19,7 @@
 #ifndef BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
 #define BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -35,7 +34,7 @@ public:
 
 private:
     HANDLE mmcss_handle_ = nullptr;
-    DISALLOW_COPY_AND_ASSIGN(ScopedMMCSSRegistration);
+    Q_DISABLE_COPY(ScopedMMCSSRegistration)
 };
 
 } // namespace base

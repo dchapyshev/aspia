@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_PLAYER_H
 #define BASE_AUDIO_AUDIO_PLAYER_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
 
 #include <memory>
 #include <mutex>
@@ -54,7 +54,7 @@ private:
     std::queue<std::unique_ptr<proto::desktop::AudioPacket>> work_queue_;
     size_t source_pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioPlayer);
+    Q_DISABLE_COPY(AudioPlayer)
 };
 
 } // namespace base

@@ -57,7 +57,7 @@ private:
     // this class.
     _XDisplay* display_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ClipboardX11);
+    Q_DISABLE_COPY(ClipboardX11)
 };
 
 } // namespace common

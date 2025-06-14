@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
 #include "proto/desktop.h"
 #include "proto/peer.h"
 
@@ -69,7 +68,7 @@ private:
     std::unique_ptr<Ui::DesktopConfigDialog> ui;
     proto::desktop::Config config_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
+    Q_DISABLE_COPY(DesktopConfigDialog)
 };
 
 } // namespace client

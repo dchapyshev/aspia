@@ -18,11 +18,10 @@
 
 #include "client/ui/sys_info/sys_info_widget_net_adapters.h"
 
-#include "base/macros_magic.h"
+#include <QMenu>
+
 #include "base/logging.h"
 #include "common/system_info_constants.h"
-
-#include <QMenu>
 
 namespace client {
 
@@ -54,7 +53,7 @@ public:
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Item);
+    Q_DISABLE_COPY(Item)
 };
 
 //--------------------------------------------------------------------------------------------------

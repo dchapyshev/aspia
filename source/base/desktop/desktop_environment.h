@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include "base/macros_magic.h"
-
 #include <optional>
 
 namespace base {
@@ -56,7 +54,7 @@ private:
     std::optional<bool> font_smoothing_;
     std::optional<bool> effects_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironment);
+    Q_DISABLE_COPY(DesktopEnvironment)
 };
 
 } // namespace base

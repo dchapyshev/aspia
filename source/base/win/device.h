@@ -46,7 +46,7 @@ public:
 private:
     ScopedHandle device_;
 
-    DISALLOW_COPY_AND_ASSIGN(Device);
+    Q_DISABLE_COPY(Device)
 };
 
 } // namespace base

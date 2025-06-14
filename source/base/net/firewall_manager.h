@@ -22,8 +22,6 @@
 #include <QString>
 #include <QVector>
 
-#include "base/macros_magic.h"
-
 #include <wrl/client.h>
 #include <netfw.h>
 
@@ -74,7 +72,7 @@ private:
 
     QString application_path_;
 
-    DISALLOW_COPY_AND_ASSIGN(FirewallManager);
+    Q_DISABLE_COPY(FirewallManager)
 };
 
 } // namespace base

@@ -19,9 +19,9 @@
 #ifndef BASE_WIN_SCOPED_SELECT_OBJECT_H
 #define BASE_WIN_SCOPED_SELECT_OBJECT_H
 
-#include "base/logging.h"
-
 #include <qt_windows.h>
+
+#include "base/logging.h"
 
 namespace base {
 
@@ -49,7 +49,7 @@ private:
     HDC hdc_;
     HGDIOBJ oldobj_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedSelectObject);
+    Q_DISABLE_COPY(ScopedSelectObject)
 };
 
 } // namespace base

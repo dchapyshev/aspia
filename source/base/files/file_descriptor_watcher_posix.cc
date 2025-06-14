@@ -38,7 +38,7 @@ private:
     Callback callback_;
     asio::posix::descriptor::wait_type wait_type_;
 
-    DISALLOW_COPY_AND_ASSIGN(Watcher);
+    Q_DISABLE_COPY(Watcher)
 };
 
 //--------------------------------------------------------------------------------------------------

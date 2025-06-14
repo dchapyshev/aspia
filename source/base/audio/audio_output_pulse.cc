@@ -53,7 +53,7 @@ public:
 
 private:
     pa_threaded_mainloop* pa_main_loop_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedPaLock);
+    Q_DISABLE_COPY(ScopedPaLock)
 };
 
 } // namespace

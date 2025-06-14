@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class SafeModeUtil
@@ -32,7 +30,7 @@ public:
     static bool setSafeModeService(const QString& service_name, bool enable);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(SafeModeUtil);
+    Q_DISABLE_COPY(SafeModeUtil)
 };
 
 } // namespace base

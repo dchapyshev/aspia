@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/openssl_util.h"
 
@@ -48,7 +47,7 @@ private:
     EVP_CIPHER_CTX_ptr ctx_;
     QByteArray iv_;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageEncryptorOpenssl);
+    Q_DISABLE_COPY(MessageEncryptorOpenssl)
 };
 
 } // namespace base

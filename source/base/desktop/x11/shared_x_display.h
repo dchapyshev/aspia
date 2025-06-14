@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 #define BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 
-#include "base/macros_magic.h"
 #include "base/memory/local_memory.h"
 
 #include <map>
@@ -78,7 +77,7 @@ private:
     Display* display_;
     EventHandlersMap event_handlers_;
 
-    DISALLOW_COPY_AND_ASSIGN(SharedXDisplay);
+    Q_DISABLE_COPY(SharedXDisplay)
 };
 
 } // namespace base

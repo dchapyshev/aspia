@@ -20,7 +20,6 @@
 #define BASE_CODEC_SINC_RESAMPLER_H
 
 #include "base/aligned_memory.h"
-#include "base/macros_magic.h"
 
 #include <functional>
 #include <memory>
@@ -158,7 +157,7 @@ private:
     float* r3_;
     float* r4_;
 
-    DISALLOW_COPY_AND_ASSIGN(SincResampler);
+    Q_DISABLE_COPY(SincResampler)
 };
 
 } // namespace base

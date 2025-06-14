@@ -18,8 +18,6 @@
 
 #include "base/codec/pixel_translator.h"
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 namespace {
@@ -94,7 +92,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
+    Q_DISABLE_COPY(PixelTranslatorT)
 };
 
 template<typename SourceT, typename TargetT>
@@ -162,7 +160,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFrom8_16bppT);
+    Q_DISABLE_COPY(PixelTranslatorFrom8_16bppT)
 };
 
 } // namespace

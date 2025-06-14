@@ -100,7 +100,7 @@ private:
     base::Parser<proto::internal::ServiceToDesktop> incoming_message_;
     base::Serializer<proto::internal::DesktopToService> outgoing_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
+    Q_DISABLE_COPY(DesktopSessionAgent)
 };
 
 } // namespace host

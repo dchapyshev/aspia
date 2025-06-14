@@ -19,7 +19,6 @@
 #ifndef HOST_UI_CONFIG_DIALOG_H
 #define HOST_UI_CONFIG_DIALOG_H
 
-#include "build/build_config.h"
 #include "base/location.h"
 #include "base/peer/user_list.h"
 #include "ui_config_dialog.h"
@@ -69,7 +68,7 @@ private:
     enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
     ServiceState service_state_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConfigDialog);
+    Q_DISABLE_COPY(ConfigDialog)
 };
 
 } // namespace host

@@ -52,7 +52,7 @@ private:
     ScopedHBITMAP bitmap_;
     std::unique_ptr<SharedMemory> owned_shared_memory_;
 
-    DISALLOW_COPY_AND_ASSIGN(FrameDib);
+    Q_DISABLE_COPY(FrameDib)
 };
 
 } // namespace base

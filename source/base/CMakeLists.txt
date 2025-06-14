@@ -38,7 +38,6 @@ list(APPEND SOURCE_BASE
     location.h
     logging.cc
     logging.h
-    macros_magic.h
     power_controller.h
     process_handle.cc
     process_handle.h

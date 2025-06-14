@@ -83,7 +83,7 @@ private:
 
     int session_count_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Controller);
+    Q_DISABLE_COPY(Controller)
 };
 
 } // namespace relay

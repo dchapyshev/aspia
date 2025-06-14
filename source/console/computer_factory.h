@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_FACTORY_H
 #define CONSOLE_COMPUTER_FACTORY_H
 
-#include "base/macros_magic.h"
 #include "proto/address_book.h"
 
 namespace console {
@@ -32,7 +31,7 @@ public:
     static proto::address_book::Computer defaultComputer();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ComputerFactory);
+    Q_DISABLE_COPY(ComputerFactory)
 };
 
 } // namespace console

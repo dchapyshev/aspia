@@ -22,10 +22,9 @@
 #include <QMap>
 #include <QList>
 
-#include "base/macros_magic.h"
-#include "proto/router.h"
-
 #include <optional>
+
+#include "proto/router.h"
 
 namespace router {
 
@@ -61,7 +60,7 @@ private:
     QMap<qint64, Keys> pool_;
     KeyFactory* factory_;
 
-    DISALLOW_COPY_AND_ASSIGN(KeyPool);
+    Q_DISABLE_COPY(KeyPool)
 };
 
 } // namespace router

@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_CURSOR_H
 #define BASE_DESKTOP_WIN_DXGI_CURSOR_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/mouse_cursor.h"
 
 #include <dxgi.h>
@@ -56,7 +55,7 @@ private:
 
     std::unique_ptr<MouseCursor> mouse_cursor_;
 
-    DISALLOW_COPY_AND_ASSIGN(DxgiCursor);
+    Q_DISABLE_COPY(DxgiCursor)
 };
 
 } // namespace base

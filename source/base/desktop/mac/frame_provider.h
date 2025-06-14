@@ -57,7 +57,7 @@ private:
     // Most recent IOSurface that contains a capture of matching display.
     std::map<CGDirectDisplayID, std::unique_ptr<SharedFrame>> io_surfaces_;
 
-    DISALLOW_COPY_AND_ASSIGN(FrameProvider);
+    Q_DISABLE_COPY(FrameProvider)
 };
 
 } // namespace base

@@ -21,8 +21,6 @@
 
 #include <QSettings>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class XmlSettings
@@ -34,7 +32,7 @@ public:
     static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(XmlSettings);
+    Q_DISABLE_COPY(XmlSettings)
 };
 
 } // namespace base

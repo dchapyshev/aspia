@@ -21,8 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class Random
@@ -41,7 +39,7 @@ public:
     static quint64 number64();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Random);
+    Q_DISABLE_COPY(Random)
 };
 
 } // namespace base

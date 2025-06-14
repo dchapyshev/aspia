@@ -21,8 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class ZstdCompress
@@ -39,7 +37,7 @@ public:
     static QByteArray decompress(const QByteArray& source);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ZstdCompress);
+    Q_DISABLE_COPY(ZstdCompress)
 };
 
 } // namespace base

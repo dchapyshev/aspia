@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_HELPER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_HELPER_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/desktop/region.h"
 
@@ -83,7 +82,7 @@ private:
     // If the value is <= 0, then the invalid region is not expanded to a grid.
     int log_grid_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerHelper);
+    Q_DISABLE_COPY(ScreenCapturerHelper)
 };
 
 } // namespace base

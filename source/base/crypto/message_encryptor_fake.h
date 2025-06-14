@@ -19,7 +19,8 @@
 #ifndef BASE_CRYPTO_MESSAGE_ENCRYPTOR_FAKE_H
 #define BASE_CRYPTO_MESSAGE_ENCRYPTOR_FAKE_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
+
 #include "base/crypto/message_encryptor.h"
 
 namespace base {
@@ -35,7 +36,7 @@ public:
     bool encrypt(const void* in, size_t in_size, void* out) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(MessageEncryptorFake);
+    Q_DISABLE_COPY(MessageEncryptorFake)
 };
 
 } // namespace base

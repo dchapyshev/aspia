@@ -111,7 +111,7 @@ private:
     // Currently only utilized for debugging purposes.
     LONG ref_count_ = 1;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioOutputWin);
+    Q_DISABLE_COPY(AudioOutputWin)
 };
 
 } // namespace base

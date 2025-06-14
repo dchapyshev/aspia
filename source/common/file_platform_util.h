@@ -22,10 +22,9 @@
 #include <QIcon>
 #include <QString>
 
-#include "base/macros_magic.h"
-#include "proto/file_transfer.h"
-
 #include <utility>
+
+#include "proto/file_transfer.h"
 
 namespace common {
 
@@ -48,7 +47,7 @@ public:
     static bool isValidFileName(const QString& file_name);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
+    Q_DISABLE_COPY(FilePlatformUtil)
 };
 
 } // namespace common

@@ -46,8 +46,7 @@ signals:
 
 private:
     Settings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(Application);
+    Q_DISABLE_COPY(Application)
 };
 
 } // namespace console

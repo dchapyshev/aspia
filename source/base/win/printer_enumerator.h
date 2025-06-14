@@ -22,8 +22,6 @@
 #include <QByteArray>
 #include <QString>
 
-#include "base/macros_magic.h"
-
 struct _PRINTER_INFO_2W;
 
 namespace base {
@@ -62,7 +60,7 @@ private:
     int count_ = 0;
     int current_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(PrinterEnumerator);
+    Q_DISABLE_COPY(PrinterEnumerator)
 };
 
 } // namespace base

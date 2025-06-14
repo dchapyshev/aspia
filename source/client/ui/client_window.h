@@ -19,14 +19,11 @@
 #ifndef CLIENT_UI_CLIENT_WINDOW_H
 #define CLIENT_UI_CLIENT_WINDOW_H
 
-#include "base/macros_magic.h"
-#include "client/client_config.h"
-#include "common/update_checker.h"
-#include "proto/desktop.h"
-#include "ui_client_window.h"
-
 #include <QByteArray>
 #include <QMainWindow>
+
+#include "common/update_checker.h"
+#include "ui_client_window.h"
 
 namespace client {
 
@@ -60,7 +57,7 @@ private:
     Ui::ClientWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientWindow);
+    Q_DISABLE_COPY(ClientWindow)
 };
 
 } // namespace client

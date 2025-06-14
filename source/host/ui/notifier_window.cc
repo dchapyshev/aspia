@@ -108,7 +108,7 @@ private:
     const QString computer_name_;
     bool is_display_name_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
+    Q_DISABLE_COPY(SessionTreeItem)
 };
 
 //--------------------------------------------------------------------------------------------------

@@ -19,10 +19,9 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
 #define CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
 
-#include "base/macros_magic.h"
-#include "proto/file_transfer.h"
-
 #include <QComboBox>
+
+#include "proto/file_transfer.h"
 
 class QLineEdit;
 class QTreeView;
@@ -59,7 +58,7 @@ private:
     QTreeView* view_;
     AddressBarModel* model_;
 
-    DISALLOW_COPY_AND_ASSIGN(AddressBar);
+    Q_DISABLE_COPY(AddressBar)
 };
 
 } // namespace client

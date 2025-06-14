@@ -193,7 +193,7 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(TcpChannel);
+    Q_DISABLE_COPY(TcpChannel)
 };
 
 } // namespace base

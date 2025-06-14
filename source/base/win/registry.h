@@ -22,8 +22,6 @@
 #include <QString>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
-
 #include <vector>
 
 namespace base {
@@ -114,7 +112,7 @@ private:
     HKEY key_ = nullptr;
     REGSAM wow64access_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(RegistryKey);
+    Q_DISABLE_COPY(RegistryKey)
 };
 
 // Iterates the entries found in a particular folder on the registry.
@@ -167,7 +165,7 @@ private:
     DWORD value_size_;
     DWORD type_;
 
-    DISALLOW_COPY_AND_ASSIGN(RegistryValueIterator);
+    Q_DISABLE_COPY(RegistryValueIterator)
 };
 
 class RegistryKeyIterator
@@ -210,7 +208,7 @@ private:
 
     wchar_t name_[MAX_PATH];
 
-    DISALLOW_COPY_AND_ASSIGN(RegistryKeyIterator);
+    Q_DISABLE_COPY(RegistryKeyIterator)
 };
 
 } // namespace base

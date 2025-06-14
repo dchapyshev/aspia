@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_CLIPBOARD_H
 #define BASE_WIN_SCOPED_CLIPBOARD_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -45,7 +44,7 @@ public:
 private:
     bool opened_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedClipboard);
+    Q_DISABLE_COPY(ScopedClipboard)
 };
 
 } // namespace base

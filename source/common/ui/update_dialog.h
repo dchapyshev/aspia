@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-#include "base/macros_magic.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
 
@@ -60,7 +59,7 @@ private:
     std::unique_ptr<UpdateChecker> checker_;
     bool checker_finished_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(UpdateDialog);
+    Q_DISABLE_COPY(UpdateDialog)
 };
 
 } // namespace common

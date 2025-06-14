@@ -43,7 +43,7 @@ private:
     bool drop_shadow_changed_ = false;
     bool animation_changed_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentWin);
+    Q_DISABLE_COPY(DesktopEnvironmentWin)
 };
 
 } // namespace base

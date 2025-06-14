@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_MANAGER_SETTINGS_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_MANAGER_SETTINGS_H
 
-#include "base/macros_magic.h"
-
 #include <QSettings>
 
 namespace client {
@@ -39,8 +37,7 @@ public:
 
 private:
     QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(FileManagerSettings);
+    Q_DISABLE_COPY(FileManagerSettings)
 };
 
 } // namespace client

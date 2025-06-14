@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 #include <memory>
 
 namespace base {
@@ -46,7 +44,7 @@ private:
     quint32 num_entries_ = 0;
     quint32 pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(RouteEnumerator);
+    Q_DISABLE_COPY(RouteEnumerator)
 };
 
 } // namespace base

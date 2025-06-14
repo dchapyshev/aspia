@@ -19,8 +19,6 @@
 #ifndef HOST_UNCONFIRMED_CLIENT_SESSION_H
 #define HOST_UNCONFIRMED_CLIENT_SESSION_H
 
-#include "base/macros_magic.h"
-
 #include <QTimer>
 
 namespace host {
@@ -48,7 +46,7 @@ private:
     QTimer* timer_ = nullptr;
     quint32 id_;
 
-    DISALLOW_COPY_AND_ASSIGN(UnconfirmedClientSession);
+    Q_DISABLE_COPY(UnconfirmedClientSession)
 };
 
 } // namespace host

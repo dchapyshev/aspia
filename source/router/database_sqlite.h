@@ -19,12 +19,9 @@
 #ifndef ROUTER_DATABASE_SQLITE_H
 #define ROUTER_DATABASE_SQLITE_H
 
-#include "base/macros_magic.h"
-#include "router/database.h"
-
-#include <filesystem>
-
 #include <sqlite3.h>
+
+#include "router/database.h"
 
 namespace router {
 
@@ -52,7 +49,7 @@ private:
 
     sqlite3* db_;
 
-    DISALLOW_COPY_AND_ASSIGN(DatabaseSqlite);
+    Q_DISABLE_COPY(DatabaseSqlite)
 };
 
 } // namespace router

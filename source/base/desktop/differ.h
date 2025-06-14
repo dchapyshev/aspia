@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_DIFFER_H
 #define BASE_DESKTOP_DIFFER_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/region.h"
 
 #include <memory>
@@ -59,7 +58,7 @@ private:
     std::unique_ptr<quint8[]> diff_info_;
     DiffFullBlockFunc diff_full_block_func_;
 
-    DISALLOW_COPY_AND_ASSIGN(Differ);
+    Q_DISABLE_COPY(Differ)
 };
 
 } // namespace base

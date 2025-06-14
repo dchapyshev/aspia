@@ -21,8 +21,6 @@
 
 #include <QAction>
 
-#include "base/macros_magic.h"
-
 namespace console {
 
 class MruAction final : public QAction
@@ -36,8 +34,7 @@ public:
 
 private:
     QString file_path_;
-
-    DISALLOW_COPY_AND_ASSIGN(MruAction);
+    Q_DISABLE_COPY(MruAction)
 };
 
 } // namespace console

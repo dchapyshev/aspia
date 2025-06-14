@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "base/macros_magic.h"
-
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -40,7 +38,7 @@ private:
     ScopedHandle handle_;
 #endif // defined(Q_OS_WINDOWS)
 
-    DISALLOW_COPY_AND_ASSIGN(PowerSaveBlocker);
+    Q_DISABLE_COPY(PowerSaveBlocker)
 };
 
 } // namespace base

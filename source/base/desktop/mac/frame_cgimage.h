@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_MAC_FRAME_CGIMAGE_H
 #define BASE_DESKTOP_MAC_FRAME_CGIMAGE_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/frame.h"
 #include "base/mac/scoped_cftyperef.h"
 
@@ -50,7 +49,7 @@ private:
     const ScopedCFTypeRef<CGImageRef> cg_image_;
     const ScopedCFTypeRef<CFDataRef> cg_data_;
 
-    DISALLOW_COPY_AND_ASSIGN(FrameCGImage);
+    Q_DISABLE_COPY(FrameCGImage)
 };
 
 } // namespace base

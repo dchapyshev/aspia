@@ -56,7 +56,7 @@ private:
     QPoint start_pos_;
     bool dragging_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupTree);
+    Q_DISABLE_COPY(ComputerGroupTree)
 };
 
 } // namespace console

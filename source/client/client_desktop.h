@@ -21,7 +21,6 @@
 
 #include <QPointer>
 
-#include "base/macros_magic.h"
 #include "base/serialization.h"
 #include "base/desktop/geometry.h"
 #include "base/desktop/mouse_cursor.h"
@@ -181,7 +180,7 @@ private:
     int cursor_shape_count_ = 0;
     int cursor_pos_count_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
+    Q_DISABLE_COPY(ClientDesktop)
 };
 
 } // namespace client

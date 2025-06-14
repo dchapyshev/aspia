@@ -21,7 +21,6 @@
 
 #include <QSet>
 
-#include "base/macros_magic.h"
 #include "host/input_injector.h"
 #include "host/win/touch_injector.h"
 
@@ -57,7 +56,7 @@ private:
 
     TouchInjector touch_injector_;
 
-    DISALLOW_COPY_AND_ASSIGN(InputInjectorWin);
+    Q_DISABLE_COPY(InputInjectorWin)
 };
 
 } // namespace host

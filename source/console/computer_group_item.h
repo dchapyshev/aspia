@@ -59,8 +59,7 @@ private:
     friend class ComputerGroupTree;
 
     proto::address_book::ComputerGroup* computer_group_;
-
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupItem);
+    Q_DISABLE_COPY(ComputerGroupItem)
 };
 
 } // namespace console

@@ -75,7 +75,7 @@ private:
     base::Serializer<proto::internal::ServiceToDesktop> outgoing_message_;
     base::Parser<proto::internal::DesktopToService> incoming_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);
+    Q_DISABLE_COPY(DesktopSessionIpc)
 };
 
 } // namespace host

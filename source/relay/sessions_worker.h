@@ -63,7 +63,7 @@ private:
     base::Thread thread_;
     std::unique_ptr<SessionManager> session_manager_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionsWorker);
+    Q_DISABLE_COPY(SessionsWorker)
 };
 
 } // namespace relay

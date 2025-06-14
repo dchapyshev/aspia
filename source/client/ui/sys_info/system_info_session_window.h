@@ -19,11 +19,10 @@
 #ifndef CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
 #define CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
 
-#include "base/macros_magic.h"
+#include <QTreeWidget>
+
 #include "client/ui/session_window.h"
 #include "proto/system_info.h"
-
-#include <QTreeWidget>
 
 namespace Ui {
 class SystemInfoSessionWindow;
@@ -68,7 +67,7 @@ private:
     QList<SysInfoWidget*> sys_info_widgets_;
     int current_widget_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(SystemInfoSessionWindow);
+    Q_DISABLE_COPY(SystemInfoSessionWindow)
 };
 
 } // namespace client

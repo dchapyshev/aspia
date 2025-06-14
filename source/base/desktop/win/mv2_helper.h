@@ -60,7 +60,7 @@ private:
 
     mutable int last_update_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Mv2Helper);
+    Q_DISABLE_COPY(Mv2Helper)
 };
 
 } // namespace base

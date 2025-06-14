@@ -22,8 +22,6 @@
 #include <QByteArray>
 #include <QString>
 
-#include "base/macros_magic.h"
-
 #if defined(Q_OS_WINDOWS)
 struct _IP_ADAPTER_ADDRESSES_LH;
 struct _IP_ADAPTER_UNICAST_ADDRESS_LH;
@@ -68,7 +66,7 @@ public:
         const _IP_ADAPTER_UNICAST_ADDRESS_LH* address_;
 #endif
 
-        DISALLOW_COPY_AND_ASSIGN(IpAddressEnumerator);
+        Q_DISABLE_COPY(IpAddressEnumerator)
     };
 
     class GatewayEnumerator
@@ -85,7 +83,7 @@ public:
         const _IP_ADAPTER_GATEWAY_ADDRESS_LH* address_;
 #endif
 
-        DISALLOW_COPY_AND_ASSIGN(GatewayEnumerator);
+        Q_DISABLE_COPY(GatewayEnumerator)
     };
 
     class DnsEnumerator
@@ -102,7 +100,7 @@ public:
         const _IP_ADAPTER_DNS_SERVER_ADDRESS_XP* address_ = nullptr;
 #endif
 
-        DISALLOW_COPY_AND_ASSIGN(DnsEnumerator);
+        Q_DISABLE_COPY(DnsEnumerator)
     };
 
 private:
@@ -111,7 +109,7 @@ private:
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
 #endif
 
-    DISALLOW_COPY_AND_ASSIGN(AdapterEnumerator);
+    Q_DISABLE_COPY(AdapterEnumerator)
 };
 
 } // namespace base

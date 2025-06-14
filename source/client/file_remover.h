@@ -101,7 +101,7 @@ private:
     Action failure_action_ = ACTION_ASK;
     size_t tasks_count_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(FileRemover);
+    Q_DISABLE_COPY(FileRemover)
 };
 
 } // namespace client

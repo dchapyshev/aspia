@@ -19,10 +19,10 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_LIST_MODEL_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_LIST_MODEL_H
 
-#include "client/file_transfer.h"
-
 #include <QAbstractItemModel>
 #include <QIcon>
+
+#include "client/file_transfer.h"
 
 namespace client {
 
@@ -99,7 +99,7 @@ private:
 
     QString mime_type_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileListModel);
+    Q_DISABLE_COPY(FileListModel)
 };
 
 } // namespace client

@@ -78,7 +78,7 @@ private:
 
     std::set<int> pressed_keys_;
 
-    DISALLOW_COPY_AND_ASSIGN(InputInjectorX11);
+    Q_DISABLE_COPY(InputInjectorX11)
 };
 
 } // namespace host

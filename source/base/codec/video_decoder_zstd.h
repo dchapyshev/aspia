@@ -19,7 +19,6 @@
 #ifndef BASE_CODEC_VIDEO_DECODER_ZSTD_H
 #define BASE_CODEC_VIDEO_DECODER_ZSTD_H
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/codec/video_decoder.h"
 
@@ -43,7 +42,7 @@ private:
     std::unique_ptr<PixelTranslator> translator_;
     std::unique_ptr<Frame> source_frame_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoDecoderZstd);
+    Q_DISABLE_COPY(VideoDecoderZstd)
 };
 
 } // namespace base

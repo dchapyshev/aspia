@@ -221,7 +221,7 @@ private:
     qint64 bytes_per_time_ = 0;
     qint64 speed_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTransfer);
+    Q_DISABLE_COPY(FileTransfer)
 };
 
 } // namespace client

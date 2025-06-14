@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "base/macros_magic.h"
-
 namespace common {
 
 // This structure is used to define the keycode mapping table.
@@ -65,7 +63,7 @@ public:
     static quint32 qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(KeycodeConverter);
+    Q_DISABLE_COPY(KeycodeConverter)
 };
 
 } // namespace common

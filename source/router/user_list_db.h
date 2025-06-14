@@ -19,7 +19,6 @@
 #ifndef ROUTER_USER_LIST_DB_H
 #define ROUTER_USER_LIST_DB_H
 
-#include "base/macros_magic.h"
 #include "base/peer/user_list_base.h"
 
 namespace router {
@@ -47,7 +46,7 @@ private:
     std::unique_ptr<Database> db_;
     QByteArray seed_key_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserListDb);
+    Q_DISABLE_COPY(UserListDb)
 };
 
 } // namespace router

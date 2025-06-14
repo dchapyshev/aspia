@@ -19,11 +19,10 @@
 #ifndef HOST_UI_USER_TREE_ITEM_H
 #define HOST_UI_USER_TREE_ITEM_H
 
-#include "base/macros_magic.h"
-#include "base/peer/user.h"
-
 #include <QCollator>
 #include <QTreeWidget>
+
+#include "base/peer/user.h"
 
 namespace host {
 
@@ -60,7 +59,7 @@ private:
     void updateData();
 
     base::User user_;
-    DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
+    Q_DISABLE_COPY(UserTreeItem)
 };
 
 } // namespace host

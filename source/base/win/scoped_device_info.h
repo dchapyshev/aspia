@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_DEVICE_INFO_H
 #define BASE_WIN_SCOPED_DEVICE_INFO_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 #include <SetupAPI.h>
 
@@ -82,7 +81,7 @@ private:
 
     HDEVINFO device_info_ = INVALID_HANDLE_VALUE;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedDeviceInfo);
+    Q_DISABLE_COPY(ScopedDeviceInfo)
 };
 
 } // namespace base

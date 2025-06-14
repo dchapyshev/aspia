@@ -20,7 +20,6 @@
 #define BASE_WIN_SCOPED_CO_MEM_H
 
 #include "base/logging.h"
-#include "base/macros_magic.h"
 
 #include <objbase.h>
 
@@ -74,7 +73,7 @@ public:
 private:
     T* mem_ptr_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedCoMem);
+    Q_DISABLE_COPY(ScopedCoMem)
 };
 
 } // namespace base

@@ -45,7 +45,7 @@ private:
     base::WaitableTimer timer_;
     int current_change_count_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ClipboardMac);
+    Q_DISABLE_COPY(ClipboardMac)
 };
 
 } // namespace common

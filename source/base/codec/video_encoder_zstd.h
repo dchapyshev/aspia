@@ -20,7 +20,6 @@
 #define BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 
 #include "base/aligned_memory.h"
-#include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/region.h"
@@ -55,7 +54,7 @@ private:
     std::unique_ptr<quint8[], base::AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderZstd);
+    Q_DISABLE_COPY(VideoEncoderZstd)
 };
 
 } // namespace base

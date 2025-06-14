@@ -19,7 +19,9 @@
 #ifndef HOST_CLIENT_SESSION_DESKTOP_H
 #define HOST_CLIENT_SESSION_DESKTOP_H
 
-#include "base/macros_magic.h"
+#include <QPointer>
+#include <QTimer>
+
 #include "base/serialization.h"
 #include "base/desktop/geometry.h"
 #include "host/client_session.h"
@@ -29,9 +31,6 @@
 #if defined(Q_OS_WINDOWS)
 #include "host/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QPointer>
-#include <QTimer>
 
 namespace base {
 class AudioEncoder;
@@ -127,7 +126,7 @@ private:
 
     StatCounter stat_counter_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
+    Q_DISABLE_COPY(ClientSessionDesktop)
 };
 
 } // namespace host

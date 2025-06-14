@@ -18,13 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_processes.h"
 
-#include "base/macros_magic.h"
-#include "common/system_info_constants.h"
-
-#include <cmath>
-#include <limits>
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -73,6 +69,7 @@ public:
 
 private:
     proto::system_info::Processes::Process process_;
+    Q_DISABLE_COPY(ProcessTreeItem)
 };
 
 } // namespace

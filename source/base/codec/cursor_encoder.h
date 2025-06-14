@@ -21,7 +21,6 @@
 
 #include <QVector>
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/desktop/mouse_cursor.h"
 #include "proto/desktop.h"
@@ -42,7 +41,7 @@ private:
     ScopedZstdCStream stream_;
     QVector<quint32> cache_;
 
-    DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
+    Q_DISABLE_COPY(CursorEncoder)
 };
 
 } // namespace base

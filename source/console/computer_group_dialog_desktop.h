@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_GROUP_DIALOG_DESKTOP_H
 #define CONSOLE_COMPUTER_GROUP_DIALOG_DESKTOP_H
 
-#include "base/macros_magic.h"
 #include "console/computer_group_dialog_tab.h"
 #include "proto/address_book.h"
 #include "ui_computer_group_dialog_desktop.h"
@@ -45,8 +44,7 @@ private slots:
 
 private:
     Ui::ComputerGroupDialogDesktop ui;
-
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialogDesktop);
+    Q_DISABLE_COPY(ComputerGroupDialogDesktop)
 };
 
 } // namespace console

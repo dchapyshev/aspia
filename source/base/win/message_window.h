@@ -19,11 +19,10 @@
 #ifndef BASE_WIN_MESSAGE_WINDOW_H
 #define BASE_WIN_MESSAGE_WINDOW_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
+#include <qt_windows.h>
 
 #include <functional>
-
-#include <qt_windows.h>
 
 namespace base {
 
@@ -54,7 +53,7 @@ private:
     MessageCallback message_callback_;
     HWND hwnd_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageWindow);
+    Q_DISABLE_COPY(MessageWindow)
 };
 
 } // namespace base

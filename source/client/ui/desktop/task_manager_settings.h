@@ -19,11 +19,8 @@
 #ifndef CLIENT_UI_DESKTOP_TASK_MANAGER_SETTINGS_H
 #define CLIENT_UI_DESKTOP_TASK_MANAGER_SETTINGS_H
 
-#include "base/macros_magic.h"
-
-#include <chrono>
-
 #include <QSettings>
+#include <chrono>
 
 namespace client {
 
@@ -49,8 +46,7 @@ public:
 
 private:
     QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(TaskManagerSettings);
+    Q_DISABLE_COPY(TaskManagerSettings)
 };
 
 } // namespace client

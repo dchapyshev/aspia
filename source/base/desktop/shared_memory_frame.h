@@ -51,7 +51,7 @@ private:
 
     SharedPointer<SharedMemory> owned_shared_memory_;
 
-    DISALLOW_COPY_AND_ASSIGN(SharedMemoryFrame);
+    Q_DISABLE_COPY(SharedMemoryFrame)
 };
 
 } // namespace base

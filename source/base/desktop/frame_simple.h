@@ -35,7 +35,7 @@ public:
 private:
     FrameSimple(const Size& size, const PixelFormat& format, quint8* data);
 
-    DISALLOW_COPY_AND_ASSIGN(FrameSimple);
+    Q_DISABLE_COPY(FrameSimple)
 };
 
 } // namespace base

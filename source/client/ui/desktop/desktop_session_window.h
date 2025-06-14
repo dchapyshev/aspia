@@ -19,12 +19,12 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_SESSION_WINDOW_H
 #define CLIENT_UI_DESKTOP_DESKTOP_SESSION_WINDOW_H
 
+#include <QPointer>
+
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/session_window.h"
 #include "client/ui/desktop/desktop_widget.h"
-
-#include <QPointer>
 
 class QHBoxLayout;
 class QScrollArea;
@@ -154,7 +154,7 @@ private:
 
     QPoint wheel_angle_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionWindow);
+    Q_DISABLE_COPY(DesktopSessionWindow)
 };
 
 } // namespace client

@@ -133,7 +133,7 @@ private:
 #if defined(Q_PROCESSOR_X86)
     unsigned int orig_state_;
 #endif
-    DISALLOW_COPY_AND_ASSIGN(ScopedSubnormalFloatDisabler);
+    Q_DISABLE_COPY(ScopedSubnormalFloatDisabler)
 };
 
 //--------------------------------------------------------------------------------------------------

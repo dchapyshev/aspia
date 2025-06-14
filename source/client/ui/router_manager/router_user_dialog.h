@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_USER_DIALOG_H
 #define CLIENT_UI_ROUTER_MANAGER_ROUTER_USER_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "base/peer/user.h"
 #include "proto/router.h"
 #include "ui_router_user_dialog.h"
@@ -51,7 +50,7 @@ private:
     QStringList users_;
     bool account_changed_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(RouterUserDialog);
+    Q_DISABLE_COPY(RouterUserDialog)
 };
 
 } // namespace client

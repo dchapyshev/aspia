@@ -22,8 +22,6 @@
 #include <QVersionNumber>
 #include <QString>
 
-#include "base/macros_magic.h"
-
 struct _OSVERSIONINFOEXW;
 struct _SYSTEM_INFO;
 
@@ -163,7 +161,7 @@ private:
     WOW64Status wow64_status_;
     QString processor_model_name_;
 
-    DISALLOW_COPY_AND_ASSIGN(OSInfo);
+    Q_DISABLE_COPY(OSInfo)
 };
 
 Version windowsVersion();

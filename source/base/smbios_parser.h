@@ -22,7 +22,6 @@
 #include <QByteArray>
 #include <QString>
 
-#include "base/macros_magic.h"
 #include "base/smbios.h"
 
 namespace base {
@@ -49,7 +48,7 @@ private:
     quint8* end_ = nullptr;
     quint8* pos_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(SmbiosTableEnumerator);
+    Q_DISABLE_COPY(SmbiosTableEnumerator)
 };
 
 QString smbiosString(const SmbiosTable* table, quint8 number);
@@ -65,7 +64,7 @@ public:
 
 private:
     const SmbiosBiosTable* table_;
-    DISALLOW_COPY_AND_ASSIGN(SmbiosBios);
+    Q_DISABLE_COPY(SmbiosBios)
 };
 
 class SmbiosBaseboard
@@ -79,7 +78,7 @@ public:
 
 private:
     const SmbiosBaseboardTable* table_;
-    DISALLOW_COPY_AND_ASSIGN(SmbiosBaseboard);
+    Q_DISABLE_COPY(SmbiosBaseboard)
 };
 
 class SmbiosMemoryDevice
@@ -99,7 +98,7 @@ public:
 
 private:
     const SmbiosMemoryDeviceTable* table_;
-    DISALLOW_COPY_AND_ASSIGN(SmbiosMemoryDevice);
+    Q_DISABLE_COPY(SmbiosMemoryDevice)
 };
 
 } // namespace base

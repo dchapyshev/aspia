@@ -19,7 +19,8 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
 #define BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
+
 #include "base/crypto/data_cryptor.h"
 
 namespace base {
@@ -36,7 +37,7 @@ public:
 private:
     std::string key_;
 
-    DISALLOW_COPY_AND_ASSIGN(DataCryptorChaCha20Poly1305);
+    Q_DISABLE_COPY(DataCryptorChaCha20Poly1305)
 };
 
 } // namespace base

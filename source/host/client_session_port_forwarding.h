@@ -19,17 +19,16 @@
 #ifndef HOST_CLIENT_SESSION_PORT_FORWARDING_H
 #define HOST_CLIENT_SESSION_PORT_FORWARDING_H
 
-#include "base/macros_magic.h"
+#include <asio/ip/tcp.hpp>
+
+#include <array>
+#include <queue>
+
 #include "base/location.h"
 #include "base/serialization.h"
 #include "base/shared_pointer.h"
 #include "host/client_session.h"
 #include "proto/port_forwarding.h"
-
-#include <array>
-#include <queue>
-
-#include <asio/ip/tcp.hpp>
 
 namespace host {
 
@@ -86,7 +85,7 @@ private:
     static const int kBufferSize = 8192;
     std::array<char, kBufferSize> read_buffer_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionPortForwarding);
+    Q_DISABLE_COPY(ClientSessionPortForwarding)
 };
 
 } // namespace host

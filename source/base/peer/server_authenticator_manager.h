@@ -88,7 +88,7 @@ private:
 
     QQueue<SessionInfo> ready_sessions_;
 
-    DISALLOW_COPY_AND_ASSIGN(ServerAuthenticatorManager);
+    Q_DISABLE_COPY(ServerAuthenticatorManager)
 };
 
 } // namespace base

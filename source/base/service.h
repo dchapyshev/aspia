@@ -22,7 +22,6 @@
 #include <QString>
 
 #include "base/application.h"
-#include "base/macros_magic.h"
 #include "base/session_id.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -66,7 +65,7 @@ private:
 
     QString name_;
 
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    Q_DISABLE_COPY(Service)
 };
 
 } // namespace base

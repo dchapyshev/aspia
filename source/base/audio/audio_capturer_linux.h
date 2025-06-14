@@ -45,7 +45,7 @@ private:
     PacketCapturedCallback callback_;
     AudioSilenceDetector silence_detector_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioCapturerLinux);
+    Q_DISABLE_COPY(AudioCapturerLinux)
 };
 
 } // namespace base

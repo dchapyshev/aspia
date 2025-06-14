@@ -23,8 +23,6 @@
 #include <QVector>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
-
 #include <memory>
 
 struct tagVS_FIXEDFILEINFO;
@@ -89,7 +87,7 @@ private:
     // This is a pointer into |data_| if it exists. Otherwise nullptr.
     const VS_FIXEDFILEINFO* const fixed_file_info_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileVersionInfo);
+    Q_DISABLE_COPY(FileVersionInfo)
 };
 
 } // namespace base

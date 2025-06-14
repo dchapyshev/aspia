@@ -20,9 +20,6 @@
 #define BASE_TYPED_BUFFER_H
 
 #include <QtGlobal>
-
-#include "base/macros_magic.h"
-
 #include <algorithm>
 
 namespace base {
@@ -113,7 +110,7 @@ private:
     // Length of the owned buffer in bytes.
     size_t length_;
 
-    DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
+    Q_DISABLE_COPY(TypedBuffer)
 };
 
 } // namespace base

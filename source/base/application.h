@@ -21,8 +21,6 @@
 
 #include <QCoreApplication>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class Application final : public QCoreApplication
@@ -37,7 +35,7 @@ public:
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Application);
+    Q_DISABLE_COPY(Application)
 };
 
 } // namespace base

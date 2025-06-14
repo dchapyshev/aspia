@@ -19,7 +19,6 @@
 #ifndef BASE_AUDIO_LINUX_AUDIO_PIPE_READER_H
 #define BASE_AUDIO_LINUX_AUDIO_PIPE_READER_H
 
-#include "base/macros_magic.h"
 #include "base/task_runner.h"
 #include "base/waitable_timer.h"
 #include "base/files/file_path_watcher.h"
@@ -123,7 +122,7 @@ private:
 
     private:
         int fd_ = -1;
-        DISALLOW_COPY_AND_ASSIGN(ScopedFile);
+        Q_DISABLE_COPY(ScopedFile)
     };
 
     std::shared_ptr<TaskRunner> task_runner_;
@@ -156,7 +155,7 @@ private:
 
     std::unique_ptr<FileDescriptorWatcher> pipe_watch_controller_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioPipeReader);
+    Q_DISABLE_COPY(AudioPipeReader)
 };
 
 } // namespace base

@@ -21,7 +21,6 @@
 
 #include <QSettings>
 
-#include "base/macros_magic.h"
 #include "proto/peer.h"
 
 namespace console {
@@ -97,8 +96,7 @@ public:
 
 private:
     QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(Settings);
+    Q_DISABLE_COPY(Settings)
 };
 
 } // namespace console

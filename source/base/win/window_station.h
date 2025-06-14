@@ -22,8 +22,6 @@
 #include <QStringList>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class WindowStation
@@ -53,7 +51,7 @@ private:
     HWINSTA winsta_ = nullptr;
     bool own_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(WindowStation);
+    Q_DISABLE_COPY(WindowStation)
 };
 
 } // namespace base

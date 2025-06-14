@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_HGLOBAL_H
 #define BASE_WIN_SCOPED_HGLOBAL_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -66,7 +65,7 @@ private:
     HGLOBAL glob_;
     T* data_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedHGLOBAL);
+    Q_DISABLE_COPY(ScopedHGLOBAL)
 };
 
 } // namespace base

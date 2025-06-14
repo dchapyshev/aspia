@@ -19,10 +19,9 @@
 #ifndef COMMON_CLIPBOARD_WIN_H
 #define COMMON_CLIPBOARD_WIN_H
 
-#include "base/macros_magic.h"
-#include "common/clipboard.h"
-
 #include <qt_windows.h>
+
+#include "common/clipboard.h"
 
 namespace base {
 class MessageWindow;
@@ -52,7 +51,7 @@ private:
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::MessageWindow> window_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClipboardWin);
+    Q_DISABLE_COPY(ClipboardWin)
 };
 
 } // namespace common

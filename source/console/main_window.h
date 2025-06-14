@@ -19,13 +19,13 @@
 #ifndef CONSOLE_MAIN_WINDOW_H
 #define CONSOLE_MAIN_WINDOW_H
 
+#include <optional>
+
 #include "client/router_config.h"
 #include "common/update_checker.h"
 #include "console/mru.h"
 #include "proto/address_book.h"
 #include "ui_main_window.h"
-
-#include <optional>
 
 class QSystemTrayIcon;
 
@@ -117,7 +117,7 @@ private:
     std::unique_ptr<QMenu> tray_menu_;
     std::unique_ptr<common::UpdateChecker> update_checker_;
 
-    DISALLOW_COPY_AND_ASSIGN(MainWindow);
+    Q_DISABLE_COPY(MainWindow)
 };
 
 } // namespace console

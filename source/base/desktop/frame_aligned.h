@@ -36,7 +36,7 @@ public:
 private:
     FrameAligned(const Size& size, const PixelFormat& format, quint8* data);
 
-    DISALLOW_COPY_AND_ASSIGN(FrameAligned);
+    Q_DISABLE_COPY(FrameAligned)
 };
 
 } // namespace base

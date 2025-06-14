@@ -19,14 +19,13 @@
 #ifndef CONSOLE_ADDRESS_BOOK_TAB_H
 #define CONSOLE_ADDRESS_BOOK_TAB_H
 
-#include "base/macros_magic.h"
+#include <optional>
+#include <memory>
+
 #include "client/router_config.h"
 #include "client/online_checker/online_checker.h"
 #include "proto/address_book.h"
 #include "ui_address_book_tab.h"
-
-#include <optional>
-#include <memory>
 
 namespace console {
 
@@ -130,7 +129,7 @@ private:
 
     std::unique_ptr<client::OnlineChecker> online_checker_;
 
-    DISALLOW_COPY_AND_ASSIGN(AddressBookTab);
+    Q_DISABLE_COPY(AddressBookTab)
 };
 
 } // namespace console

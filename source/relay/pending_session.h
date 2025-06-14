@@ -19,14 +19,12 @@
 #ifndef RELAY_PENDING_SESSION_H
 #define RELAY_PENDING_SESSION_H
 
-#include "base/macros_magic.h"
-#include "base/peer/host_id.h"
-#include "proto/relay_peer.h"
+#include <QTimer>
+#include <QByteArray>
 
 #include <asio/ip/tcp.hpp>
 
-#include <QTimer>
-#include <QByteArray>
+#include "proto/relay_peer.h"
 
 namespace base {
 class Location;
@@ -89,7 +87,7 @@ private:
     QByteArray secret_;
     quint32 key_id_ = static_cast<quint32>(-1);
 
-    DISALLOW_COPY_AND_ASSIGN(PendingSession);
+    Q_DISABLE_COPY(PendingSession)
 };
 
 } // namespace relay

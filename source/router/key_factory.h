@@ -21,7 +21,6 @@
 
 #include <QObject>
 
-#include "base/macros_magic.h"
 #include "base/shared_pointer.h"
 #include "proto/router.h"
 #include "router/key_pool.h"
@@ -55,7 +54,7 @@ signals:
 private:
     base::SharedPointer<KeyPool> pool_;
 
-    DISALLOW_COPY_AND_ASSIGN(KeyFactory);
+    Q_DISABLE_COPY(KeyFactory)
 };
 
 } // namespace router

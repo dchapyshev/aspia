@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_SCOPED_CRYPTO_INITIALIZER_H
 #define BASE_CRYPTO_SCOPED_CRYPTO_INITIALIZER_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
 
 namespace base {
 
@@ -33,7 +33,7 @@ public:
 
 private:
     bool initialized_ = false;
-    DISALLOW_COPY_AND_ASSIGN(ScopedCryptoInitializer);
+    Q_DISABLE_COPY(ScopedCryptoInitializer)
 };
 
 } // namespace base

@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 struct _FILE_INFO_3;
 
 namespace base {
@@ -46,7 +44,7 @@ private:
     quint32 total_entries_ = 0;
     quint32 current_pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(OpenFilesEnumerator);
+    Q_DISABLE_COPY(OpenFilesEnumerator)
 };
 
 } // namespace base

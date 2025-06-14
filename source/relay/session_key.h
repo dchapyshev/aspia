@@ -46,7 +46,7 @@ private:
     base::KeyPair key_pair_;
     QByteArray iv_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionKey);
+    Q_DISABLE_COPY(SessionKey)
 };
 
 } // namespace relay

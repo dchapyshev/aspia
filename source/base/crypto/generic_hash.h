@@ -21,8 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
-
 struct evp_md_ctx_st;
 struct evp_md_st;
 
@@ -61,7 +59,7 @@ private:
     evp_md_ctx_st* ctxt_ = nullptr;
     const evp_md_st* md_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(GenericHash);
+    Q_DISABLE_COPY(GenericHash)
 };
 
 } // namespace base

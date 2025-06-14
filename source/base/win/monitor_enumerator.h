@@ -19,10 +19,10 @@
 #ifndef BASE_WIN_MONITOR_ENUMERATOR_H
 #define BASE_WIN_MONITOR_ENUMERATOR_H
 
+#include <memory>
+
 #include "base/win/device_enumerator.h"
 #include "base/edid.h"
-
-#include <memory>
 
 namespace base {
 
@@ -35,7 +35,7 @@ public:
     std::unique_ptr<Edid> edid() const;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(MonitorEnumerator);
+    Q_DISABLE_COPY(MonitorEnumerator)
 };
 
 } // namespace base

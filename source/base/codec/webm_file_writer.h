@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "proto/desktop.h"
 
@@ -61,7 +60,7 @@ private:
 
     proto::desktop::VideoEncoding last_video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
 
-    DISALLOW_COPY_AND_ASSIGN(WebmFileWriter);
+    Q_DISABLE_COPY(WebmFileWriter)
 };
 
 } // namespace base

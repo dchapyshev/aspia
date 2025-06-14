@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class OSCrypt
@@ -35,7 +33,7 @@ public:
     static bool decryptString(const QByteArray& ciphertext, QString* plaintext);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(OSCrypt);
+    Q_DISABLE_COPY(OSCrypt)
 };
 
 } // namespace base

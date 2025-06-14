@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
-#include "base/macros_magic.h"
-#include "client/ui/desktop/desktop_settings.h"
 #include "proto/desktop.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
@@ -138,7 +136,7 @@ private:
 
     int scale_ = 100;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopToolBar);
+    Q_DISABLE_COPY(DesktopToolBar)
 };
 
 } // namespace client

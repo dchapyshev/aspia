@@ -109,7 +109,7 @@ private:
     bool is_keyboard_locked_ = false;
     bool is_paused_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionManager);
+    Q_DISABLE_COPY(DesktopSessionManager)
 };
 
 } // namespace host

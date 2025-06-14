@@ -23,7 +23,6 @@
 #include <QPointer>
 #include <QThread>
 
-#include "base/macros_magic.h"
 #include "common/http_file_downloader.h"
 #include "ui_download_dialog.h"
 
@@ -48,7 +47,7 @@ private:
     std::unique_ptr<HttpFileDownloader> downloader_ = nullptr;
     QFile& file_;
 
-    DISALLOW_COPY_AND_ASSIGN(DownloadDialog);
+    Q_DISABLE_COPY(DownloadDialog)
 };
 
 } // namespace common

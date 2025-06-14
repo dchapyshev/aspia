@@ -29,7 +29,6 @@
 #include <asio/local/stream_protocol.hpp>
 #endif
 
-#include "base/macros_magic.h"
 #include "base/session_id.h"
 
 namespace base {
@@ -97,7 +96,7 @@ private:
 
     SessionId peer_session_id_ = kInvalidSessionId;
 
-    DISALLOW_COPY_AND_ASSIGN(IpcChannel);
+    Q_DISABLE_COPY(IpcChannel)
 };
 
 } // namespace base

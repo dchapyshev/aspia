@@ -24,7 +24,6 @@
 #include <QStatusBar>
 #include <QTimer>
 
-#include "base/macros_magic.h"
 #include "proto/address_book.h"
 
 namespace console {
@@ -47,7 +46,7 @@ private:
     int animation_index_ = 0;
     QPointer<QLabel> status_label_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusBar);
+    Q_DISABLE_COPY(StatusBar)
 };
 
 } // namespace console

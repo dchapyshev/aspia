@@ -22,12 +22,11 @@
 #include <QObject>
 #include <QList>
 
-#include "base/macros_magic.h"
+#include <optional>
+
 #include "base/thread.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
-
-#include <optional>
 
 namespace client {
 
@@ -76,7 +75,7 @@ private:
     bool direct_finished_ = false;
     bool router_finished_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(OnlineChecker);
+    Q_DISABLE_COPY(OnlineChecker)
 };
 
 } // namespace client

@@ -21,11 +21,11 @@
 
 #include <QDialog>
 
+#include <optional>
+
 #include "console/settings.h"
 #include "proto/address_book.h"
 #include "ui_computer_dialog.h"
-
-#include <optional>
 
 class QAbstractButton;
 
@@ -68,7 +68,7 @@ private:
 
     proto::address_book::Computer computer_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerDialog);
+    Q_DISABLE_COPY(ComputerDialog)
 };
 
 } // namespace console

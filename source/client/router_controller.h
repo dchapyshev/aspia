@@ -101,7 +101,7 @@ private:
 
     base::TcpChannel* host_channel_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(RouterController);
+    Q_DISABLE_COPY(RouterController)
 };
 
 } // namespace client

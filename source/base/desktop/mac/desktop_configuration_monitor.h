@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_MAC_DESKTOP_CONFIGURATION_MONITOR_H
 #define BASE_DESKTOP_MAC_DESKTOP_CONFIGURATION_MONITOR_H
 
-#include "base/macros_magic.h"
 #include "base/desktop/mac/desktop_configuration.h"
 
 #include <memory>
@@ -51,7 +50,7 @@ private:
     MacDesktopConfiguration desktop_configuration_;
     std::set<CGDirectDisplayID> reconfiguring_displays_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopConfigurationMonitor);
+    Q_DISABLE_COPY(DesktopConfigurationMonitor)
 };
 
 } // namespace base

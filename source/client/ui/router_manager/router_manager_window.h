@@ -19,14 +19,14 @@
 #ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 #define CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 
+#include <QMainWindow>
+#include <QPointer>
+#include <QVersionNumber>
+
 #include "base/peer/authenticator.h"
 #include "base/net/network_channel.h"
 #include "client/router_config.h"
 #include "proto/router_admin.h"
-
-#include <QMainWindow>
-#include <QPointer>
-#include <QVersionNumber>
 
 namespace Ui {
 class RouterManagerWindow;
@@ -127,7 +127,7 @@ private:
     int current_relays_column_ = 0;
     int current_active_conn_column_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(RouterManagerWindow);
+    Q_DISABLE_COPY(RouterManagerWindow)
 };
 
 } // namespace client

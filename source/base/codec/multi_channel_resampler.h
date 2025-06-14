@@ -23,7 +23,6 @@
 #include <memory>
 #include <vector>
 
-#include "base/macros_magic.h"
 #include "base/codec/sinc_resampler.h"
 
 namespace base {
@@ -95,7 +94,7 @@ private:
     // the current Resample() call.
     int output_frames_ready_;
 
-    DISALLOW_COPY_AND_ASSIGN(MultiChannelResampler);
+    Q_DISABLE_COPY(MultiChannelResampler)
 };
 
 } // namespace base

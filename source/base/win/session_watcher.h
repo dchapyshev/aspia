@@ -20,14 +20,12 @@
 #define BASE_WIN_SESSION_WATCHER_H
 
 #include <QObject>
-
-#include "base/macros_magic.h"
-#include "base/session_id.h"
-#include "base/win/session_status.h"
+#include <qt_windows.h>
 
 #include <memory>
 
-#include <qt_windows.h>
+#include "base/session_id.h"
+#include "base/win/session_status.h"
 
 namespace base {
 
@@ -52,7 +50,7 @@ private:
 
     std::unique_ptr<MessageWindow> window_;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionWatcher);
+    Q_DISABLE_COPY(SessionWatcher)
 };
 
 } // namespace base

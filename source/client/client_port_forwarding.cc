@@ -18,12 +18,12 @@
 
 #include "client/client_port_forwarding.h"
 
-#include "base/asio_event_dispatcher.h"
-#include "base/logging.h"
-
 #include <asio/ip/address.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
+
+#include "base/asio_event_dispatcher.h"
+#include "base/logging.h"
 
 namespace client {
 
@@ -41,7 +41,7 @@ public:
 
 private:
     ClientPortForwarding* parent_;
-    DISALLOW_COPY_AND_ASSIGN(Handler);
+    Q_DISABLE_COPY(Handler);
 };
 
 //--------------------------------------------------------------------------------------------------

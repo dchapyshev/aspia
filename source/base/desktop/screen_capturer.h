@@ -136,7 +136,7 @@ protected:
         static const int kQueueLength = 2;
         std::unique_ptr<FrameType> frames_[kQueueLength];
 
-        DISALLOW_COPY_AND_ASSIGN(FrameQueue);
+        Q_DISABLE_COPY(FrameQueue)
     };
 
 private:

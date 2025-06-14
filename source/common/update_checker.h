@@ -22,8 +22,6 @@
 #include <QByteArray>
 #include <QThread>
 
-#include "base/macros_magic.h"
-
 namespace common {
 
 class UpdateChecker final : public QThread
@@ -48,7 +46,7 @@ private:
     QString package_name_;
     std::atomic_bool interrupted_ { false };
 
-    DISALLOW_COPY_AND_ASSIGN(UpdateChecker);
+    Q_DISABLE_COPY(UpdateChecker)
 };
 
 } // namespace common

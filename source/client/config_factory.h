@@ -19,7 +19,6 @@
 #ifndef CLIENT_CONFIG_FACTORY_H
 #define CLIENT_CONFIG_FACTORY_H
 
-#include "base/macros_magic.h"
 #include "proto/desktop.h"
 #include "proto/port_forwarding.h"
 
@@ -40,7 +39,7 @@ public:
     static void fixupDesktopConfig(proto::desktop::Config* config);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ConfigFactory);
+    Q_DISABLE_COPY(ConfigFactory)
 };
 
 } // namespace client

@@ -22,8 +22,6 @@
 #include <QByteArray>
 #include <QThread>
 
-#include "base/macros_magic.h"
-
 namespace common {
 
 class HttpFileDownloader final : public QThread
@@ -55,7 +53,7 @@ private:
     QString url_;
     QByteArray data_;
 
-    DISALLOW_COPY_AND_ASSIGN(HttpFileDownloader);
+    Q_DISABLE_COPY(HttpFileDownloader)
 };
 
 } // namespace common

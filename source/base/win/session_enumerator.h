@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
 #include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
 
@@ -68,7 +67,7 @@ private:
     DWORD count_ = 0;
     DWORD current_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(SessionEnumerator);
+    Q_DISABLE_COPY(SessionEnumerator)
 };
 
 } // namespace base

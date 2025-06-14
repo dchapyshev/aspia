@@ -18,6 +18,14 @@
 
 #include "client/ui/sys_info/system_info_session_window.h"
 
+#include <QClipboard>
+#include <QDateTime>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QTextDocument>
+
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "client/client_system_info.h"
@@ -44,14 +52,6 @@
 #include "client/ui/sys_info/tree_to_html.h"
 #include "common/system_info_constants.h"
 #include "ui_system_info_session_window.h"
-
-#include <QClipboard>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QTextDocument>
 
 namespace client {
 
@@ -81,7 +81,7 @@ private:
     Type type_;
     std::string category_;
 
-    DISALLOW_COPY_AND_ASSIGN(CategoryItem);
+    Q_DISABLE_COPY(CategoryItem)
 };
 
 } // namespace

@@ -19,8 +19,7 @@
 #ifndef BASE_NET_CURL_UTIL_H
 #define BASE_NET_CURL_UTIL_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <curl/curl.h>
 
 namespace base {
@@ -35,7 +34,7 @@ public:
 
 private:
     CURL* curl_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedCURL);
+    Q_DISABLE_COPY(ScopedCURL)
 };
 
 class ScopedCURLM
@@ -48,7 +47,7 @@ public:
 
 private:
     CURLM* curlm_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedCURLM);
+    Q_DISABLE_COPY(ScopedCURLM)
 };
 
 } // namespace base

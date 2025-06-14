@@ -140,7 +140,7 @@ private:
     std::unique_ptr<XAtomCache> atom_cache_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerX11);
+    Q_DISABLE_COPY(ScreenCapturerX11)
 };
 
 } // namespace base

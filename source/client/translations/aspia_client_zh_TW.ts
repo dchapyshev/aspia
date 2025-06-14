@@ -2930,34 +2930,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="371"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="380"/>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="372"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="373"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">沒有支援的視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="382"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1098"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1099"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1100"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1101"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_session_window.cc" line="1131"/>
+        <location filename="../ui/desktop/desktop_session_window.cc" line="1132"/>
         <source>Could not save image</source>
         <translation type="unfinished">無法儲存影像</translation>
     </message>
@@ -4040,17 +4040,17 @@
 <context>
     <name>client::SelectScreenAction</name>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="37"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="36"/>
         <source>Full Desktop</source>
         <translation>全螢幕</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="50"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="49"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished">顯示器 %1（主要）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/select_screen_action.h" line="52"/>
+        <location filename="../ui/desktop/select_screen_action.h" line="51"/>
         <source>Monitor %1</source>
         <translation type="unfinished">顯示器 %1</translation>
     </message>
@@ -4549,37 +4549,37 @@
 <context>
     <name>client::SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="137"/>
         <source>License Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="145"/>
         <source>Organization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="149"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="157"/>
         <source>Product Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="162"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="161"/>
         <source>Unknown Field</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4587,85 +4587,85 @@
 <context>
     <name>client::SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="145"/>
         <source>Full Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="148"/>
         <source>Description</source>
         <translation type="unfinished">描述</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="151"/>
         <source>Home Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Disabled</source>
         <translation type="unfinished">已停用</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Password Can&apos;t Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Password Expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="156"/>
         <source>Don&apos;t Expire Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
         <source>Lockout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="169"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
         <source>Last Logon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="166"/>
         <source>Number Logons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="171"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="167"/>
         <source>Bad Password Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="179"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4673,153 +4673,153 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
         <translation>顯示器名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
         <translation>製造商名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
         <translation>顯示器 ID</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
         <translation>序號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
         <translation>EDID 版本</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
         <translation>製造日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
         <translation>第 %1 週/ %2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="180"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
         <translation>Gamma</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
         <translation>影像大小</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
         <translation>對角線尺寸</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="199"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
         <translation>解析度</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
         <translation>水平頻率</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 kHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
         <translation>垂直頻率</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="214"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Hz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
         <translation>像素時脈</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
         <translation>最大像素時脈</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
         <translation>輸入訊號類型</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="226"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
         <translation>支援功能</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="248"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
         <translation>支援視訊模式</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="293"/>
         <source>Digital</source>
         <translation>數位</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation>類比</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="300"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="299"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
@@ -4827,67 +4827,67 @@
 <context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="138"/>
         <source>Adapter Name</source>
         <translation>介面卡名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="141"/>
         <source>Interface Type</source>
         <translation>介面類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Connection Speed</source>
         <translation>連線速度</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="147"/>
         <source>MAC Address</source>
         <translation>MAC 位址</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>DHCP Enabled</source>
         <translation>DHCP 已啟用</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP 伺服器 #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="154"/>
         <source>DHCP Server</source>
         <translation>DHCP 伺服器</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address #%1</source>
         <translation>位址 #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="166"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway #%1</source>
         <translation>閘道 #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="174"/>
         <source>Gateway</source>
         <translation>閘道</translation>
     </message>
@@ -4895,33 +4895,33 @@
 <context>
     <name>client::SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="132"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="135"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="138"/>
         <source>Local Path</source>
         <translation>本地路徑</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="140"/>
         <source>Current Uses</source>
         <translatorcomment>refer to what shi502_current_uses holds, translated by what it actually means</translatorcomment>
         <translation>目前連線數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="143"/>
         <source>Not limited</source>
         <translation>無限制</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Maximum Uses</source>
         <translation>最大連線數</translation>
     </message>
@@ -4929,22 +4929,22 @@
 <context>
     <name>client::SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="145"/>
         <source>Power Source</source>
         <translation>電力來源</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="147"/>
         <source>Battery Status</source>
         <translation>電池狀態</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="153"/>
         <source>Battery Life Percent</source>
         <translation>電池壽命百分比</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="159"/>
         <source>Full Battery Life Time</source>
         <translation>全滿電池壽命</translation>
     </message>
@@ -4953,151 +4953,151 @@
         <translation type="vanished">%1 秒</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="166"/>
         <source>Remaining Battery Life Time</source>
         <translation>剩餘電池壽命</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="182"/>
         <source>Device Name</source>
         <translation>裝置名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="185"/>
         <source>Manufacturer</source>
         <translation>製造商</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="188"/>
         <source>Manufacture Date</source>
         <translation>製造日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="191"/>
         <source>Unique Id</source>
         <translation>唯一 ID</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="194"/>
         <source>Serial Number</source>
         <translation>序號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="198"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="197"/>
         <source>Tempareture</source>
         <translation>溫度</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
         <source>Design Capacity</source>
         <translation>設計容量</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="200"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>%1 mWh</source>
         <translation>%1 mWh</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="203"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="206"/>
         <source>Full Charged Capacity</source>
         <translation>全滿容量</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="209"/>
         <source>Depreciation</source>
         <translation>衰減</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="212"/>
         <source>Current Capacity</source>
         <translation>目前容量</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>Voltage</source>
         <translation>電壓</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="215"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="307"/>
         <source>Charging</source>
         <translation>正在充電</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="221"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="305"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="304"/>
         <source>Critical</source>
         <translation>電量不足</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="227"/>
         <source>Discharging</source>
         <translation>放電中</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="230"/>
         <source>Power OnLine</source>
         <translatorcomment>refer to _SYSTEM_POWER_STATUS.ACLineStatus</translatorcomment>
         <translation>已接上 AC 電源</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="234"/>
         <source>State</source>
         <translation>狀態</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="239"/>
         <source>Battery #%1</source>
         <translation>電池 #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="281"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="280"/>
         <source>DC Battery</source>
         <translation>DC 電池</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="283"/>
         <source>AC Line</source>
         <translation>AC 電源</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="287"/>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="313"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="299"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="301"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>No Battery</source>
         <translation>無電池</translation>
     </message>
@@ -5105,44 +5105,44 @@
 <context>
     <name>client::SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="140"/>
         <source>Port</source>
         <translation>通訊埠</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="143"/>
         <source>Driver</source>
         <translation>驅動程式</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="145"/>
         <source>Shared</source>
         <translation>共用</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="148"/>
         <source>Share Name</source>
         <translation>共用名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="150"/>
         <source>Jobs Count</source>
         <translation>任務數</translation>
     </message>
@@ -5150,12 +5150,12 @@
 <context>
     <name>client::SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="142"/>
         <source>System Idle Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5235,178 +5235,178 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="152"/>
         <source>Host Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="153"/>
         <source>Client Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="154"/>
         <source>Router Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="156"/>
         <source>Aspia Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="166"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="165"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="137"/>
         <source>Domain</source>
         <translation>網域</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="140"/>
         <source>Workgroup</source>
         <translation>工作群組</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="143"/>
         <source>Uptime</source>
         <translation>正常運作時間</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="146"/>
         <source>Computer</source>
         <translation>電腦</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="169"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="241"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="240"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="172"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="171"/>
         <source>Architecture</source>
         <translation>架構</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="174"/>
         <source>License Key</source>
         <translation>產品金鑰</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="178"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="177"/>
         <source>Install Date</source>
         <translation>安裝日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="182"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="265"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="264"/>
         <source>Manufacturer</source>
         <translation>製造商</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="196"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="211"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="210"/>
         <source>Model</source>
         <translation>型號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="200"/>
         <source>Motherboard</source>
         <translation>主機板</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="214"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="238"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="237"/>
         <source>Vendor</source>
         <translation>供應商</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="217"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="216"/>
         <source>Packages</source>
         <translation>個數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Cores</source>
         <translation>核心數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="223"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Threads</source>
         <translation>執行緒數</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="227"/>
         <source>Processor</source>
         <translation>處理器</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="243"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="268"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="267"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="270"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="274"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="273"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="277"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Form Factor</source>
         <translation>尺寸</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="280"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="279"/>
         <source>Part Number</source>
         <translation>型號</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="284"/>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="355"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="283"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="354"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="293"/>
         <source>Memory</source>
         <translation>記憶體</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="323"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="322"/>
         <source>%1 (%2 free)</source>
         <translation>%1（%2 可用）</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="333"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="332"/>
         <source>Logical Drives</source>
         <translation>邏輯磁碟機</translation>
     </message>
@@ -5414,52 +5414,52 @@
 <context>
     <name>client::SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="130"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="133"/>
         <source>Adapter String</source>
         <translation>介面卡字串</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="136"/>
         <source>BIOS String</source>
         <translation>BIOS 字串</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="139"/>
         <source>Chip Type</source>
         <translation>Chip 類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="142"/>
         <source>DAC Type</source>
         <translation>DAC 類型</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>Memory Size</source>
         <translation>記憶體大小</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="145"/>
         <source>%1 bytes</source>
         <translation>%1 位元組</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="148"/>
         <source>Driver Date</source>
         <translation>驅動程式日期</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="151"/>
         <source>Driver Version</source>
         <translation>驅動程式版本</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="154"/>
         <source>Driver Provider</source>
         <translation>驅動程式提供者</translation>
     </message>

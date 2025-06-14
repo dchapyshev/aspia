@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QQueue>
 
-#include "base/macros_magic.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/relay_peer.h"
 
@@ -53,7 +52,7 @@ private:
     QList<RelayPeer*> pending_;
     QQueue<TcpChannel*> channels_;
 
-    DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);
+    Q_DISABLE_COPY(RelayPeerManager)
 };
 
 } // namespace base

@@ -126,7 +126,7 @@ private:
     SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
 
-    DISALLOW_COPY_AND_ASSIGN(ServiceThread);
+    Q_DISABLE_COPY(ServiceThread)
 };
 
 //================================================================================================

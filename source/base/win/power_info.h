@@ -22,8 +22,6 @@
 #include <QtGlobal>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class PowerInfo
@@ -45,7 +43,7 @@ private:
     SYSTEM_POWER_STATUS power_status_;
     bool initialized_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(PowerInfo);
+    Q_DISABLE_COPY(PowerInfo)
 };
 
 } // namespace base

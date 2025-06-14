@@ -19,8 +19,6 @@
 #ifndef BASE_DESKTOP_X11_X_ERROR_TRAP_H
 #define BASE_DESKTOP_X11_X_ERROR_TRAP_H
 
-#include "base/macros_magic.h"
-
 #include <X11/Xlib.h>
 
 namespace base {
@@ -40,7 +38,7 @@ private:
     XErrorHandler original_error_handler_;
     bool enabled_;
 
-    DISALLOW_COPY_AND_ASSIGN(XErrorTrap);
+    Q_DISABLE_COPY(XErrorTrap)
 };
 
 } // namespace base

@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
 #include "common/file_task.h"
 
 namespace proto::file_transfer {
@@ -59,7 +58,7 @@ private:
 
     const FileTask::Target target_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTaskFactory);
+    Q_DISABLE_COPY(FileTaskFactory)
 };
 
 } // namespace common

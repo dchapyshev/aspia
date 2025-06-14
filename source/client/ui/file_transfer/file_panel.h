@@ -90,7 +90,7 @@ private:
     bool transfer_allowed_ = false;
     bool transfer_enabled_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(FilePanel);
+    Q_DISABLE_COPY(FilePanel)
 };
 
 } // namespace client

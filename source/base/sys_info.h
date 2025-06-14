@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class SysInfo
@@ -48,7 +46,7 @@ public:
     static int processorThreads();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(SysInfo);
+    Q_DISABLE_COPY(SysInfo)
 };
 
 } // namespace base

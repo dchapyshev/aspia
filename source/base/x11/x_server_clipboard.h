@@ -19,8 +19,6 @@
 #ifndef BASE_X11_X_SERVER_CLIPBOARD_H
 #define BASE_X11_X_SERVER_CLIPBOARD_H
 
-#include "base/macros_magic.h"
-
 #include <chrono>
 #include <functional>
 #include <set>
@@ -134,7 +132,7 @@ private:
     // |callback| argument supplied to init().
     ClipboardChangedCallback callback_;
 
-    DISALLOW_COPY_AND_ASSIGN(XServerClipboard);
+    Q_DISABLE_COPY(XServerClipboard)
 };
 
 } // namespace base

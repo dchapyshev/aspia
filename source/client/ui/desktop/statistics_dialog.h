@@ -19,11 +19,10 @@
 #ifndef CLIENT_UI_DESKTOP_STATISTICS_DIALOG_H
 #define CLIENT_UI_DESKTOP_STATISTICS_DIALOG_H
 
-#include "base/macros_magic.h"
+#include <QTime>
+
 #include "client/client_desktop.h"
 #include "ui_statistics_dialog.h"
-
-#include <QTime>
 
 namespace client {
 
@@ -48,7 +47,7 @@ private:
     QTimer* update_timer_ = nullptr;
     QTime duration_;
 
-    DISALLOW_COPY_AND_ASSIGN(StatisticsDialog);
+    Q_DISABLE_COPY(StatisticsDialog)
 };
 
 } // namespace client

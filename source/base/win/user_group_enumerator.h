@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/macros_magic.h"
-
 struct _LOCALGROUP_INFO_1;
 
 namespace base {
@@ -44,7 +42,7 @@ private:
     unsigned long total_entries_ = 0;
     unsigned long current_entry_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(UserGroupEnumerator);
+    Q_DISABLE_COPY(UserGroupEnumerator)
 };
 
 } // base

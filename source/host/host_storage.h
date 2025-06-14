@@ -19,10 +19,9 @@
 #ifndef HOST_HOST_STORAGE_H
 #define HOST_HOST_STORAGE_H
 
-#include "base/macros_magic.h"
-#include "base/peer/host_id.h"
-
 #include <QSettings>
+
+#include "base/peer/host_id.h"
 
 namespace host {
 
@@ -50,7 +49,7 @@ public:
 private:
     QSettings impl_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostStorage);
+    Q_DISABLE_COPY(HostStorage)
 };
 
 } // namespace host

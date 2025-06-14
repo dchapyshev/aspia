@@ -76,7 +76,7 @@ private:
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
+    Q_DISABLE_COPY(ScreenCapturerGdi)
 };
 
 } // namespace base

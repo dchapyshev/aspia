@@ -19,8 +19,6 @@
 #ifndef HOST_UI_SETTINGS_UTIL_H
 #define HOST_UI_SETTINGS_UTIL_H
 
-#include "base/macros_magic.h"
-
 #include <QCoreApplication>
 
 namespace host {
@@ -39,7 +37,7 @@ private:
                              bool silent,
                              QWidget* parent);
 
-    DISALLOW_COPY_AND_ASSIGN(SettingsUtil);
+    Q_DISABLE_COPY(SettingsUtil)
 };
 
 } // namespace host

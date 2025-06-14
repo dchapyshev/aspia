@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_SETTINGS_H
 #define CLIENT_UI_DESKTOP_DESKTOP_SETTINGS_H
 
-#include "base/macros_magic.h"
-
 #include <QSettings>
 
 namespace client {
@@ -59,8 +57,7 @@ public:
 
 private:
     QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(DesktopSettings);
+    Q_DISABLE_COPY(DesktopSettings)
 };
 
 } // namespace client

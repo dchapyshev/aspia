@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_DIALOG_PORT_FORWARDING_H
 #define CONSOLE_COMPUTER_DIALOG_PORT_FORWARDING_H
 
-#include "base/macros_magic.h"
 #include "console/computer_dialog_tab.h"
 #include "proto/address_book.h"
 #include "ui_computer_dialog_port_forwarding.h"
@@ -39,8 +38,7 @@ public:
 
 private:
     Ui::ComputerDialogPortForwarding ui;
-
-    DISALLOW_COPY_AND_ASSIGN(ComputerDialogPortForwarding);
+    Q_DISABLE_COPY(ComputerDialogPortForwarding)
 };
 
 } // namespace console

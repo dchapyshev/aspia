@@ -125,7 +125,7 @@ private:
     base::Parser<proto::internal::UiToService> incoming_message_;
     base::Serializer<proto::internal::ServiceToUi> outgoing_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSession);
+    Q_DISABLE_COPY(UserSession)
 };
 
 } // namespace host

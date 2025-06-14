@@ -19,6 +19,15 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_WIDGET_H
 #define CLIENT_UI_DESKTOP_DESKTOP_WIDGET_H
 
+#include <QEvent>
+#include <QPainter>
+#include <QPointer>
+#include <QSet>
+#include <QTimer>
+#include <QWidget>
+
+#include <memory>
+
 #include "base/desktop/frame.h"
 #include "proto/desktop.h"
 
@@ -30,15 +39,6 @@
 #include "base/mac/scoped_cftyperef.h"
 #include <CoreGraphics/CGEventTypes.h>
 #endif // defined(Q_OS_MACOS)
-
-#include <QEvent>
-#include <QPainter>
-#include <QPointer>
-#include <QSet>
-#include <QTimer>
-#include <QWidget>
-
-#include <memory>
 
 namespace client {
 
@@ -126,7 +126,7 @@ private:
 
     QSet<quint32> remote_pressed_keys_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
+    Q_DISABLE_COPY(DesktopWidget)
 };
 
 } // namespace client

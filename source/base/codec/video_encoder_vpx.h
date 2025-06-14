@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
 
@@ -67,7 +66,7 @@ private:
     std::unique_ptr<vpx_image_t> image_;
     QByteArray image_buffer_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
+    Q_DISABLE_COPY(VideoEncoderVPX)
 };
 
 } // namespace base

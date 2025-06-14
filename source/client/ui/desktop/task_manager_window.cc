@@ -355,7 +355,7 @@ public:
 
 private:
     const int index_;
-    DISALLOW_COPY_AND_ASSIGN(ColumnAction);
+    Q_DISABLE_COPY(ColumnAction);
 };
 
 } // namespace

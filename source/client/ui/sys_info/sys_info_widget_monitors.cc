@@ -18,13 +18,12 @@
 
 #include "client/ui/sys_info/sys_info_widget_monitors.h"
 
-#include "base/macros_magic.h"
-#include "common/system_info_constants.h"
+#include <QMenu>
 
 #include <cmath>
 #include <limits>
 
-#include <QMenu>
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -68,7 +67,7 @@ public:
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Item);
+    Q_DISABLE_COPY(Item)
 };
 
 //--------------------------------------------------------------------------------------------------

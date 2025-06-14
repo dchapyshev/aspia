@@ -19,8 +19,6 @@
 #ifndef HOST_SYSTEM_SETTINGS_H
 #define HOST_SYSTEM_SETTINGS_H
 
-#include "base/macros_magic.h"
-
 #include <QSettings>
 
 namespace base {
@@ -114,7 +112,7 @@ public:
 private:
     mutable QSettings settings_;
 
-    DISALLOW_COPY_AND_ASSIGN(SystemSettings);
+    Q_DISABLE_COPY(SystemSettings)
 };
 
 } // namespace host

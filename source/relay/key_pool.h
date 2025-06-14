@@ -19,11 +19,11 @@
 #ifndef RELAY_KEY_POOL_H
 #define RELAY_KEY_POOL_H
 
-#include "relay/session_key.h"
-
 #include <optional>
 #include <mutex>
 #include <unordered_map>
+
+#include "relay/session_key.h"
 
 namespace relay {
 
@@ -53,7 +53,7 @@ private:
     std::unordered_map<quint32, SessionKey> map_;
     quint32 current_key_id_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(KeyPool);
+    Q_DISABLE_COPY(KeyPool)
 };
 
 } // namespace relay

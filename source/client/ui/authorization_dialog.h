@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_AUTHORIZATION_DIALOG_H
 #define CLIENT_UI_AUTHORIZATION_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "ui_authorization_dialog.h"
 
 class QAbstractButton;
@@ -55,8 +54,7 @@ private:
     void fitSize();
 
     Ui::AuthorizationDialog ui;
-
-    DISALLOW_COPY_AND_ASSIGN(AuthorizationDialog);
+    Q_DISABLE_COPY(AuthorizationDialog)
 };
 
 } // namespace client

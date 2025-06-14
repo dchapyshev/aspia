@@ -61,7 +61,7 @@ private:
     proto::address_book::ComputerGroup* computer_group_;
     QWidgetList tabs_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
+    Q_DISABLE_COPY(ComputerGroupDialog)
 };
 
 } // namespace console

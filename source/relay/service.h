@@ -47,7 +47,7 @@ protected:
 private:
     QPointer<Controller> controller_;
 
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    Q_DISABLE_COPY(Service)
 };
 
 } // namespace relay

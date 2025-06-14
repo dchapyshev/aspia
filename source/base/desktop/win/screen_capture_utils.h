@@ -49,7 +49,7 @@ public:
     static int screenCount();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
+    Q_DISABLE_COPY(ScreenCaptureUtils)
 };
 
 } // namespace base

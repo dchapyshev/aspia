@@ -21,7 +21,6 @@
 
 #include <QSettings>
 
-#include "base/macros_magic.h"
 #include "client/router_config.h"
 
 namespace client {
@@ -40,8 +39,7 @@ public:
 
 private:
     QSettings storage_;
-
-    DISALLOW_COPY_AND_ASSIGN(RouterConfigStorage);
+    Q_DISABLE_COPY(RouterConfigStorage)
 };
 
 } // namespace client

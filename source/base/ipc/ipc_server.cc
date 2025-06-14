@@ -77,7 +77,7 @@ private:
     std::unique_ptr<asio::local::stream_protocol::socket> handle_;
 #endif
 
-    DISALLOW_COPY_AND_ASSIGN(Listener);
+    Q_DISABLE_COPY(Listener)
 };
 
 //--------------------------------------------------------------------------------------------------

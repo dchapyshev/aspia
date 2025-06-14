@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "base/macros_magic.h"
-
 #include <memory>
 
 namespace base {
@@ -245,7 +243,7 @@ private:
     const size_t data_size_;
     Data* edid_;
 
-    DISALLOW_COPY_AND_ASSIGN(Edid);
+    Q_DISABLE_COPY(Edid)
 };
 
 } // namespace base

@@ -45,7 +45,7 @@ protected:
     void onSessionMessageWritten(size_t pending) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ClientSystemInfo);
+    Q_DISABLE_COPY(ClientSystemInfo)
 };
 
 } // namespace client

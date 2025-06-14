@@ -21,7 +21,6 @@
 
 #include <QTreeWidget>
 
-#include "base/macros_magic.h"
 #include "proto/address_book.h"
 
 namespace console {
@@ -62,7 +61,7 @@ private:
     ComputerGroupItem* parent_group_item_;
     int computer_id_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerItem);
+    Q_DISABLE_COPY(ComputerItem)
 };
 
 } // namespace console

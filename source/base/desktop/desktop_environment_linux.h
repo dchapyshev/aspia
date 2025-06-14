@@ -36,7 +36,7 @@ protected:
     void revertAll() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentLinux);
+    Q_DISABLE_COPY(DesktopEnvironmentLinux)
 };
 
 } // namespace base

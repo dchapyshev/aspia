@@ -49,7 +49,7 @@ private:
     std::unique_ptr<AudioCapturer> capturer_;
     base::Serializer<proto::internal::DesktopToService> outgoing_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioCapturerWrapper);
+    Q_DISABLE_COPY(AudioCapturerWrapper)
 };
 
 } // namespace base

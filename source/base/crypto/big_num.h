@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 
-#include "base/macros_magic.h"
 #include "base/crypto/openssl_util.h"
 
 namespace base {
@@ -81,7 +80,7 @@ public:
         }
 
         BIGNUM_CTX_ptr ctx_;
-        DISALLOW_COPY_AND_ASSIGN(Context);
+        Q_DISABLE_COPY(Context)
     };
 
 private:
@@ -95,7 +94,7 @@ private:
 
     BIGNUM_ptr num_;
 
-    DISALLOW_COPY_AND_ASSIGN(BigNum);
+    Q_DISABLE_COPY(BigNum)
 };
 
 } // namespace base

@@ -21,8 +21,6 @@
 
 #include <QAction>
 
-#include "base/macros_magic.h"
-
 namespace common {
 
 class LanguageAction final : public QAction
@@ -38,7 +36,7 @@ public:
 private:
     QString locale_code_;
 
-    DISALLOW_COPY_AND_ASSIGN(LanguageAction);
+    Q_DISABLE_COPY(LanguageAction)
 };
 
 } // namespace common

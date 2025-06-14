@@ -35,7 +35,7 @@ public:
     quint64 memorySize() const;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(VideoAdapterEnumarator);
+    Q_DISABLE_COPY(VideoAdapterEnumarator)
 };
 
 } // namespace base

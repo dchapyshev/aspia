@@ -19,11 +19,10 @@
 #ifndef CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
 #define CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
 
-#include "base/macros_magic.h"
+#include <QTreeWidget>
+
 #include "client/ui/session_window.h"
 #include "proto/text_chat.h"
-
-#include <QTreeWidget>
 
 namespace Ui {
 class TextChatSessionWindow;
@@ -57,8 +56,7 @@ protected:
 
 private:
     std::unique_ptr<Ui::TextChatSessionWindow> ui;
-
-    DISALLOW_COPY_AND_ASSIGN(TextChatSessionWindow);
+    Q_DISABLE_COPY(TextChatSessionWindow)
 };
 
 } // namespace client

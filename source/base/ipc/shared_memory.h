@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include "base/macros_magic.h"
-
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -84,7 +82,7 @@ private:
     void* data_;
     int id_;
 
-    DISALLOW_COPY_AND_ASSIGN(SharedMemory);
+    Q_DISABLE_COPY(SharedMemory)
 };
 
 } // namespace base

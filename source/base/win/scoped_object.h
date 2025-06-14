@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_HANDLE_H
 #define BASE_WIN_SCOPED_HANDLE_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -100,7 +99,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedObject);
+    Q_DISABLE_COPY(ScopedObject)
 };
 
 class HandleObjectTraits

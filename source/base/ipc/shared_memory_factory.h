@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class SharedMemory;
@@ -51,7 +49,7 @@ signals:
     void sig_memoryDestroyed(int id);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);
+    Q_DISABLE_COPY(SharedMemoryFactory)
 };
 
 } // namespace base

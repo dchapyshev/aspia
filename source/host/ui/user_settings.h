@@ -19,8 +19,6 @@
 #ifndef HOST_UI_USER_SETTINGS_H
 #define HOST_UI_USER_SETTINGS_H
 
-#include "base/macros_magic.h"
-
 #include <QSettings>
 
 namespace host {
@@ -47,7 +45,7 @@ public:
 private:
     QSettings settings_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSettings);
+    Q_DISABLE_COPY(UserSettings)
 };
 
 } // namespace host

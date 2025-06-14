@@ -62,7 +62,7 @@ private:
     base::IpcServer* ipc_server_ = nullptr;
     QList<UserSession*> sessions_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
+    Q_DISABLE_COPY(UserSessionManager)
 };
 
 } // namespace host

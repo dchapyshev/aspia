@@ -19,7 +19,7 @@
 #ifndef BASE_POWER_CONTROLLER_H
 #define BASE_POWER_CONTROLLER_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
 
 namespace base {
 
@@ -32,7 +32,7 @@ public:
     static bool lock();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(PowerController);
+    Q_DISABLE_COPY(PowerController)
 };
 
 } // namespace base

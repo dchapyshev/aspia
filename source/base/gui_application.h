@@ -74,7 +74,7 @@ private:
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
 
-    DISALLOW_COPY_AND_ASSIGN(GuiApplication);
+    Q_DISABLE_COPY(GuiApplication)
 };
 
 } // namespace base

@@ -21,8 +21,6 @@
 
 #include <QTreeWidget>
 
-#include "base/macros_magic.h"
-
 namespace console {
 
 class ComputerTree final : public QTreeWidget
@@ -51,7 +49,7 @@ private:
     QPoint start_pos_;
     QString mime_type_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerTree);
+    Q_DISABLE_COPY(ComputerTree)
 };
 
 } // namespace console

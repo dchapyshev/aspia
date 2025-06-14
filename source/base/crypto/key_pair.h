@@ -19,7 +19,6 @@
 #ifndef BASE_CRYPTO_KEY_PAIR_H
 #define BASE_CRYPTO_KEY_PAIR_H
 
-#include "base/macros_magic.h"
 #include "base/crypto/openssl_util.h"
 
 namespace base {
@@ -47,7 +46,7 @@ private:
 
     EVP_PKEY_ptr pkey_;
 
-    DISALLOW_COPY_AND_ASSIGN(KeyPair);
+    Q_DISABLE_COPY(KeyPair)
 };
 
 } // namespace base

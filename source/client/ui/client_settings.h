@@ -19,11 +19,10 @@
 #ifndef CLIENT_UI_CLIENT_SETTINGS_H
 #define CLIENT_UI_CLIENT_SETTINGS_H
 
-#include "base/macros_magic.h"
+#include <QSettings>
+
 #include "proto/desktop.h"
 #include "proto/peer.h"
-
-#include <QSettings>
 
 namespace client {
 
@@ -68,8 +67,7 @@ public:
 
 private:
     QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientSettings);
+    Q_DISABLE_COPY(ClientSettings)
 };
 
 } // namespace client

@@ -19,7 +19,6 @@
 #ifndef BASE_CODEC_AUDIO_ENCODER_H
 #define BASE_CODEC_AUDIO_ENCODER_H
 
-#include "base/macros_magic.h"
 #include "proto/desktop.h"
 
 struct OpusEncoder;
@@ -67,7 +66,7 @@ private:
     int leftover_buffer_size_ = 0;
     int leftover_samples_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioEncoder);
+    Q_DISABLE_COPY(AudioEncoder)
 };
 
 } // namespace base

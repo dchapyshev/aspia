@@ -22,7 +22,6 @@
 #include <QMap>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
 #include "host/win/touch_injector_defines.h"
 #include "proto/desktop.h"
 
@@ -58,7 +57,7 @@ private:
     // All the POINTER_TOUCH_INFOs are stored as "move" points.
     QMap<quint32, OWN_POINTER_TOUCH_INFO> touches_in_contact_;
 
-    DISALLOW_COPY_AND_ASSIGN(TouchInjector);
+    Q_DISABLE_COPY(TouchInjector)
 };
 
 } // namespace host

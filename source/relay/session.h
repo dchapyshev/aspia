@@ -19,13 +19,12 @@
 #ifndef RELAY_SESSION_H
 #define RELAY_SESSION_H
 
-#include "base/macros_magic.h"
-#include "base/peer/host_id.h"
+#include <QObject>
+#include <QByteArray>
 
 #include <asio/ip/tcp.hpp>
 
-#include <QObject>
-#include <QByteArray>
+#include "base/peer/host_id.h"
 
 namespace base {
 class Location;
@@ -81,7 +80,7 @@ private:
     asio::ip::tcp::socket socket_[kNumberOfSides];
     std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
 
-    DISALLOW_COPY_AND_ASSIGN(Session);
+    Q_DISABLE_COPY(Session)
 };
 
 } // namespace relay

@@ -23,7 +23,6 @@
 
 #include "base/net/tcp_server.h"
 #include "base/peer/server_authenticator_manager.h"
-#include "proto/router_admin.h"
 #include "router/key_factory.h"
 #include "router/session_manager.h"
 
@@ -60,7 +59,7 @@ private:
     QStringList admin_white_list_;
     QStringList relay_white_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(Server);
+    Q_DISABLE_COPY(Server)
 };
 
 } // namespace router

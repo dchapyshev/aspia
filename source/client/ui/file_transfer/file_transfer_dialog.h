@@ -74,7 +74,7 @@ private:
     bool closing_ = false;
     bool finished_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTransferDialog);
+    Q_DISABLE_COPY(FileTransferDialog)
 };
 
 } // namespace client

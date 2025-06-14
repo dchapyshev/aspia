@@ -19,7 +19,6 @@
 #ifndef HOST_UI_USER_DIALOG_H
 #define HOST_UI_USER_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "base/peer/user.h"
 #include "ui_user_dialog.h"
 
@@ -53,7 +52,7 @@ private:
     base::User user_;
     bool account_changed_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(UserDialog);
+    Q_DISABLE_COPY(UserDialog)
 };
 
 } // namespace host

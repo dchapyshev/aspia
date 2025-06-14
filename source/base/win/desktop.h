@@ -22,8 +22,6 @@
 #include <QStringList>
 #include <qt_windows.h>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class Desktop
@@ -74,7 +72,7 @@ private:
     // True if |desktop_| must be closed on teardown.
     bool own_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(Desktop);
+    Q_DISABLE_COPY(Desktop)
 };
 
 } // namespace base

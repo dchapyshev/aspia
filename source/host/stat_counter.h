@@ -21,8 +21,6 @@
 
 #include <QTimer>
 
-#include "base/macros_magic.h"
-
 namespace host {
 
 class StatCounter final : public QObject
@@ -63,7 +61,7 @@ private:
     quint64 video_error_count_ = 0;
     quint64 cursor_positions_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(StatCounter);
+    Q_DISABLE_COPY(StatCounter)
 };
 
 } // namespace host

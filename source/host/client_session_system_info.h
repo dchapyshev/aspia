@@ -19,7 +19,6 @@
 #ifndef HOST_CLIENT_SESSION_SYSTEM_INFO_H
 #define HOST_CLIENT_SESSION_SYSTEM_INFO_H
 
-#include "base/macros_magic.h"
 #include "host/client_session.h"
 
 namespace host {
@@ -38,7 +37,7 @@ protected:
     void onReceived(const QByteArray& buffer) final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);
+    Q_DISABLE_COPY(ClientSessionSystemInfo)
 };
 
 } // namespace host

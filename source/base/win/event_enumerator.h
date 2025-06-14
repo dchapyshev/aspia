@@ -56,7 +56,7 @@ private:
     mutable int current_pos_ = 0;
     mutable QByteArray record_buffer_;
 
-    DISALLOW_COPY_AND_ASSIGN(EventEnumerator);
+    Q_DISABLE_COPY(EventEnumerator)
 };
 
 } // namespace base

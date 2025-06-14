@@ -85,8 +85,7 @@ protected:
 
 private:
     QPixmap pixmap_;
-
-    DISALLOW_COPY_AND_ASSIGN(Editor);
+    Q_DISABLE_COPY(Editor)
 };
 
 } // namespace

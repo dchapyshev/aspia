@@ -39,6 +39,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
+#include "client/ui/desktop/desktop_settings.h"
 #include "client/ui/desktop/desktop_toolbar.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"

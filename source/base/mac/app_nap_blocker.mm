@@ -18,8 +18,6 @@
 
 #include "base/mac/app_nap_blocker.h"
 
-#include "base/macros_magic.h"
-
 #include <mutex>
 
 #include <Cocoa/Cocoa.h>
@@ -45,7 +43,7 @@ private:
     id id_ = nullptr;
     uint32_t counter_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(AppNapBlocker);
+    Q_DISABLE_COPY(AppNapBlocker)
 };
 
 //--------------------------------------------------------------------------------------------------

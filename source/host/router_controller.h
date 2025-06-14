@@ -81,7 +81,7 @@ private:
 
     QQueue<base::TcpChannel*> channels_;
 
-    DISALLOW_COPY_AND_ASSIGN(RouterController);
+    Q_DISABLE_COPY(RouterController)
 };
 
 } // namespace host

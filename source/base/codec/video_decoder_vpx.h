@@ -19,7 +19,6 @@
 #ifndef BASE_CODEC_VIDEO_DECODER_VPX_H
 #define BASE_CODEC_VIDEO_DECODER_VPX_H
 
-#include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_decoder.h"
 
@@ -40,7 +39,7 @@ private:
 
     ScopedVpxCodec codec_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
+    Q_DISABLE_COPY(VideoDecoderVPX)
 };
 
 } // namespace base

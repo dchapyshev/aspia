@@ -19,9 +19,9 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_MIME_DATA_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_MIME_DATA_H
 
-#include "client/file_transfer.h"
-
 #include <QMimeData>
+
+#include "client/file_transfer.h"
 
 namespace client {
 
@@ -49,7 +49,7 @@ private:
     QString mime_type_;
     QList<FileTransfer::Item> file_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileMimeData);
+    Q_DISABLE_COPY(FileMimeData)
 };
 
 } // namespace client

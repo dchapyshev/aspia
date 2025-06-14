@@ -86,7 +86,7 @@ private:
     GC shm_gc_ = nullptr;
     bool xshm_get_image_succeeded_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(XServerPixelBuffer);
+    Q_DISABLE_COPY(XServerPixelBuffer)
 };
 
 } // namespace base

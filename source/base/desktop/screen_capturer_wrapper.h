@@ -69,7 +69,7 @@ private:
     std::unique_ptr<DesktopResizer> resizer_;
     QPointer<ScreenCapturer> screen_capturer_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
+    Q_DISABLE_COPY(ScreenCapturerWrapper)
 };
 
 } // namespace base

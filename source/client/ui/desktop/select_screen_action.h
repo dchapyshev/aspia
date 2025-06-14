@@ -19,10 +19,9 @@
 #ifndef CLIENT_UI_DESKTOP_SELECT_SCREEN_ACTION_H
 #define CLIENT_UI_DESKTOP_SELECT_SCREEN_ACTION_H
 
-#include "base/macros_magic.h"
-#include "proto/desktop.h"
-
 #include <QAction>
+
+#include "proto/desktop.h"
 
 namespace client {
 
@@ -67,8 +66,7 @@ public:
 
 private:
     proto::desktop::Screen screen_;
-
-    DISALLOW_COPY_AND_ASSIGN(SelectScreenAction);
+    Q_DISABLE_COPY(SelectScreenAction)
 };
 
 } // namespace client

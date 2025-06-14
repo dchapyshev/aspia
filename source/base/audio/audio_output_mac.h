@@ -108,7 +108,7 @@ private:
     int32_t render_delay_offset_samples_ = 0;
     semaphore_t semaphore_;
 
-    DISALLOW_COPY_AND_ASSIGN(AudioOutputMac);
+    Q_DISABLE_COPY(AudioOutputMac)
 };
 
 } // namespace base

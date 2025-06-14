@@ -21,8 +21,6 @@
 
 #include <QThread>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 class Thread final : public QThread
@@ -39,7 +37,7 @@ protected:
     void run() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Thread);
+    Q_DISABLE_COPY(Thread)
 };
 
 } // namespace base

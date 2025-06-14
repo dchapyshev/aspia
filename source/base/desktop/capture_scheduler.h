@@ -19,8 +19,7 @@
 #ifndef BASE_DESKTOP_CAPTURE_SCHEDULER_H
 #define BASE_DESKTOP_CAPTURE_SCHEDULER_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <chrono>
 
 namespace base {
@@ -43,7 +42,7 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> begin_time_;
     std::chrono::time_point<std::chrono::steady_clock> end_time_;
 
-    DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
+    Q_DISABLE_COPY(CaptureScheduler)
 };
 
 } // namespace base

@@ -22,8 +22,6 @@
 #include <QString>
 #include <QVector>
 
-#include "base/macros_magic.h"
-
 struct _USER_INFO_3;
 
 namespace base {
@@ -56,7 +54,7 @@ private:
     unsigned long total_entries_ = 0;
     unsigned long current_entry_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(UserEnumerator);
+    Q_DISABLE_COPY(UserEnumerator)
 };
 
 } // base

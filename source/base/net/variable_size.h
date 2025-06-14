@@ -20,11 +20,7 @@
 #define BASE_NET_VARIABLE_SIZE_H
 
 #include <QtGlobal>
-
-#include "base/macros_magic.h"
-
 #include <asio/buffer.hpp>
-
 #include <optional>
 
 namespace base {
@@ -42,7 +38,7 @@ private:
     quint8 buffer_[4] = { 0 };
     size_t pos_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(VariableSizeReader);
+    Q_DISABLE_COPY(VariableSizeReader)
 };
 
 class VariableSizeWriter
@@ -56,7 +52,7 @@ public:
 private:
     quint8 buffer_[4];
 
-    DISALLOW_COPY_AND_ASSIGN(VariableSizeWriter);
+    Q_DISABLE_COPY(VariableSizeWriter)
 };
 
 } // namespace base

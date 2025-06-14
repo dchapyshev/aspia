@@ -19,7 +19,6 @@
 #ifndef CONSOLE_COMPUTER_DIALOG_GENERAL_H
 #define CONSOLE_COMPUTER_DIALOG_GENERAL_H
 
-#include "base/macros_magic.h"
 #include "console/computer_dialog_tab.h"
 #include "proto/address_book.h"
 #include "ui_computer_dialog_general.h"
@@ -48,7 +47,7 @@ private:
 
     bool has_name_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerDialogGeneral);
+    Q_DISABLE_COPY(ComputerDialogGeneral)
 };
 
 } // namespace console

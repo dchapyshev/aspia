@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_IMPERSONATOR_H
 #define BASE_WIN_SCOPED_IMPERSONATOR_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -42,7 +41,7 @@ public:
 private:
     bool impersonated_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedImpersonator);
+    Q_DISABLE_COPY(ScopedImpersonator)
 };
 
 } // namespace base

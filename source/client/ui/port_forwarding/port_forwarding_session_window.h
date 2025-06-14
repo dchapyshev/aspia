@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_PORT_FORWARDING_PORT_FORWARDING_SESSION_WINDOW_H
 #define CLIENT_UI_PORT_FORWARDING_PORT_FORWARDING_SESSION_WINDOW_H
 
-#include "base/macros_magic.h"
 #include "client/client_port_forwarding.h"
 #include "client/ui/session_window.h"
 #include "proto/port_forwarding.h"
@@ -54,7 +53,7 @@ private:
     std::unique_ptr<Ui::PortForwardingSessionWindow> ui;
     proto::port_forwarding::Config session_config_;
 
-    DISALLOW_COPY_AND_ASSIGN(PortForwardingSessionWindow);
+    Q_DISABLE_COPY(PortForwardingSessionWindow)
 };
 
 } // namespace client

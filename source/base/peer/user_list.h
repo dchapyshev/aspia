@@ -19,7 +19,6 @@
 #ifndef BASE_PEER_USER_LIST_H
 #define BASE_PEER_USER_LIST_H
 
-#include "base/macros_magic.h"
 #include "base/peer/user_list_base.h"
 
 namespace base {
@@ -46,7 +45,7 @@ private:
     QByteArray seed_key_;
     QVector<User> list_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserList);
+    Q_DISABLE_COPY(UserList)
 };
 
 } // namespace base

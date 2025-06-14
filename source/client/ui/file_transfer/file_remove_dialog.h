@@ -67,7 +67,7 @@ private:
     std::unique_ptr<QFontMetrics> label_metrics_;
     bool stopped_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(FileRemoveDialog);
+    Q_DISABLE_COPY(FileRemoveDialog)
 };
 
 } // namespace client

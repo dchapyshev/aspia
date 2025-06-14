@@ -51,7 +51,7 @@ private:
     // The desktop handle assigned to the calling thread at creation.
     Desktop initial_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
+    Q_DISABLE_COPY(ScopedThreadDesktop)
 };
 
 } // namespace base

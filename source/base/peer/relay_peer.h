@@ -23,7 +23,6 @@
 #include <QObject>
 
 #include "base/location.h"
-#include "base/macros_magic.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
 #include "proto/router_peer.h"
@@ -69,7 +68,7 @@ private:
 
     TcpChannel* pending_channel_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(RelayPeer);
+    Q_DISABLE_COPY(RelayPeer)
 };
 
 } // namespace base

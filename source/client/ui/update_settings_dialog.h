@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_UPDATE_SETTINGS_DIALOG_H
 #define CLIENT_UI_UPDATE_SETTINGS_DIALOG_H
 
-#include "base/macros_magic.h"
 #include "ui_update_settings_dialog.h"
 
 namespace client {
@@ -34,8 +33,7 @@ public:
 
 private:
     Ui::UpdateSettingsDialog ui;
-
-    DISALLOW_COPY_AND_ASSIGN(UpdateSettingsDialog);
+    Q_DISABLE_COPY(UpdateSettingsDialog)
 };
 
 } // namespace client

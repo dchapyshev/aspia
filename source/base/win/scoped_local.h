@@ -19,8 +19,7 @@
 #ifndef BASE_WIN_SCOPED_LOCAL_H
 #define BASE_WIN_SCOPED_LOCAL_H
 
-#include "base/macros_magic.h"
-
+#include <QtGlobal>
 #include <qt_windows.h>
 
 namespace base {
@@ -97,7 +96,7 @@ private:
 
     T local_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
+    Q_DISABLE_COPY(ScopedLocal)
 };
 
 } // namespace base

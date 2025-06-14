@@ -46,8 +46,7 @@ protected:
 
 private:
     QPointer<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    Q_DISABLE_COPY(Service)
 };
 
 } // namespace host

@@ -56,7 +56,7 @@ private:
 
     mutable int last_update_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(DFMirageHelper);
+    Q_DISABLE_COPY(DFMirageHelper)
 };
 
 } // namespace base

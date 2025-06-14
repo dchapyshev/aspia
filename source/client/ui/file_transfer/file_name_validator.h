@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_NAME_VALIDATOR_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_NAME_VALIDATOR_H
 
-#include "base/macros_magic.h"
-
 #include <QValidator>
 
 namespace client {
@@ -40,7 +38,7 @@ signals:
     void sig_invalidNameEntered() const;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FileNameValidator);
+    Q_DISABLE_COPY(FileNameValidator)
 };
 
 } // namespace client

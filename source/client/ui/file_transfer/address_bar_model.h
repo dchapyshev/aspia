@@ -19,11 +19,10 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_MODEL_H
 #define CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_MODEL_H
 
-#include "base/macros_magic.h"
-#include "common/file_platform_util.h"
-#include "proto/file_transfer.h"
-
 #include <QAbstractItemModel>
+#include <QIcon>
+
+#include "proto/file_transfer.h"
 
 namespace client {
 
@@ -79,7 +78,7 @@ private:
     QString previous_path_;
     QList<Drive> drives_;
 
-    DISALLOW_COPY_AND_ASSIGN(AddressBarModel);
+    Q_DISABLE_COPY(AddressBarModel)
 };
 
 } // namespace client

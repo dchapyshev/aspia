@@ -21,8 +21,6 @@
 
 #include <QtGlobal>
 
-#include "base/macros_magic.h"
-
 namespace base {
 
 // ScopedClearLastError stores and resets the value of thread local error codes
@@ -40,7 +38,7 @@ public:
 
 private:
     const int last_errno_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedClearLastErrorBase);
+    Q_DISABLE_COPY(ScopedClearLastErrorBase)
 };
 
 #if defined(Q_OS_WINDOWS)
@@ -54,7 +52,7 @@ public:
 
 private:
     const unsigned long last_error_;
-    DISALLOW_COPY_AND_ASSIGN(ScopedClearLastError);
+    Q_DISABLE_COPY(ScopedClearLastError)
 };
 
 #elif defined(Q_OS_UNIX)
