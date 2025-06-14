@@ -27,32 +27,32 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="43"/>
+        <location filename="../client_main.cc" line="44"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="393"/>
+        <location filename="../client_main.cc" line="394"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="397"/>
+        <location filename="../client_main.cc" line="398"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="402"/>
+        <location filename="../client_main.cc" line="403"/>
         <source>Name of host.</source>
         <translation>Имя хоста.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="406"/>
+        <location filename="../client_main.cc" line="407"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="410"/>
+        <location filename="../client_main.cc" line="411"/>
         <source>Password of user.</source>
         <translation>Пароль пользователя.</translation>
     </message>
@@ -65,108 +65,108 @@
         <translation type="vanished">Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="415"/>
         <source>Display name when connected</source>
         <translation>Имя отображаемое при подключении</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="419"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="423"/>
+        <location filename="../client_main.cc" line="424"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Тип кодека. Возможные значения: vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="427"/>
+        <location filename="../client_main.cc" line="428"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Глубина цвета. Возможные значения: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="431"/>
+        <location filename="../client_main.cc" line="432"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Уровень сжатия. Возможные значения: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="435"/>
+        <location filename="../client_main.cc" line="436"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Включить или отключить звук. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="439"/>
+        <location filename="../client_main.cc" line="440"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="443"/>
+        <location filename="../client_main.cc" line="444"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Включить или отключить положение курсора. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="447"/>
+        <location filename="../client_main.cc" line="448"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="451"/>
+        <location filename="../client_main.cc" line="452"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="455"/>
+        <location filename="../client_main.cc" line="456"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="459"/>
+        <location filename="../client_main.cc" line="460"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Включить или отключить сглаживание шрифтов. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="463"/>
+        <location filename="../client_main.cc" line="464"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Очищать буфер обмена при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="467"/>
+        <location filename="../client_main.cc" line="468"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="471"/>
+        <location filename="../client_main.cc" line="472"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="475"/>
+        <location filename="../client_main.cc" line="476"/>
         <source>Router address.</source>
         <translation>Адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="479"/>
+        <location filename="../client_main.cc" line="480"/>
         <source>Router port.</source>
         <translation>Порт машрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="484"/>
+        <location filename="../client_main.cc" line="485"/>
         <source>Router name of user.</source>
         <translation>Имя пользователя маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="488"/>
+        <location filename="../client_main.cc" line="489"/>
         <source>Router password of user.</source>
         <translation>Пароль маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="492"/>
+        <location filename="../client_main.cc" line="493"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="42"/>
-        <location filename="../client_main.cc" line="683"/>
+        <location filename="../client_main.cc" line="43"/>
+        <location filename="../client_main.cc" line="684"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -179,7 +179,7 @@
         <translation type="vanished">Введен некорректный тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="684"/>
+        <location filename="../client_main.cc" line="685"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
