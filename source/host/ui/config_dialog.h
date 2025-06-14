@@ -33,6 +33,9 @@ public:
     explicit ConfigDialog(QWidget* parent = nullptr);
     ~ConfigDialog() final;
 
+    enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
+    Q_ENUM(ServiceState)
+
 private slots:
     void onOneTimeStateChanged(int state);
     void onConnConfirmStateChanged(int state);
@@ -65,7 +68,6 @@ private:
 
     Ui::ConfigDialog ui;
 
-    enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
     ServiceState service_state_;
 
     Q_DISABLE_COPY(ConfigDialog)

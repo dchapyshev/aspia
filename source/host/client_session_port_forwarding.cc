@@ -155,7 +155,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
             return;
         }
 
-        if (state_ != State::CONNECTED)
+        if (state_ != ForwardingState::CONNECTED)
         {
             LOG(ERROR) << "Data received without connected socket";
             onError(FROM_HERE);
@@ -191,7 +191,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
             host = "127.0.0.1";
 
         LOG(INFO) << "Start resolving for" << host << ":" << service;
-        state_ = State::RESOLVING;
+        state_ = ForwardingState::RESOLVING;
 
         resolver_.async_resolve(host, service,
                                 std::bind(&Handler::onResolved,
@@ -224,7 +224,7 @@ void ClientSessionPortForwarding::onError(const base::Location& location)
 {
     LOG(ERROR) << "Error occurred (from:" << location.toString() << ")";
 
-    state_ = State::DISCONNECTED;
+    state_ = ForwardingState::DISCONNECTED;
     if (handler_)
         handler_->dettach();
 
@@ -260,7 +260,7 @@ void ClientSessionPortForwarding::onResolved(
     }
 
     LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
-    state_ = State::CONNECTING;
+    state_ = ForwardingState::CONNECTING;
 
     asio::async_connect(socket_, endpoints,
         [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
@@ -290,7 +290,7 @@ void ClientSessionPortForwarding::onConnected(
 
     LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string()
               << ":" << endpoint.port();
-    state_ = State::CONNECTED;
+    state_ = ForwardingState::CONNECTED;
 
     sendPortForwardingResult(proto::port_forwarding::Result::SUCCESS);
 }

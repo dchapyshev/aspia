@@ -29,6 +29,7 @@ class ChangePasswordDialog final : public QDialog
 
 public:
     enum class Mode { CREATE_NEW_PASSWORD, CHANGE_PASSWORD };
+    Q_ENUM(Mode)
 
     explicit ChangePasswordDialog(Mode mode, QWidget* parent = nullptr);
     ~ChangePasswordDialog() final;

@@ -39,6 +39,7 @@ public:
         READ_ONLY,
         READ_WRITE
     };
+    Q_ENUM(Mode)
 
 #if defined(Q_OS_WINDOWS)
     using PlatformHandle = HANDLE;

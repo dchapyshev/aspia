@@ -281,7 +281,7 @@ void Router::onTcpConnected()
         }
         else
         {
-            LOG(INFO) << "Failed authentication:" << base::Authenticator::errorToString(error_code);
+            LOG(INFO) << "Failed authentication:" << error_code;
             emit sig_accessDenied(error_code);
         }
 
@@ -296,7 +296,7 @@ void Router::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Router disconnected:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Router disconnected:" << error_code;
     emit sig_disconnected(error_code);
 
     if (isAutoReconnect())

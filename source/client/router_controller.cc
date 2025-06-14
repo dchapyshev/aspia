@@ -124,7 +124,7 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << error_code;
 
             Error error;
             error.type = ErrorType::AUTHENTICATION;
@@ -144,8 +144,7 @@ void RouterController::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection to the router is lost ("
-              << base::TcpChannel::errorToString(error_code) << ")";
+    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
 
     Error error;
     error.type = ErrorType::NETWORK;

@@ -174,45 +174,6 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-const char* Client::statusToString(Status status)
-{
-    switch (status)
-    {
-        case Status::STARTED:
-            return "STARTED";
-        case Status::STOPPED:
-            return "STOPPED";
-        case Status::ROUTER_CONNECTING:
-            return "ROUTER_CONNECTING";
-        case Status::ROUTER_CONNECTED:
-            return "ROUTER_CONNECTED";
-        case Status::ROUTER_ERROR:
-            return "ROUTER_ERROR";
-        case Status::HOST_CONNECTING:
-            return "HOST_CONNECTING";
-        case Status::HOST_CONNECTED:
-            return "HOST_CONNECTED";
-        case Status::HOST_DISCONNECTED:
-            return "HOST_DISCONNECTED";
-        case Status::WAIT_FOR_ROUTER:
-            return "WAIT_FOR_ROUTER";
-        case Status::WAIT_FOR_ROUTER_TIMEOUT:
-            return "WAIT_FOR_ROUTER_TIMEOUT";
-        case Status::WAIT_FOR_HOST:
-            return "WAIT_FOR_HOST";
-        case Status::WAIT_FOR_HOST_TIMEOUT:
-            return "WAIT_FOR_HOST_TIMEOUT";
-        case Status::VERSION_MISMATCH:
-            return "VERSION_MISMATCH";
-        case Status::ACCESS_DENIED:
-            return "ACCESS_DENIED";
-        default:
-            return "UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::sendMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
@@ -282,7 +243,7 @@ void Client::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection terminated:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Connection terminated:" << error_code;
 
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
@@ -465,7 +426,7 @@ void Client::startAuthentication()
         }
         else
         {
-            LOG(INFO) << "Failed authentication:" << base::Authenticator::errorToString(error_code);
+            LOG(INFO) << "Failed authentication:" << error_code;
             emit sig_statusChanged(Status::ACCESS_DENIED, QVariant::fromValue(error_code));
         }
 

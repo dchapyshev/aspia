@@ -44,15 +44,11 @@ public:
 
     // Adds a firewall rule allowing inbound connections to the application on
     // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
-    bool addTcpRule(const QString& rule_name,
-                    const QString& description,
-                    quint16 port);
+    bool addTcpRule(const QString& rule_name, const QString& description, quint16 port);
 
     // Adds a firewall rule allowing inbound connections to the application on
     // UDP port |port|. Replaces the rule if it already exists. Needs elevation.
-    bool addUdpRule(const QString& rule_name,
-                    const QString& description,
-                    quint16 port);
+    bool addUdpRule(const QString& rule_name, const QString& description, quint16 port);
 
     // Deletes all rules with specified name. Needs elevation.
     void deleteRuleByName(const QString& rule_name);

@@ -19,7 +19,6 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory.h"
@@ -176,7 +175,7 @@ void Session::sendMessage(const QByteArray& message)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Network error:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Network error:" << error_code;
     emit sig_sessionFinished(session_id_);
 }
 

@@ -19,6 +19,7 @@
 #ifndef BASE_WIN_SESSION_INFO_H
 #define BASE_WIN_SESSION_INFO_H
 
+#include <QObject>
 #include <QString>
 
 #include "base/session_id.h"
@@ -28,6 +29,8 @@ namespace base {
 
 class SessionInfo
 {
+    Q_GADGET
+
 public:
     explicit SessionInfo(SessionId session_id);
     ~SessionInfo();
@@ -49,9 +52,9 @@ public:
         DOWN          = WTSDown,         // WinStation is down due to error.
         INIT          = WTSInit,         // WinStation in initialization.
     };
+    Q_ENUM(ConnectState)
 
     ConnectState connectState() const;
-    static const char* connectStateToString(ConnectState connect_state);
 
     QString winStationName() const;
     QString domain() const;

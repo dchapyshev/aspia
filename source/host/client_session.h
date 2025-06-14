@@ -43,6 +43,7 @@ public:
         STARTED, // Session is started.
         FINISHED // Session is stopped.
     };
+    Q_ENUM(State)
 
     static ClientSession* create(
         proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent = nullptr);

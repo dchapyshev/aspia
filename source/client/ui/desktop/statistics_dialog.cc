@@ -25,6 +25,25 @@
 
 namespace client {
 
+namespace {
+
+QString capturerToString(quint32 type)
+{
+    switch (static_cast<base::ScreenCapturer::Type>(type))
+    {
+        case base::ScreenCapturer::Type::DEFAULT: return "DEFAULT";
+        case base::ScreenCapturer::Type::FAKE: return "FAKE";
+        case base::ScreenCapturer::Type::WIN_GDI: return "WIN_GDI";
+        case base::ScreenCapturer::Type::WIN_DXGI: return "WIN_DXGI";
+        case base::ScreenCapturer::Type::WIN_MIRROR: return "WIN_MIRROR";
+        case base::ScreenCapturer::Type::LINUX_X11: return "LINUX_X11";
+        case base::ScreenCapturer::Type::MACOSX: return "MACOSX";
+        default: return "UNKNOWN";
+    }
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
@@ -121,8 +140,7 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 break;
 
             case 15:
-                item->setText(1, base::ScreenCapturer::typeToString(
-                    static_cast<base::ScreenCapturer::Type>(metrics.video_capturer_type)));
+                item->setText(1, capturerToString(metrics.video_capturer_type));
                 break;
 
             case 16:

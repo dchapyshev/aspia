@@ -68,8 +68,7 @@ public:
         VERSION_MISMATCH,
         ACCESS_DENIED
     };
-
-    static const char* statusToString(Status status);
+    Q_ENUM(Status)
 
 signals:
     void sig_statusChanged(Client::Status status, const QVariant& data = QVariant());

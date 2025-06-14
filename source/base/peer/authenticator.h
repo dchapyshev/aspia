@@ -45,6 +45,7 @@ public:
         FAILED,  // The authenticator failed.
         SUCCESS  // The authenticator completed successfully.
     };
+    Q_ENUM(State)
 
     enum class ErrorCode
     {
@@ -56,6 +57,7 @@ public:
         ACCESS_DENIED,
         SESSION_DENIED
     };
+    Q_ENUM(ErrorCode)
 
     void start(TcpChannel* tcp_channel);
 
@@ -71,9 +73,6 @@ public:
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
-
-    static const char* stateToString(State state);
-    static const char* errorToString(Authenticator::ErrorCode error_code);
 
 signals:
     void sig_finished(ErrorCode error_code);

@@ -607,7 +607,7 @@ QDebug operator<<(QDebug out, const std::error_code& error)
     const int value  = error.value();
 
     return out << QString::fromLocal8Bit(message.c_str(), static_cast<QString::size_type>(message.size()))
-               << " (" << value << ')';
+               << "(" << value << ')';
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -620,7 +620,7 @@ QDebug operator<<(QDebug out, const QStringList& qstrlist)
         out << qstrlist.at(i);
 
         if (i != qstrlist.size() - 1)
-            out << ", ";
+            out << ",";
     }
 
     return out << ')';

@@ -116,7 +116,7 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << error_code;
             delayedConnectToRouter();
         }
 
@@ -131,8 +131,7 @@ void RouterController::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection to the router is lost ("
-              << base::NetworkChannel::errorToString(error_code) << ")";
+    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
 
     routerStateChanged(proto::internal::RouterState::FAILED);
     delayedConnectToRouter();

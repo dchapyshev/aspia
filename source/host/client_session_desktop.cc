@@ -22,7 +22,6 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
-#include "base/version_constants.h"
 #include "base/codec/audio_encoder.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
@@ -325,8 +324,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             screen_size->set_height(frame->size().height());
 
             LOG(INFO) << "Video packet has format";
-            LOG(INFO) << "Capturer type:" << base::ScreenCapturer::typeToString(
-                static_cast<base::ScreenCapturer::Type>(frame->capturerType()));
+            LOG(INFO) << "Capturer type:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType());
             LOG(INFO) << "Screen size:" << screen_size;
             LOG(INFO) << "Video size:" << format->video_rect();
         }

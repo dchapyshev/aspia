@@ -43,59 +43,6 @@ SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* ScreenCapturer::typeToString(Type type)
-{
-    switch (type)
-    {
-        case Type::DEFAULT:
-            return "DEFAULT";
-
-        case Type::FAKE:
-            return "FAKE";
-
-        case Type::WIN_GDI:
-            return "WIN_GDI";
-
-        case Type::WIN_DXGI:
-            return "WIN_DXGI";
-
-        case Type::WIN_MIRROR:
-            return "WIN_MIRROR";
-
-        case Type::LINUX_X11:
-            return "LINUX_X11";
-
-        case Type::MACOSX:
-            return "MACOSX";
-
-        default:
-            return "UNKNOWN";
-        }
-}
-
-//--------------------------------------------------------------------------------------------------
-const char *ScreenCapturer::screenTypeToString(ScreenType screen_type)
-{
-    switch (screen_type)
-    {
-        case ScreenType::DESKTOP:
-            return "DESKTOP";
-
-        case ScreenType::LOCK:
-            return "LOCK";
-
-        case ScreenType::LOGIN:
-            return "LOGIN";
-
-        case ScreenType::OTHER:
-            return "OTHER";
-
-        default:
-            return "UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 ScreenCapturer::Type ScreenCapturer::type() const
 {
     return type_;

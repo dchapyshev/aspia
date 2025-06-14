@@ -39,6 +39,7 @@ public:
         DISCONNECTED_FROM_SERVICE,
         SERVICE_NOT_AVAILABLE
     };
+    Q_ENUM(Status)
 
     struct Client
     {

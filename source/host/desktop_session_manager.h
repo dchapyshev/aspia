@@ -45,6 +45,9 @@ public:
     static const int kMaxScreenCaptureFpsHighEnd = 30;
     static const int kMaxScreenCaptureFpsLowEnd = 20;
 
+    enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+    Q_ENUM(State)
+
     explicit DesktopSessionManager(QObject* parent = nullptr);
     ~DesktopSessionManager() final;
 
@@ -92,11 +95,8 @@ signals:
     void sig_clipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
-    enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
-
     void setState(const base::Location& location, State state);
     void startDesktopSession();
-    static const char* stateToString(State state);
 
     QPointer<base::IpcServer> ipc_server_;
     QPointer<DesktopSession> session_;

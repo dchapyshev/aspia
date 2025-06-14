@@ -248,8 +248,7 @@ void ScreenCapturerWin::checkScreenType(const wchar_t* desktop_name)
     ScreenType screen_type = screenType(desktop_name);
     if (screen_type != last_screen_type_)
     {
-        LOG(INFO) << "Screen type changed from" << screenTypeToString(last_screen_type_)
-                  << "to" << screenTypeToString(screen_type);
+        LOG(INFO) << "Screen type changed from" << last_screen_type_ << "to" << screen_type;
 
         QString screen_name = QString::fromWCharArray(desktop_name);
         if (screen_name.isEmpty())
@@ -260,7 +259,7 @@ void ScreenCapturerWin::checkScreenType(const wchar_t* desktop_name)
     }
     else
     {
-        LOG(INFO) << "Screen type not changed:" << screenTypeToString(last_screen_type_);
+        LOG(INFO) << "Screen type not changed:" << last_screen_type_;
     }
 }
 

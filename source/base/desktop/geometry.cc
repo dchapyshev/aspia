@@ -257,22 +257,19 @@ Rect& Rect::operator=(const Rect& other)
 //--------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const Rect& rect)
 {
-    return stream << "Rect("
-                  << rect.left() << ' ' << rect.top() << ' '
-                  << rect.right() << ' ' << rect.bottom()
-                  << ')';
+    return stream << "Rect(" << rect.left() << rect.top() << rect.right() << rect.bottom() << ')';
 }
 
 //--------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const Point& point)
 {
-    return stream << "Point(" << point.x() << ' ' << point.y() << ')';
+    return stream << "Point(" << point.x() << point.y() << ')';
 }
 
 //--------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const Size& size)
 {
-    return stream << "Size(" << size.width() << ' ' << size.height() << ')';
+    return stream << "Size(" << size.width() << size.height() << ')';
 }
 
 } // namespace base

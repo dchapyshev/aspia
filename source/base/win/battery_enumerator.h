@@ -19,6 +19,7 @@
 #ifndef BASE_WIN_BATTERY_ENUMERATOR_H
 #define BASE_WIN_BATTERY_ENUMERATOR_H
 
+#include <QObject>
 #include <QString>
 
 #include "base/win/device.h"
@@ -28,6 +29,8 @@ namespace base {
 
 class BatteryEnumerator
 {
+    Q_GADGET
+
 public:
     BatteryEnumerator();
     ~BatteryEnumerator();
@@ -43,6 +46,7 @@ public:
         DISCHARGING  = 4,
         POWER_ONLINE = 8
     };
+    Q_ENUM(State)
 
     QString deviceName() const;
     QString manufacturer() const;

@@ -46,6 +46,7 @@ public:
         MACOSX     = 5,
         WIN_MIRROR = 6
     };
+    Q_ENUM(Type)
 
     ScreenCapturer(Type type, QObject* parent);
     virtual ~ScreenCapturer() = default;
@@ -56,6 +57,7 @@ public:
         PERMANENT = 1,
         TEMPORARY = 2
     };
+    Q_ENUM(Error)
 
     enum class ScreenType
     {
@@ -65,6 +67,7 @@ public:
         LOCK    = 3,
         OTHER   = 4
     };
+    Q_ENUM(ScreenType)
 
     using ScreenId = intptr_t;
 
@@ -98,9 +101,6 @@ public:
 
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;
-
-    static const char* typeToString(Type type);
-    static const char* screenTypeToString(ScreenType screen_type);
 
     Type type() const;
 

@@ -174,8 +174,8 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
         return;
     }
 
-    LOG(INFO) << "Attach session with ID:" << session_id << "current state:"
-              << stateToString(state_) << "(from=" << location.toString() << ")";
+    LOG(INFO) << "Attach session with ID:" << session_id << "current state:" << state_
+              << "(from=" << location.toString() << ")";
     session_id_ = session_id;
 
     if (state_ == State::STOPPED)
@@ -196,7 +196,7 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     LOG(INFO) << "# Session info (sid=" << session_id
               << "username=" << session_info.userName()
-              << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
+              << "connect_state=" << session_info.connectState()
               << "win_station=" << session_info.winStationName()
               << "domain=" << session_info.domain()
               << "locked=" << session_info.isUserLocked() << ")";
@@ -243,11 +243,11 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
     {
-        LOG(INFO) << "Session already stopped or dettached (" << stateToString(state_) << ")";
+        LOG(INFO) << "Session already stopped or dettached (" << state_ << ")";
         return;
     }
 
-    LOG(INFO) << "Dettach session (sid=" << session_id_ << "state=" << stateToString(state_)
+    LOG(INFO) << "Dettach session (sid=" << session_id_ << "state=" << state_
               << "from=" << location.toString() << ")";
 
     if (state_ != State::STOPPING)
@@ -413,7 +413,7 @@ void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
     {
-        LOG(INFO) << "Error skipped (state=" << stateToString(state_) << ")";
+        LOG(INFO) << "Error skipped (state=" << state_ << ")";
         return;
     }
 
@@ -425,7 +425,7 @@ void DesktopSessionManager::onErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
-    LOG(INFO) << "State changed from" << stateToString(state_) << "to" << stateToString(state)
+    LOG(INFO) << "State changed from" << state_ << "to" << state
               << "(from=" << location.toString() << ")";
     state_ = state;
 }
@@ -454,27 +454,6 @@ void DesktopSessionManager::startDesktopSession()
 
     session_->setScreenCaptureFps(qApp->property("SCREEN_CAPTURE_FPS").toInt());
     session_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-const char* DesktopSessionManager::stateToString(State state)
-{
-    switch (state)
-    {
-        case State::STOPPED:
-            return "STOPPED";
-        case State::STARTING:
-            return "STARTING";
-        case State::STOPPING:
-            return "STOPPING";
-        case State::DETACHED:
-            return "DETACHED";
-        case State::ATTACHED:
-            return "ATTACHED";
-        default:
-            return "Unknown";
-    }
 }
 
 } // namespace host

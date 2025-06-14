@@ -83,58 +83,6 @@ void Authenticator::start(TcpChannel* tcp_channel)
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-const char* Authenticator::stateToString(State state)
-{
-    switch (state)
-    {
-        case State::STOPPED:
-            return "STOPPED";
-
-        case State::PENDING:
-            return "PENDING";
-
-        case State::SUCCESS:
-            return "SUCCESS";
-
-        case State::FAILED:
-            return "FAILED";
-
-        default:
-            return "UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
-{
-    switch (error_code)
-    {
-        case Authenticator::ErrorCode::SUCCESS:
-            return "SUCCESS";
-
-        case Authenticator::ErrorCode::NETWORK_ERROR:
-            return "NETWORK_ERROR";
-
-        case Authenticator::ErrorCode::PROTOCOL_ERROR:
-            return "PROTOCOL_ERROR";
-
-        case Authenticator::ErrorCode::VERSION_ERROR:
-            return "VERSION_ERROR";
-
-        case Authenticator::ErrorCode::ACCESS_DENIED:
-            return "ACCESS_DENIED";
-
-        case Authenticator::ErrorCode::SESSION_DENIED:
-            return "SESSION_DENIED";
-
-        default:
-            return "UNKNOWN";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 {
     sendMessage(base::serialize(message));
@@ -166,7 +114,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    LOG(INFO) << "Authenticator finished with code:" << errorToString(error_code)
+    LOG(INFO) << "Authenticator finished with code:" << error_code
               << "(" << location.toString() << ")";
     emit sig_finished(error_code);
 }
@@ -252,7 +200,7 @@ bool Authenticator::onSessionKeyChanged()
 //--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Network error:" << NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Network error:" << error_code;
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 

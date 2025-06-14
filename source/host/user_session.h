@@ -45,6 +45,7 @@ public:
         CONSOLE = 0,
         RDP = 1
     };
+    Q_ENUM(Type)
 
     enum class State
     {
@@ -52,12 +53,10 @@ public:
         DETTACHED = 1,
         FINISHED = 2
     };
+    Q_ENUM(State)
 
     UserSession(base::SessionId session_id, base::IpcChannel* ipc_channel, QObject* parent = nullptr);
     ~UserSession() final;
-
-    static const char* typeToString(Type type);
-    static const char* stateToString(State state);
 
     void start();
     void restart(base::IpcChannel* channel);

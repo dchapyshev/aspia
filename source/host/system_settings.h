@@ -29,6 +29,8 @@ namespace host {
 
 class SystemSettings
 {
+    Q_GADGET
+
 public:
     SystemSettings();
     ~SystemSettings();
@@ -93,6 +95,7 @@ public:
         ACCEPT = 0,
         REJECT = 1
     };
+    Q_ENUM(NoUserAction)
 
     NoUserAction connConfirmNoUserAction() const;
     void setConnConfirmNoUserAction(NoUserAction action);

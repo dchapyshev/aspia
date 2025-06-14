@@ -43,6 +43,7 @@ public:
         DOWNLOADER,
         UPLOADER
     };
+    Q_ENUM(Type)
 
     class Error
     {

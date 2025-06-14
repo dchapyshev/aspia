@@ -284,8 +284,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
-    LOG(INFO) << "Selecting screen capturer. Preferred capturer:"
-              << ScreenCapturer::typeToString(preferred_type_);
+    LOG(INFO) << "Selecting screen capturer. Preferred capturer:" << preferred_type_;
 
     delete screen_capturer_;
 
@@ -310,7 +309,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
         return;
     }
 
-    LOG(INFO) << "Selected screen capturer:" << ScreenCapturer::typeToString(screen_capturer_->type());
+    LOG(INFO) << "Selected screen capturer:" << screen_capturer_->type();
 
     connect(screen_capturer_, &ScreenCapturer::sig_screenTypeChanged,
             this, &ScreenCapturerWrapper::sig_screenTypeChanged);

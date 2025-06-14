@@ -108,9 +108,9 @@ void SessionWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
+void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
 {
-    LOG(INFO) << "Client status changed:" << Client::statusToString(status);
+    LOG(INFO) << "Client status changed:" << status;
 
     switch (status)
     {

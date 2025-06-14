@@ -73,6 +73,7 @@ public:
         // The address specified does not belong to the host.
         ADDRESS_NOT_AVAILABLE
     };
+    Q_ENUM(ErrorCode)
 
     explicit NetworkChannel(QObject* parent)
         : QObject(parent)
@@ -85,10 +86,6 @@ public:
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
     int speedTx();
-
-    // Converts an error code to a human readable string.
-    // Does not support localization. Used for logs.
-    static QString errorToString(ErrorCode error_code);
 
 protected:
     void addTxBytes(size_t bytes_count);

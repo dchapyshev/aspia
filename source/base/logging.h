@@ -626,7 +626,7 @@ QDebug operator<<(QDebug out, Qt::HANDLE handle);
     do                                                                                           \
     {                                                                                            \
         static bool logged_once = false;                                                         \
-        LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG;                                    \
+        LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG;                                       \
         logged_once = true;                                                                      \
     } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS

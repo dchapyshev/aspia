@@ -19,19 +19,24 @@
 #ifndef BASE_WIN_POWER_INFO_H
 #define BASE_WIN_POWER_INFO_H
 
-#include <QtGlobal>
+#include <QObject>
 #include <qt_windows.h>
 
 namespace base {
 
 class PowerInfo
 {
+    Q_GADGET
+
 public:
     PowerInfo();
     ~PowerInfo();
 
     enum class PowerSource { UNKNOWN, DC_BATTERY, AC_LINE };
+    Q_ENUM(PowerSource)
+
     enum class BatteryStatus { UNKNOWN, HIGH, LOW, CRITICAL, CHARGING, NO_BATTERY };
+    Q_ENUM(BatteryStatus)
 
     PowerSource powerSource() const;
     BatteryStatus batteryStatus() const;

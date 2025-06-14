@@ -19,18 +19,21 @@
 #ifndef BASE_WIN_SERVICE_ENUMERATOR_H
 #define BASE_WIN_SERVICE_ENUMERATOR_H
 
-#include <QString>
-
-#include "base/win/scoped_object.h"
+#include <QObject>
 
 #include <memory>
+
+#include "base/win/scoped_object.h"
 
 namespace base {
 
 class ServiceEnumerator
 {
+    Q_GADGET
+
 public:
     enum class Type { SERVICES = 0, DRIVERS = 1 };
+    Q_ENUM(Type)
 
     explicit ServiceEnumerator(Type type);
     ~ServiceEnumerator() = default;
@@ -53,6 +56,7 @@ public:
         STOP_PENDING     = 6,
         STOPPED          = 7
     };
+    Q_ENUM(Status)
 
     Status status() const;
 
@@ -65,6 +69,7 @@ public:
         BOOT_START   = 4,
         SYSTEM_START = 5
     };
+    Q_ENUM(StartupType)
 
     StartupType startupType() const;
     QString binaryPath() const;

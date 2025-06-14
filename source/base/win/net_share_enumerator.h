@@ -19,6 +19,7 @@
 #ifndef BASE_WIN_NET_SHARE_ENUMERATOR_H
 #define BASE_WIN_NET_SHARE_ENUMERATOR_H
 
+#include <QObject>
 #include <QString>
 
 #include <qt_windows.h>
@@ -28,6 +29,8 @@ namespace base {
 
 class NetShareEnumerator
 {
+    Q_GADGET
+
 public:
     NetShareEnumerator();
     ~NetShareEnumerator();
@@ -45,6 +48,7 @@ public:
         SPECIAL   = 5,
         TEMPORARY = 6
     };
+    Q_ENUM(Type)
 
     QString name() const;
     QString localPath() const;

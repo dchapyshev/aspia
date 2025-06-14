@@ -385,9 +385,7 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(ERROR) << "Connection finished with error" << errorToString(error_code)
-               << "from:" << location.toString();
-
+    LOG(ERROR) << "Connection finished with error" << error_code << "from:" << location.toString();
     disconnectFrom();
     emit sig_disconnected(error_code);
 }

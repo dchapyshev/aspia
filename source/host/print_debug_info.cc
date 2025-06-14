@@ -95,8 +95,7 @@ void printDebugInfo(quint32 features)
         {
             LOG(INFO) << "Process session ID:" << session_id;
             LOG(INFO) << "Running in user session:" << session_info.userName();
-            LOG(INFO) << "Session connect state:"
-                         << base::SessionInfo::connectStateToString(session_info.connectState());
+            LOG(INFO) << "Session connect state:" << session_info.connectState();
             LOG(INFO) << "WinStation name:" << session_info.winStationName();
             LOG(INFO) << "Domain name:" << session_info.domain();
             LOG(INFO) << "User Locked:" << session_info.isUserLocked();

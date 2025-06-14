@@ -105,7 +105,7 @@ void OnlineCheckerRouter::onTcpConnected()
         }
         else
         {
-            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << error_code;
             onFinished(FROM_HERE);
         }
 
@@ -120,7 +120,7 @@ void OnlineCheckerRouter::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection to the router is lost (" << base::NetworkChannel::errorToString(error_code) << ")";
+    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
     onFinished(FROM_HERE);
 }
 

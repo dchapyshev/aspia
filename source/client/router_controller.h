@@ -44,6 +44,7 @@ public:
         AUTHENTICATION,
         ROUTER
     };
+    Q_ENUM(ErrorType)
 
     enum class ErrorCode
     {
@@ -54,6 +55,7 @@ public:
         KEY_POOL_EMPTY,
         RELAY_ERROR
     };
+    Q_ENUM(ErrorCode)
 
     struct Error
     {

@@ -66,62 +66,6 @@ int NetworkChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-QString NetworkChannel::errorToString(ErrorCode error_code)
-{
-    const char* str;
-
-    switch (error_code)
-    {
-        case ErrorCode::SUCCESS:
-            str = "SUCCESS";
-            break;
-
-        case ErrorCode::INVALID_PROTOCOL:
-            str = "INVALID_PROTOCOL";
-            break;
-
-        case ErrorCode::ACCESS_DENIED:
-            str = "ACCESS_DENIED";
-            break;
-
-        case ErrorCode::NETWORK_ERROR:
-            str = "NETWORK_ERROR";
-            break;
-
-        case ErrorCode::CONNECTION_REFUSED:
-            str = "CONNECTION_REFUSED";
-            break;
-
-        case ErrorCode::REMOTE_HOST_CLOSED:
-            str = "REMOTE_HOST_CLOSED";
-            break;
-
-        case ErrorCode::SPECIFIED_HOST_NOT_FOUND:
-            str = "SPECIFIED_HOST_NOT_FOUND";
-            break;
-
-        case ErrorCode::SOCKET_TIMEOUT:
-            str = "SOCKET_TIMEOUT";
-            break;
-
-        case ErrorCode::ADDRESS_IN_USE:
-            str = "ADDRESS_IN_USE";
-            break;
-
-        case ErrorCode::ADDRESS_NOT_AVAILABLE:
-            str = "ADDRESS_NOT_AVAILABLE";
-            break;
-
-        default:
-            str = "UNKNOWN";
-            break;
-    }
-
-    return QString("%1 (%2)").arg(str).arg(static_cast<int>(error_code));
-}
-
-//--------------------------------------------------------------------------------------------------
 void NetworkChannel::addTxBytes(size_t bytes_count)
 {
     bytes_tx_ += bytes_count;

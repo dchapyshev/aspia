@@ -20,6 +20,7 @@
 #define BASE_WIN_EVENT_ENUMERATOR_H
 
 #include <QByteArray>
+#include <QObject>
 #include <QString>
 
 #include "base/win/scoped_object.h"
@@ -28,6 +29,8 @@ namespace base {
 
 class EventEnumerator
 {
+    Q_GADGET
+
 public:
     EventEnumerator(const QString& log_name, quint32 start, quint32 count);
     ~EventEnumerator();
@@ -37,6 +40,7 @@ public:
     void advance();
 
     enum class Type { UNKNOWN, ERR, WARN, INFO, AUDIT_SUCCESS, AUDIT_FAILURE, SUCCESS };
+    Q_ENUM(Type)
 
     Type type() const;
     qint64 time() const;

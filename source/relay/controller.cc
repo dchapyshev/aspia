@@ -207,7 +207,7 @@ void Controller::onTcpConnected()
         }
         else
         {
-            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << error_code;
             delayedConnectToRouter();
         }
 
@@ -221,8 +221,7 @@ void Controller::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "The connection to the router has been lost:"
-              << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "The connection to the router has been lost:" << error_code;
 
     // Clearing the key pool.
     key_factory_->clear();

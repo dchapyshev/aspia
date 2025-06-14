@@ -40,6 +40,15 @@ public:
     ClientSessionPortForwarding(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionPortForwarding() final;
 
+    enum class ForwardingState
+    {
+        DISCONNECTED = 0,
+        RESOLVING    = 1,
+        CONNECTING   = 2,
+        CONNECTED    = 3
+    };
+    Q_ENUM(ForwardingState)
+
 protected:
     // ClientSession implementation.
     void onStarted() final;
@@ -59,15 +68,7 @@ private:
     void sendPortForwardingResult(proto::port_forwarding::Result::ErrorCode error_code);
     void sendPortForwardingData(const char* buffer, size_t length);
 
-    enum class State
-    {
-        DISCONNECTED = 0,
-        RESOLVING    = 1,
-        CONNECTING   = 2,
-        CONNECTED    = 3
-    };
-
-    State state_ = State::DISCONNECTED;
+    ForwardingState state_ = ForwardingState::DISCONNECTED;
     bool forwarding_result_sended_ = false;
     bool is_started_ = false;
 

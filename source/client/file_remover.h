@@ -43,6 +43,7 @@ public:
         ACTION_SKIP     = 2,
         ACTION_SKIP_ALL = 4
     };
+    Q_ENUM(Action)
 
     class Task
     {

@@ -361,7 +361,7 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 
                 default:
                     LOG(INFO) << "No connected UI. Connection rejected (connect_state="
-                              << base::SessionInfo::connectStateToString(connect_state) << ")";
+                              << connect_state << ")";
                     return;
             }
 #else
@@ -464,7 +464,7 @@ void UserSessionManager::startSessionProcess(
 
     LOG(INFO) << "# Session info (sid=" << session_id
               << "username=" << session_info.userName()
-              << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
+              << "connect_state=" << session_info.connectState()
               << "win_station=" << session_info.winStationName()
               << "domain=" << session_info.domain()
               << "locked=" << session_info.isUserLocked() << ")";
