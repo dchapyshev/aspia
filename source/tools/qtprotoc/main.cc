@@ -134,17 +134,17 @@ void generateMessageOperator(
 
             if (field->type() == google::protobuf::FieldDescriptor::TYPE_STRING)
             {
-                source.Print("        stream << \" $FIELD$ #\" << i << \": \" << QString::fromStdString(msg.$GETTER$(i));\n",
+                source.Print("        stream << \"$FIELD$#\" << i << \": \" << QString::fromStdString(msg.$GETTER$(i));\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
             else if (field->type() == google::protobuf::FieldDescriptor::TYPE_BYTES)
             {
-                source.Print("        stream << \" $FIELD$ #\" << i << \": \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)).toHex());\n",
+                source.Print("        stream << \"$FIELD$#\" << i << \": \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)).toHex());\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
             else
             {
-                source.Print("        stream << \" $FIELD$ #\" << i << \": \" << msg.$GETTER$(i);\n",
+                source.Print("        stream << \"$FIELD$#\" << i << \": \" << msg.$GETTER$(i);\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
 
@@ -152,27 +152,27 @@ void generateMessageOperator(
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_STRING)
         {
-            source.Print("    stream << \" $FIELD$: \" << QString::fromStdString(msg.$GETTER$());\n",
+            source.Print("    stream << \"$FIELD$:\" << QString::fromStdString(msg.$GETTER$());\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_BYTES)
         {
-            source.Print("    stream << \" $FIELD$: \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$()).toHex());\n",
+            source.Print("    stream << \"$FIELD$:\" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$()).toHex());\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE)
         {
             source.Print("    if (msg.has_$FIELD$())\n"
-                      "        stream << \" $FIELD$: \" << msg.$GETTER$();\n",
+                      "        stream << \"$FIELD$:\" << msg.$GETTER$();\n",
                       "FIELD", field_name, "GETTER", getter_name);
         }
         else
         {
-            source.Print("    stream << \" $FIELD$: \" << msg.$GETTER$();\n",
+            source.Print("    stream << \"$FIELD$:\" << msg.$GETTER$();\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
     }
-    source.Print("    stream << \" }\";\n");
+    source.Print("    stream << \"}\";\n");
     source.Print("    return stream;\n");
     source.Print("}\n\n");
 }
