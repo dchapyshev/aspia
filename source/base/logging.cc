@@ -24,6 +24,7 @@
 #include "base/win/mini_dump_writer.h"
 
 #include <qt_windows.h>
+#include <comdef.h>
 #include <Psapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -551,6 +552,13 @@ QDebug operator<<(QDebug out, const std::wstring& wstr)
 QDebug operator<<(QDebug out, const wchar_t* wstr)
 {
     return out << (wstr ? QString::fromWCharArray(wstr) : "nullptr");
+}
+
+//--------------------------------------------------------------------------------------------------
+QDebug operator<<(QDebug out, const _com_error& error)
+{
+    return out << QString::fromWCharArray(error.ErrorMessage())
+               << "(" << QString::number(static_cast<quint32>(error.Error()), 16) << ")";
 }
 #endif // defined(Q_OS_WINDOWS)
 

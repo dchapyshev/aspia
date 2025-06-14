@@ -84,6 +84,8 @@
 //
 // There is the special severity of DFATAL, which logs FATAL in debug mode, ERROR in normal mode.
 
+class _com_error;
+
 namespace base {
 
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
@@ -599,6 +601,7 @@ private:
 #if defined(Q_OS_WINDOWS)
 QDebug operator<<(QDebug out, const wchar_t* wstr);
 QDebug operator<<(QDebug out, const std::wstring& wstr);
+QDebug operator<<(QDebug stream, const _com_error& error);
 #endif // defined(Q_OS_WINDOWS)
 
 QDebug operator<<(QDebug out, const char8_t* ustr);
