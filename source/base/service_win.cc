@@ -140,7 +140,7 @@ ServiceThread* ServiceThread::self = nullptr;
 ServiceThread::ServiceThread(Service* service)
     : service_(service)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     DCHECK(!self);
     self = this;
@@ -151,7 +151,7 @@ ServiceThread::ServiceThread(Service* service)
 //--------------------------------------------------------------------------------------------------
 ServiceThread::~ServiceThread()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     setStatus(SERVICE_STOPPED);
     wait();
@@ -163,7 +163,7 @@ ServiceThread::~ServiceThread()
 //--------------------------------------------------------------------------------------------------
 void ServiceThread::setStatus(DWORD status)
 {
-    LOG(LS_INFO) << "Service status changed:" << serviceStateToString(status);
+    LOG(INFO) << "Service status changed:" << serviceStateToString(status);
 
     status_.dwServiceType = SERVICE_WIN32;
     status_.dwControlsAccepted = 0;
@@ -186,7 +186,7 @@ void ServiceThread::setStatus(DWORD status)
 
     if (!SetServiceStatus(status_handle_, &status_))
     {
-        PLOG(LS_ERROR) << "SetServiceStatus failed";
+        PLOG(ERROR) << "SetServiceStatus failed";
         return;
     }
 }
@@ -242,8 +242,7 @@ void ServiceThread::run()
         }
         else
         {
-            LOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed:"
-                          << SystemError::toString(error_code);
+            LOG(ERROR) << "StartServiceCtrlDispatcherW failed:" << SystemError::toString(error_code);
             self->startup_state = State::ERROR_OCCURRED;
         }
 
@@ -251,7 +250,7 @@ void ServiceThread::run()
     }
     else
     {
-        PLOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed";
+        PLOG(ERROR) << "StartServiceCtrlDispatcherW failed";
     }
 }
 
@@ -284,7 +283,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     if (!self->status_handle_)
     {
-        PLOG(LS_ERROR) << "RegisterServiceCtrlHandlerExW failed";
+        PLOG(ERROR) << "RegisterServiceCtrlHandlerExW failed";
         return;
     }
 
@@ -351,19 +350,19 @@ Service::Service(const QString& name, QObject* parent)
     : QObject(parent),
       name_(name)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 int Service::exec(Application& application)
 {
-    LOG(LS_INFO) << "Begin";
+    LOG(INFO) << "Begin";
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
@@ -402,7 +401,7 @@ int Service::exec(Application& application)
     int ret = application.exec();
     service_thread.reset();
 
-    LOG(LS_INFO) << "End";
+    LOG(INFO) << "End";
     return ret;
 }
 

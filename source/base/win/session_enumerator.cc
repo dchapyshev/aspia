@@ -30,7 +30,7 @@ SessionEnumerator::SessionEnumerator()
 
     if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info_.recieve(), &count_))
     {
-        PLOG(LS_ERROR) << "WTSEnumerateSessionsExW failed";
+        PLOG(ERROR) << "WTSEnumerateSessionsExW failed";
         return;
     }
 }
@@ -144,7 +144,7 @@ bool SessionEnumerator::isUserLocked() const
     SessionInfo session_info(sessionId());
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info";
+        LOG(ERROR) << "Unable to get session info";
         return false;
     }
 

@@ -34,7 +34,7 @@ PrinterEnumerator::PrinterEnumerator()
     if (EnumPrintersW(flags, nullptr, 2, nullptr, 0, &bytes_needed, &count) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_ERROR) << "Unexpected return value";
+        PLOG(ERROR) << "Unexpected return value";
         return;
     }
 
@@ -43,7 +43,7 @@ PrinterEnumerator::PrinterEnumerator()
     if (!EnumPrintersW(flags, nullptr, 2, reinterpret_cast<LPBYTE>(info_buffer_.data()), bytes_needed,
                        &bytes_needed, &count))
     {
-        PLOG(LS_ERROR) << "EnumPrintersW failed";
+        PLOG(ERROR) << "EnumPrintersW failed";
         info_buffer_.clear();
         return;
     }
@@ -53,7 +53,7 @@ PrinterEnumerator::PrinterEnumerator()
 
     if (!GetDefaultPrinterW(&default_printer_name[0], &characters_count))
     {
-        PLOG(LS_ERROR) << "GetDefaultPrinterW failed";
+        PLOG(ERROR) << "GetDefaultPrinterW failed";
     }
     else
     {

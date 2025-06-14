@@ -30,7 +30,7 @@ namespace client {
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -55,7 +55,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 
     connect(ui.checkbox_custom_server, &QCheckBox::toggled, this, [this](bool checked)
     {
-        LOG(LS_INFO) << "[ACTION] Custom server checkbox:" << checked;
+        LOG(INFO) << "[ACTION] Custom server checkbox:" << checked;
         ui.edit_server->setEnabled(checked);
 
         if (!checked)
@@ -66,7 +66,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     {
         if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
         {
-            LOG(LS_INFO) << "[ACTION] Accepted by user";
+            LOG(INFO) << "[ACTION] Accepted by user";
 
             ClientSettings settings;
             settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());
@@ -74,7 +74,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
         }
         else
         {
-            LOG(LS_INFO) << "[ACTION] Rejected by user";
+            LOG(INFO) << "[ACTION] Rejected by user";
         }
 
         close();
@@ -84,7 +84,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 UpdateSettingsDialog::~UpdateSettingsDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 } // namespace client

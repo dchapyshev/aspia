@@ -44,14 +44,14 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(DesktopEnvironment::create(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerWrapper::~ScreenCapturerWrapper()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 {
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Screen capturer not initialized";
+        LOG(ERROR) << "Screen capturer not initialized";
         return;
     }
 
@@ -67,20 +67,20 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     {
         if (resolution.isEmpty())
         {
-            LOG(LS_ERROR) << "Empty resolution";
+            LOG(ERROR) << "Empty resolution";
         }
         else
         {
             if (!resizer_)
             {
-                LOG(LS_ERROR) << "No desktop resizer";
+                LOG(ERROR) << "No desktop resizer";
             }
             else
             {
-                LOG(LS_INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
+                LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
                 if (!resizer_->setResolution(screen_id, resolution))
                 {
-                    LOG(LS_ERROR) << "setResolution failed";
+                    LOG(ERROR) << "setResolution failed";
                     return;
                 }
             }
@@ -88,15 +88,15 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     }
     else
     {
-        LOG(LS_INFO) << "Try to select screen:" << screen_id;
+        LOG(INFO) << "Try to select screen:" << screen_id;
 
         if (!screen_capturer_->selectScreen(screen_id))
         {
-            LOG(LS_ERROR) << "ScreenCapturer::selectScreen failed";
+            LOG(ERROR) << "ScreenCapturer::selectScreen failed";
         }
         else
         {
-            LOG(LS_INFO) << "Screen" << screen_id << "selected";
+            LOG(INFO) << "Screen" << screen_id << "selected";
             last_screen_id_ = screen_id;
         }
     }
@@ -104,37 +104,37 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     ScreenCapturer::ScreenList screen_list;
     if (screen_capturer_->screenList(&screen_list))
     {
-        LOG(LS_INFO) << "Received an updated list of screens";
+        LOG(INFO) << "Received an updated list of screens";
 
         if (resizer_)
         {
             screen_list.resolutions = resizer_->supportedResolutions(screen_id);
             if (screen_list.resolutions.empty())
             {
-                LOG(LS_INFO) << "No supported resolutions";
+                LOG(INFO) << "No supported resolutions";
             }
 
             for (const auto& resolition : std::as_const(screen_list.resolutions))
             {
-                LOG(LS_INFO) << "Supported resolution:" << resolition;
+                LOG(INFO) << "Supported resolution:" << resolition;
             }
         }
         else
         {
-            LOG(LS_INFO) << "No desktop resizer";
+            LOG(INFO) << "No desktop resizer";
         }
 
         for (const auto& screen : std::as_const(screen_list.screens))
         {
-            LOG(LS_INFO) << "Screen #" << screen.id << "(position:" << screen.position
-                         << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
+            LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
+                      << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
         }
 
         emit sig_screenListChanged(screen_list, screen_id);
     }
     else
     {
-        LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
     }
 }
 
@@ -144,7 +144,7 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
 {
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Screen capturer NOT initialized";
+        LOG(ERROR) << "Screen capturer NOT initialized";
         return ScreenCapturer::Error::TEMPORARY;
     }
 
@@ -153,7 +153,7 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
-        LOG(LS_INFO) << "Screen count changed:" << count << "(old:" << screen_count_ << ")";
+        LOG(INFO) << "Screen count changed:" << count << "(old:" << screen_count_ << ")";
 
         resizer_.reset();
         resizer_ = DesktopResizer::create();
@@ -214,7 +214,7 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     if (!environment_)
     {
-        LOG(LS_ERROR) << "Desktop environment not initialized";
+        LOG(ERROR) << "Desktop environment not initialized";
         return;
     }
 
@@ -226,7 +226,7 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
 {
     if (!environment_)
     {
-        LOG(LS_ERROR) << "Desktop environment not initialized";
+        LOG(ERROR) << "Desktop environment not initialized";
         return;
     }
 
@@ -238,7 +238,7 @@ void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
     if (!environment_)
     {
-        LOG(LS_ERROR) << "Desktop environment not initialized";
+        LOG(ERROR) << "Desktop environment not initialized";
         return;
     }
 
@@ -256,7 +256,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Screen capturer not initialized";
+        LOG(ERROR) << "Screen capturer not initialized";
         return ScreenCapturer::kInvalidScreenId;
     }
 
@@ -267,25 +267,25 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
         {
             if (screen.is_primary)
             {
-                LOG(LS_INFO) << "Primary screen found:" << screen.id;
+                LOG(INFO) << "Primary screen found:" << screen.id;
                 return screen.id;
             }
         }
     }
     else
     {
-        LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
     }
 
-    LOG(LS_INFO) << "Primary screen NOT found";
+    LOG(INFO) << "Primary screen NOT found";
     return ScreenCapturer::kFullDesktopScreenId;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
-    LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer:"
-                 << ScreenCapturer::typeToString(preferred_type_);
+    LOG(INFO) << "Selecting screen capturer. Preferred capturer:"
+              << ScreenCapturer::typeToString(preferred_type_);
 
     delete screen_capturer_;
 
@@ -306,12 +306,11 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Unable to create screen capturer";
+        LOG(ERROR) << "Unable to create screen capturer";
         return;
     }
 
-    LOG(LS_INFO) << "Selected screen capturer:"
-                 << ScreenCapturer::typeToString(screen_capturer_->type());
+    LOG(INFO) << "Selected screen capturer:" << ScreenCapturer::typeToString(screen_capturer_->type());
 
     connect(screen_capturer_, &ScreenCapturer::sig_screenTypeChanged,
             this, &ScreenCapturerWrapper::sig_screenTypeChanged);
@@ -320,7 +319,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     {
         if (!environment_)
         {
-            LOG(LS_ERROR) << "Desktop environment not initialized";
+            LOG(ERROR) << "Desktop environment not initialized";
             return;
         }
 
@@ -330,7 +329,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
     if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
     {
-        LOG(LS_INFO) << "Restore selected screen:" << last_screen_id_;
+        LOG(INFO) << "Restore selected screen:" << last_screen_id_;
         selectScreen(last_screen_id_, Size());
     }
 }

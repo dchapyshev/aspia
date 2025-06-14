@@ -27,7 +27,6 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "build/build_config.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/port_forwarding/port_forwarding_session_window.h"
@@ -49,7 +48,7 @@ namespace console {
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(const QString& file_path)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     Settings& settings = Application::instance()->settings();
     Application::instance()->setAttribute(
@@ -253,13 +252,13 @@ MainWindow::MainWindow(const QString& file_path)
 //--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::showConsole()
 {
-    LOG(LS_INFO) << "Show console";
+    LOG(INFO) << "Show console";
 
     if (tray_icon_ && isHidden())
     {
@@ -276,7 +275,7 @@ void MainWindow::showConsole()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::openAddressBook(const QString& file_path)
 {
-    LOG(LS_INFO) << "Open address book:" << file_path;
+    LOG(INFO) << "Open address book:" << file_path;
     showConsole();
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -311,14 +310,14 @@ void MainWindow::openAddressBook(const QString& file_path)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onNew()
 {
-    LOG(LS_INFO) << "[ACTION] New address book";
+    LOG(INFO) << "[ACTION] New address book";
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onOpen()
 {
-    LOG(LS_INFO) << "[ACTION] Open address book";
+    LOG(INFO) << "[ACTION] Open address book";
 
     Settings& settings = Application::instance()->settings();
 
@@ -329,7 +328,7 @@ void MainWindow::onOpen()
                                      tr("Aspia Address Book (*.aab)"));
     if (file_path.isEmpty())
     {
-        LOG(LS_INFO) << "No selected file path";
+        LOG(INFO) << "No selected file path";
         return;
     }
 
@@ -340,7 +339,7 @@ void MainWindow::onOpen()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSave()
 {
-    LOG(LS_INFO) << "[ACTION] Save address book";
+    LOG(INFO) << "[ACTION] Save address book";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
@@ -356,14 +355,14 @@ void MainWindow::onSave()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSaveAs()
 {
-    LOG(LS_INFO) << "[ACTION] Save as address book";
+    LOG(INFO) << "[ACTION] Save as address book";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -399,14 +398,14 @@ void MainWindow::onSaveAs()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSaveAll()
 {
-    LOG(LS_INFO) << "[ACTION] Save all address books";
+    LOG(INFO) << "[ACTION] Save all address books";
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -422,14 +421,14 @@ void MainWindow::onSaveAll()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onClose()
 {
-    LOG(LS_INFO) << "[ACTION] Close";
+    LOG(INFO) << "[ACTION] Close";
     onCloseTab(ui.tab_widget->currentIndex());
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCloseAll()
 {
-    LOG(LS_INFO) << "[ACTION] Close all";
+    LOG(INFO) << "[ACTION] Close all";
 
     for (int i = ui.tab_widget->count(); i >= 0; --i)
         onCloseTab(i);
@@ -438,7 +437,7 @@ void MainWindow::onCloseAll()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAddressBookProperties()
 {
-    LOG(LS_INFO) << "[ACTION] Open address book properties";
+    LOG(INFO) << "[ACTION] Open address book properties";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -447,14 +446,14 @@ void MainWindow::onAddressBookProperties()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAddComputer()
 {
-    LOG(LS_INFO) << "[ACTION] Add Computer";
+    LOG(INFO) << "[ACTION] Add Computer";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -463,14 +462,14 @@ void MainWindow::onAddComputer()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCopyComputer()
 {
-    LOG(LS_INFO) << "[ACTION] Copy Computer";
+    LOG(INFO) << "[ACTION] Copy Computer";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -479,14 +478,14 @@ void MainWindow::onCopyComputer()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onModifyComputer()
 {
-    LOG(LS_INFO) << "[ACTION] Modify Computer";
+    LOG(INFO) << "[ACTION] Modify Computer";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -495,14 +494,14 @@ void MainWindow::onModifyComputer()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onDeleteComputer()
 {
-    LOG(LS_INFO) << "[ACTION] Delete Computer";
+    LOG(INFO) << "[ACTION] Delete Computer";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -511,14 +510,14 @@ void MainWindow::onDeleteComputer()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAddComputerGroup()
 {
-    LOG(LS_INFO) << "[ACTION] Add Computer Group";
+    LOG(INFO) << "[ACTION] Add Computer Group";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -527,14 +526,14 @@ void MainWindow::onAddComputerGroup()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onModifyComputerGroup()
 {
-    LOG(LS_INFO) << "[ACTION] Modify Computer Group";
+    LOG(INFO) << "[ACTION] Modify Computer Group";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -543,14 +542,14 @@ void MainWindow::onModifyComputerGroup()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onDeleteComputerGroup()
 {
-    LOG(LS_INFO) << "[ACTION] Delete Computer Group";
+    LOG(INFO) << "[ACTION] Delete Computer Group";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -559,26 +558,26 @@ void MainWindow::onDeleteComputerGroup()
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onImportComputers()
 {
-    LOG(LS_INFO) << "[ACTION] Import Computers";
+    LOG(INFO) << "[ACTION] Import Computers";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
         return;
     }
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (!computer_group)
     {
-        LOG(LS_ERROR) << "Unable to get current computer group";
+        LOG(ERROR) << "Unable to get current computer group";
         return;
     }
 
@@ -590,14 +589,14 @@ void MainWindow::onImportComputers()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "No selected file path";
+        LOG(INFO) << "No selected file path";
         return;
     }
 
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
+        LOG(ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for reading."),
@@ -608,7 +607,7 @@ void MainWindow::onImportComputers()
     QByteArray json_buffer = file.readAll();
     if (json_buffer.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty file";
+        LOG(ERROR) << "Empty file";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Import file is empty."),
@@ -620,7 +619,7 @@ void MainWindow::onImportComputers()
     QJsonDocument json = QJsonDocument::fromJson(json_buffer, &parse_error);
     if (parse_error.error != QJsonParseError::NoError)
     {
-        LOG(LS_ERROR) << "Unable to parse JSON document:" << parse_error.errorString();
+        LOG(ERROR) << "Unable to parse JSON document:" << parse_error.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()),
@@ -633,7 +632,7 @@ void MainWindow::onImportComputers()
     tab->reloadAll();
     tab->setChanged(true);
 
-    LOG(LS_INFO) << "File imported";
+    LOG(INFO) << "File imported";
     QMessageBox::information(this,
                              tr("Information"),
                              tr("Import completed successfully."),
@@ -643,19 +642,19 @@ void MainWindow::onImportComputers()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onExportComputers()
 {
-    LOG(LS_INFO) << "[ACTION] Export Computers";
+    LOG(INFO) << "[ACTION] Export Computers";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
         return;
     }
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (!computer_group)
     {
-        LOG(LS_ERROR) << "Unable to get current computer group";
+        LOG(ERROR) << "Unable to get current computer group";
         return;
     }
 
@@ -667,14 +666,14 @@ void MainWindow::onExportComputers()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "No selected file path";
+        LOG(INFO) << "No selected file path";
         return;
     }
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
+        LOG(ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -687,7 +686,7 @@ void MainWindow::onExportComputers()
     qint64 written = file.write(json.toJson());
     if (written <= 0)
     {
-        LOG(LS_ERROR) << "Unable to write file:" << file.errorString();
+        LOG(ERROR) << "Unable to write file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
@@ -695,7 +694,7 @@ void MainWindow::onExportComputers()
         return;
     }
 
-    LOG(LS_INFO) << "File exported";
+    LOG(INFO) << "File exported";
     QMessageBox::information(this,
                              tr("Information"),
                              tr("Export completed successfully."),
@@ -705,12 +704,12 @@ void MainWindow::onExportComputers()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onUpdateStatus()
 {
-    LOG(LS_INFO) << "[ACTION] Start online checker";
+    LOG(INFO) << "[ACTION] Start online checker";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
         return;
     }
 
@@ -720,11 +719,11 @@ void MainWindow::onUpdateStatus()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onOnlineHelp()
 {
-    LOG(LS_INFO) << "[ACTION] Online help";
+    LOG(INFO) << "[ACTION] Online help";
 
     if (!QDesktopServices::openUrl(QUrl("https://aspia.org/help")))
     {
-        LOG(LS_ERROR) << "Unable to open URL";
+        LOG(ERROR) << "Unable to open URL";
     }
 }
 
@@ -732,7 +731,7 @@ void MainWindow::onOnlineHelp()
 void MainWindow::onCheckUpdates()
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(LS_INFO) << "[ACTION] Check for updates";
+    LOG(INFO) << "[ACTION] Check for updates";
     common::UpdateDialog(Application::instance()->settings().updateServer(),"console", this).exec();
 #endif
 }
@@ -740,14 +739,14 @@ void MainWindow::onCheckUpdates()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
-    LOG(LS_INFO) << "[ACTION] About";
+    LOG(INFO) << "[ACTION] About";
     common::AboutDialog(tr("Aspia Console"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onFastConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Fast Connect";
+    LOG(INFO) << "[ACTION] Fast Connect";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -757,7 +756,7 @@ void MainWindow::onFastConnect()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onDesktopManageConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to desktop manage session";
+    LOG(INFO) << "[ACTION] Connect to desktop manage session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -771,19 +770,19 @@ void MainWindow::onDesktopManageConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onDesktopViewConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to desktop view session";
+    LOG(INFO) << "[ACTION] Connect to desktop view session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -797,19 +796,19 @@ void MainWindow::onDesktopViewConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onFileTransferConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to file transfer session";
+    LOG(INFO) << "[ACTION] Connect to file transfer session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -823,19 +822,19 @@ void MainWindow::onFileTransferConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSystemInfoConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to system info session";
+    LOG(INFO) << "[ACTION] Connect to system info session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -849,19 +848,19 @@ void MainWindow::onSystemInfoConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onTextChatConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to text chat session";
+    LOG(INFO) << "[ACTION] Connect to text chat session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -875,19 +874,19 @@ void MainWindow::onTextChatConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onPortForwardingConnect()
 {
-    LOG(LS_INFO) << "[ACTION] Connect to port forwarding session";
+    LOG(INFO) << "[ACTION] Connect to port forwarding session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -901,19 +900,19 @@ void MainWindow::onPortForwardingConnect()
         }
         else
         {
-            LOG(LS_ERROR) << "No active computer";
+            LOG(ERROR) << "No active computer";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCurrentTabChanged(int index)
 {
-    LOG(LS_INFO) << "[ACTION] Current tab changed to:" << index;
+    LOG(INFO) << "[ACTION] Current tab changed to:" << index;
 
     if (index == -1)
     {
@@ -944,7 +943,7 @@ void MainWindow::onCurrentTabChanged(int index)
     AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
     if (!tab)
     {
-        LOG(LS_INFO) << "No active tab";
+        LOG(INFO) << "No active tab";
         return;
     }
 
@@ -964,7 +963,7 @@ void MainWindow::onCurrentTabChanged(int index)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCloseTab(int index)
 {
-    LOG(LS_INFO) << "[ACTION] Close tab:" << index;
+    LOG(INFO) << "[ACTION] Close tab:" << index;
 
     if (index == -1)
         return;
@@ -972,7 +971,7 @@ void MainWindow::onCloseTab(int index)
     AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
     if (!tab)
     {
-        LOG(LS_INFO) << "No active tab";
+        LOG(INFO) << "No active tab";
         return;
     }
 
@@ -980,7 +979,7 @@ void MainWindow::onCloseTab(int index)
 
     if (mru_.isPinnedFile(tab->filePath()))
     {
-        LOG(LS_INFO) << "Tab not pinned";
+        LOG(INFO) << "Tab not pinned";
         return;
     }
 
@@ -1157,14 +1156,14 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
     {
-        LOG(LS_INFO) << "No active tab";
+        LOG(INFO) << "No active tab";
         return;
     }
 
     ComputerItem* computer_item = tab->currentComputer();
     if (!computer_item)
     {
-        LOG(LS_INFO) << "No active computer";
+        LOG(INFO) << "No active computer";
         return;
     }
 
@@ -1196,7 +1195,7 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
     }
     else
     {
-        LOG(LS_FATAL) << "Unknown session type";
+        LOG(FATAL) << "Unknown session type";
         return;
     }
 
@@ -1303,7 +1302,7 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
         }
         else
         {
-            LOG(LS_ERROR) << "No close button";
+            LOG(ERROR) << "No close button";
         }
 
         bool has_unpinned_tabs = hasUnpinnedTabs();
@@ -1415,7 +1414,7 @@ void MainWindow::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event detected";
+    LOG(INFO) << "Close event detected";
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -1483,14 +1482,14 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 {
     if (result.isEmpty())
     {
-        LOG(LS_ERROR) << "Error while retrieving update information";
+        LOG(ERROR) << "Error while retrieving update information";
     }
     else
     {
         common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
         if (!update_info.isValid())
         {
-            LOG(LS_INFO) << "No updates available";
+            LOG(INFO) << "No updates available";
         }
         else
         {
@@ -1499,7 +1498,7 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > current_version)
             {
-                LOG(LS_INFO) << "New version available:" << update_version.toString();
+                LOG(INFO) << "New version available:" << update_version.toString();
                 common::UpdateDialog(update_info, this).exec();
             }
         }
@@ -1634,7 +1633,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
     }
     else
     {
-        LOG(LS_ERROR) << "No close button";
+        LOG(ERROR) << "No close button";
     }
 
     bool has_unpinned_tabs = hasUnpinnedTabs();
@@ -1777,14 +1776,14 @@ void MainWindow::connectToRouter()
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
     {
-        LOG(LS_ERROR) << "No active tab";
+        LOG(ERROR) << "No active tab";
         return;
     }
 
     std::optional<client::RouterConfig> router_config = tab->routerConfig();
     if (!router_config.has_value())
     {
-        LOG(LS_ERROR) << "No config for router";
+        LOG(ERROR) << "No config for router";
         return;
     }
 

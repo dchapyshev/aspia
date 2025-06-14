@@ -63,7 +63,7 @@ void RouterConfigStorage::setRouterConfig(const RouterConfig& config)
 {
     if (!config.isValid())
     {
-        LOG(LS_ERROR) << "Invalid router config";
+        LOG(ERROR) << "Invalid router config";
         return;
     }
 

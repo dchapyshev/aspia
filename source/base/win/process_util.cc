@@ -33,7 +33,7 @@ bool isProcessElevated()
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -42,7 +42,7 @@ bool isProcessElevated()
 
     if (!GetTokenInformation(token, TokenElevation, &elevation, sizeof(elevation), &size))
     {
-        PLOG(LS_ERROR) << "GetTokenInformation failed";
+        PLOG(ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -64,7 +64,7 @@ bool createProcess(const QString& program, const QString& arguments, ProcessExec
 
     if (!ShellExecuteExW(&sei))
     {
-        PLOG(LS_ERROR) << "ShellExecuteExW failed";
+        PLOG(ERROR) << "ShellExecuteExW failed";
         return false;
     }
 
@@ -80,7 +80,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -91,7 +91,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
+        PLOG(ERROR) << "DuplicateTokenEx failed";
         return false;
     }
 
@@ -107,7 +107,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -118,14 +118,14 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
+        PLOG(ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the SE_TCB_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+        PLOG(ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -139,7 +139,7 @@ bool isProcessStartedFromService()
     ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
     if (!snapshot.isValid())
     {
-        PLOG(LS_ERROR) << "CreateToolhelp32Snapshot failed";
+        PLOG(ERROR) << "CreateToolhelp32Snapshot failed";
         return false;
     }
 
@@ -148,7 +148,7 @@ bool isProcessStartedFromService()
 
     if (!Process32FirstW(snapshot, &entry))
     {
-        PLOG(LS_ERROR) << "Process32FirstW failed";
+        PLOG(ERROR) << "Process32FirstW failed";
         return false;
     }
 
@@ -165,14 +165,14 @@ bool isProcessStartedFromService()
             }
             else
             {
-                PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
+                PLOG(ERROR) << "ProcessIdToSessionId failed";
                 break;
             }
         }
 
         if (!Process32NextW(snapshot, &entry))
         {
-            PLOG(LS_ERROR) << "Process32NextW failed";
+            PLOG(ERROR) << "Process32NextW failed";
             break;
         }
     }

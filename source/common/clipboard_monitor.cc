@@ -47,7 +47,7 @@ ClipboardMonitor::ClipboardMonitor(QObject* parent)
     : QObject(parent),
       thread_(kEventDispatcher)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(&thread_, &base::Thread::started, this, &ClipboardMonitor::onBeforeThreadRunning,
             Qt::DirectConnection);
@@ -58,14 +58,14 @@ ClipboardMonitor::ClipboardMonitor(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 ClipboardMonitor::~ClipboardMonitor()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::start()
 {
-    LOG(LS_INFO) << "Starting clipboard monitor";
+    LOG(INFO) << "Starting clipboard monitor";
     thread_.start();
 }
 
@@ -84,7 +84,7 @@ void ClipboardMonitor::clearClipboard()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onBeforeThreadRunning()
 {
-    LOG(LS_INFO) << "Thread starting";
+    LOG(INFO) << "Thread starting";
 
 #if defined(Q_OS_WINDOWS)
     clipboard_ = std::make_unique<common::ClipboardWin>();
@@ -114,7 +114,7 @@ void ClipboardMonitor::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onAfterThreadRunning()
 {
-    LOG(LS_INFO) << "Thread stopping";
+    LOG(INFO) << "Thread stopping";
     clipboard_.reset();
 }
 

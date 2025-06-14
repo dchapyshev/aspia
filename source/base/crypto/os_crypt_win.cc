@@ -39,7 +39,7 @@ bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
     BOOL result = CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output);
     if (!result)
     {
-        PLOG(LS_ERROR) << "Failed to encrypt";
+        PLOG(ERROR) << "Failed to encrypt";
         return false;
     }
 
@@ -61,7 +61,7 @@ bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
     BOOL result = CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0, &output);
     if (!result)
     {
-        PLOG(LS_ERROR) << "Failed to decrypt";
+        PLOG(ERROR) << "Failed to decrypt";
         return false;
     }
 

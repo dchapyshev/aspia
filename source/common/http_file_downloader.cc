@@ -27,13 +27,13 @@ namespace common {
 HttpFileDownloader::HttpFileDownloader(QObject* parent)
     : QThread(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 HttpFileDownloader::~HttpFileDownloader()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
 }
@@ -65,7 +65,7 @@ static int debugFunc(
             if (message.ends_with("\r"))
                 message = message.substr(0, message.size() - 1);
 
-            LOG(LS_INFO) << message;
+            LOG(INFO) << message;
         }
         break;
 
@@ -79,7 +79,7 @@ static int debugFunc(
 //--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
-    LOG(LS_INFO) << "Starting http file downloader:" << url_;
+    LOG(INFO) << "Starting http file downloader:" << url_;
     interrupted_.store(false, std::memory_order_relaxed);
 
     base::ScopedCURL curl;
@@ -94,7 +94,7 @@ void HttpFileDownloader::run()
     long verify_peer = 1;
     if (qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
     {
-        LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
+        LOG(INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;
     }
 
@@ -123,14 +123,14 @@ void HttpFileDownloader::run()
 
         if (error_code)
         {
-            LOG(LS_ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
-                          << " (" << error_code << ")";
+            LOG(ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
+                       << "(" << error_code << ")";
             break;
         }
 
         if (interrupted_.load(std::memory_order_relaxed))
         {
-            LOG(LS_INFO) << "Downloading canceled";
+            LOG(INFO) << "Downloading canceled";
             break;
         }
     }
@@ -146,12 +146,12 @@ void HttpFileDownloader::run()
         }
         else
         {
-            LOG(LS_INFO) << "Download is finished:" << data_.size() << "bytes";
+            LOG(INFO) << "Download is finished:" << data_.size() << "bytes";
             emit sig_downloadCompleted();
         }
     }
 
-    LOG(LS_INFO) << "run END";
+    LOG(INFO) << "run END";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ size_t HttpFileDownloader::writeDataCallback(
     {
         if (self->interrupted_.load(std::memory_order_relaxed))
         {
-            LOG(LS_INFO) << "Interrupted by user";
+            LOG(INFO) << "Interrupted by user";
             return 0;
         }
 

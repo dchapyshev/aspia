@@ -523,17 +523,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="64"/>
+        <location filename="../main.cc" line="63"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="66"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="67"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>
@@ -1516,166 +1516,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="210"/>
-        <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="613"/>
-        <location filename="../main_window.cc" line="625"/>
-        <location filename="../main_window.cc" line="679"/>
-        <location filename="../main_window.cc" line="692"/>
-        <location filename="../main_window.cc" line="1706"/>
+        <location filename="../main_window.cc" line="209"/>
+        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="612"/>
+        <location filename="../main_window.cc" line="624"/>
+        <location filename="../main_window.cc" line="678"/>
+        <location filename="../main_window.cc" line="691"/>
+        <location filename="../main_window.cc" line="1705"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="211"/>
+        <location filename="../main_window.cc" line="210"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>找不到固定的通讯录文件&quot;%1&quot;。&lt;br/&gt;该文件将被取消固定。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="294"/>
-        <location filename="../main_window.cc" line="638"/>
-        <location filename="../main_window.cc" line="700"/>
+        <location filename="../main_window.cc" line="293"/>
+        <location filename="../main_window.cc" line="637"/>
+        <location filename="../main_window.cc" line="699"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="295"/>
+        <location filename="../main_window.cc" line="294"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>通讯录&quot;%1&quot;已打开。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="327"/>
+        <location filename="../main_window.cc" line="326"/>
         <source>Open Address Book</source>
         <translation>打开通讯录</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="329"/>
+        <location filename="../main_window.cc" line="328"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="587"/>
+        <location filename="../main_window.cc" line="586"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="589"/>
-        <location filename="../main_window.cc" line="666"/>
+        <location filename="../main_window.cc" line="588"/>
+        <location filename="../main_window.cc" line="665"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="603"/>
+        <location filename="../main_window.cc" line="602"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="614"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="664"/>
+        <location filename="../main_window.cc" line="663"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="680"/>
+        <location filename="../main_window.cc" line="679"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="693"/>
+        <location filename="../main_window.cc" line="692"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="701"/>
+        <location filename="../main_window.cc" line="700"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="990"/>
-        <location filename="../main_window.cc" line="1341"/>
-        <location filename="../main_window.cc" line="1426"/>
+        <location filename="../main_window.cc" line="989"/>
+        <location filename="../main_window.cc" line="1340"/>
+        <location filename="../main_window.cc" line="1425"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="991"/>
-        <location filename="../main_window.cc" line="1427"/>
+        <location filename="../main_window.cc" line="990"/>
+        <location filename="../main_window.cc" line="1426"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="1344"/>
+        <location filename="../main_window.cc" line="1430"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="995"/>
         <location filename="../main_window.cc" line="1345"/>
         <location filename="../main_window.cc" line="1431"/>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main_window.cc" line="996"/>
-        <location filename="../main_window.cc" line="1346"/>
-        <location filename="../main_window.cc" line="1432"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="997"/>
-        <location filename="../main_window.cc" line="1433"/>
+        <location filename="../main_window.cc" line="996"/>
+        <location filename="../main_window.cc" line="1432"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1235"/>
+        <location filename="../main_window.cc" line="1234"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1242"/>
+        <location filename="../main_window.cc" line="1241"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1243"/>
-        <location filename="../main_window.cc" line="1248"/>
+        <location filename="../main_window.cc" line="1242"/>
+        <location filename="../main_window.cc" line="1247"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1342"/>
+        <location filename="../main_window.cc" line="1341"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1379"/>
+        <location filename="../main_window.cc" line="1378"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1394"/>
+        <location filename="../main_window.cc" line="1393"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="744"/>
-        <location filename="../main_window.cc" line="1570"/>
+        <location filename="../main_window.cc" line="743"/>
+        <location filename="../main_window.cc" line="1569"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="626"/>
+        <location filename="../main_window.cc" line="625"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="639"/>
+        <location filename="../main_window.cc" line="638"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1707"/>
+        <location filename="../main_window.cc" line="1706"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>

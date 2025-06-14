@@ -32,7 +32,7 @@ StatusDialog::StatusDialog(QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::StatusDialog>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     QPushButton* close_button = ui->buttonbox->button(QDialogButtonBox::StandardButton::Close);
@@ -43,7 +43,7 @@ StatusDialog::StatusDialog(QWidget* parent)
     {
         if (ui->buttonbox->standardButton(button) == QDialogButtonBox::Close)
         {
-            LOG(LS_INFO) << "[ACTION] Close button clicked";
+            LOG(INFO) << "[ACTION] Close button clicked";
             close();
         }
     });
@@ -52,7 +52,7 @@ StatusDialog::StatusDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 StatusDialog::~StatusDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ void StatusDialog::addMessageAndActivate(const QString& message)
 {
     if (isHidden())
     {
-        LOG(LS_INFO) << "Window is hidden. Show and activate";
+        LOG(INFO) << "Window is hidden. Show and activate";
         show();
         activateWindow();
     }
@@ -84,7 +84,7 @@ void StatusDialog::retranslateUi()
 //--------------------------------------------------------------------------------------------------
 void StatusDialog::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event detected";
+    LOG(INFO) << "Close event detected";
     QDialog::closeEvent(event);
 }
 

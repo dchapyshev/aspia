@@ -37,7 +37,7 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : base::GuiApplication(argc, argv)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     setOrganizationName("Aspia");
     setApplicationName("Console");
@@ -64,13 +64,13 @@ Application::Application(int& argc, char* argv[])
         }
         else
         {
-            LOG(LS_ERROR) << "Unhandled message";
+            LOG(ERROR) << "Unhandled message";
         }
     });
 
     if (!hasLocale(settings_.locale()))
     {
-        LOG(LS_INFO) << "Set default locale";
+        LOG(INFO) << "Set default locale";
         settings_.setLocale(DEFAULT_LOCALE);
     }
 
@@ -80,7 +80,7 @@ Application::Application(int& argc, char* argv[])
 //--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

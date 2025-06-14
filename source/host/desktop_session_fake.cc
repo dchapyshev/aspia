@@ -26,26 +26,26 @@ namespace host {
 DesktopSessionFake::DesktopSessionFake(QObject* parent)
     : DesktopSession(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionFake::~DesktopSessionFake()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::start()
 {
-    LOG(LS_INFO) << "Start called for fake session";
+    LOG(INFO) << "Start called for fake session";
     emit sig_desktopSessionStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "CONTROL with action:" << action;
+    LOG(INFO) << "CONTROL with action:" << action;
 
     switch (action)
     {

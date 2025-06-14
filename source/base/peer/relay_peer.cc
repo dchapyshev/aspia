@@ -58,13 +58,13 @@ RelayPeer::RelayPeer(QObject* parent)
       socket_(io_context_),
       resolver_(io_context_)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 RelayPeer::~RelayPeer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
@@ -81,7 +81,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 
     QString host = QString::fromStdString(credentials.host());
 
-    LOG(LS_INFO) << "Start resolving for" << host << ":" << credentials.port();
+    LOG(INFO) << "Start resolving for" << host << ":" << credentials.port();
 
     resolver_.async_resolve(host.toLocal8Bit().data(),
                             std::to_string(credentials.port()),
@@ -95,8 +95,8 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
             return;
         }
 
-        LOG(LS_INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
-        LOG(LS_INFO) << "Start connecting...";
+        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+        LOG(INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
                             [this](const std::error_code& error_code,
@@ -110,12 +110,12 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
                 }
                 else
                 {
-                    LOG(LS_ERROR) << "Operation aborted";
+                    LOG(ERROR) << "Operation aborted";
                 }
                 return;
             }
 
-            LOG(LS_INFO) << "Connected to:" << endpoint.address().to_string();
+            LOG(INFO) << "Connected to:" << endpoint.address().to_string();
             onConnected();
         });
     });
@@ -163,7 +163,7 @@ void RelayPeer::onConnected()
             }
             else
             {
-                LOG(LS_ERROR) << "Operation aborted";
+                LOG(ERROR) << "Operation aborted";
             }
             return;
         }
@@ -185,7 +185,7 @@ void RelayPeer::onConnected()
                 }
                 else
                 {
-                    LOG(LS_ERROR) << "Operation aborted";
+                    LOG(ERROR) << "Operation aborted";
                 }
                 return;
             }
@@ -209,8 +209,8 @@ void RelayPeer::onConnected()
 //--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Failed to connect to relay server:" << error_code << "("
-                  << location.toString() << ")";
+    LOG(ERROR) << "Failed to connect to relay server:" << error_code << "("
+               << location.toString() << ")";
     is_finished_ = true;
     emit sig_connectionError();
 }
@@ -222,45 +222,45 @@ QByteArray RelayPeer::authenticationMessage(
 {
     if (key.type() != proto::router::RelayKey::TYPE_X25519)
     {
-        LOG(LS_ERROR) << "Unsupported key type:" << key.type();
+        LOG(ERROR) << "Unsupported key type:" << key.type();
         return QByteArray();
     }
 
     if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
     {
-        LOG(LS_ERROR) << "Unsupported encryption type:" << key.encryption();
+        LOG(ERROR) << "Unsupported encryption type:" << key.encryption();
         return QByteArray();
     }
 
     if (key.public_key().empty())
     {
-        LOG(LS_ERROR) << "Empty public key";
+        LOG(ERROR) << "Empty public key";
         return QByteArray();
     }
 
     if (key.iv().empty())
     {
-        LOG(LS_ERROR) << "Empty IV";
+        LOG(ERROR) << "Empty IV";
         return QByteArray();
     }
 
     if (secret.empty())
     {
-        LOG(LS_ERROR) << "Empty secret";
+        LOG(ERROR) << "Empty secret";
         return QByteArray();
     }
 
     KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
     if (!key_pair.isValid())
     {
-        LOG(LS_ERROR) << "KeyPair::create failed";
+        LOG(ERROR) << "KeyPair::create failed";
         return QByteArray();
     }
 
     QByteArray temp = key_pair.sessionKey(QByteArray::fromStdString(key.public_key()));
     if (temp.isEmpty())
     {
-        LOG(LS_ERROR) << "Failed to create session key";
+        LOG(ERROR) << "Failed to create session key";
         return QByteArray();
     }
 
@@ -270,7 +270,7 @@ QByteArray RelayPeer::authenticationMessage(
         MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
-        LOG(LS_ERROR) << "createForChaCha20Poly1305 failed";
+        LOG(ERROR) << "createForChaCha20Poly1305 failed";
         return QByteArray();
     }
 
@@ -278,7 +278,7 @@ QByteArray RelayPeer::authenticationMessage(
     encrypted_secret.resize(encryptor->encryptedDataSize(secret.size()));
     if (!encryptor->encrypt(secret.data(), secret.size(), encrypted_secret.data()))
     {
-        LOG(LS_ERROR) << "encrypt failed";
+        LOG(ERROR) << "encrypt failed";
         return QByteArray();
     }
 

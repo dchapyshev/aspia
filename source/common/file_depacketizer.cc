@@ -84,7 +84,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
             return true;
         }
 
-        LOG(LS_ERROR) << "Wrong packet size";
+        LOG(ERROR) << "Wrong packet size";
         return false;
     }
 
@@ -97,13 +97,13 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 
     if (!file_->seek(file_size_ - left_size_))
     {
-        LOG(LS_ERROR) << "seek failed";
+        LOG(ERROR) << "seek failed";
         return false;
     }
 
     if (file_->write(packet.data().data(), packet_size) == -1)
     {
-        LOG(LS_ERROR) << "Unable to write file";
+        LOG(ERROR) << "Unable to write file";
         return false;
     }
 

@@ -32,13 +32,13 @@ namespace router {
 SessionClient::SessionClient(QObject* parent)
     : Session(proto::router::SESSION_TYPE_CLIENT, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionClient::~SessionClient()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void SessionClient::onSessionMessageReceived(quint8 /* channel_id */, const QByt
     proto::router::PeerToRouter message;
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Could not read message from client";
+        LOG(ERROR) << "Could not read message from client";
         return;
     }
 
@@ -67,7 +67,7 @@ void SessionClient::onSessionMessageReceived(quint8 /* channel_id */, const QByt
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from client";
+        LOG(ERROR) << "Unhandled message from client";
     }
 }
 
@@ -80,7 +80,7 @@ void SessionClient::onSessionMessageWritten(quint8 /* channel_id */, size_t /* p
 //--------------------------------------------------------------------------------------------------
 void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
-    LOG(LS_INFO) << "New connection request (host_id:" << request.host_id() << ")";
+    LOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
     proto::router::RouterToPeer message;
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
@@ -88,17 +88,17 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     SessionHost* host = sessionByHostId(request.host_id());
     if (!host)
     {
-        LOG(LS_ERROR) << "Host with id" << request.host_id() << "NOT found!";
+        LOG(ERROR) << "Host with id" << request.host_id() << "NOT found!";
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
     }
     else
     {
-        LOG(LS_INFO) << "Host with id" << request.host_id() << "found";
+        LOG(INFO) << "Host with id" << request.host_id() << "found";
 
         std::optional<KeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
         if (!credentials.has_value())
         {
-            LOG(LS_ERROR) << "Empty key pool";
+            LOG(ERROR) << "Empty key pool";
             offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
         }
         else
@@ -106,7 +106,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
             SessionRelay* relay = static_cast<SessionRelay*>(sessionById(credentials->session_id));
             if (!relay)
             {
-                LOG(LS_ERROR) << "No relay with session id" << credentials->session_id;
+                LOG(ERROR) << "No relay with session id" << credentials->session_id;
                 offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
             }
             else
@@ -114,8 +114,8 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                 const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
                 if (!peer_data.has_value())
                 {
-                    LOG(LS_ERROR) << "No peer data for relay with session id"
-                                  << credentials->session_id;
+                    LOG(ERROR) << "No peer data for relay with session id"
+                               << credentials->session_id;
                     offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
                 }
                 else
@@ -140,7 +140,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
 
                     offer_credentials->set_secret(secret.SerializeAsString());
 
-                    LOG(LS_INFO) << "Sending connection offer to host";
+                    LOG(INFO) << "Sending connection offer to host";
                     offer->set_peer_role(proto::router::ConnectionOffer::HOST);
                     host->sendConnectionOffer(*offer);
                 }
@@ -148,7 +148,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
         }
     }
 
-    LOG(LS_INFO) << "Sending connection offer to client";
+    LOG(INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::router::ConnectionOffer::CLIENT);
     sendMessage(base::serialize(message));
@@ -165,8 +165,8 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
     else
         host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
 
-    LOG(LS_INFO) << "Sending host status for host ID" << check_host_status.host_id()
-                 << ":" << host_status->status();
+    LOG(INFO) << "Sending host status for host ID" << check_host_status.host_id()
+              << ":" << host_status->status();
     sendMessage(base::serialize(message));
 }
 

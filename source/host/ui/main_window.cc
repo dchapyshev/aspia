@@ -58,7 +58,7 @@ namespace host {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     UserSettings user_settings;
     Application::instance()->setAttribute(
@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
-        LOG(LS_INFO) << "[ACTION] Show icons in menus changed:" << enable;
+        LOG(INFO) << "[ACTION] Show icons in menus changed:" << enable;
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
 
@@ -118,7 +118,7 @@ MainWindow::MainWindow(QWidget* parent)
         if (reason == QSystemTrayIcon::Context)
             return;
 
-        LOG(LS_INFO) << "[ACTION] Tray icon activated";
+        LOG(INFO) << "[ACTION] Tray icon activated";
         onShowHide();
     });
 
@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
-        LOG(LS_INFO) << "[ACTION] New password";
+        LOG(INFO) << "[ACTION] New password";
         emit sig_updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
@@ -141,7 +141,7 @@ MainWindow::MainWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void MainWindow::connectToService()
 {
     if (connected_to_service_)
     {
-        LOG(LS_INFO) << "Already connected to service";
+        LOG(INFO) << "Already connected to service";
         emit sig_oneTimeSessions(calcOneTimeSessions());
         emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
         return;
@@ -212,14 +212,14 @@ void MainWindow::connectToService()
             agent, &UserSessionAgent::onTextChat,
             Qt::QueuedConnection);
 
-    LOG(LS_INFO) << "Connecting to service";
+    LOG(INFO) << "Connecting to service";
     emit sig_connectToService();
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::activateHost()
 {
-    LOG(LS_INFO) << "Activating host";
+    LOG(INFO) << "Activating host";
 
     show();
     activateWindow();
@@ -229,7 +229,7 @@ void MainWindow::activateHost()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::hideToTray()
 {
-    LOG(LS_INFO) << "Hide application to system tray";
+    LOG(INFO) << "Hide application to system tray";
 
     ui.action_show_hide->setText(tr("Show"));
     setVisible(false);
@@ -240,7 +240,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
     {
-        LOG(LS_INFO) << "Ignored close event";
+        LOG(INFO) << "Ignored close event";
 
         hideToTray();
         event->ignore();
@@ -249,11 +249,11 @@ void MainWindow::closeEvent(QCloseEvent* event)
     {
         if (notifier_)
         {
-            LOG(LS_INFO) << "Close notifier window";
+            LOG(INFO) << "Close notifier window";
             notifier_->closeNotifier();
         }
 
-        LOG(LS_INFO) << "Application quit";
+        LOG(INFO) << "Application quit";
         QApplication::quit();
     }
 }
@@ -263,27 +263,27 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
 {
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
-        LOG(LS_INFO) << "The connection to the service was successfully established.";
+        LOG(INFO) << "The connection to the service was successfully established.";
         connected_to_service_ = true;
         emit sig_oneTimeSessions(calcOneTimeSessions());
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
-        LOG(LS_INFO) << "The connection to the service is lost. The application will be closed.";
+        LOG(INFO) << "The connection to the service is lost. The application will be closed.";
         connected_to_service_ = false;
         emit sig_disconnectFromService();
         realClose();
     }
     else if (status == UserSessionAgent::Status::SERVICE_NOT_AVAILABLE)
     {
-        LOG(LS_INFO) << "The connection to the service has not been established. "
-                     << "The application works offline.";
+        LOG(INFO) << "The connection to the service has not been established. "
+                     "The application works offline.";
         connected_to_service_ = false;
         emit sig_disconnectFromService();
     }
     else
     {
-        LOG(LS_ERROR) << "Unandled status code: " << static_cast<int>(status);
+        LOG(ERROR) << "Unandled status code: " << static_cast<int>(status);
     }
 }
 
@@ -292,7 +292,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 {
     if (!notifier_)
     {
-        LOG(LS_INFO) << "Create NotifierWindow";
+        LOG(INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
         connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
@@ -311,7 +311,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
     else
     {
-        LOG(LS_INFO) << "NotifierWindow already exists";
+        LOG(INFO) << "NotifierWindow already exists";
     }
 
     notifier_->onClientListChanged(clients);
@@ -325,15 +325,15 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
     if (text_chat_clients > 0)
     {
-        LOG(LS_INFO) << "Text chat clients:" << text_chat_clients;
+        LOG(INFO) << "Text chat clients:" << text_chat_clients;
 
         if (text_chat_widget_)
         {
-            LOG(LS_INFO) << "Text chat widget already exists";
+            LOG(INFO) << "Text chat widget already exists";
         }
         else
         {
-            LOG(LS_INFO) << "Create text chat widget";
+            LOG(INFO) << "Create text chat widget";
 
             text_chat_widget_ = new common::TextChatWidget();
 
@@ -367,11 +367,11 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
     else
     {
-        LOG(LS_INFO) << "No text chat clients";
+        LOG(INFO) << "No text chat clients";
 
         if (text_chat_widget_)
         {
-            LOG(LS_INFO) << "Close text chat window";
+            LOG(INFO) << "Close text chat window";
             text_chat_widget_->close();
         }
     }
@@ -380,7 +380,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
-    LOG(LS_INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
+    LOG(INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
 
     ui.button_new_password->setEnabled(true);
 
@@ -405,7 +405,7 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 {
-    LOG(LS_INFO) << "Router state changed (state=" << state.state() << ")";
+    LOG(INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
 
     QString router;
@@ -480,12 +480,12 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 void MainWindow::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
-    LOG(LS_INFO) << "Connection confirmation request (id=" << request.id() << ")";
+    LOG(INFO) << "Connection confirmation request (id=" << request.id() << ")";
 
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
-    LOG(LS_INFO) << "[ACTION] User" << (accept ? "ACCEPT" : "REJECT") << "connection request";
+    LOG(INFO) << "[ACTION] User" << (accept ? "ACCEPT" : "REJECT") << "connection request";
     emit sig_connectConfirmation(request.id(), accept);
 }
 
@@ -493,8 +493,8 @@ void MainWindow::onConnectConfirmationRequest(
 void MainWindow::onVideoRecordingStateChanged(
     const QString& computer_name, const QString& user_name, bool started)
 {
-    LOG(LS_INFO) << "Video recoring state changed (user_name=" << user_name
-                 << "started=" << started << ")";
+    LOG(INFO) << "Video recoring state changed (user_name=" << user_name
+              << "started=" << started << ")";
 
     QString message;
 
@@ -526,14 +526,14 @@ void MainWindow::onTextChat(const proto::text_chat::TextChat& text_chat)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled text chat message";
+        LOG(ERROR) << "Unhandled text chat message";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::realClose()
 {
-    LOG(LS_INFO) << "realClose called";
+    LOG(INFO) << "realClose called";
 
     emit sig_disconnectFromService();
     should_be_quit_ = true;
@@ -545,7 +545,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-    LOG(LS_INFO) << "[ACTION] Language changed:" << new_locale;
+    LOG(INFO) << "[ACTION] Language changed:" << new_locale;
 
     Application* application = Application::instance();
 
@@ -568,12 +568,12 @@ void MainWindow::onLanguageChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
-    LOG(LS_INFO) << "[ACTION] Settings";
+    LOG(INFO) << "[ACTION] Settings";
 
 #if defined(Q_OS_WINDOWS)
     if (!base::isProcessElevated())
     {
-        LOG(LS_INFO) << "Process not elevated";
+        LOG(INFO) << "Process not elevated";
 
         QString current_exec_file =
             QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
@@ -608,12 +608,12 @@ void MainWindow::onSettings()
             }
             else
             {
-                PLOG(LS_ERROR) << "ShellExecuteExW failed";
+                PLOG(ERROR) << "ShellExecuteExW failed";
             }
         }
         else
         {
-            LOG(LS_ERROR) << "Empty file path";
+            LOG(ERROR) << "Empty file path";
         }
 
         return;
@@ -633,8 +633,8 @@ void MainWindow::onSettings()
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                 this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
         {
-            LOG(LS_INFO) << "Process finished with exit code:" << exit_code
-                         << "(status:" << exit_status << ")";
+            LOG(INFO) << "Process finished with exit code:" << exit_code
+                      << "(status:" << exit_status << ")";
 
             process->deleteLater();
             ui.action_settings->setEnabled(true);
@@ -683,14 +683,14 @@ void MainWindow::onShowHide()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onHelp()
 {
-    LOG(LS_INFO) << "[ACTION] Help";
+    LOG(INFO) << "[ACTION] Help";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
-    LOG(LS_INFO) << "[ACTION] About";
+    LOG(INFO) << "[ACTION] About";
     common::AboutDialog(tr("Aspia Host"), this).exec();
 }
 
@@ -700,12 +700,12 @@ void MainWindow::onExit()
     // If the connection to the service is not established, then exit immediately.
     if (!connected_to_service_)
     {
-        LOG(LS_INFO) << "No agent proxy";
+        LOG(INFO) << "No agent proxy";
         realClose();
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Exit";
+    LOG(INFO) << "[ACTION] Exit";
 
     QMessageBox message_box(QMessageBox::Question,
         tr("Confirmation"),
@@ -719,29 +719,29 @@ void MainWindow::onExit()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
-        LOG(LS_INFO) << "[ACTION] User confirmed exit";
+        LOG(INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)
         {
-            LOG(LS_INFO) << "No notifier";
+            LOG(INFO) << "No notifier";
             realClose();
         }
         else
         {
-            LOG(LS_INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
+            LOG(INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
             connect(notifier_, &NotifierWindow::sig_finished, this, &MainWindow::realClose);
             notifier_->onStop();
         }
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] User rejected exit";
+        LOG(INFO) << "[ACTION] User rejected exit";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSettingsChanged()
 {
-    LOG(LS_INFO) << "Settings changed";
+    LOG(INFO) << "Settings changed";
     SystemSettings settings;
     ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
@@ -749,14 +749,14 @@ void MainWindow::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onKillSession(quint32 session_id)
 {
-    LOG(LS_INFO) << "Killing session with ID:" << session_id;
+    LOG(INFO) << "Killing session with ID:" << session_id;
     emit sig_killClient(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onOneTimeSessionsChanged()
 {
-    LOG(LS_INFO) << "[ACTION] One-time sessions changed";
+    LOG(INFO) << "[ACTION] One-time sessions changed";
 
     quint32 sessions = calcOneTimeSessions();
 
@@ -790,7 +790,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateStatusBar()
 {
-    LOG(LS_INFO) << "Update status bar";
+    LOG(INFO) << "Update status bar";
 
     QString message;
     QString icon;
@@ -829,7 +829,7 @@ void MainWindow::updateStatusBar()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
-    LOG(LS_INFO) << "Updating tray tooltip";
+    LOG(INFO) << "Updating tray tooltip";
 
     QString ip;
 

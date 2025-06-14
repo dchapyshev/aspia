@@ -39,7 +39,7 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
       shared_key_pool_(std::move(shared_key_pool)),
       thread_(base::Thread::AsioDispatcher)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     DCHECK(peer_port_ && shared_key_pool_);
 
     connect(&thread_, &base::Thread::started, this, &SessionsWorker::onBeforeThreadRunning,
@@ -51,21 +51,21 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
 //--------------------------------------------------------------------------------------------------
 SessionsWorker::~SessionsWorker()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::start()
 {
-    LOG(LS_INFO) << "Starting session worker";
+    LOG(INFO) << "Starting session worker";
     thread_.start();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::onBeforeThreadRunning()
 {
-    LOG(LS_INFO) << "Before thread running";
+    LOG(INFO) << "Before thread running";
 
     asio::ip::address listen_address;
 
@@ -76,7 +76,7 @@ void SessionsWorker::onBeforeThreadRunning()
             listen_interface_.toLocal8Bit().toStdString(), error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get listen address:" << error_code;
+            LOG(ERROR) << "Unable to get listen address:" << error_code;
             return;
         }
     }
@@ -85,8 +85,8 @@ void SessionsWorker::onBeforeThreadRunning()
         listen_address = asio::ip::address_v6::any();
     }
 
-    LOG(LS_INFO) << "Listen interface: "
-                 << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
+    LOG(INFO) << "Listen interface:"
+              << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
 
     session_manager_ = std::make_unique<SessionManager>(
         listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_);
@@ -106,7 +106,7 @@ void SessionsWorker::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void SessionsWorker::onAfterThreadRunning()
 {
-    LOG(LS_INFO) << "After thread running";
+    LOG(INFO) << "After thread running";
     session_manager_.reset();
 }
 

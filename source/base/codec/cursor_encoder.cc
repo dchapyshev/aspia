@@ -48,7 +48,7 @@ quint8* outputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 CursorEncoder::CursorEncoder()
     : stream_(ZSTD_createCStream())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     static_assert(kCacheSize >= 2 && kCacheSize <= 30);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
@@ -60,7 +60,7 @@ CursorEncoder::CursorEncoder()
 //--------------------------------------------------------------------------------------------------
 CursorEncoder::~CursorEncoder()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,29 +69,27 @@ bool CursorEncoder::compressCursor(
 {
     if (!cursor_shape)
     {
-        LOG(LS_ERROR) << "Invalid pointer";
+        LOG(ERROR) << "Invalid pointer";
         return false;
     }
 
     if (mouse_cursor.width() <= 0 || mouse_cursor.height() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid cursor size:"
-                      << mouse_cursor.width() << "x" << mouse_cursor.height();
+        LOG(ERROR) << "Invalid cursor size:" << mouse_cursor.width() << "x" << mouse_cursor.height();
         return false;
     }
 
     const QByteArray& image = mouse_cursor.constImage();
     if (image.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid cursor image buffer";
+        LOG(ERROR) << "Invalid cursor image buffer";
         return false;
     }
 
     size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret)
-                      << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return false;
     }
 
@@ -109,7 +107,7 @@ bool CursorEncoder::compressCursor(
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+            LOG(ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
             return false;
         }
     }
@@ -117,7 +115,7 @@ bool CursorEncoder::compressCursor(
     ret = ZSTD_endStream(stream_.get(), &output);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return false;
     }
 
@@ -135,14 +133,14 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)
     {
-        LOG(LS_ERROR) << "Wrong size of cursor:" << size.width() << "x" << size.height();
+        LOG(ERROR) << "Wrong size of cursor:" << size;
         return false;
     }
 
     // Calculate the hash of the cursor to search in the cache.
     quint32 hash = libyuv::HashDjb2(reinterpret_cast<const quint8*>(mouse_cursor.constImage().data()),
-                                     mouse_cursor.constImage().size(),
-                                     kHashingSeed);
+                                    mouse_cursor.constImage().size(),
+                                    kHashingSeed);
 
     // Trying to find cursor in cache.
     for (int index = 0; index < cache_.size(); ++index)
@@ -170,13 +168,13 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
     // Compress the cursor using ZSTD.
     if (!compressCursor(mouse_cursor, cursor_shape))
     {
-        LOG(LS_ERROR) << "compressCursor failed";
+        LOG(ERROR) << "compressCursor failed";
         return false;
     }
 
     if (cache_.empty())
     {
-        LOG(LS_INFO) << "Empty cursor cache";
+        LOG(INFO) << "Empty cursor cache";
 
         // If the cache is empty, then set the cache reset flag on the client side and pass the
         // maximum cache size.

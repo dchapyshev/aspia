@@ -35,7 +35,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
       timer_(new QTimer(this)),
       auto_accept_(request.timeout() > 0)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -90,7 +90,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
 //--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::~ConnectConfirmDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,12 +99,12 @@ void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Yes)
     {
-        LOG(LS_INFO) << "[ACTION] 'Yes' button clicked";
+        LOG(INFO) << "[ACTION] 'Yes' button clicked";
         accept();
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] 'No' button clicked";
+        LOG(INFO) << "[ACTION] 'No' button clicked";
         reject();
     }
 
@@ -120,12 +120,12 @@ void ConnectConfirmDialog::onTimeout()
     {
         if (auto_accept_)
         {
-            LOG(LS_INFO) << "Accept connection by timeout";
+            LOG(INFO) << "Accept connection by timeout";
             accept();
         }
         else
         {
-            LOG(LS_INFO) << "Reject connection by timeout";
+            LOG(INFO) << "Reject connection by timeout";
             reject();
         }
 

@@ -36,7 +36,7 @@ T compressT(const T& source, int compress_level)
     quint32 source_data_size = static_cast<quint32>(source.size());
     if (!source_data_size || source_data_size > kMaxDataSize)
     {
-        LOG(LS_ERROR) << "Invalid source data size:" << source_data_size;
+        LOG(ERROR) << "Invalid source data size:" << source_data_size;
         return T();
     }
 
@@ -44,7 +44,7 @@ T compressT(const T& source, int compress_level)
     size_t ret = ZSTD_initCStream(stream.get(), compress_level);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return T();
     }
 
@@ -69,7 +69,7 @@ T compressT(const T& source, int compress_level)
         ret = ZSTD_compressStream(stream.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+            LOG(ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
             return T();
         }
     }
@@ -77,7 +77,7 @@ T compressT(const T& source, int compress_level)
     ret = ZSTD_endStream(stream.get(), &output);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return T();
     }
 
@@ -98,7 +98,7 @@ T decompressT(const T& source)
 
     if (!target_data_size || target_data_size > kMaxDataSize)
     {
-        LOG(LS_ERROR) << "Invalid target data size:" << target_data_size;
+        LOG(ERROR) << "Invalid target data size:" << target_data_size;
         return T();
     }
 
@@ -109,7 +109,7 @@ T decompressT(const T& source)
     size_t ret = ZSTD_initDStream(stream.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return T();
     }
 
@@ -121,8 +121,8 @@ T decompressT(const T& source)
         ret = ZSTD_decompressStream(stream.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret)
-                          << "(" << ret << ")";
+            LOG(ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret)
+                       << "(" << ret << ")";
             return T();
         }
     }

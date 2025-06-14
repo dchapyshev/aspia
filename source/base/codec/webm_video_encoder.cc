@@ -76,14 +76,14 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 //--------------------------------------------------------------------------------------------------
 WebmVideoEncoder::WebmVideoEncoder()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     memset(&config_, 0, sizeof(config_));
 }
 
 //--------------------------------------------------------------------------------------------------
 WebmVideoEncoder::~WebmVideoEncoder()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -95,14 +95,14 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::desktop::VideoPacket* p
 
     if (last_frame_size_ != frame.size())
     {
-        LOG(LS_INFO) << "Frame size changed from" << last_frame_size_ << "to" << frame.size();
+        LOG(INFO) << "Frame size changed from" << last_frame_size_ << "to" << frame.size();
         last_frame_size_ = frame.size();
 
         createImage();
 
         if (!createCodec())
         {
-            LOG(LS_ERROR) << "createCodec failed";
+            LOG(ERROR) << "createCodec failed";
             return false;
         }
 
@@ -135,7 +135,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::desktop::VideoPacket* p
         VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_encode failed";
+        LOG(ERROR) << "vpx_codec_encode failed";
         return false;
     }
 
@@ -212,7 +212,7 @@ bool WebmVideoEncoder::createCodec()
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed";
+        LOG(ERROR) << "vpx_codec_enc_config_default failed";
         return false;
     }
 
@@ -234,7 +234,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_enc_init failed:" << ret;
+        LOG(ERROR) << "vpx_codec_enc_init failed:" << ret;
         return false;
     }
 
@@ -242,14 +242,14 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
+        LOG(ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed:" << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed:" << ret;
+        LOG(ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed:" << ret;
         return false;
     }
 
@@ -258,7 +258,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
+        LOG(ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
         return false;
     }
 

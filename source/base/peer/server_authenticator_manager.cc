@@ -27,13 +27,13 @@ namespace base {
 ServerAuthenticatorManager::ServerAuthenticatorManager(QObject* parent)
     : QObject(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ServerAuthenticatorManager::~ServerAuthenticatorManager()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,14 +71,14 @@ void ServerAuthenticatorManager::addNewChannel(TcpChannel* channel)
     {
         if (!authenticator->setPrivateKey(private_key_))
         {
-            LOG(LS_ERROR) << "Failed to set private key for authenticator";
+            LOG(ERROR) << "Failed to set private key for authenticator";
             delete authenticator;
             return;
         }
 
         if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
         {
-            LOG(LS_ERROR) << "Failed to set anonymous access settings";
+            LOG(ERROR) << "Failed to set anonymous access settings";
             delete authenticator;
             return;
         }

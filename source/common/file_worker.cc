@@ -42,7 +42,7 @@ FileWorker::FileWorker(QObject* parent)
     : QObject(parent),
       idle_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(idle_timer_, &QTimer::timeout, this, []()
     {
@@ -59,7 +59,7 @@ FileWorker::FileWorker(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 FileWorker::~FileWorker()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ void FileWorker::doFileListRequest(
     QString path = QString::fromStdString(request.path());
     if (!QFileInfo::exists(path))
     {
-        LOG(LS_WARNING) << "Requested directory not exists:" << path;
+        LOG(WARNING) << "Requested directory not exists:" << path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
@@ -200,7 +200,7 @@ void FileWorker::doFileListRequest(
     QFileInfo dir_info(path);
     if (!dir_info.isDir())
     {
-        LOG(LS_WARNING) << "Requested directory is not directory:" << path;
+        LOG(WARNING) << "Requested directory is not directory:" << path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_INVALID_PATH_NAME);
         return;
     }
@@ -228,14 +228,14 @@ void FileWorker::doCreateDirectoryRequest(
 
     if (QFileInfo::exists(directory_path))
     {
-        LOG(LS_WARNING) << "Directory already exists:" << directory_path;
+        LOG(WARNING) << "Directory already exists:" << directory_path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
     if (!QDir().mkdir(directory_path))
     {
-        LOG(LS_WARNING) << "Unable to create directory:" << directory_path;
+        LOG(WARNING) << "Unable to create directory:" << directory_path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
         return;
     }
@@ -252,28 +252,28 @@ void FileWorker::doRenameRequest(
 
     if (old_name == new_name)
     {
-        LOG(LS_WARNING) << "Name of new and old element is equal:" << old_name;
+        LOG(WARNING) << "Name of new and old element is equal:" << old_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
         return;
     }
 
     if (!QFileInfo::exists(old_name))
     {
-        LOG(LS_WARNING) << "File being renamed does not exist or cannot be accessed:" << old_name;
+        LOG(WARNING) << "File being renamed does not exist or cannot be accessed:" << old_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
 
     if (QFileInfo::exists(new_name))
     {
-        LOG(LS_WARNING) << "File with the new name already exists:" << new_name;
+        LOG(WARNING) << "File with the new name already exists:" << new_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
         return;
     }
 
     if (!QFile::rename(old_name, new_name))
     {
-        LOG(LS_WARNING) << "Failed to rename file from" << old_name << "to" << new_name;
+        LOG(WARNING) << "Failed to rename file from" << old_name << "to" << new_name;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
         return;
     }
@@ -291,7 +291,7 @@ void FileWorker::doRemoveRequest(
     QFileInfo path_info(path);
     if (!path_info.exists(path))
     {
-        LOG(LS_WARNING) << "Path to be deleted was not found or could not be accessed:" << path;
+        LOG(WARNING) << "Path to be deleted was not found or could not be accessed:" << path;
         reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_NOT_FOUND);
         return;
     }
@@ -300,7 +300,7 @@ void FileWorker::doRemoveRequest(
     {
         if (!QDir().rmdir(path))
         {
-            LOG(LS_WARNING) << "Unable to remove direcotry:" << path;
+            LOG(WARNING) << "Unable to remove direcotry:" << path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
             return;
         }
@@ -314,7 +314,7 @@ void FileWorker::doRemoveRequest(
 
         if (!QFile::remove(path))
         {
-            LOG(LS_WARNING) << "Unable to remove file:" << path;
+            LOG(WARNING) << "Unable to remove file:" << path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
             return;
         }
@@ -330,7 +330,7 @@ void FileWorker::doDownloadRequest(
     packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
     if (!packetizer_)
     {
-        LOG(LS_WARNING) << "Unable to open file:" << request.path();
+        LOG(WARNING) << "Unable to open file:" << request.path();
         reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_OPEN_ERROR);
     }
     else
@@ -351,7 +351,7 @@ void FileWorker::doUploadRequest(
         {
             if (QFileInfo::exists(file_path))
             {
-                LOG(LS_WARNING) << "File already exists:" << file_path;
+                LOG(WARNING) << "File already exists:" << file_path;
                 reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
                 break;
             }
@@ -360,7 +360,7 @@ void FileWorker::doUploadRequest(
         depacketizer_ = FileDepacketizer::create(file_path, request.overwrite());
         if (!depacketizer_)
         {
-            LOG(LS_WARNING) << "Unable to create file:" << file_path;
+            LOG(WARNING) << "Unable to create file:" << file_path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_CREATE_ERROR);
             break;
         }
@@ -378,7 +378,7 @@ void FileWorker::doPacketRequest(
     {
         // Set the unknown status of the request. The connection will be closed.
         reply->set_error_code(proto::file_transfer::ERROR_CODE_UNKNOWN);
-        LOG(LS_ERROR) << "Unexpected file packet request";
+        LOG(ERROR) << "Unexpected file packet request";
     }
     else
     {
@@ -407,7 +407,7 @@ void FileWorker::doPacket(
     {
         // Set the unknown status of the request. The connection will be closed.
         reply->set_error_code(proto::file_transfer::ERROR_CODE_UNKNOWN);
-        LOG(LS_ERROR) << "Unexpected file packet";
+        LOG(ERROR) << "Unexpected file packet";
     }
     else
     {

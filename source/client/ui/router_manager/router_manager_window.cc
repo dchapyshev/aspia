@@ -106,7 +106,7 @@ public:
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to parse session data";
+            LOG(ERROR) << "Unable to parse session data";
         }
 
         setText(3, id);
@@ -312,7 +312,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
       ui(std::make_unique<Ui::RouterManagerWindow>()),
       status_dialog_(new common::StatusDialog(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -320,7 +320,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     // After closing the status dialog, close the session window.
     connect(status_dialog_, &common::StatusDialog::finished, this, [this]()
     {
-        LOG(LS_INFO) << "Session closed";
+        LOG(INFO) << "Session closed";
         close();
     });
 
@@ -437,7 +437,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 RouterManagerWindow::~RouterManagerWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     ClientSettings settings;
     settings.setRouterManagerState(saveState());
@@ -446,8 +446,7 @@ RouterManagerWindow::~RouterManagerWindow()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 {
-    LOG(LS_INFO) << "Connecting to router (address=" << peer_address_.toStdString()
-                 << " port=" << peer_port_ << ")";
+    LOG(INFO) << "Connecting to router (address=" << peer_address_.toStdString() << "port=" << peer_port_ << ")";
 
     peer_address_ = router_config.address;
     peer_port_ = router_config.port;
@@ -506,7 +505,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onConnecting()
 {
-    LOG(LS_INFO) << "Connecting to router";
+    LOG(INFO) << "Connecting to router";
     status_dialog_->addMessageAndActivate(
         tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
 }
@@ -514,7 +513,7 @@ void RouterManagerWindow::onConnecting()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onConnected(const QVersionNumber& peer_version)
 {
-    LOG(LS_INFO) << "Connected to router";
+    LOG(INFO) << "Connected to router";
     is_connected_ = true;
 
     status_dialog_->addMessageAndActivate(tr("Connected to %1:%2.").arg(peer_address_).arg(peer_port_));
@@ -579,7 +578,7 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
         {
             if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
             {
-                LOG(LS_ERROR) << "Unknown error code:" << static_cast<int>(error_code);
+                LOG(ERROR) << "Unknown error code:" << static_cast<int>(error_code);
             }
 
             message = QT_TR_NOOP("An unknown error occurred.");
@@ -594,14 +593,14 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onWaitForRouter()
 {
-    LOG(LS_INFO) << "Wait for router";
+    LOG(INFO) << "Wait for router";
     status_dialog_->addMessageAndActivate(tr("Router is unavailable. Waiting for reconnection..."));
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onWaitForRouterTimeout()
 {
-    LOG(LS_INFO) << "Wait for router timeout";
+    LOG(INFO) << "Wait for router timeout";
     status_dialog_->addMessageAndActivate(tr("Timeout waiting for reconnection."));
 }
 
@@ -1194,12 +1193,12 @@ void RouterManagerWindow::updateRelayStatistics()
             }
             else
             {
-                LOG(LS_INFO) << "No relay statistics";
+                LOG(INFO) << "No relay statistics";
             }
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to parse session data";
+            LOG(ERROR) << "Unable to parse session data";
         }
     }
 
@@ -1221,12 +1220,12 @@ void RouterManagerWindow::refreshSessionList()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectRelay()
 {
-    LOG(LS_INFO) << "[ACTION] Disconnect relay";
+    LOG(INFO) << "[ACTION] Disconnect relay";
 
     RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
     {
-        LOG(LS_ERROR) << "No current item";
+        LOG(ERROR) << "No current item";
         return;
     }
 
@@ -1251,7 +1250,7 @@ void RouterManagerWindow::disconnectRelay()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllRelays()
 {
-    LOG(LS_INFO) << "[ACTION] Disconnect all relays";
+    LOG(INFO) << "[ACTION] Disconnect all relays";
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1263,11 +1262,11 @@ void RouterManagerWindow::disconnectAllRelays()
 
     if (message_box.exec() == QMessageBox::No)
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Accepted by user";
+    LOG(INFO) << "[ACTION] Accepted by user";
 
     beforeRequest();
 
@@ -1283,12 +1282,12 @@ void RouterManagerWindow::disconnectAllRelays()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectHost()
 {
-    LOG(LS_INFO) << "[ACTION] Disconnect host";
+    LOG(INFO) << "[ACTION] Disconnect host";
 
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
     {
-        LOG(LS_INFO) << "No current item";
+        LOG(INFO) << "No current item";
         return;
     }
 
@@ -1303,11 +1302,11 @@ void RouterManagerWindow::disconnectHost()
 
     if (message_box.exec() == QMessageBox::No)
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Accepted by user";
+    LOG(INFO) << "[ACTION] Accepted by user";
 
     beforeRequest();
     emit sig_stopSession(tree_item->session.session_id());
@@ -1316,7 +1315,7 @@ void RouterManagerWindow::disconnectHost()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllHosts()
 {
-    LOG(LS_INFO) << "[ACTION] Disconnect all hosts";
+    LOG(INFO) << "[ACTION] Disconnect all hosts";
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -1328,11 +1327,11 @@ void RouterManagerWindow::disconnectAllHosts()
 
     if (message_box.exec() == QMessageBox::No)
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Accepted by user";
+    LOG(INFO) << "[ACTION] Accepted by user";
     beforeRequest();
 
     QTreeWidget* tree_hosts = ui->tree_hosts;
@@ -1354,7 +1353,7 @@ void RouterManagerWindow::refreshUserList()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::addUser()
 {
-    LOG(LS_INFO) << "[ACTION] Add user";
+    LOG(INFO) << "[ACTION] Add user";
 
     QTreeWidget* tree_users = ui->tree_users;
     QStringList users;
@@ -1365,27 +1364,27 @@ void RouterManagerWindow::addUser()
     RouterUserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
-        LOG(LS_INFO) << "[ACTION] Accepeted by user";
+        LOG(INFO) << "[ACTION] Accepeted by user";
 
         beforeRequest();
         emit sig_addUser(dialog.user().serialize());
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::modifyUser()
 {
-    LOG(LS_INFO) << "[ACTION] Modify user";
+    LOG(INFO) << "[ACTION] Modify user";
 
     QTreeWidget* tree_users = ui->tree_users;
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(tree_users->currentItem());
     if (!tree_item)
     {
-        LOG(LS_INFO) << "No selected item";
+        LOG(INFO) << "No selected item";
         return;
     }
 
@@ -1401,33 +1400,33 @@ void RouterManagerWindow::modifyUser()
     RouterUserDialog dialog(tree_item->user, users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         beforeRequest();
         emit sig_modifyUser(dialog.user().serialize());
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::deleteUser()
 {
-    LOG(LS_INFO) << "[ACTION] Delete user";
+    LOG(INFO) << "[ACTION] Delete user";
 
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
     if (!tree_item)
     {
-        LOG(LS_INFO) << "No selected item";
+        LOG(INFO) << "No selected item";
         return;
     }
 
     qint64 entry_id = tree_item->user.entry_id;
     if (entry_id == 1)
     {
-        LOG(LS_INFO) << "Unable to delete built-in user";
+        LOG(INFO) << "Unable to delete built-in user";
         QMessageBox::warning(this, tr("Warning"), tr("You cannot delete a built-in user."));
         return;
     }
@@ -1443,14 +1442,14 @@ void RouterManagerWindow::deleteUser()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         beforeRequest();
         emit sig_deleteUser(entry_id);
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
     }
 }
 
@@ -1492,7 +1491,7 @@ void RouterManagerWindow::afterRequest()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveHostsToFile()
 {
-    LOG(LS_INFO) << "[ACTION] Save hosts to file";
+    LOG(INFO) << "[ACTION] Save hosts to file";
 
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -1502,14 +1501,14 @@ void RouterManagerWindow::saveHostsToFile()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "No selected path";
+        LOG(INFO) << "No selected path";
         return;
     }
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_INFO) << "Unable to open file:" << file.errorString().toStdString();
+        LOG(INFO) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1560,7 +1559,7 @@ void RouterManagerWindow::saveHostsToFile()
     qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
-        LOG(LS_INFO) << "Unable to write file:" << file.errorString().toStdString();
+        LOG(INFO) << "Unable to write file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
@@ -1572,7 +1571,7 @@ void RouterManagerWindow::saveHostsToFile()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveRelaysToFile()
 {
-    LOG(LS_INFO) << "[ACTION] Save relays to file";
+    LOG(INFO) << "[ACTION] Save relays to file";
 
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -1582,14 +1581,14 @@ void RouterManagerWindow::saveRelaysToFile()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "No selected path";
+        LOG(INFO) << "No selected path";
         return;
     }
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_INFO) << "Unable to open file:" << file.errorString().toStdString();
+        LOG(INFO) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1659,7 +1658,7 @@ void RouterManagerWindow::saveRelaysToFile()
     qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
-        LOG(LS_INFO) << "Unable to write file:" << file.errorString().toStdString();
+        LOG(INFO) << "Unable to write file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),

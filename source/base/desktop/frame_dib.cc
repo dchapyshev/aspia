@@ -101,7 +101,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                       0);
     if (!bitmap)
     {
-        LOG(LS_ERROR) << "CreateDIBSection failed";
+        LOG(ERROR) << "CreateDIBSection failed";
         return nullptr;
     }
 

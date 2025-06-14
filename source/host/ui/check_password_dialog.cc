@@ -32,7 +32,7 @@ namespace host {
 CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -51,7 +51,7 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 CheckPasswordDialog::~CheckPasswordDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,13 +60,13 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         QString password = ui.edit_pass->text();
 
         if (!SystemSettings::isValidPassword(password))
         {
-            LOG(LS_INFO) << "Invalid password entered";
+            LOG(INFO) << "Invalid password entered";
 
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -81,7 +81,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

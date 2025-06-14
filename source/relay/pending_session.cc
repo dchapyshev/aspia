@@ -52,7 +52,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(LS_ERROR) << "Unable to get endpoint for pending session:" << error_code;
+            LOG(ERROR) << "Unable to get endpoint for pending session:" << error_code;
         }
         else
         {
@@ -63,7 +63,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
     }
     catch (const std::error_code& error_code)
     {
-        LOG(LS_ERROR) << "Unable to get address for pending session:" << error_code;
+        LOG(ERROR) << "Unable to get address for pending session:" << error_code;
     }
 }
 
@@ -76,7 +76,7 @@ PendingSession::~PendingSession()
 //--------------------------------------------------------------------------------------------------
 void PendingSession::start()
 {
-    LOG(LS_INFO) << "Starting pending session";
+    LOG(INFO) << "Starting pending session";
 
     start_time_ = Clock::now();
 
@@ -86,7 +86,7 @@ void PendingSession::start()
     socket_.set_option(option, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
+        LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
     }
 
     timer_->start(kTimeout);
@@ -201,7 +201,7 @@ void PendingSession::doReadMessage(PendingSession* session)
 //--------------------------------------------------------------------------------------------------
 void PendingSession::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Connection error:" << error_code << "(" << location.toString() << ")";
+    LOG(ERROR) << "Connection error:" << error_code << "(" << location.toString() << ")";
     emit sig_pendingSessionFailed(this);
     stop();
 }

@@ -31,7 +31,7 @@
 int desktopAgentMain(int& argc, char* argv[])
 {
     base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
+    logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
 
@@ -54,7 +54,7 @@ int desktopAgentMain(int& argc, char* argv[])
 
     if (!parser.isSet(channel_id_option))
     {
-        LOG(LS_ERROR) << "Parameter channel_id is not specified";
+        LOG(ERROR) << "Parameter channel_id is not specified";
         return 1;
     }
 

@@ -28,7 +28,7 @@ PowerInfo::PowerInfo()
     memset(&power_status_, 0, sizeof(power_status_));
     if (!GetSystemPowerStatus(&power_status_))
     {
-        PLOG(LS_ERROR) << "GetSystemPowerStatus failed";
+        PLOG(ERROR) << "GetSystemPowerStatus failed";
         return;
     }
 

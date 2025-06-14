@@ -27,20 +27,20 @@ namespace relay {
 KeyPool::KeyPool(KeyFactory* factory)
     : factory_(factory)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     DCHECK(factory_);
 }
 
 //--------------------------------------------------------------------------------------------------
 KeyPool::~KeyPool()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void KeyPool::dettach()
 {
-    LOG(LS_INFO) << "Pool is dettached";
+    LOG(INFO) << "Pool is dettached";
     std::scoped_lock lock(lock_);
     factory_ = nullptr;
 }
@@ -53,7 +53,7 @@ quint32 KeyPool::addKey(SessionKey&& session_key)
     quint32 key_id = current_key_id_++;
     map_.try_emplace(key_id, std::move(session_key));
 
-    LOG(LS_INFO) << "Key with id" << key_id << "added to pool";
+    LOG(INFO) << "Key with id" << key_id << "added to pool";
     return key_id;
 }
 
@@ -67,7 +67,7 @@ bool KeyPool::removeKey(quint32 key_id)
     {
         map_.erase(result);
 
-        LOG(LS_INFO) << "Key with id" << key_id << "removed from pool";
+        LOG(INFO) << "Key with id" << key_id << "removed from pool";
         return true;
     }
 
@@ -79,7 +79,7 @@ void KeyPool::setKeyExpired(quint32 key_id)
 {
     if (removeKey(key_id))
     {
-        LOG(LS_INFO) << "Key with ID" << key_id << "expired. It has been removed";
+        LOG(INFO) << "Key with ID" << key_id << "expired. It has been removed";
 
         std::scoped_lock lock(lock_);
         if (factory_)
@@ -103,7 +103,7 @@ std::optional<KeyPool::Key> KeyPool::key(quint32 key_id, const std::string& peer
 //--------------------------------------------------------------------------------------------------
 void KeyPool::clear()
 {
-    LOG(LS_INFO) << "Key pool cleared";
+    LOG(INFO) << "Key pool cleared";
     std::scoped_lock lock(lock_);
     map_.clear();
 }

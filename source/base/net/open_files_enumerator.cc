@@ -39,13 +39,13 @@ OpenFilesEnumerator::OpenFilesEnumerator()
                                    nullptr);
     if (error_code != NERR_Success)
     {
-        LOG(LS_ERROR) << "NetShareEnum failed:" << SystemError(error_code).toString();
+        LOG(ERROR) << "NetShareEnum failed:" << SystemError(error_code).toString();
         return;
     }
 
     if (!file_info_)
     {
-        LOG(LS_ERROR) << "Invalid file info";
+        LOG(ERROR) << "Invalid file info";
         return;
     }
 

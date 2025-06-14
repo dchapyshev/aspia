@@ -31,19 +31,19 @@ namespace host {
 ClientSessionSystemInfo::ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent)
     : ClientSession(proto::peer::SESSION_TYPE_SYSTEM_INFO, channel, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientSessionSystemInfo::~ClientSessionSystemInfo()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onStarted()
 {
-    LOG(LS_INFO) << "Session started";
+    LOG(INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ void ClientSessionSystemInfo::onReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &request))
     {
-        LOG(LS_ERROR) << "Unable to parse system info request";
+        LOG(ERROR) << "Unable to parse system info request";
         return;
     }
 

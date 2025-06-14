@@ -58,7 +58,7 @@ Desktop Desktop::desktop(const wchar_t* desktop_name)
     HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
     if (!desktop)
     {
-        PLOG(LS_ERROR) << "OpenDesktopW failed";
+        PLOG(ERROR) << "OpenDesktopW failed";
         return Desktop();
     }
 
@@ -74,7 +74,7 @@ Desktop Desktop::inputDesktop()
     HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
     if (!desktop)
     {
-        PLOG(LS_ERROR) << "OpenInputDesktop failed";
+        PLOG(ERROR) << "OpenInputDesktop failed";
         return Desktop();
     }
 
@@ -88,7 +88,7 @@ Desktop Desktop::threadDesktop()
     HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
     if (!desktop)
     {
-        PLOG(LS_ERROR) << "GetThreadDesktop failed";
+        PLOG(ERROR) << "GetThreadDesktop failed";
         return Desktop();
     }
 
@@ -103,7 +103,7 @@ QStringList Desktop::desktopList(HWINSTA winsta)
 
     if (!EnumDesktopsW(winsta, enumDesktopProc, reinterpret_cast<LPARAM>(&list)))
     {
-        PLOG(LS_ERROR) << "EnumDesktopsW failed";
+        PLOG(ERROR) << "EnumDesktopsW failed";
         return {};
     }
 
@@ -118,7 +118,7 @@ bool Desktop::name(wchar_t* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        PLOG(LS_ERROR) << "Failed to query the desktop name";
+        PLOG(ERROR) << "Failed to query the desktop name";
         return false;
     }
 
@@ -146,7 +146,7 @@ bool Desktop::setThreadDesktop() const
 {
     if (!SetThreadDesktop(desktop_))
     {
-        PLOG(LS_ERROR) << "SetThreadDesktop failed";
+        PLOG(ERROR) << "SetThreadDesktop failed";
         return false;
     }
 
@@ -166,7 +166,7 @@ void Desktop::close()
     {
         if (!CloseDesktop(desktop_))
         {
-            PLOG(LS_ERROR) << "CloseDesktop failed";
+            PLOG(ERROR) << "CloseDesktop failed";
         }
     }
 
@@ -193,13 +193,13 @@ BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
     QStringList* list = reinterpret_cast<QStringList*>(lparam);
     if (!list)
     {
-        LOG(LS_ERROR) << "Invalid desktop list pointer";
+        LOG(ERROR) << "Invalid desktop list pointer";
         return FALSE;
     }
 
     if (!desktop)
     {
-        LOG(LS_ERROR) << "Invalid desktop name";
+        LOG(ERROR) << "Invalid desktop name";
         return FALSE;
     }
 

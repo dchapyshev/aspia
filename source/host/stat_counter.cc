@@ -100,14 +100,14 @@ void StatCounter::addCursorPosition()
 //--------------------------------------------------------------------------------------------------
 void StatCounter::onTimeout()
 {
-    LOG(LS_INFO) << "### Statistics (sid=" << client_session_id_ << ") ###";
-    LOG(LS_INFO) << "Packets: video=" << video_packets_ << "audio=" << audio_packets_
-                 << "video_error=" << video_error_count_;
-    LOG(LS_INFO) << "Clipboard: in=" << incoming_clipboard_events_
-                 << "out=" << outgoing_clipboard_events_;
-    LOG(LS_INFO) << "Input: keyboard=" << keyboard_events_ << "mouse=" << mouse_events_
-                 << "touch=" << touch_events_ << "text=" << text_events_;
-    LOG(LS_INFO) << "Cursor positions:" << cursor_positions_;
+    LOG(INFO) << "### Statistics (sid=" << client_session_id_ << ") ###";
+    LOG(INFO) << "Packets: video=" << video_packets_ << "audio=" << audio_packets_
+              << "video_error=" << video_error_count_;
+    LOG(INFO) << "Clipboard: in=" << incoming_clipboard_events_
+              << "out=" << outgoing_clipboard_events_;
+    LOG(INFO) << "Input: keyboard=" << keyboard_events_ << "mouse=" << mouse_events_
+              << "touch=" << touch_events_ << "text=" << text_events_;
+    LOG(INFO) << "Cursor positions:" << cursor_positions_;
 }
 
 } // namespace host

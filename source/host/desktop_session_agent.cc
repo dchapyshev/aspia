@@ -46,7 +46,7 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
       ui_thread_(base::Thread::QtDispatcher),
       screen_capture_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(&ui_thread_, &base::Thread::started, this, &DesktopSessionAgent::onBeforeThreadRunning,
             Qt::DirectConnection);
@@ -57,19 +57,19 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
-        PLOG(LS_ERROR) << "SetProcessShutdownParameters failed";
+        PLOG(ERROR) << "SetProcessShutdownParameters failed";
     }
 
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_ERROR) << "SetPriorityClass failed";
+        PLOG(ERROR) << "SetPriorityClass failed";
     }
 #endif // defined(Q_OS_WINDOWS)
 
     SystemSettings settings;
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
-    LOG(LS_INFO) << "Preferred video capturer:" << static_cast<int>(preferred_video_capturer_);
+    LOG(INFO) << "Preferred video capturer:" << static_cast<int>(preferred_video_capturer_);
 
 #if defined(Q_OS_WINDOWS)
     ui_thread_.start();
@@ -82,7 +82,7 @@ DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::~DesktopSessionAgent()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
 #if defined(Q_OS_WINDOWS)
     ui_thread_.stop();
@@ -92,13 +92,13 @@ DesktopSessionAgent::~DesktopSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::start(const QString& channel_id)
 {
-    LOG(LS_INFO) << "Starting (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting (channel_id=" << channel_id << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
     if (!ipc_channel_->connectTo(channel_id))
     {
-        LOG(LS_ERROR) << "Connection failed (channel_id=" << channel_id << ")";
+        LOG(ERROR) << "Connection failed (channel_id=" << channel_id << ")";
         return;
     }
 
@@ -113,7 +113,7 @@ void DesktopSessionAgent::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onBeforeThreadRunning()
 {
-    LOG(LS_INFO) << "UI thread starting";
+    LOG(INFO) << "UI thread starting";
 
 #if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<base::MessageWindow>();
@@ -122,7 +122,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
                                            std::placeholders::_1, std::placeholders::_2,
                                            std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(LS_ERROR) << "Couldn't create window.";
+        LOG(ERROR) << "Couldn't create window";
         return;
     }
 #endif // defined(Q_OS_WINDOWS)
@@ -131,7 +131,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onAfterThreadRunning()
 {
-    LOG(LS_INFO) << "UI thread stopping";
+    LOG(INFO) << "UI thread stopping";
 
 #if defined(Q_OS_WINDOWS)
     message_window_.reset();
@@ -141,7 +141,7 @@ void DesktopSessionAgent::onAfterThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
-    LOG(LS_INFO) << "Shared memory created:" << id;
+    LOG(INFO) << "Shared memory created:" << id;
 
     proto::internal::SharedBuffer* shared_buffer =
         outgoing_message_.newMessage().mutable_shared_buffer();
@@ -155,7 +155,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
-    LOG(LS_INFO) << "Shared memory destroyed:" << id;
+    LOG(INFO) << "Shared memory destroyed:" << id;
 
     proto::internal::SharedBuffer* shared_buffer =
         outgoing_message_.newMessage().mutable_shared_buffer();
@@ -202,7 +202,7 @@ void DesktopSessionAgent::onScreenListChanged(
             screen_list->set_primary_screen(screen_item.id);
     }
 
-    LOG(LS_INFO) << "Sending screen list to service";
+    LOG(INFO) << "Sending screen list to service";
     ipc_channel_->send(outgoing_message_.serialize());
 }
 
@@ -254,11 +254,11 @@ void DesktopSessionAgent::onScreenTypeChanged(
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "IPC channel disconnected";
+    LOG(INFO) << "IPC channel disconnected";
 
     setEnabled(false);
 
-    LOG(LS_INFO) << "Post quit";
+    LOG(INFO) << "Post quit";
     QCoreApplication::quit();
 }
 
@@ -267,7 +267,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Invalid message from service";
+        LOG(ERROR) << "Invalid message from service";
         return;
     }
 
@@ -284,7 +284,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
+            LOG(ERROR) << "Input injector NOT initialized";
         }
     }
     else if (incoming_message_->has_key_event())
@@ -295,7 +295,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
+            LOG(ERROR) << "Input injector NOT initialized";
         }
     }
     else if (incoming_message_->has_touch_event())
@@ -306,7 +306,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
+            LOG(ERROR) << "Input injector NOT initialized";
         }
     }
     else if (incoming_message_->has_text_event())
@@ -317,7 +317,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
+            LOG(ERROR) << "Input injector NOT initialized";
         }
     }
     else if (incoming_message_->has_clipboard_event())
@@ -328,12 +328,12 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Clipboard monitor NOT initialized";
+            LOG(ERROR) << "Clipboard monitor NOT initialized";
         }
     }
     else if (incoming_message_->has_select_source())
     {
-        LOG(LS_INFO) << "Select source received";
+        LOG(INFO) << "Select source received";
 
         if (screen_capturer_)
         {
@@ -345,21 +345,21 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+            LOG(ERROR) << "Screen capturer NOT initialized";
         }
     }
     else if (incoming_message_->has_configure())
     {
         const proto::internal::Configure& config = incoming_message_->configure();
 
-        LOG(LS_INFO) << "Configure received";
-        LOG(LS_INFO) << "Disable wallpaper:" << config.disable_wallpaper();
-        LOG(LS_INFO) << "Disable effects:" << config.disable_effects();
-        LOG(LS_INFO) << "Disable font smoothing:" << config.disable_font_smoothing();
-        LOG(LS_INFO) << "Block input:" << config.block_input();
-        LOG(LS_INFO) << "Lock at disconnect:" << config.lock_at_disconnect();
-        LOG(LS_INFO) << "Clear clipboard:" << config.clear_clipboard();
-        LOG(LS_INFO) << "Cursor position:" << config.cursor_position();
+        LOG(INFO) << "Configure received";
+        LOG(INFO) << "Disable wallpaper:" << config.disable_wallpaper();
+        LOG(INFO) << "Disable effects:" << config.disable_effects();
+        LOG(INFO) << "Disable font smoothing:" << config.disable_font_smoothing();
+        LOG(INFO) << "Block input:" << config.block_input();
+        LOG(INFO) << "Lock at disconnect:" << config.lock_at_disconnect();
+        LOG(INFO) << "Clear clipboard:" << config.clear_clipboard();
+        LOG(INFO) << "Cursor position:" << config.cursor_position();
 
         if (screen_capturer_)
         {
@@ -370,7 +370,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+            LOG(ERROR) << "Screen capturer NOT initialized";
         }
 
         if (input_injector_)
@@ -379,7 +379,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Input injector NOT initialized";
+            LOG(ERROR) << "Input injector NOT initialized";
         }
 
         lock_at_disconnect_ = config.lock_at_disconnect();
@@ -387,7 +387,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_control())
     {
-        LOG(LS_INFO) << "Control received:" << incoming_message_->control().action();
+        LOG(INFO) << "Control received:" << incoming_message_->control().action();
 
         switch (incoming_message_->control().action())
         {
@@ -403,7 +403,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             {
                 if (!base::PowerController::logoff())
                 {
-                    LOG(LS_ERROR) << "base::PowerController::logoff failed";
+                    LOG(ERROR) << "base::PowerController::logoff failed";
                 }
             }
             break;
@@ -412,7 +412,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             {
                 if (!base::PowerController::lock())
                 {
-                    LOG(LS_ERROR) << "base::PowerController::lock failed";
+                    LOG(ERROR) << "base::PowerController::lock failed";
                 }
             }
             break;
@@ -424,7 +424,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from service";
+        LOG(ERROR) << "Unhandled message from service";
         return;
     }
 }
@@ -432,7 +432,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    LOG(LS_INFO) << "Send clipboard event";
+    LOG(INFO) << "Send clipboard event";
 
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -441,11 +441,11 @@ void DesktopSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent&
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::setEnabled(bool enable)
 {
-    LOG(LS_INFO) << "Enable session: " << enable;
+    LOG(INFO) << "Enable session: " << enable;
 
     if (is_session_enabled_ == enable)
     {
-        LOG(LS_INFO) << "Session already" << (enable ? "enabled" : "disabled");
+        LOG(INFO) << "Session already" << (enable ? "enabled" : "disabled");
         return;
     }
 
@@ -498,7 +498,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         audio_capturer_->start();
 
-        LOG(LS_INFO) << "Session successfully enabled";
+        LOG(INFO) << "Session successfully enabled";
 
         screen_capture_timer_->start(std::chrono::milliseconds(0));
     }
@@ -508,12 +508,12 @@ void DesktopSessionAgent::setEnabled(bool enable)
         {
             if (clipboard_monitor_)
             {
-                LOG(LS_INFO) << "Clearing clipboard";
+                LOG(INFO) << "Clearing clipboard";
                 clipboard_monitor_->clearClipboard();
             }
             else
             {
-                LOG(LS_ERROR) << "Clipboard monitor not present";
+                LOG(ERROR) << "Clipboard monitor not present";
             }
 
             clear_clipboard_ = false;
@@ -527,22 +527,22 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         if (lock_at_disconnect_)
         {
-            LOG(LS_INFO) << "Enabled locking of user session when disconnected";
+            LOG(INFO) << "Enabled locking of user session when disconnected";
 
             if (!base::PowerController::lock())
             {
-                LOG(LS_ERROR) << "base::PowerController::lock failed";
+                LOG(ERROR) << "base::PowerController::lock failed";
             }
             else
             {
-                LOG(LS_INFO) << "User session locked";
+                LOG(INFO) << "User session locked";
             }
 
             lock_at_disconnect_ = false;
         }
 
         screen_capture_timer_->stop();
-        LOG(LS_INFO) << "Session successfully disabled";
+        LOG(INFO) << "Session successfully disabled";
     }
 }
 
@@ -551,7 +551,7 @@ void DesktopSessionAgent::captureScreen()
 {
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Screen capturer not initialized";
+        LOG(ERROR) << "Screen capturer not initialized";
         return;
     }
 
@@ -591,7 +591,7 @@ void DesktopSessionAgent::captureScreen()
         base::SharedMemory* shared_memory = frame->sharedMemory();
         if (!shared_memory)
         {
-            LOG(LS_ERROR) << "Unable to get shared memory";
+            LOG(ERROR) << "Unable to get shared memory";
             return;
         }
 
@@ -670,7 +670,7 @@ bool DesktopSessionAgent::onWindowsMessage(
     {
         case WM_QUERYENDSESSION:
         {
-            LOG(LS_INFO) << "WM_QUERYENDSESSION received";
+            LOG(INFO) << "WM_QUERYENDSESSION received";
 
             base::DesktopEnvironmentWin::updateEnvironment();
 
@@ -680,7 +680,7 @@ bool DesktopSessionAgent::onWindowsMessage(
 
         case WM_ENDSESSION:
         {
-            LOG(LS_INFO) << "WM_ENDSESSION received";
+            LOG(INFO) << "WM_ENDSESSION received";
             result = FALSE;
             return true;
         }

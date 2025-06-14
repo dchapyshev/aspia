@@ -52,7 +52,7 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
+        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 
@@ -60,7 +60,7 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
         createCipher(CipherType::AES256_GCM, CipherMode::DECRYPT, key, kIVSize);
     if (!ctx)
     {
-        LOG(LS_ERROR) << "createCipher failed";
+        LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
@@ -74,7 +74,7 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
+        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 
@@ -82,7 +82,7 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly
         createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
     if (!ctx)
     {
-        LOG(LS_ERROR) << "createCipher failed";
+        LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
@@ -101,7 +101,7 @@ bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {
-        LOG(LS_ERROR) << "EVP_DecryptInit_ex failed";
+        LOG(ERROR) << "EVP_DecryptInit_ex failed";
         return false;
     }
 
@@ -112,20 +112,20 @@ bool MessageDecryptorOpenssl::decrypt(const void* in, size_t in_size, void* out)
                           reinterpret_cast<const quint8*>(in) + kTagSize,
                           static_cast<int>(in_size) - kTagSize) != 1)
     {
-        LOG(LS_ERROR) << "EVP_DecryptUpdate failed";
+        LOG(ERROR) << "EVP_DecryptUpdate failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_SET_TAG, kTagSize,
                             const_cast<void*>(in)) != 1)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 
     if (EVP_DecryptFinal_ex(ctx_.get(), reinterpret_cast<quint8*>(out) + length, &length) <= 0)
     {
-        LOG(LS_ERROR) << "EVP_DecryptFinal_ex failed";
+        LOG(ERROR) << "EVP_DecryptFinal_ex failed";
         return false;
     }
 

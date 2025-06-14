@@ -40,7 +40,7 @@ enum ColorDepth
 ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent)
     : ComputerGroupDialogTab(type, is_root_group, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -70,7 +70,7 @@ ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, bool is_root_gr
 //--------------------------------------------------------------------------------------------------
 ComputerGroupDialogDesktop::~ComputerGroupDialogDesktop()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ void ComputerGroupDialogDesktop::saveSettings(
                 break;
 
             default:
-                DLOG(LS_FATAL) << "Unexpected color depth";
+                DLOG(FATAL) << "Unexpected color depth";
                 break;
         }
 
@@ -276,7 +276,7 @@ void ComputerGroupDialogDesktop::onCodecChanged(int item_index)
     proto::desktop::VideoEncoding encoding =
         static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Video encoding changed:" << encoding;
+    LOG(INFO) << "[ACTION] Video encoding changed:" << encoding;
 
     bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);
 
@@ -291,7 +291,7 @@ void ComputerGroupDialogDesktop::onCodecChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogDesktop::onCompressionRatioChanged(int value)
 {
-    LOG(LS_INFO) << "[ACTION] Compression ratio changed:" << value;
+    LOG(INFO) << "[ACTION] Compression ratio changed:" << value;
     ui.label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 

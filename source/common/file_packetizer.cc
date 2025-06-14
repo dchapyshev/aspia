@@ -79,13 +79,13 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
     // Moving to a new position in file.
     if (!file_->seek(file_size_ - left_size_))
     {
-        LOG(LS_ERROR) << "Unable to seek file";
+        LOG(ERROR) << "Unable to seek file";
         return nullptr;
     }
 
     if (file_->read(packet_buffer, packet_buffer_size) == -1)
     {
-        LOG(LS_ERROR) << "Unable to read file";
+        LOG(ERROR) << "Unable to read file";
         return nullptr;
     }
 

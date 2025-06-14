@@ -50,11 +50,11 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 {
     if (buffer.isEmpty())
     {
-        LOG(LS_INFO) << "Empty XML buffer";
+        LOG(INFO) << "Empty XML buffer";
         return UpdateInfo();
     }
 
-    LOG(LS_INFO) << "XML:" << QString::fromUtf8(buffer);
+    LOG(INFO) << "XML:" << QString::fromUtf8(buffer);
 
     if (!buffer.startsWith('<'))
     {
@@ -106,15 +106,15 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 
     if (xml.hasError())
     {
-        LOG(LS_ERROR) << "Error parsing XML:" << xml.errorString();
+        LOG(ERROR) << "Error parsing XML:" << xml.errorString();
     }
     else if (update_info.description_.size() > kMaxDescriptionLength)
     {
-        LOG(LS_ERROR) << "Too many characters in description";
+        LOG(ERROR) << "Too many characters in description";
     }
     else if (update_info.url_.size() < kMinUrlLength || update_info.url_.size() > kMaxUrlLength)
     {
-        LOG(LS_ERROR) << "Incorrect number of characters in URL";
+        LOG(ERROR) << "Incorrect number of characters in URL";
     }
     else
     {

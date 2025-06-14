@@ -99,7 +99,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
 
     if (!userSidString(&user_sid))
     {
-        LOG(LS_ERROR) << "Failed to query the current user SID";
+        LOG(ERROR) << "Failed to query the current user SID";
         return false;
     }
 
@@ -111,7 +111,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     ScopedSd sd = convertSddlToSd(security_descriptor);
     if (!sd.get())
     {
-        LOG(LS_ERROR) << "Failed to create a security descriptor";
+        LOG(ERROR) << "Failed to create a security descriptor";
         return false;
     }
 
@@ -133,7 +133,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
                          &security_attributes));
     if (!handle.isValid())
     {
-        PLOG(LS_ERROR) << "CreateNamedPipeW failed";
+        PLOG(ERROR) << "CreateNamedPipeW failed";
         return false;
     }
 
@@ -178,26 +178,26 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     acceptor_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->open failed:" << error_code;
+        LOG(ERROR) << "acceptor_->open failed:" << error_code;
         return false;
     }
 
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->bind failed:" << error_code;
+        LOG(ERROR) << "acceptor_->bind failed:" << error_code;
         return false;
     }
 
     std::string command_line = fmt::format("chmod 777 {}", channel_file.data());
 
     int ret = system(command_line.c_str());
-    LOG(LS_INFO) << "Set security attributes:" << command_line << "(ret:" << ret << ")";
+    LOG(INFO) << "Set security attributes:" << command_line << "(ret:" << ret << ")";
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "acceptor_->listen failed:" << error_code;
+        LOG(ERROR) << "acceptor_->listen failed:" << error_code;
         return false;
     }
 
@@ -216,13 +216,13 @@ void IpcServer::Listener::onNewConnetion(
 {
     if (!server_)
     {
-        LOG(LS_ERROR) << "Invalid pointer";
+        LOG(ERROR) << "Invalid pointer";
         return;
     }
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code:" << error_code;
+        LOG(ERROR) << "Error code:" << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -238,13 +238,13 @@ void IpcServer::Listener::onNewConnetion(
 {
     if (!server_)
     {
-        LOG(LS_ERROR) << "Invalid pointer";
+        LOG(ERROR) << "Invalid pointer";
         return;
     }
 
     if (error_code)
     {
-        LOG(LS_ERROR) << "Error code:" << error_code;
+        LOG(ERROR) << "Error code:" << error_code;
         server_->onErrorOccurred(FROM_HERE);
         return;
     }
@@ -261,7 +261,7 @@ IpcServer::IpcServer(QObject* parent)
     : QObject(parent),
       io_context_(AsioEventDispatcher::currentIoContext())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
@@ -270,7 +270,7 @@ IpcServer::IpcServer(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 IpcServer::~IpcServer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     stop();
 }
 
@@ -298,11 +298,11 @@ QString IpcServer::createUniqueId()
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::start(const QString& channel_id)
 {
-    LOG(LS_INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
 
     if (channel_id.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty channel id";
+        LOG(ERROR) << "Empty channel id";
         return false;
     }
 
@@ -312,7 +312,7 @@ bool IpcServer::start(const QString& channel_id)
     {
         if (!runListener(i))
         {
-            LOG(LS_ERROR) << "runListener failed (i=" << i << ")";
+            LOG(ERROR) << "runListener failed (i=" << i << ")";
             return false;
         }
     }
@@ -323,7 +323,7 @@ bool IpcServer::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::stop()
 {
-    LOG(LS_INFO) << "Stopping IPC server (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "Stopping IPC server (channel_name=" << channel_name_ << ")";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -360,7 +360,7 @@ bool IpcServer::runListener(size_t index)
     std::shared_ptr<Listener> listener = listeners_[index];
     if (!listener)
     {
-        LOG(LS_ERROR) << "Unable to get listener (index=" << index << ")";
+        LOG(ERROR) << "Unable to get listener (index=" << index << ")";
         return false;
     }
 
@@ -370,7 +370,7 @@ bool IpcServer::runListener(size_t index)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
-    LOG(LS_INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
 
     pending_.push_back(channel);
     emit sig_newConnection();
@@ -379,8 +379,8 @@ void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
-    LOG(LS_ERROR) << "Error in IPC server (channel_name=" << channel_name_
-                  << " from=" << location.toString() << ")";
+    LOG(ERROR) << "Error in IPC server (channel_name=" << channel_name_ << "from="
+               << location.toString() << ")";
     emit sig_errorOccurred();
 }
 

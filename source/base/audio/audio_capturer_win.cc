@@ -64,7 +64,7 @@ AudioCapturerWin::AudioCapturerWin(QObject* parent)
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(capture_timer_, &QTimer::timeout, this, &AudioCapturerWin::onCaptureTimeout);
 }
@@ -72,19 +72,19 @@ AudioCapturerWin::AudioCapturerWin(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWin::~AudioCapturerWin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     deinitialize();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
 {
-    LOG(LS_INFO) << "Starting audio capturer";
+    LOG(INFO) << "Starting audio capturer";
     callback_ = callback;
 
     if (!initialize())
     {
-        LOG(LS_ERROR) << "initialize failed";
+        LOG(ERROR) << "initialize failed";
         return false;
     }
 
@@ -101,7 +101,7 @@ bool AudioCapturerWin::resetAndInitialize()
     deinitialize();
     if (!initialize())
     {
-        LOG(LS_ERROR) << "initialize failed";
+        LOG(ERROR) << "initialize failed";
         deinitialize();
         return false;
     }
@@ -111,7 +111,7 @@ bool AudioCapturerWin::resetAndInitialize()
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWin::deinitialize()
 {
-    LOG(LS_INFO) << "Deinitialize audio capturer";
+    LOG(INFO) << "Deinitialize audio capturer";
 
     wave_format_ex_.reset(nullptr);
     default_device_detector_.reset();
@@ -125,7 +125,7 @@ void AudioCapturerWin::deinitialize()
 //--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::initialize()
 {
-    LOG(LS_INFO) << "Audio capturer initializing";
+    LOG(INFO) << "Audio capturer initializing";
     DCHECK(!audio_capture_client_.Get());
     DCHECK(!audio_client_.Get());
     DCHECK(!mm_device_.Get());
@@ -137,8 +137,8 @@ bool AudioCapturerWin::initialize()
                           IID_PPV_ARGS(&mm_device_enumerator));
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to create IMMDeviceEnumerator. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to create IMMDeviceEnumerator. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
@@ -148,8 +148,8 @@ bool AudioCapturerWin::initialize()
     hr = mm_device_enumerator->GetDefaultAudioEndpoint(eRender, eConsole, mm_device_.GetAddressOf());
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get IMMDevice. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to get IMMDevice. Error" << hr.ErrorMessage() << "with code"
+                   << Qt::hex << hr.Error();
         return false;
     }
 
@@ -157,8 +157,8 @@ bool AudioCapturerWin::initialize()
     hr = mm_device_->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, &audio_client_);
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get an IAudioClient. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to get an IAudioClient. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
@@ -166,8 +166,8 @@ bool AudioCapturerWin::initialize()
     hr = audio_client_->GetDevicePeriod(&device_period, nullptr);
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetDevicePeriod failed. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "IAudioClient::GetDevicePeriod failed. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
@@ -181,8 +181,8 @@ bool AudioCapturerWin::initialize()
     hr = audio_client_->GetMixFormat(&wave_format_ex_);
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get WAVEFORMATEX. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to get WAVEFORMATEX. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
@@ -190,27 +190,26 @@ bool AudioCapturerWin::initialize()
         wave_format_ex_->wFormatTag != WAVE_FORMAT_PCM &&
         wave_format_ex_->wFormatTag != WAVE_FORMAT_EXTENSIBLE)
     {
-        LOG(LS_ERROR) << "Failed to force 16-bit PCM";
+        LOG(ERROR) << "Failed to force 16-bit PCM";
         return false;
     }
 
     if (!AudioCapturer::isValidSampleRate(wave_format_ex_->nSamplesPerSec))
     {
-        LOG(LS_ERROR) << "Host sampling rate is neither 44.1 kHz nor 48 kHz"
-                      << wave_format_ex_->nSamplesPerSec;
+        LOG(ERROR) << "Host sampling rate is neither 44.1 kHz nor 48 kHz" << wave_format_ex_->nSamplesPerSec;
         return false;
     }
 
     // We support from mono to 7.1. This check should be consistent with AudioPacket::Channels.
     if (wave_format_ex_->nChannels > 8 || wave_format_ex_->nChannels <= 0)
     {
-        LOG(LS_ERROR) << "Unsupported channels" << wave_format_ex_->nChannels;
+        LOG(ERROR) << "Unsupported channels" << wave_format_ex_->nChannels;
         return false;
     }
 
-    LOG(LS_INFO) << "Audio device period:" << audio_device_period_.count();
-    LOG(LS_INFO) << "Audio device sample rate:" << wave_format_ex_->nSamplesPerSec;
-    LOG(LS_INFO) << "Audio device channels:" << wave_format_ex_->nChannels;
+    LOG(INFO) << "Audio device period:" << audio_device_period_.count();
+    LOG(INFO) << "Audio device sample rate:" << wave_format_ex_->nSamplesPerSec;
+    LOG(INFO) << "Audio device channels:" << wave_format_ex_->nChannels;
 
     sampling_rate_ = static_cast<proto::desktop::AudioPacket::SamplingRate>(
         wave_format_ex_->nSamplesPerSec);
@@ -226,7 +225,7 @@ bool AudioCapturerWin::initialize()
         if (!IsEqualGUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, wave_format_extensible->SubFormat) &&
             !IsEqualGUID(KSDATAFORMAT_SUBTYPE_PCM, wave_format_extensible->SubFormat))
         {
-            LOG(LS_ERROR) << "Failed to force 16-bit samples";
+            LOG(ERROR) << "Failed to force 16-bit samples";
             return false;
         }
 
@@ -248,13 +247,13 @@ bool AudioCapturerWin::initialize()
         nullptr);
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to initialize IAudioClient. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to initialize IAudioClient. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
 
         if (hr.Error() == E_INVALIDARG)
         {
-            LOG(LS_ERROR) << "Audio capture may be blocked by your antivirus. Try disabling your "
-                             "antivirus or adding the application to the whitelist.";
+            LOG(ERROR) << "Audio capture may be blocked by your antivirus. Try disabling your "
+                          "antivirus or adding the application to the whitelist";
         }
         return false;
     }
@@ -263,8 +262,8 @@ bool AudioCapturerWin::initialize()
     hr = audio_client_->GetService(IID_PPV_ARGS(&audio_capture_client_));
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to get an IAudioCaptureClient. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to get an IAudioCaptureClient. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
@@ -272,15 +271,15 @@ bool AudioCapturerWin::initialize()
     hr = audio_client_->Start();
     if (FAILED(hr.Error()))
     {
-        LOG(LS_ERROR) << "Failed to start IAudioClient. Error" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error();
+        LOG(ERROR) << "Failed to start IAudioClient. Error" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error();
         return false;
     }
 
     volume_filter_.activateBy(mm_device_.Get());
     volume_filter_.initialize(sampling_rate_, wave_format_ex_->nChannels);
 
-    LOG(LS_INFO) << "Audio capturer initialized";
+    LOG(INFO) << "Audio capturer initialized";
     return true;
 }
 
@@ -355,8 +354,8 @@ void AudioCapturerWin::doCapture()
     if (FAILED(hr.Error()) && hr.Error() != last_capture_error_)
     {
         last_capture_error_ = hr.Error();
-        LOG(LS_ERROR) << "Failed to capture an audio packet" << hr.ErrorMessage()
-                      << "with code" << Qt::hex << hr.Error() << ".";
+        LOG(ERROR) << "Failed to capture an audio packet" << hr.ErrorMessage()
+                   << "with code" << Qt::hex << hr.Error() << ".";
     }
 }
 

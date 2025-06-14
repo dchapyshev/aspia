@@ -118,14 +118,14 @@ User User::create(const QString& name, const QString& password)
 {
     if (name.isEmpty() || password.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty user name or password";
+        LOG(ERROR) << "Empty user name or password";
         return User();
     }
 
     std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
     {
-        LOG(LS_ERROR) << "Pair not found for group:" << kDefaultGroup;
+        LOG(ERROR) << "Pair not found for group:" << kDefaultGroup;
         return User();
     }
 
@@ -142,7 +142,7 @@ User User::create(const QString& name, const QString& password)
     user.verifier = v.toByteArray();
     if (user.verifier.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty verifier";
+        LOG(ERROR) << "Empty verifier";
         return User();
     }
 

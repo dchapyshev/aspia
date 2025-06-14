@@ -31,14 +31,14 @@ InputEventFilter::~InputEventFilter() = default;
 //--------------------------------------------------------------------------------------------------
 void InputEventFilter::setSessionType(proto::peer::SessionType session_type)
 {
-    LOG(LS_INFO) << "Session type changed:" << session_type;
+    LOG(INFO) << "Session type changed:" << session_type;
     session_type_ = session_type;
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputEventFilter::setClipboardEnabled(bool enable)
 {
-    LOG(LS_INFO) << "Clipboard enabled:" << enable;
+    LOG(INFO) << "Clipboard enabled:" << enable;
     clipboard_enabled_ = enable;
 }
 

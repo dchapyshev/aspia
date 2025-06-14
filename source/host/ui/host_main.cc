@@ -57,7 +57,7 @@ bool waitForValidInputDesktop()
                 wchar_t desktop_name[100] = { 0 };
                 if (input_desktop.name(desktop_name, sizeof(desktop_name)))
                 {
-                    LOG(LS_INFO) << "Attached to desktop:" << desktop_name;
+                    LOG(INFO) << "Attached to desktop:" << desktop_name;
                 }
                 break;
             }
@@ -69,7 +69,7 @@ bool waitForValidInputDesktop()
 
     if (max_attempt_count == 0)
     {
-        LOG(LS_ERROR) << "Exceeded the number of attempts";
+        LOG(ERROR) << "Exceeded the number of attempts";
         return false;
     }
 #endif // defined(Q_OS_WINDOWS)
@@ -86,7 +86,7 @@ int hostMain(int argc, char* argv[])
     Q_INIT_RESOURCE(common_translations);
 
     base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
+    logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
 
@@ -94,7 +94,7 @@ int hostMain(int argc, char* argv[])
     {
         if (qstrcmp(argv[i], "--hidden") == 0)
         {
-            LOG(LS_INFO) << "Has 'hidden' switch";
+            LOG(INFO) << "Has 'hidden' switch";
             if (!waitForValidInputDesktop())
                 return 1;
             break;
@@ -139,7 +139,7 @@ int hostMain(int argc, char* argv[])
 
     if (!host::integrityCheck())
     {
-        LOG(LS_ERROR) << "Integrity check failed";
+        LOG(ERROR) << "Integrity check failed";
 
         QMessageBox::warning(
             nullptr,
@@ -150,11 +150,11 @@ int hostMain(int argc, char* argv[])
         return 1;
     }
 
-    LOG(LS_INFO) << "Integrity check passed successfully";
+    LOG(INFO) << "Integrity check passed successfully";
 
     if (parser.isSet(import_option) && parser.isSet(export_option))
     {
-        LOG(LS_ERROR) << "Import and export are specified at the same time";
+        LOG(ERROR) << "Import and export are specified at the same time";
 
         if (!parser.isSet(silent_option))
         {
@@ -190,7 +190,7 @@ int hostMain(int argc, char* argv[])
 #if defined(Q_OS_WINDOWS)
         if (!base::isProcessElevated())
         {
-            LOG(LS_INFO) << "Process not eleavated";
+            LOG(INFO) << "Process not eleavated";
         }
         else
 #endif // defined(Q_OS_WINDOWS)
@@ -214,12 +214,12 @@ int hostMain(int argc, char* argv[])
     {
         if (application.isRunning())
         {
-            LOG(LS_INFO) << "Application already running";
+            LOG(INFO) << "Application already running";
             application.activate();
         }
         else
         {
-            LOG(LS_INFO) << "Application not running yet";
+            LOG(INFO) << "Application not running yet";
 
             host::MainWindow window;
             QObject::connect(&application, &host::Application::sig_activated,
@@ -227,12 +227,12 @@ int hostMain(int argc, char* argv[])
 
             if (parser.isSet(hidden_option))
             {
-                LOG(LS_INFO) << "Hide window to tray";
+                LOG(INFO) << "Hide window to tray";
                 window.hideToTray();
             }
             else
             {
-                LOG(LS_INFO) << "Show window";
+                LOG(INFO) << "Show window";
                 window.show();
                 window.activateWindow();
             }

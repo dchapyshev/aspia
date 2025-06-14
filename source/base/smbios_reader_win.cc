@@ -30,7 +30,7 @@ QByteArray readSmbiosDump()
     UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);
     if (!buffer_size)
     {
-        PLOG(LS_ERROR) << "GetSystemFirmwareTable failed";
+        PLOG(ERROR) << "GetSystemFirmwareTable failed";
         return QByteArray();
     }
 
@@ -39,7 +39,7 @@ QByteArray readSmbiosDump()
 
     if (!GetSystemFirmwareTable('RSMB', 'PCAF', buffer.data(), buffer_size))
     {
-        PLOG(LS_ERROR) << "GetSystemFirmwareTable failed";
+        PLOG(ERROR) << "GetSystemFirmwareTable failed";
         return QByteArray();
     }
 

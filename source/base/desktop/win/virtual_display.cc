@@ -31,12 +31,12 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 VirtualDisplay::VirtualDisplay()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     cfgmgr32_dll_ = LoadLibraryExW(L"cfgmgr32.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!cfgmgr32_dll_)
     {
-        PLOG(LS_ERROR) << "Unable to load cfgmgr32.dll";
+        PLOG(ERROR) << "Unable to load cfgmgr32.dll";
         return;
     }
 
@@ -44,7 +44,7 @@ VirtualDisplay::VirtualDisplay()
         GetProcAddress(cfgmgr32_dll_, "SwDeviceCreate"));
     if (!sw_device_create_func_)
     {
-        PLOG(LS_ERROR) << "Unable to load SwDeviceCreate function";
+        PLOG(ERROR) << "Unable to load SwDeviceCreate function";
         return;
     }
 
@@ -52,14 +52,14 @@ VirtualDisplay::VirtualDisplay()
         GetProcAddress(cfgmgr32_dll_, "SwDeviceClose"));
     if (!sw_device_close_func_)
     {
-        PLOG(LS_ERROR) << "Unable to load SwDeviceClose function";
+        PLOG(ERROR) << "Unable to load SwDeviceClose function";
         return;
     }
 
     create_event_ = CreateEvent(nullptr, FALSE, FALSE, nullptr);
     if (!create_event_)
     {
-        PLOG(LS_ERROR) << "CreateEvent failed";
+        PLOG(ERROR) << "CreateEvent failed";
         return;
     }
 
@@ -78,14 +78,14 @@ VirtualDisplay::VirtualDisplay()
         &create_info, 0, nullptr, creationCallback, &create_event_, &sw_device_);
     if (FAILED(error.Error()))
     {
-        LOG(LS_ERROR) << "SwCreateDevice failed:" << error.ErrorMessage() << "(" << error.Error() << ")";
+        LOG(ERROR) << "SwCreateDevice failed:" << error.ErrorMessage() << "(" << error.Error() << ")";
         return;
     }
 
     DWORD wait_result = WaitForSingleObject(create_event_, 10000);
     if (wait_result != WAIT_OBJECT_0)
     {
-        LOG(LS_ERROR) << "Unable to create device (" << wait_result << ")";
+        LOG(ERROR) << "Unable to create device (" << wait_result << ")";
         return;
     }
 
@@ -95,7 +95,7 @@ VirtualDisplay::VirtualDisplay()
 //--------------------------------------------------------------------------------------------------
 VirtualDisplay::~VirtualDisplay()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     if (sw_device_close_func_ && sw_device_)
         sw_device_close_func_(sw_device_);
@@ -118,13 +118,13 @@ void VirtualDisplay::creationCallback(
     VirtualDisplay* self = reinterpret_cast<VirtualDisplay*>(context);
     if (!self)
     {
-        LOG(LS_ERROR) << "Unexpected self value";
+        LOG(ERROR) << "Unexpected self value";
         return;
     }
 
     if (!self->create_event_)
     {
-        LOG(LS_ERROR) << "Unexpected event value";
+        LOG(ERROR) << "Unexpected event value";
         return;
     }
 

@@ -28,7 +28,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
                                              proto::address_book::EncryptionType encryption_type)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -54,7 +54,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
             break;
 
         default:
-            LOG(LS_FATAL) << "Unknown encryption type:" << encryption_type;
+            LOG(FATAL) << "Unknown encryption type:" << encryption_type;
             break;
     }
 
@@ -65,7 +65,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
 //--------------------------------------------------------------------------------------------------
 OpenAddressBookDialog::~OpenAddressBookDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

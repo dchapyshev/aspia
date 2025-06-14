@@ -28,13 +28,13 @@ namespace router {
 SessionRelay::SessionRelay(QObject* parent)
     : Session(proto::router::SESSION_TYPE_RELAY, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionRelay::~SessionRelay()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     relayKeyPool().removeKeysForRelay(sessionId());
 }
 
@@ -63,7 +63,7 @@ void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Could not read message from relay server";
+        LOG(ERROR) << "Could not read message from relay server";
         return;
     }
 
@@ -77,7 +77,7 @@ void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByte
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from relay server";
+        LOG(ERROR) << "Unhandled message from relay server";
     }
 }
 
@@ -92,7 +92,7 @@ void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
     KeyPool& pool = relayKeyPool();
 
-    LOG(LS_INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
+    LOG(INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
 
     peer_data_.emplace(std::make_pair(
         key_pool.peer_host(), static_cast<quint16>(key_pool.peer_port())));

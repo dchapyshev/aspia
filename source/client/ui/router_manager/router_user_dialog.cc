@@ -33,7 +33,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
       user_(user),
       users_(users)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
@@ -92,7 +92,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
 //--------------------------------------------------------------------------------------------------
 RouterUserDialog::~RouterUserDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Action rejected";
+        LOG(INFO) << "[ACTION] Action rejected";
         reject();
         close();
         return;
@@ -136,7 +136,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidUserName(username))
         {
-            LOG(LS_ERROR) << "Invalid user name:" << username;
+            LOG(ERROR) << "Invalid user name:" << username;
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The user name can not be empty and can contain only alphabet"
@@ -152,7 +152,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (username.compare(users_.at(i), Qt::CaseInsensitive) == 0)
             {
-                LOG(LS_ERROR) << "User name already exists:" << username;
+                LOG(ERROR) << "User name already exists:" << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),
@@ -166,7 +166,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.edit_password->text() != ui.edit_password_retry->text())
         {
-            LOG(LS_INFO) << "Passwords do not match";
+            LOG(INFO) << "Passwords do not match";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The passwords you entered do not match."),
@@ -181,7 +181,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidPassword(password))
         {
-            LOG(LS_INFO) << "Invalid password";
+            LOG(INFO) << "Invalid password";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password can not be empty and should not exceed %n characters.",
@@ -233,7 +233,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!user_.isValid())
         {
-            LOG(LS_ERROR) << "Unable to create user";
+            LOG(ERROR) << "Unable to create user";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Unknown internal error when creating or modifying a user."),
@@ -257,7 +257,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     user_.sessions = sessions;
     user_.flags = flags;
 
-    LOG(LS_INFO) << "[ACTION] Action accepted";
+    LOG(INFO) << "[ACTION] Action accepted";
     accept();
     close();
 }

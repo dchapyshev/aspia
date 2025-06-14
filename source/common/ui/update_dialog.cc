@@ -52,7 +52,7 @@ UpdateDialog::UpdateDialog(const QString& update_server,
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     initialize();
 
     ui->label_available->setText(tr("Receiving information..."));
@@ -74,7 +74,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
       ui(std::make_unique<Ui::UpdateDialog>()),
       update_info_(update_info)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     initialize();
 
     ui->label_available->setText(update_info_.version().toString());
@@ -86,7 +86,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 UpdateDialog::~UpdateDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
-        LOG(LS_INFO) << "[ACTION] Escape key pressed";
+        LOG(INFO) << "[ACTION] Escape key pressed";
         close();
         return;
     }
@@ -105,11 +105,11 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event";
+    LOG(INFO) << "Close event";
 
     if (checker_)
     {
-        LOG(LS_INFO) << "Distroy checker...";
+        LOG(INFO) << "Distroy checker...";
         ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
         ui->button_close->setEnabled(false);
         checker_.reset();
@@ -121,7 +121,7 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateNow()
 {
-    LOG(LS_INFO) << "[ACTION] Update now";
+    LOG(INFO) << "[ACTION] Update now";
 
 #if defined(Q_OS_WINDOWS)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
@@ -142,12 +142,12 @@ void UpdateDialog::onUpdateNow()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
-        LOG(LS_INFO) << "[ACTION] Update confirmed by user";
+        LOG(INFO) << "[ACTION] Update confirmed by user";
 
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())
         {
-            LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
+            LOG(ERROR) << "Unable to open file:" << file.errorString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An error occurred while installing the update: %1")
@@ -180,19 +180,19 @@ void UpdateDialog::onUpdateNow()
 
                 if (base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
                 {
-                    LOG(LS_INFO) << "msiexec is started";
+                    LOG(INFO) << "msiexec is started";
                     // If the process is successfully launched, then the application is terminated.
                     QCoreApplication::quit();
                 }
                 else
                 {
-                    LOG(LS_ERROR) << "Unable to start msiexec process";
+                    LOG(ERROR) << "Unable to start msiexec process";
 
                     // If the update fails, delete the temporary file.
                     QString file_name = file.fileName();
                     if (!QFile::remove(file_name))
                     {
-                        LOG(LS_ERROR) << "Unable to remove file:" << file_name;
+                        LOG(ERROR) << "Unable to remove file:" << file_name;
                     }
                 }
             }
@@ -206,7 +206,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 {
     if (result.isEmpty())
     {
-        LOG(LS_ERROR) << "Error while retrieving update information";
+        LOG(ERROR) << "Error while retrieving update information";
 
         ui->label_available->setText(tr("Unknown"));
         ui->edit_description->setText(tr("Error retrieving update information."));
@@ -216,7 +216,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
         update_info_ = UpdateInfo::fromXml(result);
         if (!update_info_.isValid())
         {
-            LOG(LS_INFO) << "No updates available";
+            LOG(INFO) << "No updates available";
 
             ui->label_available->setText(base::kCurrentVersion.toString());
             ui->edit_description->setText(tr("No updates available."));
@@ -227,7 +227,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > base::kCurrentVersion)
             {
-                LOG(LS_INFO) << "New version available:" << update_version.toString();
+                LOG(INFO) << "New version available:" << update_version.toString();
 
                 ui->label_available->setText(update_version.toString());
                 ui->edit_description->setText(update_info_.description());
@@ -239,7 +239,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
             }
             else
             {
-                LOG(LS_INFO) << "New version less then current:" << update_version.toString();
+                LOG(INFO) << "New version less then current:" << update_version.toString();
 
                 ui->label_available->setText(base::kCurrentVersion.toString());
                 ui->edit_description->setText(tr("No updates available."));
@@ -249,7 +249,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 
     QTimer::singleShot(0, this, [this]()
     {
-        LOG(LS_INFO) << "Destroy update checker";
+        LOG(INFO) << "Destroy update checker";
         checker_.reset();
     });
 }

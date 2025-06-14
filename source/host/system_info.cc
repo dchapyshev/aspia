@@ -351,7 +351,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         std::unique_ptr<base::Edid> edid = enumerator.edid();
         if (!edid)
         {
-            LOG(LS_INFO) << "No EDID information for monitor";
+            LOG(INFO) << "No EDID information for monitor";
             continue;
         }
 
@@ -1011,7 +1011,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
 
     const std::string& category = request.category();
 
-    LOG(LS_INFO) << "Requested system info category:" << category;
+    LOG(INFO) << "Requested system info category:" << category;
 
     system_info->mutable_footer()->set_category(category);
 
@@ -1097,7 +1097,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown system info category:" << category;
+        LOG(ERROR) << "Unknown system info category:" << category;
     }
 }
 

@@ -52,7 +52,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
+        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 
@@ -60,7 +60,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
         CipherType::AES256_GCM, CipherMode::ENCRYPT, key, kIVSize);
     if (!ctx)
     {
-        LOG(LS_ERROR) << "createCipher failed";
+        LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
@@ -74,7 +74,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
-        LOG(LS_ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
+        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
         return nullptr;
     }
 
@@ -82,7 +82,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly
         CipherType::CHACHA20_POLY1305, CipherMode::ENCRYPT, key, kIVSize);
     if (!ctx)
     {
-        LOG(LS_ERROR) << "createCipher failed";
+        LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
@@ -101,7 +101,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {
-        LOG(LS_ERROR) << "EVP_EncryptInit_ex failed";
+        LOG(ERROR) << "EVP_EncryptInit_ex failed";
         return false;
     }
 
@@ -111,7 +111,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                           reinterpret_cast<quint8*>(out) + kTagSize, &length,
                           reinterpret_cast<const quint8*>(in), static_cast<int>(in_size)) != 1)
     {
-        LOG(LS_ERROR) << "EVP_EncryptUpdate failed";
+        LOG(ERROR) << "EVP_EncryptUpdate failed";
         return false;
     }
 
@@ -119,13 +119,13 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                             reinterpret_cast<quint8*>(out) + kTagSize + length,
                             &length) != 1)
     {
-        LOG(LS_ERROR) << "EVP_EncryptFinal_ex failed";
+        LOG(ERROR) << "EVP_EncryptFinal_ex failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_GET_TAG, kTagSize, out) != 1)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 

@@ -47,13 +47,13 @@ bool SessionWatcher::start()
                                   std::placeholders::_1, std::placeholders::_2,
                                   std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(LS_ERROR) << "Unable to create window";
+        LOG(ERROR) << "Unable to create window";
         return false;
     }
 
     if (!WTSRegisterSessionNotification(window->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
     {
-        PLOG(LS_ERROR) << "WTSRegisterSessionNotification failed";
+        PLOG(ERROR) << "WTSRegisterSessionNotification failed";
         return false;
     }
 
@@ -69,7 +69,7 @@ void SessionWatcher::stop()
 
     if (!WTSUnRegisterSessionNotification(window_->hwnd()))
     {
-        PLOG(LS_ERROR) << "WTSUnRegisterSessionNotification failed";
+        PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
     }
 
     window_.reset();

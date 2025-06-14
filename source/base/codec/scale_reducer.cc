@@ -28,13 +28,13 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 ScaleReducer::ScaleReducer()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ScaleReducer::~ScaleReducer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -47,8 +47,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     const Size& source_size = source_frame->size();
     if (source_size.width() == 0 || source_size.height() == 0)
     {
-        LOG(LS_ERROR) << "Invalid source frame size:"
-                      << source_size.width() << "x" << source_size.height();
+        LOG(ERROR) << "Invalid source frame size:" << source_size;
         return nullptr;
     }
 
@@ -64,8 +63,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
         target_size_ = target_size;
         target_frame_.reset();
 
-        LOG(LS_INFO) << "Scale mode changed (source:" << source_size << "target:" << target_size
-                     << "scale_x:" << scale_x_ << "scale_y:" << scale_y_ << ")";
+        LOG(INFO) << "Scale mode changed (source:" << source_size << "target:" << target_size
+                  << "scale_x:" << scale_x_ << "scale_y:" << scale_y_ << ")";
     }
 
     if (source_size == target_size)
@@ -78,7 +77,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
         target_frame_ = FrameSimple::create(target_size, PixelFormat::ARGB());
         if (!target_frame_)
         {
-            LOG(LS_ERROR) << "Unable to create target frame";
+            LOG(ERROR) << "Unable to create target frame";
             return nullptr;
         }
 

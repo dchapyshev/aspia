@@ -29,17 +29,17 @@ namespace common {
 ClipboardWin::ClipboardWin(QObject* parent)
     : Clipboard(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClipboardWin::~ClipboardWin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     if (!window_)
     {
-        LOG(LS_ERROR) << "Window not created";
+        LOG(ERROR) << "Window not created";
         return;
     }
 
@@ -52,7 +52,7 @@ void ClipboardWin::init()
 {
     if (window_)
     {
-        LOG(LS_ERROR) << "Window already created";
+        LOG(ERROR) << "Window already created";
         return;
     }
 
@@ -63,13 +63,13 @@ void ClipboardWin::init()
                                    std::placeholders::_1, std::placeholders::_2,
                                    std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(LS_ERROR) << "Couldn't create clipboard window.";
+        LOG(ERROR) << "Couldn't create clipboard window";
         return;
     }
 
     if (!AddClipboardFormatListener(window_->hwnd()))
     {
-        PLOG(LS_ERROR) << "AddClipboardFormatListener failed";
+        PLOG(ERROR) << "AddClipboardFormatListener failed";
         return;
     }
 }
@@ -79,7 +79,7 @@ void ClipboardWin::setData(const QString& data)
 {
     if (!window_)
     {
-        LOG(LS_ERROR) << "Window not created";
+        LOG(ERROR) << "Window not created";
         return;
     }
 
@@ -89,7 +89,7 @@ void ClipboardWin::setData(const QString& data)
     base::ScopedClipboard clipboard;
     if (!clipboard.init(window_->hwnd()))
     {
-        PLOG(LS_ERROR) << "Couldn't open the clipboard";
+        PLOG(ERROR) << "Couldn't open the clipboard";
         return;
     }
 
@@ -101,14 +101,14 @@ void ClipboardWin::setData(const QString& data)
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
     if (!text_global)
     {
-        PLOG(LS_ERROR) << "GlobalAlloc failed";
+        PLOG(ERROR) << "GlobalAlloc failed";
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        PLOG(LS_ERROR) << "GlobalLock failed";
+        PLOG(ERROR) << "GlobalLock failed";
         GlobalFree(text_global);
         return;
     }
@@ -152,14 +152,14 @@ void ClipboardWin::onClipboardUpdate()
 
         if (!clipboard.init(window_->hwnd()))
         {
-            PLOG(LS_ERROR) << "Couldn't open the clipboard";
+            PLOG(ERROR) << "Couldn't open the clipboard";
             return;
         }
 
         HGLOBAL text_global = clipboard.data(CF_UNICODETEXT);
         if (!text_global)
         {
-            PLOG(LS_ERROR) << "Couldn't get data from the clipboard";
+            PLOG(ERROR) << "Couldn't get data from the clipboard";
             return;
         }
 
@@ -167,7 +167,7 @@ void ClipboardWin::onClipboardUpdate()
             base::ScopedHGLOBAL<wchar_t> text_lock(text_global);
             if (!text_lock.get())
             {
-                PLOG(LS_ERROR) << "Couldn't lock clipboard data";
+                PLOG(ERROR) << "Couldn't lock clipboard data";
                 return;
             }
 

@@ -64,8 +64,8 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
 
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        LOG(LS_ERROR) << "Failed to retrieve current session Id, current binary may not have "
-                         "required priviledge";
+        LOG(ERROR) << "Failed to retrieve current session Id, current binary may not have "
+                      "required priviledge";
         return false;
     }
 
@@ -75,13 +75,13 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
 //--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::DxgiDuplicatorController()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::~DxgiDuplicatorController()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     deinitialize();
 }
 
@@ -102,8 +102,8 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 
     if (!result)
     {
-        LOG(LS_ERROR) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
-                         "accurate or out of date";
+        LOG(ERROR) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
+                      "accurate or out of date";
     }
 
     return result;
@@ -175,8 +175,8 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     {
         if (succeeded_duplications_ == 0 && !isCurrentSessionSupported())
         {
-            LOG(LS_ERROR) << "Current binary is running in session 0. DXGI components cannot be "
-                             "initialized";
+            LOG(ERROR) << "Current binary is running in session 0. DXGI components cannot be "
+                          "initialized";
             return Result::UNSUPPORTED_SESSION;
         }
 
@@ -219,8 +219,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     {
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
-        LOG(LS_ERROR) << "Invalid monitor id:" << monitor_id
-                        << "(screen count=" << screen_count << ")";
+        LOG(ERROR) << "Invalid monitor id:" << monitor_id << "(screen count=" << screen_count << ")";
         return Result::INVALID_MONITOR_ID;
     }
 
@@ -228,7 +227,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     // be wrong from capturer APIs. We should deinitialize().
     deinitialize();
 
-    LOG(LS_ERROR) << "Unable to duplicate frame";
+    LOG(ERROR) << "Unable to duplicate frame";
     return Result::DUPLICATION_FAILED;
 }
 
@@ -271,7 +270,7 @@ bool DxgiDuplicatorController::doInitialize()
     std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
     {
-        LOG(LS_ERROR) << "No D3dDevice found";
+        LOG(ERROR) << "No D3dDevice found";
         return false;
     }
 
@@ -293,11 +292,11 @@ bool DxgiDuplicatorController::doInitialize()
         DxgiAdapterDuplicator::ErrorCode error_code = duplicator.initialize();
         if (error_code != ErrorCode::SUCCESS)
         {
-            LOG(LS_ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter" << i;
+            LOG(ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter" << i;
 
             if (error_code == ErrorCode::CRITICAL_ERROR)
             {
-                LOG(LS_ERROR) << "Adapter duplicator has critical error. DXGI initialization failed";
+                LOG(ERROR) << "Adapter duplicator has critical error. DXGI initialization failed";
                 return false;
             }
 
@@ -316,7 +315,7 @@ bool DxgiDuplicatorController::doInitialize()
 
     if (duplicators_.empty())
     {
-        LOG(LS_ERROR) << "Cannot initialize any DxgiAdapterDuplicator instance";
+        LOG(ERROR) << "Cannot initialize any DxgiAdapterDuplicator instance";
     }
 
     return !duplicators_.empty();
@@ -504,8 +503,8 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
         if (Clock::now() - start_ms > timeout_ms)
         {
-            LOG(LS_ERROR) << "Failed to capture" << frames_to_skip << "frames within"
-                          << timeout_ms.count() << "milliseconds";
+            LOG(ERROR) << "Failed to capture" << frames_to_skip << "frames within"
+                       << timeout_ms.count() << "milliseconds";
             return false;
         }
     }

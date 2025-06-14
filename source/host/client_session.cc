@@ -43,12 +43,12 @@ ClientSession::ClientSession(
     static quint32 id_counter = 0;
     id_ = ++id_counter;
 
-    LOG(LS_INFO) << "Ctor (id=" << id_ << ")";
+    LOG(INFO) << "Ctor (id=" << id_ << ")";
 }
 
 ClientSession::~ClientSession()
 {
-    LOG(LS_INFO) << "Dtor (id=" << id_ << ")";
+    LOG(INFO) << "Dtor (id=" << id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ ClientSession* ClientSession::create(
 {
     if (!channel)
     {
-        LOG(LS_ERROR) << "Invalid network channel";
+        LOG(ERROR) << "Invalid network channel";
         return nullptr;
     }
 
@@ -81,7 +81,7 @@ ClientSession* ClientSession::create(
             return new ClientSessionPortForwarding(channel, parent);
 
         default:
-            LOG(LS_ERROR) << "Unknown session type:" << session_type;
+            LOG(ERROR) << "Unknown session type:" << session_type;
             return nullptr;
     }
 }
@@ -89,7 +89,7 @@ ClientSession* ClientSession::create(
 //--------------------------------------------------------------------------------------------------
 void ClientSession::start()
 {
-    LOG(LS_INFO) << "Starting client session";
+    LOG(INFO) << "Starting client session";
     state_ = State::STARTED;
 
     connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &ClientSession::onTcpDisconnected);
@@ -102,7 +102,7 @@ void ClientSession::start()
 //--------------------------------------------------------------------------------------------------
 void ClientSession::stop()
 {
-    LOG(LS_INFO) << "Stop client session";
+    LOG(INFO) << "Stop client session";
 
     state_ = State::FINISHED;
     emit sig_clientSessionFinished();
@@ -165,8 +165,8 @@ size_t ClientSession::pendingMessages() const
 //--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_ERROR) << "Client disconnected with error:"
-                  << base::NetworkChannel::errorToString(error_code);
+    LOG(ERROR) << "Client disconnected with error:"
+               << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
     emit sig_clientSessionFinished();
@@ -185,7 +185,7 @@ void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& bu
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 

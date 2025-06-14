@@ -62,7 +62,7 @@ Controller::Controller(QObject* parent)
       reconnect_timer_(new QTimer(this)),
       key_factory_(new KeyFactory(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(key_factory_, &KeyFactory::sig_keyExpired,
             this, &Controller::onPoolKeyExpired,
@@ -78,9 +78,9 @@ Controller::Controller(QObject* parent)
     router_port_ = settings.routerPort();
     router_public_key_ = settings.routerPublicKey();
 
-    LOG(LS_INFO) << "Router address:" << router_address_;
-    LOG(LS_INFO) << "Router port:" << router_port_;
-    LOG(LS_INFO) << "Router public key:" << router_public_key_.toHex().toStdString();
+    LOG(INFO) << "Router address:" << router_address_;
+    LOG(INFO) << "Router port:" << router_port_;
+    LOG(INFO) << "Router public key:" << router_public_key_.toHex().toStdString();
 
     // Peers settings.
     listen_interface_ = settings.listenInterface();
@@ -91,71 +91,71 @@ Controller::Controller(QObject* parent)
     statistics_enabled_ = settings.isStatisticsEnabled();
     statistics_interval_ = settings.statisticsInterval();
 
-    LOG(LS_INFO) << "Listen interface:" << listen_interface_;
-    LOG(LS_INFO) << "Peer address:" << peer_address_;
-    LOG(LS_INFO) << "Peer port:" << peer_port_;
-    LOG(LS_INFO) << "Peer idle timeout:" << peer_idle_timeout_.count();
-    LOG(LS_INFO) << "Max peer count:" << max_peer_count_;
-    LOG(LS_INFO) << "Statistics enabled:" << statistics_enabled_;
-    LOG(LS_INFO) << "Statistics interval:" << statistics_interval_.count();
+    LOG(INFO) << "Listen interface:" << listen_interface_;
+    LOG(INFO) << "Peer address:" << peer_address_;
+    LOG(INFO) << "Peer port:" << peer_port_;
+    LOG(INFO) << "Peer idle timeout:" << peer_idle_timeout_.count();
+    LOG(INFO) << "Max peer count:" << max_peer_count_;
+    LOG(INFO) << "Statistics enabled:" << statistics_enabled_;
+    LOG(INFO) << "Statistics interval:" << statistics_interval_.count();
 }
 
 //--------------------------------------------------------------------------------------------------
 Controller::~Controller()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Controller::start()
 {
-    LOG(LS_INFO) << "Starting controller";
+    LOG(INFO) << "Starting controller";
 
     if (router_address_.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty router address";
+        LOG(ERROR) << "Empty router address";
         return false;
     }
 
     if (router_port_ == 0)
     {
-        LOG(LS_ERROR) << "Invalid router port";
+        LOG(ERROR) << "Invalid router port";
         return false;
     }
 
     if (router_public_key_.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty router public key";
+        LOG(ERROR) << "Empty router public key";
         return false;
     }
 
     if (!base::TcpServer::isValidListenInterface(listen_interface_))
     {
-        LOG(LS_ERROR) << "Invalid listen interface";
+        LOG(ERROR) << "Invalid listen interface";
         return false;
     }
 
     if (peer_address_.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty peer address";
+        LOG(ERROR) << "Empty peer address";
         return false;
     }
 
     if (peer_port_ == 0)
     {
-        LOG(LS_ERROR) << "Invalid peer port";
+        LOG(ERROR) << "Invalid peer port";
         return false;
     }
 
     if (peer_idle_timeout_ < std::chrono::minutes(1) || peer_idle_timeout_ > std::chrono::minutes(60))
     {
-        LOG(LS_ERROR) << "Invalid peer idle specified";
+        LOG(ERROR) << "Invalid peer idle specified";
         return false;
     }
 
     if (statistics_interval_ < std::chrono::seconds(1) || statistics_interval_ > std::chrono::minutes(60))
     {
-        LOG(LS_ERROR) << "Invalid statistics interval";
+        LOG(ERROR) << "Invalid statistics interval";
         return false;
     }
 
@@ -179,7 +179,7 @@ bool Controller::start()
 //--------------------------------------------------------------------------------------------------
 void Controller::onTcpConnected()
 {
-    LOG(LS_INFO) << "Connection to the router is established";
+    LOG(INFO) << "Connection to the router is established";
 
     authenticator_ = new base::ClientAuthenticator(this);
 
@@ -197,7 +197,7 @@ void Controller::onTcpConnected()
             connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &Controller::onTcpMessageReceived);
 
-            LOG(LS_INFO) << "Authentication complete (session count:" << session_count_ << ")";
+            LOG(INFO) << "Authentication complete (session count:" << session_count_ << ")";
 
             // Now the session will receive incoming messages.
             tcp_channel_->setChannelIdSupport(true);
@@ -207,8 +207,7 @@ void Controller::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed:"
-                          << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 
@@ -222,8 +221,8 @@ void Controller::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "The connection to the router has been lost:"
-                 << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "The connection to the router has been lost:"
+              << base::NetworkChannel::errorToString(error_code);
 
     // Clearing the key pool.
     key_factory_->clear();
@@ -237,7 +236,7 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Invalid message from router";
+        LOG(ERROR) << "Invalid message from router";
         return;
     }
 
@@ -264,13 +263,13 @@ void Controller::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray&
                 break;
 
             default:
-                LOG(LS_ERROR) << "Unsupported request type:" << request.type();
+                LOG(ERROR) << "Unsupported request type:" << request.type();
                 break;
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from router";
+        LOG(ERROR) << "Unhandled message from router";
     }
 }
 
@@ -296,13 +295,13 @@ void Controller::onSessionFinished()
 
     if (session_count_ < 0)
     {
-        LOG(LS_ERROR) << "Invalid value for session count:" << session_count_;
+        LOG(ERROR) << "Invalid value for session count:" << session_count_;
         session_count_ = 0;
     }
 
     // After disconnecting the peer, one key is released.
     // Add a new key to the pool and send it to the router.
-    LOG(LS_INFO) << "Session finished. Add new key to pool";
+    LOG(INFO) << "Session finished. Add new key to pool";
     sendKeyPool(1);
 }
 
@@ -311,14 +310,14 @@ void Controller::onPoolKeyExpired(quint32 key_id)
 {
     // The key has expired and has been removed from the pool.
     // Add a new key to the pool and send it to the router.
-    LOG(LS_INFO) << "Key with id" << key_id << "has expired and removed from pool";
+    LOG(INFO) << "Key with id" << key_id << "has expired and removed from pool";
     sendKeyPool(1);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Controller::connectToRouter()
 {
-    LOG(LS_INFO) << "Connecting to router...";
+    LOG(INFO) << "Connecting to router...";
 
     // Create channel.
     tcp_channel_ = new base::TcpChannel(this);
@@ -332,7 +331,7 @@ void Controller::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Controller::delayedConnectToRouter()
 {
-    LOG(LS_INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
+    LOG(INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
     reconnect_timer_->start(kReconnectTimeout);
 }
 
@@ -350,7 +349,7 @@ void Controller::sendKeyPool(quint32 key_count)
         SessionKey session_key = SessionKey::create();
         if (!session_key.isValid())
         {
-            LOG(LS_ERROR) << "Unable to create session key (i=" << i << ")";
+            LOG(ERROR) << "Unable to create session key (i=" << i << ")";
             return;
         }
 

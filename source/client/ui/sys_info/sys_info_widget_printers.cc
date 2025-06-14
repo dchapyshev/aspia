@@ -123,7 +123,7 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
 
     if (!system_info.has_printers())
     {
-        LOG(LS_INFO) << "No printers";
+        LOG(INFO) << "No printers";
         ui.tree->setEnabled(false);
         return;
     }

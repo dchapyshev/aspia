@@ -78,7 +78,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
       session_type_(session_type),
       desktop_config_(desktop_config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     setMinimumSize(400, 300);
 
@@ -116,7 +116,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &DesktopSessionWindow::scaleDesktop);
     connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
     {
-        LOG(LS_INFO) << "Minimize from full screen";
+        LOG(INFO) << "Minimize from full screen";
         is_minimized_from_full_screen_ = true;
         showMinimized();
     });
@@ -232,7 +232,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
                 break;
 
             case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-                LOG(LS_ERROR) << "Fix me! Use real config";
+                LOG(ERROR) << "Fix me! Use real config";
                 session_window = new PortForwardingSessionWindow(proto::port_forwarding::Config());
                 break;
 
@@ -243,14 +243,14 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
 
         if (!session_window)
         {
-            LOG(LS_ERROR) << "Session window not created";
+            LOG(ERROR) << "Session window not created";
             return;
         }
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
         if (!session_window->connectToHost(session_config))
         {
-            LOG(LS_ERROR) << "Unable to connect to host";
+            LOG(ERROR) << "Unable to connect to host";
             session_window->close();
         }
     });
@@ -277,13 +277,13 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
 //--------------------------------------------------------------------------------------------------
 DesktopSessionWindow::~DesktopSessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client* DesktopSessionWindow::createClient()
 {
-    LOG(LS_INFO) << "Create client";
+    LOG(INFO) << "Create client";
 
     ClientDesktop* client = new ClientDesktop();
 
@@ -351,7 +351,7 @@ Client* DesktopSessionWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onShowWindow()
 {
-    LOG(LS_INFO) << "Show window";
+    LOG(INFO) << "Show window";
 
     showNormal();
     activateWindow();
@@ -362,11 +362,11 @@ void DesktopSessionWindow::onShowWindow()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onConfigRequired()
 {
-    LOG(LS_INFO) << "Config required";
+    LOG(INFO) << "Config required";
 
     if (!(video_encodings_ & common::kSupportedVideoEncodings))
     {
-        LOG(LS_INFO) << "No supported video encodings";
+        LOG(INFO) << "No supported video encodings";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("There are no supported video encodings."),
@@ -375,7 +375,7 @@ void DesktopSessionWindow::onConfigRequired()
     }
     else
     {
-        LOG(LS_INFO) << "Current video encoding not supported by host";
+        LOG(INFO) << "Current video encoding not supported by host";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The current video encoding is not supported by the host. "
@@ -473,7 +473,7 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
         }
         else
         {
-            LOG(LS_ERROR) << "Unknown flag" << name << "with value" << value;
+            LOG(ERROR) << "Unknown flag" << name << "with value" << value;
         }
     }
 }
@@ -529,7 +529,7 @@ void DesktopSessionWindow::onMetricsChanged(const client::ClientDesktop::Metrics
 {
     if (!statistics_dialog_)
     {
-        LOG(LS_INFO) << "Statistics dialog not created yet";
+        LOG(INFO) << "Statistics dialog not created yet";
 
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
@@ -556,7 +556,7 @@ void DesktopSessionWindow::onFrameChanged(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
-    LOG(LS_INFO) << "Screen size changed:" << screen_size_;
+    LOG(INFO) << "Screen size changed:" << screen_size_;
 
     bool has_old_frame = desktop_->desktopFrame() != nullptr;
 
@@ -565,7 +565,7 @@ void DesktopSessionWindow::onFrameChanged(
 
     if (!has_old_frame)
     {
-        LOG(LS_INFO) << "Resize window (first frame)";
+        LOG(INFO) << "Resize window (first frame)";
         autosizeWindow();
 
         // If the parameters indicate that it is necessary to record the connection session, then we
@@ -573,7 +573,7 @@ void DesktopSessionWindow::onFrameChanged(
         DesktopSettings settings;
         if (settings.recordSessions())
         {
-            LOG(LS_INFO) << "Auto-recording enabled";
+            LOG(INFO) << "Auto-recording enabled";
             toolbar_->startRecording(true);
         }
     }
@@ -639,23 +639,23 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onInternalReset()
 {
-    LOG(LS_INFO) << "Internal reset";
+    LOG(INFO) << "Internal reset";
 
     if (system_info_)
     {
-        LOG(LS_INFO) << "Close System Info window";
+        LOG(INFO) << "Close System Info window";
         system_info_->close();
     }
 
     if (task_manager_)
     {
-        LOG(LS_INFO) << "Close Task Manager window";
+        LOG(INFO) << "Close Task Manager window";
         task_manager_->close();
     }
 
     if (statistics_dialog_)
     {
-        LOG(LS_INFO) << "Close Statistics window";
+        LOG(INFO) << "Close Statistics window";
         statistics_dialog_->close();
     }
 
@@ -726,7 +726,7 @@ void DesktopSessionWindow::changeEvent(QEvent* event)
     {
         bool is_minimized = isMinimized();
 
-        LOG(LS_INFO) << "Window minimized:" << is_minimized;
+        LOG(INFO) << "Window minimized:" << is_minimized;
 
         if (is_minimized)
         {
@@ -774,7 +774,7 @@ void DesktopSessionWindow::showEvent(QShowEvent* event)
 {
     if (is_minimized_from_full_screen_)
     {
-        LOG(LS_INFO) << "Restore to full screen";
+        LOG(INFO) << "Restore to full screen";
         is_minimized_from_full_screen_ = false;
 
 #if defined(Q_OS_WINDOWS)
@@ -795,7 +795,7 @@ void DesktopSessionWindow::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::focusOutEvent(QFocusEvent* event)
 {
-    LOG(LS_INFO) << "Focus out event";
+    LOG(INFO) << "Focus out event";
     desktop_->userLeftFromWindow();
     QWidget::focusOutEvent(event);
 }
@@ -803,17 +803,17 @@ void DesktopSessionWindow::focusOutEvent(QFocusEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event";
+    LOG(INFO) << "Close event";
 
     if (system_info_)
     {
-        LOG(LS_INFO) << "Close System Info window";
+        LOG(INFO) << "Close System Info window";
         system_info_->close();
     }
 
     if (task_manager_)
     {
-        LOG(LS_INFO) << "Close Task Manager window";
+        LOG(INFO) << "Close Task Manager window";
         task_manager_->close();
     }
 
@@ -1015,7 +1015,7 @@ void DesktopSessionWindow::onMouseEvent(const proto::desktop::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::changeSettings()
 {
-    LOG(LS_INFO) << "Create desktop config dialog";
+    LOG(INFO) << "Create desktop config dialog";
 
     DesktopConfigDialog* dialog = new DesktopConfigDialog(
         session_type_, desktop_config_, video_encodings_, this);
@@ -1041,7 +1041,7 @@ void DesktopSessionWindow::changeSettings()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop_config)
 {
-    LOG(LS_INFO) << "Desktop config changed";
+    LOG(INFO) << "Desktop config changed";
 
     desktop_config_ = desktop_config;
 
@@ -1057,7 +1057,7 @@ void DesktopSessionWindow::autosizeWindow()
 {
     if (screen_size_.isEmpty())
     {
-        LOG(LS_INFO) << "Empty screen size";
+        LOG(INFO) << "Empty screen size";
         return;
     }
 
@@ -1070,11 +1070,11 @@ void DesktopSessionWindow::autosizeWindow()
     {
         QSize remote_screen_size = scaledSize(screen_size_, toolbar_->scale());
 
-        LOG(LS_INFO) << "Show normal (screen_size=" << screen_size_
-                     << "local_screen_rect=" << local_screen_rect
-                     << "window_size=" << window_size
-                     << "remote_screen_size=" << remote_screen_size
-                     << ")";
+        LOG(INFO) << "Show normal (screen_size=" << screen_size_
+                  << "local_screen_rect=" << local_screen_rect
+                  << "window_size=" << window_size
+                  << "remote_screen_size=" << remote_screen_size
+                  << ")";
         showNormal();
 
         resize(remote_screen_size);
@@ -1083,10 +1083,9 @@ void DesktopSessionWindow::autosizeWindow()
     }
     else
     {
-        LOG(LS_INFO) << "Show maximized (screen_size=" << screen_size_
-                     << "local_screen_rect=" << local_screen_rect
-                     << "window_size=" << window_size
-                     << ")";
+        LOG(INFO) << "Show maximized (screen_size=" << screen_size_
+                  << "local_screen_rect=" << local_screen_rect
+                  << "window_size=" << window_size << ")";
         showMaximized();
     }
 }
@@ -1102,14 +1101,14 @@ void DesktopSessionWindow::takeScreenshot()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "[ACTION] File path not selected";
+        LOG(INFO) << "[ACTION] File path not selected";
         return;
     }
 
     base::FrameQImage* frame = static_cast<base::FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
     {
-        LOG(LS_INFO) << "No desktop frame";
+        LOG(INFO) << "No desktop frame";
         return;
     }
 
@@ -1122,18 +1121,18 @@ void DesktopSessionWindow::takeScreenshot()
 
     if (!format)
     {
-        LOG(LS_INFO) << "File format not selected";
+        LOG(INFO) << "File format not selected";
         return;
     }
 
     if (!frame->constImage().save(file_path, format))
     {
-        LOG(LS_ERROR) << "Unable to save image";
+        LOG(ERROR) << "Unable to save image";
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
     }
     else
     {
-        LOG(LS_INFO) << "Image saved to file:" << file_path;
+        LOG(INFO) << "Image saved to file:" << file_path;
     }
 }
 
@@ -1142,7 +1141,7 @@ void DesktopSessionWindow::scaleDesktop()
 {
     if (screen_size_.isEmpty())
     {
-        LOG(LS_INFO) << "No screen size";
+        LOG(INFO) << "No screen size";
         return;
     }
 
@@ -1154,20 +1153,20 @@ void DesktopSessionWindow::scaleDesktop()
     if (scale != -1)
     {
         target_size = scaledSize(source_size, scale);
-        LOG(LS_INFO) << "Scaling enabled (source_size=" << source_size << "target_size="
-                     << target_size << "scale=" << scale << ")";
+        LOG(INFO) << "Scaling enabled (source_size=" << source_size << "target_size="
+                  << target_size << "scale=" << scale << ")";
     }
 
     desktop_->resize(source_size.scaled(target_size, Qt::KeepAspectRatio));
 
     if (resize_timer_->isActive())
     {
-        LOG(LS_INFO) << "Resize timer stopped";
+        LOG(INFO) << "Resize timer stopped";
         resize_timer_->stop();
     }
 
-    LOG(LS_INFO) << "Starting resize timer (scale=" << scale << " size=" << size()
-                 << " target_size=" << target_size << ")";
+    LOG(INFO) << "Starting resize timer (scale=" << scale << "size=" << size()
+              << "target_size=" << target_size << ")";
     resize_timer_->start(std::chrono::milliseconds(500));
 }
 
@@ -1180,7 +1179,7 @@ void DesktopSessionWindow::onResizeTimer()
     if (current_screen)
         desktop_size *= current_screen->devicePixelRatio();
 
-    LOG(LS_INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
+    LOG(INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
 
     emit sig_preferredSizeChanged(desktop_size.width(), desktop_size.height());
     resize_timer_->stop();
@@ -1223,7 +1222,7 @@ void DesktopSessionWindow::onPasteKeystrokes()
         QString text = clipboard->text();
         if (text.isEmpty())
         {
-            LOG(LS_INFO) << "Empty clipboard";
+            LOG(INFO) << "Empty clipboard";
             return;
         }
 
@@ -1234,7 +1233,7 @@ void DesktopSessionWindow::onPasteKeystrokes()
     }
     else
     {
-        LOG(LS_ERROR) << "QApplication::clipboard failed";
+        LOG(ERROR) << "QApplication::clipboard failed";
     }
 }
 

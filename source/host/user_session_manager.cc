@@ -60,7 +60,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
             return true;
         }
 
-        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+        PLOG(ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -80,7 +80,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -99,32 +99,32 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        PLOG(ERROR) << "CreateProcessAsUserW failed";
         if (!DestroyEnvironmentBlock(environment))
         {
-            PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
         }
         return false;
     }
 
     if (!SetPriorityClass(process_info.hProcess, NORMAL_PRIORITY_CLASS))
     {
-        PLOG(LS_ERROR) << "SetPriorityClass failed";
+        PLOG(ERROR) << "SetPriorityClass failed";
     }
 
     if (!CloseHandle(process_info.hThread))
     {
-        PLOG(LS_ERROR) << "CloseHandle failed";
+        PLOG(ERROR) << "CloseHandle failed";
     }
 
     if (!CloseHandle(process_info.hProcess))
     {
-        PLOG(LS_ERROR) << "CloseHandle failed";
+        PLOG(ERROR) << "CloseHandle failed";
     }
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -137,23 +137,23 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 UserSessionManager::UserSessionManager(QObject* parent)
     : QObject(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 UserSessionManager::~UserSessionManager()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 bool UserSessionManager::start()
 {
-    LOG(LS_INFO) << "Starting user session manager";
+    LOG(INFO) << "Starting user session manager";
 
     if (ipc_server_)
     {
-        LOG(LS_ERROR) << "IPC server already exists";
+        LOG(ERROR) << "IPC server already exists";
         return false;
     }
 
@@ -166,17 +166,17 @@ bool UserSessionManager::start()
     HostStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
 
-    LOG(LS_INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
+    LOG(INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_for_ui))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
+        LOG(ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_for_ui << ")";
         return false;
     }
     else
     {
-        LOG(LS_INFO) << "IPC channel for UI started";
+        LOG(INFO) << "IPC channel for UI started";
     }
 
 #if defined(Q_OS_WINDOWS)
@@ -195,28 +195,28 @@ bool UserSessionManager::start()
         QString name = session.sessionName();
         if (name.compare("console", Qt::CaseInsensitive) != 0)
         {
-            LOG(LS_INFO) << "RDP session detected";
+            LOG(INFO) << "RDP session detected";
 
             if (session.state() != WTSActive)
             {
-                LOG(LS_INFO) << "RDP session with ID" << session_id << "not in active state. "
-                             << "Session process will not be started (name=" << name << "state="
-                             << base::SessionEnumerator::stateToString(session.state()) << ")";
+                LOG(INFO) << "RDP session with ID" << session_id << "not in active state. "
+                          << "Session process will not be started (name=" << name << "state="
+                          << base::SessionEnumerator::stateToString(session.state()) << ")";
                 continue;
             }
             else
             {
-                LOG(LS_INFO) << "RDP session in active state";
+                LOG(INFO) << "RDP session in active state";
             }
         }
         else
         {
-            LOG(LS_INFO) << "CONSOLE session detected";
+            LOG(INFO) << "CONSOLE session detected";
         }
 
-        LOG(LS_INFO) << "Starting process for session id:" << session_id << "(name=" << name
-                     << "state=" << base::SessionEnumerator::stateToString(session.state())
-                     << ")";
+        LOG(INFO) << "Starting process for session id:" << session_id << "(name=" << name
+                  << "state=" << base::SessionEnumerator::stateToString(session.state())
+                  << ")";
 
         // Start UI process in user session.
         startSessionProcess(FROM_HERE, session.sessionId());
@@ -225,7 +225,7 @@ bool UserSessionManager::start()
     startSessionProcess(FROM_HERE, 0);
 #endif
 
-    LOG(LS_INFO) << "User session manager is started";
+    LOG(INFO) << "User session manager is started";
     return true;
 }
 
@@ -239,7 +239,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
     status_str = QString::number(static_cast<int>(status));
 #endif
 
-    LOG(LS_INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
+    LOG(INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -266,12 +266,12 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
                 if (!session->isConnectedToUi())
                 {
                     // Start UI process in user session.
-                    LOG(LS_INFO) << "Starting session process for session:" << session_id;
+                    LOG(INFO) << "Starting session process for session:" << session_id;
                     startSessionProcess(FROM_HERE, session_id);
                 }
                 else
                 {
-                    LOG(LS_INFO) << "Session proccess already connected for session:" << session_id;
+                    LOG(INFO) << "Session proccess already connected for session:" << session_id;
                 }
                 break;
             }
@@ -289,7 +289,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "Router state changed (" << router_state << ")";
+    LOG(INFO) << "Router state changed (" << router_state << ")";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -299,7 +299,7 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    LOG(LS_INFO) << "Set host ID for session:" << host_id;
+    LOG(INFO) << "Set host ID for session:" << host_id;
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -309,7 +309,7 @@ void UserSessionManager::onUpdateCredentials(base::HostId host_id, const QString
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onSettingsChanged()
 {
-    LOG(LS_INFO) << "Settings changed";
+    LOG(INFO) << "Settings changed";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -319,15 +319,15 @@ void UserSessionManager::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onClientSession(ClientSession* client_session)
 {
-    LOG(LS_INFO) << "Adding a new client connection (user=" << client_session->userName()
-                 << "host_id=" << client_session->hostId() << ")";
+    LOG(INFO) << "Adding a new client connection (user=" << client_session->userName()
+              << "host_id=" << client_session->hostId() << ")";
 
     std::unique_ptr<ClientSession> client_session_deleter(client_session);
 
     base::SessionId session_id = base::activeConsoleSessionId();
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_ERROR) << "Failed to get session id";
+        LOG(ERROR) << "Failed to get session id";
         return;
     }
 
@@ -344,7 +344,7 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
             base::SessionInfo session_info(session_id);
             if (!session_info.isValid())
             {
-                LOG(LS_ERROR) << "Unable to determine session state. Connection aborted";
+                LOG(ERROR) << "Unable to determine session state. Connection aborted";
                 return;
             }
 
@@ -354,15 +354,14 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
             {
                 case base::SessionInfo::ConnectState::CONNECTED:
                 {
-                    LOG(LS_INFO) << "Session exists, but there are no logged in users";
+                    LOG(INFO) << "Session exists, but there are no logged in users";
                     session->restart(nullptr);
                 }
                 break;
 
                 default:
-                    LOG(LS_INFO) << "No connected UI. Connection rejected (connect_state="
-                                 << base::SessionInfo::connectStateToString(connect_state)
-                                 << ")";
+                    LOG(INFO) << "No connected UI. Connection rejected (connect_state="
+                              << base::SessionInfo::connectStateToString(connect_state) << ")";
                     return;
             }
 #else
@@ -377,14 +376,14 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 
     if (!user_session_found)
     {
-        LOG(LS_ERROR) << "User session with id" << session_id << "not found";
+        LOG(ERROR) << "User session with id" << session_id << "not found";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionFinished()
 {
-    LOG(LS_INFO) << "User session finished";
+    LOG(INFO) << "User session finished";
 
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
@@ -396,7 +395,7 @@ void UserSessionManager::onUserSessionFinished()
             continue;
         }
 
-        LOG(LS_INFO) << "Finished session:" << session->sessionId();
+        LOG(INFO) << "Finished session:" << session->sessionId();
 
         session->deleteLater();
         it = sessions_.erase(it);
@@ -406,17 +405,17 @@ void UserSessionManager::onUserSessionFinished()
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onIpcNewConnection()
 {
-    LOG(LS_INFO) << "New IPC connection";
+    LOG(INFO) << "New IPC connection";
 
     if (!ipc_server_)
     {
-        LOG(LS_ERROR) << "No IPC server instance!";
+        LOG(ERROR) << "No IPC server instance!";
         return;
     }
 
     if (!ipc_server_->hasPendingConnections())
     {
-        LOG(LS_ERROR) << "No pending connections in IPC server";
+        LOG(ERROR) << "No pending connections in IPC server";
         return;
     }
 
@@ -427,7 +426,7 @@ void UserSessionManager::onIpcNewConnection()
     session_id = channel->peerSessionId();
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_ERROR) << "Invalid session id";
+        LOG(ERROR) << "Invalid session id";
         return;
     }
 #endif
@@ -439,48 +438,47 @@ void UserSessionManager::onIpcNewConnection()
 void UserSessionManager::startSessionProcess(
     const base::Location& location, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Starting UI process (sid=" << session_id
-                 << "from=" << location.toString() << ")";
+    LOG(INFO) << "Starting UI process (sid=" << session_id << "from=" << location.toString() << ")";
 
 #if defined(Q_OS_WINDOWS)
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session";
+        LOG(ERROR) << "An attempt was detected to start a process in a INVALID session";
         return;
     }
 
     if (session_id == base::kServiceSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session";
+        LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session";
         return;
     }
 
-    LOG(LS_INFO) << "Starting user session";
+    LOG(INFO) << "Starting user session";
 
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        LOG(ERROR) << "Unable to get session info (sid=" << session_id << ")";
         return;
     }
 
-    LOG(LS_INFO) << "# Session info (sid=" << session_id
-                 << "username=" << session_info.userName()
-                 << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
-                 << "win_station=" << session_info.winStationName()
-                 << "domain=" << session_info.domain()
-                 << "locked=" << session_info.isUserLocked() << ")";
+    LOG(INFO) << "# Session info (sid=" << session_id
+              << "username=" << session_info.userName()
+              << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
+              << "win_station=" << session_info.winStationName()
+              << "domain=" << session_info.domain()
+              << "locked=" << session_info.isUserLocked() << ")";
 
     base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_ERROR) << "Failed to get user token (sid=" << session_id << ")";
+        LOG(ERROR) << "Failed to get user token (sid=" << session_id << ")";
         return;
     }
 
     if (!user_token.isValid())
     {
-        LOG(LS_INFO) << "User is not logged in (sid=" << session_id << ")";
+        LOG(INFO) << "User is not logged in (sid=" << session_id << ")";
 
         // If there is no user logged in, but the session exists, then add the session without
         // connecting to UI (we cannot start UI if the user is not logged in).
@@ -490,7 +488,7 @@ void UserSessionManager::startSessionProcess(
 
     if (session_info.isUserLocked())
     {
-        LOG(LS_INFO) << "Session has LOCKED user (sid=" << session_id << ")";
+        LOG(INFO) << "Session has LOCKED user (sid=" << session_id << ")";
 
         // If the user session is locked, then we do not start the UI process. The process will be
         // started later when the user session is unlocked.
@@ -499,7 +497,7 @@ void UserSessionManager::startSessionProcess(
     }
     else
     {
-        LOG(LS_INFO) << "Session has UNLOCKED user (sid=" << session_id << ")";
+        LOG(INFO) << "Session has UNLOCKED user (sid=" << session_id << ")";
     }
 
     QString file_path = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
@@ -511,22 +509,22 @@ void UserSessionManager::startSessionProcess(
 
     if (!createProcessWithToken(user_token, command_line))
     {
-        LOG(LS_ERROR) << "Failed to start process with user token (sid=" << session_id
-                        << "cmd=" << command_line << ")";
+        LOG(ERROR) << "Failed to start process with user token (sid=" << session_id
+                   << "cmd=" << command_line << ")";
     }
 #elif defined(Q_OS_LINUX)
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(LS_ERROR) << "No X11 sessions";
+        LOG(ERROR) << "No X11 sessions";
         return;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_ERROR) << "Unable to open pipe";
+        LOG(ERROR) << "Unable to open pipe";
         return;
     }
 
@@ -547,7 +545,7 @@ void UserSessionManager::startSessionProcess(
                 std::filesystem::path file_path;
                 if (!base::BasePaths::currentExecDir(&file_path))
                 {
-                    LOG(LS_ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
+                    LOG(ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
                     return;
                 }
 
@@ -561,7 +559,7 @@ void UserSessionManager::startSessionProcess(
                                 file_path.c_str());
 
                 int ret = system(command_line.c_str());
-                LOG(LS_INFO) << "system result:" << ret;
+                LOG(INFO) << "system result:" << ret;
             }
         }
     }
@@ -574,13 +572,13 @@ void UserSessionManager::startSessionProcess(
 void UserSessionManager::addUserSession(
     const base::Location& location, base::SessionId session_id, base::IpcChannel* channel)
 {
-    LOG(LS_INFO) << "Add user session:" << session_id << "(from=" << location.toString() << ")";
+    LOG(INFO) << "Add user session:" << session_id << "(from=" << location.toString() << ")";
 
     for (const auto& session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
         {
-            LOG(LS_INFO) << "Restart user session:" << session_id;
+            LOG(INFO) << "Restart user session:" << session_id;
             session->restart(channel);
             return;
         }
@@ -601,7 +599,7 @@ void UserSessionManager::addUserSession(
 
     sessions_.append(user_session);
 
-    LOG(LS_INFO) << "Start user session:" << session_id;
+    LOG(INFO) << "Start user session:" << session_id;
 
     user_session->start();
 }

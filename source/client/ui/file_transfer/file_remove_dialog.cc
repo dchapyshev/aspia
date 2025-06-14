@@ -40,7 +40,7 @@ namespace client {
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
@@ -69,7 +69,7 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FileRemoveDialog::~FileRemoveDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)

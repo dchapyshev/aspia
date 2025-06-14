@@ -28,7 +28,7 @@ AudioCapturerWrapper::AudioCapturerWrapper(QObject* parent)
     : QObject(parent),
       thread_(Thread::AsioDispatcher)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(&thread_, &Thread::started, this, &AudioCapturerWrapper::onBeforeThreadRunning,
             Qt::DirectConnection);
@@ -39,14 +39,14 @@ AudioCapturerWrapper::AudioCapturerWrapper(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::~AudioCapturerWrapper()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     thread_.stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::start()
 {
-    LOG(LS_INFO) << "Starting audio capturer";
+    LOG(INFO) << "Starting audio capturer";
     thread_.start();
 }
 
@@ -58,7 +58,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
     capturer_ = AudioCapturer::create();
     if (!capturer_)
     {
-        LOG(LS_ERROR) << "Unable to create audio capturer";
+        LOG(ERROR) << "Unable to create audio capturer";
         return;
     }
 

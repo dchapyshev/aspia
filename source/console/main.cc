@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 #endif
 
     base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
+    logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
 
@@ -47,18 +47,17 @@ int main(int argc, char *argv[])
 
     console::Application application(argc, argv);
 
-    LOG(LS_INFO) << "Version:" << ASPIA_VERSION_STRING
-                 << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
+    LOG(INFO) << "Version:" << ASPIA_VERSION_STRING << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    LOG(LS_INFO) << "Git branch:" << GIT_CURRENT_BRANCH;
-    LOG(LS_INFO) << "Git commit:" << GIT_COMMIT_HASH;
+    LOG(INFO) << "Git branch:" << GIT_CURRENT_BRANCH;
+    LOG(INFO) << "Git commit:" << GIT_COMMIT_HASH;
 #endif
 
-    LOG(LS_INFO) << "OS:" << base::SysInfo::operatingSystemName()
-                 << " (version:" << base::SysInfo::operatingSystemVersion()
-                 <<  "arch:" << base::SysInfo::operatingSystemArchitecture() << ")";
-    LOG(LS_INFO) << "Qt version:" << QT_VERSION_STR;
-    LOG(LS_INFO) << "Command line:" << application.arguments();
+    LOG(INFO) << "OS:" << base::SysInfo::operatingSystemName()
+              << "(version:" << base::SysInfo::operatingSystemVersion()
+              <<  "arch:" << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(INFO) << "Qt version:" << QT_VERSION_STR;
+    LOG(INFO) << "Command line:" << application.arguments();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Console", "Aspia Console"));
@@ -77,16 +76,16 @@ int main(int argc, char *argv[])
 
     if (application.isRunning())
     {
-        LOG(LS_INFO) << "Application already running";
+        LOG(INFO) << "Application already running";
 
         if (file_path.isEmpty())
         {
-            LOG(LS_INFO) << "File path is empty. Activate window";
+            LOG(INFO) << "File path is empty. Activate window";
             application.activateWindow();
         }
         else
         {
-            LOG(LS_INFO) << "Open file:" << file_path;
+            LOG(INFO) << "Open file:" << file_path;
             application.openFile(file_path);
         }
 
@@ -94,7 +93,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        LOG(LS_INFO) << "Application not running yet";
+        LOG(INFO) << "Application not running yet";
 
         console_window.reset(new console::MainWindow(file_path));
 

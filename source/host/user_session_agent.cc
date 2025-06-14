@@ -34,13 +34,13 @@ auto g_clientListType = qRegisterMetaType<host::UserSessionAgent::ClientList>();
 UserSessionAgent::UserSessionAgent(QObject* parent)
     : QObject(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
 #if defined(Q_OS_WINDOWS)
     // 0x100-0x1FF Application reserved last shutdown range.
     if (!SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY))
     {
-        PLOG(LS_ERROR) << "SetProcessShutdownParameters failed";
+        PLOG(ERROR) << "SetProcessShutdownParameters failed";
     }
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -48,14 +48,14 @@ UserSessionAgent::UserSessionAgent(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UserSessionAgent::~UserSessionAgent()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectToService()
 {
     QString channel_id = HostStorage().channelIdForUI();
-    LOG(LS_INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
@@ -66,13 +66,13 @@ void UserSessionAgent::onConnectToService()
 
     if (ipc_channel_->connectTo(channel_id))
     {
-        LOG(LS_INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
+        LOG(INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
         emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
     }
     else
     {
-        LOG(LS_INFO) << "IPC channel not connected (channel_id=" << channel_id << ")";
+        LOG(INFO) << "IPC channel not connected (channel_id=" << channel_id << ")";
         emit sig_statusChanged(Status::SERVICE_NOT_AVAILABLE);
     }
 }
@@ -80,11 +80,11 @@ void UserSessionAgent::onConnectToService()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
-    LOG(LS_INFO) << "Update credentials request:" << request_type;
+    LOG(INFO) << "Update credentials request:" << request_type;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -98,11 +98,11 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
-    LOG(LS_INFO) << "One-time sessions changed:" << sessions;
+    LOG(INFO) << "One-time sessions changed:" << sessions;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -116,11 +116,11 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKillClient(quint32 id)
 {
-    LOG(LS_INFO) << "Kill client request:" << id;
+    LOG(INFO) << "Kill client request:" << id;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -135,11 +135,11 @@ void UserSessionAgent::onKillClient(quint32 id)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
-    LOG(LS_INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
+    LOG(INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -154,11 +154,11 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onMouseLock(bool enable)
 {
-    LOG(LS_INFO) << "Mouse lock:" << enable;
+    LOG(INFO) << "Mouse lock:" << enable;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -173,11 +173,11 @@ void UserSessionAgent::onMouseLock(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
-    LOG(LS_INFO) << "Keyboard lock:" << enable;
+    LOG(INFO) << "Keyboard lock:" << enable;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -192,11 +192,11 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onPause(bool enable)
 {
-    LOG(LS_INFO) << "Pause:" << enable;
+    LOG(INFO) << "Pause:" << enable;
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -211,11 +211,11 @@ void UserSessionAgent::onPause(bool enable)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 {
-    LOG(LS_INFO) << "Text chat message";
+    LOG(INFO) << "Text chat message";
 
     if (!ipc_channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(WARNING) << "No active IPC channel";
         return;
     }
 
@@ -226,7 +226,7 @@ void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "IPC channel disconncted";
+    LOG(INFO) << "IPC channel disconncted";
     emit sig_statusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
@@ -235,7 +235,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Invalid message from service";
+        LOG(ERROR) << "Invalid message from service";
         return;
     }
 
@@ -244,22 +244,22 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         const proto::internal::ConnectConfirmationRequest& request =
             incoming_message_->connect_confirmation_request();
 
-        LOG(LS_INFO) << "Connect confirmation request received (id=" << request.id()
-                     << "computer_name=" << request.computer_name() << "user_name="
-                     << request.user_name() << ")";
+        LOG(INFO) << "Connect confirmation request received (id=" << request.id()
+                  << "computer_name=" << request.computer_name() << "user_name="
+                  << request.user_name() << ")";
 
         emit sig_connectConfirmationRequest(request);
     }
     else if (incoming_message_->has_connect_event())
     {
-        LOG(LS_INFO) << "Connect event received";
+        LOG(INFO) << "Connect event received";
 
         clients_.push_back(Client(incoming_message_->connect_event()));
         emit sig_clientListChanged(clients_);
     }
     else if (incoming_message_->has_disconnect_event())
     {
-        LOG(LS_INFO) << "Disconnect event received";
+        LOG(INFO) << "Disconnect event received";
 
         for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
         {
@@ -275,13 +275,13 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     else if (incoming_message_->has_credentials())
     {
         const proto::internal::Credentials& credentials = incoming_message_->credentials();
-        LOG(LS_INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
+        LOG(INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
         emit sig_credentialsChanged(credentials);
     }
     else if (incoming_message_->has_router_state())
     {
         const proto::internal::RouterState router_state = incoming_message_->router_state();
-        LOG(LS_INFO) << "Router state received (" << router_state << ")";
+        LOG(INFO) << "Router state received (" << router_state << ")";
         emit sig_routerStateChanged(router_state);
     }
     else if (incoming_message_->has_text_chat())
@@ -293,7 +293,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
         const proto::internal::VideoRecordingState& video_recording_state =
             incoming_message_->video_recording_state();
 
-        LOG(LS_INFO) << "Video recording state changed (" << video_recording_state  << ")";
+        LOG(INFO) << "Video recording state changed (" << video_recording_state  << ")";
 
         emit sig_videoRecordingStateChanged(
             QString::fromStdString(video_recording_state.computer_name()),
@@ -302,7 +302,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from service";
+        LOG(ERROR) << "Unhandled message from service";
     }
 }
 

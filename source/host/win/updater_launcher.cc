@@ -40,7 +40,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
     base::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+        PLOG(ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -53,7 +53,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
                              sizeof(elevation_type),
                              &returned_length))
     {
-        PLOG(LS_ERROR) << "GetTokenInformation failed";
+        PLOG(ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -71,7 +71,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
                                      sizeof(linked_token_info),
                                      &returned_length))
             {
-                PLOG(LS_ERROR) << "GetTokenInformation failed";
+                PLOG(ERROR) << "GetTokenInformation failed";
                 return false;
             }
 
@@ -103,7 +103,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -122,7 +122,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        PLOG(ERROR) << "CreateProcessAsUserW failed";
         DestroyEnvironmentBlock(environment);
         return false;
     }
@@ -132,7 +132,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -145,14 +145,14 @@ bool launchUpdater(base::SessionId session_id)
 {
     if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
     {
-        LOG(LS_ERROR) << "Invalid session id: " << session_id;
+        LOG(ERROR) << "Invalid session id: " << session_id;
         return false;
     }
 
     base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_ERROR) << "createLoggedOnUserToken failed";
+        LOG(ERROR) << "createLoggedOnUserToken failed";
         return false;
     }
 

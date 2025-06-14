@@ -28,7 +28,7 @@ FileTransferQueueBuilder::FileTransferQueueBuilder(common::FileTask::Target targ
     : QObject(parent),
       task_factory_(std::make_unique<common::FileTaskFactory>(target))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
             this, &FileTransferQueueBuilder::onTaskDone);
@@ -37,7 +37,7 @@ FileTransferQueueBuilder::FileTransferQueueBuilder(common::FileTask::Target targ
 //--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::~FileTransferQueueBuilder()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ void FileTransferQueueBuilder::start(const QString& source_path,
                                      const QString& target_path,
                                      const QList<FileTransfer::Item>& items)
 {
-    LOG(LS_INFO) << "Start file transfer queue builder";
+    LOG(INFO) << "Start file transfer queue builder";
 
     for (const auto& item : items)
         addPendingTask(source_path, target_path, item.name, item.is_directory, item.size);
@@ -140,7 +140,7 @@ void FileTransferQueueBuilder::doPendingTasks()
 //--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::onAborted(proto::file_transfer::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Aborted:" << error_code;
+    LOG(INFO) << "Aborted:" << error_code;
 
     pending_tasks_.clear();
     tasks_.clear();

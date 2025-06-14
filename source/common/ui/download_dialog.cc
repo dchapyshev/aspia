@@ -33,7 +33,7 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
       downloader_(std::make_unique<HttpFileDownloader>()),
       file_(file)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -42,7 +42,7 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {
-        LOG(LS_INFO) << "[ACTION] Cancel downloading";
+        LOG(INFO) << "[ACTION] Cancel downloading";
         reject();
         close();
     });
@@ -61,13 +61,13 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 DownloadDialog::~DownloadDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderError(int error_code)
 {
-    LOG(LS_ERROR) << "Error while downloading update:" << error_code;
+    LOG(ERROR) << "Error while downloading update:" << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("An error occurred while downloading the update: %1").arg(error_code),
@@ -79,7 +79,7 @@ void DownloadDialog::onFileDownloaderError(int error_code)
 //--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderCompleted()
 {
-    LOG(LS_INFO) << "File downloaded";
+    LOG(INFO) << "File downloaded";
     const QByteArray& buffer = downloader_->data();
 
     file_.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());

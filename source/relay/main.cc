@@ -86,9 +86,8 @@ int main(int argc, char* argv[])
 
     parser.process(application);
 
-    LOG(LS_INFO) << "Version:" << ASPIA_VERSION_STRING
-                 << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
-    LOG(LS_INFO) << "Command line:" << base::Application::arguments();
+    LOG(INFO) << "Version:" << ASPIA_VERSION_STRING << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
+    LOG(INFO) << "Command line:" << base::Application::arguments();
 
     QTextStream out(stdout, QIODevice::WriteOnly);
 

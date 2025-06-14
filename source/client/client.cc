@@ -40,12 +40,12 @@ Client::Client(QObject* parent)
       timeout_timer_(new QTimer(this)),
       reconnect_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     timeout_timer_->setSingleShot(true);
     connect(timeout_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Reconnect timeout";
+        LOG(INFO) << "Reconnect timeout";
 
         if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
             emit sig_statusChanged(Status::WAIT_FOR_ROUTER_TIMEOUT);
@@ -57,13 +57,13 @@ Client::Client(QObject* parent)
 
         if (tcp_channel_)
         {
-            LOG(LS_INFO) << "Destroy channel";
+            LOG(INFO) << "Destroy channel";
             tcp_channel_->deleteLater();
         }
 
         if (router_controller_)
         {
-            LOG(LS_INFO) << "Destroy router controller";
+            LOG(INFO) << "Destroy router controller";
             router_controller_->deleteLater();
         }
     });
@@ -71,7 +71,7 @@ Client::Client(QObject* parent)
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Reconnecting...";
+        LOG(INFO) << "Reconnecting...";
         state_ = State::CREATED;
         start();
     });
@@ -84,7 +84,7 @@ Client::Client(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Client::~Client()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     state_ = State::STOPPPED;
     emit sig_statusChanged(Status::STOPPED);
@@ -99,13 +99,13 @@ void Client::start()
 {
     if (state_ != State::CREATED)
     {
-        LOG(LS_ERROR) << "Client already started before";
+        LOG(ERROR) << "Client already started before";
         return;
     }
 
     if (!session_state_)
     {
-        LOG(LS_ERROR) << "Session state not installed";
+        LOG(ERROR) << "Session state not installed";
         return;
     }
 
@@ -116,11 +116,11 @@ void Client::start()
 
     if (base::isHostId(config.address_or_id))
     {
-        LOG(LS_INFO) << "Starting RELAY connection";
+        LOG(INFO) << "Starting RELAY connection";
 
         if (!config.router_config.has_value())
         {
-            LOG(LS_FATAL) << "No router config. Continuation is impossible";
+            LOG(FATAL) << "No router config. Continuation is impossible";
             return;
         }
 
@@ -147,7 +147,7 @@ void Client::start()
     }
     else
     {
-        LOG(LS_INFO) << "Starting DIRECT connection";
+        LOG(INFO) << "Starting DIRECT connection";
 
         if (!session_state_->isReconnecting())
         {
@@ -169,7 +169,7 @@ void Client::start()
 //--------------------------------------------------------------------------------------------------
 void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 {
-    LOG(LS_INFO) << "Session state installed";
+    LOG(INFO) << "Session state installed";
     session_state_ = session_state;
 }
 
@@ -217,7 +217,7 @@ void Client::sendMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "sendMessage called but channel not initialized";
+        LOG(ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
@@ -229,7 +229,7 @@ qint64 Client::totalRx() const
 {
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "totalRx called but channel not initialized";
+        LOG(ERROR) << "totalRx called but channel not initialized";
         return 0;
     }
 
@@ -241,7 +241,7 @@ qint64 Client::totalTx() const
 {
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "totalTx called but channel not initialized";
+        LOG(ERROR) << "totalTx called but channel not initialized";
         return 0;
     }
 
@@ -253,7 +253,7 @@ int Client::speedRx()
 {
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "speedRx called but channel not initialized";
+        LOG(ERROR) << "speedRx called but channel not initialized";
         return 0;
     }
 
@@ -265,7 +265,7 @@ int Client::speedTx()
 {
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "speedTx called but channel not initialized";
+        LOG(ERROR) << "speedTx called but channel not initialized";
         return 0;
     }
 
@@ -275,21 +275,21 @@ int Client::speedTx()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpConnected()
 {
-    LOG(LS_INFO) << "Connection established";
+    LOG(INFO) << "Connection established";
     startAuthentication();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection terminated:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Connection terminated:" << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
     if (session_state_->isAutoReconnect())
     {
-        LOG(LS_INFO) << "Reconnect to host enabled";
+        LOG(INFO) << "Reconnect to host enabled";
         session_state_->setReconnecting(true);
 
         timeout_timer_->start(std::chrono::minutes(5));
@@ -297,7 +297,7 @@ void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
         // Delete old channel.
         if (tcp_channel_)
         {
-            LOG(LS_INFO) << "Post task to destroy channel";
+            LOG(INFO) << "Post task to destroy channel";
             tcp_channel_->deleteLater();
         }
 
@@ -329,7 +329,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 
@@ -346,14 +346,14 @@ void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled outgoing message from channel:" << channel_id;
+        LOG(ERROR) << "Unhandled outgoing message from channel:" << channel_id;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onRouterConnected(const QVersionNumber& router_version)
 {
-    LOG(LS_INFO) << "Router connected";
+    LOG(INFO) << "Router connected";
     session_state_->setRouterVersion(router_version);
     emit sig_statusChanged(Status::ROUTER_CONNECTED);
     is_connected_to_router_ = true;
@@ -362,18 +362,18 @@ void Client::onRouterConnected(const QVersionNumber& router_version)
 //--------------------------------------------------------------------------------------------------
 void Client::onHostAwaiting()
 {
-    LOG(LS_INFO) << "Host awaiting";
+    LOG(INFO) << "Host awaiting";
     emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onHostConnected()
 {
-    LOG(LS_INFO) << "Host connected";
+    LOG(INFO) << "Host connected";
 
     if (!router_controller_)
     {
-        LOG(LS_ERROR) << "No router controller instance";
+        LOG(ERROR) << "No router controller instance";
         return;
     }
 
@@ -383,7 +383,7 @@ void Client::onHostConnected()
     startAuthentication();
 
     // Router controller is no longer needed.
-    LOG(LS_INFO) << "Post task to destroy router controller";
+    LOG(INFO) << "Post task to destroy router controller";
     router_controller_->deleteLater();
     is_connected_to_router_ = false;
 }
@@ -393,7 +393,7 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
 {
     emit sig_statusChanged(Status::ROUTER_ERROR, QVariant::fromValue(error));
 
-    LOG(LS_INFO) << "Post task to destroy router controller";
+    LOG(INFO) << "Post task to destroy router controller";
     router_controller_->deleteLater();
     is_connected_to_router_ = false;
 
@@ -407,7 +407,7 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
 //--------------------------------------------------------------------------------------------------
 void Client::startAuthentication()
 {
-    LOG(LS_INFO) << "Start authentication for" << session_state_->hostUserName();
+    LOG(INFO) << "Start authentication for" << session_state_->hostUserName();
 
     session_state_->setReconnecting(false);
     reconnect_timer_->stop();
@@ -429,7 +429,7 @@ void Client::startAuthentication()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            LOG(LS_INFO) << "Successful authentication";
+            LOG(INFO) << "Successful authentication";
 
             connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &Client::onTcpDisconnected);
@@ -444,8 +444,8 @@ void Client::startAuthentication()
             const QVersionNumber& client_version = base::kCurrentVersion;
             if (host_version > client_version)
             {
-                LOG(LS_ERROR) << "Version mismatch. Host:" << host_version.toString()
-                              << "Client:" << client_version.toString();
+                LOG(ERROR) << "Version mismatch. Host:" << host_version.toString()
+                           << "Client:" << client_version.toString();
                 emit sig_statusChanged(Status::VERSION_MISMATCH);
             }
             else
@@ -465,8 +465,7 @@ void Client::startAuthentication()
         }
         else
         {
-            LOG(LS_INFO) << "Failed authentication:"
-                         << base::Authenticator::errorToString(error_code);
+            LOG(INFO) << "Failed authentication:" << base::Authenticator::errorToString(error_code);
             emit sig_statusChanged(Status::ACCESS_DENIED, QVariant::fromValue(error_code));
         }
 

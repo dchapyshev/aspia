@@ -50,7 +50,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
       config_(config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     QPushButton* cancel_button = ui->button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -164,76 +164,76 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::~DesktopConfigDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableAudioFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableAudioFeature:" << enable;
+    LOG(INFO) << "enableAudioFeature:" << enable;
     ui->checkbox_audio->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableClipboardFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableClipboardFeature:" << enable;
+    LOG(INFO) << "enableClipboardFeature:" << enable;
     ui->checkbox_clipboard->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableCursorShapeFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableCursorShapeFeature:" << enable;
+    LOG(INFO) << "enableCursorShapeFeature:" << enable;
     ui->checkbox_cursor_shape->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableCursorPositionFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableCursorPositionFeature:" << enable;
+    LOG(INFO) << "enableCursorPositionFeature:" << enable;
     ui->checkbox_enable_cursor_pos->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableDesktopEffectsFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableDesktopEffectsFeature:" << enable;
+    LOG(INFO) << "enableDesktopEffectsFeature:" << enable;
     ui->checkbox_desktop_effects->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableDesktopWallpaperFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableDesktopWallpaperFeature:" << enable;
+    LOG(INFO) << "enableDesktopWallpaperFeature:" << enable;
     ui->checkbox_desktop_wallpaper->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableFontSmoothingFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableFontSmoothingFeature:" << enable;
+    LOG(INFO) << "enableFontSmoothingFeature:" << enable;
     ui->checkbox_font_smoothing->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableClearClipboardFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableClearClipboardFeature:" << enable;
+    LOG(INFO) << "enableClearClipboardFeature:" << enable;
     ui->checkbox_clear_clipboard->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableLockAtDisconnectFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableLockAtDisconnectFeature:" << enable;
+    LOG(INFO) << "enableLockAtDisconnectFeature:" << enable;
     ui->checkbox_lock_at_disconnect->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableBlockInputFeature(bool enable)
 {
-    LOG(LS_INFO) << "enableBlockInputFeature:" << enable;
+    LOG(INFO) << "enableBlockInputFeature:" << enable;
     ui->checkbox_block_remote_input->setEnabled(enable);
 }
 
@@ -243,7 +243,7 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
     proto::desktop::VideoEncoding encoding =
         static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Codec changed:" << encoding;
+    LOG(INFO) << "[ACTION] Codec changed:" << encoding;
 
     bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);
 
@@ -258,7 +258,7 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCompressionRatioChanged(int value)
 {
-    LOG(LS_INFO) << "[ACTION] Compression ratio changed:" << value;
+    LOG(INFO) << "[ACTION] Compression ratio changed:" << value;
     ui->label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 
@@ -267,7 +267,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         proto::desktop::VideoEncoding video_encoding =
             static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->currentData().toInt());
@@ -301,7 +301,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
 
                 default:
-                    DLOG(LS_FATAL) << "Unexpected color depth";
+                    DLOG(FATAL) << "Unexpected color depth";
                     break;
             }
 
@@ -350,7 +350,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
     }
 }
 

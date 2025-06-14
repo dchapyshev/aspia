@@ -28,7 +28,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
     manager_handle_.reset(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ENUMERATE_SERVICE));
     if (!manager_handle_.isValid())
     {
-        PLOG(LS_ERROR) << "OpenSCManagerW failed";
+        PLOG(ERROR) << "OpenSCManagerW failed";
         return;
     }
 
@@ -47,7 +47,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
                               nullptr)
         || GetLastError() != ERROR_MORE_DATA)
     {
-        PLOG(LS_ERROR) << "Unexpected return value";
+        PLOG(ERROR) << "Unexpected return value";
         return;
     }
 
@@ -64,7 +64,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
                                &resume_handle,
                                nullptr))
     {
-        PLOG(LS_ERROR) << "EnumServicesStatusExW failed";
+        PLOG(ERROR) << "EnumServicesStatusExW failed";
         services_buffer_.reset();
         services_count_ = 0;
     }
@@ -130,7 +130,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
                                 &bytes_needed)
             || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            PLOG(LS_ERROR) << "QueryServiceConfigW failed";
+            PLOG(ERROR) << "QueryServiceConfigW failed";
             return nullptr;
         }
 
@@ -142,7 +142,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
                                  bytes_needed,
                                  &bytes_needed))
         {
-            PLOG(LS_ERROR) << "QueryServiceConfigW failed";
+            PLOG(ERROR) << "QueryServiceConfigW failed";
             return nullptr;
         }
     }
@@ -186,7 +186,7 @@ QString ServiceEnumerator::description() const
                              &bytes_needed)
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
+        PLOG(ERROR) << "QueryServiceConfig2W failed";
         return QString();
     }
 
@@ -198,7 +198,7 @@ QString ServiceEnumerator::description() const
                               bytes_needed,
                               &bytes_needed))
     {
-        PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
+        PLOG(ERROR) << "QueryServiceConfig2W failed";
         return QString();
     }
 

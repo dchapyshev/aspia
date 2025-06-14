@@ -57,7 +57,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image,
 
         if (!frame_rect.containsRect(rect))
         {
-            LOG(LS_ERROR) << "The rectangle is outside the screen area";
+            LOG(ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 
@@ -103,7 +103,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
     else
         thread_count = 1;
 
-    LOG(LS_INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
+    LOG(INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
     codec_.reset(new vpx_codec_ctx_t());
 
     vpx_codec_dec_cfg_t config;
@@ -124,7 +124,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
             break;
 
         default:
-            LOG(LS_FATAL) << "Unsupported video encoding:" << encoding;
+            LOG(FATAL) << "Unsupported video encoding:" << encoding;
             return;
     }
 
@@ -135,7 +135,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
 //--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::~VideoDecoderVPX()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,8 +153,8 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* f
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        LOG(LS_ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
-                      << "Details:" << (error_detail ? error_detail : "(NULL)");
+        LOG(ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
+                   << "Details:" << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 
@@ -164,13 +164,13 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* f
     vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
     if (!image)
     {
-        LOG(LS_ERROR) << "No video frame decoded";
+        LOG(ERROR) << "No video frame decoded";
         return false;
     }
 
     if (base::Size(static_cast<qint32>(image->d_w), static_cast<qint32>(image->d_h)) != frame->size())
     {
-        LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
+        LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;
     }
 

@@ -54,7 +54,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
       mode_(mode),
       computer_(computer.value_or(ComputerFactory::defaultComputer()))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -145,7 +145,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 //--------------------------------------------------------------------------------------------------
 ComputerDialog::~ComputerDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     base::memZero(computer_.mutable_name());
     base::memZero(computer_.mutable_address());
     base::memZero(computer_.mutable_username());
@@ -156,7 +156,7 @@ ComputerDialog::~ComputerDialog()
 //--------------------------------------------------------------------------------------------------
 void ComputerDialog::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event";
+    LOG(INFO) << "Close event";
     settings_.setComputerDialogGeometry(saveGeometry());
     settings_.setComputerDialogState(ui.splitter->saveState());
     QDialog::closeEvent(event);
@@ -204,7 +204,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         if (!saveChanges())
             return;
@@ -213,7 +213,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

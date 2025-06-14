@@ -54,7 +54,7 @@ ClientSessionDesktop::ClientSessionDesktop(proto::peer::SessionType session_type
       overflow_detection_timer_(new QTimer(this)),
       stat_counter_(id())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(overflow_detection_timer_, &QTimer::timeout,
             this, &ClientSessionDesktop::onOverflowDetectionTimer);
@@ -63,7 +63,7 @@ ClientSessionDesktop::ClientSessionDesktop(proto::peer::SessionType session_type
 //--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::~ClientSessionDesktop()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,16 +73,16 @@ void ClientSessionDesktop::onStarted()
 
     if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
     {
-        LOG(LS_INFO) << "Overflow detection enabled (current FPS:"
-                     << qApp->property("SCREEN_CAPTURE_FPS").toInt()
-                     << ", max FPS:" << max_fps_ << ")";
+        LOG(INFO) << "Overflow detection enabled (current FPS:"
+                  << qApp->property("SCREEN_CAPTURE_FPS").toInt()
+                  << ", max FPS:" << max_fps_ << ")";
 
         overflow_detection_timer_->start(std::chrono::milliseconds(1000));
     }
     else
     {
-        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS:"
-                     << qApp->property("SCREEN_CAPTURE_FPS").toInt() << ")";
+        LOG(INFO) << "Overflow detection disabled by environment variable (current FPS:"
+                  << qApp->property("SCREEN_CAPTURE_FPS").toInt() << ")";
     }
 
     const char* extensions;
@@ -131,11 +131,11 @@ void ClientSessionDesktop::onStarted()
 #warning Not implemented
 #endif
 
-    LOG(LS_INFO) << "Sending config request";
-    LOG(LS_INFO) << "Supported extensions:" << capabilities->extensions();
-    LOG(LS_INFO) << "Supported video encodings:" << capabilities->video_encodings();
-    LOG(LS_INFO) << "Supported audio encodings:" << capabilities->audio_encodings();
-    LOG(LS_INFO) << "OS type:" << capabilities->os_type();
+    LOG(INFO) << "Sending config request";
+    LOG(INFO) << "Supported extensions:" << capabilities->extensions();
+    LOG(INFO) << "Supported video encodings:" << capabilities->video_encodings();
+    LOG(INFO) << "Supported audio encodings:" << capabilities->audio_encodings();
+    LOG(INFO) << "OS type:" << capabilities->os_type();
 
     // Send the request.
     sendMessage(outgoing_message_.serialize());
@@ -146,7 +146,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Invalid message from client";
+        LOG(ERROR) << "Invalid message from client";
         return;
     }
 
@@ -154,13 +154,13 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     {
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            LOG(LS_ERROR) << "Mouse event for non-desktop-manage session";
+            LOG(ERROR) << "Mouse event for non-desktop-manage session";
             return;
         }
 
         if (!scale_reducer_)
         {
-            LOG(LS_ERROR) << "Scale reducer NOT initialized";
+            LOG(ERROR) << "Scale reducer NOT initialized";
             return;
         }
 
@@ -188,7 +188,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Key event for non-desktop-manage session";
+            LOG(ERROR) << "Key event for non-desktop-manage session";
         }
     }
     else if (incoming_message_->has_touch_event())
@@ -200,7 +200,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Touch event for non-desktop-manage session";
+            LOG(ERROR) << "Touch event for non-desktop-manage session";
         }
     }
     else if (incoming_message_->has_text_event())
@@ -212,7 +212,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Text event for non-desktop-manage session";
+            LOG(ERROR) << "Text event for non-desktop-manage session";
         }
     }
     else if (incoming_message_->has_clipboard_event())
@@ -224,7 +224,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
         }
         else
         {
-            LOG(LS_ERROR) << "Clipboard event for non-desktop-manage session";
+            LOG(ERROR) << "Clipboard event for non-desktop-manage session";
         }
     }
     else if (incoming_message_->has_extension())
@@ -237,7 +237,7 @@ void ClientSessionDesktop::onReceived(const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from client";
+        LOG(ERROR) << "Unhandled message from client";
         return;
     }
 }
@@ -299,7 +299,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
         if (!scaled_frame)
         {
-            LOG(LS_ERROR) << "No scaled frame";
+            LOG(ERROR) << "No scaled frame";
             return;
         }
 
@@ -308,7 +308,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         // Encode the frame into a video packet.
         if (!video_encoder_->encode(scaled_frame, packet))
         {
-            LOG(LS_ERROR) << "Unable to encode video packet";
+            LOG(ERROR) << "Unable to encode video packet";
             return;
         }
 
@@ -324,13 +324,11 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             screen_size->set_width(frame->size().width());
             screen_size->set_height(frame->size().height());
 
-            LOG(LS_INFO) << "Video packet has format";
-            LOG(LS_INFO) << "Capturer type:" << base::ScreenCapturer::typeToString(
+            LOG(INFO) << "Video packet has format";
+            LOG(INFO) << "Capturer type:" << base::ScreenCapturer::typeToString(
                 static_cast<base::ScreenCapturer::Type>(frame->capturerType()));
-            LOG(LS_INFO) << "Screen size:" << screen_size->width() << "x"
-                         << screen_size->height();
-            LOG(LS_INFO) << "Video size:" << format->video_rect().width() << "x"
-                         << format->video_rect().height();
+            LOG(INFO) << "Screen size:" << screen_size;
+            LOG(INFO) << "Video size:" << format->video_rect();
         }
     }
 
@@ -401,7 +399,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::desktop::CursorPositio
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setScreenList(const proto::desktop::ScreenList& list)
 {
-    LOG(LS_INFO) << "Send screen list to client";
+    LOG(INFO) << "Send screen list to client";
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
@@ -413,7 +411,7 @@ void ClientSessionDesktop::setScreenList(const proto::desktop::ScreenList& list)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setScreenType(const proto::desktop::ScreenType& type)
 {
-    LOG(LS_INFO) << "Send screen type to client";
+    LOG(INFO) << "Send screen type to client";
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kScreenTypeExtension);
@@ -433,7 +431,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::desktop::ClipboardE
     }
     else
     {
-        LOG(LS_ERROR) << "Clipboard event can only be handled in a desktop manage session";
+        LOG(ERROR) << "Clipboard event can only be handled in a desktop manage session";
     }
 }
 
@@ -478,7 +476,7 @@ void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extens
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown extension:" << extension.name();
+        LOG(ERROR) << "Unknown extension:" << extension.name();
     }
 }
 
@@ -503,14 +501,14 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
         default:
         {
             // No supported video encoding.
-            LOG(LS_ERROR) << "Unsupported video encoding:" << config.video_encoding();
+            LOG(ERROR) << "Unsupported video encoding:" << config.video_encoding();
         }
         break;
     }
 
     if (!video_encoder_)
     {
-        LOG(LS_ERROR) << "Video encoder not initialized!";
+        LOG(ERROR) << "Video encoder not initialized!";
         return;
     }
 
@@ -522,7 +520,7 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
 
         default:
         {
-            LOG(LS_ERROR) << "Unsupported audio encoding:" << config.audio_encoding();
+            LOG(ERROR) << "Unsupported audio encoding:" << config.audio_encoding();
             audio_encoder_.reset();
         }
         break;
@@ -531,7 +529,7 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
     cursor_encoder_.reset();
     if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
-        LOG(LS_INFO) << "Cursor shape enabled. Init cursor encoder";
+        LOG(INFO) << "Cursor shape enabled. Init cursor encoder";
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
     }
 
@@ -552,16 +550,16 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
     desktop_session_config_.cursor_position =
         (config.flags() & proto::desktop::CURSOR_POSITION);
 
-    LOG(LS_INFO) << "Client configuration changed";
-    LOG(LS_INFO) << "Video encoding:" << config.video_encoding();
-    LOG(LS_INFO) << "Enable cursor shape:" << (cursor_encoder_ != nullptr);
-    LOG(LS_INFO) << "Disable font smoothing:" << desktop_session_config_.disable_font_smoothing;
-    LOG(LS_INFO) << "Disable desktop effects:" << desktop_session_config_.disable_effects;
-    LOG(LS_INFO) << "Disable desktop wallpaper:" << desktop_session_config_.disable_wallpaper;
-    LOG(LS_INFO) << "Block input:" << desktop_session_config_.block_input;
-    LOG(LS_INFO) << "Lock at disconnect:" << desktop_session_config_.lock_at_disconnect;
-    LOG(LS_INFO) << "Clear clipboard:" << desktop_session_config_.clear_clipboard;
-    LOG(LS_INFO) << "Cursor position:" << desktop_session_config_.cursor_position;
+    LOG(INFO) << "Client configuration changed";
+    LOG(INFO) << "Video encoding:" << config.video_encoding();
+    LOG(INFO) << "Enable cursor shape:" << (cursor_encoder_ != nullptr);
+    LOG(INFO) << "Disable font smoothing:" << desktop_session_config_.disable_font_smoothing;
+    LOG(INFO) << "Disable desktop effects:" << desktop_session_config_.disable_effects;
+    LOG(INFO) << "Disable desktop wallpaper:" << desktop_session_config_.disable_wallpaper;
+    LOG(INFO) << "Block input:" << desktop_session_config_.block_input;
+    LOG(INFO) << "Lock at disconnect:" << desktop_session_config_.lock_at_disconnect;
+    LOG(INFO) << "Clear clipboard:" << desktop_session_config_.clear_clipboard;
+    LOG(INFO) << "Cursor position:" << desktop_session_config_.cursor_position;
 
     emit sig_clientSessionConfigured();
 }
@@ -569,13 +567,13 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
 {
-    LOG(LS_INFO) << "Select screen request";
+    LOG(INFO) << "Select screen request";
 
     proto::desktop::Screen screen;
 
     if (!screen.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse select screen extension data";
+        LOG(ERROR) << "Unable to parse select screen extension data";
         return;
     }
 
@@ -590,7 +588,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 
     if (!preferred_size.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse preferred size extension data";
+        LOG(ERROR) << "Unable to parse preferred size extension data";
         return;
     }
 
@@ -599,11 +597,11 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
     if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
         preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
     {
-        LOG(LS_ERROR) << "Invalid preferred size:" << preferred_size;
+        LOG(ERROR) << "Invalid preferred size:" << preferred_size;
         return;
     }
 
-    LOG(LS_INFO) << "Preferred size changed:" << preferred_size;
+    LOG(INFO) << "Preferred size changed:" << preferred_size;
 
     preferred_size_.set(preferred_size.width(), preferred_size.height());
     emit sig_captureScreen();
@@ -616,18 +614,18 @@ void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
 
     if (!pause.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse video pause extension data";
+        LOG(ERROR) << "Unable to parse video pause extension data";
         return;
     }
 
     is_video_paused_ = pause.enable();
-    LOG(LS_INFO) << "Video paused:" << is_video_paused_;
+    LOG(INFO) << "Video paused:" << is_video_paused_;
 
     if (!is_video_paused_)
     {
         if (!video_encoder_)
         {
-            LOG(LS_ERROR) << "Video encoder not initialized";
+            LOG(ERROR) << "Video encoder not initialized";
             return;
         }
 
@@ -642,12 +640,12 @@ void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
 
     if (!pause.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse pause extension data";
+        LOG(ERROR) << "Unable to parse pause extension data";
         return;
     }
 
     is_audio_paused_ = pause.enable();
-    LOG(LS_INFO) << "Audio paused:" << is_audio_paused_;
+    LOG(INFO) << "Audio paused:" << is_audio_paused_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -655,7 +653,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(LS_ERROR) << "Power management is only accessible from a desktop manage session";
+        LOG(ERROR) << "Power management is only accessible from a desktop manage session";
         return;
     }
 
@@ -663,7 +661,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
     if (!power_control.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse power control extension data";
+        LOG(ERROR) << "Unable to parse power control extension data";
         return;
     }
 
@@ -671,22 +669,22 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
     {
         case proto::desktop::PowerControl::ACTION_SHUTDOWN:
         {
-            LOG(LS_INFO) << "SHUTDOWN command";
+            LOG(INFO) << "SHUTDOWN command";
 
             if (!base::PowerController::shutdown())
             {
-                LOG(LS_ERROR) << "Unable to shutdown";
+                LOG(ERROR) << "Unable to shutdown";
             }
         }
         break;
 
         case proto::desktop::PowerControl::ACTION_REBOOT:
         {
-            LOG(LS_INFO) << "REBOOT command";
+            LOG(INFO) << "REBOOT command";
 
             if (!base::PowerController::reboot())
             {
-                LOG(LS_ERROR) << "Unable to reboot";
+                LOG(ERROR) << "Unable to reboot";
             }
         }
         break;
@@ -694,32 +692,32 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
 #if defined(Q_OS_WINDOWS)
-            LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
+            LOG(INFO) << "REBOOT_SAFE_MODE command";
 
             if (base::SafeModeUtil::setSafeModeService(kHostServiceName, true))
             {
-                LOG(LS_INFO) << "Service added successfully to start in safe mode";
+                LOG(INFO) << "Service added successfully to start in safe mode";
 
                 HostStorage storage;
                 storage.setBootToSafeMode(true);
 
                 if (base::SafeModeUtil::setSafeMode(true))
                 {
-                    LOG(LS_INFO) << "Safe Mode boot enabled successfully";
+                    LOG(INFO) << "Safe Mode boot enabled successfully";
 
                     if (!base::PowerController::reboot())
                     {
-                        LOG(LS_ERROR) << "Unable to reboot";
+                        LOG(ERROR) << "Unable to reboot";
                     }
                 }
                 else
                 {
-                    LOG(LS_ERROR) << "Failed to enable boot in Safe Mode";
+                    LOG(ERROR) << "Failed to enable boot in Safe Mode";
                 }
             }
             else
             {
-                LOG(LS_ERROR) << "Failed to add service to start in safe mode";
+                LOG(ERROR) << "Failed to add service to start in safe mode";
             }
 #endif // defined(Q_OS_WINDOWS)
         }
@@ -727,20 +725,20 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
         case proto::desktop::PowerControl::ACTION_LOGOFF:
         {
-            LOG(LS_INFO) << "LOGOFF command";
+            LOG(INFO) << "LOGOFF command";
             emit sig_control(proto::internal::DesktopControl::LOGOFF);
         }
         break;
 
         case proto::desktop::PowerControl::ACTION_LOCK:
         {
-            LOG(LS_INFO) << "LOCK command";
+            LOG(INFO) << "LOCK command";
             emit sig_control(proto::internal::DesktopControl::LOCK);
         }
         break;
 
         default:
-            LOG(LS_ERROR) << "Unhandled power control action:" << power_control.action();
+            LOG(ERROR) << "Unhandled power control action:" << power_control.action();
             break;
     }
 }
@@ -749,7 +747,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(LS_INFO) << "Remote update requested";
+    LOG(INFO) << "Remote update requested";
 
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -757,7 +755,7 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
     }
     else
     {
-        LOG(LS_ERROR) << "Update can only be launched from a desktop manage session";
+        LOG(ERROR) << "Update can only be launched from a desktop manage session";
     }
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -772,7 +770,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     {
         if (!system_info_request.ParseFromString(data))
         {
-            LOG(LS_ERROR) << "Unable to parse system info request";
+            LOG(ERROR) << "Unable to parse system info request";
         }
     }
 
@@ -794,7 +792,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 
     if (!video_recording.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse video recording extension data";
+        LOG(ERROR) << "Unable to parse video recording extension data";
         return;
     }
 
@@ -811,7 +809,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unknown video recording action:" << video_recording.action();
+            LOG(ERROR) << "Unknown video recording action:" << video_recording.action();
             return;
     }
 
@@ -826,7 +824,7 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 
     if (!message.ParseFromString(data))
     {
-        LOG(LS_ERROR) << "Unable to parse task manager extension data";
+        LOG(ERROR) << "Unable to parse task manager extension data";
         return;
     }
 
@@ -858,7 +856,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Critical overflow:" << pending << "(" << write_overflow_count_ << ")";
+        LOG(INFO) << "Critical overflow:" << pending << "(" << write_overflow_count_ << ")";
 
         downStepOverflow();
     }
@@ -867,7 +865,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Overflow:" << pending << "(" << write_overflow_count_ << ")";
+        LOG(INFO) << "Overflow:" << pending << "(" << write_overflow_count_ << ")";
 
         if (pending > last_pending_count_ || write_overflow_count_ > 10)
             downStepOverflow();
@@ -884,7 +882,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 1;
         write_overflow_count_ = 0;
 
-        LOG(LS_INFO) << "Overflow finished:" << pending;
+        LOG(INFO) << "Overflow finished:" << pending;
     }
     else if (write_normal_count_ > 0)
     {
@@ -896,7 +894,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
             int new_max_fps = std::min(max_fps_ + 1, DesktopSessionManager::maxCaptureFps());
             if (new_max_fps != max_fps_)
             {
-                LOG(LS_INFO) << "Max FPS:" << max_fps_ << "to" << new_max_fps;
+                LOG(INFO) << "Max FPS:" << max_fps_ << "to" << new_max_fps;
                 max_fps_ = new_max_fps;
             }
         }
@@ -925,13 +923,13 @@ void ClientSessionDesktop::downStepOverflow()
 
         if (critical_overflow_ && new_fps != max_fps_)
         {
-            LOG(LS_INFO) << "Max FPS:" << max_fps_ << "to" << new_fps;
+            LOG(INFO) << "Max FPS:" << max_fps_ << "to" << new_fps;
             max_fps_ = new_fps;
         }
 
         if (new_fps != fps)
         {
-            LOG(LS_INFO) << "FPS:" << fps << "to" << new_fps;
+            LOG(INFO) << "FPS:" << fps << "to" << new_fps;
             emit sig_captureFpsChanged(new_fps);
         }
     }
@@ -968,7 +966,7 @@ void ClientSessionDesktop::downStepOverflow()
 
         if (new_forced_size != forced_size_)
         {
-            LOG(LS_INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
+            LOG(INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
             forced_size_ = new_forced_size;
         }
     }
@@ -983,7 +981,7 @@ void ClientSessionDesktop::upStepOverflow()
     {
         new_fps = fps + 1;
 
-        LOG(LS_INFO) << "FPS:" << fps << "to" << new_fps;
+        LOG(INFO) << "FPS:" << fps << "to" << new_fps;
         emit sig_captureFpsChanged(new_fps);
     }
 
@@ -1020,7 +1018,7 @@ void ClientSessionDesktop::upStepOverflow()
 
         if (new_forced_size != forced_size_)
         {
-            LOG(LS_INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
+            LOG(INFO) << "Forced size:" << forced_size_ << "to" << new_forced_size;
             forced_size_ = new_forced_size;
         }
     }

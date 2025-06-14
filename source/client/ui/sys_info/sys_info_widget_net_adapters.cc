@@ -123,7 +123,7 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
 
     if (!system_info.has_network_adapters())
     {
-        LOG(LS_INFO) << "No network adapters";
+        LOG(INFO) << "No network adapters";
         ui.tree->setEnabled(false);
         return;
     }

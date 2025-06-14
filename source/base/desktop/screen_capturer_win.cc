@@ -39,14 +39,14 @@ ScreenCapturer::ScreenType screenType(const wchar_t* desktop_name)
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
+        PLOG(ERROR) << "ProcessIdToSessionId failed";
         return ScreenCapturer::ScreenType::UNKNOWN;
     }
 
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info";
+        LOG(ERROR) << "Unable to get session info";
         return ScreenCapturer::ScreenType::UNKNOWN;
     }
 
@@ -73,7 +73,7 @@ ScreenCapturer::ScreenType screenType(const wchar_t* desktop_name)
 ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
     : ScreenCapturer(type, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     QTimer::singleShot(0, this, [this]()
     {
@@ -82,7 +82,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
         // If the monitor is turned off, this call will turn it on.
         if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
         {
-            PLOG(LS_ERROR) << "SetThreadExecutionState failed";
+            PLOG(ERROR) << "SetThreadExecutionState failed";
         }
 
         wchar_t desktop[100] = { 0 };
@@ -90,7 +90,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
         {
             if (_wcsicmp(desktop, L"Screen-saver") == 0)
             {
-                LOG(LS_INFO) << "Screen-saver desktop detected";
+                LOG(INFO) << "Screen-saver desktop detected";
 
                 auto send_key = [](WORD key_code, DWORD flags)
                 {
@@ -105,7 +105,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
                     // Do the keyboard event.
                     if (!SendInput(1, &input, sizeof(input)))
                     {
-                        PLOG(LS_ERROR) << "SendInput failed";
+                        PLOG(ERROR) << "SendInput failed";
                     }
                 };
 
@@ -115,22 +115,22 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to get name of desktop";
+            LOG(ERROR) << "Unable to get name of desktop";
         }
 
-        LOG(LS_INFO) << "Checking current screen type";
+        LOG(INFO) << "Checking current screen type";
 
         Desktop input_desktop = Desktop::inputDesktop();
         if (!input_desktop.isValid())
         {
-            LOG(LS_ERROR) << "Unable to get input desktop";
+            LOG(ERROR) << "Unable to get input desktop";
             return;
         }
 
         wchar_t desktop_name[128] = { 0 };
         if (!input_desktop.name(desktop_name, sizeof(desktop_name)))
         {
-            LOG(LS_ERROR) << "Unable to get desktop name";
+            LOG(ERROR) << "Unable to get desktop name";
             return;
         }
 
@@ -141,7 +141,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerWin::~ScreenCapturerWin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,24 +152,24 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
         // Mirror screen capture is available only in Windows 7/2008 R2.
         if (windowsVersion() == base::VERSION_WIN7)
         {
-            LOG(LS_INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
+            LOG(INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
 
             std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
                 std::make_unique<ScreenCapturerMirror>();
 
             if (capturer_mirror->isSupported())
             {
-                LOG(LS_INFO) << "Using MIRROR capturer";
+                LOG(INFO) << "Using MIRROR capturer";
                 return capturer_mirror.release();
             }
             else
             {
-                LOG(LS_INFO) << "MIRROR capturer unavailable";
+                LOG(INFO) << "MIRROR capturer unavailable";
             }
         }
         else
         {
-            LOG(LS_INFO) << "Windows version is not equal to 7/2008R2. MIRROR capturer unavailable";
+            LOG(INFO) << "Windows version is not equal to 7/2008R2. MIRROR capturer unavailable";
         }
 
         return nullptr;
@@ -179,7 +179,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
 
     if (last_error == ScreenCapturer::Error::PERMANENT)
     {
-        LOG(LS_INFO) << "Permanent error. Reset to GDI capturer";
+        LOG(INFO) << "Permanent error. Reset to GDI capturer";
     }
     else if (preferred_type == ScreenCapturer::Type::WIN_DXGI ||
              preferred_type == ScreenCapturer::Type::DEFAULT)
@@ -191,7 +191,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
                 std::make_unique<ScreenCapturerDxgi>();
             if (capturer_dxgi->isSupported())
             {
-                LOG(LS_INFO) << "Using DXGI capturer";
+                LOG(INFO) << "Using DXGI capturer";
                 screen_capturer = capturer_dxgi.release();
             }
         }
@@ -207,7 +207,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
 
     if (!screen_capturer)
     {
-        LOG(LS_INFO) << "Using GDI capturer";
+        LOG(INFO) << "Using GDI capturer";
         screen_capturer = new ScreenCapturerGdi();
     }
 
@@ -230,7 +230,7 @@ void ScreenCapturerWin::switchToInputDesktop()
     wchar_t old_name[128] = { 0 };
     desktop_.assignedDesktop().name(old_name, sizeof(old_name));
 
-    LOG(LS_INFO) << "Input desktop changed from" << old_name << "to" << new_name;
+    LOG(INFO) << "Input desktop changed from" << old_name << "to" << new_name;
 
     reset();
 
@@ -248,8 +248,8 @@ void ScreenCapturerWin::checkScreenType(const wchar_t* desktop_name)
     ScreenType screen_type = screenType(desktop_name);
     if (screen_type != last_screen_type_)
     {
-        LOG(LS_INFO) << "Screen type changed from" << screenTypeToString(last_screen_type_)
-                     << "to" << screenTypeToString(screen_type);
+        LOG(INFO) << "Screen type changed from" << screenTypeToString(last_screen_type_)
+                  << "to" << screenTypeToString(screen_type);
 
         QString screen_name = QString::fromWCharArray(desktop_name);
         if (screen_name.isEmpty())
@@ -260,7 +260,7 @@ void ScreenCapturerWin::checkScreenType(const wchar_t* desktop_name)
     }
     else
     {
-        LOG(LS_INFO) << "Screen type not changed:" << screenTypeToString(last_screen_type_);
+        LOG(INFO) << "Screen type not changed:" << screenTypeToString(last_screen_type_);
     }
 }
 

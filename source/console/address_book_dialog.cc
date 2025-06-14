@@ -94,7 +94,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
       data_(data),
       key_(key)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -306,7 +306,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 //--------------------------------------------------------------------------------------------------
 AddressBookDialog::~AddressBookDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -403,7 +403,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected encryption type:" << encryption_type;
+            LOG(FATAL) << "Unexpected encryption type:" << encryption_type;
             break;
     }
 }
@@ -562,7 +562,7 @@ bool AddressBookDialog::saveChanges()
         break;
 
         default:
-            LOG(LS_FATAL) << "Unexpected encryption type:" << encryption_type;
+            LOG(FATAL) << "Unexpected encryption type:" << encryption_type;
             return false;
     }
 

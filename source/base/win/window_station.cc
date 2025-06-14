@@ -56,7 +56,7 @@ WindowStation WindowStation::open(const QString& name)
     HWINSTA winsta = OpenWindowStationW(qUtf16Printable(name), TRUE, GENERIC_ALL);
     if (!winsta)
     {
-        PLOG(LS_ERROR) << "OpenWindowStationW failed";
+        PLOG(ERROR) << "OpenWindowStationW failed";
         return WindowStation();
     }
 
@@ -70,7 +70,7 @@ WindowStation WindowStation::forCurrentProcess()
     HWINSTA winsta = GetProcessWindowStation();
     if (!winsta)
     {
-        PLOG(LS_ERROR) << "OpenWindowStationW failed";
+        PLOG(ERROR) << "OpenWindowStationW failed";
         return WindowStation();
     }
 
@@ -85,7 +85,7 @@ QStringList WindowStation::windowStationList()
 
     if (!EnumWindowStationsW(enumWindowStationProc, reinterpret_cast<LPARAM>(&list)))
     {
-        PLOG(LS_ERROR) << "EnumWindowStationsW failed";
+        PLOG(ERROR) << "EnumWindowStationsW failed";
         return {};
     }
 
@@ -109,7 +109,7 @@ bool WindowStation::setProcessWindowStation()
 {
     if (!SetProcessWindowStation(winsta_))
     {
-        PLOG(LS_ERROR) << "SetProcessWindowStation failed";
+        PLOG(ERROR) << "SetProcessWindowStation failed";
         return false;
     }
 
@@ -126,7 +126,7 @@ QString WindowStation::name()
 
     if (!GetUserObjectInformationW(winsta_, UOI_NAME, buffer, sizeof(buffer), nullptr))
     {
-        PLOG(LS_ERROR) << "GetUserObjectInformationW failed";
+        PLOG(ERROR) << "GetUserObjectInformationW failed";
         return QString();
     }
 
@@ -140,7 +140,7 @@ void WindowStation::close()
     {
         if (!CloseWindowStation(winsta_))
         {
-            PLOG(LS_ERROR) << "CloseWindowStation failed";
+            PLOG(ERROR) << "CloseWindowStation failed";
         }
     }
 
@@ -168,13 +168,13 @@ BOOL WindowStation::enumWindowStationProc(LPWSTR window_station, LPARAM lparam)
     QStringList* list = reinterpret_cast<QStringList*>(lparam);
     if (!list)
     {
-        LOG(LS_ERROR) << "Invalid window station list pointer";
+        LOG(ERROR) << "Invalid window station list pointer";
         return FALSE;
     }
 
     if (!window_station)
     {
-        LOG(LS_ERROR) << "Invalid window station name";;
+        LOG(ERROR) << "Invalid window station name";;
         return FALSE;
     }
 

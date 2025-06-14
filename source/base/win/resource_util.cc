@@ -23,15 +23,12 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-bool resourceFromModule(HMODULE module,
-                        int resource_id,
-                        const wchar_t* resource_type,
-                        void** data,
-                        size_t* length)
+bool resourceFromModule(HMODULE module, int resource_id, const wchar_t* resource_type,
+                        void** data, size_t* length)
 {
     if (!module)
     {
-        LOG(LS_ERROR) << "Invalid module handle";
+        LOG(ERROR) << "Invalid module handle";
         return false;
     }
 
@@ -44,7 +41,7 @@ bool resourceFromModule(HMODULE module,
     HRSRC hres_info = FindResourceW(module, MAKEINTRESOURCEW(resource_id), resource_type);
     if (hres_info == nullptr)
     {
-        PLOG(LS_ERROR) << "FindResourceW failed";
+        PLOG(ERROR) << "FindResourceW failed";
         return false;
     }
 
@@ -52,14 +49,14 @@ bool resourceFromModule(HMODULE module,
     HGLOBAL hres = LoadResource(module, hres_info);
     if (!hres)
     {
-        PLOG(LS_ERROR) << "LoadResource failed";
+        PLOG(ERROR) << "LoadResource failed";
         return false;
     }
 
     void* resource = LockResource(hres);
     if (!resource)
     {
-        PLOG(LS_ERROR) << "LockResource failed";
+        PLOG(ERROR) << "LockResource failed";
         return false;
     }
 
@@ -70,10 +67,7 @@ bool resourceFromModule(HMODULE module,
 }
 
 //--------------------------------------------------------------------------------------------------
-bool dataResourceFromModule(HMODULE module,
-                            int resource_id,
-                            void** data,
-                            size_t* length)
+bool dataResourceFromModule(HMODULE module, int resource_id, void** data, size_t* length)
 {
     return resourceFromModule(module, resource_id, L"BINDATA", data, length);
 }

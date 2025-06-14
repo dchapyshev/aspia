@@ -36,13 +36,13 @@ namespace base {
 DesktopEnvironment::DesktopEnvironment(QObject* parent)
     : QObject(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopEnvironment::~DesktopEnvironment()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

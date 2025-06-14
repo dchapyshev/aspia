@@ -37,20 +37,20 @@
 // Make a bunch of macros for logging. The way to log things is to stream things to
 // LOG(<a particular severity level>). E.g.,
 //
-//   LOG(LS_INFO) << "Found " << num_cookies << " cookies";
+//   LOG(INFO) << "Found " << num_cookies << " cookies";
 //
 // You can also do conditional logging:
 //
-//   LOG_IF(LS_INFO, num_cookies > 10) << "Got lots of cookies";
+//   LOG_IF(INFO, num_cookies > 10) << "Got lots of cookies";
 //
 // The CHECK(condition) macro is active in both debug and release builds and effectively performs a
-// LOG(LS_FATAL) which terminates the process and generates a crashdump unless a debugger is attached.
+// LOG(FATAL) which terminates the process and generates a crashdump unless a debugger is attached.
 //
 // There are also "debug mode" logging macros like the ones above:
 //
-//   DLOG(LS_INFO) << "Found cookies";
+//   DLOG(INFO) << "Found cookies";
 //
-//   DLOG_IF(LS_INFO, num_cookies > 10) << "Got lots of cookies";
+//   DLOG_IF(INFO, num_cookies > 10) << "Got lots of cookies";
 //
 // All "debug mode" logging is compiled away to nothing for non-debug mode compiles. LOG_IF and
 // development flags also work well together because the code can be compiled away sometimes.
@@ -60,16 +60,16 @@
 //   LOG_ASSERT(assertion);
 //   DLOG_ASSERT(assertion);
 //
-// which is syntactic sugar for {,D}LOG_IF(LS_FATAL, assert fails) << assertion;
+// which is syntactic sugar for {,D}LOG_IF(FATAL, assert fails) << assertion;
 //
 // We also override the standard 'assert' to use 'DLOG_ASSERT'.
 //
 // Lastly, there is:
 //
-//   PLOG(LS_ERROR) << "Couldn't do foo";
-//   DPLOG(LS_ERROR) << "Couldn't do foo";
-//   PLOG_IF(LS_ERROR, cond) << "Couldn't do foo";
-//   DPLOG_IF(LS_ERROR, cond) << "Couldn't do foo";
+//   PLOG(ERROR) << "Couldn't do foo";
+//   DPLOG(ERROR) << "Couldn't do foo";
+//   PLOG_IF(ERROR, cond) << "Couldn't do foo";
+//   DPLOG_IF(ERROR, cond) << "Couldn't do foo";
 //   PCHECK(condition) << "Couldn't do foo";
 //   DPCHECK(condition) << "Couldn't do foo";
 //
@@ -77,12 +77,12 @@
 // Windows and errno on POSIX).
 //
 // The supported severity levels for macros that allow you to specify one are (in increasing order
-// of severity) LS_INFO, LS_WARNING, LS_ERROR, and LS_FATAL.
+// of severity) INFO, WARNING, ERROR, and FATAL.
 //
-// Very important: logging a message at the LS_FATAL severity level causes the program to terminate
+// Very important: logging a message at the FATAL severity level causes the program to terminate
 // (after the message is logged).
 //
-// There is the special severity of DFATAL, which logs LS_FATAL in debug mode, LS_ERROR in normal mode.
+// There is the special severity of DFATAL, which logs FATAL in debug mode, ERROR in normal mode.
 
 namespace base {
 
@@ -115,20 +115,20 @@ enum LoggingDestination
 
 using LoggingSeverity = int;
 
-[[maybe_unused]] const LoggingSeverity LOG_LS_INFO = 0;
-[[maybe_unused]] const LoggingSeverity LOG_LS_WARNING = 1;
-[[maybe_unused]] const LoggingSeverity LOG_LS_ERROR = 2;
-[[maybe_unused]] const LoggingSeverity LOG_LS_FATAL = 3;
-[[maybe_unused]] const LoggingSeverity LOG_LS_NUMBER = 4;
-[[maybe_unused]] const LoggingSeverity LOG_LS_DFATAL = LOG_LS_FATAL;
-[[maybe_unused]] const LoggingSeverity LOG_LS_DCHECK = LOG_LS_FATAL;
+[[maybe_unused]] const LoggingSeverity LOG_INFO = 0;
+[[maybe_unused]] const LoggingSeverity LOG_WARNING = 1;
+[[maybe_unused]] const LoggingSeverity LOG_ERROR = 2;
+[[maybe_unused]] const LoggingSeverity LOG_FATAL = 3;
+[[maybe_unused]] const LoggingSeverity LOG_NUMBER = 4;
+[[maybe_unused]] const LoggingSeverity LOG_DFATAL = LOG_FATAL;
+[[maybe_unused]] const LoggingSeverity LOG_DCHECK = LOG_FATAL;
 
 struct LoggingSettings
 {
     // The defaults values are:
     //
     //  destination: LOG_DEFAULT
-    //  min_log_level: LOG_LS_INFO
+    //  min_log_level: LOG_INFO
     //  max_log_file_size: 2 Mb
     //  max_log_file_age: 14 days
     LoggingSettings();
@@ -160,27 +160,40 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
-#define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_INFO, ##__VA_ARGS__)
-#define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_WARNING, ##__VA_ARGS__)
-#define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_ERROR, ##__VA_ARGS__)
-#define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_FATAL, ##__VA_ARGS__)
-#define COMPACT_LOG_EX_LS_DFATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DFATAL, ##__VA_ARGS__)
-#define COMPACT_LOG_EX_LS_DCHECK(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DCHECK, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_INFO(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_INFO, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_WARNING(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_WARNING, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_ERROR(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_ERROR, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_FATAL(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_FATAL, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_DFATAL(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_DFATAL, ##__VA_ARGS__)
+#define COMPACT_LOG_EX_DCHECK(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_DCHECK, ##__VA_ARGS__)
 
-#define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
-#define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
-#define COMPACT_LOG_LS_ERROR   COMPACT_LOG_EX_LS_ERROR(LogMessage)
-#define COMPACT_LOG_LS_FATAL   COMPACT_LOG_EX_LS_FATAL(LogMessage)
-#define COMPACT_LOG_LS_DFATAL  COMPACT_LOG_EX_LS_DFATAL(LogMessage)
-#define COMPACT_LOG_LS_DCHECK  COMPACT_LOG_EX_LS_DCHECK(LogMessage)
+#define COMPACT_LOG_INFO    COMPACT_LOG_EX_INFO(LogMessage)
+#define COMPACT_LOG_WARNING COMPACT_LOG_EX_WARNING(LogMessage)
+#define COMPACT_LOG_ERROR   COMPACT_LOG_EX_ERROR(LogMessage)
+#define COMPACT_LOG_FATAL   COMPACT_LOG_EX_FATAL(LogMessage)
+#define COMPACT_LOG_DFATAL  COMPACT_LOG_EX_DFATAL(LogMessage)
+#define COMPACT_LOG_DCHECK  COMPACT_LOG_EX_DCHECK(LogMessage)
 
-// As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
+#if defined(Q_OS_WINDOWS)
+// wingdi.h defines ERROR to be 0. When we call LOG(ERROR), it gets substituted with 0, and it
+// expands to COMPACT_LOG_0. To allow us to keep using this syntax, we define this macro to do the
+// same thing as COMPACT_LOG_ERROR, and also define ERROR the same way that the Windows SDK does for
+// consistency.
+#define ERROR 0
+#define COMPACT_LOG_EX_0(ClassName, ...) \
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_ERROR, ##__VA_ARGS__)
+#define COMPACT_LOG_0 COMPACT_LOG_EX_0(LogMessage)
+// Needed for LOG_IS_ON(ERROR).
+[[maybe_unused]] const LoggingSeverity LOG_0 = LOG_ERROR;
+#endif
+
+// As special cases, we can assume that LOG_IS_ON(FATAL) always holds. Also, LOG_IS_ON(DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
 #define LOG_IS_ON(severity) \
     (::base::shouldCreateLogMessage(::base::LOG_##severity))
@@ -190,8 +203,8 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 #define LAZY_STREAM(stream, condition) \
   !(condition) ? (void) 0 : ::base::LogMessageVoidify() & (stream)
 
-// We use the preprocessor's merging operator, "##", so that, e.g., LOG(LS_INFO) becomes the token
-// COMPACT_LOG_LS_INFO. There's some funny subtle difference between ostream member streaming
+// We use the preprocessor's merging operator, "##", so that, e.g., LOG(INFO) becomes the token
+// COMPACT_LOG_INFO. There's some funny subtle difference between ostream member streaming
 // functions (e.g., ostream::operator<<(int) and ostream non-member streaming functions
 // (e.g., ::operator<<(ostream&, string&): it turns out that it's impossible to stream something
 // like a string directly to an unnamed ostream. We employ a neat hack by calling the stream() member
@@ -260,7 +273,7 @@ private:
     LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                                        \
-    LAZY_STREAM(PLOG_STREAM(LS_FATAL), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(PLOG_STREAM(FATAL), !(condition)) << "Check failed: " #condition ". "
 
 // Helper macro for binary operators.
 // Don't use this macro directly in your code, use CHECK_EQ et al below.
@@ -421,9 +434,9 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #if DCHECK_IS_ON()
 
 #define DCHECK(condition) \
-    LAZY_STREAM(LOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(LOG_STREAM(DCHECK), !(condition)) << "Check failed: " #condition ". "
 #define DPCHECK(condition) \
-    LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(PLOG_STREAM(DCHECK), !(condition)) << "Check failed: " #condition ". "
 
 #else // DCHECK_IS_ON()
 
@@ -446,7 +459,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
         DCHECK_IS_ON() ?                                                                         \
         ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);          \
     else                                                                                         \
-        ::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DCHECK,              \
+        ::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_DCHECK,                 \
                            true_if_passed.message()).stream()
 
 #else // DCHECK_IS_ON()
@@ -605,12 +618,12 @@ QDebug operator<<(QDebug out, Qt::HANDLE handle);
 // spam is a serious concern, NOTIMPLEMENTED_LOG_ONCE can be used.
 #define NOTIMPLEMENTED_MSG "NOT IMPLEMENTED"
 
-#define NOTIMPLEMENTED() LOG(LS_ERROR) << NOTIMPLEMENTED_MSG
+#define NOTIMPLEMENTED() LOG(ERROR) << NOTIMPLEMENTED_MSG
 #define NOTIMPLEMENTED_LOG_ONCE()                                                                \
     do                                                                                           \
     {                                                                                            \
         static bool logged_once = false;                                                         \
-        LOG_IF(LS_ERROR, !logged_once) << NOTIMPLEMENTED_MSG;                                    \
+        LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG;                                    \
         logged_once = true;                                                                      \
     } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS

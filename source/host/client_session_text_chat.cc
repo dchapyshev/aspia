@@ -30,13 +30,13 @@ ClientSessionTextChat::ClientSessionTextChat(
     base::TcpChannel* channel, QObject* parent)
     : ClientSession(proto::peer::SESSION_TYPE_TEXT_CHAT, channel, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientSessionTextChat::~ClientSessionTextChat()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ void ClientSessionTextChat::sendTextChat(const proto::text_chat::TextChat& text_
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendStatus(proto::text_chat::Status::Code code)
 {
-    LOG(LS_INFO) << "Send text chat status";
+    LOG(INFO) << "Send text chat status";
 
     proto::text_chat::TextChat text_chat;
     proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
@@ -68,14 +68,14 @@ bool ClientSessionTextChat::hasUser() const
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::setHasUser(bool enable)
 {
-    LOG(LS_INFO) << "Has user changed (has_user=" << enable << ")";
+    LOG(INFO) << "Has user changed (has_user=" << enable << ")";
     has_user_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onStarted()
 {
-    LOG(LS_INFO) << "Session started";
+    LOG(INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void ClientSessionTextChat::onReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &text_chat))
     {
-        LOG(LS_ERROR) << "Unable to parse system info request";
+        LOG(ERROR) << "Unable to parse system info request";
         return;
     }
 

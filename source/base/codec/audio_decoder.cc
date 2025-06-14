@@ -55,7 +55,7 @@ void AudioDecoder::initDecoder()
     decoder_ = opus_decoder_create(kSamplingRate, channels_, &error);
     if (!decoder_)
     {
-        LOG(LS_ERROR) << "Failed to create OPUS decoder; Error code:" << error;
+        LOG(ERROR) << "Failed to create OPUS decoder; Error code:" << error;
     }
 }
 
@@ -81,9 +81,8 @@ bool AudioDecoder::resetForPacket(const proto::desktop::AudioPacket& packet)
 
         if (channels_ <= 0 || channels_ > 2 || sampling_rate_ != kSamplingRate)
         {
-            LOG(LS_ERROR) << "Unsupported OPUS parameters:"
-                          << channels_ << "channels with"
-                          << sampling_rate_ << "samples per second.";
+            LOG(ERROR) << "Unsupported OPUS parameters:" << channels_ << "channels with"
+                       << sampling_rate_ << "samples per second";
             return false;
         }
     }
@@ -99,14 +98,14 @@ std::unique_ptr<proto::desktop::AudioPacket> AudioDecoder::decode(const proto::d
 {
     if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS)
     {
-        LOG(LS_ERROR) << "Received an audio packet with encoding"
-                      << packet.encoding() << "when an OPUS packet was expected.";
+        LOG(ERROR) << "Received an audio packet with encoding" << packet.encoding()
+                   << "when an OPUS packet was expected";
         return nullptr;
     }
 
     if (packet.data_size() > kMaxFramesPerPacket)
     {
-        LOG(LS_ERROR) << "Received an packet with too many frames.";
+        LOG(ERROR) << "Received an packet with too many frames";
         return nullptr;
     }
 
@@ -139,7 +138,7 @@ std::unique_ptr<proto::desktop::AudioPacket> AudioDecoder::decode(const proto::d
                                  pcm_buffer, max_frame_samples, 0);
         if (result < 0)
         {
-            LOG(LS_ERROR) << "Failed decoding Opus frame. Error code:" << result;
+            LOG(ERROR) << "Failed decoding Opus frame. Error code:" << result;
             destroyDecoder();
             return nullptr;
         }

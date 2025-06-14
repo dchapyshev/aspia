@@ -69,7 +69,7 @@ public:
                 break;
 
             default:
-                LOG(LS_FATAL) << "Unexpected session type:" << client.session_type;
+                LOG(FATAL) << "Unexpected session type:" << client.session_type;
                 return;
         }
 
@@ -148,7 +148,7 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 NotifierWindow::NotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     ui.label_title->installEventFilter(this);
@@ -170,7 +170,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, [this]()
     {
-        LOG(LS_INFO) << "Screen geometry changed";
+        LOG(INFO) << "Screen geometry changed";
         // The taskbar does not move instantly.
         QTimer::singleShot(
             std::chrono::milliseconds(500), this, &NotifierWindow::updateWindowPosition);
@@ -203,7 +203,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 NotifierWindow::~NotifierWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
-    LOG(LS_INFO) << "Client list changed:" << clients.size();
+    LOG(INFO) << "Client list changed:" << clients.size();
 
     if (!clients.empty())
     {
@@ -272,7 +272,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     }
     else
     {
-        LOG(LS_INFO) << "Empty session list. Notifier closed";
+        LOG(INFO) << "Empty session list. Notifier closed";
 
         emit sig_finished();
         closeNotifier();
@@ -282,7 +282,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onTextChat()
 {
-    LOG(LS_INFO) << "[ACTION] Text chat";
+    LOG(INFO) << "[ACTION] Text chat";
     emit sig_textChat();
 }
 
@@ -291,7 +291,7 @@ void NotifierWindow::onLockMouse()
 {
     is_mouse_locked_ = !is_mouse_locked_;
 
-    LOG(LS_INFO) << "[ACTION] Lock mouse:" << is_mouse_locked_;
+    LOG(INFO) << "[ACTION] Lock mouse:" << is_mouse_locked_;
 
     QString icon;
     QString tooltip;
@@ -318,7 +318,7 @@ void NotifierWindow::onLockKeyboard()
 {
     is_keyboard_locked_ = !is_keyboard_locked_;
 
-    LOG(LS_INFO) << "[ACTION] Lock keyboard:" << is_keyboard_locked_;
+    LOG(INFO) << "[ACTION] Lock keyboard:" << is_keyboard_locked_;
 
     QString icon;
     QString tooltip;
@@ -345,7 +345,7 @@ void NotifierWindow::onPause()
 {
     is_paused_ = !is_paused_;
 
-    LOG(LS_INFO) << "[ACTION] Pause:" << is_paused_;
+    LOG(INFO) << "[ACTION] Pause:" << is_paused_;
 
     QString icon;
     QString tooltip;
@@ -370,14 +370,14 @@ void NotifierWindow::onPause()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onStop()
 {
-    LOG(LS_INFO) << "[ACTION] Stop";
+    LOG(INFO) << "[ACTION] Stop";
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
         {
-            LOG(LS_INFO) << "Disconnect session with ID:" << item->id();
+            LOG(INFO) << "Disconnect session with ID:" << item->id();
             emit sig_killSession(item->id());
         }
     }
@@ -461,7 +461,7 @@ void NotifierWindow::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::moveEvent(QMoveEvent* event)
 {
-    LOG(LS_INFO) << "Notifier moved to:" << event->pos() << "(from:" << event->oldPos() << ")";
+    LOG(INFO) << "Notifier moved to:" << event->pos() << "(from:" << event->oldPos() << ")";
     QWidget::moveEvent(event);
 }
 
@@ -470,12 +470,12 @@ void NotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
     {
-        LOG(LS_INFO) << "[ACTION] Hide";
+        LOG(INFO) << "[ACTION] Hide";
         hideNotifier();
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Show";
+        LOG(INFO) << "[ACTION] Show";
         showNotifier();
     }
 }
@@ -491,8 +491,8 @@ void NotifierWindow::updateWindowPosition()
     int x = available_rect.x() + (available_rect.width() - window_size.width());
     int y = available_rect.y() + (available_rect.height() - window_size.height());
 
-    LOG(LS_INFO) << "Notifier window size:" << window_size;
-    LOG(LS_INFO) << "Notifier window moved to:" << x << "x" << y;
+    LOG(INFO) << "Notifier window size:" << window_size;
+    LOG(INFO) << "Notifier window moved to:" << x << "x" << y;
 
     move(x, y);
 }
@@ -500,7 +500,7 @@ void NotifierWindow::updateWindowPosition()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::showNotifier()
 {
-    LOG(LS_INFO) << "showNotifier called";
+    LOG(INFO) << "showNotifier called";
 
     if (ui.content->isHidden() && ui.title->isHidden())
     {
@@ -510,8 +510,8 @@ void NotifierWindow::showNotifier()
         QPoint window_pos = window_rect_.topLeft();
         QSize window_size = window_rect_.size();
 
-        LOG(LS_INFO) << "Notifier window size:" << window_size;
-        LOG(LS_INFO) << "Notifier window moved to:" << window_pos;
+        LOG(INFO) << "Notifier window size:" << window_size;
+        LOG(INFO) << "Notifier window moved to:" << window_pos;
 
         move(window_pos);
         setFixedSize(window_size);
@@ -520,14 +520,14 @@ void NotifierWindow::showNotifier()
     }
     else
     {
-        LOG(LS_INFO) << "Notifier already visibled";
+        LOG(INFO) << "Notifier already visibled";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::hideNotifier()
 {
-    LOG(LS_INFO) << "hideNotifier called";
+    LOG(INFO) << "hideNotifier called";
 
     QRect screen_rect = currentAvailableRect();
     QSize content_size = ui.content->frameSize();
@@ -539,8 +539,8 @@ void NotifierWindow::hideNotifier()
     QPoint window_pos(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
     QSize window_size(window_rect_.width() - content_size.width(), window_rect_.height());
 
-    LOG(LS_INFO) << "Notifier window size:" << window_size;
-    LOG(LS_INFO) << "Notifier window moved to:" << window_pos;
+    LOG(INFO) << "Notifier window size:" << window_size;
+    LOG(INFO) << "Notifier window moved to:" << window_pos;
 
     move(window_pos);
     setFixedSize(window_size);
@@ -557,14 +557,14 @@ QRect NotifierWindow::currentAvailableRect()
 
     if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, &work_area, 0))
     {
-        LOG(LS_ERROR) << "SystemParametersInfoW failed";
+        LOG(ERROR) << "SystemParametersInfoW failed";
         return QRect();
     }
 
     QScreen* primary_screen = QApplication::primaryScreen();
     if (!primary_screen)
     {
-        LOG(LS_ERROR) << "Primary screen not available";
+        LOG(ERROR) << "Primary screen not available";
         return QRect();
     }
 
@@ -573,13 +573,13 @@ QRect NotifierWindow::currentAvailableRect()
                QSize(work_area.right - work_area.left, work_area.bottom - work_area.top) /
                    device_pixel_ratio);
 
-    LOG(LS_INFO) << "Available rect:" << rect << "pixel ratio:" << device_pixel_ratio;
+    LOG(INFO) << "Available rect:" << rect << "pixel ratio:" << device_pixel_ratio;
     return rect;
 #else
     QScreen* primary_screen = QApplication::primaryScreen();
     if (!primary_screen)
     {
-        LOG(LS_ERROR) << "Primary screen not available";
+        LOG(ERROR) << "Primary screen not available";
         return QRect();
     }
 

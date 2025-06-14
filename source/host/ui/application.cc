@@ -90,7 +90,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
 Application::Application(int& argc, char* argv[])
     : base::GuiApplication(argc, argv)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     setOrganizationName("Aspia");
     setApplicationName("Host");
@@ -107,19 +107,19 @@ Application::Application(int& argc, char* argv[])
     {
         if (message == kActivateMessage)
         {
-            LOG(LS_INFO) << "Activate message received";
+            LOG(INFO) << "Activate message received";
             emit sig_activated();
         }
         else
         {
-            LOG(LS_ERROR) << "Unhandled message";
+            LOG(ERROR) << "Unhandled message";
         }
     });
 
     UserSettings user_settings;
     if (!hasLocale(user_settings.locale()))
     {
-        LOG(LS_INFO) << "Set default locale";
+        LOG(INFO) << "Set default locale";
         user_settings.setLocale(DEFAULT_LOCALE);
     }
 
@@ -129,7 +129,7 @@ Application::Application(int& argc, char* argv[])
 //--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ Application* Application::instance()
 //--------------------------------------------------------------------------------------------------
 void Application::activate()
 {
-    LOG(LS_INFO) << "Sending activate message";
+    LOG(INFO) << "Sending activate message";
     sendMessage(kActivateMessage);
 }
 

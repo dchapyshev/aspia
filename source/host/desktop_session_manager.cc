@@ -45,14 +45,14 @@ DesktopSessionManager::DesktopSessionManager(QObject* parent)
     : QObject(parent),
       session_attach_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     session_attach_timer_->setSingleShot(true);
 
     connect(session_attach_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_ERROR) << "Session attach timeout (session_id=" << session_id_
-                      << "timeout=" << kSessionAttachTimeout.count() << "min)";
+        LOG(ERROR) << "Session attach timeout (session_id=" << session_id_
+                   << "timeout=" << kSessionAttachTimeout.count() << "min)";
         onErrorOccurred();
     });
 
@@ -62,7 +62,7 @@ DesktopSessionManager::DesktopSessionManager(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopSessionManager::~DesktopSessionManager()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     setState(FROM_HERE, State::STOPPING);
     dettachSession(FROM_HERE);
@@ -80,11 +80,11 @@ int DesktopSessionManager::defaultCaptureFps()
         int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
         if (ok)
         {
-            LOG(LS_INFO) << "Default FPS specified by environment variable";
+            LOG(INFO) << "Default FPS specified by environment variable";
 
             if (default_fps < 1 || default_fps > 60)
             {
-                LOG(LS_INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
+                LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
             }
             else
             {
@@ -108,11 +108,11 @@ int DesktopSessionManager::minCaptureFps()
         int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
         if (ok)
         {
-            LOG(LS_INFO) << "Minimum FPS specified by environment variable";
+            LOG(INFO) << "Minimum FPS specified by environment variable";
 
             if (min_fps < 1 || min_fps > 60)
             {
-                LOG(LS_INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
+                LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
             }
             else
             {
@@ -137,11 +137,11 @@ int DesktopSessionManager::maxCaptureFps()
         int max_fps = qEnvironmentVariableIntValue("ASPIA_MAX_FPS", &ok);
         if (ok)
         {
-            LOG(LS_INFO) << "Maximum FPS specified by environment variable";
+            LOG(INFO) << "Maximum FPS specified by environment variable";
 
             if (max_fps < 1 || max_fps > 60)
             {
-                LOG(LS_INFO) << "Environment variable contains an incorrect maximum FPS:" << max_fps;
+                LOG(INFO) << "Environment variable contains an incorrect maximum FPS:" << max_fps;
             }
             else
             {
@@ -156,7 +156,7 @@ int DesktopSessionManager::maxCaptureFps()
         quint32 threads = QThread::idealThreadCount();
         if (threads <= 2)
         {
-            LOG(LS_INFO) << "Low-end CPU detected. Maximum capture FPS:" << kMaxScreenCaptureFpsLowEnd;
+            LOG(INFO) << "Low-end CPU detected. Maximum capture FPS:" << kMaxScreenCaptureFpsLowEnd;
             max_capture_fps = kMaxScreenCaptureFpsLowEnd;
         }
     }
@@ -169,13 +169,13 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 {
     if (state_ == State::ATTACHED)
     {
-        LOG(LS_INFO) << "Already attached. Session ID:" << session_id << "(from="
-                     << location.toString() << ")";
+        LOG(INFO) << "Already attached. Session ID:" << session_id << "(from="
+                  << location.toString() << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Attach session with ID:" << session_id << "current state:"
-                 << stateToString(state_) << "(from=" << location.toString() << ")";
+    LOG(INFO) << "Attach session with ID:" << session_id << "current state:"
+              << stateToString(state_) << "(from=" << location.toString() << ")";
     session_id_ = session_id;
 
     if (state_ == State::STOPPED)
@@ -183,28 +183,28 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     setState(FROM_HERE, State::STARTING);
 
-    LOG(LS_INFO) << "Starting desktop session";
-    LOG(LS_INFO) << "#####################################################";
+    LOG(INFO) << "Starting desktop session";
+    LOG(INFO) << "#####################################################";
 
 #if defined(Q_OS_WINDOWS)
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        LOG(ERROR) << "Unable to get session info (sid=" << session_id << ")";
         return;
     }
 
-    LOG(LS_INFO) << "# Session info (sid=" << session_id
-                 << "username=" << session_info.userName()
-                 << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
-                 << "win_station=" << session_info.winStationName()
-                 << "domain=" << session_info.domain()
-                 << "locked=" << session_info.isUserLocked() << ")";
+    LOG(INFO) << "# Session info (sid=" << session_id
+              << "username=" << session_info.userName()
+              << "connect_state=" << base::SessionInfo::connectStateToString(session_info.connectState())
+              << "win_station=" << session_info.winStationName()
+              << "domain=" << session_info.domain()
+              << "locked=" << session_info.isUserLocked() << ")";
 #endif // defined(Q_OS_WINDOWS)
 
     QString channel_id = base::IpcServer::createUniqueId();
 
-    LOG(LS_INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
 
     ipc_server_ = new base::IpcServer(this);
 
@@ -215,27 +215,27 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     if (!ipc_server_->start(channel_id))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
+        LOG(ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
 
-    LOG(LS_INFO) << "Starting desktop session process";
+    LOG(INFO) << "Starting desktop session process";
 
     std::unique_ptr<DesktopSessionProcess> process =
         DesktopSessionProcess::create(session_id, channel_id);
     if (!process)
     {
-        LOG(LS_ERROR) << "Failed to create session process (sid=" << session_id
-                      << "channel_id=" << channel_id << ")";
+        LOG(ERROR) << "Failed to create session process (sid=" << session_id
+                   << "channel_id=" << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
 
-    LOG(LS_INFO) << "Desktop session process created (sid=" << session_id
-                 << "channel_id=" << channel_id << ")";
+    LOG(INFO) << "Desktop session process created (sid=" << session_id
+              << "channel_id=" << channel_id << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,12 +243,12 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
     {
-        LOG(LS_INFO) << "Session already stopped or dettached (" << stateToString(state_) << ")";
+        LOG(INFO) << "Session already stopped or dettached (" << stateToString(state_) << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Dettach session (sid=" << session_id_ << "state=" << stateToString(state_)
-                 << "from=" << location.toString() << ")";
+    LOG(INFO) << "Dettach session (sid=" << session_id_ << "state=" << stateToString(state_)
+              << "from=" << location.toString() << ")";
 
     if (state_ != State::STOPPING)
         setState(FROM_HERE, State::DETACHED);
@@ -261,7 +261,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         session_ = nullptr;
     }
 
-    LOG(LS_INFO) << "Session process is detached (sid=" << session_id_ << ")";
+    LOG(INFO) << "Session process is detached (sid=" << session_id_ << ")";
 
     if (state_ == State::STOPPING)
         return;
@@ -383,17 +383,17 @@ void DesktopSessionManager::injectClipboardEvent(const proto::desktop::Clipboard
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewIpcConnection()
 {
-    LOG(LS_INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
+    LOG(INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
 
     if (!ipc_server_)
     {
-        LOG(LS_ERROR) << "No IPC server instance!";
+        LOG(ERROR) << "No IPC server instance!";
         return;
     }
 
     if (!ipc_server_->hasPendingConnections())
     {
-        LOG(LS_ERROR) << "No pending connections in IPC server";
+        LOG(ERROR) << "No pending connections in IPC server";
         return;
     }
 
@@ -413,7 +413,7 @@ void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
     {
-        LOG(LS_INFO) << "Error skipped (state=" << stateToString(state_) << ")";
+        LOG(INFO) << "Error skipped (state=" << stateToString(state_) << ")";
         return;
     }
 
@@ -425,8 +425,8 @@ void DesktopSessionManager::onErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
-    LOG(LS_INFO) << "State changed from" << stateToString(state_) << "to" << stateToString(state)
-                 << "(from=" << location.toString() << ")";
+    LOG(INFO) << "State changed from" << stateToString(state_) << "to" << stateToString(state)
+              << "(from=" << location.toString() << ")";
     state_ = state;
 }
 

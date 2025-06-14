@@ -27,13 +27,13 @@ namespace client {
 ClientSystemInfo::ClientSystemInfo(QObject* parent)
     : Client(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientSystemInfo::~ClientSystemInfo()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoR
 //--------------------------------------------------------------------------------------------------
 void ClientSystemInfo::onSessionStarted()
 {
-    LOG(LS_INFO) << "System info session started";
+    LOG(INFO) << "System info session started";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ void ClientSystemInfo::onSessionMessageReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &system_info))
     {
-        LOG(LS_ERROR) << "Unable to parse system info";
+        LOG(ERROR) << "Unable to parse system info";
         return;
     }
 

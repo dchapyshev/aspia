@@ -92,7 +92,7 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     : SessionWindow(session_state, parent),
       ui(std::make_unique<Ui::SystemInfoSessionWindow>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
 
@@ -369,13 +369,13 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
 //--------------------------------------------------------------------------------------------------
 SystemInfoSessionWindow::~SystemInfoSessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client* SystemInfoSessionWindow::createClient()
 {
-    LOG(LS_INFO) << "Create client";
+    LOG(INFO) << "Create client";
 
     ClientSystemInfo* client = new ClientSystemInfo();
 
@@ -395,7 +395,7 @@ Client* SystemInfoSessionWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoSessionWindow::onShowWindow()
 {
-    LOG(LS_INFO) << "Show window";
+    LOG(INFO) << "Show window";
 
     for (int i = 0; i < sys_info_widgets_.size(); ++i)
     {
@@ -468,7 +468,7 @@ void SystemInfoSessionWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /
         {
             current_widget_ = i;
 
-            LOG(LS_INFO) << "Current category changed:" << category << "(" << i << ")";
+            LOG(INFO) << "Current category changed:" << category << "(" << i << ")";
 
             layout_->addWidget(widget);
             widget->setVisible(true);

@@ -100,33 +100,33 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArr
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_new failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_new failed";
         return nullptr;
     }
 
     if (EVP_CipherInit_ex(ctx.get(), cipherType(type), nullptr, nullptr, nullptr,
                           cipherMode(mode)) != 1)
     {
-        LOG(LS_ERROR) << "EVP_EncryptInit_ex failed";
+        LOG(ERROR) << "EVP_EncryptInit_ex failed";
         return nullptr;
     }
 
     if (EVP_CIPHER_CTX_set_key_length(ctx.get(), static_cast<int>(key.size())) != 1)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_set_key_length failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_set_key_length failed";
         return nullptr;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx.get(), EVP_CTRL_AEAD_SET_IVLEN, iv_size, nullptr) != 1)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;
     }
 
     if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const quint8*>(key.data()),
                           nullptr, cipherMode(mode)) != 1)
     {
-        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return nullptr;
     }
 

@@ -50,7 +50,7 @@ ScopedWow64FsRedirection::ScopedWow64FsRedirection()
     BOOL wow64 = FALSE;
     if (!IsWow64Process(GetCurrentProcess(), &wow64))
     {
-        PLOG(LS_ERROR) << "IsWow64Process failed";
+        PLOG(ERROR) << "IsWow64Process failed";
         return;
     }
 
@@ -65,7 +65,7 @@ ScopedWow64FsRedirection::ScopedWow64FsRedirection()
 
     if (!Wow64DisableWow64FsRedirection(&old_value_))
     {
-        PLOG(LS_ERROR) << "Wow64DisableWow64FsRedirection failed";
+        PLOG(ERROR) << "Wow64DisableWow64FsRedirection failed";
         return;
     }
 
@@ -80,7 +80,7 @@ ScopedWow64FsRedirection::~ScopedWow64FsRedirection()
     {
         if (!Wow64RevertWow64FsRedirection(old_value_))
         {
-            PLOG(LS_ERROR) << "Wow64RevertWow64FsRedirection";
+            PLOG(ERROR) << "Wow64RevertWow64FsRedirection";
         }
     }
 }
@@ -96,7 +96,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
     ScopedWow64FsRedirection wow64_fs_redirection;
     if (!wow64_fs_redirection.isSucceeded())
     {
-        LOG(LS_ERROR) << "Failed to disable file system redirection";
+        LOG(ERROR) << "Failed to disable file system redirection";
         return false;
     }
 
@@ -133,7 +133,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
                         &startup_info,
                         &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessW failed";
+        PLOG(ERROR) << "CreateProcessW failed";
         return false;
     }
 
@@ -148,24 +148,24 @@ bool SafeModeUtil::setSafeMode(bool enable)
             break;
 
         case WAIT_TIMEOUT:
-            LOG(LS_ERROR) << "Process did not complete its work within the specified time";
+            LOG(ERROR) << "Process did not complete its work within the specified time";
             return false;
 
         default:
-            LOG(LS_ERROR) << "An error occurred while waiting for the process to complete:" << ret;
+            LOG(ERROR) << "An error occurred while waiting for the process to complete:" << ret;
             return false;
     }
 
     DWORD exit_code = 0;
     if (!GetExitCodeProcess(process_info.hProcess, &exit_code))
     {
-        PLOG(LS_ERROR) << "GetExitCodeProcess failed";
+        PLOG(ERROR) << "GetExitCodeProcess failed";
         return false;
     }
 
     if (exit_code != 0)
     {
-        LOG(LS_ERROR) << "Process ended with exit code:" << exit_code;
+        LOG(ERROR) << "Process ended with exit code:" << exit_code;
         return false;
     }
 
@@ -185,15 +185,15 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
         LONG status = key.create(HKEY_LOCAL_MACHINE, key_path, KEY_READ | KEY_WRITE);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "create failed:" << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(ERROR) << "create failed:" << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
 
         status = key.writeValue("", "Service");
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "writeValue failed:"
-                          << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(ERROR) << "writeValue failed:"
+                       << base::SystemError::toString(static_cast<ULONG>(status));
         }
     }
     else
@@ -207,8 +207,8 @@ bool SafeModeUtil::setSafeModeService(const QString& service_name, bool enable)
 
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "RegDeleteTreeW failed:"
-                          << base::SystemError::toString(static_cast<ULONG>(status));
+            LOG(ERROR) << "RegDeleteTreeW failed:"
+                       << base::SystemError::toString(static_cast<ULONG>(status));
             return false;
         }
     }

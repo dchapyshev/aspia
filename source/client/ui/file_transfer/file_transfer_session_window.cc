@@ -38,7 +38,7 @@ FileTransferSessionWindow::FileTransferSessionWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
       ui(std::make_unique<Ui::FileTransferSessionWindow>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
 
@@ -57,13 +57,13 @@ FileTransferSessionWindow::FileTransferSessionWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FileTransferSessionWindow::~FileTransferSessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client* FileTransferSessionWindow::createClient()
 {
-    LOG(LS_INFO) << "Create client";
+    LOG(INFO) << "Create client";
 
     ClientFileTransfer* client = new ClientFileTransfer();
 
@@ -111,7 +111,7 @@ Client* FileTransferSessionWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onShowWindow()
 {
-    LOG(LS_INFO) << "Show window";
+    LOG(INFO) << "Show window";
     show();
     activateWindow();
     refresh();
@@ -120,7 +120,7 @@ void FileTransferSessionWindow::onShowWindow()
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
-    LOG(LS_ERROR) << "Session error:" << error_code;
+    LOG(ERROR) << "Session error:" << error_code;
     QMessageBox::warning(this,
                          tr("Warning"),
                          tr("Session error: %1").arg(fileErrorToString(error_code)),
@@ -240,17 +240,17 @@ void FileTransferSessionWindow::onInternalReset()
 //--------------------------------------------------------------------------------------------------
 void FileTransferSessionWindow::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event detected";
+    LOG(INFO) << "Close event detected";
 
     if (transfer_dialog_)
     {
-        LOG(LS_INFO) << "Stopping transfer dialog";
+        LOG(INFO) << "Stopping transfer dialog";
         transfer_dialog_->stop();
     }
 
     if (remove_dialog_)
     {
-        LOG(LS_INFO) << "Stopping remove dialog";
+        LOG(INFO) << "Stopping remove dialog";
         remove_dialog_->stop();
     }
 
@@ -436,7 +436,7 @@ void FileTransferSessionWindow::onPathChanged(FilePanel* sender, const QString& 
 void FileTransferSessionWindow::initPanel(
     common::FileTask::Target target, const QString& title, const QString& mime_type, FilePanel* panel)
 {
-    LOG(LS_INFO) << "Init file manager panel (target=" << static_cast<int>(target) << ")";
+    LOG(INFO) << "Init file manager panel (target=" << static_cast<int>(target) << ")";
 
     panel->setPanelName(title);
     panel->setMimeType(mime_type);

@@ -104,7 +104,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     : QDialog(parent),
       ui(new Ui::AboutDialog())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     ui->label_name->setText(application_name);
@@ -221,13 +221,13 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     connect(ui->push_button_donate, &QPushButton::clicked, this, []()
     {
-        LOG(LS_INFO) << "[ACTION] Donate button clicked";
+        LOG(INFO) << "[ACTION] Donate button clicked";
         QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
     });
 
     connect(ui->push_button_close, &QPushButton::clicked, this, [this]()
     {
-        LOG(LS_INFO) << "[ACTION] Close button clicked";
+        LOG(INFO) << "[ACTION] Close button clicked";
         close();
     });
 }
@@ -235,13 +235,13 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 AboutDialog::~AboutDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void AboutDialog::onServiceContextMenu(const QPoint& pos)
 {
-    LOG(LS_INFO) << "[ACTION] Service context menu";
+    LOG(INFO) << "[ACTION] Service context menu";
 
     QMenu menu;
 
@@ -249,7 +249,7 @@ void AboutDialog::onServiceContextMenu(const QPoint& pos)
 
     if (menu.exec(ui->list_service->viewport()->mapToGlobal(pos)) == save_action)
     {
-        LOG(LS_INFO) << "[ACTION] Save action";
+        LOG(INFO) << "[ACTION] Save action";
 
         QString selected_filter;
         QString file_path = QFileDialog::getSaveFileName(this,
@@ -259,16 +259,16 @@ void AboutDialog::onServiceContextMenu(const QPoint& pos)
                                                          &selected_filter);
         if (file_path.isEmpty() || selected_filter.isEmpty())
         {
-            LOG(LS_INFO) << "File path not selected";
+            LOG(INFO) << "File path not selected";
             return;
         }
 
-        LOG(LS_INFO) << "Selected file path:" << file_path.toStdString();
+        LOG(INFO) << "Selected file path:" << file_path.toStdString();
 
         QFile file(file_path);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            LOG(LS_ERROR) << "Unable to open file:" << file.errorString().toStdString();
+            LOG(ERROR) << "Unable to open file:" << file.errorString().toStdString();
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Could not open file for writing."),

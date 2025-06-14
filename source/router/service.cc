@@ -27,37 +27,37 @@ namespace router {
 Service::Service(QObject* parent)
     : base::Service(kServiceName, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
-    LOG(LS_INFO) << "Service start...";
+    LOG(INFO) << "Service start...";
 
     server_ = new Server(this);
     if (!server_->start())
     {
-        LOG(LS_ERROR) << "Unable to start server. Service not started";
+        LOG(ERROR) << "Unable to start server. Service not started";
         QCoreApplication::quit();
         return;
     }
 
-    LOG(LS_INFO) << "Service started";
+    LOG(INFO) << "Service started";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
-    LOG(LS_INFO) << "Service stop...";
+    LOG(INFO) << "Service stop...";
     delete server_;
-    LOG(LS_INFO) << "Service stopped";
+    LOG(INFO) << "Service stopped";
 }
 
 #if defined(Q_OS_WINDOWS)

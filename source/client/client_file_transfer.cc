@@ -28,20 +28,20 @@ ClientFileTransfer::ClientFileTransfer(QObject* parent)
     : Client(parent),
       local_worker_(new common::FileWorker(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     qRegisterMetaType<common::FileTask>();
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::~ClientFileTransfer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionStarted()
 {
-    LOG(LS_INFO) << "File transfer session started";
+    LOG(INFO) << "File transfer session started";
 
     local_task_factory_ = new common::FileTaskFactory(common::FileTask::Target::LOCAL, this);
 
@@ -61,13 +61,13 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &reply))
     {
-        LOG(LS_ERROR) << "Invalid message from host";
+        LOG(ERROR) << "Invalid message from host";
         return;
     }
 
     if (reply.error_code() == proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER)
     {
-        LOG(LS_INFO) << "No logged in user on host side";
+        LOG(INFO) << "No logged in user on host side";
         emit sig_errorOccurred(reply.error_code());
     }
     else if (!remote_task_queue_.isEmpty())

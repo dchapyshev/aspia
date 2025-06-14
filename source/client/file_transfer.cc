@@ -105,7 +105,7 @@ FileTransfer::FileTransfer(Type type,
       cancel_timer_(new QTimer(this)),
       speed_update_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(speed_update_timer_, &QTimer::timeout, this, &FileTransfer::doUpdateSpeed);
 
@@ -119,13 +119,13 @@ FileTransfer::FileTransfer(Type type,
 //--------------------------------------------------------------------------------------------------
 FileTransfer::~FileTransfer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::start()
 {
-    LOG(LS_INFO) << "File transfer start";
+    LOG(INFO) << "File transfer start";
 
     common::FileTaskFactory* task_factory_local =
         new common::FileTaskFactory(common::FileTask::Target::LOCAL);
@@ -192,7 +192,7 @@ void FileTransfer::start()
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::stop()
 {
-    LOG(LS_INFO) << "File transfer stop";
+    LOG(INFO) << "File transfer stop";
 
     if (queue_builder_)
     {
@@ -209,8 +209,8 @@ void FileTransfer::stop()
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action action)
 {
-    LOG(LS_INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
-                 << static_cast<int>(action);
+    LOG(INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
+              << static_cast<int>(action);
     actions_[error_type] = action;
 }
 
@@ -348,7 +348,7 @@ void FileTransfer::sourceReply(
 {
     if (tasks_.empty())
     {
-        LOG(LS_INFO) << "No more tasks";
+        LOG(INFO) << "No more tasks";
         return;
     }
 
@@ -383,8 +383,8 @@ void FileTransfer::sourceReply(
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::setAction(Error::Type error_type, Error::Action action)
 {
-    LOG(LS_INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
-                 << static_cast<int>(action);
+    LOG(INFO) << "Set action for error" << static_cast<int>(error_type) << ":"
+              << static_cast<int>(action);
 
     switch (action)
     {
@@ -496,7 +496,7 @@ void FileTransfer::onError(Error::Type type, proto::file_transfer::ErrorCode cod
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "File transfer finished (from:" << location.toString() << ")";
+    LOG(INFO) << "File transfer finished (from:" << location.toString() << ")";
 
     speed_update_timer_->stop();
     emit sig_finished();

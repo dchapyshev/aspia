@@ -40,7 +40,7 @@ Authenticator::Authenticator(QObject* parent)
     : QObject(parent),
       timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, [this]()
@@ -52,7 +52,7 @@ Authenticator::Authenticator(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Authenticator::~Authenticator()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,14 +60,14 @@ void Authenticator::start(TcpChannel* tcp_channel)
 {
     if (state() != State::STOPPED)
     {
-        LOG(LS_ERROR) << "Trying to start an already running authenticator";
+        LOG(ERROR) << "Trying to start an already running authenticator";
         return;
     }
 
     tcp_channel_ = tcp_channel;
     DCHECK(tcp_channel_);
 
-    LOG(LS_INFO) << "Authentication started for:" << tcp_channel_->peerAddress();
+    LOG(INFO) << "Authentication started for:" << tcp_channel_->peerAddress();
     state_ = State::PENDING;
 
     // If authentication does not complete within the specified time interval, an error will be
@@ -166,8 +166,8 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    LOG(LS_INFO) << "Authenticator finished with code:" << errorToString(error_code)
-                 << " (" << location.toString() << ")";
+    LOG(INFO) << "Authenticator finished with code:" << errorToString(error_code)
+              << "(" << location.toString() << ")";
     emit sig_finished(error_code);
 }
 
@@ -204,11 +204,11 @@ void Authenticator::setPeerDisplayName(const QString& display_name)
 //--------------------------------------------------------------------------------------------------
 bool Authenticator::onSessionKeyChanged()
 {
-    LOG(LS_INFO) << "Session key changed";
+    LOG(INFO) << "Session key changed";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "No valid TCP channel";
+        LOG(ERROR) << "No valid TCP channel";
         return false;
     }
 
@@ -234,13 +234,13 @@ bool Authenticator::onSessionKeyChanged()
 
     if (!encryptor)
     {
-        LOG(LS_ERROR) << "Invalid encryptor";
+        LOG(ERROR) << "Invalid encryptor";
         return false;
     }
 
     if (!decryptor)
     {
-        LOG(LS_ERROR) << "Invalid decryptor";
+        LOG(ERROR) << "Invalid decryptor";
         return false;
     }
 
@@ -252,7 +252,7 @@ bool Authenticator::onSessionKeyChanged()
 //--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error:" << NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Network error:" << NetworkChannel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 

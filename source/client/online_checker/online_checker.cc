@@ -28,7 +28,7 @@ OnlineChecker::OnlineChecker(QObject* parent)
     : QObject(parent),
       io_thread_(base::Thread::AsioDispatcher)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(&io_thread_, &base::Thread::started, this, &OnlineChecker::onBeforeThreadRunning,
             Qt::DirectConnection);
@@ -39,16 +39,16 @@ OnlineChecker::OnlineChecker(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::~OnlineChecker()
 {
-    LOG(LS_INFO) << "Dtor BEGIN";
+    LOG(INFO) << "Dtor BEGIN";
     io_thread_.stop();
-    LOG(LS_INFO) << "Dtor END";
+    LOG(INFO) << "Dtor END";
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
                                    const ComputerList& computers)
 {
-    LOG(LS_INFO) << "Start online checker (total computers:" << computers.size() << ")";
+    LOG(INFO) << "Start online checker (total computers:" << computers.size() << ")";
 
     router_config_ = router_config;
 
@@ -79,13 +79,13 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onBeforeThreadRunning()
 {
-    LOG(LS_INFO) << "Starting new I/O thread";
+    LOG(INFO) << "Starting new I/O thread";
 
     if (router_config_.has_value())
     {
         if (!router_computers_.empty())
         {
-            LOG(LS_INFO) << "Computers for ROUTER checking:" << router_computers_.size();
+            LOG(INFO) << "Computers for ROUTER checking:" << router_computers_.size();
 
             router_checker_ = new OnlineCheckerRouter(*router_config_);
 
@@ -100,19 +100,19 @@ void OnlineChecker::onBeforeThreadRunning()
         }
         else
         {
-            LOG(LS_INFO) << "Computer list for ROUTER is empty";
+            LOG(INFO) << "Computer list for ROUTER is empty";
             router_finished_ = true;
         }
     }
     else
     {
-        LOG(LS_INFO) << "No router config";
+        LOG(INFO) << "No router config";
         router_finished_ = true;
     }
 
     if (!direct_computers_.empty())
     {
-        LOG(LS_INFO) << "Computers for DIRECT checking:" << direct_computers_.size();
+        LOG(INFO) << "Computers for DIRECT checking:" << direct_computers_.size();
 
         direct_checker_ = new OnlineCheckerDirect();
 
@@ -127,7 +127,7 @@ void OnlineChecker::onBeforeThreadRunning()
     }
     else
     {
-        LOG(LS_INFO) << "Computer list for DIRECT is empty";
+        LOG(INFO) << "Computer list for DIRECT is empty";
         direct_finished_ = true;
     }
 }
@@ -135,12 +135,12 @@ void OnlineChecker::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onAfterThreadRunning()
 {
-    LOG(LS_INFO) << "I/O thread stopping...";
+    LOG(INFO) << "I/O thread stopping...";
 
     delete direct_checker_;
     delete router_checker_;
 
-    LOG(LS_INFO) << "I/O thread stopped";
+    LOG(INFO) << "I/O thread stopped";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,8 +154,8 @@ void OnlineChecker::onDirectCheckerFinished()
 {
     direct_finished_ = true;
 
-    LOG(LS_INFO) << "DIRECT checker finished (r=" << router_finished_
-                 << ", d=" << direct_finished_ << ")";
+    LOG(INFO) << "DIRECT checker finished (r=" << router_finished_
+              << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();
@@ -172,8 +172,8 @@ void OnlineChecker::onRouterCheckerFinished()
 {
     router_finished_ = true;
 
-    LOG(LS_INFO) << "ROUTER checker finished (r=" << router_finished_
-                 << ", d=" << direct_finished_ << ")";
+    LOG(INFO) << "ROUTER checker finished (r=" << router_finished_
+              << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();

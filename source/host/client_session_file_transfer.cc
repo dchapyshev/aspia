@@ -56,7 +56,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
     base::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+        PLOG(ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -69,7 +69,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
                              sizeof(elevation_type),
                              &returned_length))
     {
-        PLOG(LS_ERROR) << "GetTokenInformation failed";
+        PLOG(ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -87,7 +87,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
                                      sizeof(linked_token_info),
                                      &returned_length))
             {
-                PLOG(LS_ERROR) << "GetTokenInformation failed";
+                PLOG(ERROR) << "GetTokenInformation failed";
                 return false;
             }
 
@@ -122,7 +122,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -141,10 +141,10 @@ bool startProcessWithToken(HANDLE token,
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        PLOG(ERROR) << "CreateProcessAsUserW failed";
         if (!DestroyEnvironmentBlock(environment))
         {
-            PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
         }
         return false;
     }
@@ -154,7 +154,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -177,12 +177,12 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
     : ClientSession(proto::peer::SESSION_TYPE_FILE_TRANSFER, channel, parent),
       attach_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     attach_timer_->setSingleShot(true);
     connect(attach_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_ERROR) << "Timeout at the start of the session process";
+        LOG(ERROR) << "Timeout at the start of the session process";
         onError(FROM_HERE);
     });
 }
@@ -190,7 +190,7 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
 //--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ void ClientSessionFileTransfer::onStarted()
 {
     QString channel_id = base::IpcServer::createUniqueId();
 
-    LOG(LS_INFO) << "Starting ipc channel for file transfer";
+    LOG(INFO) << "Starting ipc channel for file transfer";
 
     ipc_server_ = new base::IpcServer(this);
 
@@ -209,44 +209,44 @@ void ClientSessionFileTransfer::onStarted()
 
     if (!ipc_server_->start(channel_id))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server (channel_id:" << channel_id << ")";
+        LOG(ERROR) << "Failed to start IPC server (channel_id:" << channel_id << ")";
         onError(FROM_HERE);
         return;
     }
 
-    LOG(LS_INFO) << "IPC channel started";
+    LOG(INFO) << "IPC channel started";
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle session_token;
     if (!createLoggedOnUserToken(sessionId(), &session_token))
     {
-        LOG(LS_ERROR) << "createSessionToken failed";
+        LOG(ERROR) << "createSessionToken failed";
         return;
     }
 
     base::SessionInfo session_info(sessionId());
     if (!session_info.isValid())
     {
-        LOG(LS_ERROR) << "Unable to get session info";
+        LOG(ERROR) << "Unable to get session info";
         onError(FROM_HERE);
         return;
     }
 
     if (session_info.isUserLocked())
     {
-        LOG(LS_ERROR) << "User session is locked";
+        LOG(ERROR) << "User session is locked";
         return;
     }
 
     QString command_line = agentFilePath() + " --channel_id " + channel_id;
 
-    LOG(LS_INFO) << "Starting agent process with command line:" << command_line;
+    LOG(INFO) << "Starting agent process with command line:" << command_line;
 
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(LS_ERROR) << "startProcessWithToken failed";
+        LOG(ERROR) << "startProcessWithToken failed";
         onError(FROM_HERE);
         return;
     }
@@ -255,14 +255,14 @@ void ClientSessionFileTransfer::onStarted()
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(LS_ERROR) << "No X11 sessions";
+        LOG(ERROR) << "No X11 sessions";
         return;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_ERROR) << "Unable to open pipe";
+        LOG(ERROR) << "Unable to open pipe";
         onError(FROM_HERE);
         return;
     }
@@ -286,7 +286,7 @@ void ClientSessionFileTransfer::onStarted()
                         agentFilePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
-        LOG(LS_INFO) << "Start file transfer session agent:" << command_line;
+        LOG(INFO) << "Start file transfer session agent:" << command_line;
 
         char sh_name[] = "sh";
         char sh_arguments[] = "-c";
@@ -295,7 +295,7 @@ void ClientSessionFileTransfer::onStarted()
         pid_t pid;
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
-            LOG(LS_ERROR) << "Unable to start process";
+            LOG(ERROR) << "Unable to start process";
             onError(FROM_HERE);
             return;
         }
@@ -306,7 +306,7 @@ void ClientSessionFileTransfer::onStarted()
     return;
 #endif
 
-    LOG(LS_INFO) << "Wait for starting agent process";
+    LOG(INFO) << "Wait for starting agent process";
     has_logged_on_user_ = true;
 
     attach_timer_->start(std::chrono::seconds(10));
@@ -350,17 +350,17 @@ void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onIpcNewConnection()
 {
-    LOG(LS_INFO) << "IPC channel for file transfer session is connected";
+    LOG(INFO) << "IPC channel for file transfer session is connected";
 
     if (!ipc_server_)
     {
-        LOG(LS_ERROR) << "No IPC server instance!";
+        LOG(ERROR) << "No IPC server instance!";
         return;
     }
 
     if (!ipc_server_->hasPendingConnections())
     {
-        LOG(LS_ERROR) << "No pending connections in IPC server";
+        LOG(ERROR) << "No pending connections in IPC server";
         return;
     }
 
@@ -394,7 +394,7 @@ void ClientSessionFileTransfer::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onError(const base::Location& location)
 {
-    LOG(LS_ERROR) << "Error occurred (from:" << location.toString() << ")";
+    LOG(ERROR) << "Error occurred (from:" << location.toString() << ")";
     stop();
 }
 

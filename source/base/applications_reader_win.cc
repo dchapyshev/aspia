@@ -44,8 +44,8 @@ bool addApplication(
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, access | KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to open registry key:"
-                      << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(ERROR) << "Unable to open registry key:"
+                   << SystemError(static_cast<DWORD>(status)).toString();
         return false;
     }
 

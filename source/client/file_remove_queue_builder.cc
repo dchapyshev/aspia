@@ -28,7 +28,7 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(common::FileTask::Target target, 
     : QObject(parent),
       task_factory_(std::make_unique<common::FileTaskFactory>(target))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(task_factory_.get(), &common::FileTaskFactory::sig_taskDone,
             this, &FileRemoveQueueBuilder::onTaskDone);
@@ -37,14 +37,14 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(common::FileTask::Target target, 
 //--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     task_factory_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::start(const FileRemover::TaskList& items)
 {
-    LOG(LS_INFO) << "Start remove queue builder";
+    LOG(INFO) << "Start remove queue builder";
     pending_tasks_ = items;
     doPendingTasks();
 }
@@ -107,7 +107,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
 //--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onAborted(proto::file_transfer::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Aborted:" << error_code;
+    LOG(INFO) << "Aborted:" << error_code;
 
     pending_tasks_.clear();
     tasks_.clear();

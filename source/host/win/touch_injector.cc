@@ -117,7 +117,7 @@ TouchInjector::TouchInjector()
     user32_library_ = LoadLibraryExW(L"user32.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!user32_library_)
     {
-        PLOG(LS_ERROR) << "LoadLibraryExW failed";
+        PLOG(ERROR) << "LoadLibraryExW failed";
         return;
     }
 
@@ -125,7 +125,7 @@ TouchInjector::TouchInjector()
         GetProcAddress(user32_library_, "InitializeTouchInjection"));
     if (!initialize_touch_injection_)
     {
-        PLOG(LS_ERROR) << "GetProcAddress failed";
+        PLOG(ERROR) << "GetProcAddress failed";
         return;
     }
 
@@ -133,13 +133,13 @@ TouchInjector::TouchInjector()
         GetProcAddress(user32_library_, "InjectTouchInput"));
     if (!inject_touch_input_)
     {
-        PLOG(LS_ERROR) << "GetProcAddress failed";
+        PLOG(ERROR) << "GetProcAddress failed";
         return;
     }
 
     if (!initialize_touch_injection_(kMaxSimultaneousTouchCount, OWN_TOUCH_FEEDBACK_DEFAULT))
     {
-        PLOG(LS_ERROR) << "InitializeTouchInjection failed";
+        PLOG(ERROR) << "InitializeTouchInjection failed";
         return;
     }
 
@@ -206,7 +206,7 @@ void TouchInjector::addNewTouchPoints(const proto::desktop::TouchEvent& event)
 
     if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
-        PLOG(LS_ERROR) << "Failed to inject a touch start event";
+        PLOG(ERROR) << "Failed to inject a touch start event";
     }
 }
 
@@ -231,7 +231,7 @@ void TouchInjector::moveTouchPoints(const proto::desktop::TouchEvent& event)
 
     if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
-        PLOG(LS_ERROR) << "Failed to inject a touch move event";
+        PLOG(ERROR) << "Failed to inject a touch move event";
     }
 }
 
@@ -254,7 +254,7 @@ void TouchInjector::endTouchPoints(const proto::desktop::TouchEvent& event)
 
     if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
-        PLOG(LS_ERROR) << "Failed to inject a touch end event";
+        PLOG(ERROR) << "Failed to inject a touch end event";
     }
 }
 
@@ -278,7 +278,7 @@ void TouchInjector::cancelTouchPoints(const proto::desktop::TouchEvent& event)
 
     if (inject_touch_input_(static_cast<UINT32>(touches.size()), touches.data()) == 0)
     {
-        PLOG(LS_ERROR) << "Failed to inject a touch cancel event";
+        PLOG(ERROR) << "Failed to inject a touch cancel event";
     }
 }
 

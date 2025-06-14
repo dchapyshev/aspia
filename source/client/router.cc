@@ -31,19 +31,19 @@ Router::Router(QObject* parent)
       timeout_timer_(new QTimer(this)),
       reconnect_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Reconnecting to router";
+        LOG(INFO) << "Reconnecting to router";
         connectToRouter(router_address_, router_port_);
     });
 
     timeout_timer_->setSingleShot(true);
     connect(timeout_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Reconnect timeout";
+        LOG(INFO) << "Reconnect timeout";
         emit sig_waitForRouterTimeout();
 
         reconnect_timer_->stop();
@@ -56,7 +56,7 @@ Router::Router(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Router::~Router()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void Router::connectToRouter(const QString& address, quint16 port)
     router_address_ = address;
     router_port_ = port;
 
-    LOG(LS_INFO) << "Connecting to router" << router_address_ << ":" << router_port_;
+    LOG(INFO) << "Connecting to router" << router_address_ << ":" << router_port_;
 
     emit sig_connecting();
 
@@ -101,11 +101,11 @@ void Router::connectToRouter(const QString& address, quint16 port)
 //--------------------------------------------------------------------------------------------------
 void Router::refreshSessionList()
 {
-    LOG(LS_INFO) << "Sending session list request";
+    LOG(INFO) << "Sending session list request";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -117,11 +117,11 @@ void Router::refreshSessionList()
 //--------------------------------------------------------------------------------------------------
 void Router::stopSession(qint64 session_id)
 {
-    LOG(LS_INFO) << "Sending disconnect request (session_id:" << session_id << ")";
+    LOG(INFO) << "Sending disconnect request (session_id:" << session_id << ")";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -137,11 +137,11 @@ void Router::stopSession(qint64 session_id)
 //--------------------------------------------------------------------------------------------------
 void Router::refreshUserList()
 {
-    LOG(LS_INFO) << "Sending user list request";
+    LOG(INFO) << "Sending user list request";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -153,12 +153,12 @@ void Router::refreshUserList()
 //--------------------------------------------------------------------------------------------------
 void Router::addUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "Sending user add request (username:" << user.name()
-                 << ", entry_id:" << user.entry_id() << ")";
+    LOG(INFO) << "Sending user add request (username:" << user.name()
+              << ", entry_id:" << user.entry_id() << ")";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -174,12 +174,12 @@ void Router::addUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::modifyUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "Sending user modify request (username:" << user.name()
-                 << ", entry_id:" << user.entry_id() << ")";
+    LOG(INFO) << "Sending user modify request (username:" << user.name()
+              << ", entry_id:" << user.entry_id() << ")";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -195,11 +195,11 @@ void Router::modifyUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::deleteUser(qint64 entry_id)
 {
-    LOG(LS_INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
+    LOG(INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -215,12 +215,12 @@ void Router::deleteUser(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session_id)
 {
-    LOG(LS_INFO) << "Sending disconnect for peer session:" << peer_session_id
-                 << "(relay:" << relay_session_id << ")";
+    LOG(INFO) << "Sending disconnect for peer session:" << peer_session_id
+              << "(relay:" << relay_session_id << ")";
 
     if (!tcp_channel_)
     {
-        LOG(LS_ERROR) << "Tcp channel not connected yet";
+        LOG(ERROR) << "Tcp channel not connected yet";
         return;
     }
 
@@ -237,7 +237,7 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
 //--------------------------------------------------------------------------------------------------
 void Router::onTcpConnected()
 {
-    LOG(LS_INFO) << "Router connected";
+    LOG(INFO) << "Router connected";
 
     reconnect_in_progress_ = false;
     reconnect_timer_->stop();
@@ -254,7 +254,7 @@ void Router::onTcpConnected()
     {
         if (error_code == base::Authenticator::ErrorCode::SUCCESS)
         {
-            LOG(LS_INFO) << "Successful authentication";
+            LOG(INFO) << "Successful authentication";
 
             connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
                     this, &Router::onTcpDisconnected);
@@ -266,8 +266,8 @@ void Router::onTcpConnected()
 
             if (router_version > client_version)
             {
-                LOG(LS_ERROR) << "Version mismatch (router:" << router_version.toString()
-                              << "client:" << client_version.toString();
+                LOG(ERROR) << "Version mismatch (router:" << router_version.toString()
+                           << "client:" << client_version.toString();
                 emit sig_versionMismatch(router_version, client_version);
             }
             else
@@ -281,8 +281,7 @@ void Router::onTcpConnected()
         }
         else
         {
-            LOG(LS_INFO) << "Failed authentication: "
-                         << base::Authenticator::errorToString(error_code);
+            LOG(INFO) << "Failed authentication:" << base::Authenticator::errorToString(error_code);
             emit sig_accessDenied(error_code);
         }
 
@@ -297,12 +296,12 @@ void Router::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Router disconnected:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Router disconnected:" << base::NetworkChannel::errorToString(error_code);
     emit sig_disconnected(error_code);
 
     if (isAutoReconnect())
     {
-        LOG(LS_INFO) << "Reconnect to router enabled";
+        LOG(INFO) << "Reconnect to router enabled";
 
         timeout_timer_->start(std::chrono::minutes(5));
         reconnect_in_progress_ = true;
@@ -326,34 +325,33 @@ void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buf
 
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Failed to read the message from the router";
+        LOG(ERROR) << "Failed to read the message from the router";
         return;
     }
 
     if (message.has_session_list())
     {
-        LOG(LS_INFO) << "Session list received";
+        LOG(INFO) << "Session list received";
         emit sig_sessionList(std::shared_ptr<proto::router::SessionList>(message.release_session_list()));
     }
     else if (message.has_session_result())
     {
-        LOG(LS_INFO) << "Session result received with code:"
-                     << message.session_result().error_code();
+        LOG(INFO) << "Session result received with code:" << message.session_result().error_code();
         emit sig_sessionResult(std::shared_ptr<proto::router::SessionResult>(message.release_session_result()));
     }
     else if (message.has_user_list())
     {
-        LOG(LS_INFO) << "User list received";
+        LOG(INFO) << "User list received";
         emit sig_userList(std::shared_ptr<proto::router::UserList>(message.release_user_list()));
     }
     else if (message.has_user_result())
     {
-        LOG(LS_INFO) << "User result received with code:" << message.user_result().error_code();
+        LOG(INFO) << "User result received with code:" << message.user_result().error_code();
         emit sig_userResult(std::shared_ptr<proto::router::UserResult>(message.release_user_result()));
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown message type from the router";
+        LOG(ERROR) << "Unknown message type from the router";
     }
 }
 

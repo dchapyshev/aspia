@@ -61,7 +61,7 @@ GenericHash::GenericHash(Type type)
             break;
 
         default:
-            LOG(LS_FATAL) << "Unknown hashing algorithm";
+            LOG(FATAL) << "Unknown hashing algorithm";
             return;
     }
 

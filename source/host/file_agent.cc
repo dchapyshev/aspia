@@ -30,25 +30,25 @@ FileAgent::FileAgent(QObject* parent)
     : QObject(parent),
       worker_(new common::FileWorker(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 FileAgent::~FileAgent()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileAgent::start(const QString& channel_id)
 {
-    LOG(LS_INFO) << "Starting (channel_id=" << channel_id.data() << ")";
+    LOG(INFO) << "Starting (channel_id=" << channel_id.data() << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
     if (!ipc_channel_->connectTo(channel_id))
     {
-        LOG(LS_ERROR) << "Connection failed";
+        LOG(ERROR) << "Connection failed";
         return;
     }
 
@@ -61,7 +61,7 @@ void FileAgent::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void FileAgent::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "IPC channel disconnected";
+    LOG(INFO) << "IPC channel disconnected";
     QCoreApplication::quit();
 }
 
@@ -70,7 +70,7 @@ void FileAgent::onIpcMessageReceived(const QByteArray& buffer)
 {
     if (!request_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Unable to parse message";
+        LOG(ERROR) << "Unable to parse message";
         return;
     }
 

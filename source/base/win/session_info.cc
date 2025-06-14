@@ -35,7 +35,7 @@ SessionInfo::SessionInfo(SessionId session_id)
                                      reinterpret_cast<LPWSTR*>(info.recieve()),
                                      &bytes_returned))
     {
-        PLOG(LS_ERROR) << "WTSQuerySessionInformationW failed";
+        PLOG(ERROR) << "WTSQuerySessionInformationW failed";
         return;
     }
 
@@ -139,13 +139,13 @@ QString SessionInfo::clientName() const
     if (!WTSQuerySessionInformationW(
         WTS_CURRENT_SERVER_HANDLE, sessionId(), WTSClientName, &client_name, &size))
     {
-        LOG(LS_ERROR) << "WTSQuerySessionInformationW() failed:" << ::GetLastError();
+        LOG(ERROR) << "WTSQuerySessionInformationW() failed:" << ::GetLastError();
         return QString();
     }
 
     if (!client_name)
     {
-        LOG(LS_ERROR) << "Invalid client name";
+        LOG(ERROR) << "Invalid client name";
         return QString();
     }
 

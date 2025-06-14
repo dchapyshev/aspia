@@ -43,7 +43,7 @@ bool isValidRect(const RECT& rect)
 DxgiAdapterDuplicator::DxgiAdapterDuplicator(const D3dDevice& device)
     : device_(device)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ DxgiAdapterDuplicator::DxgiAdapterDuplicator(DxgiAdapterDuplicator&&) = default;
 //--------------------------------------------------------------------------------------------------
 DxgiAdapterDuplicator::~DxgiAdapterDuplicator()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -77,16 +77,15 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
         if (error.Error() == DXGI_ERROR_NOT_CURRENTLY_AVAILABLE)
         {
-            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns NOT_CURRENTLY_AVAILABLE. "
-                             "This may happen when running in session 0";
+            LOG(ERROR) << "IDXGIAdapter::EnumOutputs returns NOT_CURRENTLY_AVAILABLE. "
+                          "This may happen when running in session 0";
             break;
         }
 
         if (error.Error() != S_OK || !output)
         {
-            LOG(LS_ERROR) << "IDXGIAdapter::EnumOutputs returns an unexpected result"
-                          << error.ErrorMessage() << "with error code"
-                          << error.Error();
+            LOG(ERROR) << "IDXGIAdapter::EnumOutputs returns an unexpected result"
+                       << error.ErrorMessage() << "with error code" << error.Error();
             continue;
         }
 
@@ -101,15 +100,15 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
                 if (error.Error() != S_OK || !output1)
                 {
-                    LOG(LS_ERROR) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
-                                     "usually means the system does not support DirectX 11";
+                    LOG(ERROR) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
+                                  "usually means the system does not support DirectX 11";
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
                 DxgiOutputDuplicator duplicator(device_, output1, desc);
                 if (!duplicator.initialize())
                 {
-                    LOG(LS_ERROR) << "Failed to initialize DxgiOutputDuplicator on output" << i;
+                    LOG(ERROR) << "Failed to initialize DxgiOutputDuplicator on output" << i;
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
@@ -119,23 +118,23 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
             }
             else
             {
-                LOG(LS_ERROR) << (desc.AttachedToDesktop ? "Attached" : "Detached")
-                              << "output" << i << "("
-                              << desc.DesktopCoordinates.top << ","
-                              << desc.DesktopCoordinates.left << ") - ("
-                              << desc.DesktopCoordinates.bottom << ","
-                              << desc.DesktopCoordinates.right << ") is ignored";
+                LOG(ERROR) << (desc.AttachedToDesktop ? "Attached" : "Detached")
+                           << "output" << i << "("
+                           << desc.DesktopCoordinates.top << ","
+                           << desc.DesktopCoordinates.left << ") - ("
+                           << desc.DesktopCoordinates.bottom << ","
+                           << desc.DesktopCoordinates.right << ") is ignored";
             }
         }
         else
         {
-            LOG(LS_ERROR) << "Failed to get output description of device" << i << ", ignore";
+            LOG(ERROR) << "Failed to get output description of device" << i << ", ignore";
         }
     }
 
     if (duplicators_.empty())
     {
-        LOG(LS_ERROR) << "Cannot initialize any DxgiOutputDuplicator instance";
+        LOG(ERROR) << "Cannot initialize any DxgiOutputDuplicator instance";
     }
 
     return !duplicators_.empty() ? ErrorCode::SUCCESS : ErrorCode::GENERIC_ERROR;

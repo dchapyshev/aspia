@@ -37,7 +37,7 @@ OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config, QObj
     : QObject(parent),
       router_config_(router_config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     timer_.setSingleShot(true);
     connect(&timer_, &QTimer::timeout, this, [this]()
@@ -51,7 +51,7 @@ OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config, QObj
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerRouter::~OnlineCheckerRouter()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,12 +61,12 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 
     if (computers_.empty())
     {
-        LOG(LS_INFO) << "No computers in list";
+        LOG(INFO) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
 
-    LOG(LS_INFO) << "Connecting to router...";
+    LOG(INFO) << "Connecting to router...";
 
     tcp_channel_ = new base::TcpChannel(this);
 
@@ -78,7 +78,7 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpConnected()
 {
-    LOG(LS_INFO) << "Connection to the router is established";
+    LOG(INFO) << "Connection to the router is established";
 
     authenticator_ = new base::ClientAuthenticator(this);
 
@@ -105,8 +105,7 @@ void OnlineCheckerRouter::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed:"
-                          << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
             onFinished(FROM_HERE);
         }
 
@@ -121,8 +120,7 @@ void OnlineCheckerRouter::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::NetworkChannel::errorToString(error_code) << ")";
+    LOG(INFO) << "Connection to the router is lost (" << base::NetworkChannel::errorToString(error_code) << ")";
     onFinished(FROM_HERE);
 }
 
@@ -132,14 +130,14 @@ void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QB
     proto::router::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Invalid message from router";
+        LOG(ERROR) << "Invalid message from router";
         onFinished(FROM_HERE);
         return;
     }
 
     if (!message.has_host_status())
     {
-        LOG(LS_ERROR) << "HostStatus not present in message";
+        LOG(ERROR) << "HostStatus not present in message";
         onFinished(FROM_HERE);
         return;
     }
@@ -158,15 +156,15 @@ void OnlineCheckerRouter::checkNextComputer()
 {
     if (computers_.empty())
     {
-        LOG(LS_INFO) << "No more computers";
+        LOG(INFO) << "No more computers";
         onFinished(FROM_HERE);
         return;
     }
 
     const auto& computer = computers_.front();
 
-    LOG(LS_INFO) << "Checking status for host id" << computer.host_id
-                 << "(computer id:" << computer.computer_id << ")";
+    LOG(INFO) << "Checking status for host id" << computer.host_id
+              << "(computer id:" << computer.computer_id << ")";
 
     proto::router::PeerToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
@@ -176,7 +174,7 @@ void OnlineCheckerRouter::checkNextComputer()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "Finished (from:" << location.toString() << ")";
+    LOG(INFO) << "Finished (from:" << location.toString() << ")";
 
     if (tcp_channel_)
     {

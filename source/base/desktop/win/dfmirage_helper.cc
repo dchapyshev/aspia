@@ -68,13 +68,13 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
                                          &helper->device_name_,
                                          &helper->device_key_))
     {
-        LOG(LS_ERROR) << "Could not find dfmirage mirror driver";
+        LOG(ERROR) << "Could not find dfmirage mirror driver";
         return nullptr;
     }
 
     if (!MirrorHelper::attachToDesktop(helper->device_key_, true))
     {
-        LOG(LS_ERROR) << "Could not attach mirror driver to desktop";
+        LOG(ERROR) << "Could not attach mirror driver to desktop";
         return nullptr;
     }
 
@@ -82,7 +82,7 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 
     if (!helper->update(true))
     {
-        LOG(LS_ERROR) << "Could not load mirror driver";
+        LOG(ERROR) << "Could not load mirror driver";
         return nullptr;
     }
 
@@ -90,13 +90,13 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 
     if (!helper->mapMemory(true))
     {
-        LOG(LS_ERROR) << "Could not map memory for mirror driver";
+        LOG(ERROR) << "Could not map memory for mirror driver";
         return nullptr;
     }
 
     helper->is_mapped_ = true;
 
-    LOG(LS_INFO) << "DFMirage helper created with rect:" << screen_rect;
+    LOG(INFO) << "DFMirage helper created with rect:" << screen_rect;
     return helper;
 }
 
@@ -175,7 +175,7 @@ bool DFMirageHelper::update(bool load)
         CDS_UPDATEREGISTRY, nullptr);
     if (status < 0)
     {
-        LOG(LS_ERROR) << "ChangeDisplaySettingsExW failed:" << status;
+        LOG(ERROR) << "ChangeDisplaySettingsExW failed:" << status;
         return false;
     }
 
@@ -190,7 +190,7 @@ bool DFMirageHelper::mapMemory(bool map)
         driver_dc_.reset(CreateDCW(qUtf16Printable(device_name_), nullptr, nullptr, nullptr));
         if (!driver_dc_.isValid())
         {
-            PLOG(LS_ERROR) << "CreateDCW failed";
+            PLOG(ERROR) << "CreateDCW failed";
             return false;
         }
 
@@ -199,7 +199,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             reinterpret_cast<LPSTR>(&get_changes_buffer_));
         if (ret <= 0)
         {
-            LOG(LS_ERROR) << "ExtEscape failed:" << ret;
+            LOG(ERROR) << "ExtEscape failed:" << ret;
             return false;
         }
     }
@@ -211,7 +211,7 @@ bool DFMirageHelper::mapMemory(bool map)
                             0, nullptr);
         if (ret <= 0)
         {
-            LOG(LS_ERROR) << "ExtEscape failed:" << ret;
+            LOG(ERROR) << "ExtEscape failed:" << ret;
         }
 
         memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));

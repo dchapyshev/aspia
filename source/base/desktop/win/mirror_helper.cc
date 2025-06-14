@@ -70,8 +70,8 @@ bool MirrorHelper::attachToDesktop(const QString& key_path, bool attach)
                                   KEY_ALL_ACCESS | KEY_WOW64_64KEY);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to open registry key for device:"
-                      << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(ERROR) << "Unable to open registry key for device:"
+                   << base::SystemError::toString(static_cast<DWORD>(status));
         return false;
     }
 
@@ -86,7 +86,7 @@ bool MirrorHelper::attachToDesktop(const QString& key_path, bool attach)
         {
             if (attached != 0)
             {
-                LOG(LS_ERROR) << "Mirror driver is already attached by another application";
+                LOG(ERROR) << "Mirror driver is already attached by another application";
             }
         }
     }
@@ -94,8 +94,8 @@ bool MirrorHelper::attachToDesktop(const QString& key_path, bool attach)
     status = device_key.writeValue(kAttachToDesktop, static_cast<DWORD>(!!attach));
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to set value for registry key:"
-                      << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(ERROR) << "Unable to set value for registry key:"
+                   << base::SystemError::toString(static_cast<DWORD>(status));
         return false;
     }
 

@@ -41,7 +41,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -52,7 +52,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
+        PLOG(ERROR) << "DuplicateTokenEx failed";
         return false;
     }
 
@@ -69,7 +69,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
     ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -80,14 +80,14 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_SHUTDOWN_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
+        PLOG(ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the SE_SHUTDOWN_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+        PLOG(ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -107,21 +107,21 @@ bool PowerController::shutdown()
     ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
     ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
-        LOG(LS_ERROR) << "createPrivilegedToken failed";
+        LOG(ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
     ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_ERROR) << "loggedOnUser failed";
+        LOG(ERROR) << "loggedOnUser failed";
         return false;
     }
 
@@ -135,7 +135,7 @@ bool PowerController::shutdown()
                                               reason);
     if (!result)
     {
-        PLOG(LS_ERROR) << "InitiateSystemShutdownExW failed";
+        PLOG(ERROR) << "InitiateSystemShutdownExW failed";
     }
 
     return result;
@@ -151,21 +151,21 @@ bool PowerController::reboot()
     ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
     ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
     {
-        LOG(LS_ERROR) << "createPrivilegedToken failed";
+        LOG(ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
     ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_ERROR) << "loggedOnUser failed";
+        LOG(ERROR) << "loggedOnUser failed";
         return false;
     }
 
@@ -179,7 +179,7 @@ bool PowerController::reboot()
                                               reason);
     if (!result)
     {
-        PLOG(LS_ERROR) << "InitiateSystemShutdownExW failed";
+        PLOG(ERROR) << "InitiateSystemShutdownExW failed";
     }
 
     return result;
@@ -192,7 +192,7 @@ bool PowerController::logoff()
     DWORD session_id = base::kInvalidSessionId;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
+        PLOG(ERROR) << "ProcessIdToSessionId failed";
     }
 
     if (session_id != kInvalidSessionId)
@@ -200,14 +200,14 @@ bool PowerController::logoff()
         SessionInfo session_info(session_id);
         if (session_info.connectState() != SessionInfo::ConnectState::ACTIVE)
         {
-            LOG(LS_INFO) << "User session not in active state. Logoff not required";
+            LOG(INFO) << "User session not in active state. Logoff not required";
             return true;
         }
     }
 
     if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
     {
-        PLOG(LS_ERROR) << "WTSLogoffSession failed";
+        PLOG(ERROR) << "WTSLogoffSession failed";
         return false;
     }
 
@@ -220,7 +220,7 @@ bool PowerController::lock()
 {
     if (!LockWorkStation())
     {
-        PLOG(LS_ERROR) << "LockWorkStation failed";
+        PLOG(ERROR) << "LockWorkStation failed";
         return false;
     }
 

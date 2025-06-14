@@ -57,13 +57,13 @@ bool MessageWindow::create(MessageCallback message_callback)
                             reinterpret_cast<wchar_t*>(&windowProc),
                             &instance))
     {
-        PLOG(LS_ERROR) << "GetModuleHandleExW failed";
+        PLOG(ERROR) << "GetModuleHandleExW failed";
         return false;
     }
 
     if (!registerWindowClass(instance))
     {
-        LOG(LS_ERROR) << "Unable to create window class";
+        LOG(ERROR) << "Unable to create window class";
         return false;
     }
 
@@ -76,7 +76,7 @@ bool MessageWindow::create(MessageCallback message_callback)
                           this);
     if (!hwnd_)
     {
-        PLOG(LS_ERROR) << "CreateWindowW failed";
+        PLOG(ERROR) << "CreateWindowW failed";
         return false;
     }
 
@@ -149,7 +149,7 @@ bool MessageWindow::registerWindowClass(HINSTANCE instance)
 {
     if (_class_registered)
     {
-        LOG(LS_INFO) << "Window class already registered";
+        LOG(INFO) << "Window class already registered";
         return true;
     }
 
@@ -163,7 +163,7 @@ bool MessageWindow::registerWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        PLOG(LS_ERROR) << "RegisterClassExW failed";
+        PLOG(ERROR) << "RegisterClassExW failed";
         return false;
     }
 

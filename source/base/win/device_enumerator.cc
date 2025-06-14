@@ -46,7 +46,7 @@ DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
     device_info_.reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
     if (!device_info_.isValid())
     {
-        PLOG(LS_ERROR) << "SetupDiGetClassDevsW failed";
+        PLOG(ERROR) << "SetupDiGetClassDevsW failed";
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
@@ -65,8 +65,7 @@ bool DeviceEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            LOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed:"
-                          << SystemError(error_code).toString();
+            LOG(ERROR) << "SetupDiEnumDeviceInfo failed:" << SystemError(error_code).toString();
         }
 
         return true;
@@ -94,7 +93,7 @@ QString DeviceEnumerator::friendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
     }
 
@@ -114,7 +113,7 @@ QString DeviceEnumerator::description() const
                                            ARRAYSIZE(description),
                                            nullptr))
     {
-        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
     }
 
@@ -134,7 +133,7 @@ QString DeviceEnumerator::driverKeyPath() const
                                            ARRAYSIZE(driver),
                                            nullptr))
     {
-        PLOG(LS_ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
     }
 
@@ -149,7 +148,7 @@ QString DeviceEnumerator::driverRegistryString(const QString& key_name) const
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path, KEY_READ);
     if (!driver_key.isValid())
     {
-        PLOG(LS_ERROR) << "Unable to open registry key";
+        PLOG(ERROR) << "Unable to open registry key";
         return QString();
     }
 
@@ -159,8 +158,8 @@ QString DeviceEnumerator::driverRegistryString(const QString& key_name) const
     LONG status = driver_key.readValue(key_name, value, &value_size, nullptr);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read key value:"
-                      << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(ERROR) << "Unable to read key value:"
+                   << SystemError(static_cast<DWORD>(status)).toString();
         return QString();
     }
 
@@ -175,7 +174,7 @@ DWORD DeviceEnumerator::driverRegistryDW(const QString& key_name) const
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path, KEY_READ);
     if (!driver_key.isValid())
     {
-        DPLOG(LS_ERROR) << "Unable to open registry key";
+        DPLOG(ERROR) << "Unable to open registry key";
         return 0;
     }
 
@@ -184,8 +183,8 @@ DWORD DeviceEnumerator::driverRegistryDW(const QString& key_name) const
     LONG status = driver_key.readValueDW(key_name, &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read key value"
-                      << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(ERROR) << "Unable to read key value"
+                   << SystemError(static_cast<DWORD>(status)).toString();
         return 0;
     }
 
@@ -221,7 +220,7 @@ QString DeviceEnumerator::deviceID() const
                                      ARRAYSIZE(device_id),
                                      nullptr))
     {
-        PLOG(LS_ERROR) << "SetupDiGetDeviceInstanceIdW failed";
+        PLOG(ERROR) << "SetupDiGetDeviceInstanceIdW failed";
         return QString();
     }
 

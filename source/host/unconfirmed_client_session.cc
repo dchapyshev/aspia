@@ -35,7 +35,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(ClientSession* client_session
       client_session_(client_session),
       timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     DCHECK(client_session_);
 
@@ -47,13 +47,13 @@ UnconfirmedClientSession::UnconfirmedClientSession(ClientSession* client_session
 //--------------------------------------------------------------------------------------------------
 UnconfirmedClientSession::~UnconfirmedClientSession()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeout)
 {
-    LOG(LS_INFO) << "Timeout changed:" << timeout.count();
+    LOG(INFO) << "Timeout changed:" << timeout.count();
 
     if (timeout <= std::chrono::milliseconds(0))
     {

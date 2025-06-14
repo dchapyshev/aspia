@@ -27,14 +27,14 @@ ComputerGroupDialogPortForwarding::ComputerGroupDialogPortForwarding(
     int type, bool is_root_group, QWidget* parent)
     : ComputerGroupDialogTab(type, is_root_group, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 ComputerGroupDialogPortForwarding::~ComputerGroupDialogPortForwarding()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

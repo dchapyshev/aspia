@@ -71,19 +71,19 @@ void Session::start()
 {
     if (!tcp_channel_)
     {
-        LOG(LS_FATAL) << "Invalid network channel";
+        LOG(FATAL) << "Invalid network channel";
         return;
     }
 
     if (!relay_key_pool_)
     {
-        LOG(LS_FATAL) << "Invalid relay key pool";
+        LOG(FATAL) << "Invalid relay key pool";
         return;
     }
 
     if (!database_factory_)
     {
-        LOG(LS_FATAL) << "Invalid database factory";
+        LOG(FATAL) << "Invalid database factory";
         return;
     }
 
@@ -176,7 +176,7 @@ void Session::sendMessage(const QByteArray& message)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error:" << base::NetworkChannel::errorToString(error_code);
+    LOG(INFO) << "Network error:" << base::NetworkChannel::errorToString(error_code);
     emit sig_sessionFinished(session_id_);
 }
 
@@ -189,7 +189,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 
@@ -202,7 +202,7 @@ void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled outgoing message from channel:" << channel_id;
+        LOG(ERROR) << "Unhandled outgoing message from channel:" << channel_id;
     }
 }
 

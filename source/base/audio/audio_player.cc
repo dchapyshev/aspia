@@ -27,13 +27,13 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 AudioPlayer::AudioPlayer()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 AudioPlayer::~AudioPlayer()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ std::unique_ptr<AudioPlayer> AudioPlayer::create()
     std::unique_ptr<AudioPlayer> player(new AudioPlayer());
     if (!player->init())
     {
-        LOG(LS_ERROR) << "Unable to initialize audio player";
+        LOG(ERROR) << "Unable to initialize audio player";
         return nullptr;
     }
 
@@ -111,13 +111,13 @@ bool AudioPlayer::init()
         &AudioPlayer::onMoreDataRequired, this, std::placeholders::_1, std::placeholders::_2));
     if (!output_)
     {
-        LOG(LS_ERROR) << "AudioOutput::create failed";
+        LOG(ERROR) << "AudioOutput::create failed";
         return false;
     }
 
     if (!output_->start())
     {
-        LOG(LS_ERROR) << "AudioOutput::start failed";
+        LOG(ERROR) << "AudioOutput::start failed";
         return false;
     }
 

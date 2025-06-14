@@ -120,7 +120,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        PLOG(LS_ERROR) << "GetIconInfo failed";
+        PLOG(ERROR) << "GetIconInfo failed";
         return nullptr;
     }
 
@@ -135,7 +135,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        PLOG(LS_ERROR) << "GetObjectW failed";
+        PLOG(ERROR) << "GetObjectW failed";
         return nullptr;
     }
 
@@ -167,7 +167,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        PLOG(LS_ERROR) << "GetDIBits failed";
+        PLOG(ERROR) << "GetDIBits failed";
         return nullptr;
     }
 
@@ -189,7 +189,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            PLOG(LS_ERROR) << "GetDIBits failed";
+            PLOG(ERROR) << "GetDIBits failed";
             return nullptr;
         }
 

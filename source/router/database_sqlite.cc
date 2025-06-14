@@ -63,8 +63,8 @@ bool writeText(sqlite3_stmt* statement, const QString& text, int column)
         statement, column, text.toUtf8().data(), static_cast<int>(text.size()), SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_bind_text failed:" << sqlite3_errstr(error_code)
-                      << "(error code:" << error_code << "column:" << column << ")";
+        LOG(ERROR) << "sqlite3_bind_text failed:" << sqlite3_errstr(error_code)
+                   << "(error code:" << error_code << "column:" << column << ")";
         return false;
     }
 
@@ -81,8 +81,8 @@ bool writeBlob(sqlite3_stmt* statement, const QByteArray& blob, int column)
                                        SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_bind_blob failed:" << sqlite3_errstr(error_code)
-                      << "(error code:" << error_code << "column:" << column << ")";
+        LOG(ERROR) << "sqlite3_bind_blob failed:" << sqlite3_errstr(error_code)
+                   << "(error code:" << error_code << "column:" << column << ")";
         return false;
     }
 
@@ -95,8 +95,8 @@ bool writeInt(sqlite3_stmt* statement, int number, int column)
     int error_code = sqlite3_bind_int(statement, column, number);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_bind_int failed:" << sqlite3_errstr(error_code)
-                      << "(error code:" << error_code << "column:" << column << ")";
+        LOG(ERROR) << "sqlite3_bind_int failed:" << sqlite3_errstr(error_code)
+                   << "(error code:" << error_code << "column:" << column << ")";
         return false;
     }
 
@@ -109,8 +109,8 @@ bool writeInt64(sqlite3_stmt* statement, qint64 number, int column)
     int error_code = sqlite3_bind_int64(statement, column, number);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_bind_int64 failed:" << sqlite3_errstr(error_code)
-                      << "(error code:" << error_code << "column:" << column << ")";
+        LOG(ERROR) << "sqlite3_bind_int64 failed:" << sqlite3_errstr(error_code)
+                   << "(error code:" << error_code << "column:" << column << ")";
         return false;
     }
 
@@ -124,8 +124,8 @@ std::optional<T> readInteger(sqlite3_stmt* statement, int column)
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_INTEGER)
     {
-        LOG(LS_ERROR) << "Type is not SQLITE_INTEGER:" << columnTypeToString(column_type)
-                      << "(" << column_type << ")";
+        LOG(ERROR) << "Type is not SQLITE_INTEGER:" << columnTypeToString(column_type)
+                   << "(" << column_type << ")";
         return std::nullopt;
     }
 
@@ -138,22 +138,22 @@ std::optional<QByteArray> readBlob(sqlite3_stmt* statement, int column)
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_BLOB)
     {
-        LOG(LS_ERROR) << "Type is not SQLITE_BLOB:" << columnTypeToString(column_type)
-                      << "(" << column_type << ")";
+        LOG(ERROR) << "Type is not SQLITE_BLOB:" << columnTypeToString(column_type)
+                   << "(" << column_type << ")";
         return std::nullopt;
     }
 
     int blob_size = sqlite3_column_bytes(statement, column);
     if (blob_size <= 0)
     {
-        LOG(LS_ERROR) << "Field has an invalid size:" << blob_size;
+        LOG(ERROR) << "Field has an invalid size:" << blob_size;
         return std::nullopt;
     }
 
     const void* blob = sqlite3_column_blob(statement, column);
     if (!blob)
     {
-        LOG(LS_ERROR) << "Failed to get the pointer to the field";
+        LOG(ERROR) << "Failed to get the pointer to the field";
         return std::nullopt;
     }
 
@@ -166,22 +166,22 @@ std::optional<QString> readText(sqlite3_stmt* statement, int column)
     int column_type = sqlite3_column_type(statement, column);
     if (column_type != SQLITE_TEXT)
     {
-        LOG(LS_ERROR) << "Type is not SQLITE_TEXT:" << columnTypeToString(column_type)
-                      << "(" << column_type << ")";
+        LOG(ERROR) << "Type is not SQLITE_TEXT:" << columnTypeToString(column_type)
+                   << "(" << column_type << ")";
         return std::nullopt;
     }
 
     int string_size = sqlite3_column_bytes(statement, column);
     if (string_size <= 0)
     {
-        LOG(LS_ERROR) << "Field has an invalid size:" << string_size;
+        LOG(ERROR) << "Field has an invalid size:" << string_size;
         return std::nullopt;
     }
 
     const quint8* string = sqlite3_column_text(statement, column);
     if (!string)
     {
-        LOG(LS_ERROR) << "Failed to get the pointer to the field";
+        LOG(ERROR) << "Failed to get the pointer to the field";
         return std::nullopt;
     }
 
@@ -194,49 +194,49 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
     std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
     if (!entry_id.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'id'";
+        LOG(ERROR) << "Failed to get field 'id'";
         return std::nullopt;
     }
 
     std::optional<QString> name = readText(statement, 1);
     if (!name.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'name'";
+        LOG(ERROR) << "Failed to get field 'name'";
         return std::nullopt;
     }
 
     std::optional<QString> group = readText(statement, 2);
     if (!group.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'group'";
+        LOG(ERROR) << "Failed to get field 'group'";
         return std::nullopt;
     }
 
     std::optional<QByteArray> salt = readBlob(statement, 3);
     if (!salt.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'salt'";
+        LOG(ERROR) << "Failed to get field 'salt'";
         return std::nullopt;
     }
 
     std::optional<QByteArray> verifier = readBlob(statement, 4);
     if (!verifier.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'verifier'";
+        LOG(ERROR) << "Failed to get field 'verifier'";
         return std::nullopt;
     }
 
     std::optional<quint32> sessions = readInteger<quint32>(statement, 5);
     if (!sessions.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'sessions'";
+        LOG(ERROR) << "Failed to get field 'sessions'";
         return std::nullopt;
     }
 
     std::optional<quint32> flags = readInteger<quint32>(statement, 6);
     if (!flags.has_value())
     {
-        LOG(LS_ERROR) << "Failed to get field 'flags'";
+        LOG(ERROR) << "Failed to get field 'flags'";
         return std::nullopt;
     }
 
@@ -275,7 +275,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid directory path";
+        LOG(ERROR) << "Invalid directory path";
         return nullptr;
     }
 
@@ -285,7 +285,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     {
         if (!dir_info.isDir())
         {
-            LOG(LS_ERROR) << "Unable to create directory for database. Need to delete file" << dir_path;
+            LOG(ERROR) << "Unable to create directory for database. Need to delete file" << dir_path;
             return nullptr;
         }
     }
@@ -293,7 +293,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     {
         if (!QDir().mkpath(dir_path))
         {
-            LOG(LS_ERROR) << "Unable to create directory for database";
+            LOG(ERROR) << "Unable to create directory for database";
             return nullptr;
         }
     }
@@ -301,13 +301,13 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     QString file_path = filePath();
     if (file_path.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid file path";
+        LOG(ERROR) << "Invalid file path";
         return nullptr;
     }
 
     if (QFileInfo::exists(file_path))
     {
-        LOG(LS_ERROR) << "Database file already exists";
+        LOG(ERROR) << "Database file already exists";
         return nullptr;
     }
 
@@ -335,7 +335,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     int ret = sqlite3_exec(db->db_, kSql, nullptr, nullptr, &error_string);
     if (ret != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_exec failed:" << error_string;
+        LOG(ERROR) << "sqlite3_exec failed:" << error_string;
         return nullptr;
     }
 
@@ -349,20 +349,20 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
     QString file_path = filePath();
     if (file_path.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid file path";
+        LOG(ERROR) << "Invalid file path";
         return nullptr;
     }
 
     QByteArray file_path_utf8 = file_path.toUtf8();
-    LOG(LS_INFO) << "Opening database:" << file_path;
+    LOG(INFO) << "Opening database:" << file_path;
 
     sqlite3* db = nullptr;
 
     int error_code = sqlite3_open(file_path_utf8.data(), &db);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_open failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_open failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return nullptr;
     }
 
@@ -394,8 +394,8 @@ QVector<base::User> DatabaseSqlite::userList() const
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return {};
     }
 
@@ -420,7 +420,7 @@ bool DatabaseSqlite::addUser(const base::User& user)
 {
     if (!user.isValid())
     {
-        LOG(LS_ERROR) << "Not valid user";
+        LOG(ERROR) << "Not valid user";
         return false;
     }
 
@@ -436,8 +436,8 @@ bool DatabaseSqlite::addUser(const base::User& user)
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return false;
     }
 
@@ -466,8 +466,8 @@ bool DatabaseSqlite::addUser(const base::User& user)
         error_code = sqlite3_step(statement);
         if (error_code != SQLITE_DONE)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
-                          << "(" << error_code << ")";
+            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
+                       << "(" << error_code << ")";
             break;
         }
 
@@ -484,7 +484,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
 {
     if (!user.isValid())
     {
-        LOG(LS_ERROR) << "Not valid user";
+        LOG(ERROR) << "Not valid user";
         return false;
     }
 
@@ -500,8 +500,8 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return false;
     }
 
@@ -533,8 +533,8 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
         error_code = sqlite3_step(statement);
         if (error_code != SQLITE_DONE)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
-                          << "(" << error_code << ")";
+            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
+                       << "(" << error_code << ")";
             break;
         }
 
@@ -559,7 +559,7 @@ bool DatabaseSqlite::removeUser(qint64 entry_id)
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code);
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code);
         return false;
     }
 
@@ -573,8 +573,8 @@ bool DatabaseSqlite::removeUser(qint64 entry_id)
         error_code = sqlite3_step(statement);
         if (error_code != SQLITE_DONE)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
-                          << "(" << error_code << ")";
+            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
+                       << "(" << error_code << ")";
             break;
         }
 
@@ -599,8 +599,8 @@ base::User DatabaseSqlite::findUser(const QString& username)
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return base::User::kInvalidUser;
     }
 
@@ -628,13 +628,13 @@ Database::ErrorCode DatabaseSqlite::hostId(
 {
     if (key_hash.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid key hash";
+        LOG(ERROR) << "Invalid key hash";
         return ErrorCode::UNKNOWN;
     }
 
     if (!host_id)
     {
-        LOG(LS_ERROR) << "Invalid host id";
+        LOG(ERROR) << "Invalid host id";
         return ErrorCode::UNKNOWN;
     }
 
@@ -650,8 +650,8 @@ Database::ErrorCode DatabaseSqlite::hostId(
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return ErrorCode::UNKNOWN;
     }
 
@@ -665,8 +665,8 @@ Database::ErrorCode DatabaseSqlite::hostId(
         error_code = sqlite3_step(statement);
         if (error_code != SQLITE_ROW)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
-                          << "(" << error_code << ")";
+            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
+                       << "(" << error_code << ")";
             result = ErrorCode::NO_HOST_FOUND;
             break;
         }
@@ -674,7 +674,7 @@ Database::ErrorCode DatabaseSqlite::hostId(
         std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
         if (!entry_id.has_value())
         {
-            LOG(LS_ERROR) << "Failed to get field 'id'";
+            LOG(ERROR) << "Failed to get field 'id'";
             break;
         }
 
@@ -692,7 +692,7 @@ bool DatabaseSqlite::addHost(const QByteArray& keyHash)
 {
     if (keyHash.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid parameters";
+        LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
@@ -706,8 +706,8 @@ bool DatabaseSqlite::addHost(const QByteArray& keyHash)
                                      nullptr);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                      << "(" << error_code << ")";
+        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
+                   << "(" << error_code << ")";
         return false;
     }
 
@@ -721,8 +721,8 @@ bool DatabaseSqlite::addHost(const QByteArray& keyHash)
         error_code = sqlite3_step(statement);
         if (error_code != SQLITE_DONE)
         {
-            LOG(LS_ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
-                          << "(" << error_code << ")";
+            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code)
+                       << "(" << error_code << ")";
             break;
         }
 

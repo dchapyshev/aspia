@@ -30,7 +30,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
       duration_(0, 0)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
     ui.tree->resizeColumnToContents(0);
@@ -43,7 +43,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 StatisticsDialog::~StatisticsDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

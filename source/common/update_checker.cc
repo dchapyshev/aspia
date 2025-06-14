@@ -29,13 +29,13 @@ namespace common {
 UpdateChecker::UpdateChecker(QObject* parent)
     : QThread(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 UpdateChecker::~UpdateChecker()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
@@ -76,7 +76,7 @@ static int debugFunc(
             if (message.ends_with("\r"))
                 message = message.substr(0, message.size() - 1);
 
-            LOG(LS_INFO) << message;
+            LOG(INFO) << message;
         }
         break;
 
@@ -90,7 +90,7 @@ static int debugFunc(
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
-    LOG(LS_INFO) << "run BEGIN";
+    LOG(INFO) << "run BEGIN";
     interrupted_.store(false, std::memory_order_relaxed);
 
     QString os;
@@ -139,7 +139,7 @@ void UpdateChecker::run()
 
     QByteArray url = unicode_url.toLocal8Bit();
 
-    LOG(LS_INFO) << "Start checking for updates. Url:" << unicode_url;
+    LOG(INFO) << "Start checking for updates. Url:" << unicode_url;
 
     base::ScopedCURL curl;
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
@@ -152,7 +152,7 @@ void UpdateChecker::run()
     long verify_peer = 1;
     if (qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
     {
-        LOG(LS_INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
+        LOG(INFO) << "ASPIA_NO_VERIFY_TLS_PEER defined";
         verify_peer = 0;
     }
 
@@ -177,7 +177,7 @@ void UpdateChecker::run()
 
         if (error_code)
         {
-            LOG(LS_ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
+            LOG(ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
                           << "(" << error_code << ")";
             response.clear();
             break;
@@ -185,7 +185,7 @@ void UpdateChecker::run()
 
         if (interrupted_.load(std::memory_order_relaxed))
         {
-            LOG(LS_INFO) << "Update check canceled";
+            LOG(INFO) << "Update check canceled";
             response.clear();
             break;
         }
@@ -196,11 +196,11 @@ void UpdateChecker::run()
 
     if (!interrupted_.load(std::memory_order_relaxed))
     {
-        LOG(LS_INFO) << "Checking is finished:" << response;
+        LOG(INFO) << "Checking is finished:" << response;
         emit sig_checkedFinished(response);
     }
 
-    LOG(LS_INFO) << "run END";
+    LOG(INFO) << "run END";
 }
 
 } // namespace common

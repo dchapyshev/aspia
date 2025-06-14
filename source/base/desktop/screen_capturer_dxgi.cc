@@ -37,7 +37,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
     ScreenCapturer::ScreenList gdi_screens;
     if (!ScreenCaptureUtils::screenList(&gdi_screens))
     {
-        LOG(LS_ERROR) << "screenList failed";
+        LOG(ERROR) << "screenList failed";
         return false;
     }
 
@@ -46,9 +46,9 @@ bool screenListFromDeviceNames(const QStringList& device_names,
     for (const auto& screen : std::as_const(gdi_screens.screens))
         max_screen_id = std::max(max_screen_id, screen.id);
 
-    LOG(LS_INFO) << "Device names count:" << device_names.size()
-                 << ", GDI count:" << gdi_screens.screens.size()
-                 << ", max screen id:" << max_screen_id;
+    LOG(INFO) << "Device names count:" << device_names.size()
+              << ", GDI count:" << gdi_screens.screens.size()
+              << ", max screen id:" << max_screen_id;
 
     for (int device_index = 0; device_index < device_names.size(); ++device_index)
     {
@@ -67,8 +67,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
 
         if (!device_found)
         {
-            LOG(LS_ERROR) << "Device" << device_name << "NOT found in list ("
-                          << device_index << ")";
+            LOG(ERROR) << "Device" << device_name << "NOT found in list (" << device_index << ")";
 
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
@@ -77,7 +76,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
         }
         else
         {
-            LOG(LS_INFO) << "Device" << device_name << "found in list (" << device_index << ")";
+            LOG(INFO) << "Device" << device_name << "found in list (" << device_index << ")";
         }
     }
 
@@ -90,7 +89,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
     ScreenCapturer::ScreenList screen_list;
     if (!screenListFromDeviceNames(device_names, &screen_list))
     {
-        LOG(LS_ERROR) << "screenListFromDeviceNames failed";
+        LOG(ERROR) << "screenListFromDeviceNames failed";
         return -1;
     }
 
@@ -100,13 +99,12 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
     {
         if (screen_list.screens[i].id == id)
         {
-            LOG(LS_INFO) << "Screen with ID" << id << "found ("
-                         << screen_list.screens[i].title << ")";
+            LOG(INFO) << "Screen with ID" << id << "found (" << screen_list.screens[i].title << ")";
             return static_cast<int>(i);
         }
     }
 
-    LOG(LS_ERROR) << "Screen with ID" << id << "NOT found";
+    LOG(ERROR) << "Screen with ID" << id << "NOT found";
     return -1;
 }
 
@@ -118,13 +116,13 @@ ScreenCapturerDxgi::ScreenCapturerDxgi(QObject* parent)
       controller_(new DxgiDuplicatorController()),
       cursor_(std::make_unique<DxgiCursor>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerDxgi::~ScreenCapturerDxgi()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,7 +152,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 
     if (!controller_->deviceNames(&device_names))
     {
-        LOG(LS_ERROR) << "deviceNames failed";
+        LOG(ERROR) << "deviceNames failed";
         return false;
     }
 
@@ -174,7 +172,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
-    LOG(LS_INFO) << "Select screen with ID:" << screen_id;
+    LOG(INFO) << "Select screen with ID:" << screen_id;
 
     if (screen_id == kFullDesktopScreenId)
     {
@@ -186,14 +184,14 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     QStringList device_names;
     if (!controller_->deviceNames(&device_names))
     {
-        LOG(LS_ERROR) << "deviceNames failed";
+        LOG(ERROR) << "deviceNames failed";
         return false;
     }
 
     int index = indexFromScreenId(screen_id, device_names);
     if (index == -1)
     {
-        LOG(LS_ERROR) << "indexFromScreenId failed";
+        LOG(ERROR) << "indexFromScreenId failed";
         return false;
     }
 
@@ -237,8 +235,8 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
     if (result != DuplicateResult::SUCCEEDED)
     {
-        LOG(LS_ERROR) << "DxgiDuplicatorController failed to capture desktop, error code"
-                      << DxgiDuplicatorController::resultName(result);
+        LOG(ERROR) << "DxgiDuplicatorController failed to capture desktop, error code"
+                   << DxgiDuplicatorController::resultName(result);
     }
 
     switch (result)
@@ -252,15 +250,15 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
         case DuplicateResult::UNSUPPORTED_SESSION:
         {
-            LOG(LS_ERROR) << "Current binary is running on a session not supported "
-                             "by DirectX screen capturer";
+            LOG(ERROR) << "Current binary is running on a session not supported "
+                          "by DirectX screen capturer";
             *error = Error::PERMANENT;
             return nullptr;
         }
 
         case DuplicateResult::FRAME_PREPARE_FAILED:
         {
-            LOG(LS_ERROR) << "Failed to allocate a new Frame";
+            LOG(ERROR) << "Failed to allocate a new Frame";
             // This usually means we do not have enough memory or SharedMemoryFactory cannot work
             // correctly.
             *error = Error::PERMANENT;
@@ -269,7 +267,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
         case DuplicateResult::INVALID_MONITOR_ID:
         {
-            LOG(LS_ERROR) << "Invalid monitor id" << current_screen_index_;
+            LOG(ERROR) << "Invalid monitor id" << current_screen_index_;
             *error = Error::PERMANENT;
             return nullptr;
         }
@@ -282,8 +280,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
             if (temporary_error_count_ >= kMaxTemporaryErrorCount)
             {
-                LOG(LS_ERROR) << "More than" << kMaxTemporaryErrorCount
-                              << "temporary capture errors detected";
+                LOG(ERROR) << "More than" << kMaxTemporaryErrorCount << "temporary capture errors detected";
                 *error = Error::PERMANENT;
             }
             else

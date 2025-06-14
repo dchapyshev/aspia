@@ -52,7 +52,7 @@ SessionId clientSessionIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_ERROR) << "GetNamedPipeClientSessionId failed";
+        PLOG(ERROR) << "GetNamedPipeClientSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -66,7 +66,7 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_ERROR) << "GetNamedPipeServerSessionId failed";
+        PLOG(ERROR) << "GetNamedPipeServerSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -82,7 +82,7 @@ IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
       stream_(AsioEventDispatcher::currentIoContext())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       stream_(std::move(stream)),
       is_connected_(true)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     write_queue_.reserve(kWriteQueueReservedSize);
 
@@ -104,7 +104,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
 //--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     disconnectFrom();
 }
 
@@ -113,7 +113,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
 {
     if (channel_id.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty channel id";
+        LOG(ERROR) << "Empty channel id";
         return false;
     }
 
@@ -140,15 +140,15 @@ bool IpcChannel::connectTo(const QString& channel_id)
 
         if (error_code != ERROR_PIPE_BUSY)
         {
-            LOG(LS_ERROR) << "Failed to connect to the named pipe:"
-                          << SystemError::toString(error_code) << "(channel_name="
-                          << channel_name_ << ")";
+            LOG(ERROR) << "Failed to connect to the named pipe:"
+                       << SystemError::toString(error_code) << "(channel_name="
+                       << channel_name_ << ")";
             return false;
         }
 
         if (!WaitNamedPipeW(qUtf16Printable(channel_name_), kConnectTimeout))
         {
-            PLOG(LS_ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
+            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
             return false;
         }
     }
@@ -157,7 +157,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
     stream_.assign(handle.release(), error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Failed to assign handle:" << error_code;
+        LOG(ERROR) << "Failed to assign handle:" << error_code;
         return false;
     }
 
@@ -171,7 +171,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
     stream_.connect(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_ERROR) << "Unable to connect:" << error_code;
+        LOG(ERROR) << "Unable to connect:" << error_code;
         return false;
     }
 
@@ -185,11 +185,11 @@ void IpcChannel::disconnectFrom()
 {
     if (!is_connected_)
     {
-        LOG(LS_INFO) << "Channel not in connected state";
+        LOG(INFO) << "Channel not in connected state";
         return;
     }
 
-    LOG(LS_INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;
@@ -222,7 +222,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(LS_INFO) << "resume channel (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "resume channel (channel_name=" << channel_name_ << ")";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -263,8 +263,8 @@ QString IpcChannel::channelName(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code
-                  << "(location=" << location.toString() << ")";
+    LOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code
+               << "(location=" << location.toString() << ")";
 
     disconnectFrom();
     emit sig_disconnected();

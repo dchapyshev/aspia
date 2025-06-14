@@ -34,8 +34,8 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 {
     if (!x.isValid() || !y.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (x=" << x.isValid() << "y=" << y.isValid()
-                      << "N=" << N.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (x=" << x.isValid() << "y=" << y.isValid()
+                   << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -69,7 +69,7 @@ BigNum calc_k(const BigNum& N, const BigNum& g)
 {
     if (!N.isValid() || !g.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << "g=" << g.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (N=" << N.isValid() << "g=" << g.isValid() << ")";
         return BigNum();
     }
 
@@ -85,8 +85,8 @@ BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
 {
     if (!A.isValid() || !B.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << "B=" << B.isValid()
-                      << "N=" << N.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (A=" << A.isValid() << "B=" << B.isValid()
+                   << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -100,61 +100,61 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 {
     if (!b.isValid() || !N.isValid() || !g.isValid() || !v.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (b=" << b.isValid() << "N=" << N.isValid()
-                      << "g=" << g.isValid() << "v=" << v.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (b=" << b.isValid() << "N=" << N.isValid()
+                   << "g=" << g.isValid() << "v=" << v.isValid() << ")";
         return BigNum();
     }
 
     BigNum::Context ctx = BigNum::Context::create();
     if (!ctx.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create failed";
+        LOG(ERROR) << "BigNum::Context::create failed";
         return BigNum();
     }
 
     BigNum gb = BigNum::create();
     if (!gb.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(ERROR) << "BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(gb, g, b, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
     BigNum k = calc_k(N, g);
     if (!k.isValid())
     {
-        LOG(LS_ERROR) << "Invalid k";
+        LOG(ERROR) << "Invalid k";
         return BigNum();
     }
 
     BigNum kv = BigNum::create();
     if (!kv.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(ERROR) << "BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_mul(kv, v, k, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_mul failed";
+        LOG(ERROR) << "BN_mod_mul failed";
         return BigNum();
     }
 
     BigNum B = BigNum::create();
     if (!B.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(ERROR) << "BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_add(B, gb, kv, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_add failed";
+        LOG(ERROR) << "BN_mod_add failed";
         return BigNum();
     }
 
@@ -168,8 +168,8 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
-                      << "p=" << p.isEmpty() << ")";
+        LOG(ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
+                   << "p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
@@ -182,8 +182,8 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QByteArray& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
-        LOG(LS_ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
-                      << "p=" << p.isEmpty() << ")";
+        LOG(ERROR) << "Invalid arguments (s=" << s.isValid() << "I=" << I.isEmpty()
+                   << "p=" << p.isEmpty() << ")";
         return BigNum();
     }
 
@@ -211,8 +211,8 @@ BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
 {
     if (!a.isValid() || !N.isValid() || !g.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (a=" << a.isValid() << "N=" << N.isValid()
-                      << "g=" << g.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (a=" << a.isValid() << "N=" << N.isValid()
+                   << "g=" << g.isValid() << ")";
         return BigNum();
     }
 
@@ -221,13 +221,13 @@ BigNum SrpMath::calc_A(const BigNum& a, const BigNum& N, const BigNum& g)
 
     if (!A.isValid() || !ctx.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create or BigNum::create failed";
+        LOG(ERROR) << "BigNum::Context::create or BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(A, g, a, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
@@ -242,8 +242,8 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
 {
     if (!A.isValid() || !v.isValid() || !u.isValid() || !b.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (A=" << A.isValid() << "v=" << v.isValid()
-                      << "u=" << u.isValid() << "b=" << b.isValid() << "N=" << N.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (A=" << A.isValid() << "v=" << v.isValid()
+                   << "u=" << u.isValid() << "b=" << b.isValid() << "N=" << N.isValid() << ")";
         return BigNum();
     }
 
@@ -252,32 +252,32 @@ BigNum SrpMath::calcServerKey(const BigNum& A, const BigNum& v, const BigNum& u,
 
     if (!ctx.isValid() || !tmp.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create or BigNum::create failed";
+        LOG(ERROR) << "BigNum::Context::create or BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(tmp, v, u, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
     if (!BN_mod_mul(tmp, A, tmp, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_mul failed";
+        LOG(ERROR) << "BN_mod_mul failed";
         return BigNum();
     }
 
     BigNum S = BigNum::create();
     if (!S.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(ERROR) << "BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(S, tmp, b, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
@@ -292,16 +292,16 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
 {
     if (!N.isValid() || !B.isValid() || !g.isValid() || !x.isValid() || !a.isValid() || !u.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (N=" << N.isValid() << "B=" << B.isValid()
-                      << "g=" << g.isValid() << "x=" << x.isValid() << "a=" << a.isValid()
-                      << "u=" << u.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (N=" << N.isValid() << "B=" << B.isValid()
+                   << "g=" << g.isValid() << "x=" << x.isValid() << "a=" << a.isValid()
+                   << "u=" << u.isValid() << ")";
         return BigNum();
     }
 
     BigNum::Context ctx = BigNum::Context::create();
     if (!ctx.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create failed";
+        LOG(ERROR) << "BigNum::Context::create failed";
         return BigNum();
     }
 
@@ -311,58 +311,58 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
 
     if (!tmp.isValid() || !tmp2.isValid() || !tmp3.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed (tmp=" << tmp.isValid()
-                      << "tmp2=" << tmp2.isValid() << "tmp3=" << tmp3.isValid() << ")";
+        LOG(ERROR) << "BigNum::create failed (tmp=" << tmp.isValid()
+                   << "tmp2=" << tmp2.isValid() << "tmp3=" << tmp3.isValid() << ")";
         return BigNum();
     }
 
     if (!BN_mod_exp(tmp, g, x, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
     BigNum k = calc_k(N, g);
     if (!k.isValid())
     {
-        LOG(LS_ERROR) << "calc_k failed";
+        LOG(ERROR) << "calc_k failed";
         return BigNum();
     }
 
     if (!BN_mod_mul(tmp2, tmp, k, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_mul failed";
+        LOG(ERROR) << "BN_mod_mul failed";
         return BigNum();
     }
 
     if (!BN_mod_sub(tmp, B, tmp2, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_sub failed";
+        LOG(ERROR) << "BN_mod_sub failed";
         return BigNum();
     }
 
     if (!BN_mul(tmp3, u, x, ctx))
     {
-        LOG(LS_ERROR) << "BN_mul failed";
+        LOG(ERROR) << "BN_mul failed";
         return BigNum();
     }
 
     if (!BN_add(tmp2, a, tmp3))
     {
-        LOG(LS_ERROR) << "BN_add failed";
+        LOG(ERROR) << "BN_add failed";
         return BigNum();
     }
 
     BigNum K = BigNum::create();
     if (!K.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::create failed";
+        LOG(ERROR) << "BigNum::create failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(K, tmp, tmp2, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
@@ -375,7 +375,7 @@ bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
 {
     if (!B.isValid() || !N.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (B=" << B.isValid() << "N=" << N.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (B=" << B.isValid() << "N=" << N.isValid() << ")";
         return false;
     }
 
@@ -384,13 +384,13 @@ bool SrpMath::verify_B_mod_N(const BigNum& B, const BigNum& N)
 
     if (!ctx.isValid() || !result.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create or BigNum::create failed";
+        LOG(ERROR) << "BigNum::Context::create or BigNum::create failed";
         return false;
     }
 
     if (!BN_nnmod(result, B, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_nnmod failed";
+        LOG(ERROR) << "BN_nnmod failed";
         return false;
     }
 
@@ -411,8 +411,8 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
-                      << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
+                   << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
         return BigNum();
     }
 
@@ -421,7 +421,7 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 
     if (!ctx.isValid() || !v.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create or BigNum::create failed";
+        LOG(ERROR) << "BigNum::Context::create or BigNum::create failed";
         return BigNum();
     }
 
@@ -429,7 +429,7 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 
     if (!BN_mod_exp(v, g, x, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 
@@ -443,8 +443,8 @@ BigNum SrpMath::calc_v(const QString& I, const QByteArray& p, const BigNum& s,
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
     {
-        LOG(LS_ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
-                      << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
+        LOG(ERROR) << "Invalid arguments (I=" << I.isEmpty() << "p=" << p.isEmpty()
+                   << "N=" << N.isValid() << "g=" << g.isValid() << "s=" << s.isValid() << ")";
         return BigNum();
     }
 
@@ -453,20 +453,20 @@ BigNum SrpMath::calc_v(const QString& I, const QByteArray& p, const BigNum& s,
 
     if (!ctx.isValid() || !v.isValid())
     {
-        LOG(LS_ERROR) << "BigNum::Context::create or BigNum::create failed";
+        LOG(ERROR) << "BigNum::Context::create or BigNum::create failed";
         return BigNum();
     }
 
     BigNum x = calc_x(s, I, p);
     if (!x.isValid())
     {
-        LOG(LS_ERROR) << "calc_x failed";
+        LOG(ERROR) << "calc_x failed";
         return BigNum();
     }
 
     if (!BN_mod_exp(v, g, x, N, ctx))
     {
-        LOG(LS_ERROR) << "BN_mod_exp failed";
+        LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
     }
 

@@ -77,7 +77,7 @@ OnlineCheckerDirect::Instance::Instance(
 
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Timeout for computer:" << computer_id_;
+        LOG(INFO) << "Timeout for computer:" << computer_id_;
         onFinished(FROM_HERE, false);
     });
 
@@ -97,8 +97,8 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     finish_callback_ = std::move(finish_callback);
     DCHECK(finish_callback_);
 
-    LOG(LS_INFO) << "Starting connection to" << address_ << ":" << port_
-                 << "(computer:" << computer_id_ << ")";
+    LOG(INFO) << "Starting connection to" << address_ << ":" << port_
+              << "(computer:" << computer_id_ << ")";
 
     tcp_channel_ = new base::TcpChannel(this);
 
@@ -112,8 +112,8 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpConnected()
 {
-    LOG(LS_INFO) << "Connection to" << address_ << ":" << port_
-                 << "established (computer:" << computer_id_ << ")";
+    LOG(INFO) << "Connection to" << address_ << ":" << port_
+              << "established (computer:" << computer_id_ << ")";
 
     proto::key_exchange::ClientHello message;
 
@@ -134,7 +134,7 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
 void OnlineCheckerDirect::Instance::onTcpDisconnected(
     base::NetworkChannel::ErrorCode /* error_code */)
 {
-    LOG(LS_INFO) << "Connection aborted for computer:" << computer_id_;
+    LOG(INFO) << "Connection aborted for computer:" << computer_id_;
     onFinished(FROM_HERE, false);
 }
 
@@ -145,7 +145,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */
 
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Invalid message received";
+        LOG(ERROR) << "Invalid message received";
         return;
     }
 
@@ -153,14 +153,14 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */
     {
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
         {
-            LOG(LS_INFO) << "Message received for computer:" << computer_id_;
+            LOG(INFO) << "Message received for computer:" << computer_id_;
             onFinished(FROM_HERE, true);
         }
         break;
 
         default:
         {
-            LOG(LS_ERROR) << "Invalid encryption method:" << message.encryption();
+            LOG(ERROR) << "Invalid encryption method:" << message.encryption();
         }
         return;
     }
@@ -169,7 +169,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, bool online)
 {
-    LOG(LS_INFO) << "Finished from:" << location.toString();
+    LOG(INFO) << "Finished from:" << location.toString();
 
     if (finished_)
         return;
@@ -184,13 +184,13 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
 OnlineCheckerDirect::OnlineCheckerDirect(QObject* parent)
     : QObject(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::~OnlineCheckerDirect()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     pending_queue_.clear();
     work_queue_.clear();
@@ -203,7 +203,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
 
     if (pending_queue_.isEmpty())
     {
-        LOG(LS_INFO) << "No computers in list";
+        LOG(INFO) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
@@ -219,8 +219,8 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
 
         Instance* instance = new Instance(computer.computer_id, computer.address, port, this);
 
-        LOG(LS_INFO) << "Instance for" << computer.computer_id << "is created (address:"
-                     << computer.address << "port:" << port << ")";
+        LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
+                  << computer.address << "port:" << port << ")";
         work_queue_.push_back(instance);
         pending_queue_.pop_front();
 
@@ -245,8 +245,8 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
         Instance* instance = new Instance(
             computer.computer_id, computer.address, computer.port, this);
 
-        LOG(LS_INFO) << "Instance for" << computer.computer_id << "is created (address:"
-                     << computer.address << "port:" << computer.port << ")";
+        LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
+                  << computer.address << "port:" << computer.port << ")";
 
         work_queue_.push_back(instance);
         work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
@@ -269,7 +269,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 
         if (work_queue_.isEmpty())
         {
-            LOG(LS_INFO) << "No more items in queue";
+            LOG(INFO) << "No more items in queue";
             onFinished(FROM_HERE);
             return;
         }
@@ -279,7 +279,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "Finished (from:" << location.toString() << ")";
+    LOG(INFO) << "Finished (from:" << location.toString() << ")";
     emit sig_checkerFinished();
 }
 

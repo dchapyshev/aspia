@@ -29,7 +29,7 @@ TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
       ui(std::make_unique<Ui::TextChatSessionWindow>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendMessage,
@@ -52,13 +52,13 @@ TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 TextChatSessionWindow::~TextChatSessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client* TextChatSessionWindow::createClient()
 {
-    LOG(LS_INFO) << "Create client";
+    LOG(INFO) << "Create client";
 
     ClientTextChat* client = new ClientTextChat();
 
@@ -75,7 +75,7 @@ Client* TextChatSessionWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void TextChatSessionWindow::onShowWindow()
 {
-    LOG(LS_INFO) << "Show window";
+    LOG(INFO) << "Show window";
 
     ui->text_chat_widget->setDisplayName(sessionState()->displayName());
 
@@ -92,7 +92,7 @@ void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& 
 
         if (QApplication::applicationState() != Qt::ApplicationActive)
         {
-            LOG(LS_INFO) << "Activate text chat window";
+            LOG(INFO) << "Activate text chat window";
             activateWindow();
         }
     }
@@ -102,7 +102,7 @@ void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& 
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled text chat message";
+        LOG(ERROR) << "Unhandled text chat message";
     }
 }
 

@@ -34,8 +34,8 @@ DefaultAudioDeviceChangeDetector::DefaultAudioDeviceChangeDetector(
     if (FAILED(hr))
     {
         // We cannot predict which kind of error the API may return, but this is not a fatal error.
-        LOG(LS_ERROR) << "Failed to register IMMNotificationClient, we may not be "
-                         "able to detect the new default audio device. Error" << hr;
+        LOG(ERROR) << "Failed to register IMMNotificationClient, we may not be "
+                      "able to detect the new default audio device. Error" << hr;
     }
 }
 

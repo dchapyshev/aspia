@@ -27,32 +27,32 @@ namespace relay {
 Service::Service(QObject* parent)
     : base::Service(kServiceName, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
-    LOG(LS_INFO) << "Starting service...";
+    LOG(INFO) << "Starting service...";
 
     controller_ = new Controller(this);
     controller_->start();
 
-    LOG(LS_INFO) << "Service started";
+    LOG(INFO) << "Service started";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
-    LOG(LS_INFO) << "Stopping service...";
+    LOG(INFO) << "Stopping service...";
     delete controller_;
-    LOG(LS_INFO) << "Service stopped";
+    LOG(INFO) << "Service stopped";
 }
 
 #if defined(Q_OS_WINDOWS)

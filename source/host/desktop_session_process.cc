@@ -55,7 +55,7 @@ bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -66,7 +66,7 @@ bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
+        PLOG(ERROR) << "DuplicateTokenEx failed";
         return false;
     }
 
@@ -82,7 +82,7 @@ bool createPrivilegedToken(base::ScopedHandle* token_out)
 
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -93,14 +93,14 @@ bool createPrivilegedToken(base::ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
+        PLOG(ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the SE_TCB_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+        PLOG(ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -119,7 +119,7 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 
     if (!copyProcessToken(desired_access, &session_token))
     {
-        LOG(LS_ERROR) << "copyProcessToken failed";
+        LOG(ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -127,7 +127,7 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 
     if (!createPrivilegedToken(&privileged_token))
     {
-        LOG(LS_ERROR) << "createPrivilegedToken failed";
+        LOG(ERROR) << "createPrivilegedToken failed";
         return false;
     }
 
@@ -135,21 +135,21 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_ERROR) << "Failed to impersonate thread";
+        LOG(ERROR) << "Failed to impersonate thread";
         return false;
     }
 
     // Change the session ID of the token.
     if (!SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id)))
     {
-        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        PLOG(ERROR) << "SetTokenInformation failed";
         return false;
     }
 
     DWORD ui_access = 1;
     if (!SetTokenInformation(session_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
     {
-        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        PLOG(ERROR) << "SetTokenInformation failed";
         return false;
     }
 
@@ -173,7 +173,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -192,10 +192,10 @@ bool startProcessWithToken(HANDLE token,
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        PLOG(ERROR) << "CreateProcessAsUserW failed";
         if (!DestroyEnvironmentBlock(environment))
         {
-            PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
         }
         return false;
     }
@@ -205,7 +205,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -221,25 +221,25 @@ DesktopSessionProcess::DesktopSessionProcess(
     : process_(std::move(process)),
       thread_(std::move(thread))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 #elif defined(Q_OS_LINUX)
 DesktopSessionProcess::DesktopSessionProcess(pid_t pid)
     : pid_(pid)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 #else
 DesktopSessionProcess::DesktopSessionProcess()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 #endif
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionProcess::~DesktopSessionProcess()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,24 +249,24 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 {
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
-                      << session_id << "channel_id=" << channel_id << ")";
+        LOG(ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
+                   << session_id << "channel_id=" << channel_id << ")";
         return nullptr;
     }
 
 #if defined(Q_OS_WINDOWS)
     if (session_id == base::kServiceSessionId)
     {
-        LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session ("
-                      << "session_id=" << session_id << "channel_id=" << channel_id << ")";
+        LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session ("
+                   << "session_id=" << session_id << "channel_id=" << channel_id << ")";
         return nullptr;
     }
 
     base::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
-        LOG(LS_ERROR) << "createSessionToken failed (session_id=" << session_id << "channel_id="
-                      << channel_id << ")";
+        LOG(ERROR) << "createSessionToken failed (session_id=" << session_id << "channel_id="
+                   << channel_id << ")";
         return nullptr;
     }
 
@@ -276,8 +276,8 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(LS_ERROR) << "startProcessWithToken failed (session_id=" << session_id << "channel_id="
-                      << channel_id << ")";
+        LOG(ERROR) << "startProcessWithToken failed (session_id=" << session_id << "channel_id="
+                   << channel_id << ")";
         return nullptr;
     }
 
@@ -288,14 +288,14 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(LS_ERROR) << "No X11 sessions";
+        LOG(ERROR) << "No X11 sessions";
         return nullptr;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_ERROR) << "Unable to open pipe";
+        LOG(ERROR) << "Unable to open pipe";
         return nullptr;
     }
 
@@ -304,7 +304,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
         std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
-        LOG(LS_INFO) << line;
+        LOG(INFO) << line;
         if (!base::contains(line, u":0"))
             continue;
 
@@ -320,7 +320,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
                         filePath().c_str(),
                         base::local8BitFromUtf16(channel_id));
 
-        LOG(LS_INFO) << "Start desktop session agent:" << command_line;
+        LOG(INFO) << "Start desktop session agent:" << command_line;
 
         char sh_name[] = "sh";
         char sh_arguments[] = "-c";
@@ -329,21 +329,21 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         pid_t pid;
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
-            PLOG(LS_ERROR) << "Unable to start process";
+            PLOG(ERROR) << "Unable to start process";
             return nullptr;
         }
 
         return std::unique_ptr<DesktopSessionProcess>(new DesktopSessionProcess(pid));
     }
 
-    LOG(LS_ERROR) << "Connected X sessions not found";
+    LOG(ERROR) << "Connected X sessions not found";
 
     std::string command_line =
         fmt::format("sudo DISPLAY=':0' -u root {} --channel_id={} &",
                     filePath().c_str(),
                     base::local8BitFromUtf16(channel_id));
 
-    LOG(LS_INFO) << "Start desktop session agent:" << command_line;
+    LOG(INFO) << "Start desktop session agent:" << command_line;
 
     char sh_name[] = "sh";
     char sh_arguments[] = "-c";
@@ -352,7 +352,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     pid_t pid;
     if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
     {
-        PLOG(LS_ERROR) << "Unable to start process";
+        PLOG(ERROR) << "Unable to start process";
         return nullptr;
     }
 
@@ -379,13 +379,13 @@ void DesktopSessionProcess::kill()
 #if defined(Q_OS_WINDOWS)
     if (!process_.isValid())
     {
-        LOG(LS_ERROR) << "Invalid process handle";
+        LOG(ERROR) << "Invalid process handle";
         return;
     }
 
     if (!TerminateProcess(process_, 0))
     {
-        PLOG(LS_ERROR) << "TerminateProcess failed";
+        PLOG(ERROR) << "TerminateProcess failed";
     }
 #elif defined(Q_OS_LINUX)
     if (::kill(pid_, SIGKILL) != 0)

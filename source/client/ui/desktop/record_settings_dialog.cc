@@ -30,7 +30,7 @@ namespace client {
 RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
@@ -46,7 +46,7 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
 
     connect(ui.button_select_dir, &QPushButton::clicked, this, [this]()
     {
-        LOG(LS_INFO) << "[ACTION] Select directory";
+        LOG(INFO) << "[ACTION] Select directory";
 
         QString path = QFileDialog::getExistingDirectory(
             this, tr("Choose path"), ui.edit_dir->text(),
@@ -54,11 +54,11 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
 
         if (path.isEmpty())
         {
-            LOG(LS_INFO) << "[ACTION] Directory selection rejected";
+            LOG(INFO) << "[ACTION] Directory selection rejected";
             return;
         }
 
-        LOG(LS_INFO) << "[ACTION] Directory selected:" << path.toStdString();
+        LOG(INFO) << "[ACTION] Directory selected:" << path;
         ui.edit_dir->setText(path);
     });
 
@@ -72,7 +72,7 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 RecordSettingsDialog::~RecordSettingsDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,12 +81,12 @@ void RecordSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
         reject();
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
 
         DesktopSettings settings;
         settings.setRecordSessions(ui.checkbox_autostart->isChecked());

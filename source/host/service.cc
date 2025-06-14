@@ -75,24 +75,24 @@ QString powerEventToString(quint32 event)
 Service::Service(QObject* parent)
     : base::Service(kHostServiceName, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
-    LOG(LS_INFO) << "Service is started";
+    LOG(INFO) << "Service is started";
 
 #if defined(Q_OS_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_ERROR) << "SetPriorityClass failed";
+        PLOG(ERROR) << "SetPriorityClass failed";
     }
 
     HostStorage storage;
@@ -102,20 +102,20 @@ void Service::onStart()
 
         if (!base::SafeModeUtil::setSafeMode(false))
         {
-            LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
+            LOG(ERROR) << "Failed to turn off boot in safe mode";
         }
         else
         {
-            LOG(LS_INFO) << "Safe mode is disabled";
+            LOG(INFO) << "Safe mode is disabled";
         }
 
         if (!base::SafeModeUtil::setSafeModeService(kHostServiceName, false))
         {
-            LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
+            LOG(ERROR) << "Failed to remove service from boot in Safe Mode";
         }
         else
         {
-            LOG(LS_INFO) << "Service removed from safe mode loading";
+            LOG(INFO) << "Service removed from safe mode loading";
         }
     }
 #endif // defined(Q_OS_WINDOWS)
@@ -127,17 +127,17 @@ void Service::onStart()
 //--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
-    LOG(LS_INFO) << "Service stopping...";
+    LOG(INFO) << "Service stopping...";
     delete server_;
-    LOG(LS_INFO) << "Service is stopped";
+    LOG(INFO) << "Service is stopped";
 }
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event detected (status:" << base::sessionStatusToString(status)
-                 << ", session_id:" << session_id << ")";
+    LOG(INFO) << "Session event detected (status:" << base::sessionStatusToString(status)
+              << ", session_id:" << session_id << ")";
 
     if (server_)
     {
@@ -145,14 +145,14 @@ void Service::onSessionEvent(base::SessionStatus status, base::SessionId session
     }
     else
     {
-        LOG(LS_ERROR) << "No server instance";
+        LOG(ERROR) << "No server instance";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(quint32 event)
 {
-    LOG(LS_INFO) << "Power event detected:" << powerEventToString(event);
+    LOG(INFO) << "Power event detected:" << powerEventToString(event);
 
     if (server_)
     {
@@ -160,7 +160,7 @@ void Service::onPowerEvent(quint32 event)
     }
     else
     {
-        LOG(LS_ERROR) << "No server instance";
+        LOG(ERROR) << "No server instance";
     }
 }
 #endif // defined(Q_OS_WINDOWS)

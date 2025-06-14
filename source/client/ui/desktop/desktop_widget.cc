@@ -130,7 +130,7 @@ const char* applicationStateToString(Qt::ApplicationState state)
 DesktopWidget::DesktopWidget(QWidget* parent)
     : QWidget(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
@@ -143,7 +143,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state)
     {
-        LOG(LS_INFO) << "Application state changed:" << applicationStateToString(state);
+        LOG(INFO) << "Application state changed:" << applicationStateToString(state);
         if (state != Qt::ApplicationActive)
         {
             releaseKeyboardButtons();
@@ -155,7 +155,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopWidget::~DesktopWidget()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     enableKeyHooks(false);
 }
 
@@ -177,7 +177,7 @@ void DesktopWidget::setDesktopFrameError(proto::desktop::VideoErrorCode error_co
     if (last_error_code_ == error_code)
         return;
 
-    LOG(LS_INFO) << "Video error detected:" << error_code;
+    LOG(INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
     if (error_timer_)

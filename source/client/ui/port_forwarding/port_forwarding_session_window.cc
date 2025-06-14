@@ -31,20 +31,20 @@ PortForwardingSessionWindow::PortForwardingSessionWindow(
       ui(std::make_unique<Ui::PortForwardingSessionWindow>()),
       session_config_(session_config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui->setupUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 PortForwardingSessionWindow::~PortForwardingSessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client* PortForwardingSessionWindow::createClient()
 {
-    LOG(LS_INFO) << "Create client";
+    LOG(INFO) << "Create client";
 
     ClientPortForwarding* client = new ClientPortForwarding();
 
@@ -67,7 +67,7 @@ Client* PortForwardingSessionWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 void PortForwardingSessionWindow::onShowWindow()
 {
-    LOG(LS_INFO) << "Show window";
+    LOG(INFO) << "Show window";
     show();
     activateWindow();
 }

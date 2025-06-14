@@ -39,13 +39,13 @@ HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& desc
     ScopedHandle handle(PowerCreateRequest(&context));
     if (!handle.isValid())
     {
-        PLOG(LS_ERROR) << "PowerCreateRequest failed";
+        PLOG(ERROR) << "PowerCreateRequest failed";
         return INVALID_HANDLE_VALUE;
     }
 
     if (!PowerSetRequest(handle, type))
     {
-        PLOG(LS_ERROR) << "PowerSetRequest failed";
+        PLOG(ERROR) << "PowerSetRequest failed";
         return INVALID_HANDLE_VALUE;
     }
 
@@ -59,13 +59,13 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
     ScopedHandle request_handle(handle);
     if (!request_handle.isValid())
     {
-        LOG(LS_ERROR) << "Invalid handle for power request";
+        LOG(ERROR) << "Invalid handle for power request";
         return;
     }
 
     if (!PowerClearRequest(request_handle, type))
     {
-        PLOG(LS_ERROR) << "PowerClearRequest failed";
+        PLOG(ERROR) << "PowerClearRequest failed";
     }
 }
 
@@ -76,7 +76,7 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 //--------------------------------------------------------------------------------------------------
 PowerSaveBlocker::PowerSaveBlocker()
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
 #if defined(Q_OS_WINDOWS)
     static const wchar_t kDescription[] = L"Aspia session is active";
@@ -91,7 +91,7 @@ PowerSaveBlocker::PowerSaveBlocker()
 //--------------------------------------------------------------------------------------------------
 PowerSaveBlocker::~PowerSaveBlocker()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
 #if defined(Q_OS_WINDOWS)
     deletePowerRequest(PowerRequestDisplayRequired, handle_.release());

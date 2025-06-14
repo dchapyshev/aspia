@@ -28,13 +28,13 @@ namespace base {
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 VideoDecoderZstd::~VideoDecoderZstd()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,14 +62,14 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
 
     if (!source_frame_ || !translator_)
     {
-        LOG(LS_ERROR) << "A packet with image information was not received";
+        LOG(ERROR) << "A packet with image information was not received";
         return false;
     }
 
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret);
+        LOG(ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret);
         return false;
     }
 
@@ -82,7 +82,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
 
         if (!frame_rect.containsRect(rect))
         {
-            LOG(LS_ERROR) << "The rectangle is outside the screen area";
+            LOG(ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 
@@ -98,7 +98,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
             ret = ZSTD_decompressStream(stream_.get(), &output, &input);
             if (ZSTD_isError(ret))
             {
-                LOG(LS_ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret);
+                LOG(ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret);
                 return false;
             }
 

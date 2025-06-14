@@ -42,19 +42,19 @@ HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* fi
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
     if (!event_log.isValid())
     {
-        PLOG(LS_ERROR) << "OpenEventLogW failed";
+        PLOG(ERROR) << "OpenEventLogW failed";
         return nullptr;
     }
 
     if (!GetNumberOfEventLogRecords(event_log.get(), records_count))
     {
-        PLOG(LS_ERROR) << "GetNumberOfEventLogRecords failed";
+        PLOG(ERROR) << "GetNumberOfEventLogRecords failed";
         return nullptr;
     }
 
     if (!GetOldestEventLogRecord(event_log.get(), first_record))
     {
-        PLOG(LS_ERROR) << "GetOldestEventLogRecord failed";
+        PLOG(ERROR) << "GetOldestEventLogRecord failed";
         return nullptr;
     }
 
@@ -83,7 +83,7 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, QByteArray* record_bu
 
         if (error_code != ERROR_INSUFFICIENT_BUFFER)
         {
-            LOG(LS_ERROR) << "ReadEventLogW failed:" << SystemError(error_code).toString();
+            LOG(ERROR) << "ReadEventLogW failed:" << SystemError(error_code).toString();
             return false;
         }
 
@@ -98,7 +98,7 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, QByteArray* record_bu
                            &bytes_read,
                            &bytes_needed))
         {
-            PLOG(LS_ERROR) << "ReadEventLogW failed";
+            PLOG(ERROR) << "ReadEventLogW failed";
             return false;
         }
     }
@@ -118,16 +118,14 @@ bool eventLogMessageFileDLL(
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "key.open failed:"
-                      << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(ERROR) << "key.open failed:" << SystemError(static_cast<DWORD>(status)).toString();
         return false;
     }
 
     status = key.readValue("EventMessageFile", message_file);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_INFO) << "key.readValue failed:"
-                     << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(INFO) << "key.readValue failed:" << SystemError(static_cast<DWORD>(status)).toString();
         return false;
     }
 
@@ -291,9 +289,9 @@ EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32
     if (end_record_ < static_cast<int>(first_record))
         end_record_ = static_cast<int>(first_record);
 
-    LOG(LS_INFO) << "Log name:" << log_name_;
-    LOG(LS_INFO) << "First:" << first_record << "count:" << records_count
-                 << "pos:" << current_pos_ << "end:" << end_record_;
+    LOG(INFO) << "Log name:" << log_name_;
+    LOG(INFO) << "First:" << first_record << "count:" << records_count
+              << "pos:" << current_pos_ << "end:" << end_record_;
 }
 
 //--------------------------------------------------------------------------------------------------

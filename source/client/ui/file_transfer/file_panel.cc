@@ -57,7 +57,7 @@ QString parentPath(const QString& path)
 FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     FileItemDelegate* delegate = static_cast<FileItemDelegate*>(ui.list->itemDelegate());
@@ -92,7 +92,7 @@ FilePanel::FilePanel(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FilePanel::~FilePanel()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -378,7 +378,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::toChildFolder(const QString& child_name)
 {
-    LOG(LS_INFO) << "toChildFolder called:" << child_name.toStdString();
+    LOG(INFO) << "toChildFolder called:" << child_name;
 
     ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
     ui.action_up->setEnabled(true);
@@ -387,7 +387,7 @@ void FilePanel::toChildFolder(const QString& child_name)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::toParentFolder()
 {
-    LOG(LS_INFO) << "toParentFolder called";
+    LOG(INFO) << "toParentFolder called";
 
     if (ui.action_up->isEnabled())
     {

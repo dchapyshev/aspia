@@ -97,7 +97,7 @@ bool VideoEncoderZstd::compressPacket(
     size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret);
+        LOG(ERROR) << "ZSTD_initCStream failed:" << ZSTD_getErrorName(ret);
         return false;
     }
 
@@ -112,7 +112,7 @@ bool VideoEncoderZstd::compressPacket(
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret);
+            LOG(ERROR) << "ZSTD_compressStream failed:" << ZSTD_getErrorName(ret);
             return false;
         }
     }
@@ -120,7 +120,7 @@ bool VideoEncoderZstd::compressPacket(
     ret = ZSTD_endStream(stream_.get(), &output);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret);
+        LOG(ERROR) << "ZSTD_endStream failed:" << ZSTD_getErrorName(ret);
         return false;
     }
 
@@ -135,7 +135,7 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 
     if (packet->has_format())
     {
-        LOG(LS_INFO) << "Has packet format";
+        LOG(INFO) << "Has packet format";
 
         serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
         updated_region_ = Region(Rect::makeSize(frame->size()));
@@ -154,12 +154,12 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 
     if (!translator_)
     {
-        LOG(LS_INFO) << "Pixel translator not created yet";
+        LOG(INFO) << "Pixel translator not created yet";
 
         translator_ = PixelTranslator::create(PixelFormat::ARGB(), target_format_);
         if (!translator_)
         {
-            LOG(LS_ERROR) << "Unsupported pixel format";
+            LOG(ERROR) << "Unsupported pixel format";
             return false;
         }
     }
@@ -175,8 +175,8 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 
     if (translate_buffer_size_ < data_size)
     {
-        LOG(LS_INFO) << "Translate buffer too small. Resize from" << translate_buffer_size_
-                     << "to" << data_size;
+        LOG(INFO) << "Translate buffer too small. Resize from" << translate_buffer_size_
+                  << "to" << data_size;
 
         translate_buffer_.reset(static_cast<quint8*>(base::alignedAlloc(data_size, 32)));
         translate_buffer_size_ = data_size;
@@ -204,7 +204,7 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
     // Compress data with using Zstd compressor.
     if (!compressPacket(translate_buffer_.get(), data_size, encode_buffer))
     {
-        LOG(LS_ERROR) << "compressPacket failed";
+        LOG(ERROR) << "compressPacket failed";
         return false;
     }
 
@@ -219,7 +219,7 @@ bool VideoEncoderZstd::setCompressRatio(int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel() || compression_ratio < 1)
     {
-        LOG(LS_ERROR) << "Invalid compression ratio:" << compression_ratio;
+        LOG(ERROR) << "Invalid compression ratio:" << compression_ratio;
         return false;
     }
 

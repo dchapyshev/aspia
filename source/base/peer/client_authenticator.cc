@@ -78,13 +78,13 @@ bool verifyNg(std::string_view N, std::string_view g)
 ClientAuthenticator::ClientAuthenticator(QObject* parent)
     : Authenticator(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticator::~ClientAuthenticator()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -188,21 +188,21 @@ void ClientAuthenticator::onWritten()
     {
         case InternalState::SEND_CLIENT_HELLO:
         {
-            LOG(LS_INFO) << "Sended: ClientHello";
+            LOG(INFO) << "Sended: ClientHello";
             internal_state_ = InternalState::READ_SERVER_HELLO;
         }
         break;
 
         case InternalState::SEND_IDENTIFY:
         {
-            LOG(LS_INFO) << "Sended: Identify";
+            LOG(INFO) << "Sended: Identify";
             internal_state_ = InternalState::READ_SERVER_KEY_EXCHANGE;
         }
         break;
 
         case InternalState::SEND_CLIENT_KEY_EXCHANGE:
         {
-            LOG(LS_INFO) << "Sended: ClientKeyExchange";
+            LOG(INFO) << "Sended: ClientKeyExchange";
             internal_state_ = InternalState::READ_SESSION_CHALLENGE;
             if (!onSessionKeyChanged())
             {
@@ -214,7 +214,7 @@ void ClientAuthenticator::onWritten()
 
         case InternalState::SEND_SESSION_RESPONSE:
         {
-            LOG(LS_INFO) << "Sended: SessionResponse";
+            LOG(INFO) << "Sended: SessionResponse";
             finish(FROM_HERE, ErrorCode::SUCCESS);
         }
         break;
@@ -293,14 +293,14 @@ void ClientAuthenticator::sendClientHello()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    LOG(LS_INFO) << "Sending: ClientHello";
+    LOG(INFO) << "Sending: ClientHello";
     sendMessage(client_hello);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
-    LOG(LS_INFO) << "Received: ServerHello";
+    LOG(INFO) << "Received: ServerHello";
 
     proto::key_exchange::ServerHello server_hello;
     if (!parse(buffer, &server_hello))
@@ -311,7 +311,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 
     if (server_hello.has_version())
     {
-        LOG(LS_INFO) << "ServerHello with version info";
+        LOG(INFO) << "ServerHello with version info";
         setPeerVersion(server_hello.version());
 
         const QVersionNumber& peer_version = peerVersion();
@@ -336,7 +336,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         }
     }
 
-    LOG(LS_INFO) << "Encryption:" << server_hello.encryption();
+    LOG(INFO) << "Encryption:" << server_hello.encryption();
 
     encryption_ = server_hello.encryption();
     switch (encryption_)
@@ -373,14 +373,14 @@ void ClientAuthenticator::sendIdentify()
     proto::key_exchange::SrpIdentify identify;
     identify.set_username(username_.toStdString());
 
-    LOG(LS_INFO) << "Sending: Identify";
+    LOG(INFO) << "Sending: Identify";
     sendMessage(identify);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
-    LOG(LS_INFO) << "Received: ServerKeyExchange";
+    LOG(INFO) << "Received: ServerKeyExchange";
 
     proto::key_exchange::SrpServerKeyExchange server_key_exchange;
     if (!parse(buffer, &server_key_exchange))
@@ -391,8 +391,8 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 
     if (server_key_exchange.salt().empty() || server_key_exchange.b().empty())
     {
-        LOG(LS_ERROR) << "Salt size:" << server_key_exchange.salt().size();
-        LOG(LS_ERROR) << "B size:" << server_key_exchange.b().size();
+        LOG(ERROR) << "Salt size:" << server_key_exchange.salt().size();
+        LOG(ERROR) << "B size:" << server_key_exchange.b().size();
 
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -416,7 +416,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 
     if (!SrpMath::verify_B_mod_N(B_, N_))
     {
-        LOG(LS_ERROR) << "Invalid B or N";
+        LOG(ERROR) << "Invalid B or N";
         return false;
     }
 
@@ -425,7 +425,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
     BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
     if (!key.isValid())
     {
-        LOG(LS_ERROR) << "Empty encryption key generated";
+        LOG(ERROR) << "Empty encryption key generated";
         return false;
     }
 
@@ -447,14 +447,14 @@ void ClientAuthenticator::sendClientKeyExchange()
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(encrypt_iv_.toStdString());
 
-    LOG(LS_INFO) << "Sending: ClientKeyExchange";
+    LOG(INFO) << "Sending: ClientKeyExchange";
     sendMessage(client_key_exchange);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
-    LOG(LS_INFO) << "Received: SessionChallenge";
+    LOG(INFO) << "Received: SessionChallenge";
 
     proto::key_exchange::SessionChallenge challenge;
     if (!parse(buffer, &challenge))
@@ -500,10 +500,10 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(challenge.arch()));
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
 
-    LOG(LS_INFO) << "Server (version=" << peerVersion().toString() << "name=" << peerComputerName()
-                 << "os=" << peerOsName() << "cores=" << challenge.cpu_cores()
-                 << "arch=" << peerArch() << "display_name=" << peerDisplayName()
-                 << ")";
+    LOG(INFO) << "Server (version=" << peerVersion().toString() << "name=" << peerComputerName()
+              << "os=" << peerOsName() << "cores=" << challenge.cpu_cores()
+              << "arch=" << peerArch() << "display_name=" << peerDisplayName()
+              << ")";
 
     return true;
 }
@@ -526,7 +526,7 @@ void ClientAuthenticator::sendSessionResponse()
     response.set_display_name(display_name_.toStdString());
     response.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
-    LOG(LS_INFO) << "Sending: SessionResponse";
+    LOG(INFO) << "Sending: SessionResponse";
     sendMessage(response);
 }
 

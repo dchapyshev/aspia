@@ -47,7 +47,7 @@ Point dpiByRect(const Rect& rect)
     HMONITOR monitor = MonitorFromRect(&native_rect, MONITOR_DEFAULTTONEAREST);
     if (!monitor)
     {
-        PLOG(LS_ERROR) << "MonitorFromRect failed";
+        PLOG(ERROR) << "MonitorFromRect failed";
         return result;
     }
 
@@ -75,8 +75,8 @@ Point dpiByRect(const Rect& rect)
             HRESULT hr = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "GetDpiForMonitor failed:"
-                              << SystemError(static_cast<DWORD>(hr)).toString();
+                LOG(ERROR) << "GetDpiForMonitor failed:"
+                           << SystemError(static_cast<DWORD>(hr)).toString();
             }
             else
             {
@@ -86,14 +86,14 @@ Point dpiByRect(const Rect& rect)
         }
         else
         {
-            PLOG(LS_ERROR) << "GetProcAddress failed";
+            PLOG(ERROR) << "GetProcAddress failed";
         }
 
         FreeLibrary(module);
     }
     else
     {
-        PLOG(LS_ERROR) << "LoadLibraryW failed";
+        PLOG(ERROR) << "LoadLibraryW failed";
     }
 
     return result;
@@ -130,7 +130,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 
         if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
         {
-            PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
+            PLOG(ERROR) << "EnumDisplaySettingsExW failed";
             return false;
         }
 
@@ -163,7 +163,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
 
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
     {
-        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
+        PLOG(ERROR) << "EnumDisplayDevicesW failed";
         return false;
     }
 
@@ -193,7 +193,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
     {
-        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
+        PLOG(ERROR) << "EnumDisplayDevicesW failed";
         return Rect();
     }
 
@@ -203,7 +203,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     // monitor, while DeviceID is not.
     if (device.DeviceKey != device_key)
     {
-        LOG(LS_ERROR) << "Invalid device key";
+        LOG(ERROR) << "Invalid device key";
         return Rect();
     }
 
@@ -213,7 +213,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
     {
-        PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
+        PLOG(ERROR) << "EnumDisplaySettingsExW failed";
         return Rect();
     }
 

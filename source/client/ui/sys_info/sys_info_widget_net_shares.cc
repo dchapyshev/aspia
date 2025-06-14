@@ -117,7 +117,7 @@ void SysInfoWidgetNetShares::setSystemInfo(const proto::system_info::SystemInfo&
 
     if (!system_info.has_network_shares())
     {
-        LOG(LS_INFO) << "No network shares";
+        LOG(INFO) << "No network shares";
         ui.tree->setEnabled(false);
         return;
     }

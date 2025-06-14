@@ -54,7 +54,7 @@ TextChatWidget::TextChatWidget(QWidget* parent)
       display_name_(QHostInfo::localHostName()),
       status_clear_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
     ui->edit_message->installEventFilter(this);
@@ -65,7 +65,7 @@ TextChatWidget::TextChatWidget(QWidget* parent)
     connect(ui->button_send, &QToolButton::clicked, this, &TextChatWidget::onSendMessage);
     connect(ui->button_tools, &QToolButton::clicked, this, [this]()
     {
-        LOG(LS_INFO) << "[ACTION] Show tool menu";
+        LOG(INFO) << "[ACTION] Show tool menu";
 
         QMenu menu;
         QAction* save_chat_action = menu.addAction(tr("Save chat..."));
@@ -94,7 +94,7 @@ TextChatWidget::TextChatWidget(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 TextChatWidget::~TextChatWidget()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ void TextChatWidget::readStatus(const proto::text_chat::Status& status)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unhandled status code:" << status.code();
+            LOG(ERROR) << "Unhandled status code:" << status.code();
             return;
     }
 
@@ -195,7 +195,7 @@ void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event detected";
+    LOG(INFO) << "Close event detected";
 
     emit sig_textChatClosed();
     QWidget::closeEvent(event);
@@ -244,7 +244,7 @@ void TextChatWidget::onSendMessage()
 
     if (message.length() > kMaxMessageLength)
     {
-        LOG(LS_ERROR) << "Too long message:" << message.length();
+        LOG(ERROR) << "Too long message:" << message.length();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The message is too long. The maximum message length is %n "
@@ -281,7 +281,7 @@ void TextChatWidget::onSendStatus(proto::text_chat::Status::Code code)
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::onClearHistory()
 {
-    LOG(LS_INFO) << "[ACTION] Clear history";
+    LOG(INFO) << "[ACTION] Clear history";
 
     QListWidget* list_messages = ui->list_messages;
     for (int i = list_messages->count() - 1; i >= 0; --i)
@@ -291,7 +291,7 @@ void TextChatWidget::onClearHistory()
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::onSaveChat()
 {
-    LOG(LS_INFO) << "[ACTION] Save chat";
+    LOG(INFO) << "[ACTION] Save chat";
 
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -301,16 +301,16 @@ void TextChatWidget::onSaveChat()
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
-        LOG(LS_INFO) << "File path not selected";
+        LOG(INFO) << "File path not selected";
         return;
     }
 
-    LOG(LS_INFO) << "Selected file path:" << file_path;
+    LOG(INFO) << "Selected file path:" << file_path;
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        LOG(LS_ERROR) << "Unable to open file:" << file.errorString();
+        LOG(ERROR) << "Unable to open file:" << file.errorString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),

@@ -37,13 +37,13 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
       status_request_timer_(new QTimer(this)),
       router_config_(router_config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     status_request_timer_->setSingleShot(true);
 
     connect(status_request_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(LS_INFO) << "Request host status from router (host_id=" << host_id_ << ")";
+        LOG(INFO) << "Request host status from router (host_id=" << host_id_ << ")";
 
         proto::router::PeerToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
@@ -54,7 +54,7 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
 //--------------------------------------------------------------------------------------------------
 RouterController::~RouterController()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,8 +65,8 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
 
-    LOG(LS_INFO) << "Connecting to router... (host_id=" << host_id_ << "wait_for_host="
-                 << wait_for_host_ << ")";
+    LOG(INFO) << "Connecting to router... (host_id=" << host_id_ << "wait_for_host="
+              << wait_for_host_ << ")";
 
     router_channel_ = new base::TcpChannel(this);
 
@@ -93,7 +93,7 @@ base::TcpChannel* RouterController::takeChannel()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpConnected()
 {
-    LOG(LS_INFO) << "Connection to the router is established";
+    LOG(INFO) << "Connection to the router is established";
 
     authenticator_ = new base::ClientAuthenticator(this);
 
@@ -114,7 +114,7 @@ void RouterController::onTcpConnected()
             connect(router_channel_, &base::TcpChannel::sig_messageReceived,
                     this, &RouterController::onTcpMessageReceived);
 
-            LOG(LS_INFO) << "Sending connection request (host_id: " << host_id_ << ")";
+            LOG(INFO) << "Sending connection request (host_id:" << host_id_ << ")";
 
             // Now the session will receive incoming messages.
             router_channel_->setChannelIdSupport(true);
@@ -124,8 +124,7 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(LS_ERROR) << "Authentication failed: "
-                          << base::Authenticator::errorToString(error_code);
+            LOG(ERROR) << "Authentication failed:" << base::Authenticator::errorToString(error_code);
 
             Error error;
             error.type = ErrorType::AUTHENTICATION;
@@ -145,8 +144,8 @@ void RouterController::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::TcpChannel::errorToString(error_code) << ")";
+    LOG(INFO) << "Connection to the router is lost ("
+              << base::TcpChannel::errorToString(error_code) << ")";
 
     Error error;
     error.type = ErrorType::NETWORK;
@@ -164,7 +163,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
     proto::router::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Invalid message from router";
+        LOG(ERROR) << "Invalid message from router";
 
         error.code.router = ErrorCode::UNKNOWN_ERROR;
         emit sig_errorOccurred(error);
@@ -175,7 +174,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
     {
         if (relay_peer_)
         {
-            LOG(LS_ERROR) << "Re-offer connection detected";
+            LOG(ERROR) << "Re-offer connection detected";
             return;
         }
 
@@ -205,7 +204,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 
             if (error.code.router == ErrorCode::PEER_NOT_FOUND && wait_for_host_)
             {
-                LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
+                LOG(INFO) << "Host is OFFLINE. Wait for host";
                 waitForHost();
             }
             else
@@ -230,29 +229,29 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
         const proto::router::HostStatus& host_status = message.host_status();
         if (host_status.status() == proto::router::HostStatus::STATUS_ONLINE)
         {
-            LOG(LS_INFO) << "Host is ONLINE now. Sending connection request";
+            LOG(INFO) << "Host is ONLINE now. Sending connection request";
             sendConnectionRequest();
         }
         else
         {
-            LOG(LS_INFO) << "Host is OFFLINE. Wait for host";
+            LOG(INFO) << "Host is OFFLINE. Wait for host";
             waitForHost();
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from router";
+        LOG(ERROR) << "Unhandled message from router";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionReady()
 {
-    LOG(LS_INFO) << "Relay connection ready";
+    LOG(INFO) << "Relay connection ready";
 
     if (!relay_peer_)
     {
-        LOG(LS_ERROR) << "No relay peer instance";
+        LOG(ERROR) << "No relay peer instance";
         return;
     }
 
@@ -266,7 +265,7 @@ void RouterController::onRelayConnectionReady()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionError()
 {
-    LOG(LS_INFO) << "Relay connection error";
+    LOG(INFO) << "Relay connection error";
 
     Error error;
     error.type = ErrorType::ROUTER;
@@ -279,7 +278,7 @@ void RouterController::onRelayConnectionError()
 //--------------------------------------------------------------------------------------------------
 void RouterController::sendConnectionRequest()
 {
-    LOG(LS_INFO) << "Sending connection request (host_id=" << host_id_ << ")";
+    LOG(INFO) << "Sending connection request (host_id=" << host_id_ << ")";
 
     proto::router::PeerToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
@@ -289,7 +288,7 @@ void RouterController::sendConnectionRequest()
 //--------------------------------------------------------------------------------------------------
 void RouterController::waitForHost()
 {
-    LOG(LS_INFO) << "Wait for host";
+    LOG(INFO) << "Wait for host";
     emit sig_hostAwaiting();
     status_request_timer_->start(std::chrono::milliseconds(5000));
 }

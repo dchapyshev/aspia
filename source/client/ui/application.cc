@@ -31,7 +31,7 @@ namespace client {
 Application::Application(int& argc, char* argv[])
     : base::GuiApplication(argc, argv)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     setOrganizationName("Aspia");
     setApplicationName("Client");
@@ -45,7 +45,7 @@ Application::Application(int& argc, char* argv[])
 
     if (!hasLocale(settings.locale()))
     {
-        LOG(LS_INFO) << "Set default locale";
+        LOG(INFO) << "Set default locale";
         settings.setLocale(DEFAULT_LOCALE);
     }
 
@@ -55,7 +55,7 @@ Application::Application(int& argc, char* argv[])
 //--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

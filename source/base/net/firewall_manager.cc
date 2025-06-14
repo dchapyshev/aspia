@@ -37,7 +37,7 @@ FirewallManager::FirewallManager(const QString& application_path)
                                   IID_PPV_ARGS(&firewall_policy_));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
         firewall_policy_ = nullptr;
         return;
     }
@@ -45,7 +45,7 @@ FirewallManager::FirewallManager(const QString& application_path)
     hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "get_Rules failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "get_Rules failed:" << SystemError::toString(static_cast<DWORD>(hr));
         firewall_rules_ = nullptr;
     }
 }
@@ -114,8 +114,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed:"
-                      << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CoCreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return false;
     }
 
@@ -132,7 +131,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return false;
     }
 
@@ -154,8 +153,7 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
     HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed:"
-                      << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CoCreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return false;
     }
 
@@ -172,7 +170,7 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
     firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return false;
     }
 
@@ -192,7 +190,7 @@ void FirewallManager::deleteRuleByName(const QString& rule_name)
         HRESULT hr = rule->get_Name(bstr_rule_name.GetAddress());
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "get_Name failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "get_Name failed:" << SystemError::toString(static_cast<DWORD>(hr));
             continue;
         }
 
@@ -222,7 +220,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "get__NewEnum failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "get__NewEnum failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return;
     }
 
@@ -231,8 +229,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
     hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "QueryInterface failed:"
-                      << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "QueryInterface failed:" << SystemError::toString(static_cast<DWORD>(hr));
         return;
     }
 
@@ -242,7 +239,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "Next failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "Next failed:" << SystemError::toString(static_cast<DWORD>(hr));
         }
 
         if (hr != S_OK)
@@ -258,8 +255,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "QueryInterface failed:"
-                          << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "QueryInterface failed:" << SystemError::toString(static_cast<DWORD>(hr));
             continue;
         }
 
@@ -267,8 +263,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         hr = rule->get_ApplicationName(bstr_path.GetAddress());
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "get_ApplicationName failed:"
-                          << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "get_ApplicationName failed:" << SystemError::toString(static_cast<DWORD>(hr));
             continue;
         }
 

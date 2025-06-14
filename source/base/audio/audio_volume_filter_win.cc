@@ -42,7 +42,7 @@ bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
         nullptr, &audio_volume_);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "Failed to get an IAudioEndpointVolume. Error" << hr;
+        LOG(ERROR) << "Failed to get an IAudioEndpointVolume. Error" << hr;
         return false;
     }
     return true;
@@ -58,7 +58,7 @@ float AudioVolumeFilterWin::audioLevel()
     HRESULT hr = audio_volume_->GetMute(&mute);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "Failed to get mute status from IAudioEndpointVolume, error" << hr;
+        LOG(ERROR) << "Failed to get mute status from IAudioEndpointVolume, error" << hr;
         return 1;
     }
 
@@ -69,7 +69,7 @@ float AudioVolumeFilterWin::audioLevel()
     hr = audio_volume_->GetMasterVolumeLevelScalar(&level);
     if (FAILED(hr) || level > 1)
     {
-        LOG(LS_ERROR) << "Failed to get master volume from IAudioEndpointVolume, error" << hr;
+        LOG(ERROR) << "Failed to get master volume from IAudioEndpointVolume, error" << hr;
         return 1;
     }
 

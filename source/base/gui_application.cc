@@ -58,13 +58,13 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     : QApplication(argc, argv),
       io_thread_(base::Thread::AsioDispatcher, nullptr)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
 #if defined(Q_OS_WINDOWS)
     DWORD id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &id))
     {
-        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
+        PLOG(ERROR) << "ProcessIdToSessionId failed";
     }
     QString session_id = QString::number(id);
 #else
@@ -97,7 +97,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 //--------------------------------------------------------------------------------------------------
 GuiApplication::~GuiApplication()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     io_thread_.stop();
 
@@ -126,7 +126,7 @@ QThread* GuiApplication::ioThread()
     GuiApplication* application = instance();
     if (!application)
     {
-        LOG(LS_ERROR) << "Invalid application instance";
+        LOG(ERROR) << "Invalid application instance";
         return nullptr;
     }
 
@@ -138,7 +138,7 @@ bool GuiApplication::isRunning()
 {
     if (!lock_file_->tryLock())
     {
-        LOG(LS_INFO) << "Application already running";
+        LOG(INFO) << "Application already running";
         return true;
     }
 
@@ -149,8 +149,8 @@ bool GuiApplication::isRunning()
 
     if (!server_->listen(server_name_))
     {
-        LOG(LS_ERROR) << "IPC server is not running on channel"
-                      << server_->serverName() << ":" << server_->errorString();
+        LOG(ERROR) << "IPC server is not running on channel"
+                   << server_->serverName() << ":" << server_->errorString();
     }
     else
     {
@@ -183,7 +183,7 @@ void GuiApplication::sendMessage(const QByteArray& message)
 {
     if (server_)
     {
-        LOG(LS_ERROR) << "Attempt to send a message from the first instance of the application";
+        LOG(ERROR) << "Attempt to send a message from the first instance of the application";
         return;
     }
 
@@ -204,7 +204,7 @@ void GuiApplication::sendMessage(const QByteArray& message)
 
     if (socket.state() != QLocalSocket::LocalSocketState::ConnectedState)
     {
-        LOG(LS_ERROR) << "Could not connect to server";
+        LOG(ERROR) << "Could not connect to server";
         return;
     }
 
@@ -213,19 +213,19 @@ void GuiApplication::sendMessage(const QByteArray& message)
 
     if (!socket.waitForBytesWritten(kWriteTimeoutMs))
     {
-        LOG(LS_ERROR) << "Timeout when sending a message";
+        LOG(ERROR) << "Timeout when sending a message";
         return;
     }
 
     if (!socket.waitForReadyRead(kReadTimeoutMs))
     {
-        LOG(LS_ERROR) << "Timeout when reading a message";
+        LOG(ERROR) << "Timeout when reading a message";
         return;
     }
 
     if (socket.read(strlen(kOkMessage)) != kOkMessage)
     {
-        LOG(LS_ERROR) << "Unknown status code";
+        LOG(ERROR) << "Unknown status code";
         return;
     }
 }
@@ -238,7 +238,7 @@ void GuiApplication::onNewConnection()
     std::unique_ptr<QLocalSocket> socket(server_->nextPendingConnection());
     if (!socket)
     {
-        LOG(LS_ERROR) << "Invalid socket";
+        LOG(ERROR) << "Invalid socket";
         return;
     }
 
@@ -260,7 +260,7 @@ void GuiApplication::onNewConnection()
 
     if (!remaining || remaining > kMaxMessageSize)
     {
-        LOG(LS_ERROR) << "Message has an incorrect size:" << remaining;
+        LOG(ERROR) << "Message has an incorrect size:" << remaining;
         return;
     }
 
@@ -274,7 +274,7 @@ void GuiApplication::onNewConnection()
         int read_bytes = stream.readRawData(buffer, static_cast<int>(remaining));
         if (read_bytes < 0)
         {
-            LOG(LS_ERROR) << "Could not read message";
+            LOG(ERROR) << "Could not read message";
             return;
         }
 

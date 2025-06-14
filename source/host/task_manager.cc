@@ -32,13 +32,13 @@ TaskManager::TaskManager(QObject* parent)
     : QObject(parent),
       process_monitor_(std::make_unique<ProcessMonitor>())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 TaskManager::~TaskManager()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     {
         if (message.service_request().name().empty())
         {
-            LOG(LS_ERROR) << "Service name not specified";
+            LOG(ERROR) << "Service name not specified";
             return;
         }
 
@@ -76,13 +76,13 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
-                    LOG(LS_ERROR) << "Unable to open service:" << message.service_request().name();
+                    LOG(ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
                 if (!controller.start())
                 {
-                    LOG(LS_ERROR) << "Unable to start service:" << message.service_request().name();
+                    LOG(ERROR) << "Unable to start service:" << message.service_request().name();
                     return;
                 }
 
@@ -96,13 +96,13 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                     QString::fromStdString(message.service_request().name()));
                 if (!controller.isValid())
                 {
-                    LOG(LS_ERROR) << "Unable to open service:" << message.service_request().name();
+                    LOG(ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
                 if (!controller.stop())
                 {
-                    LOG(LS_ERROR) << "Unable to stop service:" << message.service_request().name();
+                    LOG(ERROR) << "Unable to stop service:" << message.service_request().name();
                     return;
                 }
 
@@ -112,8 +112,8 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             default:
             {
-                LOG(LS_ERROR) << "Unknown command for service request:"
-                              << message.service_request().command();
+                LOG(ERROR) << "Unknown command for service request:"
+                           << message.service_request().command();
             }
             break;
         }
@@ -126,7 +126,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     {
         if (message.user_request().session_id() == base::kInvalidSessionId)
         {
-            LOG(LS_ERROR) << "Invalid session id";
+            LOG(ERROR) << "Invalid session id";
             return;
         }
 
@@ -136,7 +136,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             {
                 if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, message.user_request().session_id(), FALSE))
                 {
-                    PLOG(LS_ERROR) << "WTSLogoffSession failed";
+                    PLOG(ERROR) << "WTSLogoffSession failed";
                     return;
                 }
             }
@@ -146,7 +146,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             {
                 if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, message.user_request().session_id(), FALSE))
                 {
-                    PLOG(LS_ERROR) << "WTSLogoffSession failed";
+                    PLOG(ERROR) << "WTSLogoffSession failed";
                     return;
                 }
             }
@@ -154,15 +154,14 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             default:
             {
-                LOG(LS_ERROR) << "Unknown command for user request:"
-                              << message.user_request().command();
+                LOG(ERROR) << "Unknown command for user request:" << message.user_request().command();
             }
             break;
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled task manager request";
+        LOG(ERROR) << "Unhandled task manager request";
     }
 }
 

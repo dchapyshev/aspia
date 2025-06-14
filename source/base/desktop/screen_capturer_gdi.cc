@@ -46,7 +46,7 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 ScreenCapturerGdi::ScreenCapturerGdi(QObject* parent)
     : ScreenCapturerWin(Type::WIN_GDI, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
@@ -58,26 +58,26 @@ ScreenCapturerGdi::ScreenCapturerGdi(QObject* parent)
             GetProcAddress(dwmapi_dll_, "DwmEnableComposition"));
         if (!dwm_enable_composition_func_)
         {
-            PLOG(LS_ERROR) << "Unable to load DwmEnableComposition function";
+            PLOG(ERROR) << "Unable to load DwmEnableComposition function";
         }
 
         dwm_is_composition_enabled_func_ = reinterpret_cast<DwmIsCompositionEnabledFunc>(
             GetProcAddress(dwmapi_dll_, "DwmIsCompositionEnabled"));
         if (!dwm_is_composition_enabled_func_)
         {
-            PLOG(LS_ERROR) << "Unable to load DwmIsCompositionEnabled function";
+            PLOG(ERROR) << "Unable to load DwmIsCompositionEnabled function";
         }
     }
     else
     {
-        PLOG(LS_ERROR) << "Unable to load dwmapi.dll";
+        PLOG(ERROR) << "Unable to load dwmapi.dll";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     if (composition_changed_ && dwm_enable_composition_func_)
         dwm_enable_composition_func_(DWM_EC_ENABLECOMPOSITION);
@@ -101,11 +101,11 @@ bool ScreenCapturerGdi::screenList(ScreenList* screens)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 {
-    LOG(LS_INFO) << "Select screen with ID:" << screen_id;
+    LOG(INFO) << "Select screen with ID:" << screen_id;
 
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
     {
-        LOG(LS_ERROR) << "Invalid screen";
+        LOG(ERROR) << "Invalid screen";
         return false;
     }
 
@@ -136,7 +136,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
     screen_rect_ = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect_.isEmpty())
     {
-        LOG(LS_ERROR) << "Failed to get screen rect";
+        LOG(ERROR) << "Failed to get screen rect";
         *error = Error::PERMANENT;
         return nullptr;
     }
@@ -150,7 +150,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
             screen_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
         if (!frame)
         {
-            LOG(LS_ERROR) << "Failed to create frame buffer";
+            LOG(ERROR) << "Failed to create frame buffer";
             return nullptr;
         }
 
@@ -176,7 +176,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 
             if (count == 0)
             {
-                LOG(LS_ERROR) << "BitBlt failed";
+                LOG(ERROR) << "BitBlt failed";
             }
 
             if (++count > 10)
@@ -220,7 +220,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
         {
             if (curr_cursor_info_.flags == 0)
             {
-                LOG(LS_INFO) << "No hardware cursor attached. Using default mouse cursor";
+                LOG(INFO) << "No hardware cursor attached. Using default mouse cursor";
 
                 // Host machine does not have a hardware mouse attached, we will send a default one
                 // instead. Note, Windows automatically caches cursor resource, so we do not need
@@ -228,7 +228,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
                 curr_cursor_info_.hCursor = LoadCursorW(nullptr, IDC_ARROW);
                 if (!curr_cursor_info_.hCursor)
                 {
-                    PLOG(LS_ERROR) << "LoadCursorW failed";
+                    PLOG(ERROR) << "LoadCursorW failed";
                     return nullptr;
                 }
             }
@@ -248,7 +248,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
     }
     else
     {
-        PLOG(LS_ERROR) << "GetCursorInfo failed";
+        PLOG(ERROR) << "GetCursorInfo failed";
     }
 
     return nullptr;
@@ -283,7 +283,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
     {
-        LOG(LS_INFO) << "Desktop rect changed from" << desktop_dc_rect_ << "to" << desktop_rect;
+        LOG(INFO) << "Desktop rect changed from" << desktop_dc_rect_ << "to" << desktop_rect;
 
         desktop_dc_.close();
         memory_dc_.reset();
@@ -314,7 +314,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
         memory_dc_.reset(CreateCompatibleDC(desktop_dc_));
         if (!memory_dc_)
         {
-            LOG(LS_ERROR) << "CreateCompatibleDC failed";
+            LOG(ERROR) << "CreateCompatibleDC failed";
             return false;
         }
 

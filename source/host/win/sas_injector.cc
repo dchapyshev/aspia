@@ -56,8 +56,8 @@ ScopedSasPolicy::ScopedSasPolicy()
                               KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "key.create failed:"
-                      << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(ERROR) << "key.create failed:"
+                   << base::SystemError::toString(static_cast<DWORD>(status));
         return;
     }
 
@@ -74,8 +74,8 @@ ScopedSasPolicy::ScopedSasPolicy()
         status = key_.writeValue(kSoftwareSASGeneration, kApplications);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_ERROR) << "key.writeValue failed:"
-                          << base::SystemError::toString(static_cast<DWORD>(status));
+            LOG(ERROR) << "key.writeValue failed:"
+                       << base::SystemError::toString(static_cast<DWORD>(status));
             key_.close();
         }
     }
@@ -90,8 +90,8 @@ ScopedSasPolicy::~ScopedSasPolicy()
     LONG status = key_.writeValue(kSoftwareSASGeneration, old_state_);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "key.writeValue failed:"
-                      << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(ERROR) << "key.writeValue failed:"
+                   << base::SystemError::toString(static_cast<DWORD>(status));
         return;
     }
 }
@@ -112,14 +112,14 @@ void injectSAS()
         }
         else
         {
-            PLOG(LS_ERROR) << "Unable to load SendSAS function";
+            PLOG(ERROR) << "Unable to load SendSAS function";
         }
 
         FreeLibrary(sas_dll);
     }
     else
     {
-        PLOG(LS_ERROR) << "Unable to load sas.dll";
+        PLOG(ERROR) << "Unable to load sas.dll";
     }
 }
 

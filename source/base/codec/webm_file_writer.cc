@@ -31,13 +31,13 @@ WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)
     : path_(path),
       name_(name)
 {
-    LOG(LS_INFO) << "Ctor (path=" << path << "name=" << name.data() << ")";
+    LOG(INFO) << "Ctor (path=" << path << "name=" << name.data() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 WebmFileWriter::~WebmFileWriter()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     close();
 }
 
@@ -55,7 +55,7 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
                 break;
 
             default:
-                LOG(LS_ERROR) << "Not supported video encoding";
+                LOG(ERROR) << "Not supported video encoding";
                 return;
         }
 
@@ -71,7 +71,7 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
     {
         if (!init())
         {
-            LOG(LS_ERROR) << "init failed";
+            LOG(ERROR) << "init failed";
             return;
         }
 
@@ -83,7 +83,7 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
                                    packet.format().video_rect().height(),
                                    video_codec_id))
         {
-            LOG(LS_ERROR) << "WebmFileMuxer::addVideoTrack failed";
+            LOG(ERROR) << "WebmFileMuxer::addVideoTrack failed";
             return;
         }
 
@@ -91,7 +91,7 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
                                    proto::desktop::AudioPacket::CHANNELS_STEREO,
                                    mkvmuxer::Tracks::kOpusCodecId))
         {
-            LOG(LS_ERROR) << "WebmFileMuxer::addAudioTrack failed";
+            LOG(ERROR) << "WebmFileMuxer::addAudioTrack failed";
             return;
         }
 
@@ -161,28 +161,28 @@ bool WebmFileWriter::init()
 
     if (!directory.exists())
     {
-        LOG(LS_INFO) << "Path" << path_ << "not exists yet";
+        LOG(INFO) << "Path" << path_ << "not exists yet";
 
         if (directory.mkpath(path_))
         {
-            LOG(LS_INFO) << "Path created successfully";
+            LOG(INFO) << "Path created successfully";
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to create path";
+            LOG(ERROR) << "Unable to create path";
             return false;
         }
     }
     else
     {
-        LOG(LS_INFO) << "Path" << path_ << "already exists";
+        LOG(INFO) << "Path" << path_ << "already exists";
     }
 
     QString time = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss.zzz"));
     QString file_name = QString("/%1-%2.%3.webm").arg(name_, time).arg(file_counter_);
     QString file_path = path_ + file_name;
 
-    LOG(LS_INFO) << "New video file:" << file_path;
+    LOG(INFO) << "New video file:" << file_path;
 
 #if defined(Q_OS_WINDOWS)
     if (fopen_s(&file_, file_path.toLocal8Bit().data(), "wb") != 0)
@@ -191,14 +191,14 @@ bool WebmFileWriter::init()
     if (!file_)
 #endif
     {
-        LOG(LS_ERROR) << "Could not open file for writing";
+        LOG(ERROR) << "Could not open file for writing";
         return false;
     }
 
     muxer_ = std::make_unique<WebmFileMuxer>();
     if (!muxer_->init(file_))
     {
-        LOG(LS_ERROR) << "WebmFileMuxer::init failed";
+        LOG(ERROR) << "WebmFileMuxer::init failed";
         close();
         return false;
     }
@@ -218,16 +218,16 @@ void WebmFileWriter::close()
     {
         if (muxer_->initialized() && !muxer_->finalize())
         {
-            LOG(LS_ERROR) << "WebmFileMuxer::finalize failed";
+            LOG(ERROR) << "WebmFileMuxer::finalize failed";
         }
 
-        LOG(LS_INFO) << "Muxer destroyed";
+        LOG(INFO) << "Muxer destroyed";
         muxer_.reset();
     }
 
     if (file_)
     {
-        LOG(LS_INFO) << "File closed";
+        LOG(INFO) << "File closed";
         fclose(file_);
         file_ = nullptr;
     }

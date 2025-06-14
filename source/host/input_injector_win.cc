@@ -55,7 +55,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        PLOG(LS_ERROR) << "SendInput failed";
+        PLOG(ERROR) << "SendInput failed";
     }
 }
 
@@ -73,7 +73,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        PLOG(LS_ERROR) << "SendInput failed";
+        PLOG(ERROR) << "SendInput failed";
     }
 }
 
@@ -90,7 +90,7 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        PLOG(LS_ERROR) << "SendInput failed";
+        PLOG(ERROR) << "SendInput failed";
     }
 }
 
@@ -100,13 +100,13 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 InputInjectorWin::InputInjectorWin(QObject* parent)
     : InputInjector(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorWin::~InputInjectorWin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     setBlockInputImpl(false);
     for (const auto& key : std::as_const(pressed_keys_))
@@ -118,7 +118,7 @@ InputInjectorWin::~InputInjectorWin()
         }
         else
         {
-            LOG(LS_ERROR) << "Invalid key code:" << key;
+            LOG(ERROR) << "Invalid key code:" << key;
         }
     }
 }
@@ -144,7 +144,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
         if (event.usb_keycode() == kUsbCodeDelete && isCtrlAndAltPressed())
         {
-            LOG(LS_INFO) << "CTRL+ALT+DEL detected";
+            LOG(INFO) << "CTRL+ALT+DEL detected";
             injectSAS();
             return;
         }
@@ -153,7 +153,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
     {
         if (!pressed_keys_.contains(event.usb_keycode()))
         {
-            LOG(LS_INFO) << "No pressed key in the list";
+            LOG(INFO) << "No pressed key in the list";
             return;
         }
 
@@ -163,7 +163,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
     int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (scancode == common::KeycodeConverter::invalidNativeKeycode())
     {
-        LOG(LS_ERROR) << "Invalid key code:" << event.usb_keycode();
+        LOG(ERROR) << "Invalid key code:" << event.usb_keycode();
         return;
     }
 
@@ -228,7 +228,7 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (full_size.width() <= 1 || full_size.height() <= 1)
     {
-        LOG(LS_ERROR) << "Invalid screen size:" << full_size;
+        LOG(ERROR) << "Invalid screen size:" << full_size;
         return;
     }
 
@@ -316,7 +316,7 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        PLOG(LS_ERROR) << "SendInput failed";
+        PLOG(ERROR) << "SendInput failed";
     }
 
     last_mouse_mask_ = mask;

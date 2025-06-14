@@ -31,12 +31,12 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
                                   IID_PPV_ARGS(&device_enumerator));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
     }
 
     if (hr == CO_E_NOTINITIALIZED && allow_reinitialize)
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed with CO_E_NOTINITIALIZED";
+        LOG(ERROR) << "CoCreateInstance failed with CO_E_NOTINITIALIZED";
 
         hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (FAILED(hr))
@@ -45,7 +45,7 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
                                   CLSCTX_ALL, IID_PPV_ARGS(&device_enumerator));
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
+                LOG(ERROR) << "CoCreateInstance failed:" << SystemError(hr).toString();
             }
         }
     }
@@ -64,7 +64,7 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enum(createDeviceEnumerator(true));
     if (!device_enum.Get())
     {
-        LOG(LS_ERROR) << "createDeviceEnumerator failed";
+        LOG(ERROR) << "createDeviceEnumerator failed";
         return audio_endpoint_device;
     }
 
@@ -78,8 +78,8 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
         eRender, eConsole, audio_endpoint_device.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IMMDeviceEnumerator::GetDefaultAudioEndpoint failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IMMDeviceEnumerator::GetDefaultAudioEndpoint failed:"
+                   << SystemError(hr).toString();
     }
 
     // Verify that the audio endpoint device is active, i.e., that the audio
@@ -87,7 +87,7 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     if (SUCCEEDED(hr) && !audio_endpoint_device.Get() &&
         !isDeviceActive(audio_endpoint_device.Get()))
     {
-        LOG(LS_ERROR) << "Selected endpoint device is not active";
+        LOG(ERROR) << "Selected endpoint device is not active";
         audio_endpoint_device.Reset();
     }
 
@@ -106,8 +106,8 @@ Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
                                         nullptr, &audio_client);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IMMDevice::Activate(IAudioClient) failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IMMDevice::Activate(IAudioClient) failed:"
+                   << SystemError(hr).toString();
     }
     return audio_client;
 }
@@ -122,8 +122,8 @@ Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* clie
     HRESULT hr = client->GetService(IID_PPV_ARGS(&audio_render_client));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioRenderClient) failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetService(IID_IAudioRenderClient) failed:"
+                   << SystemError(hr).toString();
         return Microsoft::WRL::ComPtr<IAudioRenderClient>();
     }
     return audio_render_client;
@@ -137,8 +137,8 @@ Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioCli
     HRESULT hr = client->GetService(IID_PPV_ARGS(&audio_session_control));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetService(IID_IAudioControl) failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetService(IID_IAudioControl) failed:"
+                   << SystemError(hr).toString();
         return Microsoft::WRL::ComPtr<IAudioSessionControl>();
     }
     return audio_session_control;
@@ -157,11 +157,11 @@ bool sharedModeInitialize(IAudioClient* client,
 
     if (buffer_duration != 0)
     {
-        LOG(LS_INFO) << "Non-default buffer size is used";
+        LOG(INFO) << "Non-default buffer size is used";
     }
     if (auto_convert_pcm)
     {
-        LOG(LS_INFO) << "Sample rate converter can be utilized";
+        LOG(INFO) << "Sample rate converter can be utilized";
     }
     // The AUDCLNT_STREAMFLAGS_NOPERSIST flag disables persistence of the volume and mute settings
     // for a session that contains rendering streams. By default, the volume level and muting state
@@ -177,7 +177,7 @@ bool sharedModeInitialize(IAudioClient* client,
     if (use_event)
     {
         stream_flags |= AUDCLNT_STREAMFLAGS_EVENTCALLBACK;
-        LOG(LS_INFO) << "The stream is initialized to be event driven";
+        LOG(INFO) << "The stream is initialized to be event driven";
     }
 
     // Check if sample-rate conversion is requested.
@@ -186,7 +186,7 @@ bool sharedModeInitialize(IAudioClient* client,
         // Add channel matrixer (not utilized here) and rate converter to convert from our (the
         // client's) format to the audio engine mix format. Currently only supported for testing,
         // i.e., not possible to enable using public APIs.
-        LOG(LS_INFO) << "The stream is initialized to support rate conversion";
+        LOG(INFO) << "The stream is initialized to support rate conversion";
         stream_flags |= AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM;
         stream_flags |= AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY;
     }
@@ -198,7 +198,7 @@ bool sharedModeInitialize(IAudioClient* client,
                                     reinterpret_cast<const WAVEFORMATEX*>(format), nullptr);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Initialize failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Initialize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -209,7 +209,7 @@ bool sharedModeInitialize(IAudioClient* client,
         hr = client->SetEventHandle(event_handle);
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "IAudioClient::SetEventHandle failed:" << SystemError(hr).toString();
+            LOG(ERROR) << "IAudioClient::SetEventHandle failed:" << SystemError(hr).toString();
             return false;
         }
     }
@@ -224,7 +224,7 @@ bool sharedModeInitialize(IAudioClient* client,
     hr = client->GetBufferSize(&buffer_size_in_frames);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -250,24 +250,23 @@ bool isFormatSupported(IAudioClient* client,
                                            &closest_match);
     if ((hr == S_OK) && (closest_match == nullptr))
     {
-        LOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(INFO) << "Audio device does not support specified format";
     }
     else if ((hr == S_FALSE) && (closest_match != nullptr))
     {
         // Call succeeded with a closest match to the specified format. This log can
         // only be triggered for shared mode.
-        LOG(LS_ERROR) << "Exact format is not supported, but a closest match exists";
+        LOG(ERROR) << "Exact format is not supported, but a closest match exists";
     }
     else if ((hr == AUDCLNT_E_UNSUPPORTED_FORMAT) && (closest_match == nullptr))
     {
         // The audio engine does not support the caller-specified format or any
         // similar format.
-        LOG(LS_INFO) << "Audio device does not support specified format";
+        LOG(INFO) << "Audio device does not support specified format";
     }
     else
     {
-        LOG(LS_ERROR) << "IAudioClient::IsFormatSupported failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::IsFormatSupported failed:" << SystemError(hr).toString();
     }
 
     return (hr == S_OK);
@@ -283,7 +282,7 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     HRESULT hr = client->GetBufferSize(&endpoint_buffer_size);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetBufferSize failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -293,20 +292,20 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     hr = client->GetCurrentPadding(&num_queued_frames);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:"
+                   << SystemError(hr).toString();
         return false;
     }
-    LOG(LS_INFO) << "num_queued_frames:" << num_queued_frames;
+    LOG(INFO) << "num_queued_frames:" << num_queued_frames;
 
     BYTE* data = nullptr;
     int num_frames_to_fill = endpoint_buffer_size - num_queued_frames;
-    LOG(LS_INFO) << "num_frames_to_fill:" << num_frames_to_fill;
+    LOG(INFO) << "num_frames_to_fill:" << num_frames_to_fill;
 
     hr = render_client->GetBuffer(num_frames_to_fill, &data);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -315,8 +314,7 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     hr = render_client->ReleaseBuffer(num_frames_to_fill, AUDCLNT_BUFFERFLAGS_SILENT);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 

@@ -123,11 +123,11 @@ int removeService(QTextStream& out)
 int hostServiceMain(int& argc, char* argv[])
 {
     base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_LS_INFO;
+    logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    LOG(LS_INFO) << "Integrity check passed successfully";
+    LOG(INFO) << "Integrity check passed successfully";
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
@@ -136,7 +136,7 @@ int hostServiceMain(int& argc, char* argv[])
 
     if (!integrityCheck())
     {
-        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
+        LOG(ERROR) << "Integrity check failed. Application stopped";
         return 1;
     }
 

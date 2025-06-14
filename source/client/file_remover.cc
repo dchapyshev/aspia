@@ -36,7 +36,7 @@ FileRemover::FileRemover(common::FileTask::Target target, const TaskList& items,
       task_factory_(new common::FileTaskFactory(target, this)),
       tasks_(items)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(task_factory_, &common::FileTaskFactory::sig_taskDone, this, &FileRemover::onTaskDone);
 }
@@ -44,13 +44,13 @@ FileRemover::FileRemover(common::FileTask::Target target, const TaskList& items,
 //--------------------------------------------------------------------------------------------------
 FileRemover::~FileRemover()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileRemover::start()
 {
-    LOG(LS_INFO) << "Start file remover";
+    LOG(INFO) << "Start file remover";
 
     // Asynchronously start UI.
     emit sig_started();
@@ -83,7 +83,7 @@ void FileRemover::start()
 //--------------------------------------------------------------------------------------------------
 void FileRemover::stop()
 {
-    LOG(LS_INFO) << "File remover stop";
+    LOG(INFO) << "File remover stop";
 
     delete queue_builder_;
     tasks_.clear();
@@ -194,7 +194,7 @@ void FileRemover::doCurrentTask()
 //--------------------------------------------------------------------------------------------------
 void FileRemover::onFinished(const base::Location& location)
 {
-    LOG(LS_INFO) << "File remover finished (from:" << location.toString() << ")";
+    LOG(INFO) << "File remover finished (from:" << location.toString() << ")";
     emit sig_finished();
 }
 

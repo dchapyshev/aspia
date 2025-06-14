@@ -50,7 +50,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
       default_config_(default_config),
       router_config_(router_config)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
 
@@ -141,7 +141,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 //--------------------------------------------------------------------------------------------------
 FastConnectDialog::~FastConnectDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     writeState();
 }
 
@@ -151,7 +151,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     state_.session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
-    LOG(LS_INFO) << "[ACTION] Session type changed:" << state_.session_type;
+    LOG(INFO) << "[ACTION] Session type changed:" << state_.session_type;
 
     if (ui.checkbox_use_session_params->isChecked())
     {
@@ -175,7 +175,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionConfigButtonPressed()
 {
-    LOG(LS_INFO) << "[ACTION] Session config button pressed";
+    LOG(INFO) << "[ACTION] Session config button pressed";
 
     proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
@@ -222,13 +222,13 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Cancel)
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         reject();
         close();
         return;
     }
 
-    LOG(LS_INFO) << "[ACTION] Accepted by user";
+    LOG(INFO) << "[ACTION] Accepted by user";
 
     QComboBox* combo_address = ui.combo_address;
     QString current_address = combo_address->currentText();
@@ -245,7 +245,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (host_id_entered && !router_config_.has_value())
     {
-        LOG(LS_ERROR) << "Router not configured";
+        LOG(ERROR) << "Router not configured";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Connection by ID is specified but the router is not configured. "
@@ -259,12 +259,12 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (!host_id_entered)
     {
-        LOG(LS_INFO) << "Direct connection selected";
+        LOG(INFO) << "Direct connection selected";
 
         base::Address address = base::Address::fromString(current_address, DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            LOG(LS_ERROR) << "Invalid address entered";
+            LOG(ERROR) << "Invalid address entered";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An invalid computer address was entered."),
@@ -278,7 +278,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        LOG(LS_INFO) << "Relay connection selected";
+        LOG(INFO) << "Relay connection selected";
         client_config.address_or_id = current_address;
     }
 
@@ -372,12 +372,12 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(client_config))
     {
-        LOG(LS_ERROR) << "Unable to connect";
+        LOG(ERROR) << "Unable to connect";
         session_window->close();
     }
     else
     {
-        LOG(LS_INFO) << "Close fast connect dialog";
+        LOG(INFO) << "Close fast connect dialog";
         accept();
         close();
     }

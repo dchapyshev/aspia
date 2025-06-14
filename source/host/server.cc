@@ -59,7 +59,7 @@ Server::Server(QObject* parent)
       user_session_manager_(new UserSessionManager(this)),
       password_expire_timer_(new QTimer(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     connect(update_timer_, &QTimer::timeout, this, &Server::checkForUpdates);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
@@ -82,21 +82,21 @@ Server::Server(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     deleteFirewallRules();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::start()
 {
-    LOG(LS_INFO) << "Starting the host server";
+    LOG(INFO) << "Starting the host server";
 
     QString settings_file_path = settings_.filePath();
-    LOG(LS_INFO) << "Configuration file path:" << settings_file_path;
+    LOG(INFO) << "Configuration file path:" << settings_file_path;
 
     if (!QFileInfo::exists(settings_file_path))
     {
-        LOG(LS_ERROR) << "Configuration file does not exist";
+        LOG(ERROR) << "Configuration file does not exist";
 
         // For QFileSystemWatcher to be able to track configuration changes, the file must exist.
         // We write the current TCP port to the config and synchronize.
@@ -116,18 +116,18 @@ void Server::start()
 
     if (settings_.isRouterEnabled())
     {
-        LOG(LS_INFO) << "Router enabled";
+        LOG(INFO) << "Router enabled";
         connectToRouter();
     }
 
-    LOG(LS_INFO) << "Host server is started successfully";
+    LOG(INFO) << "Host server is started successfully";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::setSessionEvent(base::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event (status:" << static_cast<int>(status)
-                 << "session_id:" << session_id << ")";
+    LOG(INFO) << "Session event (status:" << static_cast<int>(status)
+              << "session_id:" << session_id << ")";
     user_session_manager_->onUserSessionEvent(status, session_id);
 }
 
@@ -135,7 +135,7 @@ void Server::setSessionEvent(base::SessionStatus status, base::SessionId session
 void Server::setPowerEvent(quint32 power_event)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(LS_INFO) << "Power event:" << power_event;
+    LOG(INFO) << "Power event:" << power_event;
 
     switch (power_event)
     {
@@ -149,7 +149,7 @@ void Server::setPowerEvent(quint32 power_event)
         {
             if (settings_.isRouterEnabled())
             {
-                LOG(LS_INFO) << "Router enabled";
+                LOG(INFO) << "Router enabled";
                 connectToRouter();
             }
         }
@@ -207,7 +207,7 @@ void Server::onChangeOneTimeSessions(quint32 sessions)
 //--------------------------------------------------------------------------------------------------
 void Server::onSessionAuthenticated()
 {
-    LOG(LS_INFO) << "New client session";
+    LOG(INFO) << "New client session";
 
     while (authenticator_manager_->hasReadySessions())
     {
@@ -219,15 +219,15 @@ void Server::onSessionAuthenticated()
         const QVersionNumber& host_version = base::kCurrentVersion;
         if (host_version > session_info.version)
         {
-            LOG(LS_ERROR) << "Version mismatch (host:" << host_version.toString()
-                          << "client:" << session_info.version.toString() << ")";
+            LOG(ERROR) << "Version mismatch (host:" << host_version.toString()
+                       << "client:" << session_info.version.toString() << ")";
         }
 
         ClientSession* session = ClientSession::create(
             static_cast<proto::peer::SessionType>(session_info.session_type), session_info.channel);
         if (!session)
         {
-            LOG(LS_ERROR) << "Invalid client session";
+            LOG(ERROR) << "Invalid client session";
             return;
         }
 
@@ -243,11 +243,11 @@ void Server::onSessionAuthenticated()
 //--------------------------------------------------------------------------------------------------
 void Server::onNewDirectConnection()
 {
-    LOG(LS_INFO) << "New DIRECT connection";
+    LOG(INFO) << "New DIRECT connection";
 
     if (!tcp_server_)
     {
-        LOG(LS_ERROR) << "No TCP server instance";
+        LOG(ERROR) << "No TCP server instance";
         return;
     }
 
@@ -258,25 +258,25 @@ void Server::onNewDirectConnection()
 //--------------------------------------------------------------------------------------------------
 void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "Router state changed";
+    LOG(INFO) << "Router state changed";
     user_session_manager_->onRouterStateChanged(router_state);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::onHostIdAssigned(base::HostId host_id)
 {
-    LOG(LS_INFO) << "New host ID assigned:" << host_id;
+    LOG(INFO) << "New host ID assigned:" << host_id;
     user_session_manager_->onUpdateCredentials(host_id, one_time_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::onNewRelayConnection()
 {
-    LOG(LS_INFO) << "New RELAY connection";
+    LOG(INFO) << "New RELAY connection";
 
     if (!router_controller_)
     {
-        LOG(LS_ERROR) << "No router controller instance";
+        LOG(ERROR) << "No router controller instance";
         return;
     }
 
@@ -289,14 +289,14 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
 {
     if (result.isEmpty())
     {
-        LOG(LS_ERROR) << "Error while retrieving update information";
+        LOG(ERROR) << "Error while retrieving update information";
     }
     else
     {
         common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
         if (!update_info.isValid())
         {
-            LOG(LS_INFO) << "No updates available";
+            LOG(INFO) << "No updates available";
         }
         else
         {
@@ -305,7 +305,7 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
 
             if (update_version > current_version)
             {
-                LOG(LS_INFO) << "New version available:" << update_version.toString();
+                LOG(INFO) << "New version available:" << update_version.toString();
 
                 update_downloader_ = new common::HttpFileDownloader(this);
 
@@ -321,7 +321,7 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
             }
             else
             {
-                LOG(LS_INFO) << "No available updates";
+                LOG(INFO) << "No available updates";
             }
         }
     }
@@ -333,7 +333,7 @@ void Server::onUpdateCheckedFinished(const QByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
-    LOG(LS_ERROR) << "Unable to download update:" << error_code;
+    LOG(ERROR) << "Unable to download update:" << error_code;
     update_downloader_->deleteLater();
     update_downloader_ = nullptr;
 }
@@ -345,7 +345,7 @@ void Server::onFileDownloaderCompleted()
     QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     if (file_path.isEmpty())
     {
-        LOG(LS_ERROR) << "Unable to get temp directory";
+        LOG(ERROR) << "Unable to get temp directory";
     }
     else
     {
@@ -358,7 +358,7 @@ void Server::onFileDownloaderCompleted()
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
-            LOG(LS_ERROR) << "Unable to write file" << file_path;
+            LOG(ERROR) << "Unable to write file" << file_path;
         }
         else
         {
@@ -370,16 +370,16 @@ void Server::onFileDownloaderCompleted()
 
             if (base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
             {
-                LOG(LS_INFO) << "Update process started (cmd:" << arguments << ")";
+                LOG(INFO) << "Update process started (cmd:" << arguments << ")";
             }
             else
             {
-                LOG(LS_ERROR) << "Unable to create update process (cmd:" << arguments << ")";
+                LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
 
                 // If the update fails, delete the temporary file.
                 if (!QFile::remove(file_path))
                 {
-                    LOG(LS_ERROR) << "Unable to remove installer file";
+                    LOG(ERROR) << "Unable to remove installer file";
                 }
             }
         }
@@ -393,13 +393,13 @@ void Server::onFileDownloaderCompleted()
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderProgress(int percentage)
 {
-    LOG(LS_INFO) << "Update downloading progress:" << percentage << "%";
+    LOG(INFO) << "Update downloading progress:" << percentage << "%";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Server::startAuthentication(base::TcpChannel* channel)
 {
-    LOG(LS_INFO) << "Start authentication";
+    LOG(INFO) << "Start authentication";
 
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
     channel->setReadBufferSize(kReadBufferSize);
@@ -414,7 +414,7 @@ void Server::addFirewallRules()
     base::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (!firewall.isValid())
     {
-        LOG(LS_ERROR) << "Invalid firewall manager";
+        LOG(ERROR) << "Invalid firewall manager";
         return;
     }
 
@@ -422,11 +422,11 @@ void Server::addFirewallRules()
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
     {
-        LOG(LS_ERROR) << "Unable to add firewall rule";
+        LOG(ERROR) << "Unable to add firewall rule";
         return;
     }
 
-    LOG(LS_INFO) << "Rule is added to the firewall (TCP" << tcp_port << ")";
+    LOG(INFO) << "Rule is added to the firewall (TCP" << tcp_port << ")";
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -437,11 +437,11 @@ void Server::deleteFirewallRules()
     base::FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (!firewall.isValid())
     {
-        LOG(LS_ERROR) << "Invalid firewall manager";
+        LOG(ERROR) << "Invalid firewall manager";
         return;
     }
 
-    LOG(LS_INFO) << "Delete firewall rule";
+    LOG(INFO) << "Delete firewall rule";
     firewall.deleteRuleByName(kFirewallRuleName);
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -449,7 +449,7 @@ void Server::deleteFirewallRules()
 //--------------------------------------------------------------------------------------------------
 void Server::updateConfiguration(const QString& path)
 {
-    LOG(LS_INFO) << "Configuration file change detected";
+    LOG(INFO) << "Configuration file change detected";
 
     QString settings_file_path = settings_.filePath();
 
@@ -457,7 +457,7 @@ void Server::updateConfiguration(const QString& path)
     // monitor has time to detect this, but we must not load an empty configuration.
     if (QFileInfo(settings_file_path).size() <= 0)
     {
-        LOG(LS_INFO) << "Configuration file is empty. Configuration update skipped";
+        LOG(INFO) << "Configuration file is empty. Configuration update skipped";
         return;
     }
 
@@ -474,11 +474,11 @@ void Server::updateConfiguration(const QString& path)
     // If a controller instance already exists.
     if (router_controller_)
     {
-        LOG(LS_INFO) << "Has router controller";
+        LOG(INFO) << "Has router controller";
 
         if (settings_.isRouterEnabled())
         {
-            LOG(LS_INFO) << "Router enabled";
+            LOG(INFO) << "Router enabled";
 
             // Check if the connection parameters have changed.
             if (router_controller_->address() != settings_.routerAddress() ||
@@ -486,18 +486,18 @@ void Server::updateConfiguration(const QString& path)
                 router_controller_->publicKey() != settings_.routerPublicKey())
             {
                 // Reconnect to the router with new parameters.
-                LOG(LS_INFO) << "Router parameters have changed";
+                LOG(INFO) << "Router parameters have changed";
                 connectToRouter();
             }
             else
             {
-                LOG(LS_INFO) << "Router parameters without changes";
+                LOG(INFO) << "Router parameters without changes";
             }
         }
         else
         {
             // Destroy the controller.
-            LOG(LS_INFO) << "The router is now disabled";
+            LOG(INFO) << "The router is now disabled";
             router_controller_->deleteLater();
             router_controller_ = nullptr;
 
@@ -508,11 +508,11 @@ void Server::updateConfiguration(const QString& path)
     }
     else
     {
-        LOG(LS_INFO) << "No router controller";
+        LOG(INFO) << "No router controller";
 
         if (settings_.isRouterEnabled())
         {
-            LOG(LS_INFO) << "Router enabled";
+            LOG(INFO) << "Router enabled";
             connectToRouter();
         }
     }
@@ -521,7 +521,7 @@ void Server::updateConfiguration(const QString& path)
 //--------------------------------------------------------------------------------------------------
 void Server::reloadUserList()
 {
-    LOG(LS_INFO) << "Reloading user list";
+    LOG(INFO) << "Reloading user list";
 
     // Read the list of regular users.
     std::unique_ptr<base::UserList> user_list = settings_.userList();
@@ -529,7 +529,7 @@ void Server::reloadUserList()
     user_list->add(createOneTimeUser());
 
     if (user_list->seedKey().isEmpty())
-        LOG(LS_ERROR) << "Empty seed key for user list";
+        LOG(ERROR) << "Empty seed key for user list";
 
     // Updating the list of users.
     authenticator_manager_->setUserList(std::move(user_list));
@@ -538,7 +538,7 @@ void Server::reloadUserList()
 //--------------------------------------------------------------------------------------------------
 void Server::connectToRouter()
 {
-    LOG(LS_INFO) << "Connecting to router...";
+    LOG(INFO) << "Connecting to router...";
 
     // Destroy the previous instance.
     if (router_controller_)
@@ -564,17 +564,17 @@ void Server::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Server::disconnectFromRouter()
 {
-    LOG(LS_INFO) << "Disconnect from router";
+    LOG(INFO) << "Disconnect from router";
 
     if (router_controller_)
     {
         router_controller_->deleteLater();
         router_controller_ = nullptr;
-        LOG(LS_INFO) << "Disconnected from router";
+        LOG(INFO) << "Disconnected from router";
     }
     else
     {
-        LOG(LS_INFO) << "No router controller";
+        LOG(INFO) << "No router controller";
     }
 }
 
@@ -590,7 +590,7 @@ void Server::checkForUpdates()
     qint64 last_timepoint = storage.lastUpdateCheck();
     qint64 current_timepoint = std::time(nullptr);
 
-    LOG(LS_INFO) << "Last timepoint:" << last_timepoint << ", current:" << current_timepoint;
+    LOG(INFO) << "Last timepoint:" << last_timepoint << ", current:" << current_timepoint;
 
     qint64 time_diff = current_timepoint - last_timepoint;
     if (time_diff <= 0)
@@ -609,13 +609,13 @@ void Server::checkForUpdates()
 
     if (days < settings_.updateCheckFrequency())
     {
-        LOG(LS_INFO) << "Not enough time has elapsed since the previous check for updates";
+        LOG(INFO) << "Not enough time has elapsed since the previous check for updates";
         return;
     }
 
     storage.setLastUpdateCheck(current_timepoint);
 
-    LOG(LS_INFO) << "Start checking for updates";
+    LOG(INFO) << "Start checking for updates";
 
     update_checker_ = new common::UpdateChecker(this);
 
@@ -632,11 +632,11 @@ void Server::checkForUpdates()
 //--------------------------------------------------------------------------------------------------
 void Server::updateOneTimeCredentials(const base::Location &location)
 {
-    LOG(LS_INFO) << "Updating credentials (from:" << location.toString() << ")";
+    LOG(INFO) << "Updating credentials (from:" << location.toString() << ")";
 
     if (settings_.oneTimePassword())
     {
-        LOG(LS_INFO) << "One-time password is enabled";
+        LOG(INFO) << "One-time password is enabled";
 
         base::PasswordGenerator generator;
         generator.setCharacters(settings_.oneTimePasswordCharacters());
@@ -652,7 +652,7 @@ void Server::updateOneTimeCredentials(const base::Location &location)
     }
     else
     {
-        LOG(LS_INFO) << "One-time password is disabled";
+        LOG(INFO) << "One-time password is disabled";
 
         password_expire_timer_->stop();
         one_time_sessions_ = 0;
@@ -665,20 +665,20 @@ base::User Server::createOneTimeUser() const
 {
     if (!router_controller_)
     {
-        LOG(LS_WARNING) << "No router controller instance";
+        LOG(WARNING) << "No router controller instance";
         return base::User();
     }
 
     base::HostId host_id = router_controller_->hostId();
     if (host_id == base::kInvalidHostId)
     {
-        LOG(LS_INFO) << "Invalid host ID";
+        LOG(INFO) << "Invalid host ID";
         return base::User();
     }
 
     if (one_time_password_.isEmpty())
     {
-        LOG(LS_INFO) << "No password for one-time user";
+        LOG(INFO) << "No password for one-time user";
         return base::User();
     }
 
@@ -688,8 +688,8 @@ base::User Server::createOneTimeUser() const
     user.sessions = one_time_sessions_;
     user.flags = base::User::ENABLED;
 
-    LOG(LS_INFO) << "One time user" << username << "created (host_id=" << host_id
-                 << "sessions=" << one_time_sessions_ << ")";
+    LOG(INFO) << "One time user" << username << "created (host_id=" << host_id
+              << "sessions=" << one_time_sessions_ << ")";
     return user;
 }
 

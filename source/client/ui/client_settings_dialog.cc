@@ -35,7 +35,7 @@ namespace client {
 ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
@@ -73,7 +73,7 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
 
     connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
     {
-        LOG(LS_INFO) << "[ACTION] Enable router: " << checked;
+        LOG(INFO) << "[ACTION] Enable router:" << checked;
 
         ui.label_address->setEnabled(checked);
         ui.edit_address->setEnabled(checked);
@@ -92,13 +92,13 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 ClientSettingsDialog::~ClientSettingsDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientSettingsDialog::closeEvent(QCloseEvent* event)
 {
-    LOG(LS_INFO) << "Close event detected";
+    LOG(INFO) << "Close event detected";
     QDialog::closeEvent(event);
 }
 
@@ -108,12 +108,12 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         reject();
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         bool enable_router = ui.checkbox_enable_router->isChecked();
 
@@ -123,11 +123,11 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (!enable_router && address_text.isEmpty())
             {
-                LOG(LS_INFO) << "Router disabled and address is empty";
+                LOG(INFO) << "Router disabled and address is empty";
             }
             else
             {
-                LOG(LS_ERROR) << "Invalid router address entered";
+                LOG(ERROR) << "Invalid router address entered";
                 showError(tr("An invalid router address was entered."));
                 ui.edit_address->setFocus();
                 ui.edit_address->selectAll();
@@ -142,11 +142,11 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (!enable_router && username.isEmpty())
             {
-                LOG(LS_INFO) << "Router disabled and username is empty";
+                LOG(INFO) << "Router disabled and username is empty";
             }
             else
             {
-                LOG(LS_ERROR) << "Invalid user name entered";
+                LOG(ERROR) << "Invalid user name entered";
                 showError(tr("The user name can not be empty and can contain only"
                              " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
                 ui.edit_username->setFocus();
@@ -159,11 +159,11 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (!enable_router && password.isEmpty())
             {
-                LOG(LS_INFO) << "Router disabled and password is empty";
+                LOG(INFO) << "Router disabled and password is empty";
             }
             else
             {
-                LOG(LS_ERROR) << "Invalid password entered";
+                LOG(ERROR) << "Invalid password entered";
                 showError(tr("Password cannot be empty."));
                 ui.edit_password->setFocus();
                 ui.edit_password->selectAll();

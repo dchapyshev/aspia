@@ -32,13 +32,13 @@ namespace router {
 SessionAdmin::SessionAdmin(QObject* parent)
     : Session(proto::router::SESSION_TYPE_ADMIN, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionAdmin::~SessionAdmin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Could not read message from manager";
+        LOG(ERROR) << "Could not read message from manager";
         return;
     }
 
@@ -80,7 +80,7 @@ void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByte
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from manager";
+        LOG(ERROR) << "Unhandled message from manager";
     }
 }
 
@@ -96,7 +96,7 @@ void SessionAdmin::doUserListRequest()
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to connect to database";
+        LOG(ERROR) << "Failed to connect to database";
         return;
     }
 
@@ -132,7 +132,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             break;
 
         default:
-            LOG(LS_ERROR) << "Unknown request type:" << request.type();
+            LOG(ERROR) << "Unknown request type:" << request.type();
             return;
     }
 
@@ -217,18 +217,18 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
 
         if (!sessionManager()->stopSession(session_id))
         {
-            LOG(LS_ERROR) << "Session not found:" << session_id;
+            LOG(ERROR) << "Session not found:" << session_id;
             session_result->set_error_code(proto::router::SessionResult::INVALID_SESSION_ID);
         }
         else
         {
-            LOG(LS_INFO) << "Session '" << session_id << "' disconnected by" << userName();
+            LOG(INFO) << "Session '" << session_id << "' disconnected by" << userName();
             session_result->set_error_code(proto::router::SessionResult::SUCCESS);
         }
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown session request:" << request.type();
+        LOG(ERROR) << "Unknown session request:" << request.type();
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
@@ -242,7 +242,7 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
         dynamic_cast<SessionRelay*>(sessionManager()->sessionById(request.relay_session_id()));
     if (!relay_session)
     {
-        LOG(LS_ERROR) << "Relay with id" << request.relay_session_id() << "not found";
+        LOG(ERROR) << "Relay with id" << request.relay_session_id() << "not found";
         return;
     }
 
@@ -252,25 +252,25 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "User add request:" << user.name();
+    LOG(INFO) << "User add request:" << user.name();
 
     base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
     {
-        LOG(LS_ERROR) << "Failed to create user";
+        LOG(ERROR) << "Failed to create user";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!base::User::isValidUserName(new_user.name))
     {
-        LOG(LS_ERROR) << "Invalid user name:" << new_user.name;
+        LOG(ERROR) << "Invalid user name:" << new_user.name;
         return proto::router::UserResult::INVALID_DATA;
     }
 
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to connect to database";
+        LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
@@ -283,37 +283,37 @@ proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::router::User& user)
 {
-    LOG(LS_INFO) << "User modify request:" << user.name();
+    LOG(INFO) << "User modify request:" << user.name();
 
     if (user.entry_id() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid user ID:" << user.entry_id();
+        LOG(ERROR) << "Invalid user ID:" << user.entry_id();
         return proto::router::UserResult::INVALID_DATA;
     }
 
     base::User new_user = base::User::parseFrom(user);
     if (!new_user.isValid())
     {
-        LOG(LS_ERROR) << "Failed to create user";
+        LOG(ERROR) << "Failed to create user";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!base::User::isValidUserName(new_user.name))
     {
-        LOG(LS_ERROR) << "Invalid user name:" << new_user.name;
+        LOG(ERROR) << "Invalid user name:" << new_user.name;
         return proto::router::UserResult::INVALID_DATA;
     }
 
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to connect to database";
+        LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     if (!database->modifyUser(new_user))
     {
-        LOG(LS_ERROR) << "modifyUser failed";
+        LOG(ERROR) << "modifyUser failed";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
@@ -326,17 +326,17 @@ proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::route
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to connect to database";
+        LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
     qint64 entry_id = user.entry_id();
 
-    LOG(LS_INFO) << "User remove request:" << entry_id;
+    LOG(INFO) << "User remove request:" << entry_id;
 
     if (!database->removeUser(entry_id))
     {
-        LOG(LS_ERROR) << "removeUser failed";
+        LOG(ERROR) << "removeUser failed";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 

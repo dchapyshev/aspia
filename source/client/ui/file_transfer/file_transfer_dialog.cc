@@ -39,7 +39,7 @@ namespace client {
 FileTransferDialog::FileTransferDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
@@ -74,7 +74,7 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FileTransferDialog::~FileTransferDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)

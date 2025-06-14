@@ -115,7 +115,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     QString name = ui.edit_name->text();
     if (name.length() > kMaxNameLength)
     {
-        LOG(LS_ERROR) << "Too long name:" << name.length();
+        LOG(ERROR) << "Too long name:" << name.length();
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", kMaxNameLength));
         ui.edit_name->setFocus();
@@ -124,7 +124,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     }
     else if (name.length() < kMinNameLength)
     {
-        LOG(LS_ERROR) << "Name can not be empty";
+        LOG(ERROR) << "Name can not be empty";
         showError(tr("Name can not be empty."));
         ui.edit_name->setFocus();
         return false;
@@ -135,7 +135,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
 
     if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
-        LOG(LS_ERROR) << "Invalid user name:" << username;
+        LOG(ERROR) << "Invalid user name:" << username;
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
         ui.edit_username->setFocus();
@@ -146,7 +146,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     QString comment = ui.edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
-        LOG(LS_ERROR) << "Too long comment:" << comment.length();
+        LOG(ERROR) << "Too long comment:" << comment.length();
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", kMaxCommentLength));
         ui.edit_comment->setFocus();
@@ -164,7 +164,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
             ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            LOG(LS_ERROR) << "Invalid address:" << ui.edit_address->text();
+            LOG(ERROR) << "Invalid address:" << ui.edit_address->text();
             showError(tr("An invalid computer address was entered."));
             ui.edit_address->setFocus();
             ui.edit_address->selectAll();
@@ -186,7 +186,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
 //--------------------------------------------------------------------------------------------------
 void ComputerDialogGeneral::showPasswordButtonToggled(bool checked)
 {
-    LOG(LS_INFO) << "[ACTION] Show password:" << checked;
+    LOG(INFO) << "[ACTION] Show password:" << checked;
     if (checked)
     {
         ui.edit_password->setEchoMode(QLineEdit::Normal);

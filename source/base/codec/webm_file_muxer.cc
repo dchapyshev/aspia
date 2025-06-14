@@ -46,7 +46,7 @@ bool WebmFileMuxer::init(FILE* file)
 
     if (!segment_->Init(writer_.get()))
     {
-        LOG(LS_ERROR) << "Cannot Init Segment";
+        LOG(ERROR) << "Cannot Init Segment";
         return false;
     }
 
@@ -56,7 +56,7 @@ bool WebmFileMuxer::init(FILE* file)
     mkvmuxer::SegmentInfo* const segment_info = segment_->GetSegmentInfo();
     if (!segment_info)
     {
-        LOG(LS_ERROR) << "Segment has no SegmentInfo";
+        LOG(ERROR) << "Segment has no SegmentInfo";
         return false;
     }
 
@@ -72,20 +72,20 @@ bool WebmFileMuxer::addAudioTrack(int sample_rate, int channels, std::string_vie
 {
     if (audio_track_num_ != 0)
     {
-        LOG(LS_ERROR) << "Cannot add audio track: it already exists";
+        LOG(ERROR) << "Cannot add audio track: it already exists";
         return false;
     }
 
     if (codec_id.empty())
     {
-        LOG(LS_ERROR) << "Cannot AddAudioTrack with empty codec_id";
+        LOG(ERROR) << "Cannot AddAudioTrack with empty codec_id";
         return false;
     }
 
     audio_track_num_ = segment_->AddAudioTrack(sample_rate, channels, 0);
     if (!audio_track_num_)
     {
-        LOG(LS_ERROR) << "Cannot AddAudioTrack on segment";
+        LOG(ERROR) << "Cannot AddAudioTrack on segment";
         return false;
     }
 
@@ -93,7 +93,7 @@ bool WebmFileMuxer::addAudioTrack(int sample_rate, int channels, std::string_vie
         segment_->GetTrackByNumber(audio_track_num_));
     if (!audio_track)
     {
-        LOG(LS_ERROR) << "Unable to set audio codec_id: Track look up failed";
+        LOG(ERROR) << "Unable to set audio codec_id: Track look up failed";
         return false;
     }
 
@@ -106,20 +106,20 @@ bool WebmFileMuxer::addVideoTrack(int width, int height, std::string_view codec_
 {
     if (video_track_num_ != 0)
     {
-        LOG(LS_ERROR) << "Cannot add video track: it already exists";
+        LOG(ERROR) << "Cannot add video track: it already exists";
         return false;
     }
 
     if (codec_id.empty())
     {
-        LOG(LS_ERROR) << "Cannot AddVideoTrack with empty codec_id";
+        LOG(ERROR) << "Cannot AddVideoTrack with empty codec_id";
         return false;
     }
 
     video_track_num_ = segment_->AddVideoTrack(width, height, 0);
     if (!video_track_num_)
     {
-        LOG(LS_ERROR) << "Cannot AddVideoTrack on segment";
+        LOG(ERROR) << "Cannot AddVideoTrack on segment";
         return false;
     }
 
@@ -127,7 +127,7 @@ bool WebmFileMuxer::addVideoTrack(int width, int height, std::string_view codec_
        segment_->GetTrackByNumber(video_track_num_));
     if (!video_track)
     {
-        LOG(LS_ERROR) << "Unable to set video codec_id: Track look up failed";
+        LOG(ERROR) << "Unable to set video codec_id: Track look up failed";
         return false;
     }
 
@@ -140,7 +140,7 @@ bool WebmFileMuxer::finalize()
 {
     if (!segment_->Finalize())
     {
-        LOG(LS_ERROR) << "libwebm mkvmuxer Finalize failed";
+        LOG(ERROR) << "libwebm mkvmuxer Finalize failed";
         return false;
     }
 
@@ -153,7 +153,7 @@ bool WebmFileMuxer::writeAudioFrame(std::string_view frame,
 {
     if (audio_track_num_ == 0)
     {
-        LOG(LS_ERROR) << "Cannot WriteAudioFrame without an audio track";
+        LOG(ERROR) << "Cannot WriteAudioFrame without an audio track";
         return false;
     }
 
@@ -167,7 +167,7 @@ bool WebmFileMuxer::writeVideoFrame(std::string_view frame,
 {
     if (video_track_num_ == 0)
     {
-        LOG(LS_ERROR) << "Cannot WriteVideoFrame without a video track";
+        LOG(ERROR) << "Cannot WriteVideoFrame without a video track";
         return false;
     }
 
@@ -182,7 +182,7 @@ bool WebmFileMuxer::writeFrame(std::string_view frame,
     if (!segment_->AddFrame(reinterpret_cast<const quint8*>(frame.data()), frame.size(),
                             track_num, static_cast<quint64>(timestamp.count()), is_key))
     {
-        LOG(LS_ERROR) << "AddFrame failed";
+        LOG(ERROR) << "AddFrame failed";
         return false;
     }
 

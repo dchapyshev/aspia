@@ -31,7 +31,7 @@ SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidge
     : QWidget(parent),
       session_state_(std::move(session_state))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     // Create a dialog to display the connection status.
     status_dialog_ = new common::StatusDialog(this);
@@ -44,20 +44,20 @@ SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidge
 //--------------------------------------------------------------------------------------------------
 SessionWindow::~SessionWindow()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SessionWindow::connectToHost(Config config)
 {
-    LOG(LS_INFO) << "Connecting to host";
+    LOG(INFO) << "Connecting to host";
 
     // Set the window title.
     setClientTitle(config);
 
     if (config.username.isEmpty() || config.password.isEmpty())
     {
-        LOG(LS_INFO) << "Empty user name or password";
+        LOG(INFO) << "Empty user name or password";
 
         AuthorizationDialog auth_dialog(this);
 
@@ -67,7 +67,7 @@ bool SessionWindow::connectToHost(Config config)
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
-            LOG(LS_INFO) << "Authorization rejected by user";
+            LOG(INFO) << "Authorization rejected by user";
             return false;
         }
 
@@ -79,7 +79,7 @@ bool SessionWindow::connectToHost(Config config)
     // #host_id.
     if (config.username.isEmpty())
     {
-        LOG(LS_INFO) << "User name is empty. Connection by ID";
+        LOG(INFO) << "User name is empty. Connection by ID";
         config.username = u"#" + config.address_or_id;
     }
 
@@ -95,7 +95,7 @@ bool SessionWindow::connectToHost(Config config)
     connect(this, &SessionWindow::sig_start, client, &Client::start, Qt::QueuedConnection);
     connect(this, &SessionWindow::sig_stop, client, &Client::deleteLater, Qt::QueuedConnection);
 
-    LOG(LS_INFO) << "Start client";
+    LOG(INFO) << "Start client";
     emit sig_start();
     return true;
 }
@@ -103,14 +103,14 @@ bool SessionWindow::connectToHost(Config config)
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::closeEvent(QCloseEvent* /* event */)
 {
-    LOG(LS_INFO) << "Close event";
+    LOG(INFO) << "Close event";
     emit sig_stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
 {
-    LOG(LS_INFO) << "Client status changed:" << Client::statusToString(status);
+    LOG(INFO) << "Client status changed:" << Client::statusToString(status);
 
     switch (status)
     {
@@ -156,7 +156,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
         {
             if (!data.canConvert<client::RouterController::Error>())
             {
-                LOG(LS_ERROR) << "Unable to convert error type";
+                LOG(ERROR) << "Unable to convert error type";
                 return;
             }
 
@@ -230,7 +230,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
             }
             else
             {
-                LOG(LS_ERROR) << "Unable to convert error code";
+                LOG(ERROR) << "Unable to convert error code";
             }
         }
         break;
@@ -273,7 +273,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant &data)
             }
             else
             {
-                LOG(LS_ERROR) << "Unable to convert error code";
+                LOG(ERROR) << "Unable to convert error code";
             }
         }
         break;
@@ -388,7 +388,7 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
         {
             if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
             {
-                LOG(LS_ERROR) << "Unknown error code:" << static_cast<int>(error_code);
+                LOG(ERROR) << "Unknown error code:" << static_cast<int>(error_code);
             }
 
             message = QT_TR_NOOP("An unknown error occurred.");

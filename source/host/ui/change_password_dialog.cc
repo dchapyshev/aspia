@@ -33,7 +33,7 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
       mode_(mode)
 {
-    LOG(LS_INFO) << "Ctor (" << static_cast<int>(mode) << ")";
+    LOG(INFO) << "Ctor (" << static_cast<int>(mode) << ")";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -62,7 +62,7 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::~ChangePasswordDialog()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
-        LOG(LS_INFO) << "[ACTION] Accepted by user";
+        LOG(INFO) << "[ACTION] Accepted by user";
 
         if (mode_ == Mode::CREATE_NEW_PASSWORD)
         {
@@ -92,7 +92,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password.isEmpty())
             {
-                LOG(LS_ERROR) << "Password cannot be empty";
+                LOG(ERROR) << "Password cannot be empty";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password cannot be empty."),
@@ -104,7 +104,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password != new_password_repeat)
             {
-                LOG(LS_ERROR) << "Password entered do not match";
+                LOG(ERROR) << "Password entered do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),
@@ -124,7 +124,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (old_password.isEmpty())
             {
-                LOG(LS_ERROR) << "Old password not entered";
+                LOG(ERROR) << "Old password not entered";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("You must enter your old password."),
@@ -135,7 +135,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!SystemSettings::isValidPassword(old_password))
             {
-                LOG(LS_ERROR) << "Incorrect password entered";
+                LOG(ERROR) << "Incorrect password entered";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("You entered an incorrect old password."),
@@ -147,7 +147,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password.isEmpty())
             {
-                LOG(LS_ERROR) << "New password cannot be empty";
+                LOG(ERROR) << "New password cannot be empty";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("New password cannot be empty."),
@@ -158,7 +158,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (new_password != new_password_repeat)
             {
-                LOG(LS_ERROR) << "Password entered do not match";
+                LOG(ERROR) << "Password entered do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),
@@ -173,7 +173,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        LOG(LS_INFO) << "[ACTION] Rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

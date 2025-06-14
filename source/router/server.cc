@@ -38,13 +38,13 @@ Server::Server(QObject* parent)
       database_factory_(new DatabaseFactorySqlite()),
       session_manager_(new SessionManager(this))
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,14 +52,14 @@ bool Server::start()
 {
     if (tcp_server_)
     {
-        LOG(LS_ERROR) << "Server already started";
+        LOG(ERROR) << "Server already started";
         return false;
     }
 
     std::unique_ptr<Database> database = database_factory_->openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to open the database";
+        LOG(ERROR) << "Failed to open the database";
         return false;
     }
 
@@ -68,68 +68,68 @@ bool Server::start()
     QByteArray private_key = settings.privateKey();
     if (private_key.isEmpty())
     {
-        LOG(LS_INFO) << "The private key is not specified in the configuration file";
+        LOG(INFO) << "The private key is not specified in the configuration file";
         return false;
     }
 
     QString listen_interface = settings.listenInterface();
     if (!base::TcpServer::isValidListenInterface(listen_interface))
     {
-        LOG(LS_ERROR) << "Invalid listen interface address";
+        LOG(ERROR) << "Invalid listen interface address";
         return false;
     }
 
     quint16 port = settings.port();
     if (!port)
     {
-        LOG(LS_ERROR) << "Invalid port specified in configuration file";
+        LOG(ERROR) << "Invalid port specified in configuration file";
         return false;
     }
 
     client_white_list_ = settings.clientWhiteList();
     if (client_white_list_.empty())
     {
-        LOG(LS_INFO) << "Empty client white list. Connections from all clients will be allowed";
+        LOG(INFO) << "Empty client white list. Connections from all clients will be allowed";
     }
     else
     {
-        LOG(LS_INFO) << "Client white list is not empty. Allowed clients:" << client_white_list_;
+        LOG(INFO) << "Client white list is not empty. Allowed clients:" << client_white_list_;
     }
 
     host_white_list_ = settings.hostWhiteList();
     if (host_white_list_.empty())
     {
-        LOG(LS_INFO) << "Empty host white list. Connections from all hosts will be allowed";
+        LOG(INFO) << "Empty host white list. Connections from all hosts will be allowed";
     }
     else
     {
-        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts:" << host_white_list_;
+        LOG(INFO) << "Host white list is not empty. Allowed hosts:" << host_white_list_;
     }
 
     admin_white_list_ = settings.adminWhiteList();
     if (admin_white_list_.empty())
     {
-        LOG(LS_INFO) << "Empty admin white list. Connections from all admins will be allowed";
+        LOG(INFO) << "Empty admin white list. Connections from all admins will be allowed";
     }
     else
     {
-        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins:" << admin_white_list_;
+        LOG(INFO) << "Admin white list is not empty. Allowed admins:" << admin_white_list_;
     }
 
     relay_white_list_ = settings.relayWhiteList();
     if (relay_white_list_.empty())
     {
-        LOG(LS_INFO) << "Empty relay white list. Connections from all relays will be allowed";
+        LOG(INFO) << "Empty relay white list. Connections from all relays will be allowed";
     }
     else
     {
-        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays:" << relay_white_list_;
+        LOG(INFO) << "Relay white list is not empty. Allowed relays:" << relay_white_list_;
     }
 
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
     {
-        LOG(LS_INFO) << "Empty seed key. New key generated";
+        LOG(INFO) << "Empty seed key. New key generated";
         seed_key = base::Random::byteArray(64);
         settings.setSeedKey(seed_key);
     }
@@ -155,7 +155,7 @@ bool Server::start()
     connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
     tcp_server_->start(port, listen_interface);
 
-    LOG(LS_INFO) << "Server started";
+    LOG(INFO) << "Server started";
     return true;
 }
 
@@ -179,7 +179,7 @@ void Server::onSessionAuthenticated()
 {
     if (!authenticator_manager_)
     {
-        LOG(LS_ERROR) << "No authenticator manager instance";
+        LOG(ERROR) << "No authenticator manager instance";
         return;
     }
 
@@ -194,7 +194,7 @@ void Server::onSessionAuthenticated()
         proto::router::SessionType session_type =
             static_cast<proto::router::SessionType>(session_info.session_type);
 
-        LOG(LS_INFO) << "New session:" << session_type << "(" << address << ")";
+        LOG(INFO) << "New session:" << session_type << "(" << address << ")";
 
         Session* session = nullptr;
 
@@ -238,15 +238,15 @@ void Server::onSessionAuthenticated()
 
             default:
             {
-                LOG(LS_ERROR) << "Unsupported session type: "
-                              << static_cast<int>(session_info.session_type);
+                LOG(ERROR) << "Unsupported session type:"
+                           << static_cast<int>(session_info.session_type);
             }
             break;
         }
 
         if (!session)
         {
-            LOG(LS_ERROR) << "Connection rejected for" << address;
+            LOG(ERROR) << "Connection rejected for" << address;
             return;
         }
 
@@ -269,14 +269,14 @@ void Server::onNewConnection()
 {
     if (!tcp_server_)
     {
-        LOG(LS_ERROR) << "No TCP server instance";
+        LOG(ERROR) << "No TCP server instance";
         return;
     }
 
     while (tcp_server_->hasPendingConnections())
     {
         base::TcpChannel* channel = tcp_server_->nextPendingConnection();
-        LOG(LS_INFO) << "New connection:" << channel->peerAddress();
+        LOG(INFO) << "New connection:" << channel->peerAddress();
         authenticator_manager_->addNewChannel(channel);
     }
 }

@@ -42,11 +42,11 @@ void KeyPool::addKey(Session::SessionId session_id, const proto::router::RelayKe
     auto relay = pool_.find(session_id);
     if (relay == pool_.end())
     {
-        LOG(LS_INFO) << "Host not found in pool. It will be added";
+        LOG(INFO) << "Host not found in pool. It will be added";
         relay = pool_.insert(session_id, Keys());
     }
 
-    LOG(LS_INFO) << "Added key with id" << key.key_id() << "for host" << session_id;
+    LOG(INFO) << "Added key with id" << key.key_id() << "for host" << session_id;
     relay.value().append(key);
 }
 
@@ -55,7 +55,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 {
     if (pool_.empty())
     {
-        LOG(LS_ERROR) << "Empty key pool";
+        LOG(ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
@@ -74,16 +74,16 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 
     if (preffered_relay == pool_.end())
     {
-        LOG(LS_ERROR) << "Empty key pool";
+        LOG(ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
-    LOG(LS_INFO) << "Preffered relay:" << preffered_relay.key();
+    LOG(INFO) << "Preffered relay:" << preffered_relay.key();
 
     QList<proto::router::RelayKey>& keys = preffered_relay.value();
     if (keys.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty key pool for relay";
+        LOG(ERROR) << "Empty key pool for relay";
         return std::nullopt;
     }
 
@@ -96,7 +96,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 
     if (keys.isEmpty())
     {
-        LOG(LS_INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
+        LOG(INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
         pool_.remove(preffered_relay.key());
     }
 
@@ -109,14 +109,14 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 //--------------------------------------------------------------------------------------------------
 void KeyPool::removeKeysForRelay(Session::SessionId session_id)
 {
-    LOG(LS_INFO) << "All keys for relay" << session_id << "removed";
+    LOG(INFO) << "All keys for relay" << session_id << "removed";
     pool_.remove(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void KeyPool::clear()
 {
-    LOG(LS_INFO) << "Key pool cleared";
+    LOG(INFO) << "Key pool cleared";
     pool_.clear();
 }
 

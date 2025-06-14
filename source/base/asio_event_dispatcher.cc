@@ -48,7 +48,7 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
       work_guard_(asio::make_work_guard(io_context_)),
       timer_(io_context_)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     timers_.reserve(kReservedSizeForTimersMap);
     timers_.max_load_factor(kLoadFactorForTimersMap);
@@ -61,7 +61,7 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 AsioEventDispatcher::~AsioEventDispatcher()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     work_guard_.reset();
     io_context_.stop();
 }
@@ -219,7 +219,7 @@ bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
     HANDLE handle = notifier->handle();
     if (!handle || handle == INVALID_HANDLE_VALUE)
     {
-        LOG(LS_ERROR) << "Invalid notifier handle";
+        LOG(ERROR) << "Invalid notifier handle";
         return false;
     }
 
@@ -227,7 +227,7 @@ bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
     if (!RegisterWaitForSingleObject(&wait_handle, handle, eventCallback, notifier, INFINITE,
                                      WT_EXECUTEINWAITTHREAD))
     {
-        PLOG(LS_ERROR) << "RegisterWaitForSingleObject failed";
+        PLOG(ERROR) << "RegisterWaitForSingleObject failed";
         return false;
     }
 
@@ -304,7 +304,7 @@ void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wai
     QWinEventNotifier* notifier = reinterpret_cast<QWinEventNotifier*>(parameter);
     if (!notifier)
     {
-        LOG(LS_ERROR) << "Invalid pointer";
+        LOG(ERROR) << "Invalid pointer";
         return;
     }
 

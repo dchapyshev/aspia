@@ -37,13 +37,13 @@ const size_t kHostKeySize = 512;
 SessionHost::SessionHost(QObject* parent)
     : Session(proto::router::SESSION_TYPE_HOST, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionHost::~SessionHost()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteA
     proto::router::PeerToRouter message;
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_ERROR) << "Could not read message from host";
+        LOG(ERROR) << "Could not read message from host";
         return;
     }
 
@@ -86,7 +86,7 @@ void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteA
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from host";
+        LOG(ERROR) << "Unhandled message from host";
     }
 }
 
@@ -102,7 +102,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
-        LOG(LS_ERROR) << "Failed to connect to database";
+        LOG(ERROR) << "Failed to connect to database";
         return;
     }
 
@@ -120,7 +120,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
 
         if (!database->addHost(key_hash))
         {
-            LOG(LS_ERROR) << "Unable to add host";
+            LOG(ERROR) << "Unable to add host";
             return;
         }
 
@@ -134,7 +134,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown request type:" << host_id_request.type();
+        LOG(ERROR) << "Unknown request type:" << host_id_request.type();
         return;
     }
 
@@ -158,7 +158,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
             else
             {
                 host_id_response->set_error_code(proto::router::HostIdResponse::UNKNOWN);
-                LOG(LS_ERROR) << "Invalid host id";
+                LOG(ERROR) << "Invalid host id";
             }
         }
         break;
@@ -181,13 +181,13 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
     base::HostId host_id = reset_host_id.host_id();
     if (host_id == base::kInvalidHostId)
     {
-        LOG(LS_ERROR) << "Invalid host ID";
+        LOG(ERROR) << "Invalid host ID";
         return;
     }
 
     if (host_id_list_.empty())
     {
-        LOG(LS_ERROR) << "Empty host ID list";
+        LOG(ERROR) << "Empty host ID list";
         return;
     }
 
@@ -195,13 +195,13 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
     {
         if (*it == host_id)
         {
-            LOG(LS_INFO) << "Host ID" << host_id << "remove from list";
+            LOG(INFO) << "Host ID" << host_id << "remove from list";
             host_id_list_.erase(it);
             return;
         }
     }
 
-    LOG(LS_ERROR) << "Host ID" << host_id << "NOT found in list";
+    LOG(ERROR) << "Host ID" << host_id << "NOT found in list";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ void SessionHost::removeOtherWithSameId()
         {
             if (other_host_session->hasHostId(host_id))
             {
-                LOG(LS_INFO) << "Detected previous connection with ID" << host_id;
+                LOG(INFO) << "Detected previous connection with ID" << host_id;
 
                 is_found = true;
                 break;

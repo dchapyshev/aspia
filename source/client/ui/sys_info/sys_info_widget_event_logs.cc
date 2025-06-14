@@ -199,9 +199,9 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
     ui.button_prev->setEnabled(current_page > 0);
     ui.button_next->setEnabled(current_page < ui.combobox_page->count() - 1);
 
-    LOG(LS_INFO) << "Events count:" << event_logs.event_size();
-    LOG(LS_INFO) << "Current page:" << current_page << "(total:" << total_records_
-                    << "start:" << start_record_ << ")";
+    LOG(INFO) << "Events count:" << event_logs.event_size();
+    LOG(INFO) << "Current page:" << current_page << "(total:" << total_records_
+              << "start:" << start_record_ << ")";
 
     ui.combobox_page->setCurrentIndex(current_page);
 
@@ -276,7 +276,7 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 void SysInfoWidgetEventLogs::onPageActivated(int index)
 {
     start_record_ = static_cast<quint32>(index) * kRecordsPerPage;
-    LOG(LS_INFO) << "Page activated:" << index << "(start:" << start_record_ << ")";
+    LOG(INFO) << "Page activated:" << index << "(start:" << start_record_ << ")";
     emit sig_systemInfoRequest(request());
 }
 

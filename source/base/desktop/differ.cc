@@ -67,10 +67,10 @@ Differ::Differ(const Size& size)
       full_blocks_x_(size.width() / kBlockSize),
       full_blocks_y_(size.height() / kBlockSize)
 {
-    LOG(LS_INFO) << "Screen size:" << size;
-    LOG(LS_INFO) << "Bytes per row:" << bytes_per_row_;
-    LOG(LS_INFO) << "Diff size:" << diff_width_ << "x" << diff_height_;
-    LOG(LS_INFO) << "Full blocks:" << full_blocks_x_ << "x" << full_blocks_y_;
+    LOG(INFO) << "Screen size:" << size;
+    LOG(INFO) << "Bytes per row:" << bytes_per_row_;
+    LOG(INFO) << "Diff size:" << diff_width_ << "x" << diff_height_;
+    LOG(INFO) << "Full blocks:" << full_blocks_x_ << "x" << full_blocks_y_;
 
     const size_t diff_info_size = static_cast<size_t>(diff_width_ * diff_height_);
 
@@ -81,13 +81,13 @@ Differ::Differ(const Size& size)
     partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
     partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
-    LOG(LS_INFO) << "Partial column:" << partial_column_width_;
-    LOG(LS_INFO) << "Partial row:" << partial_row_height_;
+    LOG(INFO) << "Partial column:" << partial_column_width_;
+    LOG(INFO) << "Partial row:" << partial_row_height_;
 
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
 
-    LOG(LS_INFO) << "Block stride:" << block_stride_y_;
+    LOG(INFO) << "Block stride:" << block_stride_y_;
 
     diff_full_block_func_ = diffFunction();
     CHECK(diff_full_block_func_);
@@ -100,7 +100,7 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
 #if defined(Q_PROCESSOR_X86)
-        LOG(LS_INFO) << "SSE2 differ loaded";
+        LOG(INFO) << "SSE2 differ loaded";
 
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_SSE2;
@@ -110,7 +110,7 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
     }
     else
     {
-        LOG(LS_INFO) << "C differ loaded";
+        LOG(INFO) << "C differ loaded";
 
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_C;

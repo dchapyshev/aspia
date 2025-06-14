@@ -47,11 +47,11 @@ namespace base {
 
 namespace {
 
-const LoggingSeverity kDefaultLogLevel = LOG_LS_FATAL;
+const LoggingSeverity kDefaultLogLevel = LOG_FATAL;
 const qint64 kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const qint64 kDefaultMaxLogFileAge = 14; // 14 days.
 
-LoggingSeverity g_min_log_level = LOG_LS_ERROR;
+LoggingSeverity g_min_log_level = LOG_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 qint64 g_max_log_file_size = kDefaultMaxLogFileSize;
@@ -69,9 +69,9 @@ const QString& severityName(LoggingSeverity severity)
     static const QString kLogSeverityNames[] = { "INFO", "WARNING", "ERROR", "FATAL" };
     static const QString kUnknown("UNKNOWN");
 
-    static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
+    static_assert(LOG_NUMBER == std::size(kLogSeverityNames));
 
-    if (severity >= 0 && severity < LOG_LS_NUMBER)
+    if (severity >= 0 && severity < LOG_NUMBER)
         return kLogSeverityNames[severity];
 
     return kUnknown;
@@ -143,15 +143,15 @@ base::LoggingSeverity qtMessageTypeToSeverity(QtMsgType type)
     {
         case QtCriticalMsg:
         case QtFatalMsg:
-            return base::LOG_LS_ERROR;
+            return base::LOG_ERROR;
 
         case QtWarningMsg:
-            return base::LOG_LS_WARNING;
+            return base::LOG_WARNING;
 
         case QtDebugMsg:
         case QtInfoMsg:
         default:
-            return base::LOG_LS_INFO;
+            return base::LOG_INFO;
     }
 }
 
@@ -188,8 +188,8 @@ LoggingSettings::LoggingSettings()
         int log_level_var = qEnvironmentVariableIntValue("ASPIA_LOG_LEVEL", &ok);
         if (ok)
         {
-            int log_level = std::max(log_level_var, LOG_LS_INFO);
-            log_level = std::min(log_level, LOG_LS_FATAL);
+            int log_level = std::max(log_level_var, LOG_INFO);
+            log_level = std::min(log_level, LOG_FATAL);
 
             min_log_level = log_level;
         }
@@ -306,28 +306,28 @@ bool initLogging(const LoggingSettings& settings)
 
     qInstallMessageHandler(qtMessageHandler);
 
-    LOG(LS_INFO) << "Executable file:" << applicationFilePath();
+    LOG(INFO) << "Executable file:" << applicationFilePath();
     if (g_logging_destination & LOG_TO_FILE)
     {
         // If log output is enabled, then we output information about the file.
-        LOG(LS_INFO) << "Logging file:" << g_log_file_path;
+        LOG(INFO) << "Logging file:" << g_log_file_path;
     }
-    LOG(LS_INFO) << "Logging level:" << g_min_log_level;
+    LOG(INFO) << "Logging level:" << g_min_log_level;
 
 #if defined(NDEBUG)
-    LOG(LS_INFO) << "Debug build: No";
+    LOG(INFO) << "Debug build: No";
 #else
-    LOG(LS_INFO) << "Debug build: Yes";
+    LOG(INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
 
-    LOG(LS_INFO) << "Logging started";
+    LOG(INFO) << "Logging started";
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void shutdownLogging()
 {
-    LOG(LS_INFO) << "Logging finished";
+    LOG(INFO) << "Logging finished";
 
     QMutexLocker lock(&g_log_file_lock);
     g_log_file.close();
@@ -357,7 +357,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     // Return true here unless we know ~LogMessage won't do anything. Note that
     // ~LogMessage writes to stderr if severity_ >= kAlwaysPrintErrorLevel, even
     // when g_logging_destination is LOG_NONE.
-    return g_logging_destination != LOG_NONE || severity >= LOG_LS_ERROR;
+    return g_logging_destination != LOG_NONE || severity >= LOG_ERROR;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        const char* condition)
-    : severity_(LOG_LS_FATAL),
+    : severity_(LOG_FATAL),
       stream_(&string_)
 {
     init(file, line, function);
@@ -438,7 +438,7 @@ LogMessage::LogMessage(std::string_view file,
                        int line,
                        std::string_view function,
                        QString* result)
-    : severity_(LOG_LS_FATAL),
+    : severity_(LOG_FATAL),
       stream_(&string_)
 {
     std::unique_ptr<QString> result_deleter(result);
@@ -474,7 +474,7 @@ LogMessage::~LogMessage()
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
-    else if (severity_ >= LOG_LS_ERROR)
+    else if (severity_ >= LOG_ERROR)
     {
         // When we're only outputting to a log file, above a certain log level, we
         // should still output to stderr so that we can better detect and diagnose
@@ -499,7 +499,7 @@ LogMessage::~LogMessage()
         g_log_file.flush();
     }
 
-    if (severity_ == LOG_LS_FATAL)
+    if (severity_ == LOG_FATAL)
     {
         // Crash the process.
         debugBreak();

@@ -33,19 +33,19 @@ DesktopSessionIpc::DesktopSessionIpc(base::IpcChannel* ipc_channel, QObject* par
     ipc_channel_->setParent(this);
     session_id_ = ipc_channel_->peerSessionId();
 
-    LOG(LS_INFO) << "Ctor (sid=" << session_id_ << ")";
+    LOG(INFO) << "Ctor (sid=" << session_id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::~DesktopSessionIpc()
 {
-    LOG(LS_INFO) << "Dtor (sid=" << session_id_ << ")";
+    LOG(INFO) << "Dtor (sid=" << session_id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::start()
 {
-    LOG(LS_INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
+    LOG(INFO) << "Start IPC desktop session (sid=" << session_id_ << ")";
 
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopSessionIpc::onIpcDisconnected);
@@ -59,7 +59,7 @@ void DesktopSessionIpc::start()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
-    LOG(LS_INFO) << "Send CONTROL with action:" << action << "(sid=" << session_id_ << ")";
+    LOG(INFO) << "Send CONTROL with action:" << action << "(sid=" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_control()->set_action(action);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -68,7 +68,7 @@ void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::configure(const Config& config)
 {
-    LOG(LS_INFO) << "Send CONFIGURE (sid=" << session_id_ << ")";
+    LOG(INFO) << "Send CONFIGURE (sid=" << session_id_ << ")";
 
     proto::internal::Configure* configure = outgoing_message_.newMessage().mutable_configure();
     configure->set_disable_font_smoothing(config.disable_font_smoothing);
@@ -85,7 +85,7 @@ void DesktopSessionIpc::configure(const Config& config)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::selectScreen(const proto::desktop::Screen& screen)
 {
-    LOG(LS_INFO) << "Send SELECT_SCREEN (sid=" << session_id_ << ")";
+    LOG(INFO) << "Send SELECT_SCREEN (sid=" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_select_source()->mutable_screen()->CopyFrom(screen);
     ipc_channel_->send(outgoing_message_.serialize());
@@ -100,12 +100,12 @@ void DesktopSessionIpc::captureScreen()
 
         if (last_screen_list_)
         {
-            LOG(LS_INFO) << "Has last screen list (sid=" << session_id_ << ")";
+            LOG(INFO) << "Has last screen list (sid=" << session_id_ << ")";
             emit sig_screenListChanged(*last_screen_list_);
         }
         else
         {
-            LOG(LS_INFO) << "No last screen list (sid=" << session_id_ << ")";
+            LOG(INFO) << "No last screen list (sid=" << session_id_ << ")";
         }
 
         base::MouseCursor* last_mouse_cursor =
@@ -125,7 +125,7 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
     if (fps > 60 || fps < 1)
     {
-        LOG(LS_ERROR) << "Invalid fps:" << fps << "(sid=" << session_id_ << ")";
+        LOG(ERROR) << "Invalid fps:" << fps << "(sid=" << session_id_ << ")";
         return;
     }
 
@@ -170,7 +170,7 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::desktop::ClipboardEven
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onIpcDisconnected()
 {
-    LOG(LS_INFO) << "IPC channel disconnected (sid=" << session_id_ << ")";
+    LOG(INFO) << "IPC channel disconnected (sid=" << session_id_ << ")";
     emit sig_desktopSessionStopped();
 }
 
@@ -179,7 +179,7 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(LS_ERROR) << "Invalid message from desktop (sid=" << session_id_ << ")";
+        LOG(ERROR) << "Invalid message from desktop (sid=" << session_id_ << ")";
         return;
     }
 
@@ -197,13 +197,13 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
     }
     else if (incoming_message_->has_screen_list())
     {
-        LOG(LS_INFO) << "Screen list received (sid=" << session_id_ << ")";
+        LOG(INFO) << "Screen list received (sid=" << session_id_ << ")";
         last_screen_list_.reset(incoming_message_->release_screen_list());
         emit sig_screenListChanged(*last_screen_list_);
     }
     else if (incoming_message_->has_screen_type())
     {
-        LOG(LS_INFO) << "Screen type received (sid=" << session_id_ << ")";
+        LOG(INFO) << "Screen type received (sid=" << session_id_ << ")";
         emit sig_screenTypeChanged(incoming_message_->screen_type());
     }
     else if (incoming_message_->has_shared_buffer())
@@ -229,7 +229,7 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unhandled message from desktop (sid=" << session_id_ << ")";
+        LOG(ERROR) << "Unhandled message from desktop (sid=" << session_id_ << ")";
         return;
     }
 }
@@ -299,15 +299,15 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory created:" << shared_buffer_id << "(sid=" << session_id_ << ")";
+    LOG(INFO) << "Shared memory created:" << shared_buffer_id << "(sid=" << session_id_ << ")";
 
     base::SharedMemory* shared_memory =
         base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
     if (!shared_memory)
     {
-        LOG(LS_ERROR) << "Failed to create the shared buffer" << shared_buffer_id
-                      << "(sid=" << session_id_ << ")";
+        LOG(ERROR) << "Failed to create the shared buffer" << shared_buffer_id
+                   << "(sid=" << session_id_ << ")";
         return;
     }
 
@@ -317,13 +317,13 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
-    LOG(LS_INFO) << "Shared memory destroyed:" << shared_buffer_id << "(sid=" << session_id_ << ")";
+    LOG(INFO) << "Shared memory destroyed:" << shared_buffer_id << "(sid=" << session_id_ << ")";
 
     shared_buffers_.remove(shared_buffer_id);
 
     if (shared_buffers_.isEmpty())
     {
-        LOG(LS_INFO) << "Reset last frame (sid=" << session_id_ << ")";
+        LOG(INFO) << "Reset last frame (sid=" << session_id_ << ")";
         last_frame_.dettach();
     }
 }
@@ -334,8 +334,8 @@ base::SharedPointer<base::SharedMemory> DesktopSessionIpc::sharedBuffer(int shar
     auto result = shared_buffers_.find(shared_buffer_id);
     if (result == shared_buffers_.end())
     {
-        LOG(LS_ERROR) << "Failed to find the shared buffer" << shared_buffer_id
-                      << "(sid=" << session_id_ << ")";
+        LOG(ERROR) << "Failed to find the shared buffer" << shared_buffer_id
+                   << "(sid=" << session_id_ << ")";
         return nullptr;
     }
 

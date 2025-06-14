@@ -109,13 +109,13 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
                                          qUtf16Printable(path)));
     if (!file.isValid())
     {
-        PLOG(LS_ERROR) << "CreateFileMappingW failed";
+        PLOG(ERROR) << "CreateFileMappingW failed";
         return false;
     }
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        LOG(LS_ERROR) << "Already exists shared memory:" << path;
+        LOG(ERROR) << "Already exists shared memory:" << path;
         return false;
     }
 
@@ -123,7 +123,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, ScopedHandl
         file, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, nullptr);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "SetSecurityInfo failed:" << SystemError::toString(error_code);
+        LOG(ERROR) << "SetSecurityInfo failed:" << SystemError::toString(error_code);
         return false;
     }
 
@@ -141,7 +141,7 @@ bool openFileMapping(SharedMemory::Mode mode, int id, ScopedHandle* out)
     ScopedHandle file(OpenFileMappingW(desired_access, FALSE, qUtf16Printable(createFilePath(id))));
     if (!file.isValid())
     {
-        PLOG(LS_ERROR) << "OpenFileMappingW failed";
+        PLOG(ERROR) << "OpenFileMappingW failed";
         return false;
     }
 
@@ -159,7 +159,7 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
     *memory = MapViewOfFile(file, desired_access, 0, 0, 0);
     if (!*memory)
     {
-        PLOG(LS_ERROR) << "MapViewOfFile failed";
+        PLOG(ERROR) << "MapViewOfFile failed";
         return false;
     }
 

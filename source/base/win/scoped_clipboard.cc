@@ -49,7 +49,7 @@ bool ScopedClipboard::init(HWND owner)
 
     if (opened_)
     {
-        LOG(LS_ERROR) << "Attempt to open an already opened clipboard";
+        LOG(ERROR) << "Attempt to open an already opened clipboard";
         return true;
     }
 
@@ -76,7 +76,7 @@ BOOL ScopedClipboard::empty()
 {
     if (!opened_)
     {
-        LOG(LS_ERROR) << "Clipboard is not open";
+        LOG(ERROR) << "Clipboard is not open";
         return FALSE;
     }
 
@@ -88,7 +88,7 @@ void ScopedClipboard::setData(UINT format, HANDLE mem)
 {
     if (!opened_)
     {
-        LOG(LS_ERROR) << "Clipboard is not open";
+        LOG(ERROR) << "Clipboard is not open";
         return;
     }
 
@@ -101,7 +101,7 @@ HANDLE ScopedClipboard::data(UINT format) const
 {
     if (!opened_)
     {
-        LOG(LS_ERROR) << "Clipboard is not open";
+        LOG(ERROR) << "Clipboard is not open";
         return nullptr;
     }
 

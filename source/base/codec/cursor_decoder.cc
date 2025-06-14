@@ -33,13 +33,13 @@ constexpr size_t kMaxCacheSize = 30;
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 CursorDecoder::~CursorDecoder()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,14 +49,13 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
 
     if (data.empty())
     {
-        LOG(LS_ERROR) << "No cursor data";
+        LOG(ERROR) << "No cursor data";
         return QByteArray();
     }
 
     if (cursor_shape.width() <= 0 || cursor_shape.height() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid cursor size:"
-                      << cursor_shape.width() << "x" << cursor_shape.height();
+        LOG(ERROR) << "Invalid cursor size:" << cursor_shape;
         return QByteArray();
     }
 
@@ -68,8 +67,7 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
     size_t ret = ZSTD_initDStream(stream_.get());
     if (ZSTD_isError(ret))
     {
-        LOG(LS_ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret)
-                      << "(" << ret << ")";
+        LOG(ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return QByteArray();
     }
 
@@ -81,8 +79,8 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
         ret = ZSTD_decompressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret)
-                          << "(" << ret << ")";
+            LOG(ERROR) << "ZSTD_decompressStream failed:" << ZSTD_getErrorName(ret)
+                       << "(" << ret << ")";
             return QByteArray();
         }
     }
@@ -99,7 +97,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
     {
         if (!cache_size_.has_value())
         {
-            LOG(LS_ERROR) << "Host did not send cache reset command";
+            LOG(ERROR) << "Host did not send cache reset command";
             return nullptr;
         }
 
@@ -116,15 +114,14 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
         {
-            LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor:"
-                          << size.width() << "x" << size.height();
+            LOG(ERROR) << "Cursor dimensions are out of bounds for SetCursor:" << size;
             return nullptr;
         }
 
         QByteArray image = decompressCursor(cursor_shape);
         if (image.isEmpty())
         {
-            LOG(LS_ERROR) << "decompressCursor failed";
+            LOG(ERROR) << "decompressCursor failed";
             return nullptr;
         }
 
@@ -143,7 +140,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
             if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
             {
-                LOG(LS_ERROR) << "Invalid cache size:" << cache_size;
+                LOG(ERROR) << "Invalid cache size:" << cache_size;
                 return nullptr;
             }
 
@@ -154,7 +151,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
         if (!cache_size_.has_value())
         {
-            LOG(LS_ERROR) << "Host did not send cache reset command";
+            LOG(ERROR) << "Host did not send cache reset command";
             return nullptr;
         }
 
@@ -173,7 +170,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
     if (cache_index >= cache_.size())
     {
-        LOG(LS_ERROR) << "Invalid cache index:" << cache_index;
+        LOG(ERROR) << "Invalid cache index:" << cache_index;
         return nullptr;
     }
 

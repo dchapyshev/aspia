@@ -49,7 +49,7 @@ const char* sessionStateToString(AudioSessionState state)
 AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     : AudioOutput(need_more_data_cb)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
     // processed by the client.
@@ -71,7 +71,7 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
 //--------------------------------------------------------------------------------------------------
 AudioOutputWin::~AudioOutputWin()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     stop();
 }
 
@@ -88,7 +88,7 @@ bool AudioOutputWin::start()
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
-        LOG(LS_ERROR) << "Failed to prepare output endpoint with silence";
+        LOG(ERROR) << "Failed to prepare output endpoint with silence";
     }
 
     num_frames_written_ = endpoint_buffer_size_frames_;
@@ -101,7 +101,7 @@ bool AudioOutputWin::start()
         if (!audio_thread_->isRunning())
         {
             stopThread();
-            LOG(LS_ERROR) << "Failed to start audio thread";
+            LOG(ERROR) << "Failed to start audio thread";
             return false;
         }
     }
@@ -110,7 +110,7 @@ bool AudioOutputWin::start()
     if (FAILED(hr))
     {
         stopThread();
-        LOG(LS_ERROR) << "IAudioClient::Start failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Start failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -126,7 +126,7 @@ bool AudioOutputWin::stop()
 
     if (!is_active_)
     {
-        LOG(LS_ERROR) << "No output stream is active";
+        LOG(ERROR) << "No output stream is active";
         releaseCOMObjects();
         is_initialized_ = false;
         return true;
@@ -136,7 +136,7 @@ bool AudioOutputWin::stop()
     HRESULT hr = audio_client_->Stop();
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
     }
 
     // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
@@ -146,7 +146,7 @@ bool AudioOutputWin::stop()
     hr = audio_client_->Reset();
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::Reset failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Reset failed:" << SystemError(hr).toString();
     }
 
     // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
@@ -166,7 +166,7 @@ void AudioOutputWin::threadRun()
 {
     if (!isMMCSSSupported())
     {
-        LOG(LS_ERROR) << "MMCSS is not supported";
+        LOG(ERROR) << "MMCSS is not supported";
         return;
     }
 
@@ -213,14 +213,14 @@ void AudioOutputWin::threadRun()
 
     if (streaming && error)
     {
-        LOG(LS_ERROR) << "WASAPI streaming failed";
+        LOG(ERROR) << "WASAPI streaming failed";
         // Stop audio streaming since something has gone wrong in our main thread loop. Note that,
         // we are still in a "started" state, hence a stop() call is required to join the thread
         // properly.
         HRESULT hr = audio_client_->Stop();
         if (FAILED(hr))
         {
-            LOG(LS_ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
+            LOG(ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
         }
     }
 }
@@ -231,14 +231,14 @@ bool AudioOutputWin::init()
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
     if (!device.Get())
     {
-        LOG(LS_ERROR) << "createDevice failed";
+        LOG(ERROR) << "createDevice failed";
         return false;
     }
 
     Microsoft::WRL::ComPtr<IAudioClient> audio_client = createClient(device.Get());
     if (!audio_client.Get())
     {
-        LOG(LS_ERROR) << "createClient failed";
+        LOG(ERROR) << "createClient failed";
         return false;
     }
 
@@ -262,7 +262,7 @@ bool AudioOutputWin::init()
 
     if (!isFormatSupported(audio_client.Get(), AUDCLNT_SHAREMODE_SHARED, &format_extensible))
     {
-        LOG(LS_ERROR) << "Format not supported";
+        LOG(ERROR) << "Format not supported";
         return false;
     }
 
@@ -273,7 +273,7 @@ bool AudioOutputWin::init()
     if (!sharedModeInitialize(audio_client.Get(), &format_extensible, audio_samples_event_,
                               requested_buffer_size, true, &endpoint_buffer_size_frames_))
     {
-        LOG(LS_ERROR) << "sharedModeInitialize failed";
+        LOG(ERROR) << "sharedModeInitialize failed";
         return false;
     }
 
@@ -283,7 +283,7 @@ bool AudioOutputWin::init()
         createRenderClient(audio_client.Get());
     if (!audio_render_client.Get())
     {
-        LOG(LS_ERROR) << "createRenderClient failed";
+        LOG(ERROR) << "createRenderClient failed";
         return false;
     }
 
@@ -294,7 +294,7 @@ bool AudioOutputWin::init()
         createAudioSessionControl(audio_client.Get());
     if (!audio_session_control.Get())
     {
-        LOG(LS_ERROR) << "createAudioSessionControl failed";
+        LOG(ERROR) << "createAudioSessionControl failed";
         return false;
     }
 
@@ -304,13 +304,13 @@ bool AudioOutputWin::init()
     if (FAILED(audio_session_control->GetState(&state)))
         return false;
 
-    LOG(LS_INFO) << "Audio session state:" << sessionStateToString(state);
+    LOG(INFO) << "Audio session state:" << sessionStateToString(state);
 
     // Register the client to receive notifications of session events, including changes in the
     // stream state.
     if (FAILED(audio_session_control->RegisterAudioSessionNotification(this)))
     {
-        LOG(LS_ERROR) << "IAudioSessionControl::RegisterAudioSessionNotification failed";
+        LOG(ERROR) << "IAudioSessionControl::RegisterAudioSessionNotification failed";
         return false;
     }
 
@@ -333,13 +333,13 @@ bool AudioOutputWin::handleDataRequest()
         // Avoid breaking the thread loop implicitly by returning false and return true instead for
         // AUDCLNT_E_DEVICE_INVALIDATED even it is a valid error message. We will use notifications
         // about device changes instead to stop data callbacks and attempt to restart streaming.
-        LOG(LS_ERROR) << "AUDCLNT_E_DEVICE_INVALIDATED";
+        LOG(ERROR) << "AUDCLNT_E_DEVICE_INVALIDATED";
         return true;
     }
 
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioClient::GetCurrentPadding failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -349,7 +349,7 @@ bool AudioOutputWin::handleDataRequest()
     UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
     if (num_requested_frames == 0)
     {
-        LOG(LS_ERROR) << "Audio thread is signaled but no new audio samples are needed";
+        LOG(ERROR) << "Audio thread is signaled but no new audio samples are needed";
         return true;
     }
 
@@ -359,7 +359,7 @@ bool AudioOutputWin::handleDataRequest()
     hr = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -371,8 +371,7 @@ bool AudioOutputWin::handleDataRequest()
     hr = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "IAudioRenderClient::ReleaseBuffer failed:"
-                      << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << SystemError(hr).toString();
         return false;
     }
 
@@ -391,19 +390,19 @@ bool AudioOutputWin::handleRestartEvent()
 
     if (!stop())
     {
-        LOG(LS_ERROR) << "stop failed";
+        LOG(ERROR) << "stop failed";
         return false;
     }
 
     if (!init())
     {
-        LOG(LS_ERROR) << "init failed";
+        LOG(ERROR) << "init failed";
         return false;
     }
 
     if (!start())
     {
-        LOG(LS_ERROR) << "start failed";
+        LOG(ERROR) << "start failed";
         return false;
     }
 
@@ -485,7 +484,7 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
 {
     if (is_restarting_)
     {
-        LOG(LS_ERROR) << "Ignoring since restart is already active";
+        LOG(ERROR) << "Ignoring since restart is already active";
         return S_OK;
     }
 

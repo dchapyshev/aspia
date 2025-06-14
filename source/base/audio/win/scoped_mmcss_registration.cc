@@ -83,16 +83,16 @@ ScopedMMCSSRegistration::ScopedMMCSSRegistration(const wchar_t* task_name)
     mmcss_handle_ = AvSetMmThreadCharacteristicsW(task_name, &mmcss_task_index);
     if (mmcss_handle_ == nullptr)
     {
-        PLOG(LS_ERROR) << "Failed to enable MMCSS on this thread";
+        PLOG(ERROR) << "Failed to enable MMCSS on this thread";
     }
     else
     {
         const DWORD priority_class = GetPriorityClass(GetCurrentProcess());
         const int priority = GetThreadPriority(GetCurrentThread());
-        LOG(LS_INFO) << "priority class:"
+        LOG(INFO) << "priority class:"
             << priorityClassToString(priority_class) << "("
             << priority_class << ")";
-        LOG(LS_INFO) << "priority:" << priorityToString(priority) << "(" << priority << ")";
+        LOG(INFO) << "priority:" << priorityToString(priority) << "(" << priority << ")";
     }
 }
 

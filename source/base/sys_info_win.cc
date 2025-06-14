@@ -45,7 +45,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
     if (GetLogicalProcessorInformation(nullptr, &returned_length) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        LOG(LS_ERROR) << "Unexpected return value";
+        LOG(ERROR) << "Unexpected return value";
         return 0;
     }
 
@@ -56,7 +56,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 
     if (!GetLogicalProcessorInformation(info, &returned_length))
     {
-        PLOG(LS_ERROR) << "GetLogicalProcessorInformation failed";
+        PLOG(ERROR) << "GetLogicalProcessorInformation failed";
         return 0;
     }
 
@@ -168,7 +168,7 @@ QString SysInfo::operatingSystemName()
                            access);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to open registry key:" << SystemError::toString(status);
+        LOG(ERROR) << "Unable to open registry key:" << SystemError::toString(status);
         return QString();
     }
 
@@ -177,7 +177,7 @@ QString SysInfo::operatingSystemName()
     status = key.readValue("ProductName", &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_ERROR) << "Unable to read registry key:" << SystemError::toString(status);
+        LOG(ERROR) << "Unable to read registry key:" << SystemError::toString(status);
         return QString();
     }
 
@@ -301,13 +301,13 @@ quint64 SysInfo::uptime()
 
     if (!QueryPerformanceCounter(&counter))
     {
-        PLOG(LS_ERROR) << "QueryPerformanceCounter failed";
+        PLOG(ERROR) << "QueryPerformanceCounter failed";
         return 0;
     }
 
     if (!QueryPerformanceFrequency(&frequency))
     {
-        PLOG(LS_ERROR) << "QueryPerformanceFrequency failed";
+        PLOG(ERROR) << "QueryPerformanceFrequency failed";
         return 0;
     }
 
@@ -323,7 +323,7 @@ QString SysInfo::computerName()
 
     if (!GetComputerNameW(buffer, &buffer_size))
     {
-        PLOG(LS_ERROR) << "GetComputerNameW failed";
+        PLOG(ERROR) << "GetComputerNameW failed";
         return QString();
     }
 
@@ -339,7 +339,7 @@ QString SysInfo::computerDomain()
     if (GetComputerNameExW(ComputerNameDnsDomain, nullptr, &buffer_size) ||
         GetLastError() != ERROR_MORE_DATA)
     {
-        LOG(LS_ERROR) << "Unexpected return value";
+        LOG(ERROR) << "Unexpected return value";
         return QString();
     }
 
@@ -347,7 +347,7 @@ QString SysInfo::computerDomain()
 
     if (!GetComputerNameExW(ComputerNameDnsDomain, buffer.get(), &buffer_size))
     {
-        PLOG(LS_ERROR) << "GetComputerNameExW failed";
+        PLOG(ERROR) << "GetComputerNameExW failed";
         return QString();
     }
 
@@ -364,7 +364,7 @@ QString SysInfo::computerWorkgroup()
     DWORD ret = NetGetJoinInformation(nullptr, &buffer, &buffer_type);
     if (ret != NERR_Success)
     {
-        LOG(LS_ERROR) << "NetGetJoinInformation failed:" << ret;
+        LOG(ERROR) << "NetGetJoinInformation failed:" << ret;
         return QString();
     }
 

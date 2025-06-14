@@ -41,7 +41,7 @@ std::unique_ptr<UserListDb> UserListDb::open(const DatabaseFactory& factory)
     std::unique_ptr<Database> db = factory.openDatabase();
     if (!db)
     {
-        LOG(LS_ERROR) << "Unable to open database";
+        LOG(ERROR) << "Unable to open database";
         return nullptr;
     }
 

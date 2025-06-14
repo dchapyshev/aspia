@@ -70,7 +70,7 @@ void AudioEncoder::initEncoder()
     encoder_ = opus_encoder_create(kOpusSamplingRate, channels_, OPUS_APPLICATION_AUDIO, &error);
     if (!encoder_)
     {
-        LOG(LS_ERROR) << "Failed to create OPUS encoder. Error code:" << error;
+        LOG(ERROR) << "Failed to create OPUS encoder. Error code:" << error;
         return;
     }
 
@@ -123,9 +123,8 @@ bool AudioEncoder::resetForPacket(const proto::desktop::AudioPacket& packet)
 
         if (channels_ <= 0 || channels_ > 2 || !isSupportedSampleRate(sampling_rate_))
         {
-            LOG(LS_ERROR) << "Unsupported OPUS parameters:"
-                          << channels_ << "channels with"
-                          << sampling_rate_ << "samples per second.";
+            LOG(ERROR) << "Unsupported OPUS parameters:" << channels_ << "channels with"
+                       << sampling_rate_ << "samples per second";
             return false;
         }
 
@@ -174,11 +173,11 @@ bool AudioEncoder::setBitrate(int bitrate)
             break;
 
         default:
-            LOG(LS_ERROR) << "Invalid bitrate value:" << bitrate;
+            LOG(ERROR) << "Invalid bitrate value:" << bitrate;
             return false;
     }
 
-    LOG(LS_INFO) << "Bitrate changed from" << bitrate_ << "to" << bitrate;
+    LOG(INFO) << "Bitrate changed from" << bitrate_ << "to" << bitrate;
     bitrate_ = bitrate;
 
     opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitrate));
@@ -195,7 +194,7 @@ bool AudioEncoder::encode(
 
     if (!resetForPacket(input_packet))
     {
-        LOG(LS_ERROR) << "Encoder initialization failed";
+        LOG(ERROR) << "Encoder initialization failed";
         return false;
     }
 
@@ -259,7 +258,7 @@ bool AudioEncoder::encode(
                                  opus_int32(data->length()));
         if (result < 0)
         {
-            LOG(LS_ERROR) << "opus_encode() failed with error code:" << result;
+            LOG(ERROR) << "opus_encode() failed with error code:" << result;
             return false;
         }
 
