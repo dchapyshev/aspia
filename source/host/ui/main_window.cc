@@ -18,9 +18,20 @@
 
 #include "host/ui/main_window.h"
 
+#include <QActionGroup>
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QDir>
+#include <QMessageBox>
+#include <QNetworkInterface>
+#include <QProcess>
+#include <QTimer>
+#include <QUrl>
+
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
+#include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
@@ -33,16 +44,6 @@
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/user_settings.h"
-
-#include <QActionGroup>
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QDir>
-#include <QMessageBox>
-#include <QNetworkInterface>
-#include <QProcess>
-#include <QTimer>
-#include <QUrl>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"

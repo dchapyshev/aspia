@@ -32,13 +32,6 @@ Location::Location(const Location& other) = default;
 Location& Location::operator=(const Location& other) = default;
 
 //--------------------------------------------------------------------------------------------------
-Location::Location(const char* file_name)
-    : file_name_(file_name)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 Location::Location(const char* function_name, const char* file_name, int line_number)
     : function_name_(function_name),
       file_name_(file_name),
@@ -48,25 +41,15 @@ Location::Location(const char* function_name, const char* file_name, int line_nu
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Location::toString(PathType path_type) const
+QString Location::toString() const
 {
     std::string_view file_name(file_name_);
 
-    if (path_type == SHORT_PATH)
-    {
-        size_t last_slash_pos = file_name.find_last_of("\\/");
-        if (last_slash_pos != std::string_view::npos)
-            file_name.remove_prefix(last_slash_pos + 1);
-    }
+    size_t last_slash_pos = file_name.find_last_of("\\/");
+    if (last_slash_pos != std::string_view::npos)
+        file_name.remove_prefix(last_slash_pos + 1);
 
     return QString(function_name_) + "@" + file_name.data() + ":" + QString::number(line_number_);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-NOINLINE Location Location::createFromHere(const char* file_name)
-{
-    return Location(file_name);
 }
 
 //--------------------------------------------------------------------------------------------------

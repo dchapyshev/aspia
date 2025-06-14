@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/net/tcp_channel.h"
+#include "build/build_config.h"
 #include "proto/key_exchange.h"
 
 namespace client {

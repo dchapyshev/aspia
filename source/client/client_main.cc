@@ -24,6 +24,7 @@
 
 #include "base/logging.h"
 #include "base/sys_info.h"
+#include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"

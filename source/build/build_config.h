@@ -22,10 +22,8 @@
 #define DEFAULT_LOCALE        "en"
 #define DEFAULT_UPDATE_SERVER "https://update.aspia.net"
 
-#define DEFAULT_HOST_TCP_PORT             8050
-#define DEFAULT_ROUTER_TCP_PORT           8060
-#define DEFAULT_RELAY_PEER_TCP_PORT       8070
-
-#define ENABLE_LOCATION_SOURCE
+#define DEFAULT_HOST_TCP_PORT       8050
+#define DEFAULT_ROUTER_TCP_PORT     8060
+#define DEFAULT_RELAY_PEER_TCP_PORT 8070
 
 #endif // BUILD_BUILD_CONFIG_H
