@@ -264,7 +264,7 @@ QString IpcChannel::channelName(const QString& channel_id)
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     LOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code
-               << "(location=" << location.toString() << ")";
+               << "(location=" << location << ")";
 
     disconnectFrom();
     emit sig_disconnected();

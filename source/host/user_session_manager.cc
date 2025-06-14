@@ -438,7 +438,7 @@ void UserSessionManager::onIpcNewConnection()
 void UserSessionManager::startSessionProcess(
     const base::Location& location, base::SessionId session_id)
 {
-    LOG(INFO) << "Starting UI process (sid=" << session_id << "from=" << location.toString() << ")";
+    LOG(INFO) << "Starting UI process (sid" << session_id << "from" << location << ")";
 
 #if defined(Q_OS_WINDOWS)
     if (session_id == base::kInvalidSessionId)
@@ -572,7 +572,7 @@ void UserSessionManager::startSessionProcess(
 void UserSessionManager::addUserSession(
     const base::Location& location, base::SessionId session_id, base::IpcChannel* channel)
 {
-    LOG(INFO) << "Add user session:" << session_id << "(from=" << location.toString() << ")";
+    LOG(INFO) << "Add user session:" << session_id << "(from" << location << ")";
 
     for (const auto& session : std::as_const(sessions_))
     {

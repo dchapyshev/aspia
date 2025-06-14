@@ -51,8 +51,8 @@ DesktopSessionManager::DesktopSessionManager(QObject* parent)
 
     connect(session_attach_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(ERROR) << "Session attach timeout (session_id=" << session_id_
-                   << "timeout=" << kSessionAttachTimeout.count() << "min)";
+        LOG(ERROR) << "Session attach timeout (sid" << session_id_
+                   << "timeout" << kSessionAttachTimeout.count() << "min)";
         onErrorOccurred();
     });
 
@@ -169,13 +169,12 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 {
     if (state_ == State::ATTACHED)
     {
-        LOG(INFO) << "Already attached. Session ID:" << session_id << "(from="
-                  << location.toString() << ")";
+        LOG(INFO) << "Already attached. Session ID:" << session_id << "(from" << location << ")";
         return;
     }
 
     LOG(INFO) << "Attach session with ID:" << session_id << "current state:" << state_
-              << "(from=" << location.toString() << ")";
+              << "(from" << location << ")";
     session_id_ = session_id;
 
     if (state_ == State::STOPPED)
@@ -190,7 +189,7 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        LOG(ERROR) << "Unable to get session info (sid" << session_id << ")";
         return;
     }
 
@@ -204,7 +203,7 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     QString channel_id = base::IpcServer::createUniqueId();
 
-    LOG(INFO) << "Starting IPC server for desktop session (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting IPC server for desktop session (channel_id" << channel_id << ")";
 
     ipc_server_ = new base::IpcServer(this);
 
@@ -215,7 +214,7 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     if (!ipc_server_->start(channel_id))
     {
-        LOG(ERROR) << "Failed to start IPC server (channel_id=" << channel_id << ")";
+        LOG(ERROR) << "Failed to start IPC server (channel_id" << channel_id << ")";
 
         onErrorOccurred();
         return;
@@ -227,15 +226,15 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
         DesktopSessionProcess::create(session_id, channel_id);
     if (!process)
     {
-        LOG(ERROR) << "Failed to create session process (sid=" << session_id
-                   << "channel_id=" << channel_id << ")";
+        LOG(ERROR) << "Failed to create session process (sid" << session_id
+                   << "channel_id" << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
 
-    LOG(INFO) << "Desktop session process created (sid=" << session_id
-              << "channel_id=" << channel_id << ")";
+    LOG(INFO) << "Desktop session process created (sid" << session_id
+              << "channel_id" << channel_id << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,8 +246,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         return;
     }
 
-    LOG(INFO) << "Dettach session (sid=" << session_id_ << "state=" << state_
-              << "from=" << location.toString() << ")";
+    LOG(INFO) << "Dettach session (sid" << session_id_ << "state" << state_ << "from" << location << ")";
 
     if (state_ != State::STOPPING)
         setState(FROM_HERE, State::DETACHED);
@@ -261,7 +259,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         session_ = nullptr;
     }
 
-    LOG(INFO) << "Session process is detached (sid=" << session_id_ << ")";
+    LOG(INFO) << "Session process is detached (sid" << session_id_ << ")";
 
     if (state_ == State::STOPPING)
         return;
@@ -383,7 +381,7 @@ void DesktopSessionManager::injectClipboardEvent(const proto::desktop::Clipboard
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewIpcConnection()
 {
-    LOG(INFO) << "Session process successfully connected (sid=" << session_id_ << ")";
+    LOG(INFO) << "Session process successfully connected (sid" << session_id_ << ")";
 
     if (!ipc_server_)
     {
@@ -413,7 +411,7 @@ void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
     {
-        LOG(INFO) << "Error skipped (state=" << state_ << ")";
+        LOG(INFO) << "Error skipped (state" << state_ << ")";
         return;
     }
 
@@ -425,8 +423,7 @@ void DesktopSessionManager::onErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
-    LOG(INFO) << "State changed from" << state_ << "to" << state
-              << "(from=" << location.toString() << ")";
+    LOG(INFO) << "State changed from" << state_ << "to" << state << "(from" << location << ")";
     state_ = state;
 }
 

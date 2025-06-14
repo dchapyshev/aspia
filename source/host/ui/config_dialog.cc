@@ -747,7 +747,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::setConfigChanged(const base::Location& location, bool changed)
 {
-    LOG(INFO) << "Config changed (from=" << location.toString() << "changed=" << changed << ")";
+    LOG(INFO) << "Config changed (from" << location << "changed" << changed << ")";
 
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
     if (!apply_button)

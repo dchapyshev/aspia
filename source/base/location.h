@@ -19,6 +19,8 @@
 #ifndef BASE_LOCATION_H
 #define BASE_LOCATION_H
 
+#include <QDebug>
+#include <QMetaType>
 #include <QString>
 
 namespace base {
@@ -63,5 +65,9 @@ private:
     ::base::Location::createFromHere(function_name, __FILE__, __LINE__)
 
 } // namespace base
+
+Q_DECLARE_METATYPE(base::Location)
+
+QDebug operator<<(QDebug out, const base::Location& location);
 
 #endif // BASE_LOCATION_H

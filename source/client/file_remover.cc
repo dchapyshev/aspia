@@ -194,7 +194,7 @@ void FileRemover::doCurrentTask()
 //--------------------------------------------------------------------------------------------------
 void FileRemover::onFinished(const base::Location& location)
 {
-    LOG(INFO) << "File remover finished (from:" << location.toString() << ")";
+    LOG(INFO) << "File remover finished (from" << location << ")";
     emit sig_finished();
 }
 

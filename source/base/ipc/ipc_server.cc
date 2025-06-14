@@ -360,7 +360,7 @@ bool IpcServer::runListener(size_t index)
     std::shared_ptr<Listener> listener = listeners_[index];
     if (!listener)
     {
-        LOG(ERROR) << "Unable to get listener (index=" << index << ")";
+        LOG(ERROR) << "Unable to get listener (index" << index << ")";
         return false;
     }
 
@@ -370,7 +370,7 @@ bool IpcServer::runListener(size_t index)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
-    LOG(INFO) << "New IPC connecting (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "New IPC connecting (channel_name" << channel_name_ << ")";
 
     pending_.push_back(channel);
     emit sig_newConnection();
@@ -379,8 +379,7 @@ void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
-    LOG(ERROR) << "Error in IPC server (channel_name=" << channel_name_ << "from="
-               << location.toString() << ")";
+    LOG(ERROR) << "Error in IPC server (channel_name" << channel_name_ << "from" << location << ")";
     emit sig_errorOccurred();
 }
 

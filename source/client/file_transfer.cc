@@ -496,8 +496,7 @@ void FileTransfer::onError(Error::Type type, proto::file_transfer::ErrorCode cod
 //--------------------------------------------------------------------------------------------------
 void FileTransfer::onFinished(const base::Location& location)
 {
-    LOG(INFO) << "File transfer finished (from:" << location.toString() << ")";
-
+    LOG(INFO) << "File transfer finished (from" << location << ")";
     speed_update_timer_->stop();
     emit sig_finished();
 }

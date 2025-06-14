@@ -751,7 +751,7 @@ void UserSession::onSessionDettached(const base::Location& location)
         return;
     }
 
-    LOG(INFO) << "Dettach session (sid" << session_id_ << "from" << location.toString() << ")";
+    LOG(INFO) << "Dettach session (sid" << session_id_ << "from" << location << ")";
 
     if (ipc_channel_)
     {
@@ -1008,7 +1008,7 @@ void UserSession::addNewClientSession(ClientSession* client_session)
 void UserSession::setState(const base::Location& location, State state)
 {
     LOG(INFO) << "State changed from" << state_ << "to" << state
-              << "(sid" << session_id_ << "from" << location.toString() << ")";
+              << "(sid" << session_id_ << "from" << location << ")";
     state_ = state;
 }
 
@@ -1016,7 +1016,7 @@ void UserSession::setState(const base::Location& location, State state)
 void UserSession::onTextChatHasUser(const base::Location& location, bool has_user)
 {
     LOG(INFO) << "User state changed (has_user" << has_user << "sid" << session_id_
-              << "from" << location.toString() << ")";
+              << "from" << location << ")";
 
     for (const auto& client : std::as_const(clients_))
     {

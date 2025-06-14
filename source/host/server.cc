@@ -632,7 +632,7 @@ void Server::checkForUpdates()
 //--------------------------------------------------------------------------------------------------
 void Server::updateOneTimeCredentials(const base::Location &location)
 {
-    LOG(INFO) << "Updating credentials (from:" << location.toString() << ")";
+    LOG(INFO) << "Updating credentials (from" << location << ")";
 
     if (settings_.oneTimePassword())
     {

@@ -394,7 +394,7 @@ void ClientSessionFileTransfer::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onError(const base::Location& location)
 {
-    LOG(ERROR) << "Error occurred (from:" << location.toString() << ")";
+    LOG(ERROR) << "Error occurred (from" << location << ")";
     stop();
 }
 

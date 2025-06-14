@@ -114,8 +114,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    LOG(INFO) << "Authenticator finished with code:" << error_code
-              << "(" << location.toString() << ")";
+    LOG(INFO) << "Authenticator finished with code:" << error_code << "(" << location << ")";
     emit sig_finished(error_code);
 }
 

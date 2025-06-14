@@ -170,7 +170,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, bool online)
 {
-    LOG(INFO) << "Finished from:" << location.toString();
+    LOG(INFO) << "Finished from:" << location;
 
     if (finished_)
         return;
@@ -280,7 +280,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
-    LOG(INFO) << "Finished (from:" << location.toString() << ")";
+    LOG(INFO) << "Finished (from" << location << ")";
     emit sig_checkerFinished();
 }
 

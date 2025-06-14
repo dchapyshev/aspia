@@ -174,7 +174,7 @@ void OnlineCheckerRouter::checkNextComputer()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
-    LOG(INFO) << "Finished (from:" << location.toString() << ")";
+    LOG(INFO) << "Finished (from:" << location << ")";
 
     if (tcp_channel_)
     {

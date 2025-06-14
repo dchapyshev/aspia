@@ -222,7 +222,7 @@ void ClientSessionPortForwarding::onReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientSessionPortForwarding::onError(const base::Location& location)
 {
-    LOG(ERROR) << "Error occurred (from:" << location.toString() << ")";
+    LOG(ERROR) << "Error occurred (from" << location << ")";
 
     state_ = ForwardingState::DISCONNECTED;
     if (handler_)

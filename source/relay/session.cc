@@ -146,7 +146,7 @@ void Session::doReadSome(Session* session, int source)
 //--------------------------------------------------------------------------------------------------
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Connection finished:" << error_code << "(" << location.toString() << ")";
+    LOG(ERROR) << "Connection finished:" << error_code << "(" << location << ")";
     emit sig_sessionFinished(this);
     stop();
 }

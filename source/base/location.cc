@@ -62,3 +62,9 @@ NOINLINE Location Location::createFromHere(const char* function_name,
 }
 
 } // namespace base
+
+//--------------------------------------------------------------------------------------------------
+QDebug operator<<(QDebug out, const base::Location& location)
+{
+    return out << location.toString();
+}

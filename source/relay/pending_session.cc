@@ -201,7 +201,7 @@ void PendingSession::doReadMessage(PendingSession* session)
 //--------------------------------------------------------------------------------------------------
 void PendingSession::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Connection error:" << error_code << "(" << location.toString() << ")";
+    LOG(ERROR) << "Connection error:" << error_code << "(" << location << ")";
     emit sig_pendingSessionFailed(this);
     stop();
 }
