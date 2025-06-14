@@ -601,7 +601,7 @@ private:
 #if defined(Q_OS_WINDOWS)
 QDebug operator<<(QDebug out, const wchar_t* wstr);
 QDebug operator<<(QDebug out, const std::wstring& wstr);
-QDebug operator<<(QDebug stream, const _com_error& error);
+QDebug operator<<(QDebug out, const _com_error& error);
 #endif // defined(Q_OS_WINDOWS)
 
 QDebug operator<<(QDebug out, const char8_t* ustr);
