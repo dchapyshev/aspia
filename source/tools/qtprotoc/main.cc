@@ -88,7 +88,7 @@ void generateEnumOperator(
 {
     const std::string cpp_enum_type = qualifiedCppTypeName(descriptor->full_name());
 
-    source.Print("QDebug operator<<(QDebug stream, $TYPE$ value)\n", "TYPE", cpp_enum_type);
+    source.Print("QDebug operator<<(QDebug out, $TYPE$ value)\n", "TYPE", cpp_enum_type);
     source.Print("{\n");
     source.Print("    switch (value)\n"
                  "    {\n");
@@ -101,11 +101,11 @@ void generateEnumOperator(
         std::string full_enum_const = full_enum_scope + "::" + val->name();
 
         source.Print("        case $CONST$:\n", "CONST", full_enum_const);
-        source.Print("            return stream << \"$CONST$\";\n", "CONST", val->name());
+        source.Print("            return out << \"$CONST$\";\n", "CONST", val->name());
     }
 
     source.Print("        default:\n");
-    source.Print("            return stream << \"$TYPE$(UNKNOWN)\";\n", "TYPE", cpp_enum_type);
+    source.Print("            return out << \"$TYPE$(UNKNOWN)\";\n", "TYPE", cpp_enum_type);
     source.Print("    }\n");
     source.Print("}\n");
     source.Print("\n");
@@ -117,8 +117,8 @@ void generateMessageOperator(
 {
     std::string cpp_type = qualifiedCppTypeName(descriptor->full_name());
 
-    source.Print("QDebug operator<<(QDebug stream, const $TYPE$& msg)\n{\n", "TYPE", cpp_type);
-    source.Print("    stream << \"$NAME$ {\";\n", "NAME", descriptor->name());
+    source.Print("QDebug operator<<(QDebug out, const $TYPE$& msg)\n{\n", "TYPE", cpp_type);
+    source.Print("    out << \"$NAME$(\";\n", "NAME", descriptor->name());
 
     for (int i = 0; i < descriptor->field_count(); ++i)
     {
@@ -130,50 +130,47 @@ void generateMessageOperator(
         if (field->is_repeated())
         {
             source.Print("    for (int i = 0; i < msg.$FIELD$_size(); ++i)\n", "FIELD", field_name);
-            source.Print("    {\n");
 
             if (field->type() == google::protobuf::FieldDescriptor::TYPE_STRING)
             {
-                source.Print("        stream << \"$FIELD$#\" << i << \": \" << QString::fromStdString(msg.$GETTER$(i));\n",
+                source.Print("        out << \"$FIELD$#\" << i << ':' << QString::fromStdString(msg.$GETTER$(i));\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
             else if (field->type() == google::protobuf::FieldDescriptor::TYPE_BYTES)
             {
-                source.Print("        stream << \"$FIELD$#\" << i << \": \" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)).toHex());\n",
+                source.Print("        out << \"$FIELD$#\" << i << ':' << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$(i)).toHex());\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
             else
             {
-                source.Print("        stream << \"$FIELD$#\" << i << \": \" << msg.$GETTER$(i);\n",
+                source.Print("        out << \"$FIELD$#\" << i << ':' << msg.$GETTER$(i);\n",
                              "FIELD", field_name, "GETTER", getter_name);
             }
-
-            source.Print("    }\n");
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_STRING)
         {
-            source.Print("    stream << \"$FIELD$:\" << QString::fromStdString(msg.$GETTER$());\n",
+            source.Print("    out << \"$FIELD$:\" << QString::fromStdString(msg.$GETTER$());\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_BYTES)
         {
-            source.Print("    stream << \"$FIELD$:\" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$()).toHex());\n",
+            source.Print("    out << \"$FIELD$:\" << QString::fromLatin1(QByteArray::fromStdString(msg.$GETTER$()).toHex());\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
         else if (field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE)
         {
             source.Print("    if (msg.has_$FIELD$())\n"
-                      "        stream << \"$FIELD$:\" << msg.$GETTER$();\n",
-                      "FIELD", field_name, "GETTER", getter_name);
+                         "        out << \"$FIELD$:\" << msg.$GETTER$();\n",
+                         "FIELD", field_name, "GETTER", getter_name);
         }
         else
         {
-            source.Print("    stream << \"$FIELD$:\" << msg.$GETTER$();\n",
+            source.Print("    out << \"$FIELD$:\" << msg.$GETTER$();\n",
                          "FIELD", field_name, "GETTER", getter_name);
         }
     }
-    source.Print("    stream << \"}\";\n");
-    source.Print("    return stream;\n");
+    source.Print("    out << ')';\n");
+    source.Print("    return out;\n");
     source.Print("}\n\n");
 }
 
@@ -259,7 +256,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     for (const auto* e : enums)
     {
         const std::string cpp_enum_type = qualifiedCppTypeName(e->full_name());
-        header.Print("QDebug operator<<(QDebug stream, $TYPE$ value);\n", "TYPE", cpp_enum_type);
+        header.Print("QDebug operator<<(QDebug out, $TYPE$ value);\n", "TYPE", cpp_enum_type);
     }
 
     header.Print("\n");
@@ -268,7 +265,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     for (const auto* msg : messages)
     {
         const std::string cpp_enum_type = qualifiedCppTypeName(msg->full_name());
-        header.Print("QDebug operator<<(QDebug stream, const $TYPE$& value);\n", "TYPE", cpp_enum_type);
+        header.Print("QDebug operator<<(QDebug out, const $TYPE$& value);\n", "TYPE", cpp_enum_type);
     }
 
     header.Print("\n#endif // $GUARD$\n", "GUARD", include_guard);
