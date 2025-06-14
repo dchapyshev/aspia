@@ -150,4 +150,12 @@ int SysInfo::processorThreads()
     return static_cast<int>(res);
 }
 
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray SysInfo::smbiosDump()
+{
+    NOTIMPLEMENTED();
+    return QByteArray();
+}
+
 } // namespace base

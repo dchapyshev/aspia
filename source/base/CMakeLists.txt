@@ -52,7 +52,6 @@ list(APPEND SOURCE_BASE
     smbios.h
     smbios_parser.cc
     smbios_parser.h
-    smbios_reader.h
     sys_info.cc
     sys_info.h
     system_error.cc
@@ -72,7 +71,6 @@ if (WIN32)
         applications_reader_win.cc
         license_reader_win.cc
         power_controller_win.cc
-        smbios_reader_win.cc
         service_win.cc
         sys_info_win.cc)
 endif()
@@ -82,7 +80,6 @@ if (LINUX)
         applications_reader_linux.cc
         license_reader_linux.cc
         power_controller_linux.cc
-        smbios_reader_linux.cc
         service_posix.cc
         sys_info_linux.cc)
 endif()
@@ -92,7 +89,6 @@ if (APPLE)
         applications_reader_mac.cc
         license_reader_mac.cc
         power_controller_mac.mm
-        smbios_reader_mac.mm
         service_posix.cc
         sys_info_mac.mm)
 endif()

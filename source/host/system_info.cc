@@ -22,7 +22,6 @@
 #include "base/license_reader.h"
 #include "base/logging.h"
 #include "base/smbios_parser.h"
-#include "base/smbios_reader.h"
 #include "base/sys_info.h"
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
@@ -702,7 +701,7 @@ void fillProcessor(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillBios(proto::system_info::SystemInfo* system_info)
 {
-    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
+    for (base::SmbiosTableEnumerator enumerator(base::SysInfo::smbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
         const base::SmbiosTable* table = enumerator.table();
@@ -729,7 +728,7 @@ void fillBios(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillMotherboard(proto::system_info::SystemInfo* system_info)
 {
-    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
+    for (base::SmbiosTableEnumerator enumerator(base::SysInfo::smbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
         const base::SmbiosTable* table = enumerator.table();
@@ -757,7 +756,7 @@ void fillMotherboard(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillMemory(proto::system_info::SystemInfo* system_info)
 {
-    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
+    for (base::SmbiosTableEnumerator enumerator(base::SysInfo::smbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
         const base::SmbiosTable* table = enumerator.table();

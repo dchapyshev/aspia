@@ -45,6 +45,8 @@ public:
     static int processorCores();
     static int processorThreads();
 
+    static QByteArray smbiosDump();
+
 private:
     Q_DISABLE_COPY(SysInfo)
 };

@@ -401,4 +401,27 @@ int SysInfo::processorThreads()
     return system_info.dwNumberOfProcessors;
 }
 
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray SysInfo::smbiosDump()
+{
+    UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);
+    if (!buffer_size)
+    {
+        PLOG(ERROR) << "GetSystemFirmwareTable failed";
+        return QByteArray();
+    }
+
+    QByteArray buffer;
+    buffer.resize(static_cast<QByteArray::size_type>(buffer_size));
+
+    if (!GetSystemFirmwareTable('RSMB', 'PCAF', buffer.data(), buffer_size))
+    {
+        PLOG(ERROR) << "GetSystemFirmwareTable failed";
+        return QByteArray();
+    }
+
+    return buffer;
+}
+
 } // namespace base
