@@ -182,11 +182,11 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
             {
                 ComPtr<IDXGIOutput> output;
 
-                HRESULT hr = adapter->EnumOutputs(j, output.GetAddressOf());
-                if (hr == DXGI_ERROR_NOT_FOUND)
+                _com_error hr = adapter->EnumOutputs(j, output.GetAddressOf());
+                if (hr.Error() == DXGI_ERROR_NOT_FOUND)
                     break;
 
-                if (FAILED(hr))
+                if (FAILED(hr.Error()))
                 {
                     LOG(INFO) << "Unable to get outputs for adapter #" << i;
                     break;
@@ -194,7 +194,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
 
                 DXGI_OUTPUT_DESC desc;
                 hr = output->GetDesc(&desc);
-                if (hr != S_OK)
+                if (hr.Error() != S_OK)
                 {
                     LOG(INFO) << "Unable to get output" << j << "description for adapter #" << i;
                 }

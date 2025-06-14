@@ -153,8 +153,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 continue;
             }
 
-            LOG(ERROR) << "Failed to duplicate output from IDXGIOutput1, error"
-                       << error.ErrorMessage() << ", with code" << error.Error();
+            LOG(ERROR) << "Failed to duplicate output from IDXGIOutput1:" << error;
             return false;
         }
         else
@@ -187,8 +186,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
         LOG(ERROR) << "IDXGIDuplicateOutput does not return a same size as its "
                       "IDXGIOutput1, size returned by IDXGIDuplicateOutput is"
                    << desc_.ModeDesc.Width << "x" << desc_.ModeDesc.Height
-                   << ", size returned by IDXGIOutput1 is" << desktop_rect_.width()
-                   << "x" << desktop_rect_.height();
+                   << ", size returned by IDXGIOutput1 is" << desktop_rect_.size();
         return false;
     }
 
@@ -206,8 +204,7 @@ bool DxgiOutputDuplicator::releaseFrame()
     _com_error error = duplication_->ReleaseFrame();
     if (error.Error() != S_OK)
     {
-        LOG(ERROR) << "Failed to release frame from IDXGIOutputDuplication, error"
-                   << error.ErrorMessage() << ", code" << error.Error();
+        LOG(ERROR) << "Failed to release frame from IDXGIOutputDuplication:" << error;
         return false;
     }
 
@@ -239,8 +236,7 @@ bool DxgiOutputDuplicator::duplicate(
                                                       resource.GetAddressOf());
     if (error.Error() != S_OK && error.Error() != DXGI_ERROR_WAIT_TIMEOUT)
     {
-        LOG(ERROR) << "Failed to capture frame, error"
-                   << error.ErrorMessage() << ", code" << error.Error();
+        LOG(ERROR) << "Failed to capture frame:" << error;
         return false;
     }
 
@@ -261,8 +257,7 @@ bool DxgiOutputDuplicator::duplicate(
                                                            shape_info);
         if (FAILED(hr.Error()))
         {
-            LOG(ERROR) << "Failed to capture cursor, error"
-                       << error.ErrorMessage() << ", code" << error.Error();
+            LOG(ERROR) << "Failed to capture cursor:" << error;
             buffer->clear();
         }
     }
@@ -431,8 +426,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         static_cast<UINT>(metadata_.size()), move_rects, &buff_size);
     if (error.Error() != S_OK)
     {
-        LOG(ERROR) << "Failed to get move rectangles, error"
-                   << error.ErrorMessage() << ", code" << error.Error();
+        LOG(ERROR) << "Failed to get move rectangles:" << error;
         return false;
     }
 
@@ -444,8 +438,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         static_cast<UINT>(metadata_.size()) - buff_size, dirty_rects, &buff_size);
     if (error.Error() != S_OK)
     {
-        LOG(ERROR) << "Failed to get dirty rectangles, error"
-                   << error.ErrorMessage() << ", code" << error.Error();
+        LOG(ERROR) << "Failed to get dirty rectangles:" << error;
         return false;
     }
 
@@ -527,7 +520,7 @@ void DxgiOutputDuplicator::unregister(const Context* const context)
 //--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::spreadContextChange(const Context* const source)
 {
-    for (Context* dest : contexts_)
+    for (Context* dest : std::as_const(contexts_))
     {
         DCHECK(dest);
 

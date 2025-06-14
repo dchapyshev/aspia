@@ -66,9 +66,9 @@ void Settings::sync()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setListenInterface(const QString& interface)
+void Settings::setListenInterface(const QString& iface)
 {
-    impl_.setValue("ListenInterface", interface);
+    impl_.setValue("ListenInterface", iface);
 }
 
 //--------------------------------------------------------------------------------------------------

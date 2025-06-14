@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 
+#include <comdef.h>
 #include <unknwn.h>
 
 namespace base {
@@ -30,12 +31,12 @@ DefaultAudioDeviceChangeDetector::DefaultAudioDeviceChangeDetector(
     : enumerator_(enumerator)
 {
     DCHECK(enumerator_);
-    HRESULT hr = enumerator_->RegisterEndpointNotificationCallback(this);
-    if (FAILED(hr))
+    _com_error hr = enumerator_->RegisterEndpointNotificationCallback(this);
+    if (FAILED(hr.Error()))
     {
         // We cannot predict which kind of error the API may return, but this is not a fatal error.
         LOG(ERROR) << "Failed to register IMMNotificationClient, we may not be "
-                      "able to detect the new default audio device. Error" << hr;
+                      "able to detect the new default audio device. Error:" << hr;
     }
 }
 

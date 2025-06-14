@@ -557,8 +557,11 @@ QDebug operator<<(QDebug out, const wchar_t* wstr)
 //--------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug out, const _com_error& error)
 {
-    return out << QString::fromWCharArray(error.ErrorMessage())
-               << "(" << QString::number(static_cast<quint32>(error.Error()), 16) << ")";
+    const wchar_t* message = error.ErrorMessage();
+    const quint32 code = static_cast<quint32>(error.Error());
+
+    return out << (message ? QString::fromWCharArray(message) : "nullptr")
+               << "(" << QString::number(code, 16) << ")";
 }
 #endif // defined(Q_OS_WINDOWS)
 

@@ -18,6 +18,8 @@
 
 #include "base/audio/audio_volume_filter_win.h"
 
+#include <comdef.h>
+
 #include "base/logging.h"
 
 namespace base {
@@ -38,11 +40,11 @@ bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
     DCHECK(mm_device);
     audio_volume_.Reset();
     // TODO(zijiehe): Do we need to control the volume per process?
-    HRESULT hr = mm_device->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL,
+    _com_error hr = mm_device->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL,
         nullptr, &audio_volume_);
-    if (FAILED(hr))
+    if (FAILED(hr.Error()))
     {
-        LOG(ERROR) << "Failed to get an IAudioEndpointVolume. Error" << hr;
+        LOG(ERROR) << "Failed to get an IAudioEndpointVolume:" << hr;
         return false;
     }
     return true;
@@ -55,10 +57,10 @@ float AudioVolumeFilterWin::audioLevel()
         return 1;
 
     BOOL mute;
-    HRESULT hr = audio_volume_->GetMute(&mute);
-    if (FAILED(hr))
+    _com_error hr = audio_volume_->GetMute(&mute);
+    if (FAILED(hr.Error()))
     {
-        LOG(ERROR) << "Failed to get mute status from IAudioEndpointVolume, error" << hr;
+        LOG(ERROR) << "Failed to get mute status from IAudioEndpointVolume:" << hr;
         return 1;
     }
 
@@ -67,9 +69,9 @@ float AudioVolumeFilterWin::audioLevel()
 
     float level;
     hr = audio_volume_->GetMasterVolumeLevelScalar(&level);
-    if (FAILED(hr) || level > 1)
+    if (FAILED(hr.Error()) || level > 1)
     {
-        LOG(ERROR) << "Failed to get master volume from IAudioEndpointVolume, error" << hr;
+        LOG(ERROR) << "Failed to get master volume from IAudioEndpointVolume:" << hr;
         return 1;
     }
 

@@ -18,6 +18,8 @@
 
 #include "base/audio/audio_output_win.h"
 
+#include <comdef.h>
+
 #include "base/logging.h"
 #include "base/audio/win/audio_util_win.h"
 #include "base/audio/win/scoped_mmcss_registration.h"
@@ -106,11 +108,11 @@ bool AudioOutputWin::start()
         }
     }
 
-    HRESULT hr = audio_client_->Start();
-    if (FAILED(hr))
+    _com_error error = audio_client_->Start();
+    if (FAILED(error.Error()))
     {
         stopThread();
-        LOG(ERROR) << "IAudioClient::Start failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Start failed:" << error;
         return false;
     }
 
@@ -133,20 +135,20 @@ bool AudioOutputWin::stop()
     }
 
     // Stop audio streaming.
-    HRESULT hr = audio_client_->Stop();
-    if (FAILED(hr))
+    _com_error error = audio_client_->Stop();
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
     }
 
     // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
     if (!is_restarting_)
         stopThread();
 
-    hr = audio_client_->Reset();
-    if (FAILED(hr))
+    error = audio_client_->Reset();
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioClient::Reset failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
     }
 
     // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
@@ -217,10 +219,10 @@ void AudioOutputWin::threadRun()
         // Stop audio streaming since something has gone wrong in our main thread loop. Note that,
         // we are still in a "started" state, hence a stop() call is required to join the thread
         // properly.
-        HRESULT hr = audio_client_->Stop();
-        if (FAILED(hr))
+        _com_error error = audio_client_->Stop();
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "IAudioClient::Stop failed:" << SystemError(hr).toString();
+            LOG(ERROR) << "IAudioClient::Stop failed:" << error;
         }
     }
 }
@@ -327,8 +329,8 @@ bool AudioOutputWin::handleDataRequest()
     // Get the padding value which indicates the amount of valid unread data that the endpoint
     // buffer currently contains.
     UINT32 num_unread_frames = 0;
-    HRESULT hr = audio_client_->GetCurrentPadding(&num_unread_frames);
-    if (hr == AUDCLNT_E_DEVICE_INVALIDATED)
+    _com_error error = audio_client_->GetCurrentPadding(&num_unread_frames);
+    if (error.Error() == AUDCLNT_E_DEVICE_INVALIDATED)
     {
         // Avoid breaking the thread loop implicitly by returning false and return true instead for
         // AUDCLNT_E_DEVICE_INVALIDATED even it is a valid error message. We will use notifications
@@ -337,9 +339,9 @@ bool AudioOutputWin::handleDataRequest()
         return true;
     }
 
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << error;
         return false;
     }
 
@@ -356,10 +358,10 @@ bool AudioOutputWin::handleDataRequest()
     // Request all available space in the rendering endpoint buffer into which the client can later
     // write an audio packet.
     quint8* audio_data;
-    hr = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
-    if (FAILED(hr))
+    error = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << error;
         return false;
     }
 
@@ -368,10 +370,10 @@ bool AudioOutputWin::handleDataRequest()
     onDataRequest(reinterpret_cast<qint16*>(audio_data), num_requested_frames * kChannels);
 
     // Release the buffer space acquired in IAudioRenderClient::GetBuffer.
-    hr = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
-    if (FAILED(hr))
+    error = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << SystemError(hr).toString();
+        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << error;
         return false;
     }
 

@@ -18,10 +18,11 @@
 
 #include "base/desktop/win/screen_capture_utils.h"
 
-#include "base/logging.h"
-
 #include <qt_windows.h>
+#include <comdef.h>
 #include <VersionHelpers.h>
+
+#include "base/logging.h"
 
 namespace base {
 
@@ -72,11 +73,10 @@ Point dpiByRect(const Rect& rect)
             UINT dpi_x = 0;
             UINT dpi_y = 0;
 
-            HRESULT hr = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
-            if (FAILED(hr))
+            _com_error error = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
+            if (FAILED(error.Error()))
             {
-                LOG(ERROR) << "GetDpiForMonitor failed:"
-                           << SystemError(static_cast<DWORD>(hr)).toString();
+                LOG(ERROR) << "GetDpiForMonitor failed:" << error;
             }
             else
             {

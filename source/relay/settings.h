@@ -45,7 +45,7 @@ public:
     void setRouterPublicKey(const QByteArray& public_key);
     QByteArray routerPublicKey() const;
 
-    void setListenInterface(const QString& interface);
+    void setListenInterface(const QString& iface);
     QString listenInterface() const;
 
     void setPeerAddress(const QString& address);

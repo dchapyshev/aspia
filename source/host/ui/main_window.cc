@@ -837,16 +837,16 @@ void MainWindow::updateTrayIconTooltip()
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
     for (int i = 0; i < interfaces.count(); ++i)
     {
-        const QNetworkInterface& interface = interfaces[i];
+        const QNetworkInterface& iface = interfaces[i];
 
-        QNetworkInterface::InterfaceFlags flags = interface.flags();
+        QNetworkInterface::InterfaceFlags flags = iface.flags();
         if (!(flags & QNetworkInterface::IsUp))
              continue;
 
         if (!(flags & QNetworkInterface::IsRunning))
             continue;
 
-        QNetworkInterface::InterfaceType type = interface.type();
+        QNetworkInterface::InterfaceType type = iface.type();
         if (type != QNetworkInterface::Ethernet && type != QNetworkInterface::Wifi &&
             type != QNetworkInterface::Ieee80211 && type != QNetworkInterface::Ieee80216 &&
             type != QNetworkInterface::Ieee802154)
@@ -854,7 +854,7 @@ void MainWindow::updateTrayIconTooltip()
             continue;
         }
 
-        QList<QNetworkAddressEntry> addresses = interface.addressEntries();
+        QList<QNetworkAddressEntry> addresses = iface.addressEntries();
         for (int j = 0; j < addresses.count(); ++j)
         {
             QHostAddress address = addresses[j].ip();

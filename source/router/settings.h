@@ -36,7 +36,7 @@ public:
     void reset();
     void sync();
 
-    void setListenInterface(const QString& interface);
+    void setListenInterface(const QString& iface);
     QString listenInterface() const;
 
     void setPort(quint16 port);

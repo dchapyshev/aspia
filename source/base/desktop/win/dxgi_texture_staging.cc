@@ -130,8 +130,7 @@ bool DxgiTextureStaging::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_in
     if (error.Error() != S_OK)
     {
         *rect() = { 0 };
-        LOG(ERROR) << "Failed to map the IDXGISurface to a bitmap, error"
-                   << error.ErrorMessage() << ", code" << error.Error();
+        LOG(ERROR) << "Failed to map the IDXGISurface to a bitmap:" << error;
         return false;
     }
 

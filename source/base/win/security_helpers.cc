@@ -18,12 +18,13 @@
 
 #include "base/win/security_helpers.h"
 
+#include <comdef.h>
+#include <ObjIdl.h>
+#include <sddl.h>
+
 #include "base/logging.h"
 #include "base/win/scoped_local.h"
 #include "base/win/scoped_object.h"
-
-#include <ObjIdl.h>
-#include <sddl.h>
 
 namespace base {
 
@@ -133,7 +134,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
 
     // Apply the security descriptor and default security settings. See
     // InitializeComSecurity's declaration for details.
-    HRESULT result = CoInitializeSecurity(
+    _com_error result = CoInitializeSecurity(
         absolute_sd.get(),
         -1,        // Let COM choose which authentication services to register.
         nullptr,   // See above.
@@ -143,10 +144,9 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
         nullptr,   // Default authentication information is not provided.
         capabilities,
         nullptr);  // Reserved, must be nullptr
-    if (FAILED(result))
+    if (FAILED(result.Error()))
     {
-        LOG(ERROR) << "CoInitializeSecurity failed:"
-                   << SystemError::toString(static_cast<DWORD>(result));
+        LOG(ERROR) << "CoInitializeSecurity failed:" << result;
         return false;
     }
 

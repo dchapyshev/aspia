@@ -21,10 +21,11 @@
 #include <QDir>
 #include <QUuid>
 
-#include "base/logging.h"
-
+#include <comdef.h>
 #include <comutil.h>
 #include <Unknwn.h>
+
+#include "base/logging.h"
 
 namespace base {
 
@@ -33,19 +34,19 @@ FirewallManager::FirewallManager(const QString& application_path)
     : application_path_(QDir::toNativeSeparators(application_path))
 {
     // Retrieve INetFwPolicy2
-    HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
-                                  IID_PPV_ARGS(&firewall_policy_));
-    if (FAILED(hr))
+    _com_error error = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
+                                        IID_PPV_ARGS(&firewall_policy_));
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CreateInstance failed:" << error;
         firewall_policy_ = nullptr;
         return;
     }
 
-    hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
-    if (FAILED(hr))
+    error = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "get_Rules failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "get_Rules failed:" << error;
         firewall_rules_ = nullptr;
     }
 }
@@ -61,8 +62,8 @@ bool FirewallManager::isFirewallEnabled() const
 {
     long profile_types = 0;
 
-    HRESULT hr = firewall_policy_->get_CurrentProfileTypes(&profile_types);
-    if (FAILED(hr))
+    _com_error error = firewall_policy_->get_CurrentProfileTypes(&profile_types);
+    if (FAILED(error.Error()))
         return false;
 
     // The most-restrictive active profile takes precedence.
@@ -79,10 +80,10 @@ bool FirewallManager::isFirewallEnabled() const
         {
             VARIANT_BOOL enabled = VARIANT_TRUE;
 
-            hr = firewall_policy_->get_FirewallEnabled(kProfileTypes[i], &enabled);
+            error = firewall_policy_->get_FirewallEnabled(kProfileTypes[i], &enabled);
 
             // Assume the firewall is enabled if we can't determine.
-            if (FAILED(hr) || enabled != VARIANT_FALSE)
+            if (FAILED(error.Error()) || enabled != VARIANT_FALSE)
                 return true;
         }
     }
@@ -95,7 +96,6 @@ bool FirewallManager::hasAnyRule()
 {
     QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
-
     return !rules.empty();
 }
 
@@ -111,10 +111,10 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
 
     Microsoft::WRL::ComPtr<INetFwRule> rule;
 
-    HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
-    if (FAILED(hr))
+    _com_error error = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CoCreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CoCreateInstance failed:" << error;
         return false;
     }
 
@@ -129,9 +129,9 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
     firewall_rules_->Add(rule.Get());
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "Add failed:" << error;
         return false;
     }
 
@@ -150,10 +150,10 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
 
     Microsoft::WRL::ComPtr<INetFwRule> rule;
 
-    HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
-    if (FAILED(hr))
+    _com_error error = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CoCreateInstance failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "CoCreateInstance failed:" << error;
         return false;
     }
 
@@ -167,10 +167,10 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
-    firewall_rules_->Add(rule.Get());
-    if (FAILED(hr))
+    error = firewall_rules_->Add(rule.Get());
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "Add failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "Add failed:" << error;
         return false;
     }
 
@@ -187,10 +187,10 @@ void FirewallManager::deleteRuleByName(const QString& rule_name)
     {
         _bstr_t bstr_rule_name;
 
-        HRESULT hr = rule->get_Name(bstr_rule_name.GetAddress());
-        if (FAILED(hr))
+        _com_error error = rule->get_Name(bstr_rule_name.GetAddress());
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "get_Name failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "get_Name failed:" << error;
             continue;
         }
 
@@ -217,32 +217,32 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
 {
     Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
 
-    HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
-    if (FAILED(hr))
+    _com_error error = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "get__NewEnum failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "get__NewEnum failed:" << error;
         return;
     }
 
     Microsoft::WRL::ComPtr<IEnumVARIANT> rules_enum;
 
-    hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
-    if (FAILED(hr))
+    error = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "QueryInterface failed:" << SystemError::toString(static_cast<DWORD>(hr));
+        LOG(ERROR) << "QueryInterface failed:" << error;
         return;
     }
 
     for (;;)
     {
         _variant_t rule_var;
-        hr = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
-        if (FAILED(hr))
+        error = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "Next failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "Next failed:" << error;
         }
 
-        if (hr != S_OK)
+        if (error.Error() != S_OK)
             break;
 
         DCHECK_EQ(VT_DISPATCH, rule_var.vt);
@@ -252,18 +252,18 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
 
         Microsoft::WRL::ComPtr<INetFwRule> rule;
 
-        hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
-        if (FAILED(hr))
+        error = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "QueryInterface failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "QueryInterface failed:" << error;
             continue;
         }
 
         _bstr_t bstr_path;
-        hr = rule->get_ApplicationName(bstr_path.GetAddress());
-        if (FAILED(hr))
+        error = rule->get_ApplicationName(bstr_path.GetAddress());
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "get_ApplicationName failed:" << SystemError::toString(static_cast<DWORD>(hr));
+            LOG(ERROR) << "get_ApplicationName failed:" << error;
             continue;
         }
 
