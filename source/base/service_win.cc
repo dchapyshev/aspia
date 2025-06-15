@@ -364,13 +364,11 @@ int Service::exec(Application& application)
 {
     LOG(INFO) << "Begin";
 
-    std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
-        std::make_unique<ScopedCryptoInitializer>();
-    CHECK(crypto_initializer->isSucceeded());
+    ScopedCryptoInitializer crypto_initializer;
+    CHECK(crypto_initializer.isSucceeded());
 
-    std::unique_ptr<ScopedCOMInitializer> com_initializer =
-        std::make_unique<ScopedCOMInitializer>();
-    CHECK(com_initializer->isSucceeded());
+    ScopedCOMInitializer com_initializer;
+    CHECK(com_initializer.isSucceeded());
 
     initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
