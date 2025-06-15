@@ -93,7 +93,7 @@
     <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
 
-    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import=&quot;[SourceDir]aspia-host-config.json&quot; --silent" />
+    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import=&quot;[SourceDir]aspia-host.conf&quot; --silent" />
     <InstallExecuteSequence>
         <Custom Action="ImportSettings" After="InstallFiles">1</Custom>
     </InstallExecuteSequence>
