@@ -155,11 +155,11 @@ QVariant stringToVariant(const QString& value, const QString& type)
 {
     if (type == kByteArrayType)
     {
-        return QVariant(QByteArray::fromHex(value.toUtf8()));
+        return QVariant(QByteArray::fromHex(value.toLatin1()));
     }
     else if (type == kVariantType)
     {
-        QByteArray buffer = QByteArray::fromHex(value.toUtf8());
+        QByteArray buffer = QByteArray::fromHex(value.toLatin1());
 
         QDataStream stream(&buffer, QIODevice::ReadOnly);
         stream.setVersion(QDataStream::Qt_5_15);
@@ -234,12 +234,14 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
                 if (!settings_found)
                     return false;
 
-                QString name = xml.attributes().value(kNameAttribute).toString();
+                QXmlStreamAttributes attributes = xml.attributes();
+
+                QString name = attributes.value(kNameAttribute).toString();
                 if (name.isEmpty())
                     return false;
 
                 segments.append(name);
-                type = xml.attributes().value(kTypeAttribute).toString();
+                type = attributes.value(kTypeAttribute).toString();
             }
             break;
 
@@ -287,13 +289,14 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
 
     xml.setAutoFormatting(true);
     xml.writeStartDocument();
-    xml.writeStartElement(kSettingsElement);
+    xml.writeStartElement(kSettingsElement); // <settings>
 
     QStringList oldSegments;
 
     for (auto it = map.cbegin(), it_end = map.cend(); it != it_end; ++it)
     {
         QStringList segments = it.key().split(QLatin1Char('/'), Qt::SkipEmptyParts);
+        const QVariant& value = it.value();
         int count = 0;
 
         while (count < oldSegments.size() && segments.at(count) == oldSegments.at(count))
@@ -312,19 +315,19 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
             xml.writeAttribute(kNameAttribute, segments.at(i));
         }
 
-        QString type = variantToType(it.value());
+        QString type = variantToType(value);
         if (!type.isEmpty())
             xml.writeAttribute(kTypeAttribute, type);
 
-        xml.writeCharacters(variantToString(it.value()));
+        xml.writeCharacters(variantToString(value));
 
-        oldSegments.swap(segments);
+        oldSegments = std::move(segments);
     }
 
     for (int i = 0; i < oldSegments.size(); ++i)
         xml.writeEndElement();
 
-    xml.writeEndElement();
+    xml.writeEndElement(); // </settings>
     xml.writeEndDocument();
 
     return !xml.hasError();
