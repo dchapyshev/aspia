@@ -39,6 +39,7 @@ const QString kSizeType = QStringLiteral("size");
 const QString kPointType = QStringLiteral("point");
 const QString kVariantType = QStringLiteral("variant");
 
+//--------------------------------------------------------------------------------------------------
 QString variantToType(const QVariant& value)
 {
     QString result;
@@ -84,6 +85,7 @@ QString variantToType(const QVariant& value)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 QString variantToString(const QVariant& value)
 {
     QString result;
@@ -148,6 +150,7 @@ QString variantToString(const QVariant& value)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 QVariant stringToVariant(const QString& value, const QString& type)
 {
     if (type == kByteArrayType)
@@ -193,6 +196,7 @@ QVariant stringToVariant(const QString& value, const QString& type)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 QSettings::Format XmlSettings::format()
 {
@@ -205,6 +209,7 @@ QSettings::Format XmlSettings::format()
     return xml_format;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
 {
@@ -274,6 +279,7 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
     return !xml.hasError();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map)
 {
