@@ -74,9 +74,9 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_chann
     LOG(INFO) << "Ctor (sid" << session_id_ << "type" << type_ << ")";
 
     SystemSettings settings;
-    connection_confirmation_ = settings.connConfirm();
-    no_user_action_ = settings.connConfirmNoUserAction();
-    auto_confirmation_interval_ = settings.autoConnConfirmInterval();
+    connect_confirmation_ = settings.connectConfirmation();
+    no_user_action_ = settings.noUserAction();
+    auto_confirmation_interval_ = settings.autoConfirmationInterval();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ void UserSession::onClientSession(ClientSession* client_session)
         confirm_required = false;
     }
 
-    if (connection_confirmation_ && confirm_required)
+    if (connect_confirmation_ && confirm_required)
     {
         LOG(INFO) << "User confirmation of connection is required (state"
                   << state_ << "sid" << session_id_ << ")";
@@ -410,9 +410,9 @@ void UserSession::onSettingsChanged()
     LOG(INFO) << "Settings changed";
 
     SystemSettings settings;
-    connection_confirmation_ = settings.connConfirm();
-    no_user_action_ = settings.connConfirmNoUserAction();
-    auto_confirmation_interval_ = settings.autoConnConfirmInterval();
+    connect_confirmation_ = settings.connectConfirmation();
+    no_user_action_ = settings.noUserAction();
+    auto_confirmation_interval_ = settings.autoConfirmationInterval();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,7 +28,7 @@ class SystemError
 public:
 #if defined(Q_OS_WINDOWS)
     using Code = unsigned long;
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     using Code = int;
 #else
 #error Platform support not implemented

@@ -112,7 +112,7 @@ private:
 
     base::SessionId session_id_;
 
-    bool connection_confirmation_ = false;
+    bool connect_confirmation_ = false;
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 

@@ -713,10 +713,10 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             ui.combobox_onetime_pass_chars->currentData().toUInt());
         settings.setOneTimePasswordLength(ui.spinbox_onetime_pass_char_count->value());
 
-        settings.setConnConfirm(ui.checkbox_conn_confirm_require->isChecked());
-        settings.setAutoConnConfirmInterval(std::chrono::seconds(
+        settings.setConnectConfirmation(ui.checkbox_conn_confirm_require->isChecked());
+        settings.setAutoConfirmationInterval(std::chrono::seconds(
             ui.combobox_conn_confirm_auto->currentData().toInt()));
-        settings.setConnConfirmNoUserAction(static_cast<SystemSettings::NoUserAction>(
+        settings.setNoUserAction(static_cast<SystemSettings::NoUserAction>(
             ui.combobox_no_user_action->currentData().toInt()));
 
         settings.sync();
@@ -800,17 +800,17 @@ void ConfigDialog::reloadAll()
 
     ui.spinbox_onetime_pass_char_count->setValue(settings.oneTimePasswordLength());
 
-    bool conn_confirm = settings.connConfirm();
+    bool conn_confirm = settings.connectConfirmation();
     ui.checkbox_conn_confirm_require->setChecked(conn_confirm);
     onConnConfirmStateChanged(conn_confirm ? Qt::Checked : Qt::Unchecked);
 
     std::chrono::seconds auto_conn_confirm =
-        std::chrono::duration_cast<std::chrono::seconds>(settings.autoConnConfirmInterval());
+        std::chrono::duration_cast<std::chrono::seconds>(settings.autoConfirmationInterval());
     item_index = ui.combobox_conn_confirm_auto->findData(static_cast<int>(auto_conn_confirm.count()));
     if (item_index != -1)
         ui.combobox_conn_confirm_auto->setCurrentIndex(item_index);
 
-    SystemSettings::NoUserAction no_user_action = settings.connConfirmNoUserAction();
+    SystemSettings::NoUserAction no_user_action = settings.noUserAction();
     item_index = ui.combobox_no_user_action->findData(static_cast<int>(no_user_action));
     if (item_index != -1)
         ui.combobox_no_user_action->setCurrentIndex(item_index);
