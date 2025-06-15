@@ -26,6 +26,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "host/migration_utils.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -94,6 +95,9 @@ void Service::onStart()
     {
         PLOG(ERROR) << "SetPriorityClass failed";
     }
+
+    if (MigrationUtils::isMigrationNeeded())
+        MigrationUtils::doMigrate();
 
     HostStorage storage;
     if (storage.isBootToSafeMode())

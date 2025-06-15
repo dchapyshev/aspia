@@ -85,6 +85,8 @@ if (WIN32)
         host_core.rc
         input_injector_win.cc
         input_injector_win.h
+        migration_utils.cc
+        migration_utils.h
         process_monitor.cc
         process_monitor.h
         system_info.cc
