@@ -46,10 +46,6 @@ QString variantToType(const QVariant& value)
 
     switch (value.type())
     {
-        case QVariant::Invalid:
-            result = kInvalidType;
-            break;
-
         case QVariant::Bool:
         case QVariant::Int:
         case QVariant::UInt:
@@ -59,6 +55,10 @@ QString variantToType(const QVariant& value)
         case QVariant::String:
         case QVariant::KeySequence:
             // Default type.
+            break;
+
+        case QVariant::Invalid:
+            result = kInvalidType;
             break;
 
         case QVariant::ByteArray:
