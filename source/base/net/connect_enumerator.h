@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include <memory>
-
 #include "base/win/scoped_object.h"
 
 namespace base {
@@ -49,7 +47,7 @@ public:
 private:
     const Mode mode_;
     base::ScopedHandle snapshot_;
-    std::unique_ptr<quint8[]> table_buffer_;
+    QByteArray table_buffer_;
 
     quint32 num_entries_ = 0;
     quint32 pos_ = 0;

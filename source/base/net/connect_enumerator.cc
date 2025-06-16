@@ -20,31 +20,32 @@
 
 #include <QtEndian>
 
-#include "base/logging.h"
-
 #include <iphlpapi.h>
 #include <TlHelp32.h>
 #include <WinSock2.h>
+
+#include "base/logging.h"
 
 namespace base {
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<quint8[]> initializeTcpTable()
+QByteArray initializeTcpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_TCPTABLE);
 
-    std::unique_ptr<quint8[]> table_buffer = std::make_unique<quint8[]>(table_buffer_size);
+    QByteArray table_buffer;
+    table_buffer.resize(table_buffer_size);
 
-    DWORD ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.get()),
+    DWORD ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.data()),
                                     &table_buffer_size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
     if (ret == ERROR_INSUFFICIENT_BUFFER)
     {
-        table_buffer = std::make_unique<quint8[]>(table_buffer_size);
+        table_buffer.resize(table_buffer_size);
 
-        ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.get()),
+        ret = GetExtendedTcpTable(reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer.data()),
                                   &table_buffer_size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
     }
 
@@ -55,20 +56,21 @@ std::unique_ptr<quint8[]> initializeTcpTable()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<quint8[]> initializeUdpTable()
+QByteArray initializeUdpTable()
 {
     ULONG table_buffer_size = sizeof(MIB_UDPTABLE);
 
-    std::unique_ptr<quint8[]> table_buffer = std::make_unique<quint8[]>(table_buffer_size);
+    QByteArray table_buffer;
+    table_buffer.resize(table_buffer_size);
 
-    DWORD ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.get()),
+    DWORD ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.data()),
                                     &table_buffer_size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
 
     if (ret == ERROR_INSUFFICIENT_BUFFER)
     {
-        table_buffer = std::make_unique<quint8[]>(table_buffer_size);
+        table_buffer.resize(table_buffer_size);
 
-        ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.get()),
+        ret = GetExtendedUdpTable(reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer.data()),
                                   &table_buffer_size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
     }
 
@@ -142,7 +144,7 @@ ConnectEnumerator::ConnectEnumerator(Mode mode)
         table_buffer_ = initializeTcpTable();
 
         PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.data());
         if (tcp_table)
             num_entries_ = tcp_table->dwNumEntries;
     }
@@ -152,7 +154,7 @@ ConnectEnumerator::ConnectEnumerator(Mode mode)
         table_buffer_ = initializeUdpTable();
 
         PMIB_UDPTABLE_OWNER_PID udp_table =
-            reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
+            reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.data());
         if (udp_table)
             num_entries_ = udp_table->dwNumEntries;
     }
@@ -184,8 +186,8 @@ QString ConnectEnumerator::processName() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return QString();
 
@@ -193,8 +195,8 @@ QString ConnectEnumerator::processName() const
     }
     else
     {
-        PMIB_UDPTABLE_OWNER_PID udp_table =
-            reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_UDPTABLE_OWNER_PID* udp_table =
+            reinterpret_cast<const MIB_UDPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!udp_table)
             return QString();
 
@@ -207,8 +209,8 @@ QString ConnectEnumerator::localAddress() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return QString();
 
@@ -216,8 +218,8 @@ QString ConnectEnumerator::localAddress() const
     }
     else
     {
-        PMIB_UDPTABLE_OWNER_PID udp_table =
-            reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_UDPTABLE_OWNER_PID* udp_table =
+            reinterpret_cast<const MIB_UDPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!udp_table)
             return QString();
 
@@ -230,8 +232,8 @@ QString ConnectEnumerator::remoteAddress() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return QString();
 
@@ -248,8 +250,8 @@ quint16 ConnectEnumerator::localPort() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return 0;
 
@@ -257,8 +259,8 @@ quint16 ConnectEnumerator::localPort() const
     }
     else
     {
-        PMIB_UDPTABLE_OWNER_PID udp_table =
-            reinterpret_cast<PMIB_UDPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_UDPTABLE_OWNER_PID* udp_table =
+            reinterpret_cast<const MIB_UDPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!udp_table)
             return 0;
 
@@ -271,8 +273,8 @@ quint16 ConnectEnumerator::remotePort() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return 0;
 
@@ -289,8 +291,8 @@ QString ConnectEnumerator::state() const
 {
     if (mode_ == Mode::TCP)
     {
-        PMIB_TCPTABLE_OWNER_PID tcp_table =
-            reinterpret_cast<PMIB_TCPTABLE_OWNER_PID>(table_buffer_.get());
+        const MIB_TCPTABLE_OWNER_PID* tcp_table =
+            reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(table_buffer_.data());
         if (!tcp_table)
             return QString();
 

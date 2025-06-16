@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include <memory>
-
 namespace base {
 
 class RouteEnumerator
@@ -40,7 +38,7 @@ public:
     quint32 metric() const;
 
 private:
-    std::unique_ptr<quint8[]> forward_table_buffer_;
+    QByteArray forward_table_buffer_;
     quint32 num_entries_ = 0;
     quint32 pos_ = 0;
 
