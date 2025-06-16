@@ -19,8 +19,6 @@
 #ifndef BASE_WIN_MONITOR_ENUMERATOR_H
 #define BASE_WIN_MONITOR_ENUMERATOR_H
 
-#include <memory>
-
 #include "base/win/device_enumerator.h"
 #include "base/edid.h"
 
@@ -32,7 +30,7 @@ public:
     MonitorEnumerator();
     ~MonitorEnumerator() final = default;
 
-    std::unique_ptr<Edid> edid() const;
+    Edid edid() const;
 
 private:
     Q_DISABLE_COPY(MonitorEnumerator)

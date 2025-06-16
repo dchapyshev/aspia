@@ -18,10 +18,10 @@
 
 #include "base/win/monitor_enumerator.h"
 
+#include <devguid.h>
+
 #include "base/logging.h"
 #include "base/win/registry.h"
-
-#include <devguid.h>
 
 namespace base {
 
@@ -33,7 +33,7 @@ MonitorEnumerator::MonitorEnumerator()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<Edid> MonitorEnumerator::edid() const
+Edid MonitorEnumerator::edid() const
 {
     QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters").arg(deviceID());
 
@@ -43,37 +43,19 @@ std::unique_ptr<Edid> MonitorEnumerator::edid() const
     {
         LOG(ERROR) << "Unable to open registry key:"
                    << SystemError(static_cast<DWORD>(status)).toString();
-        return nullptr;
+        return Edid();
     }
 
-    DWORD type;
-    DWORD size = 128;
-    std::unique_ptr<quint8[]> data = std::make_unique<quint8[]>(size);
-
-    status = key.readValue("EDID", data.get(), &size, &type);
+    QByteArray buffer;
+    status = key.readValueBIN("EDID", &buffer);
     if (status != ERROR_SUCCESS)
     {
-        if (status == ERROR_MORE_DATA)
-        {
-            data = std::make_unique<quint8[]>(size);
-            status = key.readValue("EDID", data.get(), &size, &type);
-        }
-
-        if (status != ERROR_SUCCESS)
-        {
-            LOG(ERROR) << "Unable to read EDID data from registry:"
-                       << SystemError(static_cast<DWORD>(status)).toString();
-            return nullptr;
-        }
+        LOG(ERROR) << "Unable to read EDID data from registry:"
+                   << SystemError(static_cast<DWORD>(status)).toString();
+        return Edid();
     }
 
-    if (type != REG_BINARY)
-    {
-        LOG(ERROR) << "Unexpected data type:" << type;
-        return nullptr;
-    }
-
-    return Edid::create(std::move(data), size);
+    return Edid(buffer);
 }
 
 } // namespace base

@@ -347,8 +347,8 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
 {
     for (base::MonitorEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
-        std::unique_ptr<base::Edid> edid = enumerator.edid();
-        if (!edid)
+        base::Edid edid = enumerator.edid();
+        if (!edid.isValid())
         {
             LOG(INFO) << "No EDID information for monitor";
             continue;
@@ -362,27 +362,27 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
             system_name = enumerator.description();
 
         monitor->set_system_name(system_name.toStdString());
-        monitor->set_monitor_name(edid->monitorName().toStdString());
-        monitor->set_manufacturer_name(edid->manufacturerName().toStdString());
-        monitor->set_monitor_id(edid->monitorId().toStdString());
-        monitor->set_serial_number(edid->serialNumber().toStdString());
-        monitor->set_edid_version(edid->edidVersion());
-        monitor->set_edid_revision(edid->edidRevision());
-        monitor->set_week_of_manufacture(edid->weekOfManufacture());
-        monitor->set_year_of_manufacture(edid->yearOfManufacture());
-        monitor->set_max_horizontal_image_size(edid->maxHorizontalImageSize());
-        monitor->set_max_vertical_image_size(edid->maxVerticalImageSize());
-        monitor->set_horizontal_resolution(edid->horizontalResolution());
-        monitor->set_vertical_resoulution(edid->verticalResolution());
-        monitor->set_gamma(edid->gamma());
-        monitor->set_max_horizontal_rate(edid->maxHorizontalRate());
-        monitor->set_min_horizontal_rate(edid->minHorizontalRate());
-        monitor->set_max_vertical_rate(edid->maxVerticalRate());
-        monitor->set_min_vertical_rate(edid->minVerticalRate());
-        monitor->set_pixel_clock(edid->pixelClock());
-        monitor->set_max_pixel_clock(edid->maxSupportedPixelClock());
+        monitor->set_monitor_name(edid.monitorName().toStdString());
+        monitor->set_manufacturer_name(edid.manufacturerName().toStdString());
+        monitor->set_monitor_id(edid.monitorId().toStdString());
+        monitor->set_serial_number(edid.serialNumber().toStdString());
+        monitor->set_edid_version(edid.edidVersion());
+        monitor->set_edid_revision(edid.edidRevision());
+        monitor->set_week_of_manufacture(edid.weekOfManufacture());
+        monitor->set_year_of_manufacture(edid.yearOfManufacture());
+        monitor->set_max_horizontal_image_size(edid.maxHorizontalImageSize());
+        monitor->set_max_vertical_image_size(edid.maxVerticalImageSize());
+        monitor->set_horizontal_resolution(edid.horizontalResolution());
+        monitor->set_vertical_resoulution(edid.verticalResolution());
+        monitor->set_gamma(edid.gamma());
+        monitor->set_max_horizontal_rate(edid.maxHorizontalRate());
+        monitor->set_min_horizontal_rate(edid.minHorizontalRate());
+        monitor->set_max_vertical_rate(edid.maxVerticalRate());
+        monitor->set_min_vertical_rate(edid.minVerticalRate());
+        monitor->set_pixel_clock(edid.pixelClock());
+        monitor->set_max_pixel_clock(edid.maxSupportedPixelClock());
 
-        switch (edid->inputSignalType())
+        switch (edid.inputSignalType())
         {
             case base::Edid::INPUT_SIGNAL_TYPE_DIGITAL:
                 monitor->set_input_signal_type(
@@ -398,7 +398,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
                 break;
         }
 
-        quint8 supported_features = edid->featureSupport();
+        quint8 supported_features = edid.featureSupport();
 
         if (supported_features & base::Edid::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
             monitor->set_default_gtf_supported(true);
@@ -427,7 +427,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
             timing->set_frequency(freq);
         };
 
-        quint8 estabilished_timings1 = edid->estabilishedTimings1();
+        quint8 estabilished_timings1 = edid.estabilishedTimings1();
 
         if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_800X600_60HZ)
             add_timing(800, 600, 60);
@@ -453,7 +453,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_720X400_70HZ)
             add_timing(720, 400, 70);
 
-        quint8 estabilished_timings2 = edid->estabilishedTimings2();
+        quint8 estabilished_timings2 = edid.estabilishedTimings2();
 
         if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
             add_timing(1280, 1024, 75);
@@ -479,16 +479,16 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_800X600_72HZ)
             add_timing(800, 600, 72);
 
-        quint8 manufacturer_timings = edid->manufacturersTimings();
+        quint8 manufacturer_timings = edid.manufacturersTimings();
 
         if (manufacturer_timings & base::Edid::MANUFACTURERS_TIMINGS_1152X870_75HZ)
             add_timing(1152, 870, 75);
 
-        for (int index = 0; index < edid->standardTimingsCount(); ++index)
+        for (int index = 0; index < edid.standardTimingsCount(); ++index)
         {
             int width, height, freq;
 
-            if (edid->standardTimings(index, &width, &height, &freq))
+            if (edid.standardTimings(index, &width, &height, &freq))
                 add_timing(width, height, freq);
         }
     }

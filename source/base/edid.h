@@ -19,17 +19,15 @@
 #ifndef BASE_EDID_H
 #define BASE_EDID_H
 
-#include <QtGlobal>
-
-#include <memory>
+#include <QByteArray>
 
 namespace base {
 
 class Edid
 {
 public:
-    static std::unique_ptr<Edid> create(std::unique_ptr<quint8[]> data, size_t data_size);
-
+    Edid() = default;
+    explicit Edid(const QByteArray& buffer);
     ~Edid() = default;
 
     enum InputSignalType
@@ -205,6 +203,8 @@ public:
         MANUFACTURERS_TIMINGS_1152X870_75HZ = 0x80
     };
 
+    bool isValid() const;
+
     QString manufacturerName() const;
     QString monitorName() const;
     QString monitorId() const;
@@ -234,16 +234,11 @@ public:
     bool standardTimings(int index, int* width, int* height, int* frequency);
 
 private:
-    Edid(std::unique_ptr<quint8[]> data, size_t data_size);
-
     QString getManufacturerSignature() const;
-    quint8* getDescriptor(int type) const;
+    const quint8* getDescriptor(int type) const;
 
-    std::unique_ptr<quint8[]> data_;
-    const size_t data_size_;
-    Data* edid_;
-
-    Q_DISABLE_COPY(Edid)
+    QByteArray buffer_;
+    const Data* edid_ = nullptr;
 };
 
 } // namespace base

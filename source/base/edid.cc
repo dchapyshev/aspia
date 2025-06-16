@@ -23,8 +23,6 @@
 #include "base/bitset.h"
 #include "base/logging.h"
 
-#include <cstring>
-
 namespace base {
 
 namespace {
@@ -106,7 +104,7 @@ struct Manufacturers
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-static int GetDataType(quint8* descriptor)
+static int getDataType(const quint8* descriptor)
 {
     const quint8 kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
 
@@ -122,49 +120,42 @@ static int GetDataType(quint8* descriptor)
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<Edid> Edid::create(std::unique_ptr<quint8[]> data, size_t data_size)
+Edid::Edid(const QByteArray& buffer)
+    : buffer_(buffer)
 {
     static_assert(sizeof(Data) == kMinEdidSize);
 
-    if (data && data_size >= sizeof(Data))
-    {
-        Data* edid = reinterpret_cast<Data*>(data.get());
-
-        if (edid->header == kEdidHeader)
-        {
-            quint8 checksum = 0;
-
-            for (size_t index = 0; index < kMinEdidSize; ++index)
-                checksum += data[index];
-
-            // The 1-byte sum of all 128 bytes in this EDID block shall equal zero.
-            if (!checksum)
-            {
-                return std::unique_ptr<Edid>(new Edid(std::move(data), data_size));
-            }
-
-            LOG(ERROR) << "Invalid EDID checksum:" << checksum;
-        }
-        else
-        {
-            LOG(ERROR) << "Invalid EDID header:" << edid->header;
-        }
-    }
-    else
+    if (buffer_.size() < sizeof(Data))
     {
         LOG(ERROR) << "Invalid EDID data";
+        return;
     }
 
-    return nullptr;
+    const Data* edid = reinterpret_cast<const Data*>(buffer_.data());
+    if (edid->header != kEdidHeader)
+    {
+        LOG(ERROR) << "Invalid EDID header:" << edid->header;
+        return;
+    }
+
+    quint8 checksum = 0;
+    for (int index = 0; index < kMinEdidSize; ++index)
+        checksum += buffer_[index];
+
+    // The 1-byte sum of all 128 bytes in this EDID block shall equal zero.
+    if (checksum)
+    {
+        LOG(ERROR) << "Invalid EDID checksum:" << checksum;
+        return;
+    }
+
+    edid_ = edid;
 }
 
 //--------------------------------------------------------------------------------------------------
-Edid::Edid(std::unique_ptr<quint8[]> data, size_t data_size)
-    : data_(std::move(data)),
-      data_size_(data_size)
+bool Edid::isValid() const
 {
-    edid_ = reinterpret_cast<Data*>(data_.get());
+    return edid_ != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,9 +210,8 @@ int Edid::maxVerticalImageSize() const
 //--------------------------------------------------------------------------------------------------
 int Edid::horizontalResolution() const
 {
-    DetailedTimingDescriptor* descriptor =
-        reinterpret_cast<DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
-
+    const DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<const DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
     if (!descriptor)
         return 0;
 
@@ -234,9 +224,8 @@ int Edid::horizontalResolution() const
 //--------------------------------------------------------------------------------------------------
 int Edid::verticalResolution() const
 {
-    DetailedTimingDescriptor* descriptor =
-        reinterpret_cast<DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
-
+    const DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<const DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
     if (!descriptor)
         return 0;
 
@@ -290,8 +279,8 @@ QString Edid::monitorId() const
 //--------------------------------------------------------------------------------------------------
 QString Edid::serialNumber() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(
             getDescriptor(DATA_TYPE_TAG_MONITOR_SERIAL_NUMBER_ASCII));
 
     if (descriptor)
@@ -316,16 +305,16 @@ QString Edid::serialNumber() const
 }
 
 //--------------------------------------------------------------------------------------------------
-quint8* Edid::getDescriptor(int type) const
+const quint8* Edid::getDescriptor(int type) const
 {
     size_t count = sizeof(Data::detailed_timing_description) /
         sizeof(Data::detailed_timing_description[0]);
 
     for (size_t index = 0; index < count; ++index)
     {
-        quint8* descriptor = &edid_->detailed_timing_description[index][0];
+        const quint8* descriptor = &edid_->detailed_timing_description[index][0];
 
-        if (GetDataType(descriptor) == type)
+        if (getDataType(descriptor) == type)
             return descriptor;
     }
 
@@ -349,8 +338,8 @@ QString Edid::manufacturerName() const
 //--------------------------------------------------------------------------------------------------
 QString Edid::monitorName() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
 
     if (descriptor)
     {
@@ -376,9 +365,8 @@ QString Edid::monitorName() const
 //--------------------------------------------------------------------------------------------------
 int Edid::minVerticalRate() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
-
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
     if (!descriptor)
         return 0;
 
@@ -388,9 +376,8 @@ int Edid::minVerticalRate() const
 //--------------------------------------------------------------------------------------------------
 int Edid::maxVerticalRate() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
-
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
     if (!descriptor)
         return 0;
 
@@ -400,9 +387,8 @@ int Edid::maxVerticalRate() const
 //--------------------------------------------------------------------------------------------------
 int Edid::minHorizontalRate() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
-
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
     if (!descriptor)
         return 0;
 
@@ -412,9 +398,8 @@ int Edid::minHorizontalRate() const
 //--------------------------------------------------------------------------------------------------
 int Edid::maxHorizontalRate() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
-
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
     if (!descriptor)
         return 0;
 
@@ -424,9 +409,8 @@ int Edid::maxHorizontalRate() const
 //--------------------------------------------------------------------------------------------------
 int Edid::maxSupportedPixelClock() const
 {
-    MonitorDescriptor* descriptor =
-        reinterpret_cast<MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
-
+    const MonitorDescriptor* descriptor =
+        reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
     if (!descriptor)
         return 0;
 
@@ -436,9 +420,8 @@ int Edid::maxSupportedPixelClock() const
 //--------------------------------------------------------------------------------------------------
 double Edid::pixelClock() const
 {
-    DetailedTimingDescriptor* descriptor =
-        reinterpret_cast<DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
-
+    const DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<const DetailedTimingDescriptor*>(getDescriptor(kDetailedTimingDescriptor));
     if (!descriptor)
         return 0;
 
