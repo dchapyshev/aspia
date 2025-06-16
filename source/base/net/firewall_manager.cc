@@ -128,7 +128,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
-    firewall_rules_->Add(rule.Get());
+    error = firewall_rules_->Add(rule.Get());
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "Add failed:" << error;
@@ -282,7 +282,7 @@ void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
 {
     // Rename rule to unique name and delete by unique name. We can't just delete rule by name.
     // Multiple rules with the same name and different app are possible.
-    _bstr_t unique_name(QUuid::createUuid().toString().toStdWString().c_str());
+    _bstr_t unique_name(qUtf16Printable(QUuid::createUuid().toString()));
 
     rule->put_Name(unique_name);
     firewall_rules_->Remove(unique_name);
