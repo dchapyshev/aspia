@@ -28,8 +28,8 @@ namespace base {
 class VariableSizeReader
 {
 public:
-    VariableSizeReader();
-    ~VariableSizeReader();
+    VariableSizeReader() = default;
+    ~VariableSizeReader() = default;
 
     asio::mutable_buffer buffer();
     std::optional<size_t> messageSize();
@@ -44,8 +44,8 @@ private:
 class VariableSizeWriter
 {
 public:
-    VariableSizeWriter();
-    ~VariableSizeWriter();
+    VariableSizeWriter() = default;
+    ~VariableSizeWriter() = default;
 
     asio::const_buffer variableSize(size_t size);
 

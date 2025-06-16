@@ -20,16 +20,16 @@
 
 #include <QThread>
 
+#include <asio/connect.hpp>
+#include <asio/read.hpp>
+#include <asio/write.hpp>
+
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_encryptor_fake.h"
 #include "base/crypto/message_decryptor_fake.h"
-
-#include <asio/connect.hpp>
-#include <asio/read.hpp>
-#include <asio/write.hpp>
 
 namespace base {
 
@@ -39,6 +39,7 @@ const int kWriteQueueReservedSize = 64;
 const TcpChannel::Seconds kKeepAliveInterval { 60 };
 const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
+//--------------------------------------------------------------------------------------------------
 QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
     QString str;
@@ -335,6 +336,7 @@ void TcpChannel::init()
     connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::setConnected(bool connected)
 {
     connected_ = connected;

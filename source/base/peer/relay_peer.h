@@ -54,7 +54,8 @@ private:
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    static QByteArray authenticationMessage(const proto::router::RelayKey& key, const std::string& secret);
+    static QByteArray authenticationMessage(
+        const proto::router::RelayKey& key, const std::string& secret);
 
     proto::router::ConnectionOffer connection_offer_;
     bool is_finished_ = false;

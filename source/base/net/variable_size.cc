@@ -23,12 +23,6 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-VariableSizeReader::VariableSizeReader() = default;
-
-//--------------------------------------------------------------------------------------------------
-VariableSizeReader::~VariableSizeReader() = default;
-
-//--------------------------------------------------------------------------------------------------
 asio::mutable_buffer VariableSizeReader::buffer()
 {
     DCHECK_LT(pos_, std::size(buffer_));
@@ -62,16 +56,9 @@ std::optional<size_t> VariableSizeReader::messageSize()
     else
     {
         ++pos_;
-
         return std::nullopt;
     }
 }
-
-//--------------------------------------------------------------------------------------------------
-VariableSizeWriter::VariableSizeWriter() = default;
-
-//--------------------------------------------------------------------------------------------------
-VariableSizeWriter::~VariableSizeWriter() = default;
 
 //--------------------------------------------------------------------------------------------------
 asio::const_buffer VariableSizeWriter::variableSize(size_t size)
