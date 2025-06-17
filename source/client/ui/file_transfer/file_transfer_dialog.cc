@@ -18,20 +18,16 @@
 
 #include "client/ui/file_transfer/file_transfer_dialog.h"
 
-#include "base/logging.h"
-#include "client/ui/file_transfer/file_error_code.h"
-
 #include <QCloseEvent>
 #include <QPushButton>
 #include <QMessageBox>
 
-// Removed completely in qt6.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include "base/logging.h"
+#include "client/ui/file_transfer/file_error_code.h"
+
 #if defined(Q_OS_WINDOWS)
-#include <QWinTaskbarButton>
-#include <QWinTaskbarProgress>
+#include "common/ui/taskbar_button.h"
 #endif // defined(Q_OS_WINDOWS)
-#endif
 
 namespace client {
 
@@ -53,10 +49,8 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileTransferDialog::close);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
-    QWinTaskbarButton* button = new QWinTaskbarButton(this);
-
+    common::TaskbarButton* button = new common::TaskbarButton(this);
     button->setWindow(parent->windowHandle());
 
     taskbar_progress_ = button->progress();
@@ -65,7 +59,6 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
         taskbar_progress_->setRange(0, 0);
         taskbar_progress_->show();
     }
-#endif
 #endif
 
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_source->font());
@@ -76,11 +69,9 @@ FileTransferDialog::~FileTransferDialog()
 {
     LOG(INFO) << "Dtor";
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->hide();
-#endif
 #endif
 }
 
@@ -109,11 +100,9 @@ void FileTransferDialog::setCurrentItem(const QString& source_path, const QStrin
         ui.progress_total->setRange(0, 100);
         ui.progress_current->setRange(0, 100);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
         if (taskbar_progress_)
             taskbar_progress_->setRange(0, 100);
-#endif
 #endif
     }
 
@@ -133,11 +122,9 @@ void FileTransferDialog::setCurrentProgress(int total, int current)
     ui.progress_total->setValue(total);
     ui.progress_current->setValue(current);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->setValue(total);
-#endif
 #endif
 }
 
@@ -150,11 +137,9 @@ void FileTransferDialog::setCurrentSpeed(qint64 speed)
 //--------------------------------------------------------------------------------------------------
 void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->pause();
-#endif
 #endif
 
     QMessageBox* dialog = new QMessageBox(this);
@@ -221,11 +206,9 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 
     dialog->exec();
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->resume();
-#endif
 #endif
 }
 

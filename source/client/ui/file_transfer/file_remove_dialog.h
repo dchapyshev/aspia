@@ -22,12 +22,9 @@
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
 
-// Removed completely in qt6.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
-class QWinTaskbarProgress;
-#endif
-#endif
+#include "common/ui/taskbar_progress.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace client {
 
@@ -57,15 +54,12 @@ protected:
 
 private:
     Ui::FileRemoveDialog ui;
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(Q_OS_WINDOWS)
-    QWinTaskbarProgress* taskbar_progress_ = nullptr;
-#endif
-#endif
-
     std::unique_ptr<QFontMetrics> label_metrics_;
     bool stopped_ = false;
+
+#if defined(Q_OS_WINDOWS)
+    common::TaskbarProgress* taskbar_progress_ = nullptr;
+#endif // defined(Q_OS_WINDOWS)
 
     Q_DISABLE_COPY(FileRemoveDialog)
 };

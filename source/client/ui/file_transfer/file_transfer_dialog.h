@@ -22,11 +22,8 @@
 #include "client/file_transfer.h"
 #include "ui_file_transfer_dialog.h"
 
-// Removed completely in qt6.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
-class QWinTaskbarProgress;
-#endif
+#include "common/ui/taskbar_progress.h"
 #endif
 
 namespace client {
@@ -64,10 +61,8 @@ private:
     Ui::FileTransferDialog ui;
     std::unique_ptr<QFontMetrics> label_metrics_;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
-    QWinTaskbarProgress* taskbar_progress_ = nullptr;
-#endif
+    common::TaskbarProgress* taskbar_progress_ = nullptr;
 #endif
 
     bool task_queue_building_ = true;

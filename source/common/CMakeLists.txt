@@ -100,6 +100,14 @@ list(APPEND SOURCE_COMMON_UI
     ui/update_dialog.h
     ui/update_dialog.ui)
 
+if (WIN32)
+    list(APPEND SOURCE_COMMON_UI
+        ui/taskbar_button.cc
+        ui/taskbar_button.h
+        ui/taskbar_progress.cc
+        ui/taskbar_progress.h)
+endif()
+
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})

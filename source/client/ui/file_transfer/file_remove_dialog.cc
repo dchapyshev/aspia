@@ -18,21 +18,17 @@
 
 #include "client/ui/file_transfer/file_remove_dialog.h"
 
-#include "base/logging.h"
-#include "client/ui/file_transfer/file_error_code.h"
-
 #include <QCloseEvent>
 #include <QPointer>
 #include <QPushButton>
 #include <QMessageBox>
 
-// Removed completely in qt6.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include "base/logging.h"
+#include "client/ui/file_transfer/file_error_code.h"
+
 #if defined(Q_OS_WINDOWS)
-#include <QWinTaskbarButton>
-#include <QWinTaskbarProgress>
+#include "common/ui/taskbar_button.h"
 #endif // defined(Q_OS_WINDOWS)
-#endif
 
 namespace client {
 
@@ -51,16 +47,13 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
-    QWinTaskbarButton* button = new QWinTaskbarButton(this);
-
+    common::TaskbarButton* button = new common::TaskbarButton(this);
     button->setWindow(parent->windowHandle());
 
     taskbar_progress_ = button->progress();
     if (taskbar_progress_)
         taskbar_progress_->show();
-#endif
 #endif
 
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_current_item->font());
@@ -71,11 +64,9 @@ FileRemoveDialog::~FileRemoveDialog()
 {
     LOG(INFO) << "Dtor";
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->hide();
-#endif
 #endif
 }
 
@@ -107,11 +98,9 @@ void FileRemoveDialog::setCurrentProgress(const QString& name, int percentage)
     ui.label_current_item->setText(elided_text);
     ui.progress->setValue(percentage);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->setValue(percentage);
-#endif
 #endif
 }
 
@@ -120,11 +109,9 @@ void FileRemoveDialog::errorOccurred(const QString& path,
                                      proto::file_transfer::ErrorCode error_code,
                                      quint32 available_actions)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->pause();
-#endif
 #endif
 
     QString message;
@@ -179,11 +166,9 @@ void FileRemoveDialog::errorOccurred(const QString& path,
 
     dialog->exec();
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
         taskbar_progress_->resume();
-#endif
 #endif
 }
 
