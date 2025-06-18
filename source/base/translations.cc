@@ -89,7 +89,7 @@ Translations::LocaleList Translations::localeList() const
         else
         {
             name = QLocale::languageToString(locale.language())
-                + " (" + QLocale::countryToString(locale.country()) + ")";
+                + " (" + QLocale::territoryToString(locale.territory()) + ")";
         }
 
         list.push_back(Locale(locale_code, name));

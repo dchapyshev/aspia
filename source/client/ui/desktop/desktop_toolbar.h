@@ -58,7 +58,7 @@ public:
 
 signals:
     void sig_pasteAsKeystrokes();
-    void sig_keyCombination(int key_secuence);
+    void sig_keyCombination(QKeyCombination key_secuence);
     void sig_switchToFullscreen(bool fullscreen);
     void sig_switchToAutosize();
     void sig_settingsButton();
@@ -82,11 +82,7 @@ signals:
 
 protected:
     // QFrame implementation.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void enterEvent(QEvent* event) final;
-#else
     void enterEvent(QEnterEvent* event) final;
-#endif
     void leaveEvent(QEvent* event) final;
 
 private slots:

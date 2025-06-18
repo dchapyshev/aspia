@@ -130,7 +130,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     //---------------------------------------------------------------------------------------------
     // One-time Password
-    connect(ui.checkbox_onetime_password, &QCheckBox::stateChanged,
+    connect(ui.checkbox_onetime_password, &QCheckBox::checkStateChanged,
             this, &ConfigDialog::onOneTimeStateChanged);
 
     ui.combobox_onetime_pass_change->addItem(tr("On reboot"), 0);
@@ -166,7 +166,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     //---------------------------------------------------------------------------------------------
     // Connection Confirmation
-    connect(ui.checkbox_conn_confirm_require, &QCheckBox::stateChanged,
+    connect(ui.checkbox_conn_confirm_require, &QCheckBox::checkStateChanged,
             this, &ConfigDialog::onConnConfirmStateChanged);
 
     ui.combobox_conn_confirm_auto->addItem(tr("Never"), 0);

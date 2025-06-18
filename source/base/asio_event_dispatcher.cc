@@ -21,13 +21,9 @@
 #include <QCoreApplication>
 #include <QThread>
 
-#if defined(Q_OS_WINDOWS)
-#include <QWinEventNotifier>
-#endif // defined(Q_OS_WINDOWS)
+#include <asio/post.hpp>
 
 #include "base/logging.h"
-
-#include <asio/post.hpp>
 
 namespace base {
 
@@ -35,10 +31,6 @@ namespace {
 
 const size_t kReservedSizeForTimersMap = 50;
 const float kLoadFactorForTimersMap = 0.5;
-
-#if defined(Q_OS_WINDOWS)
-const size_t kReservedSizeForEvents = 30;
-#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -52,10 +44,6 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 
     timers_.reserve(kReservedSizeForTimersMap);
     timers_.max_load_factor(kLoadFactorForTimersMap);
-
-#if defined(Q_OS_WINDOWS)
-    events_.reserve(kReservedSizeForEvents);
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,13 +94,6 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AsioEventDispatcher::hasPendingEvents()
-{
-    extern uint qGlobalPostedEventsCount();
-    return qGlobalPostedEventsCount() > 0;
-}
-
-//--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* /* notifier */)
 {
     NOTIMPLEMENTED();
@@ -126,7 +107,7 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier 
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::registerTimer(
-    int timer_id, int interval, Qt::TimerType type, QObject* object)
+    int timer_id, qint64 interval, Qt::TimerType type, QObject* object)
 {
     if (!object)
         return;
@@ -213,53 +194,6 @@ int AsioEventDispatcher::remainingTime(int timer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WINDOWS)
-bool AsioEventDispatcher::registerEventNotifier(QWinEventNotifier* notifier)
-{
-    HANDLE handle = notifier->handle();
-    if (!handle || handle == INVALID_HANDLE_VALUE)
-    {
-        LOG(ERROR) << "Invalid notifier handle";
-        return false;
-    }
-
-    HANDLE wait_handle;
-    if (!RegisterWaitForSingleObject(&wait_handle, handle, eventCallback, notifier, INFINITE,
-                                     WT_EXECUTEINWAITTHREAD))
-    {
-        PLOG(ERROR) << "RegisterWaitForSingleObject failed";
-        return false;
-    }
-
-    events_.emplace_back(notifier, wait_handle);
-    return true;
-}
-#endif // defined(Q_OS_WINDOWS)
-
-//--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WINDOWS)
-void AsioEventDispatcher::unregisterEventNotifier(QWinEventNotifier* notifier)
-{
-    auto it = events_.begin();
-    while (it != events_.end())
-    {
-        const EventData& event = *it;
-
-        if (event.notifier == notifier)
-        {
-            UnregisterWait(event.wait_handle);
-            events_.erase(it);
-            break;
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
-#endif // defined(Q_OS_WINDOWS)
-
-//--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
     // To stop run_one inside method processEvents completes.
@@ -271,12 +205,6 @@ void AsioEventDispatcher::interrupt()
 {
     interrupted_.store(true, std::memory_order_relaxed);
     wakeUp();
-}
-
-//--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::flush()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,22 +223,6 @@ asio::io_context& AsioEventDispatcher::ioContext()
 {
     return io_context_;
 }
-
-//--------------------------------------------------------------------------------------------------
-// static
-#if defined(Q_OS_WINDOWS)
-void AsioEventDispatcher::eventCallback(PVOID parameter, BOOLEAN /* timer_or_wait_fired */)
-{
-    QWinEventNotifier* notifier = reinterpret_cast<QWinEventNotifier*>(parameter);
-    if (!notifier)
-    {
-        LOG(ERROR) << "Invalid pointer";
-        return;
-    }
-
-    emit notifier->activated(notifier->handle(), {});
-}
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::scheduleNextTimer()

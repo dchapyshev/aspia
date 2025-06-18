@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(translations)
-
 list(APPEND SOURCE_CONSOLE
     address_book_dialog.cc
     address_book_dialog.h
@@ -106,19 +104,8 @@ source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
 
 if (WIN32)
     set(CONSOLE_PLATFORM_LIBS
-        avrt
-        crypt32
-        dbghelp
-        dwmapi
-        imm32
-        iphlpapi
-        netapi32
-        shlwapi
-        userenv
-        uxtheme
-        version
-        winmm
-        wtsapi32)
+        avrt crypt32 dbghelp dwmapi imm32 iphlpapi netapi32 shlwapi userenv uxtheme version
+        winmm wtsapi32)
 endif()
 
 if (APPLE)
@@ -161,24 +148,4 @@ target_link_libraries(aspia_console
 set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_console PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_console PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_console
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
-
-if(Qt5LinguistTools_FOUND)
-    # Get the list of translation files.
-    file(GLOB CONSOLE_TS_FILES translations/*.ts)
-    add_translations(aspia_console QRC_FILE "translations/console_translations.qrc" TS_FILES ${CONSOLE_TS_FILES})
-
-    # Get the list of files containing messages.
-    file(GLOB_RECURSE CONSOLE_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/source/console/*.cc
-        ${PROJECT_SOURCE_DIR}/source/console/*.cpp
-        ${PROJECT_SOURCE_DIR}/source/console/*.h
-        ${PROJECT_SOURCE_DIR}/source/console/*.ui)
-
-    create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES})
-    add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})
-endif()
+qt_import_plugins(aspia_console INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)

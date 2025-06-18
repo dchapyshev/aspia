@@ -652,11 +652,7 @@ add_library(aspia_base STATIC
 set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_base
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
+qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs xdg_user_dirs)
@@ -695,10 +691,6 @@ target_link_libraries(aspia_base_tests PRIVATE
 set_property(TARGET aspia_base_tests PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_base_tests PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base_tests PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_base_tests
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
+qt_import_plugins(aspia_base_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

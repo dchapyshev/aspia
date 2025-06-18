@@ -64,7 +64,7 @@ public:
     void doKeyEvent(QKeyEvent* event);
 
 public slots:
-    void executeKeyCombination(int key_sequence);
+    void executeKeyCombination(QKeyCombination key_sequence);
 
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.

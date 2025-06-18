@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(translations)
-
 list(APPEND SOURCE_HOST_CORE
     client_session.cc
     client_session.h
@@ -159,19 +157,8 @@ if (WIN32)
     source_group(win FILES ${SOURCE_HOST_CORE_WIN})
 
     set(HOST_PLATFORM_LIBS
-        crypt32
-        dbghelp
-        dxgi
-        d3d11
-        imm32
-        iphlpapi
-        netapi32
-        setupapi
-        userenv
-        uxtheme
-        version
-        winmm
-        wtsapi32)
+        avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi userenv uxtheme version
+        winmm wtsapi32)
 endif()
 
 add_library(aspia_host_core SHARED
@@ -190,33 +177,7 @@ set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLE
 set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_host_core
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
-
-if(Qt5LinguistTools_FOUND)
-    # Get the list of translation files.
-    file(GLOB HOST_TS_FILES ui/translations/*.ts)
-    add_translations(aspia_host_core QRC_FILE "ui/translations.qrc" TS_FILES ${HOST_TS_FILES})
-
-    # Get the list of files containing messages.
-    file(GLOB_RECURSE HOST_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/source/host/ui/*.cc
-        ${PROJECT_SOURCE_DIR}/source/host/ui/*.cpp
-        ${PROJECT_SOURCE_DIR}/source/host/ui/*.h
-        ${PROJECT_SOURCE_DIR}/source/host/ui/*.ui)
-
-    create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
-    add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
-else()
-    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
-endif()
-
-if (WIN32)
-    set(HOST_PLATFORM_LIBS Qt5::WinMain)
-endif()
+qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 if (LINUX)
     set(HOST_PLATFORM_LIBS
@@ -228,6 +189,10 @@ if (LINUX)
         ${XI_LIB}
         ${X11_LIB}
         ${XEXT_LIB})
+endif()
+
+if (WIN32)
+    set(HOST_PLATFORM_LIBS Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
 endif()
 
 # Aspia Host (GUI)

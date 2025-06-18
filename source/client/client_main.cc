@@ -360,20 +360,14 @@ bool parseBlockRemoteInputValue(const QString& value, proto::desktop::Config& co
 //--------------------------------------------------------------------------------------------------
 int clientMain(int argc, char* argv[])
 {
-#if !defined(I18L_DISABLED)
     Q_INIT_RESOURCE(client);
-    Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
-#endif
 
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
-    client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     client::Application::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 

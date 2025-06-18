@@ -25,8 +25,7 @@
 #include <QWindow>
 
 #include <wrl/client.h>
-
-struct ITaskbarList4;
+#include <Shobjidl.h>
 
 namespace common {
 

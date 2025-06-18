@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(translations)
-
 list(APPEND SOURCE_COMMON
     clipboard.cc
     clipboard.h
@@ -132,22 +130,6 @@ target_link_libraries(aspia_common PRIVATE
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
-
-if(Qt5LinguistTools_FOUND)
-    # Get the list of translation files.
-    file(GLOB COMMON_TS_FILES translations/*.ts)
-    add_translations(aspia_common QRC_FILE "translations/common_translations.qrc" TS_FILES ${COMMON_TS_FILES})
-
-    # Get the list of files containing messages.
-    file(GLOB_RECURSE COMMON_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/source/common/*.cc
-        ${PROJECT_SOURCE_DIR}/source/common/*.cpp
-        ${PROJECT_SOURCE_DIR}/source/common/*.h
-        ${PROJECT_SOURCE_DIR}/source/common/*.ui)
-
-    create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES})
-    add_custom_target(aspia_common_ts_update DEPENDS ${TS_COMMON_UPDATE})
-endif()
 
 # File about_dialog.cc contains macro __TIME__ containing the build time. To ensure that the time is
 # updated with each build, we rebuild the file each time.

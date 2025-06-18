@@ -19,6 +19,7 @@
 #ifndef CLIENT_FILE_TASK_FACTORY_H
 #define CLIENT_FILE_TASK_FACTORY_H
 
+#include <QObject>
 #include <QString>
 
 #include "common/file_task.h"

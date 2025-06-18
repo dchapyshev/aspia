@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(translations)
-
 list(APPEND SOURCE_CLIENT_CORE
     client.cc
     client.h
@@ -256,7 +254,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
     ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
-target_link_libraries(aspia_client_core
+target_link_libraries(aspia_client_core PRIVATE
     aspia_base
     aspia_common
     aspia_proto
@@ -267,39 +265,10 @@ set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
 
-if(Qt5LinguistTools_FOUND)
-    # Get the list of translation files.
-    file(GLOB CLIENT_CORE_TS_FILES translations/*.ts)
-
-    add_translations(aspia_client_core QRC_FILE "translations/client_translations.qrc" TS_FILES ${CLIENT_CORE_TS_FILES})
-
-    # Get the list of files containing messages.
-    file(GLOB_RECURSE CLIENT_CORE_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/source/client/*.cc
-        ${PROJECT_SOURCE_DIR}/source/client/*.cpp
-        ${PROJECT_SOURCE_DIR}/source/client/*.h
-        ${PROJECT_SOURCE_DIR}/source/client/*.ui)
-
-    create_translation(TS_CLIENT_CORE_UPDATE ${CLIENT_CORE_TR_SOURCES} ${CLIENT_CORE_TS_FILES})
-    add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_CORE_UPDATE})
-endif()
-
 if (WIN32)
     set(CLIENT_PLATFORM_LIBS
-        avrt
-        crypt32
-        dbghelp
-        dwmapi
-        imm32
-        iphlpapi
-        netapi32
-        shlwapi
-        userenv
-        uxtheme
-        version
-        winmm
-        wtsapi32
-        Qt5::WinMain)
+        avrt crypt32 dbghelp dwmapi imm32 iphlpapi netapi32 shlwapi userenv uxtheme version
+        winmm wtsapi32)
 endif()
 
 if (LINUX)
@@ -316,11 +285,7 @@ endif()
 
 add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
 target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
-qt5_import_plugins(aspia_client
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
+qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)

@@ -83,7 +83,6 @@ bool waitForValidInputDesktop()
 int hostMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);
-    Q_INIT_RESOURCE(common_translations);
 
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_INFO;
@@ -102,8 +101,6 @@ int hostMain(int argc, char* argv[])
     }
 
     host::Application::setApplicationVersion(ASPIA_VERSION_STRING);
-    host::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
-    host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     host::Application::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
@@ -117,7 +114,7 @@ int hostMain(int argc, char* argv[])
     QCommandLineOption export_option("export",
         base::GuiApplication::translate("HostMain", "Export parameters to file."), "export");
     QCommandLineOption import_option("import",
-        base::GuiApplication::translate("HostMain", "Import parameters to file."), "import");
+        base::GuiApplication::translate("HostMain", "Import parameters from file."), "import");
     QCommandLineOption silent_option("silent",
         base::GuiApplication::translate("HostMain", "Do not display any messages during import and export."));
     QCommandLineOption update_option("update",

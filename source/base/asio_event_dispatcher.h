@@ -38,25 +38,18 @@ public:
     ~AsioEventDispatcher() final;
 
     bool processEvents(QEventLoop::ProcessEventsFlags flags) final;
-    bool hasPendingEvents() final;
 
     void registerSocketNotifier(QSocketNotifier* notifier) final;
     void unregisterSocketNotifier(QSocketNotifier* notifier) final;
 
-    void registerTimer(int timer_id, int interval, Qt::TimerType type, QObject* object) final;
+    void registerTimer(int timer_id, qint64 interval, Qt::TimerType type, QObject* object) final;
     bool unregisterTimer(int timer_id) final;
     bool unregisterTimers(QObject* object) final;
     QList<TimerInfo> registeredTimers(QObject* object) const final;
     int remainingTime(int timer_id) final;
 
-#if defined(Q_OS_WINDOWS)
-    bool registerEventNotifier(QWinEventNotifier* notifier) final;
-    void unregisterEventNotifier(QWinEventNotifier* notifier) final;
-#endif // defined(Q_OS_WINDOWS)
-
     void wakeUp() final;
     void interrupt() final;
-    void flush() final;
 
     static asio::io_context& currentIoContext();
     asio::io_context& ioContext();
@@ -74,18 +67,6 @@ private:
         TimePoint start_time;
         TimePoint end_time;
     };
-
-#if defined(Q_OS_WINDOWS)
-    struct EventData
-    {
-        QWinEventNotifier* notifier;
-        HANDLE wait_handle;
-    };
-
-    static void CALLBACK eventCallback(PVOID parameter, BOOLEAN timer_or_wait_fired);
-
-    std::vector<EventData> events_;
-#endif // defined(Q_OS_WINDOWS)
 
     void scheduleNextTimer();
 

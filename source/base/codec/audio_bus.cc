@@ -179,7 +179,7 @@ void AudioBus::SetChannelData(int channel, float* data)
     CHECK(can_set_channel_data_);
     CHECK(data);
     CHECK_GE(channel, 0);
-    CHECK_LT(static_cast<size_t>(channel), channel_data_.size());
+    CHECK_LT(static_cast<qsizetype>(channel), channel_data_.size());
     DCHECK(IsAligned(data));
     channel_data_[channel] = data;
 }

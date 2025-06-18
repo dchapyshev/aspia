@@ -45,7 +45,7 @@ private:
     QByteArray decompressCursor(const proto::desktop::CursorShape& cursor_shape) const;
 
     QVector<std::shared_ptr<MouseCursor>> cache_;
-    std::optional<size_t> cache_size_;
+    std::optional<qsizetype> cache_size_;
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;
 

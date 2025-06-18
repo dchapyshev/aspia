@@ -24,8 +24,8 @@ namespace base {
 
 namespace {
 
-constexpr size_t kMinCacheSize = 2;
-constexpr size_t kMaxCacheSize = 30;
+constexpr qsizetype kMinCacheSize = 2;
+constexpr qsizetype kMaxCacheSize = 30;
 
 } // namespace
 
@@ -136,7 +136,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {
-            int cache_size = cursor_shape.flags() & 0x1F;
+            qsizetype cache_size = cursor_shape.flags() & 0x1F;
 
             if (cache_size < kMinCacheSize || cache_size > kMaxCacheSize)
             {

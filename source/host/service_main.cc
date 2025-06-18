@@ -19,6 +19,7 @@
 #include "host/service_main.h"
 
 #include <QCommandLineParser>
+#include <QIODevice>
 
 #include "base/application.h"
 #include "base/asio_event_dispatcher.h"

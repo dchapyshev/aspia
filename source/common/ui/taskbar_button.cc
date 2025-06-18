@@ -21,15 +21,9 @@
 #include <QAbstractNativeEventFilter>
 #include <QEvent>
 #include <QGuiApplication>
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QtWin>
-#else
 #include <QImage>
-#endif
 
 #include <comdef.h>
-#include <Shobjidl.h>
 
 #include "base/logging.h"
 #include "base/win/scoped_user_object.h"
@@ -55,11 +49,7 @@ public:
         instance = nullptr;
     }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) final
-#else
-    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) final
-#endif
+    bool nativeEventFilter(const QByteArray& /* event_type */, void* message, qintptr* result) final
     {
         MSG* msg = static_cast<MSG*>(message);
         if (msg->message != button_created_message_id_)
@@ -246,7 +236,7 @@ void TaskbarButton::updateOverlayIcon()
         desc = qUtf16Printable(overlay_description_);
 
     if (!overlay_icon_.isNull())
-        icon.reset(QtWin::toHICON(overlay_icon_.pixmap(GetSystemMetrics(SM_CXSMICON))));
+        icon.reset(overlay_icon_.pixmap(GetSystemMetrics(SM_CXSMICON)).toImage().toHICON());
 
     if (icon)
     {

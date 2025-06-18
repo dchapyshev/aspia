@@ -4,27 +4,35 @@
   "dependencies": [
     "asio",
     "curl",
-    "fmt",
     "gtest",
-    {
-      "name": "icu",
-      "platform": "linux | osx"
-    },
     "libvpx",
     "libyuv",
     "openssl",
     "opus",
     "protobuf",
-    "qt5-base",
-    "qt5-translations",
     {
-      "name": "qt5-winextras",
-      "platform": "windows"
+      "name": "qtbase",
+      "default-features": false,
+      "features": [
+        "zstd",
+        "widgets",
+        "thread",
+        "sql-sqlite",
+        "sql",
+        "png",
+        {
+          "name": "icu",
+          "platform": "linux | osx"
+        },
+        "pcre2",
+        "network",
+        "harfbuzz",
+        "gui",
+        "freetype",
+        "doubleconversion",
+        "brotli"
+      ]
     },
-    "rapidjson",
-    {
-      "name": "wtl",
-      "platform": "windows"
-    }
+    "qttools"
   ]
 }

@@ -18,11 +18,7 @@
 
 #include "common/file_platform_util.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QtWin>
-#else
 #include <QImage>
-#endif
 
 #include "base/win/scoped_user_object.h"
 
@@ -58,11 +54,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
     {
         base::ScopedHICON icon(icon_info.hIcon);
         if (icon.isValid())
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            return QtWin::fromHICON(icon);
-#else
             return QPixmap::fromImage(QImage::fromHICON(icon));
-#endif
     }
 
     return QIcon(QStringLiteral(":/img/document.png"));
@@ -86,18 +78,12 @@ std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_nam
     base::ScopedHICON icon(file_info.hIcon);
     if (icon.isValid())
     {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        return std::pair<QIcon, QString>(QtWin::fromHICON(icon),
-#else
         return std::pair<QIcon, QString>(QPixmap::fromImage(QImage::fromHICON(icon)),
-#endif
-                                         QString::fromUtf16(
-                                             reinterpret_cast<const ushort*>(file_info.szTypeName)));
+                                         QString::fromWCharArray(file_info.szTypeName));
     }
 
     return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
-                                     QString::fromUtf16(
-                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
+                                     QString::fromWCharArray(file_info.szTypeName));
 }
 
 //--------------------------------------------------------------------------------------------------

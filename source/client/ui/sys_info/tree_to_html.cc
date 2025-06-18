@@ -147,9 +147,6 @@ QString treeToHtmlString(const QTreeWidget* tree)
     QString string;
 
     QXmlStreamWriter writer(&string);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    writer.setCodec("UTF-8");
-#endif
     writer.setAutoFormatting(false);
 
     treeToHtml(tree, &writer);
@@ -169,9 +166,6 @@ bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* 
     }
 
     QXmlStreamWriter writer;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    writer.setCodec("UTF-8");
-#endif
     writer.setAutoFormatting(true);
     writer.setAutoFormattingIndent(-1);
     writer.setDevice(&file);

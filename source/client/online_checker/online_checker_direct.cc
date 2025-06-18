@@ -32,7 +32,7 @@ namespace client {
 
 namespace {
 
-const int kNumberOfParallelTasks = 30;
+const qint64 kNumberOfParallelTasks = 30;
 const std::chrono::seconds kTimeout { 15 };
 
 } // namespace

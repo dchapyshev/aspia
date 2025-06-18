@@ -747,7 +747,7 @@ void TcpChannel::doReadServiceData(size_t length)
             }
             else
             {
-                if (read_buffer_.size() < (sizeof(ServiceHeader) + header->length))
+                if (read_buffer_.size() < static_cast<qsizetype>(sizeof(ServiceHeader) + header->length))
                 {
                     onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                     return;

@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QThread>
+#include <QVariant>
 
 #include "base/location.h"
 #include "base/logging.h"

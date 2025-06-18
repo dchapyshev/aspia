@@ -364,7 +364,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::executeKeyCombination(int key_sequence)
+void DesktopWidget::executeKeyCombination(QKeyCombination key_sequence)
 {
     const quint32 kUsbCodeLeftAlt = 0x0700e2;
     const quint32 kUsbCodeLeftCtrl = 0x0700e0;
@@ -376,33 +376,35 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
+    int combined_key_sequence = key_sequence.toCombined();
+
     quint32 key = common::KeycodeConverter::qtKeycodeToUsbKeycode(
-        key_sequence & ~Qt::KeyboardModifierMask);
+        combined_key_sequence & ~Qt::KeyboardModifierMask);
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
     proto::desktop::KeyEvent event;
     event.set_flags(flags | proto::desktop::KeyEvent::PRESSED);
 
-    if (key_sequence & Qt::AltModifier)
+    if (combined_key_sequence & Qt::AltModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftAlt);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::ControlModifier)
+    if (combined_key_sequence & Qt::ControlModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftCtrl);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::ShiftModifier)
+    if (combined_key_sequence & Qt::ShiftModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftShift);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::MetaModifier)
+    if (combined_key_sequence & Qt::MetaModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftMeta);
         emit sig_keyEvent(event);
@@ -416,25 +418,25 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     event.set_usb_keycode(key);
     emit sig_keyEvent(event);
 
-    if (key_sequence & Qt::MetaModifier)
+    if (combined_key_sequence & Qt::MetaModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftMeta);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::ShiftModifier)
+    if (combined_key_sequence & Qt::ShiftModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftShift);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::ControlModifier)
+    if (combined_key_sequence & Qt::ControlModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftCtrl);
         emit sig_keyEvent(event);
     }
 
-    if (key_sequence & Qt::AltModifier)
+    if (combined_key_sequence & Qt::AltModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftAlt);
         emit sig_keyEvent(event);

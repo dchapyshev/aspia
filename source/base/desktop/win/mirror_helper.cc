@@ -41,7 +41,7 @@ bool MirrorHelper::findDisplayDevice(const QString& device_string,
 
     while (EnumDisplayDevicesW(nullptr, device_number, &device_info, 0))
     {
-        if (device_string == device_info.DeviceString)
+        if (device_string.compare(QString::fromWCharArray(device_info.DeviceString)) == 0)
         {
             QString prefix = "\\Registry\\Machine\\";
 

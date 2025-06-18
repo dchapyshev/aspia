@@ -62,7 +62,7 @@ source_group("" FILES ${SOURCE_ROUTER})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_ROUTER_WIN})
-    set(ROUTER_PLATFORM_LIBS comsupp crypt32 dbghelp netapi32 version)
+    set(ROUTER_PLATFORM_LIBS avrt comsupp crypt32 dbghelp netapi32 version)
 endif()
 
 if (LINUX)

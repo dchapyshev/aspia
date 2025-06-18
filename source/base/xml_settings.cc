@@ -44,36 +44,36 @@ QString variantToType(const QVariant& value)
 {
     QString result;
 
-    switch (value.type())
+    switch (value.typeId())
     {
-        case QVariant::Bool:
-        case QVariant::Int:
-        case QVariant::UInt:
-        case QVariant::LongLong:
-        case QVariant::ULongLong:
-        case QVariant::Double:
-        case QVariant::String:
-        case QVariant::KeySequence:
+        case QMetaType::Bool:
+        case QMetaType::Int:
+        case QMetaType::UInt:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
+        case QMetaType::Double:
+        case QMetaType::QString:
+        case QMetaType::QKeySequence:
             // Default type.
             break;
 
-        case QVariant::Invalid:
+        case QMetaType::UnknownType:
             result = kInvalidType;
             break;
 
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
             result = kByteArrayType;
             break;
 
-        case QVariant::Rect:
+        case QMetaType::QRect:
             result = kRectType;
             break;
 
-        case QVariant::Size:
+        case QMetaType::QSize:
             result = kSizeType;
             break;
 
-        case QVariant::Point:
+        case QMetaType::QPoint:
             result = kPointType;
             break;
 
@@ -90,27 +90,27 @@ QString variantToString(const QVariant& value)
 {
     QString result;
 
-    switch (value.type())
+    switch (value.typeId())
     {
-        case QVariant::Invalid:
+        case QMetaType::UnknownType:
             break;
 
-        case QVariant::Bool:
-        case QVariant::Int:
-        case QVariant::UInt:
-        case QVariant::LongLong:
-        case QVariant::ULongLong:
-        case QVariant::Double:
-        case QVariant::String:
-        case QVariant::KeySequence:
+        case QMetaType::Bool:
+        case QMetaType::Int:
+        case QMetaType::UInt:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
+        case QMetaType::Double:
+        case QMetaType::QString:
+        case QMetaType::QKeySequence:
             result = value.toString();
             break;
 
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
             result = value.toByteArray().toHex();
             break;
 
-        case QVariant::Rect:
+        case QMetaType::QRect:
         {
             QRect rect = value.toRect();
             result = QString::asprintf("%d %d %d %d",
@@ -118,14 +118,14 @@ QString variantToString(const QVariant& value)
         }
         break;
 
-        case QVariant::Size:
+        case QMetaType::QSize:
         {
             QSize size = value.toSize();
             result = QString::asprintf("%d %d", size.width(), size.height());
         }
         break;
 
-        case QVariant::Point:
+        case QMetaType::QPoint:
         {
             QPoint point = value.toPoint();
             result = QString::asprintf("%d %d", point.x(), point.y());

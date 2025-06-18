@@ -105,7 +105,7 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
     if (mime_data->hasFormat(computer_group_mime_type_))
     {
         ComputerGroupItem* source_item = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));
-        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->position().toPoint()));
 
         if (isAllowedDropTarget(target_item, source_item))
         {
@@ -117,7 +117,7 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
     }
     else if (mime_data->hasFormat(computer_mime_type_))
     {
-        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->position().toPoint()));
         if (target_item)
         {
             const ComputerMimeData* computer_mime_data =
@@ -157,7 +157,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
         if (computer_group_mime_data)
         {
             ComputerGroupItem* target_group_item =
-                dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+                dynamic_cast<ComputerGroupItem*>(itemAt(event->position().toPoint()));
             if (!target_group_item)
                 return;
 
@@ -195,7 +195,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             ComputerItem* computer_item = computer_mime_data->computerItem();
 
             ComputerGroupItem* target_group_item =
-                dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+                dynamic_cast<ComputerGroupItem*>(itemAt(event->position().toPoint()));
             ComputerGroupItem* source_group_item =
                 computer_item->parentComputerGroupItem();
 

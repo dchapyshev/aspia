@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.21.0)
+cmake_minimum_required(VERSION 4.0.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -60,8 +60,11 @@ endif()
 
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
-find_package(Qt5LinguistTools)
+find_package(Qt6 CONFIG REQUIRED Core Gui Network PrintSupport Sql Widgets Xml LinguistTools)
+find_package(Qt6DeviceDiscoverySupportPrivate CONFIG REQUIRED)
+find_package(Qt6FbSupportPrivate CONFIG REQUIRED)
+find_package(Qt6EntryPointPrivate CONFIG REQUIRED)
+
 find_package(asio CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
@@ -74,7 +77,6 @@ find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 
 if (WIN32)
-    find_package(Qt5WinExtras REQUIRED)
     find_package(WDK REQUIRED)
 endif()
 
@@ -114,5 +116,25 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 enable_testing()
-
 add_subdirectory(source)
+
+file(GLOB TS_FILES_LIST "source/translations/*.ts")
+get_target_property(LUPDATE_PATH Qt::lupdate IMPORTED_LOCATION)
+set(SOURCE_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
+
+add_custom_target(update_translations
+    COMMAND ${LUPDATE_PATH} -I ${SOURCE_FILES_DIR} -extensions ui,cc,cpp,h ${SOURCE_FILES_DIR} -ts ${TS_FILES_LIST}
+    WORKING_DIRECTORY "${SOURCE_FILES_DIR}"
+    SOURCES ${TS_FILES_LIST}
+    VERBATIM
+    COMMAND_EXPAND_LISTS)
+
+qt_add_translation(QM_FILES_LIST ${TS_FILES_LIST})
+
+qt_add_resources(aspia_console "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
+qt_add_resources(aspia_client_core "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
+qt_add_resources(aspia_host_core "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
+
+message(STATUS "Source files: ${SOURCE_FILES_DIR}")
+message(STATUS "TS files: ${TS_FILES_LIST}")
+message(STATUS "QM files: ${QM_FILES_LIST}")

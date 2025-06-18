@@ -172,11 +172,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             if (password != ui.edit_password_repeat->text())
-#else
-            if (password != ui.edit_password_repeat->text().toStdU16String())
-#endif
             {
                 LOG(ERROR) << "Passwords do not match";
                 QMessageBox::warning(this,

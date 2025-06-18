@@ -24,11 +24,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
-if(NOT Qt5LinguistTools_FOUND)
-    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
-    add_definitions(-DI18L_DISABLED)
-endif()
-
 if (WIN32)
     # Target version.
     add_definitions(-DNTDDI_VERSION=0x06010000
@@ -51,34 +46,24 @@ add_definitions(-DASIO_STANDALONE
                 -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING)
 
 # For Qt.
-add_definitions(-DQT_NO_CAST_TO_ASCII
+add_definitions(#-DQT_NO_CAST_FROM_ASCII
+                -DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
 
 set(QT_COMMON_LIBS
-    Qt5::Core
-    Qt5::CorePrivate
-    Qt5::QGenericEnginePlugin
-    Qt5::Gui
-    Qt5::GuiPrivate
-    Qt5::QICOPlugin
-    Qt5::Network
-    Qt5::NetworkPrivate
-    Qt5::PrintSupport
-    Qt5::PrintSupportPrivate
-    Qt5::Widgets
-    Qt5::WidgetsPrivate
-    Qt5::Xml
-    Qt5::XmlPrivate)
+    Qt6::Core Qt6::CorePrivate
+    Qt6::DeviceDiscoverySupportPrivate
+    Qt6::FbSupportPrivate
+    Qt6::Gui Qt6::GuiPrivate Qt6::QICOPlugin
+    Qt6::Network Qt6::NetworkPrivate
+    Qt6::PrintSupport Qt6::PrintSupportPrivate Qt6::PrintSupport_resources_1 Qt6::PrintSupport_resources_2
+    Qt6::Widgets Qt6::WidgetsPrivate Qt6::Widgets_resources_1 Qt6::Widgets_resources_2
+    Qt6::Sql Qt6::SqlPrivate Qt6::QSQLiteDriverPlugin
+    Qt6::Xml Qt6::XmlPrivate)
 
 if (WIN32)
-    set(QT_PLATFORM_LIBS
-        Qt5::WinMain
-        Qt5::WinExtras
-        Qt5::WinExtrasPrivate
-        Qt5::QWindowsIntegrationPlugin
-        Qt5::QWindowsVistaStylePlugin
-        Qt5::QWindowsPrinterSupportPlugin)
+    set(QT_PLATFORM_LIBS Qt6::QWindowsIntegrationPlugin)
 endif()
 
 set(THIRD_PARTY_LIBS

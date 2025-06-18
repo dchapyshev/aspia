@@ -485,11 +485,7 @@ bool DesktopToolBar::isAudioPauseEnabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void DesktopToolBar::enterEvent(QEvent* /* event */)
-#else
 void DesktopToolBar::enterEvent(QEnterEvent* /* event */)
-#endif
 {
     leaved_ = false;
 

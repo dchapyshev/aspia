@@ -17,6 +17,7 @@
 //
 
 #include <QCommandLineParser>
+#include <QIODevice>
 #include <QSysInfo>
 
 #include "base/asio_event_dispatcher.h"

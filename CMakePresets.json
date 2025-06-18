@@ -20,6 +20,10 @@
         "VCPKG_TARGET_TRIPLET": {
           "type": "STRING",
           "value": "$env{VCPKG_TRIPLET}"
+        },
+        "VCPKG_HOST_TRIPLET": {
+          "type": "STRING",
+          "value": "$env{VCPKG_TRIPLET}"
         }
       }
     },
