@@ -101,8 +101,8 @@ MouseCursor* DxgiCursor::mouseCursor()
 
     mouse_cursor_ = std::make_unique<MouseCursor>(
         std::move(image),
-        Size(width, height),
-        Point(pointer_shape_info_.HotSpot.x, pointer_shape_info_.HotSpot.y));
+        QSize(width, height),
+        QPoint(pointer_shape_info_.HotSpot.x, pointer_shape_info_.HotSpot.y));
 
     pointer_shape_.clear();
 
@@ -110,25 +110,25 @@ MouseCursor* DxgiCursor::mouseCursor()
 }
 
 //--------------------------------------------------------------------------------------------------
-Point DxgiCursor::position() const
+QPoint DxgiCursor::position() const
 {
     return pointer_position_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DxgiCursor::setPosition(const Point& pointer_position)
+void DxgiCursor::setPosition(const QPoint& pointer_position)
 {
     pointer_position_ = pointer_position;
 }
 
 //--------------------------------------------------------------------------------------------------
-Point DxgiCursor::nativePosition() const
+QPoint DxgiCursor::nativePosition() const
 {
     return native_pointer_position_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DxgiCursor::setNativePosition(const Point& native_pointer_position)
+void DxgiCursor::setNativePosition(const QPoint& native_pointer_position)
 {
     native_pointer_position_ = native_pointer_position;
 }

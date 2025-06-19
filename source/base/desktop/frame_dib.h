@@ -34,7 +34,7 @@ class FrameDib final : public Frame
 public:
     ~FrameDib() final = default;
 
-    static std::unique_ptr<FrameDib> create(const Size& size,
+    static std::unique_ptr<FrameDib> create(const QSize& size,
                                             const PixelFormat& format,
                                             SharedMemoryFactory* shared_memory_factory,
                                             HDC hdc);
@@ -42,7 +42,7 @@ public:
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    FrameDib(const Size& size,
+    FrameDib(const QSize& size,
              const PixelFormat& format,
              int stride,
              quint8* data,

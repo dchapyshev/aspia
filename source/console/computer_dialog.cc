@@ -18,6 +18,9 @@
 
 #include "console/computer_dialog.h"
 
+#include <QAbstractButton>
+#include <QDateTime>
+
 #include "base/logging.h"
 #include "base/crypto/secure_memory.h"
 #include "client/config_factory.h"
@@ -26,9 +29,6 @@
 #include "console/computer_dialog_parent.h"
 #include "console/computer_dialog_port_forwarding.h"
 #include "console/computer_factory.h"
-
-#include <QAbstractButton>
-#include <QDateTime>
 
 namespace console {
 

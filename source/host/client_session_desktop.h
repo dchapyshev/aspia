@@ -104,9 +104,9 @@ private:
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
     DesktopSession::Config desktop_session_config_;
-    base::Size source_size_;
-    base::Size preferred_size_;
-    base::Size forced_size_;
+    QSize source_size_;
+    QSize preferred_size_;
+    QSize forced_size_;
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 

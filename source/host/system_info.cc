@@ -18,6 +18,11 @@
 
 #include "host/system_info.h"
 
+#include <QProcessEnvironment>
+#include <QStorageInfo>
+
+#include <thread>
+
 #include "base/applications_reader.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
@@ -40,11 +45,6 @@
 #include "base/win/video_adapter_enumerator.h"
 #include "common/system_info_constants.h"
 #include "host/process_monitor.h"
-
-#include <thread>
-
-#include <QProcessEnvironment>
-#include <QStorageInfo>
 
 namespace host {
 

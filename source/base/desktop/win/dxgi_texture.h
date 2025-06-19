@@ -41,7 +41,7 @@ public:
     // Returns false if anything wrong.
     bool copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResource* resource);
 
-    const Size& desktopSize() const { return desktop_size_; }
+    const QSize& desktopSize() const { return desktop_size_; }
     quint8* bits() const { return static_cast<quint8*>(rect_.pBits); }
     int pitch() const { return static_cast<int>(rect_.Pitch); }
 
@@ -66,7 +66,7 @@ protected:
 
 private:
     DXGI_MAPPED_RECT rect_ = { 0 };
-    Size desktop_size_;
+    QSize desktop_size_;
     std::unique_ptr<Frame> frame_;
 };
 

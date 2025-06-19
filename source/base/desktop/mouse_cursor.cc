@@ -38,7 +38,7 @@ static volatile Registrator registrator;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MouseCursor::MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
+MouseCursor::MouseCursor(QByteArray&& image, const QSize& size, const QPoint& hotspot, const QPoint& dpi)
     : image_(std::move(image)),
       size_(size),
       hotspot_(hotspot),
@@ -63,9 +63,9 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
         hotspot_ = other.hotspot_;
         dpi_ = other.dpi_;
 
-        other.size_ = Size();
-        other.hotspot_ = Point();
-        other.dpi_ = Point();
+        other.size_ = QSize();
+        other.hotspot_ = QPoint();
+        other.dpi_ = QPoint();
     }
 
     return *this;
@@ -86,9 +86,7 @@ int MouseCursor::stride() const
 //--------------------------------------------------------------------------------------------------
 bool MouseCursor::equals(const MouseCursor& other)
 {
-    return size_.equals(other.size_) &&
-           hotspot_.equals(other.hotspot_) &&
-           dpi_.equals(other.dpi_) &&
+    return size_ == other.size_ && hotspot_ == other.hotspot_ && dpi_ == other.dpi_ &&
            image_ == other.image_;
 }
 

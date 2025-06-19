@@ -72,7 +72,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
             screen_list->screens.push_back(
-                { max_screen_id, QString(), Point(), Size(), Point(), false });
+                { max_screen_id, QString(), QPoint(), QSize(), QPoint(), false });
         }
         else
         {
@@ -299,7 +299,7 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
     MouseCursor* mouse_cursor = cursor_->mouseCursor();
     if (mouse_cursor)
     {
-        Point position = cursor_->nativePosition();
+        QPoint position = cursor_->nativePosition();
 
         for (const auto& item : std::as_const(dpi_for_rect_))
         {
@@ -307,7 +307,7 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
 
             if (rect.contains(position))
             {
-                const Point& dpi = item.second;
+                const QPoint& dpi = item.second;
                 mouse_cursor->dpi() = dpi;
             }
         }
@@ -317,7 +317,7 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
 }
 
 //--------------------------------------------------------------------------------------------------
-Point ScreenCapturerDxgi::cursorPosition()
+QPoint ScreenCapturerDxgi::cursorPosition()
 {
     return cursor_->position();
 }

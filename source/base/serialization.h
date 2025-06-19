@@ -20,8 +20,10 @@
 #define BASE_SERIALIZATION_H
 
 #include <QByteArray>
+#include <QRect>
 #include <QVersionNumber>
 
+#include "proto/desktop.h"
 #include "proto/peer.h"
 
 #include <google/protobuf/message_lite.h>
@@ -38,6 +40,15 @@ bool parse(const QByteArray& buffer, T* message)
 
 proto::peer::Version serialize(const QVersionNumber& version);
 QVersionNumber parse(const proto::peer::Version& version);
+
+proto::desktop::Rect serialize(const QRect& rect);
+QRect parse(const proto::desktop::Rect& rect);
+
+proto::desktop::Point serialize(const QPoint& point);
+QPoint parse(const proto::desktop::Point& point);
+
+proto::desktop::Size serialize(const QSize& size);
+QSize parse(const proto::desktop::Size& size);
 
 class SerializerImpl
 {

@@ -38,13 +38,13 @@ ScaleReducer::~ScaleReducer()
 }
 
 //--------------------------------------------------------------------------------------------------
-const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& target_size)
+const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& target_size)
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
     DCHECK(source_frame->format() == PixelFormat::ARGB());
 
-    const Size& source_size = source_frame->size();
+    const QSize& source_size = source_frame->size();
     if (source_size.width() == 0 || source_size.height() == 0)
     {
         LOG(ERROR) << "Invalid source frame size:" << source_size;

@@ -19,7 +19,8 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_H
 #define BASE_CODEC_VIDEO_ENCODER_H
 
-#include "base/desktop/geometry.h"
+#include <QSize>
+
 #include "proto/desktop.h"
 
 namespace base {
@@ -48,7 +49,7 @@ protected:
 
 private:
     const proto::desktop::VideoEncoding encoding_;
-    Size last_size_;
+    QSize last_size_;
     bool key_frame_required_ = false;
     std::string encode_buffer_;
 };

@@ -18,9 +18,6 @@
 
 #include "host/ui/notifier_window.h"
 
-#include "base/logging.h"
-#include "build/build_config.h"
-
 #include <QHideEvent>
 #include <QMenu>
 #include <QMouseEvent>
@@ -28,6 +25,8 @@
 #include <QTimer>
 #include <QTranslator>
 #include <QToolButton>
+
+#include "base/logging.h"
 
 namespace host {
 

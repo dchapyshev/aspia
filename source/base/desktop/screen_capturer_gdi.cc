@@ -186,7 +186,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
         }
     }
 
-    current->setTopLeft(screen_rect_.topLeft().subtract(desktop_dc_rect_.topLeft()));
+    current->setTopLeft(screen_rect_.topLeft() - desktop_dc_rect_.topLeft());
 
     if (!previous || previous->size() != current->size())
     {
@@ -241,7 +241,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
                 int dpi_x = GetDeviceCaps(desktop_dc_, LOGPIXELSX);
                 int dpi_y = GetDeviceCaps(desktop_dc_, LOGPIXELSY);
 
-                mouse_cursor_->dpi() = Point(dpi_x, dpi_y);
+                mouse_cursor_->dpi() = QPoint(dpi_x, dpi_y);
                 return mouse_cursor_.get();
             }
         }
@@ -255,14 +255,14 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
 }
 
 //--------------------------------------------------------------------------------------------------
-Point ScreenCapturerGdi::cursorPosition()
+QPoint ScreenCapturerGdi::cursorPosition()
 {
-    Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
+    QPoint cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
 
     if (current_screen_id_ == kFullDesktopScreenId)
-        cursor_pos = cursor_pos.subtract(desktop_dc_rect_.topLeft());
+        cursor_pos = cursor_pos - desktop_dc_rect_.topLeft();
     else
-        cursor_pos = cursor_pos.subtract(screen_rect_.topLeft());
+        cursor_pos = cursor_pos - screen_rect_.topLeft();
 
     return cursor_pos;
 }

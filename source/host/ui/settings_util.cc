@@ -18,14 +18,14 @@
 
 #include "host/ui/settings_util.h"
 
-#include "base/logging.h"
-#include "base/xml_settings.h"
-#include "host/system_settings.h"
-
 #include <QAbstractButton>
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
+
+#include "base/logging.h"
+#include "base/xml_settings.h"
+#include "host/system_settings.h"
 
 namespace host {
 

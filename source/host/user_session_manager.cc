@@ -18,6 +18,9 @@
 
 #include "host/user_session_manager.h"
 
+#include <QCoreApplication>
+#include <QDir>
+
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
@@ -30,9 +33,6 @@
 #include "base/win/session_info.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QCoreApplication>
-#include <QDir>
 
 namespace host {
 

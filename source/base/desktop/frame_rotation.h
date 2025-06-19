@@ -42,18 +42,18 @@ enum class Rotation
 void rotateDesktopFrame(const Frame& source,
                         const Rect& source_rect,
                         const Rotation& rotation,
-                        const Point& target_offset,
+                        const QPoint& target_offset,
                         Frame* target);
 
 // Returns a reverse rotation of |rotation|.
 Rotation reverseRotation(Rotation rotation);
 
 // Returns a rotated Size of |size|.
-Size rotateSize(const Size& size, Rotation rotation);
+QSize rotateSize(const QSize& size, Rotation rotation);
 
 // Returns a rotated Rect of |rect|. The |size| represents the size of the Frame which |rect|
 // belongs in.
-Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation);
+Rect rotateRect(const Rect& rect, const QSize& size, Rotation rotation);
 
 } // namespace base
 

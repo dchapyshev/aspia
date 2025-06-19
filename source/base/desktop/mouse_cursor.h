@@ -20,8 +20,9 @@
 #define BASE_DESKTOP_MOUSE_CURSOR_H
 
 #include <QByteArray>
-
-#include "base/desktop/geometry.h"
+#include <QMetaType>
+#include <QPoint>
+#include <QSize>
 
 namespace base {
 
@@ -34,8 +35,8 @@ public:
     static const int kDefaultDpiY = 96;
 
     MouseCursor() = default;
-    MouseCursor(QByteArray&& image, const Size& size, const Point& hotspot,
-                const Point& dpi = Point(kDefaultDpiX, kDefaultDpiY));
+    MouseCursor(QByteArray&& image, const QSize& size, const QPoint& hotspot,
+                const QPoint& dpi = QPoint(kDefaultDpiX, kDefaultDpiY));
 
     MouseCursor(MouseCursor&& other) noexcept;
     MouseCursor& operator=(MouseCursor&& other) noexcept;
@@ -47,16 +48,16 @@ public:
 
     bool isValid() const;
 
-    const Size& size() const { return size_; }
+    const QSize& size() const { return size_; }
     int width() const { return size_.width(); }
     int height() const { return size_.height(); }
 
-    const Point& hotSpot() const { return hotspot_; }
+    const QPoint& hotSpot() const { return hotspot_; }
     int hotSpotX() const { return hotspot_.x(); }
     int hotSpotY() const { return hotspot_.y(); }
 
-    const Point& constDpi() const { return dpi_; }
-    Point& dpi() { return dpi_; }
+    const QPoint& constDpi() const { return dpi_; }
+    QPoint& dpi() { return dpi_; }
 
     const QByteArray& constImage() const { return image_; }
     QByteArray& image() { return image_; }
@@ -67,9 +68,9 @@ public:
 
 private:
     QByteArray image_;
-    Size size_;
-    Point hotspot_;
-    Point dpi_;
+    QSize size_;
+    QPoint hotspot_;
+    QPoint dpi_;
 };
 
 } // namespace base

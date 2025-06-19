@@ -24,7 +24,6 @@
 
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
-#include "proto/desktop.h"
 #include "proto/peer.h"
 #include "proto/text_chat.h"
 

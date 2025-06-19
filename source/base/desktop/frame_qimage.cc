@@ -24,11 +24,7 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(Size(img.size().width(), img.size().height()),
-            PixelFormat::ARGB(),
-            img.bytesPerLine(),
-            img.bits(),
-            nullptr),
+    : Frame(QSize(img.size()), PixelFormat::ARGB(), img.bytesPerLine(), img.bits(), nullptr),
       image_(std::move(img))
 {
     // Nothing
@@ -36,7 +32,7 @@ FrameQImage::FrameQImage(QImage&& img)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameQImage> FrameQImage::create(const Size& size)
+std::unique_ptr<FrameQImage> FrameQImage::create(const QSize& size)
 {
     if (size.isEmpty())
         return nullptr;

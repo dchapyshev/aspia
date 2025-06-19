@@ -265,9 +265,9 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     alphaMul(reinterpret_cast<quint32*>(image.data()), width, height);
 
     return new MouseCursor(std::move(image),
-                           Size(width, height),
-                           Point(static_cast<int>(icon_info.xHotspot),
-                                 static_cast<int>(icon_info.yHotspot)));
+                           QSize(width, height),
+                           QPoint(static_cast<int>(icon_info.xHotspot),
+                                  static_cast<int>(icon_info.yHotspot)));
 }
 
 } // namespace base

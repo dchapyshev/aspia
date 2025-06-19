@@ -213,7 +213,7 @@ bool DxgiOutputDuplicator::releaseFrame()
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::duplicate(
-    Context* context, const Point& offset, SharedPointer<Frame>& target, DxgiCursor* cursor)
+    Context* context, const QPoint& offset, SharedPointer<Frame>& target, DxgiCursor* cursor)
 {
     DCHECK(duplication_);
     DCHECK(texture_);
@@ -274,8 +274,8 @@ bool DxgiOutputDuplicator::duplicate(
             int pos_y = frame_info.PointerPosition.Position.y + shape_info->HotSpot.y + offset.y();
 
             cursor->setNativePosition(
-                Point(pos_x + initial_desktop_rect_.x(), pos_y + initial_desktop_rect_.y()));
-            cursor->setPosition(Point(pos_x, pos_y));
+                QPoint(pos_x + initial_desktop_rect_.x(), pos_y + initial_desktop_rect_.y()));
+            cursor->setPosition(QPoint(pos_x, pos_y));
         }
     }
 
@@ -370,7 +370,7 @@ bool DxgiOutputDuplicator::duplicate(
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect DxgiOutputDuplicator::translatedDesktopRect(const Point& offset) const
+Rect DxgiOutputDuplicator::translatedDesktopRect(const QPoint& offset) const
 {
     Rect result(Rect::makeSize(desktopSize()));
     result.translate(offset);
@@ -530,7 +530,7 @@ void DxgiOutputDuplicator::spreadContextChange(const Context* const source)
 }
 
 //--------------------------------------------------------------------------------------------------
-Size DxgiOutputDuplicator::desktopSize() const
+QSize DxgiOutputDuplicator::desktopSize() const
 {
     return desktop_rect_.size();
 }
@@ -545,7 +545,7 @@ qint64 DxgiOutputDuplicator::numFramesCaptured() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void DxgiOutputDuplicator::translateRect(const Point& position)
+void DxgiOutputDuplicator::translateRect(const QPoint& position)
 {
     desktop_rect_.translate(position);
     DCHECK_GE(desktop_rect_.left(), 0);

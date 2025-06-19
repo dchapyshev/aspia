@@ -22,7 +22,6 @@
 #include <QPointer>
 
 #include "base/serialization.h"
-#include "base/desktop/geometry.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
 #include "client/input_event_filter.h"
@@ -112,7 +111,7 @@ signals:
     void sig_taskManager(const proto::task_manager::HostToClient& message);
     void sig_metrics(const client::ClientDesktop::Metrics& metrics);
     void sig_frameError(proto::desktop::VideoErrorCode error_code);
-    void sig_frameChanged(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
+    void sig_frameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
 

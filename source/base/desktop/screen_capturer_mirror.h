@@ -44,7 +44,7 @@ public:
     ScreenId currentScreen() const final;
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
-    Point cursorPosition() final;
+    QPoint cursorPosition() final;
 
 protected:
     // ScreenCapturer implementation.

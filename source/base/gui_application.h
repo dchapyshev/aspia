@@ -42,7 +42,6 @@ public:
     virtual ~GuiApplication() override;
 
     static GuiApplication* instance();
-
     static QThread* ioThread();
 
     bool isRunning();

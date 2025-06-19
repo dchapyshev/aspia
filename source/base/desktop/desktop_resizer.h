@@ -20,7 +20,6 @@
 #define BASE_DESKTOP_DESKTOP_RESIZER_H
 
 #include "base/desktop/screen_capturer.h"
-#include "base/desktop/geometry.h"
 
 #include <memory>
 
@@ -36,8 +35,8 @@ public:
     // Create a platform-specific DesktopResizer instance.
     static std::unique_ptr<DesktopResizer> create();
 
-    virtual QList<Size> supportedResolutions(ScreenId screen_id) = 0;
-    virtual bool setResolution(ScreenId screen_id, const Size& resolution) = 0;
+    virtual QList<QSize> supportedResolutions(ScreenId screen_id) = 0;
+    virtual bool setResolution(ScreenId screen_id, const QSize& resolution) = 0;
     virtual void restoreResolution(ScreenId screen_id) = 0;
     virtual void restoreResulution() = 0;
 };

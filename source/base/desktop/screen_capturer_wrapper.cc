@@ -55,7 +55,7 @@ ScreenCapturerWrapper::~ScreenCapturerWrapper()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution)
+void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution)
 {
     if (!screen_capturer_)
     {
@@ -159,7 +159,7 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
         resizer_ = DesktopResizer::create();
 
         screen_count_ = count;
-        selectScreen(defaultScreen(), Size());
+        selectScreen(defaultScreen(), QSize());
     }
 
     ScreenCapturer::Error error;
@@ -185,10 +185,10 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
 
     if (enable_cursor_position_)
     {
-        Point cursor_pos = screen_capturer_->cursorPosition();
+        QPoint cursor_pos = screen_capturer_->cursorPosition();
 
-        qint32 delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
-        qint32 delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+        int delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+        int delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
 
         if (delta_x > 1 || delta_y > 1)
         {
@@ -329,7 +329,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
     {
         LOG(INFO) << "Restore selected screen:" << last_screen_id_;
-        selectScreen(last_screen_id_, Size());
+        selectScreen(last_screen_id_, QSize());
     }
 }
 

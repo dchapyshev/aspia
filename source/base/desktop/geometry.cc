@@ -24,64 +24,6 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-// static
-Point Point::fromQPoint(const QPoint& point)
-{
-    return Point(point.x(), point.y());
-}
-
-//--------------------------------------------------------------------------------------------------
-QPoint Point::toQPoint()
-{
-    return QPoint(x_, y_);
-}
-
-//--------------------------------------------------------------------------------------------------
-Point& Point::operator=(const Point& other)
-{
-    if (&other != this)
-        set(other.x_, other.y_);
-    return *this;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-Size Size::fromQSize(const QSize& size)
-{
-    return Size(size.width(), size.height());
-}
-
-//--------------------------------------------------------------------------------------------------
-QSize Size::toQSize()
-{
-    return QSize(width_, height_);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-Size Size::fromProto(const proto::desktop::Size& size)
-{
-    return Size(size.width(), size.height());
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::desktop::Size Size::toProto()
-{
-    proto::desktop::Size size;
-    size.set_width(width_);
-    size.set_height(height_);
-    return size;
-}
-
-//--------------------------------------------------------------------------------------------------
-Size& Size::operator=(const Size& other)
-{
-    if (&other != this)
-        set(other.width_, other.height_);
-    return *this;
-}
-
-//--------------------------------------------------------------------------------------------------
 Rect::Rect(const Rect& other)
     : left_(other.left_),
       top_(other.top_),
@@ -92,14 +34,14 @@ Rect::Rect(const Rect& other)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Rect::setTopLeft(const Point& top_left)
+void Rect::setTopLeft(const QPoint& top_left)
 {
     left_ = top_left.x();
     top_ = top_left.y();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Rect::setSize(const Size& size)
+void Rect::setSize(const QSize& size)
 {
     right_ = left_ + size.width();
     bottom_ = top_ + size.height();
@@ -112,7 +54,7 @@ bool Rect::contains(qint32 x, qint32 y) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Rect::contains(const Point& pos) const
+bool Rect::contains(const QPoint& pos) const
 {
     return contains(pos.x(), pos.y());
 }
@@ -258,18 +200,6 @@ Rect& Rect::operator=(const Rect& other)
 QDebug operator<<(QDebug stream, const Rect& rect)
 {
     return stream << "Rect(" << rect.left() << rect.top() << rect.right() << rect.bottom() << ')';
-}
-
-//--------------------------------------------------------------------------------------------------
-QDebug operator<<(QDebug stream, const Point& point)
-{
-    return stream << "Point(" << point.x() << point.y() << ')';
-}
-
-//--------------------------------------------------------------------------------------------------
-QDebug operator<<(QDebug stream, const Size& size)
-{
-    return stream << "Size(" << size.width() << size.height() << ')';
 }
 
 } // namespace base

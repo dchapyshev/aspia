@@ -64,7 +64,7 @@ public:
     // this function copies the content to the rectangle of (offset.x(), offset.y()) to
     // (offset.x() + desktop_rect_.width(), offset.y() + desktop_rect_.height()).
     // Returns false in case of a failure.
-    bool duplicate(Context* context, const Point& offset, SharedPointer<Frame>& target_frame, DxgiCursor* cursor);
+    bool duplicate(Context* context, const QPoint& offset, SharedPointer<Frame>& target_frame, DxgiCursor* cursor);
 
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
     const Rect& desktopRect() const { return desktop_rect_; }
@@ -80,7 +80,7 @@ public:
     qint64 numFramesCaptured() const;
 
     // Moves |desktop_rect_|. See DxgiDuplicatorController::translateRect().
-    void translateRect(const Point& position);
+    void translateRect(const QPoint& position);
 
 private:
     // Calls doDetectUpdatedRegion(). If it fails, this function sets the |updated_region| as
@@ -98,7 +98,7 @@ private:
     bool duplicateOutput();
 
     // Returns a Rect with the same size of desktopSize(), but translated by offset.
-    Rect translatedDesktopRect(const Point& offset) const;
+    Rect translatedDesktopRect(const QPoint& offset) const;
 
     // Returns a Rect with the same size of desktopSize(), but starts from (0, 0).
     Rect untranslatedDesktopRect() const;
@@ -107,7 +107,7 @@ private:
     void spreadContextChange(const Context* const context);
 
     // Returns the size of desktop rectangle current instance representing.
-    Size desktopSize() const;
+    QSize desktopSize() const;
 
     const D3dDevice device_;
     const Microsoft::WRL::ComPtr<IDXGIOutput1> output_;
@@ -119,7 +119,7 @@ private:
     QVector<quint8> metadata_;
     std::unique_ptr<DxgiTexture> texture_;
     Rotation rotation_ = Rotation::CLOCK_WISE_0;
-    Size unrotated_size_;
+    QSize unrotated_size_;
 
     // After each AcquireNextFrame() function call, updated_region_(s) of all active Context(s)
     // need to be updated. Since they have missed the change this time. And during next duplicate()
@@ -129,7 +129,7 @@ private:
     // The last full frame of this output and its offset. If on AcquireNextFrame() failed because
     // of timeout, i.e. no update, we can copy content from |last_frame_|.
     SharedPointer<Frame> last_frame_;
-    Point last_frame_offset_;
+    QPoint last_frame_offset_;
 
     qint64 num_frames_captured_ = 0;
     Desktop desktop_;

@@ -188,7 +188,7 @@ bool DxgiAdapterDuplicator::duplicateMonitor(
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
     return duplicators_[static_cast<size_t>(monitor_id)].duplicate(
-        &context->contexts[static_cast<size_t>(monitor_id)], Point(), target, cursor);
+        &context->contexts[static_cast<size_t>(monitor_id)], QPoint(), target, cursor);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -227,7 +227,7 @@ qint64 DxgiAdapterDuplicator::numFramesCaptured() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void DxgiAdapterDuplicator::translateRect(const Point& position)
+void DxgiAdapterDuplicator::translateRect(const QPoint& position)
 {
     desktop_rect_.translate(position);
 

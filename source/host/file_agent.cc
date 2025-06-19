@@ -18,10 +18,10 @@
 
 #include "host/file_agent.h"
 
+#include <QCoreApplication>
+
 #include "base/logging.h"
 #include "base/serialization.h"
-
-#include <QCoreApplication>
 
 namespace host {
 

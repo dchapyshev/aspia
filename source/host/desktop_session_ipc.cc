@@ -249,7 +249,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         if (shared_buffer)
         {
             last_frame_.attach(
-                base::Size(serialized_frame.width(), serialized_frame.height()),
+                QSize(serialized_frame.width(), serialized_frame.height()),
                 base::PixelFormat::ARGB(),
                 std::move(shared_buffer));
 
@@ -273,12 +273,9 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         const proto::internal::MouseCursor& serialized_mouse_cursor =
             screen_captured.mouse_cursor();
 
-        base::Size size =
-            base::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
-        base::Point hotspot =
-            base::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
-        base::Point dpi =
-            base::Point(serialized_mouse_cursor.dpi_x(), serialized_mouse_cursor.dpi_y());
+        QSize size = QSize(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
+        QPoint hotspot = QPoint(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+        QPoint dpi = QPoint(serialized_mouse_cursor.dpi_x(), serialized_mouse_cursor.dpi_y());
 
         last_mouse_cursor_ = base::MouseCursor(
             QByteArray::fromStdString(serialized_mouse_cursor.data()), size, hotspot, dpi);

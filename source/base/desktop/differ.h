@@ -29,7 +29,7 @@ namespace base {
 class Differ
 {
 public:
-    explicit Differ(const Size& size);
+    explicit Differ(const QSize& size);
     ~Differ() = default;
 
     void calcDirtyRegion(const quint8* prev_image,

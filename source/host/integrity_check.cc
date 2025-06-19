@@ -18,10 +18,10 @@
 
 #include "host/integrity_check.h"
 
-#include "base/logging.h"
-
 #include <QCoreApplication>
 #include <QFileInfo>
+
+#include "base/logging.h"
 
 namespace host {
 

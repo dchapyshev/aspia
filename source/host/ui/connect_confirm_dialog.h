@@ -43,7 +43,7 @@ private:
     void updateMessage();
 
     Ui::ConnectConfirmDialog ui;
-    QTimer* timer_;
+    QTimer* timer_ = nullptr;
 
     QString message_;
     QString question_;

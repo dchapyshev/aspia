@@ -27,6 +27,16 @@ namespace base {
 
 namespace {
 
+struct QSizeLess
+{
+    bool operator()(const QSize &a, const QSize &b) const
+    {
+        if (a.width() != b.width())
+            return a.width() < b.width();
+        return a.height() < b.height();
+    }
+};
+
 //--------------------------------------------------------------------------------------------------
 bool isModeValid(const DEVMODEW& mode)
 {
@@ -38,23 +48,13 @@ bool isModeValid(const DEVMODEW& mode)
 }
 
 //--------------------------------------------------------------------------------------------------
-Size resolutionFromMode(const DEVMODEW& mode)
+QSize resolutionFromMode(const DEVMODEW& mode)
 {
     DCHECK(isModeValid(mode));
-    return Size(static_cast<qint32>(mode.dmPelsWidth), static_cast<qint32>(mode.dmPelsHeight));
+    return QSize(static_cast<int>(mode.dmPelsWidth), static_cast<int>(mode.dmPelsHeight));
 }
 
 } // namespace
-
-//--------------------------------------------------------------------------------------------------
-// Provide comparison operation for base::Size so we can use it in std::map.
-static inline bool operator<(const Size& a, const Size& b)
-{
-    if (a.width() != b.width())
-        return a.width() < b.width();
-
-    return a.height() < b.height();
-}
 
 class DesktopResizerWin::Screen
 {
@@ -62,18 +62,18 @@ public:
     explicit Screen(ScreenId screen_id);
     ~Screen() = default;
 
-    QList<Size> supportedResolutions() const;
-    bool setResolution(const Size& resolution);
+    QList<QSize> supportedResolutions() const;
+    bool setResolution(const QSize& resolution);
     void restoreResolution();
 
 private:
-    bool modeForResolution(const Size& resolution, DEVMODEW* mode);
+    bool modeForResolution(const QSize& resolution, DEVMODEW* mode);
     void updateBestModeForResolution(const DEVMODEW& current_mode, const DEVMODEW& candidate_mode);
 
     ScreenId screen_id_;
     QString name_;
-    Size current_resolution_;
-    QMap<Size, DEVMODEW> best_mode_;
+    QSize current_resolution_;
+    std::map<QSize, DEVMODEW, QSizeLess> best_mode_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -99,8 +99,8 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     }
 
     name_ = QString::fromWCharArray(device.DeviceName);
-    current_resolution_.set(static_cast<qint32>(current_mode.dmPelsWidth),
-                            static_cast<qint32>(current_mode.dmPelsHeight));
+    current_resolution_ = QSize(static_cast<int>(current_mode.dmPelsWidth),
+                                static_cast<int>(current_mode.dmPelsHeight));
 
     for (DWORD i = 0; ; ++i)
     {
@@ -116,18 +116,18 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Size> DesktopResizerWin::Screen::supportedResolutions() const
+QList<QSize> DesktopResizerWin::Screen::supportedResolutions() const
 {
-    QList<Size> result;
+    QList<QSize> result;
 
     for (auto it = best_mode_.begin(), it_end = best_mode_.end(); it != it_end; ++it)
-        result.push_back(it.key());
+        result.push_back(it->first);
 
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
+bool DesktopResizerWin::Screen::setResolution(const QSize& resolution)
 {
     if (current_resolution_ == resolution)
     {
@@ -165,7 +165,7 @@ void DesktopResizerWin::Screen::restoreResolution()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMODEW* mode)
+bool DesktopResizerWin::Screen::modeForResolution(const QSize& resolution, DEVMODEW* mode)
 {
     DCHECK(mode);
 
@@ -173,7 +173,7 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
     if (result == best_mode_.end())
         return false;
 
-    *mode = result.value();
+    *mode = result->second;
     return true;
 }
 
@@ -199,9 +199,10 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
         return;
     }
 
-    Size candidate_resolution = resolutionFromMode(candidate_mode);
     if (!candidate_mode.dmPelsWidth || !candidate_mode.dmPelsHeight)
         return;
+
+    QSize candidate_resolution = resolutionFromMode(candidate_mode);
 
     if (best_mode_.count(candidate_resolution) != 0)
     {
@@ -258,7 +259,7 @@ DesktopResizerWin::~DesktopResizerWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
+QList<QSize> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
@@ -271,7 +272,7 @@ QList<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution)
+bool DesktopResizerWin::setResolution(ScreenId screen_id, const QSize& resolution)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())

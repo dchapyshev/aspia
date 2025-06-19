@@ -404,7 +404,7 @@ qint64 DxgiDuplicatorController::numFramesCaptured() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Size DxgiDuplicatorController::desktopSize() const
+QSize DxgiDuplicatorController::desktopSize() const
 {
     return desktop_rect_.size();
 }
@@ -437,7 +437,7 @@ int DxgiDuplicatorController::doScreenCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Size DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
+QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
     if (monitor_id < 0)
         return desktopSize();
@@ -515,7 +515,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 //--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::translateRect()
 {
-    const Point position = Point().subtract(desktop_rect_.topLeft());
+    const QPoint position = QPoint(0, 0) - desktop_rect_.topLeft();
 
     desktop_rect_.translate(position);
 

@@ -34,11 +34,11 @@ public:
 
     MouseCursor* mouseCursor();
 
-    Point position() const;
-    void setPosition(const Point& pointer_position);
+    QPoint position() const;
+    void setPosition(const QPoint& pointer_position);
 
-    Point nativePosition() const;
-    void setNativePosition(const Point& native_pointer_position);
+    QPoint nativePosition() const;
+    void setNativePosition(const QPoint& native_pointer_position);
 
     bool isVisible() const;
     void setVisible(bool visible);
@@ -49,8 +49,8 @@ public:
 private:
     DXGI_OUTDUPL_POINTER_SHAPE_INFO pointer_shape_info_;
     QByteArray pointer_shape_;
-    Point pointer_position_;
-    Point native_pointer_position_;
+    QPoint pointer_position_;
+    QPoint native_pointer_position_;
     bool is_visible_ = false;
 
     std::unique_ptr<MouseCursor> mouse_cursor_;

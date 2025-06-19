@@ -33,7 +33,7 @@ public:
     ScaleReducer();
     ~ScaleReducer();
 
-    const Frame* scaleFrame(const Frame* source_frame, const Size& target_size);
+    const Frame* scaleFrame(const Frame* source_frame, const QSize& target_size);
 
     double scaleFactorX() const { return scale_x_; }
     double scaleFactorY() const { return scale_y_; }
@@ -42,8 +42,8 @@ private:
     Rect scaledRect(const Rect& source_rect);
 
     std::unique_ptr<Frame> target_frame_;
-    Size source_size_;
-    Size target_size_;
+    QSize source_size_;
+    QSize target_size_;
     double scale_x_ = 0;
     double scale_y_ = 0;
 

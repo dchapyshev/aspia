@@ -18,20 +18,20 @@
 
 #include "host/desktop_session_process.h"
 
-#include "base/logging.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_impersonator.h"
-#include <UserEnv.h>
-#endif // defined(Q_OS_WINDOWS)
+#include <QCoreApplication>
+#include <QDir>
 
 #if defined(Q_OS_LINUX)
 #include <signal.h>
 #include <spawn.h>
 #endif // defined(Q_OS_LINUX)
 
-#include <QCoreApplication>
-#include <QDir>
+#include "base/logging.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "base/win/scoped_impersonator.h"
+#include <UserEnv.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 

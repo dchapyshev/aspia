@@ -23,6 +23,7 @@
 
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_encoder.h"
+#include "base/desktop/geometry.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -48,9 +49,9 @@ public:
 private:
     explicit VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
 
-    void createActiveMap(const Size& size);
-    bool createVp8Codec(const Size& size);
-    bool createVp9Codec(const Size& size);
+    void createActiveMap(const QSize& size);
+    bool createVp8Codec(const QSize& size);
+    bool createVp9Codec(const QSize& size);
     void prepareImageAndActiveMap(
         bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet);
     void addRectToActiveMap(const Rect& rect);

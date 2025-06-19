@@ -48,7 +48,7 @@ private:
     void createImage();
     bool createCodec();
 
-    Size last_frame_size_;
+    QSize last_frame_size_;
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;

@@ -506,8 +506,8 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     if (packet.has_format())
     {
         const proto::desktop::VideoPacketFormat& format = packet.format();
-        base::Size video_size(format.video_rect().width(), format.video_rect().height());
-        base::Size screen_size = video_size;
+        QSize video_size = QSize(format.video_rect().width(), format.video_rect().height());
+        QSize screen_size = video_size;
 
         static const int kMaxValue = std::numeric_limits<quint16>::max();
 
@@ -520,8 +520,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
         if (format.has_screen_size())
         {
-            screen_size = base::Size(
-                format.screen_size().width(), format.screen_size().height());
+            screen_size = base::parse(format.screen_size());
 
             if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
                 screen_size.height() <= 0 || screen_size.height() >= kMaxValue)

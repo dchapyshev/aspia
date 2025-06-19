@@ -42,15 +42,15 @@ public:
     void invalidateRegion(const Region& invalid_region);
 
     // Invalidate the entire screen, of a given size.
-    void invalidateScreen(const Size& size);
+    void invalidateScreen(const QSize& size);
 
     // Copies current invalid region to |invalid_region| clears invalid region storage for the next
     // frame.
     void takeInvalidRegion(Region* invalid_region);
 
     // Access the size of the most recently captured screen.
-    const Size& sizeMostRecent() const;
-    void setSizeMostRecent(const Size& size);
+    const QSize& sizeMostRecent() const;
+    void setSizeMostRecent(const QSize& size);
 
     // Lossy compression can result in color values leaking between pixels in one block. If part of
     // a block changes, then unchanged parts of that block can be changed in the compressed output.
@@ -76,7 +76,7 @@ private:
     std::mutex invalid_region_mutex_;
 
     // The size of the most recently captured screen.
-    Size size_most_recent_;
+    QSize size_most_recent_;
 
     // The log (base 2) of the size of the grid to which the invalid region is expanded.
     // If the value is <= 0, then the invalid region is not expanded to a grid.

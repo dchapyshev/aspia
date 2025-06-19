@@ -21,7 +21,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, quint8* data)
+FrameSimple::FrameSimple(const QSize& size, const PixelFormat& format, quint8* data)
     : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
@@ -35,7 +35,7 @@ FrameSimple::~FrameSimple()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
+std::unique_ptr<FrameSimple> FrameSimple::create(const QSize& size, const PixelFormat& format)
 {
     quint8* data = reinterpret_cast<quint8*>(malloc(calcMemorySize(size, format.bytesPerPixel())));
     if (!data)

@@ -60,7 +60,7 @@ private slots:
     void onSharedMemoryDestroy(int id);
     void onScreenListChanged(
         const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
-    void onCursorPositionChanged(const base::Point& position);
+    void onCursorPositionChanged(const QPoint& position);
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);

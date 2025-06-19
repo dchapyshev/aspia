@@ -150,7 +150,7 @@ private:
     qint64 numFramesCaptured() const;
 
     // Returns a Size to cover entire |desktop_rect_|.
-    Size desktopSize() const;
+    QSize desktopSize() const;
 
     // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
     // capturer, or |id| is greater than the total screen count of all the Duplicators, this
@@ -161,7 +161,7 @@ private:
 
     // Returns the desktop size of the selected screen |monitor_id|. Setting |monitor_id| < 0 to
     // return the entire screen size.
-    Size selectedDesktopSize(int monitor_id) const;
+    QSize selectedDesktopSize(int monitor_id) const;
 
     // Retries doDuplicateAll() for several times until numFramesCaptured() is large enough.
     // Returns false if doDuplicateAll() returns false, or numFramesCaptured() has never reached

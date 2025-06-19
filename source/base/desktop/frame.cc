@@ -45,7 +45,7 @@ static volatile Registrator registrator;
 const float Frame::kStandardDPI = 96.0;
 
 //--------------------------------------------------------------------------------------------------
-Frame::Frame(const Size& size,
+Frame::Frame(const QSize& size,
              const PixelFormat& format,
              int stride,
              quint8* data,
@@ -83,7 +83,7 @@ void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect&
 }
 
 //--------------------------------------------------------------------------------------------------
-void Frame::copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect)
+void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const Rect& dest_rect)
 {
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
 }
@@ -108,8 +108,8 @@ Rect Frame::rect() const
 {
     const float scale = scaleFactor();
 
-    const Point& frame_top_left = topLeft();
-    const Size& frame_size = size();
+    const QPoint& frame_top_left = topLeft();
+    const QSize& frame_size = size();
 
     // Only scale the size.
     return Rect::makeXYWH(frame_top_left.x(),
@@ -119,7 +119,7 @@ Rect Frame::rect() const
 }
 
 //--------------------------------------------------------------------------------------------------
-quint8* Frame::frameDataAtPos(const Point& pos) const
+quint8* Frame::frameDataAtPos(const QPoint& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
 }
@@ -141,7 +141,7 @@ void Frame::copyFrameInfoFrom(const Frame& other)
 
 //--------------------------------------------------------------------------------------------------
 // static
-size_t Frame::calcMemorySize(const Size& size, int bytes_per_pixel)
+size_t Frame::calcMemorySize(const QSize& size, int bytes_per_pixel)
 {
     return static_cast<size_t>(
         ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * bytes_per_pixel);

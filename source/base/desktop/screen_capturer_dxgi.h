@@ -50,7 +50,7 @@ public:
     ScreenId currentScreen() const final;
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
-    Point cursorPosition() final;
+    QPoint cursorPosition() final;
 
 protected:
     // ScreenCapturer implementation.
@@ -63,7 +63,7 @@ private:
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     FrameQueue<DxgiFrame> queue_;
     std::unique_ptr<DxgiCursor> cursor_;
-    QVector<std::pair<Rect, Point>> dpi_for_rect_;
+    QVector<std::pair<Rect, QPoint>> dpi_for_rect_;
     int temporary_error_count_ = 0;
 
     Q_DISABLE_COPY(ScreenCapturerDxgi)

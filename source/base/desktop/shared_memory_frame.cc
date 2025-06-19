@@ -26,13 +26,13 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 SharedMemoryFrame::SharedMemoryFrame()
-    : Frame(Size(), PixelFormat(), 0, nullptr, nullptr)
+    : Frame(QSize(), PixelFormat(), 0, nullptr, nullptr)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-SharedMemoryFrame::SharedMemoryFrame(const Size& size,
+SharedMemoryFrame::SharedMemoryFrame(const QSize& size,
                                      const PixelFormat& format,
                                      SharedPointer<SharedMemory> shared_memory)
     : Frame(size, format, size.width() * format.bytesPerPixel(),
@@ -48,7 +48,7 @@ SharedMemoryFrame::~SharedMemoryFrame() = default;
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::create(
-    const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory)
+    const QSize& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory)
 {
     const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
 
@@ -66,7 +66,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::open(
-    const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory)
+    const QSize& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory)
 {
     SharedMemory* shared_memory = shared_memory_factory->open(id);
     if (!shared_memory)
@@ -81,7 +81,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
 
 //--------------------------------------------------------------------------------------------------
 void SharedMemoryFrame::attach(
-    const Size& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory)
+    const QSize& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory)
 {
     owned_shared_memory_ = std::move(shared_memory);
 
@@ -101,7 +101,7 @@ void SharedMemoryFrame::dettach()
     data_ = nullptr;
     shared_memory_ = nullptr;
 
-    size_ = Size();
+    size_ = QSize();
     format_ = PixelFormat();
     stride_ = 0;
 }

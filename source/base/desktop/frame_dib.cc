@@ -25,7 +25,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameDib::FrameDib(const Size& size,
+FrameDib::FrameDib(const QSize& size,
                    const PixelFormat& format,
                    int stride,
                    quint8* data,
@@ -40,7 +40,7 @@ FrameDib::FrameDib(const Size& size,
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
+std::unique_ptr<FrameDib> FrameDib::create(const QSize& size,
                                            const PixelFormat& format,
                                            SharedMemoryFactory* shared_memory_factory,
                                            HDC hdc)

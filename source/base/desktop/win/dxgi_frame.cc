@@ -40,7 +40,7 @@ DxgiFrame::~DxgiFrame()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
+bool DxgiFrame::prepare(const QSize& size, ScreenCapturer::ScreenId source_id)
 {
     if (source_id != source_id_)
     {
@@ -82,7 +82,7 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 
         frame->setCapturerType(static_cast<quint32>(ScreenCapturer::Type::WIN_DXGI));
 
-        const Size& frame_size = frame->size();
+        const QSize& frame_size = frame->size();
 
         // DirectX capturer won't paint each pixel in the frame due to its one
         // capturer per monitor design. So once the new frame is created, we should

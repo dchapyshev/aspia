@@ -126,7 +126,7 @@ bool CursorEncoder::compressCursor(
 //--------------------------------------------------------------------------------------------------
 bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::CursorShape* cursor_shape)
 {
-    const Size& size = mouse_cursor.size();
+    const QSize& size = mouse_cursor.size();
     const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
 
     // Check the correctness of the cursor size.
@@ -153,9 +153,9 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
         }
     }
 
-    Point dpi = mouse_cursor.constDpi();
+    QPoint dpi = mouse_cursor.constDpi();
     if (dpi.x() <= 0 || dpi.y() <= 0)
-        dpi = Point(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
+        dpi = QPoint(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
 
     // Set cursor parameters.
     cursor_shape->set_width(size.width());

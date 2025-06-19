@@ -29,9 +29,9 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-Point dpiByRect(const Rect& rect)
+QPoint dpiByRect(const Rect& rect)
 {
-    Point result(96, 96);
+    QPoint result(96, 96);
 
     if (!IsWindows8Point1OrGreater())
     {
@@ -139,7 +139,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
         Rect rect = Rect::makeXYWH(device_mode.dmPosition.x, device_mode.dmPosition.y,
             static_cast<qint32>(device_mode.dmPelsWidth),
             static_cast<qint32>(device_mode.dmPelsHeight));
-        Point dpi = dpiByRect(rect);
+        QPoint dpi = dpiByRect(rect);
 
         screen_list->screens.push_back(
             {device_index, device_name, rect.topLeft(), rect.size(), dpi, is_primary });

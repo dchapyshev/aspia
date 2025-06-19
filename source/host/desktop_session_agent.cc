@@ -18,6 +18,8 @@
 
 #include "host/desktop_session_agent.h"
 
+#include <QCoreApplication>
+
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
@@ -35,8 +37,6 @@
 #if defined(Q_OS_LINUX)
 #include "host/input_injector_x11.h"
 #endif // defined(Q_OS_LINUX)
-
-#include <QCoreApplication>
 
 namespace host {
 
@@ -207,7 +207,7 @@ void DesktopSessionAgent::onScreenListChanged(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
+void DesktopSessionAgent::onCursorPositionChanged(const QPoint& position)
 {
     proto::desktop::CursorPosition* cursor_position =
         outgoing_message_.newMessage().mutable_cursor_position();
@@ -341,7 +341,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
             const proto::desktop::Size& resolution = screen.resolution();
 
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
-                                           screen.id()), base::Size::fromProto(resolution));
+                                           screen.id()), base::parse(resolution));
         }
         else
         {

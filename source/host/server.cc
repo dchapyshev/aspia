@@ -18,6 +18,12 @@
 
 #include "host/server.h"
 
+#include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QStandardPaths>
+
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/crypto/password_generator.h"
@@ -33,12 +39,6 @@
 #include "base/net/firewall_manager.h"
 #include "base/win/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QCoreApplication>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QStandardPaths>
 
 namespace host {
 

@@ -18,11 +18,11 @@
 
 #include "host/input_injector_win.h"
 
+#include <qt_windows.h>
+
 #include "base/logging.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
-
-#include <qt_windows.h>
 
 namespace host {
 
@@ -124,7 +124,7 @@ InputInjectorWin::~InputInjectorWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::setScreenOffset(const base::Point& offset)
+void InputInjectorWin::setScreenOffset(const QPoint& offset)
 {
     screen_offset_ = offset;
 }
@@ -224,8 +224,7 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
 {
     beforeInput();
 
-    base::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                         GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    QSize full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (full_size.width() <= 1 || full_size.height() <= 1)
     {
         LOG(ERROR) << "Invalid screen size:" << full_size;
@@ -233,8 +232,8 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
     }
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    base::Point pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
-                    ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
+    QPoint pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
+               ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD mouse_data = 0;

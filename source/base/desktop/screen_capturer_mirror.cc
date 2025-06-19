@@ -149,7 +149,7 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 
     const Rect& screen_rect = helper_->screenRect();
 
-    frame_->setTopLeft(screen_rect.topLeft().subtract(desktop_rect_.topLeft()));
+    frame_->setTopLeft(screen_rect.topLeft() - desktop_rect_.topLeft());
     return frame_.get();
 }
 
@@ -197,7 +197,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
                 int dpi_x = GetDeviceCaps(desktop_dc_, LOGPIXELSX);
                 int dpi_y = GetDeviceCaps(desktop_dc_, LOGPIXELSY);
 
-                mouse_cursor_->dpi() = Point(dpi_x, dpi_y);
+                mouse_cursor_->dpi() = QPoint(dpi_x, dpi_y);
                 return mouse_cursor_.get();
             }
         }
@@ -211,10 +211,10 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
 }
 
 //--------------------------------------------------------------------------------------------------
-Point ScreenCapturerMirror::cursorPosition()
+QPoint ScreenCapturerMirror::cursorPosition()
 {
-    Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
-    cursor_pos = cursor_pos.subtract(helper_->screenRect().topLeft());
+    QPoint cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
+    cursor_pos = cursor_pos - helper_->screenRect().topLeft();
     return cursor_pos;
 }
 

@@ -97,7 +97,7 @@ Translations::LocaleList Translations::localeList() const
 
     add_locale("en");
 
-    for (auto it = locale_list_.constBegin(); it != locale_list_.constEnd(); ++it)
+    for (auto it = locale_list_.cbegin(), it_end = locale_list_.cend(); it != it_end; ++it)
         add_locale(it.key());
 
     std::sort(list.begin(), list.end(), [](const Locale& a, const Locale& b)

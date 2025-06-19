@@ -18,14 +18,14 @@
 
 #include "host/ui/application.h"
 
+#include <QAbstractEventDispatcher>
+#include <QAbstractNativeEventFilter>
+#include <QIcon>
+
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "host/ui/user_settings.h"
-
-#include <QAbstractEventDispatcher>
-#include <QAbstractNativeEventFilter>
-#include <QIcon>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>

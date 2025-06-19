@@ -35,7 +35,7 @@ public:
     ~InputInjectorWin() final;
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) final;
+    void setScreenOffset(const QPoint& offset) final;
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::desktop::KeyEvent& event) final;
     void injectTextEvent(const proto::desktop::TextEvent& event) final;
@@ -50,8 +50,8 @@ private:
     bool block_input_ = false;
     QSet<quint32> pressed_keys_;
 
-    base::Point screen_offset_;
-    base::Point last_mouse_pos_;
+    QPoint screen_offset_;
+    QPoint last_mouse_pos_;
     quint32 last_mouse_mask_ = 0;
 
     TouchInjector touch_injector_;

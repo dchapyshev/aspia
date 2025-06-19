@@ -168,7 +168,7 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* f
         return false;
     }
 
-    if (base::Size(static_cast<qint32>(image->d_w), static_cast<qint32>(image->d_h)) != frame->size())
+    if (QSize(static_cast<int>(image->d_w), static_cast<int>(image->d_h)) != frame->size())
     {
         LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;

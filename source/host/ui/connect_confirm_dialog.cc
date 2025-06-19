@@ -18,13 +18,13 @@
 
 #include "host/ui/connect_confirm_dialog.h"
 
-#include "base/logging.h"
-#include "common/ui/session_type.h"
-
 #include <QAbstractButton>
 #include <QPushButton>
 #include <QScreen>
 #include <QTimer>
+
+#include "base/logging.h"
+#include "common/ui/session_type.h"
 
 namespace host {
 

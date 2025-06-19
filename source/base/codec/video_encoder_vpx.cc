@@ -42,7 +42,7 @@ const int kVp9I420ProfileNumber = 0;
 const int kVp9AqModeCyclicRefresh = 3;
 
 //--------------------------------------------------------------------------------------------------
-void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
+void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -78,7 +78,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void createImage(const Size& size,
+void createImage(const QSize& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  QByteArray* out_image_buffer)
 {
@@ -177,7 +177,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
 
     if (packet->has_format())
     {
-        const Size& frame_size = frame->size();
+        const QSize& frame_size = frame->size();
 
         createImage(frame_size, &image_, &image_buffer_);
         createActiveMap(frame_size);
@@ -344,7 +344,7 @@ quint32 VideoEncoderVPX::maxQuantizer() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::createActiveMap(const Size& size)
+void VideoEncoderVPX::createActiveMap(const QSize& size)
 {
     active_map_.cols = static_cast<unsigned int>(
         (size.width() + kMacroBlockSize - 1) / kMacroBlockSize);
@@ -358,7 +358,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::createVp8Codec(const Size& size)
+bool VideoEncoderVPX::createVp8Codec(const QSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -429,7 +429,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::createVp9Codec(const Size& size)
+bool VideoEncoderVPX::createVp9Codec(const QSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 

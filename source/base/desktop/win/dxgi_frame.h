@@ -50,13 +50,13 @@ private:
     friend class DxgiDuplicatorController;
 
     // Prepares current instance with desktop size and source id.
-    bool prepare(const Size& size, ScreenCapturer::ScreenId source_id);
+    bool prepare(const QSize& size, ScreenCapturer::ScreenId source_id);
 
     // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
     SharedMemoryFactory* const shared_memory_factory_;
-    std::optional<Size> last_frame_size_;
+    std::optional<QSize> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     SharedPointer<Frame> frame_;
     Context context_;

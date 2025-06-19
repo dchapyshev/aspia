@@ -269,11 +269,11 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         {
             // Every time we change the resolution, we have to reset the preferred size.
             source_size_ = frame->size();
-            preferred_size_ = base::Size();
-            forced_size_ = base::Size();
+            preferred_size_ = QSize(0, 0);
+            forced_size_ = QSize(0, 0);
         }
 
-        base::Size current_size = preferred_size_;
+        QSize current_size = preferred_size_;
 
         // If the preferred size is larger than the original, then we use the original size.
         if (current_size.width() > source_size_.width() ||
@@ -576,7 +576,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
     }
 
     emit sig_selectScreen(screen);
-    preferred_size_ = base::Size();
+    preferred_size_ = QSize(0, 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,7 +601,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 
     LOG(INFO) << "Preferred size changed:" << preferred_size;
 
-    preferred_size_.set(preferred_size.width(), preferred_size.height());
+    preferred_size_ = base::parse(preferred_size);
     emit sig_captureScreen();
 }
 
@@ -953,14 +953,14 @@ void ClientSessionDesktop::downStepOverflow()
 
     if (new_fps < 20)
     {
-        base::Size new_forced_size;
+        QSize new_forced_size;
 
         if (new_fps < 10)
-            new_forced_size.set(source_size_.width() * 70 / 100, source_size_.height() * 70 / 100);
+            new_forced_size = QSize(source_size_.width() * 70 / 100, source_size_.height() * 70 / 100);
         else if (new_fps < 15)
-            new_forced_size.set(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
+            new_forced_size = QSize(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
         else
-            new_forced_size.set(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
+            new_forced_size = QSize(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
 
         if (new_forced_size != forced_size_)
         {
@@ -1003,14 +1003,14 @@ void ClientSessionDesktop::upStepOverflow()
 
     if (!forced_size_.isEmpty())
     {
-        base::Size new_forced_size;
+        QSize new_forced_size;
 
         if (new_fps >= 25)
-            new_forced_size.set(0, 0);
+            new_forced_size = QSize(0, 0);
         else if (new_fps >= 20)
-            new_forced_size.set(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
+            new_forced_size = QSize(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
         else if (new_fps >= 15)
-            new_forced_size.set(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
+            new_forced_size = QSize(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
         else
             new_forced_size = forced_size_;
 

@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+const QString kEmptyString;
 const QString kExtension = QStringLiteral("conf");
 const QString kSettingsElement = QStringLiteral("settings");
 const QString kGroupElement = QStringLiteral("group");
@@ -40,9 +41,9 @@ const QString kPointType = QStringLiteral("point");
 const QString kVariantType = QStringLiteral("variant");
 
 //--------------------------------------------------------------------------------------------------
-QString variantToType(const QVariant& value)
+QStringView variantToType(const QVariant& value)
 {
-    QString result;
+    QStringView result;
 
     switch (value.typeId())
     {
@@ -54,11 +55,7 @@ QString variantToType(const QVariant& value)
         case QMetaType::Double:
         case QMetaType::QString:
         case QMetaType::QKeySequence:
-            // Default type.
-            break;
-
-        case QMetaType::UnknownType:
-            result = kInvalidType;
+            result = kEmptyString;
             break;
 
         case QMetaType::QByteArray:
@@ -77,6 +74,10 @@ QString variantToType(const QVariant& value)
             result = kPointType;
             break;
 
+        case QMetaType::UnknownType:
+            result = kInvalidType;
+            break;
+
         default:
             result = kVariantType;
             break;
@@ -92,9 +93,6 @@ QString variantToString(const QVariant& value)
 
     switch (value.typeId())
     {
-        case QMetaType::UnknownType:
-            break;
-
         case QMetaType::Bool:
         case QMetaType::Int:
         case QMetaType::UInt:
@@ -132,6 +130,9 @@ QString variantToString(const QVariant& value)
         }
         break;
 
+        case QMetaType::UnknownType:
+            break;
+
         default:
         {
             QByteArray buffer;
@@ -151,7 +152,7 @@ QString variantToString(const QVariant& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QVariant stringToVariant(const QString& value, const QString& type)
+QVariant stringToVariant(QStringView value, const QString& type)
 {
     if (type == kByteArrayType)
     {
@@ -170,19 +171,19 @@ QVariant stringToVariant(const QString& value, const QString& type)
     }
     else if (type == kRectType)
     {
-        QStringList list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+        QList<QStringView> list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
         if (list.size() == 4)
             return QVariant(QRect(list[0].toInt(), list[1].toInt(), list[2].toInt(), list[3].toInt()));
     }
     else if (type == kSizeType)
     {
-        QStringList list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+        QList<QStringView> list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
         if (list.size() == 2)
             return QVariant(QSize(list[0].toInt(), list[1].toInt()));
     }
     else if (type == kPointType)
     {
-        QStringList list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+        QList<QStringView> list = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
         if (list.size() == 2)
             return QVariant(QPoint(list[0].toInt(), list[1].toInt()));
     }
@@ -191,7 +192,7 @@ QVariant stringToVariant(const QString& value, const QString& type)
         return QVariant();
     }
 
-    return QVariant(value);
+    return QVariant(value.toString());
 }
 
 } // namespace
@@ -291,11 +292,11 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
     xml.writeStartDocument();
     xml.writeStartElement(kSettingsElement); // <settings>
 
-    QStringList oldSegments;
+    QList<QStringView> oldSegments;
 
     for (auto it = map.cbegin(), it_end = map.cend(); it != it_end; ++it)
     {
-        QStringList segments = it.key().split(QLatin1Char('/'), Qt::SkipEmptyParts);
+        QList<QStringView> segments = QStringView(it.key()).split(QLatin1Char('/'), Qt::SkipEmptyParts);
         const QVariant& value = it.value();
         int count = 0;
 
@@ -315,7 +316,7 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
             xml.writeAttribute(kNameAttribute, segments.at(i));
         }
 
-        QString type = variantToType(value);
+        QStringView type = variantToType(value);
         if (!type.isEmpty())
             xml.writeAttribute(kTypeAttribute, type);
 

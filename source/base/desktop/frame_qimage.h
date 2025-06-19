@@ -32,7 +32,7 @@ class FrameQImage final : public Frame
 public:
     ~FrameQImage() final = default;
 
-    static std::unique_ptr<FrameQImage> create(const Size& size);
+    static std::unique_ptr<FrameQImage> create(const QSize& size);
     static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
     static std::unique_ptr<FrameQImage> create(QImage&& image);
 

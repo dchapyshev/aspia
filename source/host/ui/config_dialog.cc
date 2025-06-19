@@ -18,6 +18,12 @@
 
 #include "host/ui/config_dialog.h"
 
+#include <QFileDialog>
+#include <QMenu>
+#include <QMessageBox>
+#include <QTimer>
+#include <QTranslator>
+
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
@@ -36,12 +42,6 @@
 #include "base/win/service_controller.h"
 #include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
-
-#include <QFileDialog>
-#include <QMenu>
-#include <QMessageBox>
-#include <QTimer>
-#include <QTranslator>
 
 namespace host {
 

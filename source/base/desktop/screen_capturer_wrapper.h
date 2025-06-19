@@ -38,7 +38,7 @@ public:
     explicit ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, QObject* parent = nullptr);
     ~ScreenCapturerWrapper();
 
-    void selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution);
+    void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
     ScreenCapturer::Error captureFrame(const Frame** frame, const MouseCursor** mouse_cursor);
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
@@ -49,7 +49,7 @@ public:
 signals:
     void sig_screenListChanged(
         const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
-    void sig_cursorPositionChanged(const base::Point& position);
+    void sig_cursorPositionChanged(const QPoint& position);
     void sig_screenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
 
 private:
@@ -61,7 +61,7 @@ private:
 
     int screen_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
-    Point last_cursor_pos_;
+    QPoint last_cursor_pos_;
     bool enable_cursor_position_ = false;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;

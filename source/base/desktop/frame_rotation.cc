@@ -46,9 +46,9 @@ libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
 
 //--------------------------------------------------------------------------------------------------
 Rect rotateAndOffsetRect(const Rect& rect,
-                         const Size& size,
+                         const QSize& size,
                          Rotation rotation,
-                         const Point &offset)
+                         const QPoint &offset)
 {
     Rect result = rotateRect(rect, size, rotation);
     result.translate(offset.x(), offset.y());
@@ -76,7 +76,7 @@ Rotation reverseRotation(Rotation rotation)
 }
 
 //--------------------------------------------------------------------------------------------------
-Size rotateSize(const Size& size, Rotation rotation)
+QSize rotateSize(const QSize& size, Rotation rotation)
 {
     switch (rotation)
     {
@@ -86,14 +86,14 @@ Size rotateSize(const Size& size, Rotation rotation)
 
         case Rotation::CLOCK_WISE_90:
         case Rotation::CLOCK_WISE_270:
-            return Size(size.height(), size.width());
+            return QSize(size.height(), size.width());
     }
 
-    return Size();
+    return QSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation)
+Rect rotateRect(const Rect& rect, const QSize& size, Rotation rotation)
 {
     switch (rotation)
     {
@@ -117,7 +117,7 @@ Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation)
 void rotateDesktopFrame(const Frame& source,
                         const Rect& source_rect,
                         const Rotation& rotation,
-                        const Point& target_offset,
+                        const QPoint& target_offset,
                         Frame* target)
 {
     DCHECK(target);

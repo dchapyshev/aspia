@@ -78,16 +78,16 @@ public:
     {
         ScreenId id = kInvalidScreenId;
         QString title;
-        Point position;
-        Size resolution;
-        Point dpi;
+        QPoint position;
+        QSize resolution;
+        QPoint dpi;
         bool is_primary = false;
     };
 
     struct ScreenList
     {
         QList<Screen> screens;
-        QList<Size> resolutions;
+        QList<QSize> resolutions;
     };
 
     virtual void switchToInputDesktop() { /* Nothing */ };
@@ -97,7 +97,7 @@ public:
     virtual ScreenId currentScreen() const = 0;
     virtual const Frame* captureFrame(Error* error) = 0;
     virtual const MouseCursor* captureCursor() = 0;
-    virtual Point cursorPosition() = 0;
+    virtual QPoint cursorPosition() = 0;
 
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;

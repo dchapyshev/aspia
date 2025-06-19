@@ -27,137 +27,6 @@
 
 namespace base {
 
-class Point
-{
-public:
-    Point() = default;
-
-    Point(qint32 x, qint32 y)
-        : x_(x),
-          y_(y)
-    {
-        // Nothing
-    }
-
-    Point(const Point& point)
-        : x_(point.x_),
-          y_(point.y_)
-    {
-        // Nothing
-    }
-
-    ~Point() = default;
-
-    qint32 x() const { return x_; }
-    qint32 y() const { return y_; }
-
-    void setX(qint32 x) { x_ = x; }
-    void setY(qint32 y) { y_ = y; }
-
-    void set(qint32 x, qint32 y)
-    {
-        x_ = x;
-        y_ = y;
-    }
-
-    Point add(const Point& other) const
-    {
-        return Point(x() + other.x(), y() + other.y());
-    }
-
-    Point subtract(const Point& other) const
-    {
-        return Point(x() - other.x(), y() - other.y());
-    }
-
-    bool equals(const Point& other) const
-    {
-        return (x_ == other.x_ && y_ == other.y_);
-    }
-
-    void translate(qint32 x_offset, qint32 y_offset)
-    {
-        x_ += x_offset;
-        y_ += y_offset;
-    }
-
-    void translate(const Point& offset) { translate(offset.x(), offset.y()); }
-
-    static Point fromQPoint(const QPoint& point);
-    QPoint toQPoint();
-
-    Point& operator=(const Point& other);
-
-    bool operator!=(const Point& other) const { return !equals(other); }
-    bool operator==(const Point& other) const { return equals(other); }
-
-private:
-    qint32 x_ = 0;
-    qint32 y_ = 0;
-};
-
-class Size
-{
-public:
-    Size() = default;
-
-    Size(qint32 width, qint32 height)
-        : width_(width),
-          height_(height)
-    {
-        // Nothing
-    }
-
-    Size(const Size& other)
-        : width_(other.width_),
-          height_(other.height_)
-    {
-        // Nothing
-    }
-
-    ~Size() = default;
-
-    qint32 width() const { return width_; }
-    qint32 height() const { return height_; }
-
-    void set(qint32 width, qint32 height)
-    {
-        width_ = width;
-        height_ = height;
-    }
-
-    bool isEmpty() const
-    {
-        return width_ <= 0 || height_ <= 0;
-    }
-
-    bool equals(const Size& other) const
-    {
-        return width_ == other.width_ && height_ == other.height_;
-    }
-
-    void clear()
-    {
-        width_ = 0;
-        height_ = 0;
-    }
-
-    static Size fromQSize(const QSize& size);
-    QSize toQSize();
-
-    static Size fromProto(const proto::desktop::Size& size);
-    proto::desktop::Size toProto();
-
-    Size& operator=(const Size& other);
-
-    bool operator!=(const Size& other) const { return !equals(other); }
-    bool operator==(const Size& other) const { return equals(other); }
-
-private:
-    qint32 width_ = 0;
-    qint32 height_ = 0;
-};
-
 class Rect
 {
 public:
@@ -170,7 +39,7 @@ public:
         return Rect(x, y, x + width, y + height);
     }
 
-    static Rect makeXYWH(const Point& left_top, const Size& size)
+    static Rect makeXYWH(const QPoint& left_top, const QSize& size)
     {
         return Rect::makeXYWH(left_top.x(), left_top.y(), size.width(), size.height());
     }
@@ -185,7 +54,7 @@ public:
         return Rect(left, top, right, bottom);
     }
 
-    static Rect makeSize(const Size& size)
+    static Rect makeSize(const QSize& size)
     {
         return Rect(0, 0, size.width(), size.height());
     }
@@ -200,11 +69,11 @@ public:
     qint32 width() const { return right_ - left_; }
     qint32 height() const { return bottom_ - top_; }
 
-    Point topLeft() const { return Point(left(), top()); }
-    void setTopLeft(const Point& top_left);
+    QPoint topLeft() const { return QPoint(left(), top()); }
+    void setTopLeft(const QPoint& top_left);
 
-    Size size() const { return Size(width(), height()); }
-    void setSize(const Size& size);
+    QSize size() const { return QSize(width(), height()); }
+    void setSize(const QSize& size);
 
     bool isEmpty() const { return left_ >= right_ || top_ >= bottom_; }
 
@@ -216,16 +85,16 @@ public:
 
     // Returns true if point lies within the rectangle boundaries.
     bool contains(qint32 x, qint32 y) const;
-    bool contains(const Point& pos) const;
+    bool contains(const QPoint& pos) const;
 
     // Returns true if |rect| lies within the boundaries of this rectangle.
     bool containsRect(const Rect& rect) const;
 
     void translate(qint32 dx, qint32 dy);
-    void translate(const Point& pt) { translate(pt.x(), pt.y()); }
+    void translate(const QPoint& pt) { translate(pt.x(), pt.y()); }
 
     Rect translated(qint32 dx, qint32 dy) const;
-    Rect translated(const Point& pt) const { return translated(pt.x(), pt.y()); }
+    Rect translated(const QPoint& pt) const { return translated(pt.x(), pt.y()); }
 
     // Finds intersection with |rect|.
     void intersectWith(const Rect& rect);
@@ -245,10 +114,10 @@ public:
     // Scales current Rect. This function does not impact the |top_| and |left_|.
     void scale(double horizontal, double vertical);
 
-    void move(const Point& pt) { move(pt.x(), pt.y()); }
+    void move(const QPoint& pt) { move(pt.x(), pt.y()); }
     void move(qint32 x, qint32 y);
 
-    Rect moved(const Point& pt) const { return moved(pt.x(), pt.y()); }
+    Rect moved(const QPoint& pt) const { return moved(pt.x(), pt.y()); }
     Rect moved(qint32 x, qint32 y) const;
 
     static Rect fromQRect(const QRect& rect);
@@ -279,13 +148,9 @@ private:
 };
 
 QDebug operator<<(QDebug stream, const Rect& rect);
-QDebug operator<<(QDebug stream, const Point& point);
-QDebug operator<<(QDebug stream, const Size& size);
 
 } // namespace base
 
-Q_DECLARE_METATYPE(base::Point)
-Q_DECLARE_METATYPE(base::Size)
 Q_DECLARE_METATYPE(base::Rect)
 
 #endif // BASE_DESKTOP_GEOMETRY_H

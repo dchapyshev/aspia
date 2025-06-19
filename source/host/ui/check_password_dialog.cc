@@ -18,13 +18,13 @@
 
 #include "host/ui/check_password_dialog.h"
 
-#include "host/system_settings.h"
-#include "base/logging.h"
-
 #include <QAbstractButton>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
+
+#include "host/system_settings.h"
+#include "base/logging.h"
 
 namespace host {
 

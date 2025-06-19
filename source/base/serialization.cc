@@ -61,4 +61,57 @@ QVersionNumber parse(const proto::peer::Version& version)
                             static_cast<int>(version.patch()) });
 }
 
+//--------------------------------------------------------------------------------------------------
+proto::desktop::Rect serialize(const QRect& rect)
+{
+    proto::desktop::Rect result;
+
+    result.set_x(rect.x());
+    result.set_y(rect.y());
+    result.set_width(rect.width());
+    result.set_height(rect.height());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QRect parse(const proto::desktop::Rect& rect)
+{
+    return QRect(QPoint(rect.x(), rect.y()), QSize(rect.width(), rect.height()));
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::desktop::Point serialize(const QPoint& point)
+{
+    proto::desktop::Point result;
+
+    result.set_x(point.x());
+    result.set_y(point.y());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QPoint parse(const proto::desktop::Point& point)
+{
+    return QPoint(point.x(), point.y());
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::desktop::Size serialize(const QSize& size)
+{
+    proto::desktop::Size result;
+
+    result.set_width(size.width());
+    result.set_height(size.height());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QSize parse(const proto::desktop::Size& size)
+{
+    return QSize(size.width(), size.height());
+}
+
 } // namespace base

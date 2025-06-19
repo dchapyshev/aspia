@@ -18,10 +18,10 @@
 
 #include "host/ui/user_settings.h"
 
+#include <QLocale>
+
 #include "base/xml_settings.h"
 #include "proto/peer.h"
-
-#include <QLocale>
 
 namespace host {
 

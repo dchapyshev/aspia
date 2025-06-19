@@ -20,8 +20,8 @@
 #define HOST_INPUT_INJECTOR_H
 
 #include <QObject>
+#include <QPoint>
 
-#include "base/desktop/geometry.h"
 #include "proto/desktop.h"
 
 namespace host {
@@ -38,7 +38,7 @@ public:
     }
     virtual ~InputInjector() = default;
 
-    virtual void setScreenOffset(const base::Point& offset) = 0;
+    virtual void setScreenOffset(const QPoint& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
     virtual void injectTextEvent(const proto::desktop::TextEvent& event) = 0;

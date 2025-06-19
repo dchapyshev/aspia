@@ -18,6 +18,14 @@
 
 #include "host/client_session_file_transfer.h"
 
+#include <QCoreApplication>
+#include <QDir>
+
+#if defined(Q_OS_LINUX)
+#include <signal.h>
+#include <spawn.h>
+#endif // defined(Q_OS_LINUX)
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/file_transfer.h"
@@ -29,14 +37,6 @@
 #include <UserEnv.h>
 #include <WtsApi32.h>
 #endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_LINUX)
-#include <signal.h>
-#include <spawn.h>
-#endif // defined(Q_OS_LINUX)
-
-#include <QCoreApplication>
-#include <QDir>
 
 namespace host {
 

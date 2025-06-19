@@ -30,10 +30,10 @@ class FrameSimple final : public Frame
 public:
     ~FrameSimple() final;
 
-    static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
+    static std::unique_ptr<FrameSimple> create(const QSize& size, const PixelFormat& format);
 
 private:
-    FrameSimple(const Size& size, const PixelFormat& format, quint8* data);
+    FrameSimple(const QSize& size, const PixelFormat& format, quint8* data);
 
     Q_DISABLE_COPY(FrameSimple)
 };

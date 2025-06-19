@@ -23,7 +23,7 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, quint8* data)
+FrameAligned::FrameAligned(const QSize& size, const PixelFormat& format, quint8* data)
     : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
@@ -38,7 +38,7 @@ FrameAligned::~FrameAligned()
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameAligned> FrameAligned::create(
-    const Size& size, const PixelFormat& format, size_t alignment)
+    const QSize& size, const PixelFormat& format, size_t alignment)
 {
     quint8* data = reinterpret_cast<quint8*>(
         alignedAlloc(calcMemorySize(size, format.bytesPerPixel()), alignment));

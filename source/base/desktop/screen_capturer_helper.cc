@@ -37,7 +37,7 @@ void ScreenCapturerHelper::invalidateRegion(const Region& invalid_region)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerHelper::invalidateScreen(const Size& size)
+void ScreenCapturerHelper::invalidateScreen(const QSize& size)
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
     invalid_region_.addRect(Rect::makeSize(size));
@@ -70,13 +70,13 @@ void ScreenCapturerHelper::setLogGridSize(int log_grid_size)
 }
 
 //--------------------------------------------------------------------------------------------------
-const Size& ScreenCapturerHelper::sizeMostRecent() const
+const QSize& ScreenCapturerHelper::sizeMostRecent() const
 {
     return size_most_recent_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerHelper::setSizeMostRecent(const Size& size)
+void ScreenCapturerHelper::setSizeMostRecent(const QSize& size)
 {
     size_most_recent_ = size;
 }

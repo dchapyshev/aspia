@@ -107,9 +107,9 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
     }
     else
     {
-        Size size(cursor_shape.width(), cursor_shape.height());
-        Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
-        Point dpi(cursor_shape.dpi_x(), cursor_shape.dpi_y());
+        QSize size(cursor_shape.width(), cursor_shape.height());
+        QPoint hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
+        QPoint dpi(cursor_shape.dpi_x(), cursor_shape.dpi_y());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
@@ -128,7 +128,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (dpi.x() <= 0 || dpi.x() > std::numeric_limits<qint16>::max() ||
             dpi.y() <= 0 || dpi.y() > std::numeric_limits<qint16>::max())
         {
-            dpi = Point(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
+            dpi = QPoint(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
         }
 
         std::unique_ptr<MouseCursor> mouse_cursor =

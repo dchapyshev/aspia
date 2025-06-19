@@ -35,17 +35,17 @@ public:
     ~SharedMemoryFrame() final;
 
     static std::unique_ptr<Frame> create(
-        const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory);
+        const QSize& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> open(
-        const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory);
+        const QSize& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory);
 
-    void attach(const Size& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory);
+    void attach(const QSize& size, const PixelFormat& format, SharedPointer<SharedMemory> shared_memory);
     void dettach();
     bool isAttached() const;
 
 private:
-    SharedMemoryFrame(const Size& size,
+    SharedMemoryFrame(const QSize& size,
                       const PixelFormat& format,
                       SharedPointer<SharedMemory> shared_memory);
 

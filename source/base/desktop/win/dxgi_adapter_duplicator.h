@@ -84,7 +84,7 @@ public:
 
     // Moves |desktop_rect_| and all underlying |duplicators_|. See
     // DxgiDuplicatorController::translateRect().
-    void translateRect(const Point& position);
+    void translateRect(const QPoint& position);
 
 private:
     ErrorCode doInitialize();

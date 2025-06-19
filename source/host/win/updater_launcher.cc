@@ -18,14 +18,14 @@
 
 #include "host/win/updater_launcher.h"
 
-#include "base/logging.h"
-#include "base/win/scoped_object.h"
+#include <QCoreApplication>
+#include <QDir>
 
 #include <UserEnv.h>
 #include <WtsApi32.h>
 
-#include <QCoreApplication>
-#include <QDir>
+#include "base/logging.h"
+#include "base/win/scoped_object.h"
 
 namespace host {
 

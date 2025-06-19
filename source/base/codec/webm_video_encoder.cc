@@ -36,7 +36,7 @@ const int kMacroBlockSize = 16;
 const std::chrono::milliseconds kTargetFrameInterval{ 80 };
 
 //--------------------------------------------------------------------------------------------------
-void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
+void setCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
