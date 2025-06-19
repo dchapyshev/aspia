@@ -19,6 +19,7 @@
 #include "console/computer_group_dialog_desktop.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/desktop/pixel_format.h"
 
 namespace console {
@@ -111,7 +112,7 @@ void ComputerGroupDialogDesktop::restoreSettings(
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    base::PixelFormat pixel_format = base::PixelFormat::fromProto(desktop_config.pixel_format());
+    base::PixelFormat pixel_format = base::parse(desktop_config.pixel_format());
     ColorDepth color_depth;
 
     if (pixel_format.isEqual(base::PixelFormat::ARGB()))
@@ -229,7 +230,7 @@ void ComputerGroupDialogDesktop::saveSettings(
                 break;
         }
 
-        desktop_config->mutable_pixel_format()->CopyFrom(pixel_format.toProto());
+        desktop_config->mutable_pixel_format()->CopyFrom(base::serialize(pixel_format));
         desktop_config->set_compress_ratio(static_cast<quint32>(ui.slider_compress_ratio->value()));
     }
 

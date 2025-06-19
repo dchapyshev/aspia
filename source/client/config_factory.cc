@@ -19,6 +19,7 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/desktop/pixel_format.h"
 
 namespace client {
@@ -76,7 +77,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
     config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
+    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 
     fixupDesktopConfig(config);
 }
@@ -94,7 +95,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
     config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::PixelFormat::RGB332().toProto());
+    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 
     fixupDesktopConfig(config);
 }

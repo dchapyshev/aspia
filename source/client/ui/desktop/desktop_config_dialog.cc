@@ -22,6 +22,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/desktop/pixel_format.h"
 #include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
@@ -84,7 +85,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
     combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
 
-    base::PixelFormat pixel_format = base::PixelFormat::fromProto(config_.pixel_format());
+    base::PixelFormat pixel_format = base::parse(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
     if (pixel_format.isEqual(base::PixelFormat::ARGB()))
@@ -305,7 +306,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
             }
 
-            config_.mutable_pixel_format()->CopyFrom(pixel_format.toProto());
+            config_.mutable_pixel_format()->CopyFrom(base::serialize(pixel_format));
             config_.set_compress_ratio(static_cast<quint32>(ui->slider_compress_ratio->value()));
         }
 

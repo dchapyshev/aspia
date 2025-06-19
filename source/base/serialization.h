@@ -23,6 +23,7 @@
 #include <QRect>
 #include <QVersionNumber>
 
+#include "base/desktop/pixel_format.h"
 #include "proto/desktop.h"
 #include "proto/peer.h"
 
@@ -49,6 +50,9 @@ QPoint parse(const proto::desktop::Point& point);
 
 proto::desktop::Size serialize(const QSize& size);
 QSize parse(const proto::desktop::Size& size);
+
+proto::desktop::PixelFormat serialize(const PixelFormat& format);
+PixelFormat parse(const proto::desktop::PixelFormat& format);
 
 class SerializerImpl
 {

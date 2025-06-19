@@ -79,23 +79,23 @@ bool parseColorDepthValue(const QString& value, proto::desktop::Config& config)
     {
         if (value == "32")
         {
-            *config.mutable_pixel_format() = base::PixelFormat::ARGB().toProto();
+            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::ARGB());
         }
         else if (value == "16")
         {
-            *config.mutable_pixel_format() = base::PixelFormat::RGB565().toProto();
+            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB565());
         }
         else if (value == "8")
         {
-            *config.mutable_pixel_format() = base::PixelFormat::RGB332().toProto();
+            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB332());
         }
         else if (value == "6")
         {
-            *config.mutable_pixel_format() = base::PixelFormat::RGB222().toProto();
+            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB222());
         }
         else if (value == "3")
         {
-            *config.mutable_pixel_format() = base::PixelFormat::RGB111().toProto();
+            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB111());
         }
         else
         {
@@ -411,7 +411,7 @@ int clientMain(int argc, char* argv[])
 
     QCommandLineOption session_type_option("session-type",
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
-                                "desktop-view, file-transfer, system-info, text-chat."),
+                                "desktop-view, file-transfer, system-info, text-chat, port-forwarding."),
         "desktop-manage");
 
     QCommandLineOption codec_option("codec",
@@ -565,7 +565,7 @@ int clientMain(int argc, char* argv[])
         {
             LOG(ERROR) << "Unknown session type specified:" << session_type;
             onInvalidValue("session-type",
-                           "desktop-manage, desktop-view, file-transfer, system-info, text-chat");
+                "desktop-manage, desktop-view, file-transfer, system-info, text-chat, port-forwarding");
             return 1;
         }
 

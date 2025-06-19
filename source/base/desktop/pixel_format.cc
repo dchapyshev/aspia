@@ -200,34 +200,6 @@ bool PixelFormat::operator!=(const PixelFormat& other) const
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-PixelFormat PixelFormat::fromProto(const proto::desktop::PixelFormat& format)
-{
-    return base::PixelFormat(
-        static_cast<quint8>(format.bits_per_pixel()),
-        static_cast<quint16>(format.red_max()),
-        static_cast<quint16>(format.green_max()),
-        static_cast<quint16>(format.blue_max()),
-        static_cast<quint8>(format.red_shift()),
-        static_cast<quint8>(format.green_shift()),
-        static_cast<quint8>(format.blue_shift()));
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::desktop::PixelFormat PixelFormat::toProto()
-{
-    proto::desktop::PixelFormat format;
-    format.set_bits_per_pixel(bits_per_pixel_);
-    format.set_red_max(red_max_);
-    format.set_green_max(green_max_);
-    format.set_blue_max(blue_max_);
-    format.set_red_shift(red_shift_);
-    format.set_green_shift(green_shift_);
-    format.set_blue_shift(blue_shift_);
-    return format;
-}
-
-//--------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const PixelFormat& pixel_format)
 {
     return stream << "PixelFormat("

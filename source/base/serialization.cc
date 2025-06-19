@@ -114,4 +114,33 @@ QSize parse(const proto::desktop::Size& size)
     return QSize(size.width(), size.height());
 }
 
+//--------------------------------------------------------------------------------------------------
+proto::desktop::PixelFormat serialize(const PixelFormat& format)
+{
+    proto::desktop::PixelFormat result;
+
+    result.set_bits_per_pixel(format.bitsPerPixel());
+    result.set_red_max(format.redMax());
+    result.set_green_max(format.greenMax());
+    result.set_blue_max(format.blueMax());
+    result.set_red_shift(format.redShift());
+    result.set_green_shift(format.greenShift());
+    result.set_blue_shift(format.blueShift());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+PixelFormat parse(const proto::desktop::PixelFormat& format)
+{
+    return base::PixelFormat(
+        static_cast<quint8>(format.bits_per_pixel()),
+        static_cast<quint16>(format.red_max()),
+        static_cast<quint16>(format.green_max()),
+        static_cast<quint16>(format.blue_max()),
+        static_cast<quint8>(format.red_shift()),
+        static_cast<quint8>(format.green_shift()),
+        static_cast<quint8>(format.blue_shift()));
+}
+
 } // namespace base
