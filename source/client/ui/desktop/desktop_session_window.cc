@@ -89,10 +89,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     scroll_area_->setAlignment(Qt::AlignCenter);
     scroll_area_->setFrameShape(QFrame::NoFrame);
     scroll_area_->setWidget(desktop_);
-
-    QPalette palette(scroll_area_->palette());
-    palette.setBrush(QPalette::Window, QBrush(QColor(25, 25, 25)));
-    scroll_area_->viewport()->setPalette(palette);
+    scroll_area_->viewport()->setStyleSheet("background-color: rgb(25, 25, 25);");
 
     layout_ = new QHBoxLayout(this);
     layout_->setContentsMargins(0, 0, 0, 0);
