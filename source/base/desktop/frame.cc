@@ -67,9 +67,9 @@ bool Frame::contains(int x, int y) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect& dest_rect)
+void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect& dest_rect)
 {
-    DCHECK(Rect::makeSize(size()).containsRect(dest_rect));
+    DCHECK(QRect(QPoint(0, 0), size()).contains(dest_rect));
 
     quint8* dest = frameDataAtPos(dest_rect.topLeft());
     size_t bytes_per_row = static_cast<size_t>(format_.bytesPerPixel() * dest_rect.width());
@@ -83,7 +83,7 @@ void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect&
 }
 
 //--------------------------------------------------------------------------------------------------
-void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const Rect& dest_rect)
+void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect)
 {
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
 }
@@ -104,7 +104,7 @@ float Frame::scaleFactor() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect Frame::rect() const
+QRect Frame::rect() const
 {
     const float scale = scaleFactor();
 
@@ -112,10 +112,9 @@ Rect Frame::rect() const
     const QSize& frame_size = size();
 
     // Only scale the size.
-    return Rect::makeXYWH(frame_top_left.x(),
-                          frame_top_left.y(),
-                          qint32(float(frame_size.width()) / scale),
-                          qint32(float(frame_size.height()) / scale));
+    return QRect(frame_top_left,
+                 QSize(int(float(frame_size.width()) / scale),
+                       int(float(frame_size.height()) / scale)));
 }
 
 //--------------------------------------------------------------------------------------------------

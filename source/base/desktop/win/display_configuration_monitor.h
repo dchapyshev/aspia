@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_WIN_DISPLAY_CONFIGURATION_MONITOR_H
 #define BASE_DESKTOP_WIN_DISPLAY_CONFIGURATION_MONITOR_H
 
-#include "base/desktop/geometry.h"
+#include <QRect>
 
 namespace base {
 
@@ -37,7 +37,7 @@ public:
     void reset();
 
 private:
-    Rect rect_;
+    QRect rect_;
     bool initialized_ = false;
 };
 

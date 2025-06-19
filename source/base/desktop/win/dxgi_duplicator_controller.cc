@@ -189,7 +189,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
 
     SharedPointer<Frame> shared_frame = frame->frame();
 
-    shared_frame->updatedRegion()->clear();
+    *shared_frame->updatedRegion() = QRegion();
 
     setup(frame->context());
 
@@ -306,7 +306,7 @@ bool DxgiDuplicatorController::doInitialize()
         DCHECK(!duplicator.desktopRect().isEmpty());
         duplicators_.push_back(std::move(duplicator));
 
-        desktop_rect_.unionWith(duplicators_.back().desktopRect());
+        desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
     }
 
     translateRect();
@@ -324,7 +324,7 @@ bool DxgiDuplicatorController::doInitialize()
 //--------------------------------------------------------------------------------------------------
 void DxgiDuplicatorController::deinitialize()
 {
-    desktop_rect_ = Rect();
+    desktop_rect_ = QRect();
     duplicators_.clear();
     display_configuration_monitor_.reset();
 }
@@ -410,7 +410,7 @@ QSize DxgiDuplicatorController::desktopSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect DxgiDuplicatorController::screenRect(int id) const
+QRect DxgiDuplicatorController::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
 
@@ -422,7 +422,7 @@ Rect DxgiDuplicatorController::screenRect(int id) const
             return duplicators_[i].screenRect(id);
     }
 
-    return Rect();
+    return QRect();
 }
 
 //--------------------------------------------------------------------------------------------------

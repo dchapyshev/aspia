@@ -96,7 +96,7 @@ void DesktopSessionIpc::captureScreen()
 {
     if (last_frame_.isAttached())
     {
-        last_frame_.updatedRegion()->addRect(base::Rect::makeSize(last_frame_.size()));
+        *last_frame_.updatedRegion() += QRect(QPoint(0, 0), last_frame_.size());
 
         if (last_screen_list_)
         {
@@ -255,13 +255,12 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
             last_frame_.setCapturerType(serialized_frame.capturer_type());
 
-            base::Region* updated_region = last_frame_.updatedRegion();
+            QRegion* updated_region = last_frame_.updatedRegion();
 
             for (int i = 0; i < serialized_frame.dirty_rect_size(); ++i)
             {
                 const proto::desktop::Rect& dirty_rect = serialized_frame.dirty_rect(i);
-                updated_region->addRect(base::Rect::makeXYWH(
-                    dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height()));
+                *updated_region += base::parse(dirty_rect);
             }
 
             frame = &last_frame_;

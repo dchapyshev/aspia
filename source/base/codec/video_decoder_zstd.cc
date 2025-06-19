@@ -19,6 +19,7 @@
 #include "base/codec/video_decoder_zstd.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/codec/pixel_translator.h"
 #include "base/desktop/frame_aligned.h"
 
@@ -53,7 +54,7 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
 
         source_frame_ = FrameAligned::create(
             QSize(format.video_rect().width(), format.video_rect().height()),
-            base::PixelFormat::fromProto(format.pixel_format()), 32);
+            base::parse(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), PixelFormat::ARGB());
     }
@@ -73,14 +74,13 @@ bool VideoDecoderZstd::decode(const proto::desktop::VideoPacket& packet, Frame* 
         return false;
     }
 
-    Rect frame_rect = Rect::makeSize(source_frame_->size());
+    QRect frame_rect = QRect(QPoint(0, 0), source_frame_->size());
     ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        Rect rect = base::Rect::fromProto(packet.dirty_rect(i));
-
-        if (!frame_rect.containsRect(rect))
+        QRect rect = base::parse(packet.dirty_rect(i));
+        if (!frame_rect.contains(rect))
         {
             LOG(ERROR) << "The rectangle is outside the screen area";
             return false;

@@ -19,7 +19,7 @@
 #ifndef BASE_CODEC_SCALE_REDUCER_H
 #define BASE_CODEC_SCALE_REDUCER_H
 
-#include "base/desktop/geometry.h"
+#include <QRect>
 
 #include <memory>
 
@@ -39,7 +39,7 @@ public:
     double scaleFactorY() const { return scale_y_; }
 
 private:
-    Rect scaledRect(const Rect& source_rect);
+    QRect scaledRect(const QRect& source_rect);
 
     std::unique_ptr<Frame> target_frame_;
     QSize source_size_;

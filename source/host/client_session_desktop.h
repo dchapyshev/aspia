@@ -23,7 +23,6 @@
 #include <QTimer>
 
 #include "base/serialization.h"
-#include "base/desktop/geometry.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 #include "host/stat_counter.h"

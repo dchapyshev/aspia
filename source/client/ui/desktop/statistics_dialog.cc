@@ -35,7 +35,6 @@ QString capturerToString(quint32 type)
         case base::ScreenCapturer::Type::FAKE: return "FAKE";
         case base::ScreenCapturer::Type::WIN_GDI: return "WIN_GDI";
         case base::ScreenCapturer::Type::WIN_DXGI: return "WIN_DXGI";
-        case base::ScreenCapturer::Type::WIN_MIRROR: return "WIN_MIRROR";
         case base::ScreenCapturer::Type::LINUX_X11: return "LINUX_X11";
         case base::ScreenCapturer::Type::MACOSX: return "MACOSX";
         default: return "UNKNOWN";

@@ -19,6 +19,7 @@
 #include "base/codec/video_encoder_zstd.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/codec/pixel_translator.h"
 #include "base/desktop/frame.h"
 
@@ -36,29 +37,6 @@ quint8* outputBuffer(std::string* data, size_t size)
 
     data->resize(size);
     return reinterpret_cast<quint8*>(data->data());
-}
-
-//--------------------------------------------------------------------------------------------------
-void serializePixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
-//--------------------------------------------------------------------------------------------------
-void serializeRect(const Rect& from, proto::desktop::Rect* to)
-{
-    to->set_x(from.x());
-    to->set_y(from.y());
-    to->set_width(from.width());
-    to->set_height(from.height());
 }
 
 } // namespace
@@ -137,14 +115,14 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
     {
         LOG(INFO) << "Has packet format";
 
-        serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
-        updated_region_ = Region(Rect::makeSize(frame->size()));
+        *packet->mutable_format()->mutable_pixel_format() = base::serialize(target_format_);
+        updated_region_ = QRect(QPoint(0, 0), frame->size());
     }
     else
     {
         if (isKeyFrameRequired())
         {
-            updated_region_ = Region(Rect::makeSize(frame->size()));
+            updated_region_ = QRect(QPoint(0, 0), frame->size());
         }
         else
         {
@@ -166,11 +144,10 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 
     size_t data_size = 0;
 
-    for (Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
+    for (const auto& rect : updated_region_)
     {
-        const Rect& rect = it.rect();
         data_size += static_cast<size_t>(rect.width() * rect.height() * target_format_.bytesPerPixel());
-        serializeRect(rect, packet->add_dirty_rect());
+        *packet->add_dirty_rect() = base::serialize(rect);
     }
 
     if (translate_buffer_size_ < data_size)
@@ -184,9 +161,8 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 
     quint8* translate_pos = translate_buffer_.get();
 
-    for (Region::Iterator it(updated_region_); !it.isAtEnd(); it.advance())
+    for (const auto& rect : updated_region_)
     {
-        const Rect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
 
         translator_->translate(frame->frameDataAtPos(rect.topLeft()),

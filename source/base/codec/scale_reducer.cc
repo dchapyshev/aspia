@@ -53,7 +53,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
 
     if (source_size_ != source_size || target_size_ != target_size)
     {
-        const_cast<Frame*>(source_frame)->updatedRegion()->addRect(Rect::makeSize(source_size));
+        *const_cast<Frame*>(source_frame)->updatedRegion() += QRect(QPoint(0, 0), source_size);
 
         scale_x_ = static_cast<double>(target_size.width() * 100.0) /
             static_cast<double>(source_size.width());
@@ -70,7 +70,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     if (source_size == target_size)
         return source_frame;
 
-    Rect target_frame_rect = Rect::makeSize(target_size);
+    QRect target_frame_rect(QPoint(0, 0), target_size);
 
     if (!target_frame_)
     {
@@ -81,7 +81,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
             return nullptr;
         }
 
-        target_frame_->updatedRegion()->addRect(target_frame_rect);
+        *target_frame_->updatedRegion() += target_frame_rect;
 
         libyuv::ARGBScale(source_frame->frameData(),
                           source_frame->stride(),
@@ -95,14 +95,13 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     }
     else
     {
-        Region* updated_region = target_frame_->updatedRegion();
-        updated_region->clear();
+        QRegion* updated_region = target_frame_->updatedRegion();
+        *updated_region = QRegion();
 
-        for (Region::Iterator it(source_frame->constUpdatedRegion());
-             !it.isAtEnd(); it.advance())
+        for (const auto& rect : source_frame->constUpdatedRegion())
         {
-            Rect target_rect = scaledRect(it.rect());
-            target_rect.intersectWith(target_frame_rect);
+            QRect target_rect = scaledRect(rect);
+            target_rect = target_rect.intersected(target_frame_rect);
 
             libyuv::ARGBScaleClip(source_frame->frameData(),
                                   source_frame->stride(),
@@ -118,7 +117,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
                                   target_rect.height(),
                                   libyuv::kFilterBox);
 
-            updated_region->addRect(target_rect);
+            *updated_region += target_rect;
         }
     }
 
@@ -126,18 +125,14 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect ScaleReducer::scaledRect(const Rect& source_rect)
+QRect ScaleReducer::scaledRect(const QRect& source_rect)
 {
-    int left = static_cast<int>(
-        static_cast<double>(source_rect.left() * scale_x_) / 100.0);
-    int top = static_cast<int>(
-        static_cast<double>(source_rect.top() * scale_y_) / 100.0);
-    int right = static_cast<int>(
-        static_cast<double>(source_rect.right() * scale_x_) / 100.0);
-    int bottom = static_cast<int>(
-        static_cast<double>(source_rect.bottom() * scale_y_) / 100.0);
+    int left = int(double(source_rect.left() * scale_x_) / 100.0);
+    int top = int(double(source_rect.top() * scale_y_) / 100.0);
+    int right = int(double(source_rect.right() * scale_x_) / 100.0);
+    int bottom = int(double(source_rect.bottom() * scale_y_) / 100.0);
 
-    return Rect::makeLTRB(left - 1, top - 1, right + 2, bottom + 2);
+    return QRect(QPoint(left - 1, top - 1), QPoint(right + 2, bottom + 2));
 }
 
 } // namespace base

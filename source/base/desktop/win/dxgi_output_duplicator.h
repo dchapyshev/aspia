@@ -67,7 +67,7 @@ public:
     bool duplicate(Context* context, const QPoint& offset, SharedPointer<Frame>& target_frame, DxgiCursor* cursor);
 
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
-    const Rect& desktopRect() const { return desktop_rect_; }
+    const QRect& desktopRect() const { return desktop_rect_; }
 
     // Returns the device name from DXGI_OUTPUT_DESC.
     const QString& deviceName() const { return device_name_; }
@@ -85,11 +85,11 @@ public:
 private:
     // Calls doDetectUpdatedRegion(). If it fails, this function sets the |updated_region| as
     // entire untranslatedDesktopRect().
-    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
+    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, QRegion* updated_region);
 
     // Returns untranslated updated region, which are directly returned by Windows APIs. Returns
     // false in case of a failure.
-    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
+    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, QRegion* updated_region);
 
     bool releaseFrame();
 
@@ -98,10 +98,10 @@ private:
     bool duplicateOutput();
 
     // Returns a Rect with the same size of desktopSize(), but translated by offset.
-    Rect translatedDesktopRect(const QPoint& offset) const;
+    QRect translatedDesktopRect(const QPoint& offset) const;
 
     // Returns a Rect with the same size of desktopSize(), but starts from (0, 0).
-    Rect untranslatedDesktopRect() const;
+    QRect untranslatedDesktopRect() const;
 
     // Spreads changes from |context| to other registered Context(s) in contexts_.
     void spreadContextChange(const Context* const context);
@@ -112,8 +112,8 @@ private:
     const D3dDevice device_;
     const Microsoft::WRL::ComPtr<IDXGIOutput1> output_;
     const QString device_name_;
-    const Rect initial_desktop_rect_;
-    Rect desktop_rect_;
+    const QRect initial_desktop_rect_;
+    QRect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;
     DXGI_OUTDUPL_DESC desc_;
     QVector<quint8> metadata_;

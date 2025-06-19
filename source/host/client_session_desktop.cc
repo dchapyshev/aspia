@@ -35,7 +35,6 @@
 #include "host/host_storage.h"
 #include "proto/desktop_internal.h"
 #include "proto/task_manager.h"
-#include "proto/text_chat.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
@@ -493,7 +492,7 @@ void ClientSessionDesktop::readConfig(const proto::desktop::Config& config)
 
         case proto::desktop::VIDEO_ENCODING_ZSTD:
             video_encoder_ = base::VideoEncoderZstd::create(
-                base::PixelFormat::fromProto(config.pixel_format()), static_cast<int>(config.compress_ratio()));
+                base::parse(config.pixel_format()), static_cast<int>(config.compress_ratio()));
             break;
 
         default:

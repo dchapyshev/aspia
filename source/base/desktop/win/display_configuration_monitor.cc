@@ -25,7 +25,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 bool DisplayConfigurationMonitor::isChanged()
 {
-    Rect rect = ScreenCaptureUtils::fullScreenRect();
+    QRect rect = ScreenCaptureUtils::fullScreenRect();
     if (!initialized_)
     {
         initialized_ = true;

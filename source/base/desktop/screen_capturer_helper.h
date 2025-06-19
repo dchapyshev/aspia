@@ -19,8 +19,7 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_HELPER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_HELPER_H
 
-#include "base/desktop/geometry.h"
-#include "base/desktop/region.h"
+#include <QRegion>
 
 #include <mutex>
 
@@ -39,14 +38,14 @@ public:
     void clearInvalidRegion();
 
     // Invalidate the specified region.
-    void invalidateRegion(const Region& invalid_region);
+    void invalidateRegion(const QRegion& invalid_region);
 
     // Invalidate the entire screen, of a given size.
     void invalidateScreen(const QSize& size);
 
     // Copies current invalid region to |invalid_region| clears invalid region storage for the next
     // frame.
-    void takeInvalidRegion(Region* invalid_region);
+    void takeInvalidRegion(QRegion* invalid_region);
 
     // Access the size of the most recently captured screen.
     const QSize& sizeMostRecent() const;
@@ -65,12 +64,12 @@ public:
 
     // Expands a region so that its vertices all lie on a grid.
     // The grid size must be >= 2, so |log_grid_size| must be >= 1.
-    static void expandToGrid(const Region& region, int log_grid_size, Region* result);
+    static void expandToGrid(const QRegion& region, int log_grid_size, QRegion* result);
 
 private:
     // A region that has been manually invalidated (through InvalidateRegion). These will be
     // returned as dirty_region in the capture data during the next capture.
-    Region invalid_region_;
+    QRegion invalid_region_;
 
     // A lock protecting |invalid_region_| across threads.
     std::mutex invalid_region_mutex_;

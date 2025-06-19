@@ -134,14 +134,14 @@ int roundToTwosMultiple(int x)
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect alignRect(const Rect& rect)
+QRect alignRect(const QRect& rect)
 {
     int x = roundToTwosMultiple(rect.left());
     int y = roundToTwosMultiple(rect.top());
     int right = roundToTwosMultiple(rect.right() + 1);
     int bottom = roundToTwosMultiple(rect.bottom() + 1);
 
-    return Rect::makeLTRB(x, y, right, bottom);
+    return QRect(QPoint(x, y), QPoint(right + 1, bottom + 1));
 }
 
 } // namespace
@@ -501,37 +501,36 @@ bool VideoEncoderVPX::createVp9Codec(const QSize& size)
 void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet)
 {
-    Rect image_rect = Rect::makeWH(static_cast<qint32>(image_->w), static_cast<qint32>(image_->h));
-    Region updated_region;
+    QRect image_rect(QPoint(0, 0), QSize(static_cast<int>(image_->w), static_cast<int>(image_->h)));
+    QRegion updated_region;
 
     if (!is_key_frame)
     {
         const int padding = ((encoding() == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
 
-        for (Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+        for (const auto& rect : frame->constUpdatedRegion())
         {
-            Rect rect = it.rect();
-
             // Pad each rectangle to avoid the block-artefact filters in libvpx from introducing
             // artefacts; VP9 includes up to 8px either side, and VP8 up to 3px, so unchanged
             // pixels up to that far out may still be affected by the changes in the updated
             // region, and so must be listed in the active map. After padding we align each
             // rectangle to 16x16 active-map macroblocks. This implicitly ensures all rects have
             // even top-left coords, which is is required by ARGBToI420().
-            updated_region.addRect(
-                alignRect(Rect::makeLTRB(
-                    rect.left() - padding, rect.top() - padding,
-                    rect.right() + padding, rect.bottom() + padding)));
+            QRect rect_with_padding =
+                QRect(QPoint(rect.left() - padding, rect.top() - padding),
+                      QPoint(rect.right() + padding, rect.bottom() + padding));
+
+            updated_region += alignRect(rect_with_padding);
         }
 
         // Clip back to the screen dimensions, in case they're not macroblock aligned.
         // The conversion routines don't require even width & height, so this is safe even if the
         // source dimensions are not even.
-        updated_region.intersectWith(image_rect);
+        updated_region = updated_region.intersected(image_rect);
     }
     else
     {
-        updated_region = Region(image_rect);
+        updated_region = image_rect;
     }
 
     clearActiveMap();
@@ -542,10 +541,8 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     quint8* u_data = image_->planes[1];
     quint8* v_data = image_->planes[2];
 
-    for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+    for (const auto& rect : updated_region)
     {
-        Rect rect = it.rect();
-
         const int y_offset = y_stride * rect.y() + rect.x();
         const int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
         const int width = rect.width();
@@ -570,7 +567,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
+void VideoEncoderVPX::addRectToActiveMap(const QRect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
     int top = rect.top() / kMacroBlockSize;

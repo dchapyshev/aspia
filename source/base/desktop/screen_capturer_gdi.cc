@@ -110,7 +110,7 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     }
 
     // At next screen capture, the resources are recreated.
-    desktop_dc_rect_ = Rect();
+    desktop_dc_rect_ = QRect();
 
     current_screen_id_ = screen_id;
     return true;
@@ -191,7 +191,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
     if (!previous || previous->size() != current->size())
     {
         differ_ = std::make_unique<Differ>(screen_rect_.size());
-        current->updatedRegion()->addRect(Rect::makeSize(screen_rect_.size()));
+        *current->updatedRegion() += QRect(QPoint(0, 0), screen_rect_.size());
     }
     else
     {
@@ -278,7 +278,7 @@ void ScreenCapturerGdi::reset()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::prepareCaptureResources()
 {
-    Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
+    QRect desktop_rect = ScreenCaptureUtils::fullScreenRect();
 
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
@@ -288,7 +288,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
         desktop_dc_.close();
         memory_dc_.reset();
 
-        desktop_dc_rect_ = Rect();
+        desktop_dc_rect_ = QRect();
     }
 
     if (!desktop_dc_)

@@ -60,7 +60,7 @@ quint8 diffPartialBlock(const quint8* prev_image,
 
 //--------------------------------------------------------------------------------------------------
 Differ::Differ(const QSize& size)
-    : screen_rect_(Rect::makeSize(size)),
+    : screen_rect_(QPoint(0, 0), size),
       bytes_per_row_(size.width() * kBytesPerPixel),
       diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
       diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
@@ -206,7 +206,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
 //--------------------------------------------------------------------------------------------------
 // After the dirty blocks have been identified, this routine merges adjacent blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
-void Differ::mergeBlocks(Region* dirty_region)
+void Differ::mergeBlocks(QRegion* dirty_region)
 {
     quint8* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -269,13 +269,11 @@ void Differ::mergeBlocks(Region* dirty_region)
                     }
                 } while (found_new_row);
 
-                Rect dirty_rect = Rect::makeXYWH(x * kBlockSize, y * kBlockSize,
-                                                 width * kBlockSize, height * kBlockSize);
-
-                dirty_rect.intersectWith(screen_rect_);
+                QRect dirty_rect(QPoint(x * kBlockSize, y * kBlockSize),
+                                 QSize(width * kBlockSize, height * kBlockSize));
 
                 // Add rect to region.
-                dirty_region->addRect(dirty_rect);
+                *dirty_region += dirty_rect.intersected(screen_rect_);
             }
 
             // Increment to next block in this row.
@@ -290,9 +288,9 @@ void Differ::mergeBlocks(Region* dirty_region)
 //--------------------------------------------------------------------------------------------------
 void Differ::calcDirtyRegion(const quint8* prev_image,
                              const quint8* curr_image,
-                             Region* dirty_region)
+                             QRegion* dirty_region)
 {
-    dirty_region->clear();
+    *dirty_region = QRegion();
 
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);

@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include "base/desktop/geometry.h"
 #include "proto/desktop.h"
 
 #include <chrono>

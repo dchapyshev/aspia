@@ -24,7 +24,7 @@ namespace base {
 
 namespace {
 
-std::unique_ptr<Frame> createTestFrame(const Rect& rect, int pixels_value)
+std::unique_ptr<Frame> createTestFrame(const QRect& rect, int pixels_value)
 {
     QSize size = rect.size();
     auto frame = FrameSimple::create(size, PixelFormat::ARGB());
@@ -39,21 +39,21 @@ std::unique_ptr<Frame> createTestFrame(const Rect& rect, int pixels_value)
 
 TEST(FrameTest, Performance)
 {
-    Rect frame_rect = Rect::makeWH(1024, 768);
+    QRect frame_rect(QPoint(0, 0), QSize(1024, 768));
     auto frame1 = createTestFrame(frame_rect, 0);
     auto frame2 = createTestFrame(frame_rect, 0xff);
 
     struct
     {
-        Rect src_rect;
-        Rect dst_rect;
+        QRect src_rect;
+        QRect dst_rect;
     } cases[] =
     {
-        { Rect::makeXYWH(0, 0, 120, 175), Rect::makeXYWH(50, 50, 120, 175) },
-        { Rect::makeXYWH(100, 200, 50, 100), Rect::makeXYWH(500, 400, 50, 100) },
-        { Rect::makeXYWH(75, 60, 10, 5), Rect::makeXYWH(30, 45, 10, 5) },
-        { Rect::makeXYWH(500, 200, 200, 200), Rect::makeXYWH(200, 500, 200, 200) },
-        { Rect::makeXYWH(350, 0, 100, 50), Rect::makeXYWH(0, 350, 100, 50) }
+        { QRect(QPoint(0, 0), QSize(120, 175)), QRect(QPoint(50, 50), QSize(120, 175)) },
+        { QRect(QPoint(100, 200), QSize(50, 100)), QRect(QPoint(500, 400), QSize(50, 100)) },
+        { QRect(QPoint(75, 60), QSize(10, 5)), QRect(QPoint(30, 45), QSize(10, 5)) },
+        { QRect(QPoint(500, 200), QSize(200, 200)), QRect(QPoint(200, 500), QSize(200, 200)) },
+        { QRect(QPoint(350, 0), QSize(100, 50)), QRect(QPoint(0, 350), QSize(100, 50)) }
     };
 
     for (size_t n = 0; n < 100000; ++n)

@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_CONTEXT_H
 #define BASE_DESKTOP_WIN_DXGI_CONTEXT_H
 
-#include "base/desktop/region.h"
+#include <QRegion>
 
 #include <memory>
 #include <vector>
@@ -33,7 +33,7 @@ struct DxgiOutputContext final
 {
     // The updated region DxgiOutputDuplicator::detectUpdatedRegion() output during last
     // duplicate() function call. It's always relative to the (0, 0).
-    Region updated_region;
+    QRegion updated_region;
 };
 
 // A DxgiAdapterContext stores the status of a single DxgiFrame of DxgiAdapterDuplicator.

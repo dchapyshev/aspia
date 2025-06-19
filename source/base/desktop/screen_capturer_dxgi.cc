@@ -163,7 +163,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
     for (const auto& screen : std::as_const(screens->screens))
     {
         dpi_for_rect_.push_back(
-            std::make_pair(Rect::makeXYWH(screen.position, screen.resolution), screen.dpi));
+            std::make_pair(QRect(screen.position, screen.resolution), screen.dpi));
     }
 
     return result;
@@ -303,7 +303,7 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
 
         for (const auto& item : std::as_const(dpi_for_rect_))
         {
-            const Rect& rect = item.first;
+            const QRect& rect = item.first;
 
             if (rect.contains(position))
             {

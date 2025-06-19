@@ -44,9 +44,9 @@ namespace {
 const int kAcquireTimeoutMs = 0;
 
 //--------------------------------------------------------------------------------------------------
-Rect RECTToDesktopRect(const RECT& rect)
+QRect RECTToDesktopRect(const RECT& rect)
 {
-    return Rect::makeLTRB(rect.left, rect.top, rect.right, rect.bottom);
+    return QRect(QPoint(rect.left, rect.top), QPoint(rect.right - 1, rect.bottom - 1));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ bool DxgiOutputDuplicator::duplicate(
     DCHECK(target);
     DCHECK(cursor);
 
-    if (!Rect::makeSize(target->size()).containsRect(translatedDesktopRect(offset)))
+    if (!QRect(QPoint(0, 0), target->size()).contains(translatedDesktopRect(offset)))
     {
         // target size is not large enough to cover current output region.
         return false;
@@ -282,8 +282,8 @@ bool DxgiOutputDuplicator::duplicate(
     // We need to merge updated region with the one from context, but only spread updated region
     // from current frame. So keeps a copy of updated region from context here. The |updated_region|
     // always starts from (0, 0).
-    Region updated_region;
-    updated_region.swap(&context->updated_region);
+    QRegion updated_region;
+    updated_region.swap(context->updated_region);
 
     if (error.Error() == S_OK && frame_info.AccumulatedFrames > 0 && resource)
     {
@@ -293,7 +293,7 @@ bool DxgiOutputDuplicator::duplicate(
         if (!texture_->copyFrom(frame_info, resource.Get()))
             return false;
 
-        updated_region.addRegion(context->updated_region);
+        updated_region += context->updated_region;
 
         // TODO(zijiehe): Figure out why clearing context->updated_region() here triggers screen
         // flickering?
@@ -302,24 +302,23 @@ bool DxgiOutputDuplicator::duplicate(
 
         if (rotation_ != Rotation::CLOCK_WISE_0)
         {
-            for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+            for (const auto& rect : updated_region)
             {
                 // The |updated_region| returned by Windows is rotated, but the |source| frame is
                 // not. So we need to rotate it reversely.
-                const Rect source_rect =
-                    rotateRect(it.rect(), desktopSize(), reverseRotation(rotation_));
+                const QRect source_rect = rotateRect(rect, desktopSize(), reverseRotation(rotation_));
                 rotateDesktopFrame(source, source_rect, rotation_, offset, target.get());
             }
         }
         else
         {
-            for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+            for (const auto& rect : updated_region)
             {
                 // The Rect in |target|, starts from offset.
-                Rect dest_rect = it.rect();
+                QRect dest_rect = rect;
                 dest_rect.translate(offset);
 
-                libyuv::ARGBCopy(source.frameDataAtPos(it.rect().topLeft()), source.stride(),
+                libyuv::ARGBCopy(source.frameDataAtPos(rect.topLeft()), source.stride(),
                                  target->frameDataAtPos(dest_rect.topLeft()), target->stride(),
                                  dest_rect.width(), dest_rect.height());
             }
@@ -329,7 +328,7 @@ bool DxgiOutputDuplicator::duplicate(
         last_frame_offset_ = offset;
 
         updated_region.translate(offset.x(), offset.y());
-        target->updatedRegion()->addRegion(updated_region);
+        *target->updatedRegion() += updated_region;
         ++num_frames_captured_;
 
         return texture_->release() && releaseFrame();
@@ -339,13 +338,13 @@ bool DxgiOutputDuplicator::duplicate(
     {
         // No change since last frame or AcquireNextFrame() timed out, we will export last frame to
         // the target.
-        for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
+        for (const auto& rect : updated_region)
         {
             // The Rect in |source|, starts from last_frame_offset_.
-            Rect source_rect = it.rect();
+            QRect source_rect = rect;
 
             // The Rect in |target|, starts from offset.
-            Rect target_rect = source_rect;
+            QRect target_rect = source_rect;
 
             source_rect.translate(last_frame_offset_);
             target_rect.translate(offset);
@@ -356,13 +355,13 @@ bool DxgiOutputDuplicator::duplicate(
         }
 
         updated_region.translate(offset.x(), offset.y());
-        target->updatedRegion()->addRegion(updated_region);
+        *target->updatedRegion() += updated_region;
     }
     else
     {
         // If we were at the very first frame, and capturing failed, the
         // context->updated_region should be kept unchanged for next attempt.
-        context->updated_region.swap(&updated_region);
+        context->updated_region.swap(updated_region);
     }
 
     // If AcquireNextFrame() failed with timeout error, we do not need to release the frame.
@@ -370,41 +369,41 @@ bool DxgiOutputDuplicator::duplicate(
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect DxgiOutputDuplicator::translatedDesktopRect(const QPoint& offset) const
+QRect DxgiOutputDuplicator::translatedDesktopRect(const QPoint& offset) const
 {
-    Rect result(Rect::makeSize(desktopSize()));
+    QRect result(QPoint(0, 0), desktopSize());
     result.translate(offset);
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect DxgiOutputDuplicator::untranslatedDesktopRect() const
+QRect DxgiOutputDuplicator::untranslatedDesktopRect() const
 {
-    return Rect::makeSize(desktopSize());
+    return QRect(QPoint(0, 0), desktopSize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                                               Region* updated_region)
+                                               QRegion* updated_region)
 {
     if (doDetectUpdatedRegion(frame_info, updated_region))
     {
         // Make sure even a region returned by Windows API is out of the scope of
         // desktop_rect_, we still won't export it to the target DesktopFrame.
-        updated_region->intersectWith(untranslatedDesktopRect());
+        *updated_region = updated_region->intersected(untranslatedDesktopRect());
     }
     else
     {
-        updated_region->setRect(untranslatedDesktopRect());
+        *updated_region = untranslatedDesktopRect();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                                                 Region* updated_region)
+                                                 QRegion* updated_region)
 {
     DCHECK(updated_region);
-    updated_region->clear();
+    *updated_region = QRegion();
 
     if (frame_info.TotalMetadataBufferSize == 0)
     {
@@ -455,21 +454,19 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         if (move_rects->SourcePoint.x != move_rects->DestinationRect.left ||
             move_rects->SourcePoint.y != move_rects->DestinationRect.top)
         {
-            updated_region->addRect(
-                rotateRect(Rect::makeXYWH(move_rects->SourcePoint.x,
-                                          move_rects->SourcePoint.y,
-                                          move_rects->DestinationRect.right -
-                                          move_rects->DestinationRect.left,
-                                          move_rects->DestinationRect.bottom -
-                                          move_rects->DestinationRect.top),
-                           unrotated_size_, rotation_));
+            *updated_region +=
+                rotateRect(QRect(QPoint(move_rects->SourcePoint.x,
+                                        move_rects->SourcePoint.y),
+                                 QSize(move_rects->DestinationRect.right - move_rects->DestinationRect.left,
+                                       move_rects->DestinationRect.bottom - move_rects->DestinationRect.top)),
+                           unrotated_size_, rotation_);
 
-            updated_region->addRect(
-                rotateRect(Rect::makeLTRB(move_rects->DestinationRect.left,
-                                          move_rects->DestinationRect.top,
-                                          move_rects->DestinationRect.right,
-                                          move_rects->DestinationRect.bottom),
-                           unrotated_size_, rotation_));
+            *updated_region +=
+                rotateRect(QRect(QPoint(move_rects->DestinationRect.left,
+                                        move_rects->DestinationRect.top),
+                                 QPoint(move_rects->DestinationRect.right - 1,
+                                        move_rects->DestinationRect.bottom - 1)),
+                           unrotated_size_, rotation_);
         }
         else
         {
@@ -486,10 +483,10 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
 
     while (dirty_rects_count > 0)
     {
-        updated_region->addRect(rotateRect(
-            Rect::makeLTRB(dirty_rects->left, dirty_rects->top,
-                           dirty_rects->right, dirty_rects->bottom),
-            unrotated_size_, rotation_));
+        *updated_region += rotateRect(
+            QRect(QPoint(dirty_rects->left, dirty_rects->top),
+                  QPoint(dirty_rects->right - 1, dirty_rects->bottom - 1)),
+            unrotated_size_, rotation_);
 
         ++dirty_rects;
         --dirty_rects_count;
@@ -504,7 +501,7 @@ void DxgiOutputDuplicator::setup(Context* context)
     DCHECK(context->updated_region.isEmpty());
 
     // Always copy entire monitor during the first duplicate() function call.
-    context->updated_region.addRect(untranslatedDesktopRect());
+    context->updated_region += untranslatedDesktopRect();
     DCHECK(std::find(contexts_.begin(), contexts_.end(), context) == contexts_.end());
     contexts_.push_back(context);
 }
@@ -525,7 +522,7 @@ void DxgiOutputDuplicator::spreadContextChange(const Context* const source)
         DCHECK(dest);
 
         if (dest != source)
-            dest->updated_region.addRegion(source->updated_region);
+            dest->updated_region += source->updated_region;
     }
 }
 

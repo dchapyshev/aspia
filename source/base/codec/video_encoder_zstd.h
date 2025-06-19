@@ -19,10 +19,11 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 #define BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 
+#include <QRegion>
+
 #include "base/aligned_memory.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/codec/video_encoder.h"
-#include "base/desktop/region.h"
 #include "base/desktop/pixel_format.h"
 
 namespace base {
@@ -46,7 +47,7 @@ private:
     VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio);
     bool compressPacket(const quint8* input_data, size_t input_size, std::string* output_buffer);
 
-    Region updated_region_;
+    QRegion updated_region_;
     PixelFormat target_format_;
     int compress_ratio_;
     ScopedZstdCStream stream_;

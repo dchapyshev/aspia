@@ -75,7 +75,6 @@ set(THIRD_PARTY_LIBS
     Opus::opus
     libwebm
     unofficial::libvpx::libvpx
-    x11region
     yuv)
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)

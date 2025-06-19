@@ -288,16 +288,12 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/frame_rotation.h
     desktop/frame_simple.cc
     desktop/frame_simple.h
-    desktop/geometry.cc
-    desktop/geometry.h
     desktop/mouse_cursor.cc
     desktop/mouse_cursor.h
     desktop/pixel_format.cc
     desktop/pixel_format.h
     desktop/power_save_blocker.cc
     desktop/power_save_blocker.h
-    desktop/region.cc
-    desktop/region.h
     desktop/screen_capturer.cc
     desktop/screen_capturer.h
     desktop/screen_capturer_helper.cc
@@ -319,8 +315,6 @@ if (WIN32)
         desktop/screen_capturer_dxgi.h
         desktop/screen_capturer_gdi.cc
         desktop/screen_capturer_gdi.h
-        desktop/screen_capturer_mirror.cc
-        desktop/screen_capturer_mirror.h
         desktop/screen_capturer_win.cc
         desktop/screen_capturer_win.h)
 endif()
@@ -346,9 +340,7 @@ endif()
 list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/diff_block_32bpp_c_unittest.cc
     desktop/diff_block_32bpp_sse2_unittest.cc
-    desktop/frame_unittest.cc
-    desktop/geometry_unittest.cc
-    desktop/region_unittest.cc)
+    desktop/frame_unittest.cc)
 
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP_MAC
@@ -371,9 +363,6 @@ if (WIN32)
         desktop/win/cursor.h
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
-        desktop/win/dfmirage.h
-        desktop/win/dfmirage_helper.cc
-        desktop/win/dfmirage_helper.h
         desktop/win/display_configuration_monitor.cc
         desktop/win/display_configuration_monitor.h
         desktop/win/dxgi_adapter_duplicator.cc
@@ -394,11 +383,6 @@ if (WIN32)
         desktop/win/dxgi_texture_mapping.h
         desktop/win/dxgi_texture_staging.cc
         desktop/win/dxgi_texture_staging.h
-        desktop/win/mirror_helper.cc
-        desktop/win/mirror_helper.h
-        desktop/win/mv2.h
-        desktop/win/mv2_helper.cc
-        desktop/win/mv2_helper.h
         desktop/win/screen_capture_utils.cc
         desktop/win/screen_capture_utils.h
         desktop/win/swdevice_defines.h

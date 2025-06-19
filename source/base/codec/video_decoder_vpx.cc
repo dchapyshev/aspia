@@ -21,6 +21,7 @@
 #include <QThread>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/desktop/frame.h"
 
 #include <libyuv/convert_from.h>
@@ -40,7 +41,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image,
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
 
-    Rect frame_rect = Rect::makeSize(frame->size());
+    QRect frame_rect = QRect(QPoint(0, 0), frame->size());
 
     quint8* y_data = image->planes[0];
     quint8* u_data = image->planes[1];
@@ -51,11 +52,8 @@ bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        const proto::desktop::Rect& dirty_rect = packet.dirty_rect(i);
-        Rect rect = Rect::makeXYWH(
-            dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height());
-
-        if (!frame_rect.containsRect(rect))
+        QRect rect = base::parse(packet.dirty_rect(i));
+        if (!frame_rect.contains(rect))
         {
             LOG(ERROR) << "The rectangle is outside the screen area";
             return false;

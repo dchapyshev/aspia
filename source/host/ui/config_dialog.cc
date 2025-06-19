@@ -40,7 +40,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"
-#include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -248,13 +247,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     ui.combo_video_capturer->addItem(
         "GDI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_GDI));
-
-    // Mirror screen capture is available only in Windows 7/2008 R2.
-    if (base::windowsVersion() == base::VERSION_WIN7)
-    {
-        ui.combo_video_capturer->addItem(
-            "MIRROR", static_cast<quint32>(base::ScreenCapturer::Type::WIN_MIRROR));
-    }
 
 #elif defined(Q_OS_LINUX)
     ui.combo_video_capturer->addItem(

@@ -26,40 +26,40 @@ namespace base {
 void ScreenCapturerHelper::clearInvalidRegion()
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
-    invalid_region_.clear();
+    invalid_region_ = QRegion();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerHelper::invalidateRegion(const Region& invalid_region)
+void ScreenCapturerHelper::invalidateRegion(const QRegion& invalid_region)
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
-    invalid_region_.addRegion(invalid_region);
+    invalid_region_ += invalid_region;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::invalidateScreen(const QSize& size)
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
-    invalid_region_.addRect(Rect::makeSize(size));
+    invalid_region_ += QRect(QPoint(0, 0), size);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerHelper::takeInvalidRegion(Region* invalid_region)
+void ScreenCapturerHelper::takeInvalidRegion(QRegion* invalid_region)
 {
-    invalid_region->clear();
+    *invalid_region = QRegion();
 
     {
         std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
-        invalid_region->swap(&invalid_region_);
+        invalid_region->swap(invalid_region_);
     }
 
     if (log_grid_size_ > 0)
     {
-        Region expanded_region;
+        QRegion expanded_region;
         expandToGrid(*invalid_region, log_grid_size_, &expanded_region);
-        expanded_region.swap(invalid_region);
+        expanded_region.swap(*invalid_region);
 
-        invalid_region->intersectWith(Rect::makeSize(size_most_recent_));
+        *invalid_region = invalid_region->intersected(QRect(QPoint(0, 0), size_most_recent_));
     }
 }
 
@@ -98,20 +98,20 @@ static int upToMultiple(int x, int n, int n_mask)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerHelper::expandToGrid(const Region& region, int log_grid_size, Region* result)
+void ScreenCapturerHelper::expandToGrid(const QRegion& region, int log_grid_size, QRegion* result)
 {
     assert(log_grid_size >= 1);
     int grid_size = 1 << log_grid_size;
     int grid_size_mask = ~(grid_size - 1);
 
-    result->clear();
-    for (Region::Iterator it(region); !it.isAtEnd(); it.advance())
+    *result = QRegion();
+    for (const auto& rect : region)
     {
-        int left = downToMultiple(it.rect().left(), grid_size_mask);
-        int right = upToMultiple(it.rect().right(), grid_size, grid_size_mask);
-        int top = downToMultiple(it.rect().top(), grid_size_mask);
-        int bottom = upToMultiple(it.rect().bottom(), grid_size, grid_size_mask);
-        result->addRect(Rect::makeLTRB(left, top, right, bottom));
+        int left = downToMultiple(rect.left(), grid_size_mask);
+        int right = upToMultiple(rect.right(), grid_size, grid_size_mask);
+        int top = downToMultiple(rect.top(), grid_size_mask);
+        int bottom = upToMultiple(rect.bottom(), grid_size, grid_size_mask);
+        *result += QRect(QPoint(left, top), QPoint(right - 1, bottom - 1));
     }
 }
 

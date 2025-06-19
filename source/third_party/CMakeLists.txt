@@ -17,7 +17,6 @@
 #
 
 add_subdirectory(libwebm)
-add_subdirectory(x11region)
 
 if (APPLE)
     add_subdirectory(portaudio)

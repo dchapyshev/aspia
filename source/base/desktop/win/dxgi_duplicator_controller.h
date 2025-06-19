@@ -155,7 +155,7 @@ private:
     // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
     // capturer, or |id| is greater than the total screen count of all the Duplicators, this
     // function returns an empty Rect.
-    Rect screenRect(int id) const;
+    QRect screenRect(int id) const;
 
     int doScreenCount() const;
 
@@ -179,7 +179,7 @@ private:
     // A self-incremented integer to compare with the one in Context. It ensures a Context instance
     // is always initialized after DxgiDuplicatorController.
     int identity_ = 0;
-    Rect desktop_rect_;
+    QRect desktop_rect_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
     D3dInfo d3d_info_;
     DisplayConfigurationMonitor display_configuration_monitor_;

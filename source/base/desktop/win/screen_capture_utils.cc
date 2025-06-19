@@ -29,7 +29,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-QPoint dpiByRect(const Rect& rect)
+QPoint dpiByRect(const QRect& rect)
 {
     QPoint result(96, 96);
 
@@ -136,9 +136,9 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 
         QString device_name = QString::fromWCharArray(device.DeviceName);
         bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
-        Rect rect = Rect::makeXYWH(device_mode.dmPosition.x, device_mode.dmPosition.y,
-            static_cast<qint32>(device_mode.dmPelsWidth),
-            static_cast<qint32>(device_mode.dmPelsHeight));
+        QRect rect(QPoint(device_mode.dmPosition.x, device_mode.dmPosition.y),
+                   QSize(static_cast<int>(device_mode.dmPelsWidth),
+                         static_cast<int>(device_mode.dmPelsHeight)));
         QPoint dpi = dpiByRect(rect);
 
         screen_list->screens.push_back(
@@ -173,18 +173,16 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
 
 //--------------------------------------------------------------------------------------------------
 // static
-Rect ScreenCaptureUtils::fullScreenRect()
+QRect ScreenCaptureUtils::fullScreenRect()
 {
-    return Rect::makeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                          GetSystemMetrics(SM_YVIRTUALSCREEN),
-                          GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    return QRect(QPoint(GetSystemMetrics(SM_XVIRTUALSCREEN), GetSystemMetrics(SM_YVIRTUALSCREEN)),
+                 QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN)));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
-                                    const std::wstring& device_key)
+QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
+                                     const std::wstring& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
         return fullScreenRect();
@@ -194,7 +192,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
     {
         PLOG(ERROR) << "EnumDisplayDevicesW failed";
-        return Rect();
+        return QRect();
     }
 
     // Verifies the device index still maps to the same display device, to make sure we are
@@ -204,7 +202,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     if (device.DeviceKey != device_key)
     {
         LOG(ERROR) << "Invalid device key";
-        return Rect();
+        return QRect();
     }
 
     DEVMODEW device_mode;
@@ -214,13 +212,12 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
     {
         PLOG(ERROR) << "EnumDisplaySettingsExW failed";
-        return Rect();
+        return QRect();
     }
 
-    return Rect::makeXYWH(device_mode.dmPosition.x,
-                          device_mode.dmPosition.y,
-                          static_cast<qint32>(device_mode.dmPelsWidth),
-                          static_cast<qint32>(device_mode.dmPelsHeight));
+    return QRect(QPoint(device_mode.dmPosition.x, device_mode.dmPosition.y),
+                 QSize(static_cast<int>(device_mode.dmPelsWidth),
+                       static_cast<int>(device_mode.dmPelsHeight)));
 }
 
 //--------------------------------------------------------------------------------------------------

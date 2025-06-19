@@ -21,7 +21,6 @@
 #include <QVector>
 
 #include "base/logging.h"
-#include "base/desktop/geometry.h"
 #include "base/desktop/win/screen_capture_utils.h"
 
 namespace host {

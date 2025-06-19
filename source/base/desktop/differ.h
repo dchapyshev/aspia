@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_DIFFER_H
 #define BASE_DESKTOP_DIFFER_H
 
-#include "base/desktop/region.h"
+#include <QRegion>
 
 #include <memory>
 
@@ -34,7 +34,7 @@ public:
 
     void calcDirtyRegion(const quint8* prev_image,
                          const quint8* curr_image,
-                         Region* changed_region);
+                         QRegion* changed_region);
 
 private:
     typedef quint8(*DiffFullBlockFunc)(const quint8*, const quint8*, int);
@@ -42,9 +42,9 @@ private:
     static DiffFullBlockFunc diffFunction();
 
     void markDirtyBlocks(const quint8* prev_image, const quint8* curr_image);
-    void mergeBlocks(Region* dirty_region);
+    void mergeBlocks(QRegion* dirty_region);
 
-    const Rect screen_rect_;
+    const QRect screen_rect_;
     const int bytes_per_row_;
     const int diff_width_;
     const int diff_height_;

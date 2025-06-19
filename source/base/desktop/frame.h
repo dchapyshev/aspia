@@ -19,8 +19,9 @@
 #ifndef BASE_DESKTOP_FRAME_H
 #define BASE_DESKTOP_FRAME_H
 
+#include <QRegion>
+
 #include "base/desktop/pixel_format.h"
-#include "base/desktop/region.h"
 
 namespace base {
 
@@ -43,11 +44,11 @@ public:
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
-    void copyPixelsFrom(const quint8* src_buffer, int src_stride, const Rect& dest_rect);
-    void copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const Rect& dest_rect);
+    void copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect& dest_rect);
+    void copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect);
 
-    const Region& constUpdatedRegion() const { return updated_region_; }
-    Region* updatedRegion() { return &updated_region_; }
+    const QRegion& constUpdatedRegion() const { return updated_region_; }
+    QRegion* updatedRegion() { return &updated_region_; }
 
     void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
     const QPoint& topLeft() const { return top_left_; }
@@ -56,7 +57,7 @@ public:
     const QPoint& dpi() const { return dpi_; }
 
     float scaleFactor() const;
-    Rect rect() const;
+    QRect rect() const;
 
     void setCapturerType(quint32 capturer_type) { capturer_type_ = capturer_type; }
     quint32 capturerType() const { return capturer_type_; }
@@ -84,7 +85,7 @@ protected:
     int stride_;
 
 private:
-    Region updated_region_;
+    QRegion updated_region_;
     QPoint top_left_;
     QPoint dpi_;
     quint32 capturer_type_ = 0;

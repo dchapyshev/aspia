@@ -63,8 +63,8 @@ private:
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::wstring current_device_key_;
 
-    Rect desktop_dc_rect_;
-    Rect screen_rect_;
+    QRect desktop_dc_rect_;
+    QRect screen_rect_;
 
     std::unique_ptr<Differ> differ_;
     ScopedGetDC desktop_dc_;

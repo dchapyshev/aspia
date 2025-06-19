@@ -40,7 +40,7 @@ enum class Rotation
 // This function triggers check failure if |source| does not cover the
 // |source_rect|, or |target| does not cover the rotated |rect|.
 void rotateDesktopFrame(const Frame& source,
-                        const Rect& source_rect,
+                        const QRect& source_rect,
                         const Rotation& rotation,
                         const QPoint& target_offset,
                         Frame* target);
@@ -53,7 +53,7 @@ QSize rotateSize(const QSize& size, Rotation rotation);
 
 // Returns a rotated Rect of |rect|. The |size| represents the size of the Frame which |rect|
 // belongs in.
-Rect rotateRect(const Rect& rect, const QSize& size, Rotation rotation);
+QRect rotateRect(const QRect& rect, const QSize& size, Rotation rotation);
 
 } // namespace base
 

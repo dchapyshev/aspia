@@ -605,11 +605,9 @@ void DesktopSessionAgent::captureScreen()
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
 
-        for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
+        for (const auto& rect : frame->constUpdatedRegion())
         {
             proto::desktop::Rect* dirty_rect = serialized_frame->add_dirty_rect();
-            base::Rect rect = it.rect();
-
             dirty_rect->set_x(rect.x());
             dirty_rect->set_y(rect.y());
             dirty_rect->set_width(rect.width());

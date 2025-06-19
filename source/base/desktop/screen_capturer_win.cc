@@ -23,7 +23,6 @@
 #include "base/logging.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
-#include "base/desktop/screen_capturer_mirror.h"
 #include "base/win/session_info.h"
 #include "base/win/windows_version.h"
 
@@ -147,34 +146,6 @@ ScreenCapturerWin::~ScreenCapturerWin()
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error, QObject* parent)
 {
-    auto try_mirror_capturer = []() -> ScreenCapturer*
-    {
-        // Mirror screen capture is available only in Windows 7/2008 R2.
-        if (windowsVersion() == base::VERSION_WIN7)
-        {
-            LOG(INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
-
-            std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
-                std::make_unique<ScreenCapturerMirror>();
-
-            if (capturer_mirror->isSupported())
-            {
-                LOG(INFO) << "Using MIRROR capturer";
-                return capturer_mirror.release();
-            }
-            else
-            {
-                LOG(INFO) << "MIRROR capturer unavailable";
-            }
-        }
-        else
-        {
-            LOG(INFO) << "Windows version is not equal to 7/2008R2. MIRROR capturer unavailable";
-        }
-
-        return nullptr;
-    };
-
     ScreenCapturer* screen_capturer = nullptr;
 
     if (last_error == ScreenCapturer::Error::PERMANENT)
@@ -195,14 +166,6 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
                 screen_capturer = capturer_dxgi.release();
             }
         }
-        else
-        {
-            screen_capturer = try_mirror_capturer();
-        }
-    }
-    else if (preferred_type == ScreenCapturer::Type::WIN_MIRROR)
-    {
-        screen_capturer = try_mirror_capturer();
     }
 
     if (!screen_capturer)

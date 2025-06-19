@@ -113,7 +113,7 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 
                 duplicators_.push_back(std::move(duplicator));
 
-                desktop_rect_.unionWith(duplicators_.back().desktopRect());
+                desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
             }
             else
             {
@@ -192,7 +192,7 @@ bool DxgiAdapterDuplicator::duplicateMonitor(
 }
 
 //--------------------------------------------------------------------------------------------------
-Rect DxgiAdapterDuplicator::screenRect(int id) const
+QRect DxgiAdapterDuplicator::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));
