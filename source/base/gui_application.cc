@@ -18,7 +18,6 @@
 
 #include "base/gui_application.h"
 
-#include <QCryptographicHash>
 #include <QDataStream>
 #include <QDir>
 #include <QLocalServer>
@@ -79,10 +78,9 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     if (temp_path.endsWith(session_id))
         temp_path = temp_path.left(temp_path.length() - session_id.length());
 
-    QByteArray app_path = QApplication::applicationFilePath().toLower().toUtf8();
-    QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
+    QByteArray app_path_hex = QApplication::applicationFilePath().toLower().toUtf8().toHex();
 
-    server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
+    server_name_ = QString::fromLatin1(app_path_hex) + session_id;
     lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + QLatin1String(".lock");
     lock_file_ = new QLockFile(lock_file_name_);
 
