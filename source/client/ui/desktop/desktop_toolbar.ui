@@ -23,10 +23,10 @@
    <bool>true</bool>
   </property>
   <property name="frameShape">
-   <enum>QFrame::Panel</enum>
+   <enum>QFrame::Shape::Panel</enum>
   </property>
   <property name="frameShadow">
-   <enum>QFrame::Raised</enum>
+   <enum>QFrame::Shadow::Raised</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -54,8 +54,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>18</width>
-       <height>18</height>
+       <width>22</width>
+       <height>22</height>
       </size>
      </property>
      <addaction name="action_pin"/>
@@ -101,10 +101,10 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>

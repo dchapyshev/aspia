@@ -36,12 +36,12 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>16</width>
-       <height>16</height>
+       <width>22</width>
+       <height>22</height>
       </size>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+      <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
      </property>
      <addaction name="action_save"/>
      <addaction name="action_print"/>
@@ -53,7 +53,7 @@
      <item>
       <widget class="QSplitter" name="splitter">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <widget class="QTreeWidget" name="tree_category">
         <property name="sizePolicy">
@@ -63,13 +63,13 @@
          </sizepolicy>
         </property>
         <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
+         <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
         </property>
         <property name="showDropIndicator" stdset="0">
          <bool>false</bool>
         </property>
         <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectItems</enum>
+         <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
         </property>
         <property name="iconSize">
          <size>
