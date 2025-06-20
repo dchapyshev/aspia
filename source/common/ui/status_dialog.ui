@@ -24,7 +24,7 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonbox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
+      <set>QDialogButtonBox::StandardButton::Close</set>
      </property>
     </widget>
    </item>

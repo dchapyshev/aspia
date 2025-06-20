@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>316</width>
-    <height>253</height>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,14 +52,14 @@
        <item>
         <widget class="QLineEdit" name="edit_password">
          <property name="echoMode">
-          <enum>QLineEdit::Password</enum>
+          <enum>QLineEdit::EchoMode::Password</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="edit_password_retry">
          <property name="echoMode">
-          <enum>QLineEdit::Password</enum>
+          <enum>QLineEdit::EchoMode::Password</enum>
          </property>
         </widget>
        </item>
@@ -99,7 +99,7 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonbox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

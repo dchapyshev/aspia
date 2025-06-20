@@ -47,7 +47,7 @@
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
+      <set>QDialogButtonBox::StandardButton::No|QDialogButtonBox::StandardButton::Yes</set>
      </property>
     </widget>
    </item>

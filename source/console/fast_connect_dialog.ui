@@ -127,14 +127,13 @@
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../common/resources/common.qrc"/>
   <include location="../common/resources/common.qrc"/>
  </resources>
  <connections/>

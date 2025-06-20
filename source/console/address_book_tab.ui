@@ -29,7 +29,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <widget class="console::ComputerGroupTree" name="tree_group">
       <property name="sizePolicy">
@@ -39,19 +39,19 @@
        </sizepolicy>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
+       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
       </property>
       <property name="dragEnabled">
        <bool>false</bool>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragDrop</enum>
+       <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
       </property>
       <property name="defaultDropAction">
-       <enum>Qt::MoveAction</enum>
+       <enum>Qt::DropAction::MoveAction</enum>
       </property>
       <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectItems</enum>
+       <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
       </property>
       <attribute name="headerVisible">
        <bool>false</bool>
@@ -70,19 +70,19 @@
        </sizepolicy>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
+       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
       </property>
       <property name="dragEnabled">
        <bool>true</bool>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragOnly</enum>
+       <enum>QAbstractItemView::DragDropMode::DragOnly</enum>
       </property>
       <property name="defaultDropAction">
-       <enum>Qt::MoveAction</enum>
+       <enum>Qt::DropAction::MoveAction</enum>
       </property>
       <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
+       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
       </property>
       <property name="indentation">
        <number>0</number>

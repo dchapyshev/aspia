@@ -3,7 +3,7 @@
  <class>ComputerGroupDialog</class>
  <widget class="QDialog" name="ComputerGroupDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -99,7 +99,7 @@ background-color: transparent;
 }</string>
          </property>
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="childrenCollapsible">
           <bool>false</bool>
@@ -115,7 +115,7 @@ background-color: transparent;
            <bool>false</bool>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectItems</enum>
+           <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
           </property>
           <property name="rootIsDecorated">
            <bool>false</bool>
@@ -149,7 +149,7 @@ background-color: transparent;
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

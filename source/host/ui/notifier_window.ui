@@ -66,7 +66,7 @@ background: #CFCFCF;
 padding: 3px;</string>
         </property>
         <property name="text">
-         <string notr="true">&lt;img src=&quot;:/img/main.png&quot;/&gt;</string>
+         <string notr="true">&lt;img src=&quot;:/img/aspia-host.png&quot;/&gt;</string>
         </property>
        </widget>
       </item>
@@ -151,7 +151,7 @@ background: #CFCFCF;</string>
          <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aspia&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::RichText</enum>
+         <enum>Qt::TextFormat::RichText</enum>
         </property>
        </widget>
       </item>
@@ -180,7 +180,7 @@ background: #CFCFCF;</string>
          <string>Connections</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::PlainText</enum>
+         <enum>Qt::TextFormat::PlainText</enum>
         </property>
        </widget>
       </item>
@@ -190,7 +190,7 @@ background: #CFCFCF;</string>
    <item row="1" column="0">
     <spacer name="vertical_spacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -239,7 +239,7 @@ padding: 30px;
          </sizepolicy>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::CustomContextMenu</enum>
+         <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">QTreeWidget {
@@ -253,13 +253,13 @@ color: #505050;
 }</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::Shape::NoFrame</enum>
         </property>
         <property name="selectionMode">
-         <enum>QAbstractItemView::SingleSelection</enum>
+         <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
         </property>
         <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
+         <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
         </property>
         <property name="indentation">
          <number>0</number>
@@ -333,7 +333,7 @@ background: #D7D7D7;
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -352,7 +352,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../../common/resources/common.qrc">
+            <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
            </property>
           </widget>
@@ -380,7 +380,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../../common/resources/common.qrc">
+            <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/keyboard.png</normaloff>:/img/keyboard.png</iconset>
            </property>
           </widget>
@@ -408,7 +408,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../../common/resources/common.qrc">
+            <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/control-stop.png</normaloff>:/img/control-stop.png</iconset>
            </property>
           </widget>
@@ -422,7 +422,6 @@ background: #D7D7D7;
   </layout>
  </widget>
  <resources>
-  <include location="../../../common/resources/common.qrc"/>
   <include location="../../common/resources/common.qrc"/>
  </resources>
  <connections/>

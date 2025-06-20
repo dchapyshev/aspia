@@ -487,7 +487,6 @@ text-decoration: underline;
  </widget>
  <resources>
   <include location="../../common/resources/common.qrc"/>
-  <include location="../../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

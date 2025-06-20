@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>107</height>
+    <height>114</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,14 +40,12 @@
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::StandardButton::Cancel</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/common.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

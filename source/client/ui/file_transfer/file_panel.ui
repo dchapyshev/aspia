@@ -35,10 +35,10 @@
    <item>
     <widget class="QLabel" name="label_name">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="text">
       <string notr="true">Panel Name</string>
@@ -65,7 +65,7 @@
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+        <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
        </property>
        <addaction name="action_up"/>
        <addaction name="action_refresh"/>
@@ -92,7 +92,7 @@
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+        <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
        </property>
        <addaction name="action_send"/>
       </widget>
@@ -102,31 +102,31 @@
    <item>
     <widget class="client::FileList" name="list">
      <property name="focusPolicy">
-      <enum>Qt::StrongFocus</enum>
+      <enum>Qt::FocusPolicy::StrongFocus</enum>
      </property>
      <property name="contextMenuPolicy">
-      <enum>Qt::CustomContextMenu</enum>
+      <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
      </property>
      <property name="acceptDrops">
       <bool>true</bool>
      </property>
      <property name="editTriggers">
-      <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+      <set>QAbstractItemView::EditTrigger::EditKeyPressed|QAbstractItemView::EditTrigger::SelectedClicked</set>
      </property>
      <property name="dragEnabled">
       <bool>true</bool>
      </property>
      <property name="dragDropMode">
-      <enum>QAbstractItemView::DragDrop</enum>
+      <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
      </property>
      <property name="defaultDropAction">
-      <enum>Qt::CopyAction</enum>
+      <enum>Qt::DropAction::CopyAction</enum>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
+      <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
      </property>
      <property name="indentation">
       <number>0</number>

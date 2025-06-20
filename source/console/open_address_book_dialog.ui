@@ -3,14 +3,14 @@
  <class>OpenAddressBookDialog</class>
  <widget class="QDialog" name="OpenAddressBookDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
   </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>181</height>
+    <width>409</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -107,7 +107,7 @@
             <item>
              <widget class="QLineEdit" name="edit_password">
               <property name="echoMode">
-               <enum>QLineEdit::Password</enum>
+               <enum>QLineEdit::EchoMode::Password</enum>
               </property>
              </widget>
             </item>
@@ -143,7 +143,7 @@
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
@@ -151,7 +151,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../common/resources/common.qrc"/>
   <include location="../common/resources/common.qrc"/>
  </resources>
  <connections/>

@@ -29,7 +29,7 @@
    <item>
     <widget class="QTreeWidget" name="tree">
      <property name="contextMenuPolicy">
-      <enum>Qt::CustomContextMenu</enum>
+      <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
      </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>

@@ -99,7 +99,7 @@
    <item>
     <widget class="QDialogButtonBox" name="button_box">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::StandardButton::Cancel</set>
      </property>
     </widget>
    </item>

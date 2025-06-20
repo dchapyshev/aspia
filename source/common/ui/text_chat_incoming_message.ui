@@ -88,10 +88,10 @@ border-radius: 3px;
          <item>
           <spacer name="verticalSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
+            <enum>QSizePolicy::Policy::Expanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -131,10 +131,10 @@ font-family: Verdana;
             <string notr="true">Source</string>
            </property>
            <property name="textFormat">
-            <enum>Qt::PlainText</enum>
+            <enum>Qt::TextFormat::PlainText</enum>
            </property>
            <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+            <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -156,10 +156,10 @@ font-family: Verdana;
             <string notr="true">Message</string>
            </property>
            <property name="textFormat">
-            <enum>Qt::PlainText</enum>
+            <enum>Qt::TextFormat::PlainText</enum>
            </property>
            <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -168,7 +168,7 @@ font-family: Verdana;
             <bool>true</bool>
            </property>
            <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+            <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -197,10 +197,10 @@ padding: 0px 0px 1px 0px;
       <string>Time</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+      <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
      </property>
      <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
