@@ -54,7 +54,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="resources/console.qrc">
+           <iconset resource="../common/resources/common.qrc">
             <normaloff>:/img/broom.png</normaloff>:/img/broom.png</iconset>
           </property>
           <property name="autoDefault">
@@ -88,7 +88,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../client/resources/client.qrc">
+           <iconset resource="../common/resources/common.qrc">
             <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
           </property>
           <property name="autoDefault">
@@ -134,8 +134,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../client/resources/client.qrc"/>
-  <include location="resources/console.qrc"/>
+  <include location="../common/resources/common.qrc"/>
+  <include location="../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

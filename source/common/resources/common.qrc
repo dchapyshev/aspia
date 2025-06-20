@@ -108,5 +108,25 @@
         <file>mouse-unlock.png</file>
         <file>port-forwarding.png</file>
         <file>question.png</file>
+        <file>address-book.png</file>
+        <file>address-book-pinned.png</file>
+        <file>aspia-console.ico</file>
+        <file>aspia-console.png</file>
+        <file>book.png</file>
+        <file>book-pencil.png</file>
+        <file>broom.png</file>
+        <file>computer-copy.png</file>
+        <file>computer-minus.png</file>
+        <file>computer-pencil.png</file>
+        <file>computer-plus.png</file>
+        <file>disks.png</file>
+        <file>export.png</file>
+        <file>folder-minus.png</file>
+        <file>folder-pencil.png</file>
+        <file>import.png</file>
+        <file>lock-medium.png</file>
+        <file>open.png</file>
+        <file>plug-disconnect.png</file>
+        <file>server.png</file>
     </qresource>
 </RCC>

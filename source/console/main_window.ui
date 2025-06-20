@@ -135,7 +135,7 @@
       <string>&amp;Language</string>
      </property>
      <property name="icon">
-      <iconset resource="../client/resources/client.qrc">
+      <iconset resource="../common/resources/common.qrc">
        <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
      </property>
     </widget>
@@ -224,7 +224,7 @@
   </action>
   <action name="action_open">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/open.png</normaloff>:/img/open.png</iconset>
    </property>
    <property name="text">
@@ -239,7 +239,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
    </property>
    <property name="text">
@@ -273,7 +273,7 @@
   </action>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
    </property>
    <property name="text">
@@ -285,7 +285,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
    </property>
    <property name="text">
@@ -297,7 +297,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/folder-pencil.png</normaloff>:/img/folder-pencil.png</iconset>
    </property>
    <property name="text">
@@ -309,7 +309,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/folder-minus.png</normaloff>:/img/folder-minus.png</iconset>
    </property>
    <property name="text">
@@ -321,7 +321,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer-plus.png</normaloff>:/img/computer-plus.png</iconset>
    </property>
    <property name="text">
@@ -333,7 +333,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer-pencil.png</normaloff>:/img/computer-pencil.png</iconset>
    </property>
    <property name="text">
@@ -345,7 +345,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer-minus.png</normaloff>:/img/computer-minus.png</iconset>
    </property>
    <property name="text">
@@ -360,7 +360,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -372,7 +372,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
@@ -384,7 +384,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -393,7 +393,7 @@
   </action>
   <action name="action_online_help">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
    </property>
    <property name="text">
@@ -405,7 +405,7 @@
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
    </property>
    <property name="text">
@@ -417,7 +417,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/book-pencil.png</normaloff>:/img/book-pencil.png</iconset>
    </property>
    <property name="text">
@@ -426,7 +426,7 @@
   </action>
   <action name="action_desktop_manage_connect">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -438,7 +438,7 @@
   </action>
   <action name="action_desktop_view_connect">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
@@ -450,7 +450,7 @@
   </action>
   <action name="action_file_transfer_connect">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -487,7 +487,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/plug-disconnect.png</normaloff>:/img/plug-disconnect.png</iconset>
    </property>
    <property name="text">
@@ -523,7 +523,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/disks.png</normaloff>:/img/disks.png</iconset>
    </property>
    <property name="text">
@@ -575,7 +575,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer-copy.png</normaloff>:/img/computer-copy.png</iconset>
    </property>
    <property name="text">
@@ -587,7 +587,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/server.png</normaloff>:/img/server.png</iconset>
    </property>
    <property name="text">
@@ -607,7 +607,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
    </property>
    <property name="text">
@@ -619,7 +619,7 @@
   </action>
   <action name="action_system_info_connect">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
    </property>
    <property name="text">
@@ -634,7 +634,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
    </property>
    <property name="text">
@@ -646,7 +646,7 @@
   </action>
   <action name="action_text_chat_connect">
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
    </property>
    <property name="text">
@@ -661,7 +661,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../client/resources/client.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
@@ -679,7 +679,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/import.png</normaloff>:/img/import.png</iconset>
    </property>
    <property name="text">
@@ -694,7 +694,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/export.png</normaloff>:/img/export.png</iconset>
    </property>
    <property name="text">
@@ -709,7 +709,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
    </property>
    <property name="text">
@@ -718,7 +718,7 @@
   </action>
   <action name="action_port_forwarding_connect">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
    </property>
    <property name="text">
@@ -738,9 +738,9 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../client/resources/client.qrc"/>
   <include location="../common/resources/common.qrc"/>
-  <include location="resources/console.qrc"/>
+  <include location="../common/resources/common.qrc"/>
+  <include location="../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

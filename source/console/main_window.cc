@@ -1565,7 +1565,7 @@ void MainWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(":/img/main.ico"));
+        tray_icon_->setIcon(QIcon(":/img/aspia-console.ico"));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();

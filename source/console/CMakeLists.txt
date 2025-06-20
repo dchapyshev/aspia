@@ -96,11 +96,8 @@ list(APPEND SOURCE_CONSOLE
     update_settings_dialog.h
     update_settings_dialog.ui)
 
-list(APPEND SOURCE_CONSOLE_RESOURCES resources/console.qrc)
-
 source_group("" FILES ${SOURCE_CONSOLE})
 source_group(moc FILES ${SOURCE_CONSOLE_MOC})
-source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
 
 if (WIN32)
     set(CONSOLE_PLATFORM_LIBS
@@ -110,7 +107,7 @@ endif()
 
 if (APPLE)
     set(CONSOLE_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB})
-    set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/source/console/resources/main.icns)
+    set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-console.icns)
     set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/source/console/Info.plist)
 
     set_source_files_properties(${aspia_console_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -120,10 +117,7 @@ if (LINUX)
     set(CONSOLE_PLATFORM_LIBS stdc++fs ${XFIXES_LIB})
 endif()
 
-add_executable(aspia_console MACOSX_BUNDLE
-    ${aspia_console_ICON}
-    ${SOURCE_CONSOLE}
-    ${SOURCE_CONSOLE_RESOURCES})
+add_executable(aspia_console MACOSX_BUNDLE ${aspia_console_ICON} ${SOURCE_CONSOLE})
 
 if (APPLE)
     set_target_properties(aspia_console PROPERTIES OUTPUT_NAME "Aspia Console")

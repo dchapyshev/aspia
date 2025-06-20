@@ -43,7 +43,7 @@ Application::Application(int& argc, char* argv[])
     setApplicationName("Console");
     setApplicationVersion(ASPIA_VERSION_STRING);
     setQuitOnLastWindowClosed(false);
-    setWindowIcon(QIcon(":/img/main.ico"));
+    setWindowIcon(QIcon(":/img/aspia-console.ico"));
 
     connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {

@@ -480,7 +480,7 @@
   </action>
   <action name="action_port_forwarding">
    <property name="icon">
-    <iconset resource="../../../host/ui/resources.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
    </property>
    <property name="text">
@@ -496,7 +496,7 @@
  </widget>
  <resources>
   <include location="../../../common/resources/common.qrc"/>
-  <include location="../../../host/ui/resources.qrc"/>
+  <include location="../../../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

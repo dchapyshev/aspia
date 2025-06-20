@@ -352,7 +352,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../client/resources/client.qrc">
+            <iconset resource="../../../common/resources/common.qrc">
              <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
            </property>
           </widget>
@@ -380,7 +380,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../client/resources/client.qrc">
+            <iconset resource="../../../common/resources/common.qrc">
              <normaloff>:/img/keyboard.png</normaloff>:/img/keyboard.png</iconset>
            </property>
           </widget>
@@ -408,7 +408,7 @@ background: #D7D7D7;
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../client/resources/client.qrc">
+            <iconset resource="../../../common/resources/common.qrc">
              <normaloff>:/img/control-stop.png</normaloff>:/img/control-stop.png</iconset>
            </property>
           </widget>
@@ -422,7 +422,7 @@ background: #D7D7D7;
   </layout>
  </widget>
  <resources>
-  <include location="../../client/resources/client.qrc"/>
+  <include location="../../../common/resources/common.qrc"/>
   <include location="../../common/resources/common.qrc"/>
  </resources>
  <connections/>

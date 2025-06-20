@@ -202,7 +202,7 @@ border-radius: 2px;
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../client/resources/client.qrc">
+            <iconset resource="../resources/common.qrc">
              <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
            </property>
           </widget>
@@ -258,7 +258,7 @@ border-radius: 2px;
   </layout>
  </widget>
  <resources>
-  <include location="../../client/resources/client.qrc"/>
+  <include location="../resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

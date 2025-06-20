@@ -21,8 +21,8 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "console.manifest"
-IDI_ICON1 ICON "console/resources/main.ico"
-IDI_ICON2 ICON "console/resources/address-book.ico"
+IDI_ICON1 ICON "common/resources/aspia-console.ico"
+IDI_ICON2 ICON "common/resources/address-book.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_console.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Console"
