@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget* parent)
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
-    tray_icon_.setIcon(QIcon(":/img/main.ico"));
+    tray_icon_.setIcon(QIcon(":/img/aspia-host.ico"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
 
@@ -504,7 +504,7 @@ void MainWindow::onVideoRecordingStateChanged(
     else
         message = tr("User \"%1\" (%2) stopped screen recording.").arg(user_name, computer_name);
 
-    tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/main.ico"), 1200);
+    tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
 }
 
 //--------------------------------------------------------------------------------------------------

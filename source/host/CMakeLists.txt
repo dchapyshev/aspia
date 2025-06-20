@@ -128,7 +128,6 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/notifier_window.cc
     ui/notifier_window.h
     ui/notifier_window.ui
-    ui/resources.qrc
     ui/settings_util.cc
     ui/settings_util.h
     ui/user_dialog.cc

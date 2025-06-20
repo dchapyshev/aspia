@@ -94,7 +94,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../../common/resources/common.qrc">
            <normaloff>:/img/check-all.png</normaloff>:/img/check-all.png</iconset>
          </property>
         </widget>
@@ -111,7 +111,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../../common/resources/common.qrc">
            <normaloff>:/img/check-none.png</normaloff>:/img/check-none.png</iconset>
          </property>
         </widget>
@@ -158,7 +158,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

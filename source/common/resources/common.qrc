@@ -25,7 +25,7 @@
         <file>arrow-circle-double.png</file>
         <file>arrow-down.png</file>
         <file>arrow-in-out.png</file>
-        <file>aspia-console.png</file>
+        <file>aspia-client.png</file>
         <file>aspia-host.png</file>
         <file>bios.png</file>
         <file>block.png</file>
@@ -92,5 +92,21 @@
         <file>users.png</file>
         <file>warning.png</file>
         <file>aspia-client.ico</file>
+        <file>arrow-left-gray.png</file>
+        <file>arrow-right-gray.png</file>
+        <file>aspia-client.png</file>
+        <file>aspia-host.ico</file>
+        <file>check-all.png</file>
+        <file>check-none.png</file>
+        <file>computer-cloud.png</file>
+        <file>control-pause.png</file>
+        <file>control-start.png</file>
+        <file>headphone.png</file>
+        <file>key.png</file>
+        <file>keyboard-lock.png</file>
+        <file>mouse-lock.png</file>
+        <file>mouse-unlock.png</file>
+        <file>port-forwarding.png</file>
+        <file>question.png</file>
     </qresource>
 </RCC>
