@@ -130,10 +130,7 @@ add_custom_target(update_translations
     COMMAND_EXPAND_LISTS)
 
 qt_add_translation(QM_FILES_LIST ${TS_FILES_LIST})
-
-qt_add_resources(aspia_console "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
-qt_add_resources(aspia_client_core "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
-qt_add_resources(aspia_host_core "translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
+qt_add_resources(aspia_common "common_translations" PREFIX "tr" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES "${QM_FILES_LIST}")
 
 message(STATUS "Source files: ${SOURCE_FILES_DIR}")
 message(STATUS "TS files: ${TS_FILES_LIST}")

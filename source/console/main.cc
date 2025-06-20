@@ -29,6 +29,7 @@
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(common);
+    Q_INIT_RESOURCE(common_translations);
 
     base::LoggingSettings logging_settings;
     logging_settings.min_log_level = base::LOG_INFO;
