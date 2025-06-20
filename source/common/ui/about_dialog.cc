@@ -23,7 +23,6 @@
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
-#include <QScreen>
 #include <QSysInfo>
 #include <QTextStream>
 
@@ -164,38 +163,6 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     list->addItem(tr("Logging directory: %1").arg(base::loggingDirectory()));
     list->addItem(tr("Logging file: %1").arg(base::loggingFile()));
-
-    QList<QScreen*> screens = QApplication::screens();
-    for (const auto& screen : std::as_const(screens))
-    {
-        auto add_sub_item = [list](const QString& text)
-        {
-            list->addItem("      " + text);
-        };
-
-        list->addItem(tr("Display '%1'").arg(screen->name()));
-        add_sub_item(tr("Pixel ratio: %1").arg(screen->devicePixelRatio()));
-        add_sub_item(tr("Logical DPI: %1x%2")
-                     .arg(screen->logicalDotsPerInchX())
-                     .arg(screen->logicalDotsPerInchY()));
-        add_sub_item(tr("Physical DPI: %1x%2")
-                     .arg(screen->physicalDotsPerInchX())
-                     .arg(screen->physicalDotsPerInchY()));
-
-        QSize size = screen->size();
-        add_sub_item(tr("Size: %1x%2").arg(size.width()).arg(size.height()));
-
-        QSize available_size = screen->availableSize();
-        add_sub_item(tr("Available size: %1x%2")
-                     .arg(available_size.width()).arg(available_size.height()));
-
-        QSize virtual_size = screen->virtualSize();
-        add_sub_item(tr("Virtual size: %1x%2")
-                     .arg(virtual_size.width()).arg(virtual_size.height()));
-
-        add_sub_item(tr("Depth: %1").arg(screen->depth()));
-        add_sub_item(tr("Refresh rate: %1").arg(screen->refreshRate()));
-    }
 
     auto add_version = [list](const char* name, const QString& version)
     {
