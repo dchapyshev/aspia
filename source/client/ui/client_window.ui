@@ -32,7 +32,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../resources/client.qrc">:/img/computer.png</pixmap>
+         <pixmap resource="../../common/resources/common.qrc">:/img/computer.png</pixmap>
         </property>
        </widget>
       </item>
@@ -104,7 +104,7 @@ height: 10px;
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../resources/client.qrc">:/img/gear.png</pixmap>
+         <pixmap resource="../../common/resources/common.qrc">:/img/gear.png</pixmap>
         </property>
        </widget>
       </item>
@@ -199,7 +199,7 @@ border-radius: 2px;
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/client.qrc">
+         <iconset resource="../../common/resources/common.qrc">
           <normaloff>:/img/gear-pencil.png</normaloff>:/img/gear-pencil.png</iconset>
         </property>
        </widget>
@@ -305,7 +305,7 @@ border-radius: 2px;
       <string>Language</string>
      </property>
      <property name="icon">
-      <iconset resource="../resources/client.qrc">
+      <iconset resource="../../common/resources/common.qrc">
        <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
      </property>
     </widget>
@@ -319,7 +319,7 @@ border-radius: 2px;
   </widget>
   <action name="action_help">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
    </property>
    <property name="text">
@@ -328,7 +328,7 @@ border-radius: 2px;
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
    </property>
    <property name="text">
@@ -337,7 +337,7 @@ border-radius: 2px;
   </action>
   <action name="action_settings">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
    </property>
    <property name="text">
@@ -346,7 +346,7 @@ border-radius: 2px;
   </action>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="../resources/client.qrc">
+    <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
    </property>
    <property name="text">
@@ -378,7 +378,7 @@ border-radius: 2px;
   </action>
  </widget>
  <resources>
-  <include location="../resources/client.qrc"/>
+  <include location="../../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

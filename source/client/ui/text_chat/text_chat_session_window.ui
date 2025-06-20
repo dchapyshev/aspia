@@ -35,7 +35,7 @@
   </layout>
   <action name="action_save">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
    </property>
    <property name="text">
@@ -50,7 +50,7 @@
   </action>
   <action name="action_print">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/printer.png</normaloff>:/img/printer.png</iconset>
    </property>
    <property name="text">
@@ -80,7 +80,7 @@
   </action>
   <action name="action_refresh">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
    </property>
    <property name="text">
@@ -103,7 +103,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/client.qrc"/>
+  <include location="../../../common/resources/common.qrc"/>
  </resources>
  <connections/>
 </ui>

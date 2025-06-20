@@ -21,7 +21,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "client.manifest"
-IDI_ICON1 ICON "client/resources/main.ico"
+IDI_ICON1 ICON "common/resources/aspia-client.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_client.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Client"

@@ -56,9 +56,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_session_state.cc
     client_session_state.h)
 
-list(APPEND SOURCE_CLIENT_CORE_RESOURCES
-    resources/client.qrc)
-
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
     online_checker/online_checker.h
@@ -233,7 +230,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
     ui/text_chat/text_chat_session_window.ui)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
-source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
@@ -245,7 +241,6 @@ source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
-    ${SOURCE_CLIENT_CORE_RESOURCES}
     ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
@@ -277,7 +272,7 @@ endif()
 
 if (APPLE)
     set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio)
-    set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/client/resources/main.icns)
+    set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-client.icns)
     set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
 
     set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)

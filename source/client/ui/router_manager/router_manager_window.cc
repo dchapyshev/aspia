@@ -74,7 +74,7 @@ public:
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(":/img/host.png"));
+        setIcon(0, QIcon(":/img/aspia-host.png"));
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);

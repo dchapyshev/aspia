@@ -153,7 +153,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         items << mk(tr("Client Version"), client_version_);
         items << mk(tr("Router Version"), router_version_);
 
-        ui.tree->addTopLevelItem(new Item(":/img/main.png", tr("Aspia Information"), items));
+        ui.tree->addTopLevelItem(new Item(":/img/aspia-client.png", tr("Aspia Information"), items));
     }
 
     if (system_info.has_operating_system())

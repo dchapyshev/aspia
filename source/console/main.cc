@@ -28,7 +28,6 @@
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(common);
 
     base::LoggingSettings logging_settings;

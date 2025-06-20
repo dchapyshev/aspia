@@ -117,7 +117,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/pin.png</normaloff>:/img/pin.png</iconset>
    </property>
    <property name="text">
@@ -129,7 +129,7 @@
   </action>
   <action name="action_settings">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
    </property>
    <property name="text">
@@ -141,7 +141,7 @@
   </action>
   <action name="action_autosize">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/arrow-in-out.png</normaloff>:/img/arrow-in-out.png</iconset>
    </property>
    <property name="text">
@@ -156,7 +156,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/application-resize-full.png</normaloff>:/img/application-resize-full.png</iconset>
    </property>
    <property name="text">
@@ -179,7 +179,7 @@
   </action>
   <action name="action_cad">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/ctrl-alt-del.png</normaloff>:/img/ctrl-alt-del.png</iconset>
    </property>
    <property name="text">
@@ -191,7 +191,7 @@
   </action>
   <action name="action_menu">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/menu.png</normaloff>:/img/menu.png</iconset>
    </property>
    <property name="text">
@@ -214,7 +214,7 @@
   </action>
   <action name="action_file_transfer">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -245,7 +245,7 @@
   </action>
   <action name="action_power_control">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/lightning.png</normaloff>:/img/lightning.png</iconset>
    </property>
    <property name="text">
@@ -280,7 +280,7 @@
   </action>
   <action name="action_update">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/update.png</normaloff>:/img/update.png</iconset>
    </property>
    <property name="text">
@@ -292,7 +292,7 @@
   </action>
   <action name="action_system_info">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
    </property>
    <property name="text">
@@ -304,7 +304,7 @@
   </action>
   <action name="action_close">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/cross-button.png</normaloff>:/img/cross-button.png</iconset>
    </property>
    <property name="text">
@@ -375,7 +375,7 @@
   </action>
   <action name="action_minimize">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/navigation-270-button.png</normaloff>:/img/navigation-270-button.png</iconset>
    </property>
    <property name="text">
@@ -408,7 +408,7 @@
   </action>
   <action name="action_text_chat">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
    </property>
    <property name="text">
@@ -428,7 +428,7 @@
   </action>
   <action name="action_start_recording">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/control-record.png</normaloff>:/img/control-record.png</iconset>
    </property>
    <property name="text">
@@ -440,7 +440,7 @@
   </action>
   <action name="action_task_manager">
    <property name="icon">
-    <iconset resource="../../resources/client.qrc">
+    <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/task-manager.png</normaloff>:/img/task-manager.png</iconset>
    </property>
    <property name="text">
@@ -495,7 +495,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../resources/client.qrc"/>
+  <include location="../../../common/resources/common.qrc"/>
   <include location="../../../host/ui/resources.qrc"/>
  </resources>
  <connections/>
