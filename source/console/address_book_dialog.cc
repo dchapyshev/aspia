@@ -88,7 +88,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
                                      const QString& file_path,
                                      proto::address_book::File* file,
                                      proto::address_book::Data* data,
-                                     std::string* key)
+                                     QByteArray* key)
     : QDialog(parent),
       file_(file),
       data_(data),
@@ -141,7 +141,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     if (file->encryption_type() == proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305)
     {
-        if (!key_->empty())
+        if (!key_->isEmpty())
         {
             QString text = tr("Double-click to change");
 
@@ -556,7 +556,8 @@ bool AddressBookDialog::saveChanges()
 
                 // Now generate a key for encryption/decryption.
                 *key_ = base::PasswordHash::hash(
-                    base::PasswordHash::SCRYPT, password, file_->hashing_salt());
+                    base::PasswordHash::SCRYPT, password,
+                    QByteArray::fromStdString(file_->hashing_salt()));
             }
         }
         break;

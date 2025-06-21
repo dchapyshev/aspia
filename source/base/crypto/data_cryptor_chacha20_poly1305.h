@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
 #define BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
 
-#include <QtGlobal>
+#include <QByteArray>
 
 #include "base/crypto/data_cryptor.h"
 
@@ -28,14 +28,14 @@ namespace base {
 class DataCryptorChaCha20Poly1305 final : public DataCryptor
 {
 public:
-    explicit DataCryptorChaCha20Poly1305(std::string_view key);
+    explicit DataCryptorChaCha20Poly1305(const QByteArray& key);
     ~DataCryptorChaCha20Poly1305() final;
 
-    bool encrypt(std::string_view in, std::string* out) final;
-    bool decrypt(std::string_view in, std::string* out) final;
+    bool encrypt(QByteArrayView in, QByteArray* out) final;
+    bool decrypt(QByteArrayView in, QByteArray* out) final;
 
 private:
-    std::string key_;
+    QByteArray key_;
 
     Q_DISABLE_COPY(DataCryptorChaCha20Poly1305)
 };

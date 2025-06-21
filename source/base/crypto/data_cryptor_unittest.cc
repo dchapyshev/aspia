@@ -31,15 +31,14 @@ TEST(DataCryptorChaCha20Poly1305Test, TestVector)
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
                 "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
 
-    std::unique_ptr<DataCryptor> cryptor =
-        std::make_unique<DataCryptorChaCha20Poly1305>(key.toStdString());
+    std::unique_ptr<DataCryptor> cryptor = std::make_unique<DataCryptorChaCha20Poly1305>(key);
 
-    std::string encrypted_message;
-    bool ret = cryptor->encrypt(message.toStdString(), &encrypted_message);
+    QByteArray encrypted_message;
+    bool ret = cryptor->encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
-    std::string decrypted_message;
+    QByteArray decrypted_message;
 
     ret = cryptor->decrypt(encrypted_message, &decrypted_message);
     ASSERT_TRUE(ret);
@@ -53,17 +52,15 @@ TEST(DataCryptorChaCha20Poly1305Test, WrongKey)
     const QByteArray wrong_key = QByteArray::fromHex("2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683");
 
-    std::unique_ptr<DataCryptor> cryptor1 =
-        std::make_unique<DataCryptorChaCha20Poly1305>(key.toStdString());
-    std::unique_ptr<DataCryptor> cryptor2 =
-        std::make_unique<DataCryptorChaCha20Poly1305>(wrong_key.toStdString());
+    std::unique_ptr<DataCryptor> cryptor1 = std::make_unique<DataCryptorChaCha20Poly1305>(key);
+    std::unique_ptr<DataCryptor> cryptor2 = std::make_unique<DataCryptorChaCha20Poly1305>(wrong_key);
 
-    std::string encrypted_message;
+    QByteArray encrypted_message;
     bool ret = cryptor1->encrypt(message.toStdString(), &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
-    std::string decrypted_message;
+    QByteArray decrypted_message;
 
     ret = cryptor2->decrypt(encrypted_message, &decrypted_message);
     ASSERT_FALSE(ret);

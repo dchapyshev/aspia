@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_H
 #define BASE_CRYPTO_DATA_CRYPTOR_H
 
-#include <string>
+#include <QByteArrayView>
 
 namespace base {
 
@@ -28,8 +28,8 @@ class DataCryptor
 public:
     virtual ~DataCryptor() = default;
 
-    virtual bool encrypt(std::string_view in, std::string* out) = 0;
-    virtual bool decrypt(std::string_view in, std::string* out) = 0;
+    virtual bool encrypt(QByteArrayView in, QByteArray* out) = 0;
+    virtual bool decrypt(QByteArrayView in, QByteArray* out) = 0;
 };
 
 } // namespace base

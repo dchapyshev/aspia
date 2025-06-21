@@ -35,7 +35,7 @@ static const size_t kTagSize = 16; // 128 bits, 16 bytes.
 static const size_t kHeaderSize = kIVSize + kTagSize;
 
 //--------------------------------------------------------------------------------------------------
-EVP_CIPHER_CTX_ptr createCipher(std::string_view key, const char* iv, int type)
+EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
 {
     if (key.size() != kKeySize)
     {
@@ -84,7 +84,7 @@ EVP_CIPHER_CTX_ptr createCipher(std::string_view key, const char* iv, int type)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(std::string_view key)
+DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(const QByteArray& key)
     : key_(key)
 {
     // Nothing
@@ -97,7 +97,7 @@ DataCryptorChaCha20Poly1305::~DataCryptorChaCha20Poly1305()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
+bool DataCryptorChaCha20Poly1305::encrypt(QByteArrayView in, QByteArray* out)
 {
     if (in.empty())
     {
@@ -153,7 +153,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
+bool DataCryptorChaCha20Poly1305::decrypt(QByteArrayView in, QByteArray* out)
 {
     if (in.size() <= kHeaderSize)
     {

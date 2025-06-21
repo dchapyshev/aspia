@@ -24,7 +24,7 @@
 namespace base {
 
 const quint32 PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
-const QString::size_type PasswordGenerator::kDefaultLength = 8;
+const qsizetype PasswordGenerator::kDefaultLength = 8;
 
 //--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setCharacters(quint32 value)
@@ -34,7 +34,7 @@ void PasswordGenerator::setCharacters(quint32 value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PasswordGenerator::setLength(QString::size_type value)
+void PasswordGenerator::setLength(qsizetype value)
 {
     if (value)
         length_ = value;
@@ -43,11 +43,11 @@ void PasswordGenerator::setLength(QString::size_type value)
 //--------------------------------------------------------------------------------------------------
 QString PasswordGenerator::result() const
 {
-    constexpr std::string_view lower_case = "abcdefghijklmnopqrstuvwxyz";
-    constexpr std::string_view upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    constexpr std::string_view digits = "0123456789";
+    constexpr QByteArrayView lower_case = "abcdefghijklmnopqrstuvwxyz";
+    constexpr QByteArrayView upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    constexpr QByteArrayView digits = "0123456789";
 
-    size_t table_length = 0;
+    qsizetype table_length = 0;
 
     if (characters_ & LOWER_CASE)
         table_length += lower_case.length();
@@ -58,7 +58,7 @@ QString PasswordGenerator::result() const
     if (characters_ & DIGITS)
         table_length += digits.length();
 
-    std::string table;
+    QByteArray table;
     table.reserve(table_length);
 
     if (characters_ & LOWER_CASE)
@@ -80,7 +80,7 @@ QString PasswordGenerator::result() const
     QString result;
     result.resize(length_);
 
-    for (QString::size_type i = 0; i < length_; ++i)
+    for (qsizetype i = 0; i < length_; ++i)
         result[i] = table[static_cast<size_t>(uniform_distance(engine))];
 
     return result;

@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
 #define BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
 
-#include <QtGlobal>
+#include <QByteArray>
 
 #include "base/crypto/data_cryptor.h"
 
@@ -31,8 +31,8 @@ public:
     DataCryptorFake() = default;
     ~DataCryptorFake() final = default;
 
-    bool encrypt(std::string_view in, std::string* out) final;
-    bool decrypt(std::string_view in, std::string* out) final;
+    bool encrypt(QByteArrayView in, QByteArray* out) final;
+    bool decrypt(QByteArrayView in, QByteArray* out) final;
 
 private:
     Q_DISABLE_COPY(DataCryptorFake)

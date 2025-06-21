@@ -37,19 +37,19 @@ public:
     };
 
     static const quint32 kDefaultCharacters;
-    static const QString::size_type kDefaultLength;
+    static const qsizetype kDefaultLength;
 
     void setCharacters(quint32 value);
     quint32 characters() const { return characters_; }
 
-    void setLength(QString::size_type value);
-    QString::size_type length() const { return length_; }
+    void setLength(qsizetype value);
+    qsizetype length() const { return length_; }
 
     QString result() const;
 
 private:
     quint32 characters_ = kDefaultCharacters;
-    QString::size_type length_ = kDefaultLength;
+    qsizetype length_ = kDefaultLength;
 
     Q_DISABLE_COPY(PasswordGenerator)
 };

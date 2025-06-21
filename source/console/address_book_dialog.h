@@ -33,7 +33,7 @@ public:
                       const QString& file_path,
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
-                      std::string* key);
+                      QByteArray* key);
     ~AddressBookDialog() final;
 
 protected:
@@ -58,7 +58,7 @@ private:
 
     proto::address_book::File* file_;
     proto::address_book::Data* data_;
-    std::string* key_;
+    QByteArray* key_;
 
     bool password_changed_ = true;
     bool value_reverting_ = false;

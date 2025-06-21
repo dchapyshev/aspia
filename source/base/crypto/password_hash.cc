@@ -68,11 +68,4 @@ QByteArray PasswordHash::hash(Type type, const QString& password, const QByteArr
     return hashT<const QByteArray, QByteArray>(type, password, salt);
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-std::string PasswordHash::hash(Type type, const QString& password, std::string_view salt)
-{
-    return hashT<std::string_view, std::string>(type, password, salt);
-}
-
 } // namespace base
