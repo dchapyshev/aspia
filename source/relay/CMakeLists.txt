@@ -24,6 +24,8 @@ list(APPEND SOURCE_RELAY
     key_pool.cc
     key_pool.h
     main.cc
+    migration_utils.cc
+    migration_utils.h
     pending_session.cc
     pending_session.h
     service.cc

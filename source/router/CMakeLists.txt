@@ -28,6 +28,8 @@ list(APPEND SOURCE_ROUTER
     key_pool.cc
     key_pool.h
     main.cc
+    migration_utils.cc
+    migration_utils.h
     server.cc
     server.h
     service.cc

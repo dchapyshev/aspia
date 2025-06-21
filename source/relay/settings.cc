@@ -68,121 +68,121 @@ void Settings::sync()
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterAddress(const QString& address)
 {
-    impl_.setValue("RouterAddress", address);
+    impl_.setValue("router_address", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::routerAddress() const
 {
-    return impl_.value("RouterAddress").toString();
+    return impl_.value("router_address").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPort(quint16 port)
 {
-    impl_.setValue("RouterPort", port);
+    impl_.setValue("router_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::routerPort() const
 {
-    return impl_.value("RouterPort", DEFAULT_ROUTER_TCP_PORT).toUInt();
+    return impl_.value("router_port", DEFAULT_ROUTER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPublicKey(const QByteArray& public_key)
 {
-    impl_.setValue("RouterPublicKey", public_key);
+    impl_.setValue("router_public_key", public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::routerPublicKey() const
 {
-    return impl_.value("RouterPublicKey").toByteArray();
+    return impl_.value("router_public_key").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const QString& iface)
 {
-    impl_.setValue("ListenInterface", iface);
+    impl_.setValue("listen_interface", iface);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::listenInterface() const
 {
-    return impl_.value("ListenInterface").toString();
+    return impl_.value("listen_interface").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerAddress(const QString& address)
 {
-    impl_.setValue("PeerAddress", address);
+    impl_.setValue("peer_address", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::peerAddress() const
 {
-    return impl_.value("PeerAddress").toString();
+    return impl_.value("peer_address").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerPort(quint16 port)
 {
-    impl_.setValue("PeerPort", port);
+    impl_.setValue("peer_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::peerPort() const
 {
-    return impl_.value("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT).toUInt();
+    return impl_.value("peer_port", DEFAULT_RELAY_PEER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerIdleTimeout(const std::chrono::minutes& timeout)
 {
-    impl_.setValue("PeerIdleTimeout", timeout.count());
+    impl_.setValue("peer_idle_timeout", timeout.count());
 }
 
 //--------------------------------------------------------------------------------------------------
 std::chrono::minutes Settings::peerIdleTimeout() const
 {
-    return std::chrono::minutes(impl_.value("PeerIdleTimeout", 5).toInt());
+    return std::chrono::minutes(impl_.value("peer_idle_timeout", 5).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setMaxPeerCount(quint32 count)
 {
-    impl_.setValue("MaxPeerCount", count);
+    impl_.setValue("max_peer_count", count);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 Settings::maxPeerCount() const
 {
-    return impl_.value("MaxPeerCount", 100).toUInt();
+    return impl_.value("max_peer_count", 100).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsEnabled(bool enable)
 {
-    impl_.setValue("StatisticsEnabled", enable);
+    impl_.setValue("statistics_enabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Settings::isStatisticsEnabled() const
 {
-    return impl_.value("StatisticsEnabled", false).toBool();
+    return impl_.value("statistics_enabled", false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsInterval(const std::chrono::seconds& interval)
 {
-    impl_.setValue("StatisticsInterval", static_cast<int>(interval.count()));
+    impl_.setValue("statistics_interval", static_cast<int>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
 std::chrono::seconds Settings::statisticsInterval() const
 {
-    return std::chrono::seconds(impl_.value("StatisticsInterval", 5).toInt());
+    return std::chrono::seconds(impl_.value("statistics_interval", 5).toInt());
 }
 
 } // namespace relay

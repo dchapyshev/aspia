@@ -19,6 +19,7 @@
 #include "router/service.h"
 
 #include "base/logging.h"
+#include "router/migration_utils.h"
 #include "router/service_constants.h"
 
 namespace router {
@@ -40,6 +41,9 @@ Service::~Service()
 void Service::onStart()
 {
     LOG(INFO) << "Service start...";
+
+    if (isMigrationNeeded())
+        doMigration();
 
     server_ = new Server(this);
     if (!server_->start())

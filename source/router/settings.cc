@@ -68,97 +68,97 @@ void Settings::sync()
 //--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const QString& iface)
 {
-    impl_.setValue("ListenInterface", iface);
+    impl_.setValue("listen_interface", iface);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::listenInterface() const
 {
-    return impl_.value("ListenInterface").toString();
+    return impl_.value("listen_interface").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPort(quint16 port)
 {
-    impl_.setValue("Port", port);
+    impl_.setValue("port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::port() const
 {
-    return impl_.value("Port", DEFAULT_ROUTER_TCP_PORT).toUInt();
+    return impl_.value("port", DEFAULT_ROUTER_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPrivateKey(const QByteArray& private_key)
 {
-    impl_.setValue("PrivateKey", private_key);
+    impl_.setValue("private_key", private_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::privateKey() const
 {
-    return impl_.value("PrivateKey").toByteArray();
+    return impl_.value("private_key").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setClientWhiteList(const WhiteList& list)
 {
-    setWhiteList("ClientWhiteList", list);
+    setWhiteList("client_white_list", list);
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::clientWhiteList() const
 {
-    return whiteList("ClientWhiteList");
+    return whiteList("client_white_list");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setHostWhiteList(const WhiteList& list)
 {
-    setWhiteList("HostWhiteList", list);
+    setWhiteList("host_white_list", list);
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::hostWhiteList() const
 {
-    return whiteList("HostWhiteList");
+    return whiteList("host_white_list");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setAdminWhiteList(const WhiteList& list)
 {
-    setWhiteList("AdminWhiteList", list);
+    setWhiteList("admin_white_list", list);
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::adminWhiteList() const
 {
-    return whiteList("AdminWhiteList");
+    return whiteList("admin_white_list");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRelayWhiteList(const WhiteList& list)
 {
-    setWhiteList("RelayWhiteList", list);
+    setWhiteList("relay_white_list", list);
 }
 
 //--------------------------------------------------------------------------------------------------
 Settings::WhiteList Settings::relayWhiteList() const
 {
-    return whiteList("RelayWhiteList");
+    return whiteList("relay_white_list");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setSeedKey(const QByteArray &seed_key)
 {
-    impl_.setValue("SeedKey", seed_key);
+    impl_.setValue("seed_key", seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::seedKey() const
 {
-    return impl_.value("SeedKey").toByteArray();
+    return impl_.value("seed_key").toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------

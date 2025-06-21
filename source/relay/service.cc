@@ -19,6 +19,7 @@
 #include "relay/service.h"
 
 #include "base/logging.h"
+#include "relay/migration_utils.h"
 #include "relay/service_constants.h"
 
 namespace relay {
@@ -40,6 +41,9 @@ Service::~Service()
 void Service::onStart()
 {
     LOG(INFO) << "Starting service...";
+
+    if (isMigrationNeeded())
+        doMigration();
 
     controller_ = new Controller(this);
     controller_->start();
