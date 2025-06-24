@@ -19,7 +19,6 @@
 #include "router/database_sqlite.h"
 
 #include "base/logging.h"
-#include "build/build_config.h"
 
 #include <optional>
 
