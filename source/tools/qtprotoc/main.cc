@@ -18,7 +18,10 @@
 
 #include <google/protobuf/compiler/code_generator.h>
 #include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/printer.h>
+
+#include <fstream>
 
 //--------------------------------------------------------------------------------------------------
 std::string qualifiedCppTypeName(const std::string& full_name)
@@ -183,6 +186,35 @@ void generateHeadComment(google::protobuf::io::Printer& file)
 }
 
 //--------------------------------------------------------------------------------------------------
+void trimTrailingNuls(std::string& str)
+{
+    while (!str.empty() && str.back() == '\0')
+    {
+        str.pop_back();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void writeFileIfChanged(const std::string& filename,
+                        const std::string& content,
+                        google::protobuf::compiler::GeneratorContext* context)
+{
+    {
+        std::ifstream existing_file(filename, std::ios::in | std::ios::binary);
+        if (existing_file)
+        {
+            std::ostringstream ss;
+            ss << existing_file.rdbuf();
+            if (ss.str() == content)
+                return;
+        }
+    }
+
+    std::ofstream out(filename, std::ios::binary | std::ios::trunc);
+    out.write(content.data(), content.size());
+}
+
+//--------------------------------------------------------------------------------------------------
 class MetatypeGenerator : public google::protobuf::compiler::CodeGenerator
 {
 public:
@@ -217,8 +249,9 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     // Header File
     //
 
-    std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> header_output(context->Open(header_name));
-    google::protobuf::io::Printer header(header_output.get(), '$');
+    std::string header_content;
+    google::protobuf::io::StringOutputStream header_string_stream(&header_content);
+    google::protobuf::io::Printer header(&header_string_stream, '$');
 
     const std::string include_guard = makeIncludeGuardMacro(header_name);
 
@@ -270,12 +303,16 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
 
     header.Print("\n#endif // $GUARD$\n", "GUARD", include_guard);
 
+    trimTrailingNuls(header_content);
+    writeFileIfChanged(header_name, header_content, context);
+
     //
     // Source File
     //
 
-    std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> source_output(context->Open(source_name));
-    google::protobuf::io::Printer source(source_output.get(), '$');
+    std::string source_content;
+    google::protobuf::io::StringOutputStream source_string_stream(&source_content);
+    google::protobuf::io::Printer source(&source_string_stream, '$');
 
     generateHeadComment(source);
 
@@ -321,6 +358,9 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
 
     for (const auto* msg : messages)
         generateMessageOperator(msg, source);
+
+    trimTrailingNuls(source_content);
+    writeFileIfChanged(source_name, source_content, context);
 
     return true;
 }
