@@ -40,18 +40,18 @@ const TcpChannel::Seconds kKeepAliveInterval { 60 };
 const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
 //--------------------------------------------------------------------------------------------------
-QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
-    QString str;
+    if (endpoints.empty())
+        return QStringList();
 
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end;)
-    {
-        str += QString::fromStdString(it->endpoint().address().to_string());
-        if (++it != it_end)
-            str += ", ";
-    }
+    QStringList list;
+    list.resize(endpoints.size());
 
-    return str;
+    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
+        list.append(QString::fromLocal8Bit(it->endpoint().address().to_string()));
+
+    return list;
 }
 
 } // namespace
@@ -90,12 +90,18 @@ TcpChannel::~TcpChannel()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
 {
+    CHECK(encryptor);
+
+    LOG(INFO) << "Encryptor changed from" << encryptor_->type() << "to" << encryptor->type();
     encryptor_ = std::move(encryptor);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 {
+    CHECK(decryptor);
+
+    LOG(INFO) << "Decryptor changed from" << decryptor_->type() << "to" << decryptor->type();
     decryptor_ = std::move(decryptor);
 }
 
@@ -159,6 +165,12 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
     {
         if (error_code)
         {
+            if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
+                return;
+            }
+
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -172,6 +184,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             {
                 // If more than one address for a host was resolved, then we return false and cancel
                 // attempts to connect to all addresses.
+                LOG(INFO) << "Operation is aborted";
                 return false;
             }
 
@@ -182,7 +195,10 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             if (error_code)
             {
                 if (error_code == asio::error::operation_aborted)
+                {
+                    LOG(INFO) << "Operation is aborted";
                     return;
+                }
 
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
@@ -252,6 +268,7 @@ void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 void TcpChannel::setChannelIdSupport(bool enable)
 {
     is_channel_id_supported_ = enable;
+    LOG(INFO) << "Support for channel id is changed:" << enable;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,6 +291,7 @@ bool TcpChannel::setReadBufferSize(size_t size)
         return false;
     }
 
+    LOG(INFO) << "Read buffer size is changed:" << size;
     return true;
 }
 
@@ -291,6 +309,7 @@ bool TcpChannel::setWriteBufferSize(size_t size)
         return false;
     }
 
+    LOG(INFO) << "Write buffer size is changed:" << size;
     return true;
 }
 
@@ -352,9 +371,15 @@ void TcpChannel::setConnected(bool connected)
     {
         LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
     }
+    else
+    {
+        LOG(INFO) << "Nagle's algorithm is disabled";
+    }
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
+
+    LOG(INFO) << "Starting keep alive timer";
 
     keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     keep_alive_timer_->start(kKeepAliveInterval);
@@ -524,7 +549,10 @@ void TcpChannel::doWrite()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
                 return;
+            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -564,7 +592,10 @@ void TcpChannel::doReadSize()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
                 return;
+            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -615,7 +646,10 @@ void TcpChannel::doReadUserData(size_t length)
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
                 return;
+            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -659,7 +693,10 @@ void TcpChannel::doReadServiceHeader()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
                 return;
+            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -718,7 +755,10 @@ void TcpChannel::doReadServiceData(size_t length)
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
+            {
+                LOG(INFO) << "Operation is aborted";
                 return;
+            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
