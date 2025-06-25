@@ -29,18 +29,18 @@ namespace host {
 
 namespace {
 
-QString endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
-    QString str;
+    if (endpoints.empty())
+        return QStringList();
 
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end;)
-    {
-        str += QString::fromStdString(it->endpoint().address().to_string());
-        if (++it != it_end)
-            str += ", ";
-    }
+    QStringList list;
+    list.resize(endpoints.size());
 
-    return str;
+    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
+        list.append(QString::fromLocal8Bit(it->endpoint().address().to_string()));
+
+    return list;
 }
 
 } // namespace

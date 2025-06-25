@@ -289,7 +289,7 @@ void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::Se
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << "Router state changed (" << router_state << ")";
+    LOG(INFO) << router_state;
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -319,8 +319,8 @@ void UserSessionManager::onSettingsChanged()
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onClientSession(ClientSession* client_session)
 {
-    LOG(INFO) << "Adding a new client connection (user=" << client_session->userName()
-              << "host_id=" << client_session->hostId() << ")";
+    LOG(INFO) << "Adding a new client connection (user:" << client_session->userName()
+              << "host_id:" << client_session->hostId() << ")";
 
     std::unique_ptr<ClientSession> client_session_deleter(client_session);
 
