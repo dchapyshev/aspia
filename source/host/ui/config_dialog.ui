@@ -507,7 +507,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
+             <normaloff>:/img/plus-lg.svg</normaloff>:/img/plus-lg.svg</iconset>
            </property>
           </widget>
          </item>
@@ -527,7 +527,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+             <normaloff>:/img/pencil.svg</normaloff>:/img/pencil.svg</iconset>
            </property>
           </widget>
          </item>
@@ -547,7 +547,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
+             <normaloff>:/img/dash-lg.svg</normaloff>:/img/dash-lg.svg</iconset>
            </property>
           </widget>
          </item>

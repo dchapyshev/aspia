@@ -77,6 +77,7 @@ private slots:
 
     void realClose();
     void onLanguageChanged(QAction* action);
+    void onThemeChanged();
     void onSettings();
     void onShowHide();
     void onHelp();

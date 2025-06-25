@@ -62,8 +62,6 @@ MainWindow::MainWindow(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     UserSettings user_settings;
-    Application::instance()->setAttribute(
-        Qt::AA_DontShowIconsInMenus, !user_settings.showIconsInMenus());
 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -103,17 +101,6 @@ MainWindow::MainWindow(QWidget* parent)
     createLanguageMenu(user_settings.locale());
     onSettingsChanged();
 
-    ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
-    connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
-    {
-        LOG(INFO) << "[ACTION] Show icons in menus changed:" << enable;
-        Application* instance = Application::instance();
-        instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-
-        UserSettings user_settings;
-        user_settings.setShowIconsInMenus(enable);
-    });
-
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
     {
         if (reason == QSystemTrayIcon::Context)
@@ -137,6 +124,11 @@ MainWindow::MainWindow(QWidget* parent)
         LOG(INFO) << "[ACTION] New password";
         emit sig_updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
+
+    connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
+            this, &MainWindow::onThemeChanged);
+
+    onThemeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -387,16 +379,12 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 
     bool has_id = credentials.host_id() != base::kInvalidHostId;
 
-    ui.label_icon_id->setEnabled(has_id);
-    ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
     ui.edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
 
     bool has_password = !credentials.password().empty();
 
-    ui.label_icon_password->setEnabled(has_password);
     ui.button_new_password->setEnabled(has_password);
-    ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
     ui.edit_password->setText(QString::fromStdString(credentials.password()));
 
@@ -427,8 +415,6 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 
     if (state.state() != proto::internal::RouterState::CONNECTED)
     {
-        ui.label_icon_id->setEnabled(false);
-        ui.label_icon_password->setEnabled(false);
         ui.button_new_password->setEnabled(false);
 
         ui.edit_id->setText("-");
@@ -564,6 +550,45 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     updateStatusBar();
     emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onThemeChanged()
+{
+    QTimer::singleShot(100, this, [this]()
+    {
+        ui.label_icon_id->setPixmap(base::GuiApplication::svgPixmap(":/img/cloud.svg", QSize(16, 16)));
+        ui.label_icon_password->setPixmap(base::GuiApplication::svgPixmap(":/img/key.svg", QSize(16, 16)));
+        ui.button_new_password->setIcon(base::GuiApplication::svgIcon(":/img/arrow-clockwise.svg", QSize(20, 20)));
+
+        auto set_edit_colors = [](QLineEdit* edit, const QString& color)
+        {
+            edit->setStyleSheet(QString("QLineEdit {"
+                                            "border: 0;"
+                                            "background-color: %1;"
+                                            "font-size: 20px;"
+                                            "padding-left: 20px; }").arg(color));
+        };
+
+        auto set_label_colors = [](QLabel* label, const QString& color)
+        {
+            label->setStyleSheet(QString("QLabel {"
+                                    "color: %1"
+                                    "font: bold 11px;}").arg(color));
+        };
+
+        QPalette window_palette = palette();
+        QString edit_color = window_palette.color(QPalette::Window).name(QColor::HexRgb);
+        QString window_text = window_palette.color(QPalette::WindowText).name(QColor::HexRgb);
+
+        set_label_colors(ui.label_id, window_text);
+        set_label_colors(ui.label_password, window_text);
+
+        set_edit_colors(ui.edit_id, edit_color);
+        set_edit_colors(ui.edit_password, edit_color);
+
+        updateStatusBar();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -800,22 +825,22 @@ void MainWindow::updateStatusBar()
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
-            icon = ":/img/cross-script.png";
+            icon = ":/img/x-lg.svg";
             break;
 
         case proto::internal::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
-            icon = ":/img/arrow-circle-double.png";
+            icon = ":/img/arrow-clockwise.svg";
             break;
 
         case proto::internal::RouterState::CONNECTED:
             message = tr("Connected to a router");
-            icon = ":/img/tick.png";
+            icon = ":/img/check-lg.svg";
             break;
 
         case proto::internal::RouterState::FAILED:
             message = tr("Connection error");
-            icon = ":/img/cross-script.png";
+            icon = ":/img/x-lg.svg";
             break;
 
         default:
@@ -824,7 +849,19 @@ void MainWindow::updateStatusBar()
     }
 
     ui.button_status->setText(message);
-    ui.button_status->setIcon(QIcon(icon));
+    ui.button_status->setIcon(base::GuiApplication::svgIcon(icon, QSize(16, 16)));
+
+    QString statusbar_text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
+
+    ui.button_status->setStyleSheet(QString("QPushButton {"
+                                        "color: %1;"
+                                        "font: 11px;"
+                                        "text-align: left;"
+                                        "border: 0;"
+                                    "}"
+                                    "QPushButton:hover:enabled {"
+                                        "text-decoration: underline;"
+                                    "}").arg(statusbar_text_color));
 }
 
 //--------------------------------------------------------------------------------------------------

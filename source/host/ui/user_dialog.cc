@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
@@ -92,6 +93,12 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         if (!account_changed_)
             setAccountChanged(true);
     });
+
+    ui.button_check_all->setIcon(base::GuiApplication::svgIcon(":/img/front.svg", QSize(16, 16)));
+    ui.button_check_all->setIconSize(QSize(22, 22));
+
+    ui.button_check_none->setIcon(base::GuiApplication::svgIcon(":/img/back.svg", QSize(16, 16)));
+    ui.button_check_none->setIconSize(QSize(22, 22));
 }
 
 //--------------------------------------------------------------------------------------------------

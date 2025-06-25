@@ -101,7 +101,7 @@ background: #C0C0C0;
         </property>
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
-          <normaloff>:/img/arrow-left-gray.png</normaloff>:/img/arrow-left-gray.png</iconset>
+          <normaloff>:/img/chevron-right.svg</normaloff>:/img/chevron-right.svg</iconset>
         </property>
        </widget>
       </item>

@@ -106,7 +106,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="icon">
         <iconset resource="../resources/common.qrc">
-         <normaloff>:/img/heart.png</normaloff>:/img/heart.png</iconset>
+         <normaloff>:/img/heart.svg</normaloff>:/img/heart.svg</iconset>
        </property>
       </widget>
      </item>

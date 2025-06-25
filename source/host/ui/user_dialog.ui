@@ -90,12 +90,15 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Check all</string>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/check-all.png</normaloff>:/img/check-all.png</iconset>
+           <normaloff>:/img/front.svg</normaloff>:/img/front.svg</iconset>
          </property>
         </widget>
        </item>
@@ -107,12 +110,15 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Uncheck all</string>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/check-none.png</normaloff>:/img/check-none.png</iconset>
+           <normaloff>:/img/back.svg</normaloff>:/img/back.svg</iconset>
          </property>
         </widget>
        </item>

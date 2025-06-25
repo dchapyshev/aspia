@@ -10,7 +10,6 @@
         <file>folder.png</file>
         <file>home.png</file>
         <file>globe-green.png</file>
-        <file>heart.png</file>
         <file>text-chat.png</file>
         <file>user-24x24.png</file>
         <file>application.png</file>
@@ -92,12 +91,8 @@
         <file>users.png</file>
         <file>warning.png</file>
         <file>aspia-client.ico</file>
-        <file>arrow-left-gray.png</file>
-        <file>arrow-right-gray.png</file>
         <file>aspia-client.png</file>
         <file>aspia-host.ico</file>
-        <file>check-all.png</file>
-        <file>check-none.png</file>
         <file>computer-cloud.png</file>
         <file>control-pause.png</file>
         <file>control-start.png</file>
@@ -128,5 +123,20 @@
         <file>open.png</file>
         <file>plug-disconnect.png</file>
         <file>server.png</file>
+        <file>chevron-left.svg</file>
+        <file>chevron-right.svg</file>
+        <file>key.svg</file>
+        <file>cloud.svg</file>
+        <file>check-lg.svg</file>
+        <file>x-lg.svg</file>
+        <file>arrow-clockwise.svg</file>
+        <file>dash-lg.svg</file>
+        <file>pencil.svg</file>
+        <file>plus-lg.svg</file>
+        <file>person.svg</file>
+        <file>person-slash.svg</file>
+        <file>heart.svg</file>
+        <file>back.svg</file>
+        <file>front.svg</file>
     </qresource>
 </RCC>

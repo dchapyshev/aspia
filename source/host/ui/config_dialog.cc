@@ -234,6 +234,10 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_modify, &QPushButton::clicked, this, &ConfigDialog::onModifyUser);
     connect(ui.button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
 
+    ui.button_add->setIconSize(QSize(22, 22));
+    ui.button_delete->setIconSize(QSize(22, 22));
+    ui.button_modify->setIconSize(QSize(22, 22));
+
     //---------------------------------------------------------------------------------------------
     // Advanced Tab
     //---------------------------------------------------------------------------------------------

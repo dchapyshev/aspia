@@ -515,7 +515,7 @@ void NotifierWindow::showNotifier()
         move(window_pos);
         setFixedSize(window_size);
 
-        ui.button_show_hide->setIcon(QIcon(":/img/arrow-left-gray.png"));
+        ui.button_show_hide->setIcon(QIcon(":/img/chevron-right.svg"));
     }
     else
     {
@@ -544,7 +544,7 @@ void NotifierWindow::hideNotifier()
     move(window_pos);
     setFixedSize(window_size);
 
-    ui.button_show_hide->setIcon(QIcon(":/img/arrow-right-gray.png"));
+    ui.button_show_hide->setIcon(QIcon(":/img/chevron-left.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

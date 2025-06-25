@@ -27,7 +27,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">QWidget#centralwidget { background-color:#FAFAFA; }
+    <string notr="true">QWidget#centralwidget { }
 </string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -74,7 +74,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/computer-cloud.png</pixmap>
+           <pixmap resource="../../common/resources/common.qrc">:/img/cloud.svg</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -89,7 +89,6 @@
           <property name="styleSheet">
            <string notr="true">QLabel {
 font: bold 11px;
-color:#505050;
 }</string>
           </property>
           <property name="text">
@@ -106,8 +105,6 @@ color:#505050;
         </property>
         <property name="styleSheet">
          <string notr="true">QLineEdit {
-background: #FAFAFA;
-color: #505050;
 border: 0;
 font-size: 20px;
 padding-left: 20px;
@@ -115,6 +112,9 @@ padding-left: 20px;
         </property>
         <property name="text">
          <string notr="true">-</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
         </property>
         <property name="readOnly">
          <bool>true</bool>
@@ -138,7 +138,7 @@ padding-left: 20px;
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/key.png</pixmap>
+           <pixmap resource="../../common/resources/common.qrc">:/img/key.svg</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -153,7 +153,6 @@ padding-left: 20px;
           <property name="styleSheet">
            <string notr="true">QLabel {
 font: bold 11px;
-color:#505050;
 }</string>
           </property>
           <property name="text">
@@ -199,8 +198,6 @@ border: 0;
            </property>
            <property name="styleSheet">
             <string notr="true">QLineEdit {
-background: #FAFAFA;
-color: #505050;
 border: 0;
 font-size: 22px;
 padding-left: 20px;
@@ -208,6 +205,9 @@ padding-left: 20px;
            </property>
            <property name="text">
             <string notr="true">-</string>
+           </property>
+           <property name="frame">
+            <bool>false</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -230,17 +230,14 @@ padding-left: 20px;
            </property>
            <property name="styleSheet">
             <string notr="true">QPushButton {
-background: #FAFAFA;
 border: 0;
 padding: 3px;
 }
 QPushButton:hover {
-background: #EBEBEB;
 border: 1px solid #AAAAAA;
 border-radius: 2px;
 }
 QPushButton:pressed {
-background: #D7D7D7;
 border: 1px solid #AAAAAA;
 border-radius: 2px;
 }</string>
@@ -250,7 +247,13 @@ border-radius: 2px;
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+             <normaloff>:/img/arrow-clockwise.svg</normaloff>:/img/arrow-clockwise.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -261,11 +264,6 @@ border-radius: 2px;
     </item>
     <item>
      <widget class="QWidget" name="widget_statusbar" native="true">
-      <property name="styleSheet">
-       <string notr="true">QWidget {
-border-top: 1px solid #E4E4E4;
-}</string>
-      </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QPushButton" name="button_status">
@@ -275,7 +273,6 @@ border-top: 1px solid #E4E4E4;
          <property name="styleSheet">
           <string notr="true">QPushButton {
 font: 11px;
-color: #505050;
 text-align: left;
 border: 0;
 }
@@ -288,7 +285,7 @@ text-decoration: underline;
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
+           <normaloff>:/img/x-lg.svg</normaloff>:/img/x-lg.svg</iconset>
          </property>
         </widget>
        </item>
@@ -336,22 +333,11 @@ text-decoration: underline;
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menu_view">
+   <widget class="QMenu" name="menu_language">
     <property name="title">
-     <string>View</string>
+     <string>Language</string>
     </property>
-    <widget class="QMenu" name="menu_language">
-     <property name="title">
-      <string>Language</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../../common/resources/common.qrc">
-       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
-     </property>
-    </widget>
-    <addaction name="menu_language"/>
     <addaction name="separator"/>
-    <addaction name="action_show_icons_in_menus"/>
    </widget>
    <widget class="QMenu" name="menu_access">
     <property name="title">
@@ -365,45 +351,29 @@ text-decoration: underline;
     <addaction name="action_port_forwarding"/>
    </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menu_view"/>
+   <addaction name="menu_language"/>
    <addaction name="menu_access"/>
    <addaction name="menu_help"/>
   </widget>
   <action name="action_exit">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
-   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="action_help">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
-   </property>
    <property name="text">
     <string>Online Help...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">F1</string>
+    <string>F1</string>
    </property>
   </action>
   <action name="action_about">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
-   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="action_settings">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
-   </property>
    <property name="text">
     <string>Settings...</string>
    </property>
@@ -411,14 +381,6 @@ text-decoration: underline;
   <action name="action_show_hide">
    <property name="text">
     <string>Hide</string>
-   </property>
-  </action>
-  <action name="action_show_icons_in_menus">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show icons in menus</string>
    </property>
   </action>
   <action name="action_desktop_manage">
