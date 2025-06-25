@@ -130,9 +130,3 @@ target_link_libraries(aspia_common PRIVATE
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
-
-# File about_dialog.cc contains macro __TIME__ containing the build time. To ensure that the time is
-# updated with each build, we rebuild the file each time.
-add_custom_target(build_time_updater
-    COMMAND ${CMAKE_COMMAND} -E touch_nocreate ${PROJECT_SOURCE_DIR}/source/common/ui/about_dialog.cc)
-add_dependencies(aspia_common build_time_updater)
