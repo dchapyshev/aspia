@@ -420,7 +420,6 @@ void Client::startAuthentication()
                 emit sig_showSessionWindow();
 
                 // Now the session will receive incoming messages.
-                tcp_channel_->setChannelIdSupport(true);
                 tcp_channel_->resume();
             }
         }

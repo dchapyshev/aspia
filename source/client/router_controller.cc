@@ -117,7 +117,6 @@ void RouterController::onTcpConnected()
             LOG(INFO) << "Sending connection request (host_id:" << host_id_ << ")";
 
             // Now the session will receive incoming messages.
-            router_channel_->setChannelIdSupport(true);
             router_channel_->resume();
 
             sendConnectionRequest();

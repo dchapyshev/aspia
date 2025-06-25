@@ -188,8 +188,6 @@ void Server::onSessionAuthenticated()
         base::ServerAuthenticatorManager::SessionInfo session_info =
             authenticator_manager_->nextReadySession();
 
-        session_info.channel->setChannelIdSupport(true);
-
         QString address = session_info.channel->peerAddress();
         proto::router::SessionType session_type =
             static_cast<proto::router::SessionType>(session_info.session_type);

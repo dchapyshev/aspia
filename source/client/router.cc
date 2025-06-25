@@ -275,7 +275,6 @@ void Router::onTcpConnected()
                 emit sig_connected(router_version);
 
                 // Now the session will receive incoming messages.
-                tcp_channel_->setChannelIdSupport(true);
                 tcp_channel_->resume();
             }
         }

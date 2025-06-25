@@ -109,7 +109,6 @@ void RouterController::onTcpConnected()
             routerStateChanged(proto::internal::RouterState::CONNECTED);
 
             // Now the session will receive incoming messages.
-            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
 
             hostIdRequest();
@@ -131,7 +130,7 @@ void RouterController::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
+    LOG(INFO) << "Connection to the router is lost:" << error_code;
 
     routerStateChanged(proto::internal::RouterState::FAILED);
     delayedConnectToRouter();

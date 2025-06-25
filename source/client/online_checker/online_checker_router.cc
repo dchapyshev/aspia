@@ -98,7 +98,6 @@ void OnlineCheckerRouter::onTcpConnected()
                     this, &OnlineCheckerRouter::onTcpMessageReceived);
 
             // Now the session will receive incoming messages.
-            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
 
             checkNextComputer();

@@ -103,6 +103,8 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
         return;
 
     tcp_channel_->pause();
+    tcp_channel_->setChannelIdSupport(true);
+
     timer_->stop();
 
     disconnect(tcp_channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);

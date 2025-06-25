@@ -200,7 +200,6 @@ void Controller::onTcpConnected()
             LOG(INFO) << "Authentication complete (session count:" << session_count_ << ")";
 
             // Now the session will receive incoming messages.
-            tcp_channel_->setChannelIdSupport(true);
             tcp_channel_->resume();
 
             sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));

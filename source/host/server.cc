@@ -214,8 +214,6 @@ void Server::onSessionAuthenticated()
         base::ServerAuthenticatorManager::SessionInfo session_info =
             authenticator_manager_->nextReadySession();
 
-        session_info.channel->setChannelIdSupport(true);
-
         const QVersionNumber& host_version = base::kCurrentVersion;
         if (host_version > session_info.version)
         {
