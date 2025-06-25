@@ -60,6 +60,7 @@ set(QT_COMMON_LIBS
     Qt6::PrintSupport Qt6::PrintSupportPrivate Qt6::PrintSupport_resources_1 Qt6::PrintSupport_resources_2
     Qt6::Widgets Qt6::WidgetsPrivate Qt6::Widgets_resources_1 Qt6::Widgets_resources_2
     Qt6::Sql Qt6::SqlPrivate Qt6::QSQLiteDriverPlugin
+    Qt6::Svg Qt6::SvgPrivate
     Qt6::Xml Qt6::XmlPrivate)
 
 if (WIN32)

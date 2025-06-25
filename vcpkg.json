@@ -33,6 +33,7 @@
         "brotli"
       ]
     },
+    "qtsvg",
     "qttools"
   ]
 }
