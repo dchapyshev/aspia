@@ -21,9 +21,12 @@
 #include <QCryptographicHash>
 #include <QDataStream>
 #include <QDir>
+#include <QIcon>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
+#include <QPainter>
+#include <QSvgRenderer>
 
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -92,6 +95,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     io_thread_.start();
 
     translations_ = std::make_unique<Translations>();
+    updateColors();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,6 +183,58 @@ bool GuiApplication::hasLocale(const QString& locale)
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& size)
+{
+    GuiApplication* current_app = GuiApplication::instance();
+    if (!current_app)
+    {
+        LOG(ERROR) << "Invalid application instance";
+        return QPixmap();
+    }
+
+    QFile file(svg_file_path);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG(ERROR) << "Unable to open svg file:" << svg_file_path << "(" << file.errorString() << ")";
+        return QPixmap();
+    }
+
+    QByteArray buffer = file.readAll();
+    if (buffer.isEmpty())
+    {
+        LOG(ERROR) << "Empty svg file:" << svg_file_path;
+        return QPixmap();
+    }
+
+    buffer.replace("currentColor", current_app->window_text_color_);
+
+    QSvgRenderer renderer(buffer);
+
+    QPixmap pixmap(size);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    renderer.render(&painter);
+
+    return pixmap;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QIcon GuiApplication::svgIcon(const QString& svg_file_path, const QSize& size)
+{
+    return QIcon(svgPixmap(svg_file_path, size));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QImage GuiApplication::svgImage(const QString &svg_file_path, const QSize &size)
+{
+    return svgPixmap(svg_file_path, size).toImage();
+}
+
+//--------------------------------------------------------------------------------------------------
 void GuiApplication::sendMessage(const QByteArray& message)
 {
     if (server_)
@@ -228,6 +284,18 @@ void GuiApplication::sendMessage(const QByteArray& message)
         LOG(ERROR) << "Unknown status code";
         return;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool GuiApplication::event(QEvent* event)
+{
+    if (event->type() == QEvent::ApplicationPaletteChange)
+    {
+        updateColors();
+        emit sig_themeChanged();
+    }
+
+    return QApplication::event(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,6 +356,12 @@ void GuiApplication::onNewConnection()
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
     emit sig_messageReceived(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GuiApplication::updateColors()
+{
+    window_text_color_ = palette().color(QPalette::WindowText).name(QColor::HexRgb).toLatin1();
 }
 
 } // namespace base

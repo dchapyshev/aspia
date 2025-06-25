@@ -20,6 +20,7 @@
 #define BASE_GUI_APPLICATION_H
 
 #include <QApplication>
+#include <QPalette>
 
 #include "base/thread.h"
 #include "base/translations.h"
@@ -53,16 +54,26 @@ public:
     void setLocale(const QString& locale);
     bool hasLocale(const QString& locale);
 
+    static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size);
+    static QIcon svgIcon(const QString& svg_file_path, const QSize& size);
+    static QImage svgImage(const QString& svg_file_path, const QSize& size);
+
 public slots:
     void sendMessage(const QByteArray& message);
 
 signals:
     void sig_messageReceived(const QByteArray& message);
+    void sig_themeChanged();
+
+protected:
+    bool event(QEvent* event) override;
 
 private slots:
     void onNewConnection();
 
 private:
+    void updateColors();
+
     QString lock_file_name_;
     QString server_name_;
 
@@ -72,6 +83,8 @@ private:
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
+
+    QByteArray window_text_color_; // Window text color in HEX.
 
     Q_DISABLE_COPY(GuiApplication)
 };
