@@ -34,8 +34,10 @@ const int kTagSize = 16; // 128 bits, 16 bytes.
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MessageDecryptorOpenssl::MessageDecryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
-    : ctx_(std::move(ctx)),
+MessageDecryptorOpenssl::MessageDecryptorOpenssl(
+    MessageDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
+    : MessageDecryptor(type),
+      ctx_(std::move(ctx)),
       iv_(iv)
 {
     DCHECK_EQ(EVP_CIPHER_CTX_key_length(ctx_.get()), kKeySize);
@@ -64,7 +66,8 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
         return nullptr;
     }
 
-    return std::unique_ptr<MessageDecryptor>(new MessageDecryptorOpenssl(std::move(ctx), iv));
+    return std::unique_ptr<MessageDecryptor>(
+        new MessageDecryptorOpenssl(MessageDecryptor::Type::AES256_GCM, std::move(ctx), iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,7 +89,8 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly
         return nullptr;
     }
 
-    return std::unique_ptr<MessageDecryptor>(new MessageDecryptorOpenssl(std::move(ctx), iv));
+    return std::unique_ptr<MessageDecryptor>(
+        new MessageDecryptorOpenssl(MessageDecryptor::Type::CHACHA20_POLY1305, std::move(ctx), iv));
 }
 
 //--------------------------------------------------------------------------------------------------

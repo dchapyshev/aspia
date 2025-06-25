@@ -42,7 +42,7 @@ public:
     bool encrypt(const void* in, size_t in_size, void* out) final;
 
 private:
-    MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
+    MessageEncryptorOpenssl(MessageEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
 
     EVP_CIPHER_CTX_ptr ctx_;
     QByteArray iv_;

@@ -23,7 +23,11 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-MessageDecryptorFake::MessageDecryptorFake() = default;
+MessageDecryptorFake::MessageDecryptorFake()
+    : MessageDecryptor(MessageDecryptor::Type::FAKE)
+{
+    // Nothing
+}
 
 //--------------------------------------------------------------------------------------------------
 MessageDecryptorFake::~MessageDecryptorFake() = default;

@@ -19,17 +19,38 @@
 #ifndef BASE_CRYPTO_MESSAGE_ENCRYPTOR_H
 #define BASE_CRYPTO_MESSAGE_ENCRYPTOR_H
 
-#include <cstddef>
+#include <QObject>
 
 namespace base {
 
 class MessageEncryptor
 {
+    Q_GADGET
+
 public:
+    enum class Type
+    {
+        UNKNOWN,
+        FAKE,
+        AES256_GCM,
+        CHACHA20_POLY1305
+    };
+    Q_ENUM(Type)
+
+    explicit MessageEncryptor(Type type)
+        : type_(type)
+    {
+        // Nothing
+    }
     virtual ~MessageEncryptor() = default;
 
     virtual size_t encryptedDataSize(size_t in_size) = 0;
     virtual bool encrypt(const void* in, size_t in_size, void* out) = 0;
+
+    Type type() const { return type_; }
+
+private:
+    const Type type_;
 };
 
 } // namespace base
