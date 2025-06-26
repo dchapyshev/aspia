@@ -300,7 +300,7 @@ void ClientAuthenticator::sendClientHello()
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ServerHello";
+    LOG(INFO) << "Received: ServerHello (" << buffer.size() << ")";
 
     proto::key_exchange::ServerHello server_hello;
     if (!parse(buffer, &server_hello))
@@ -380,7 +380,7 @@ void ClientAuthenticator::sendIdentify()
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ServerKeyExchange";
+    LOG(INFO) << "Received: ServerKeyExchange (" << buffer.size() << ")";
 
     proto::key_exchange::SrpServerKeyExchange server_key_exchange;
     if (!parse(buffer, &server_key_exchange))
@@ -454,7 +454,7 @@ void ClientAuthenticator::sendClientKeyExchange()
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: SessionChallenge";
+    LOG(INFO) << "Received: SessionChallenge (" << buffer.size() << ")";
 
     proto::key_exchange::SessionChallenge challenge;
     if (!parse(buffer, &challenge))

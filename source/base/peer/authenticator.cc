@@ -123,6 +123,7 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerVersion(const proto::peer::Version& version)
 {
+    LOG(INFO) << "Version changed from" << peer_version_ << "to" << version;
     peer_version_ = base::parse(version);
 }
 
