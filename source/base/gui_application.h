@@ -54,8 +54,8 @@ public:
     void setLocale(const QString& locale);
     bool hasLocale(const QString& locale);
 
-    static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size);
-    static QIcon svgIcon(const QString& svg_file_path, const QSize& size);
+    static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size = QSize(16, 16));
+    static QIcon svgIcon(const QString& svg_file_path, const QSize& size = QSize(16, 16));
     static QImage svgImage(const QString& svg_file_path, const QSize& size);
 
 public slots:
