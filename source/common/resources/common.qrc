@@ -138,5 +138,16 @@
         <file>heart.svg</file>
         <file>back.svg</file>
         <file>front.svg</file>
+        <file>keyboard.svg</file>
+        <file>mouse2.svg</file>
+        <file>stop-fill.svg</file>
+        <file>folder2.svg</file>
+        <file>pc-display.svg</file>
+        <file>chat.svg</file>
+        <file>motherboard.svg</file>
+        <file>display.svg</file>
+        <file>share.svg</file>
+        <file>pause-fill.svg</file>
+        <file>play-fill.svg</file>
     </qresource>
 </RCC>

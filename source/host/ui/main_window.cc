@@ -289,11 +289,6 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         notifier_ = new NotifierWindow();
 
         connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
-        connect(notifier_, &NotifierWindow::sig_textChat, this, [=]()
-        {
-            // TODO
-        });
-
         connect(notifier_, &NotifierWindow::sig_lockMouse, this, &MainWindow::sig_mouseLock);
         connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, &MainWindow::sig_keyboardLock);
         connect(notifier_, &NotifierWindow::sig_pause, this, &MainWindow::sig_pause);
@@ -557,9 +552,9 @@ void MainWindow::onThemeChanged()
 {
     QTimer::singleShot(100, this, [this]()
     {
-        ui.label_icon_id->setPixmap(base::GuiApplication::svgPixmap(":/img/cloud.svg", QSize(16, 16)));
-        ui.label_icon_password->setPixmap(base::GuiApplication::svgPixmap(":/img/key.svg", QSize(16, 16)));
-        ui.button_new_password->setIcon(base::GuiApplication::svgIcon(":/img/arrow-clockwise.svg", QSize(20, 20)));
+        ui.label_icon_id->setPixmap(base::GuiApplication::svgPixmap(":/img/cloud.svg"));
+        ui.label_icon_password->setPixmap(base::GuiApplication::svgPixmap(":/img/key.svg"));
+        ui.button_new_password->setIcon(base::GuiApplication::svgIcon(":/img/arrow-clockwise.svg"));
 
         auto set_edit_colors = [](QLineEdit* edit, const QString& color)
         {
@@ -849,7 +844,7 @@ void MainWindow::updateStatusBar()
     }
 
     ui.button_status->setText(message);
-    ui.button_status->setIcon(base::GuiApplication::svgIcon(icon, QSize(16, 16)));
+    ui.button_status->setIcon(base::GuiApplication::svgIcon(icon));
 
     QString statusbar_text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
 

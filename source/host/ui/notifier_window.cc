@@ -21,16 +21,23 @@
 #include <QHideEvent>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QPainterPath>
 #include <QScreen>
 #include <QTimer>
 #include <QTranslator>
 #include <QToolButton>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 
 namespace host {
 
 namespace {
+
+const int kRightPadding = 10;
+const int kBottonPadding = 10;
+const int kBorderRadius = 4;
 
 class SessionTreeItem : public QTreeWidgetItem
 {
@@ -41,36 +48,40 @@ public:
           display_name_(client.display_name),
           computer_name_(client.computer_name)
     {
+        QString icon;
+
         switch (client.session_type)
         {
             case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-                setIcon(0, QIcon(":/img/monitor-keyboard.png"));
+                icon = ":/img/pc-display.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                setIcon(0, QIcon(":/img/monitor.png"));
+                icon = ":/img/display.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-                setIcon(0, QIcon(":/img/folder-stand.png"));
+                icon = ":/img/folder2.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-                setIcon(0, QIcon(":/img/computer_info.png"));
+                icon = ":/img/motherboard.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_TEXT_CHAT:
-                setIcon(0, QIcon(":/img/text-chat.png"));
+                icon = ":/img/chat.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-                setIcon(0, QIcon(":/img/port-forwarding.png"));
+                icon = ":/img/share.svg";
                 break;
 
             default:
                 LOG(FATAL) << "Unexpected session type:" << client.session_type;
                 return;
         }
+
+        setIcon(0, base::GuiApplication::svgIcon(icon));
 
         if (display_name_.isEmpty())
         {
@@ -113,29 +124,12 @@ private:
 //--------------------------------------------------------------------------------------------------
 QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QString& tooltip)
 {
-    static const QString kStyle = QStringLiteral("\
-        QToolButton {\
-            border:1px solid #FAFAFA;\
-            border-radius:2px;\
-            background:transparent;\
-            padding:1px;\
-        }\
-        QToolButton:hover {\
-            border:1px solid #AAAAAA;\
-            background:#EBEBEB;\
-        }\
-        QToolButton:pressed {\
-            border:1px solid #AAAAAA;\
-            background:#D7D7D7;\
-        }");
-
     QToolButton* button = new QToolButton(parent);
 
-    button->setIcon(QIcon(icon));
+    button->setIcon(base::GuiApplication::svgIcon(icon));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     button->setFixedWidth(20);
     button->setFixedHeight(20);
-    button->setStyleSheet(kStyle);
     button->setToolTip(tooltip);
 
     return button;
@@ -150,21 +144,23 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    ui.label_title->installEventFilter(this);
-    ui.label_connections->installEventFilter(this);
+    setAttribute(Qt::WA_TranslucentBackground);
 
-    connect(ui.button_show_hide, &QPushButton::clicked, this, &NotifierWindow::onShowHidePressed);
-    connect(ui.button_text_chat, &QToolButton::clicked, this, &NotifierWindow::onTextChat);
+    ui.label_title->installEventFilter(this);
+
+    ui.button_lock_keyboard->setCheckable(true);
+    ui.button_lock_mouse->setCheckable(true);
+    ui.button_pause->setCheckable(true);
+
+    connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
+            this, &NotifierWindow::onThemeChanged);
+
+    connect(ui.button_hide, &QPushButton::clicked, this, &NotifierWindow::onHideNotifier);
+    connect(ui.button_show, &QToolButton::clicked, this, &NotifierWindow::onShowNotifier);
     connect(ui.button_lock_mouse, &QToolButton::clicked, this, &NotifierWindow::onLockMouse);
     connect(ui.button_lock_keyboard, &QToolButton::clicked, this, &NotifierWindow::onLockKeyboard);
     connect(ui.button_pause, &QToolButton::clicked, this, &NotifierWindow::onPause);
     connect(ui.button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
-
-#if 1
-    ui.button_text_chat->setVisible(false);
-#endif
-
-    setAttribute(Qt::WA_TranslucentBackground);
 
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, [this]()
@@ -172,7 +168,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
         LOG(INFO) << "Screen geometry changed";
         // The taskbar does not move instantly.
         QTimer::singleShot(
-            std::chrono::milliseconds(500), this, &NotifierWindow::updateWindowPosition);
+            std::chrono::milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
     connect(ui.tree, &QTreeWidget::itemDoubleClicked,
@@ -196,7 +192,10 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     });
     timer->start(std::chrono::seconds(3));
 
-    QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::updateWindowPosition);
+    ui.show_panel->setVisible(false);
+    onThemeChanged();
+
+    QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::onUpdateWindowPosition);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,7 +248,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
             ui.tree->addTopLevelItem(tree_item);
 
             QToolButton* stop_button =
-                createSessionButton(ui.tree, ":/img/control-stop.png", tr("Disconnect"));
+                createSessionButton(ui.tree, ":/img/stop-fill.svg", tr("Disconnect"));
             quint32 tree_item_id = tree_item->id();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
@@ -279,91 +278,27 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::onTextChat()
+void NotifierWindow::onLockMouse(bool value)
 {
-    LOG(INFO) << "[ACTION] Text chat";
-    emit sig_textChat();
+    LOG(INFO) << "[ACTION] Lock mouse:" << value;
+    ui.button_lock_mouse->setToolTip(value ? tr("Unlock mouse") : tr("Lock mouse"));
+    emit sig_lockMouse(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::onLockMouse()
+void NotifierWindow::onLockKeyboard(bool value)
 {
-    is_mouse_locked_ = !is_mouse_locked_;
-
-    LOG(INFO) << "[ACTION] Lock mouse:" << is_mouse_locked_;
-
-    QString icon;
-    QString tooltip;
-
-    if (is_mouse_locked_)
-    {
-        icon = ":/img/mouse-lock.png";
-        tooltip = tr("Unlock mouse");
-    }
-    else
-    {
-        icon = ":/img/mouse-unlock.png";
-        tooltip = tr("Lock mouse");
-    }
-
-    ui.button_lock_mouse->setIcon(QIcon(icon));
-    ui.button_lock_mouse->setToolTip(tooltip);
-
-    emit sig_lockMouse(is_mouse_locked_);
+    LOG(INFO) << "[ACTION] Lock keyboard:" << value;
+    ui.button_lock_keyboard->setToolTip(value ? tr("Unlock keyboard") : tr("Lock keyboard"));
+    emit sig_lockKeyboard(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::onLockKeyboard()
+void NotifierWindow::onPause(bool value)
 {
-    is_keyboard_locked_ = !is_keyboard_locked_;
-
-    LOG(INFO) << "[ACTION] Lock keyboard:" << is_keyboard_locked_;
-
-    QString icon;
-    QString tooltip;
-
-    if (is_keyboard_locked_)
-    {
-        icon = ":/img/keyboard-lock.png";
-        tooltip = tr("Unlock keyboard");
-    }
-    else
-    {
-        icon = ":/img/keyboard.png";
-        tooltip = tr("Lock keyboard");
-    }
-
-    ui.button_lock_keyboard->setIcon(QIcon(icon));
-    ui.button_lock_keyboard->setToolTip(tooltip);
-
-    emit sig_lockKeyboard(is_keyboard_locked_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void NotifierWindow::onPause()
-{
-    is_paused_ = !is_paused_;
-
-    LOG(INFO) << "[ACTION] Pause:" << is_paused_;
-
-    QString icon;
-    QString tooltip;
-
-    if (is_paused_)
-    {
-        icon = ":/img/control-start.png";
-        tooltip = tr("Resume");
-    }
-    else
-    {
-        icon = ":/img/control-pause.png";
-        tooltip = tr("Pause");
-    }
-
-    ui.button_pause->setIcon(QIcon(icon));
-    ui.button_pause->setToolTip(tooltip);
-
-    emit sig_pause(is_paused_);
+    LOG(INFO) << "[ACTION] Pause:" << value;
+    ui.button_pause->setToolTip(value ? tr("Resume") : tr("Pause"));
+    emit sig_pause(value);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -398,7 +333,7 @@ void NotifierWindow::closeNotifier()
 //--------------------------------------------------------------------------------------------------
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 {
-    if (object == ui.label_title || object == ui.label_connections)
+    if (object == ui.label_title)
     {
         switch (event->type())
         {
@@ -460,35 +395,39 @@ void NotifierWindow::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::moveEvent(QMoveEvent* event)
 {
-    LOG(INFO) << "Notifier moved to:" << event->pos() << "(from:" << event->oldPos() << ")";
+    LOG(INFO) << "Notifier moved to" << event->pos() << "from" << event->oldPos();
     QWidget::moveEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::onShowHidePressed()
+void NotifierWindow::paintEvent(QPaintEvent* event)
 {
-    if (ui.content->isVisible())
-    {
-        LOG(INFO) << "[ACTION] Hide";
-        hideNotifier();
-    }
-    else
-    {
-        LOG(INFO) << "[ACTION] Show";
-        showNotifier();
-    }
+    QPainter painter(this);
+
+    QPalette palette = base::GuiApplication::palette();
+
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(palette.brush(QPalette::Window));
+    painter.setPen(QPen(palette.color(QPalette::Dark), 1));
+
+    painter.drawRoundedRect(rect(), kBorderRadius + 2, kBorderRadius + 2);
+
+    QPainterPath path;
+    path.addRoundedRect(rect(), kBorderRadius, kBorderRadius);
+    QRegion mask = QRegion(path.toFillPolygon().toPolygon());
+    setMask(mask);
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::updateWindowPosition()
+void NotifierWindow::onUpdateWindowPosition()
 {
-    showNotifier();
+    onShowNotifier();
 
     QRect available_rect = currentAvailableRect();
     QSize window_size = frameSize();
 
-    int x = available_rect.x() + (available_rect.width() - window_size.width());
-    int y = available_rect.y() + (available_rect.height() - window_size.height());
+    int x = available_rect.x() + (available_rect.width() - window_size.width()) - kRightPadding;
+    int y = available_rect.y() + (available_rect.height() - window_size.height()) - kBottonPadding;
 
     LOG(INFO) << "Notifier window size:" << window_size;
     LOG(INFO) << "Notifier window moved to:" << x << "x" << y;
@@ -497,14 +436,15 @@ void NotifierWindow::updateWindowPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::showNotifier()
+void NotifierWindow::onShowNotifier()
 {
-    LOG(INFO) << "showNotifier called";
+    LOG(INFO) << "[ACTION] showNotifier called";
 
     if (ui.content->isHidden() && ui.title->isHidden())
     {
         ui.content->show();
         ui.title->show();
+        ui.show_panel->hide();
 
         QPoint window_pos = window_rect_.topLeft();
         QSize window_size = window_rect_.size();
@@ -514,8 +454,6 @@ void NotifierWindow::showNotifier()
 
         move(window_pos);
         setFixedSize(window_size);
-
-        ui.button_show_hide->setIcon(QIcon(":/img/chevron-right.svg"));
     }
     else
     {
@@ -524,27 +462,60 @@ void NotifierWindow::showNotifier()
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::hideNotifier()
+void NotifierWindow::onHideNotifier()
 {
-    LOG(INFO) << "hideNotifier called";
+    LOG(INFO) << "[ACTION] hideNotifier called";
 
-    QRect screen_rect = currentAvailableRect();
-    QSize content_size = ui.content->frameSize();
     window_rect_ = frameGeometry();
 
     ui.content->hide();
     ui.title->hide();
+    ui.show_panel->show();
 
-    QPoint window_pos(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
-    QSize window_size(window_rect_.width() - content_size.width(), window_rect_.height());
+    setFixedSize(minimumSizeHint());
 
-    LOG(INFO) << "Notifier window size:" << window_size;
-    LOG(INFO) << "Notifier window moved to:" << window_pos;
+    QTimer::singleShot(0, this, [this]()
+    {
+        QRect screen_rect = currentAvailableRect();
+        QPoint window_pos(screen_rect.x() + screen_rect.width() - width() - kRightPadding, pos().y());
 
-    move(window_pos);
-    setFixedSize(window_size);
+        LOG(INFO) << "Notifier window moved to:" << window_pos;
+        move(window_pos);
+    });
+}
 
-    ui.button_show_hide->setIcon(QIcon(":/img/chevron-left.svg"));
+//--------------------------------------------------------------------------------------------------
+void NotifierWindow::onThemeChanged()
+{
+    ui.button_hide->setIcon(base::GuiApplication::svgIcon(":/img/chevron-right.svg"));
+    ui.button_show->setIcon(base::GuiApplication::svgIcon(":/img/chevron-left.svg"));
+    ui.button_lock_keyboard->setIcon(base::GuiApplication::svgIcon(":/img/keyboard.svg"));
+    ui.button_lock_mouse->setIcon(base::GuiApplication::svgIcon(":/img/mouse2.svg"));
+    ui.button_pause->setIcon(base::GuiApplication::svgIcon(":/img/pause-fill.svg"));
+    ui.button_stop->setIcon(base::GuiApplication::svgIcon(":/img/stop-fill.svg"));
+
+    QString window_color = base::GuiApplication::palette().color(QPalette::Window).name(QColor::HexRgb);
+
+    ui.tree->setStyleSheet(QString("background-color: %1;").arg(window_color));
+
+    ui.content->setStyleSheet(QString("#content {"
+                                          "background-color: %1;"
+                                          "padding: 30px;"
+                                      "}").arg(window_color));
+
+    ui.toolbar->setStyleSheet(QString("#toolbar {"
+                                          "background-color: %1;"
+                                      "}"
+                                      "QToolButton {"
+                                          "padding: 3px;"
+                                      "}").arg(window_color));
+
+    ui.title->setStyleSheet(QString("#title { background-color: %1; }").arg(window_color));
+
+    ui.label_title->setText(
+        QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>")
+            .arg(tr("Aspia Host")));
+    ui.label_title->setStyleSheet("padding: 3px;");
 }
 
 //--------------------------------------------------------------------------------------------------

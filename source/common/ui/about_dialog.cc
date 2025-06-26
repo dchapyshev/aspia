@@ -27,6 +27,7 @@
 #include <QTextStream>
 
 #include "build/version.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "ui_about_dialog.h"
 
@@ -197,6 +198,8 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
         LOG(INFO) << "[ACTION] Close button clicked";
         close();
     });
+
+    ui->push_button_donate->setIcon(base::GuiApplication::svgIcon(":/img/heart.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

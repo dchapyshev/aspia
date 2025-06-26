@@ -36,17 +36,15 @@ public:
 
 public slots:
     void onClientListChanged(const host::UserSessionAgent::ClientList& clients);
-    void onTextChat();
-    void onLockMouse();
-    void onLockKeyboard();
-    void onPause();
+    void onLockMouse(bool value);
+    void onLockKeyboard(bool value);
+    void onPause(bool value);
     void onStop();
     void retranslateUi();
     void closeNotifier();
 
 signals:
     void sig_killSession(quint32 id);
-    void sig_textChat();
     void sig_lockMouse(bool enable);
     void sig_lockKeyboard(bool enable);
     void sig_pause(bool enable);
@@ -58,14 +56,15 @@ protected:
     void hideEvent(QHideEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
     void moveEvent(QMoveEvent* event) final;
+    void paintEvent(QPaintEvent* event) final;
 
 private slots:
-    void onShowHidePressed();
-    void updateWindowPosition();
+    void onUpdateWindowPosition();
+    void onShowNotifier();
+    void onHideNotifier();
+    void onThemeChanged();
 
 private:
-    void showNotifier();
-    void hideNotifier();
     QRect currentAvailableRect();
 
     Ui::NotifierWindow ui;
@@ -73,10 +72,6 @@ private:
     bool should_be_close_ = false;
     QPoint start_pos_;
     QRect window_rect_;
-
-    bool is_mouse_locked_ = false;
-    bool is_keyboard_locked_ = false;
-    bool is_paused_ = false;
 
     Q_DISABLE_COPY(NotifierWindow)
 };

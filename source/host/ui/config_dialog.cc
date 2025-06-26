@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QTranslator>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
@@ -235,8 +236,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
 
     ui.button_add->setIconSize(QSize(22, 22));
+    ui.button_add->setIcon(base::GuiApplication::svgIcon(":/img/plus-lg.svg"));
+
     ui.button_delete->setIconSize(QSize(22, 22));
+    ui.button_delete->setIcon(base::GuiApplication::svgIcon(":/img/dash-lg.svg"));
+
     ui.button_modify->setIconSize(QSize(22, 22));
+    ui.button_modify->setIcon(base::GuiApplication::svgIcon(":/img/pencil.svg"));
 
     //---------------------------------------------------------------------------------------------
     // Advanced Tab

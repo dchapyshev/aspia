@@ -40,9 +40,9 @@ void UserTreeItem::setUser(const base::User& user)
 void UserTreeItem::updateData()
 {
     if (user_.flags & base::User::ENABLED)
-        setIcon(0, base::GuiApplication::svgIcon(":/img/person.svg", QSize(16, 16)));
+        setIcon(0, base::GuiApplication::svgIcon(":/img/person.svg"));
     else
-        setIcon(0, base::GuiApplication::svgIcon(":/img/person-slash.svg", QSize(16, 16)));
+        setIcon(0, base::GuiApplication::svgIcon(":/img/person-slash.svg"));
 
     setText(0, user_.name);
 }
