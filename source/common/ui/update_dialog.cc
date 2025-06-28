@@ -24,6 +24,7 @@
 #include <QTemporaryFile>
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "common/ui/download_dialog.h"
@@ -258,6 +259,8 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
 void UpdateDialog::initialize()
 {
     ui->setupUi(this);
+
+    ui->label_icon->setPixmap(base::GuiApplication::svgPixmap(":/img/globe.svg", QSize(32, 32)));
 
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);

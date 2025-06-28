@@ -9,7 +9,6 @@
         <file>drive-network.png</file>
         <file>folder.png</file>
         <file>home.png</file>
-        <file>globe-green.png</file>
         <file>text-chat.png</file>
         <file>user-24x24.png</file>
         <file>application.png</file>
@@ -22,7 +21,6 @@
         <file>arrow-circle-225.png</file>
         <file>arrow-circle-315.png</file>
         <file>arrow-circle-double.png</file>
-        <file>arrow-down.png</file>
         <file>arrow-in-out.png</file>
         <file>aspia-client.png</file>
         <file>aspia-host.png</file>
@@ -98,15 +96,11 @@
         <file>control-start.png</file>
         <file>headphone.png</file>
         <file>key.png</file>
-        <file>keyboard-lock.png</file>
-        <file>mouse-lock.png</file>
-        <file>mouse-unlock.png</file>
         <file>port-forwarding.png</file>
         <file>question.png</file>
         <file>address-book.png</file>
         <file>address-book-pinned.png</file>
         <file>aspia-console.ico</file>
-        <file>aspia-console.png</file>
         <file>book.png</file>
         <file>book-pencil.png</file>
         <file>broom.png</file>
@@ -149,5 +143,9 @@
         <file>share.svg</file>
         <file>pause-fill.svg</file>
         <file>play-fill.svg</file>
+        <file>gear.svg</file>
+        <file>sliders.svg</file>
+        <file>chevron-down.svg</file>
+        <file>globe.svg</file>
     </qresource>
 </RCC>

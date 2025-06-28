@@ -47,9 +47,6 @@ public:
     proto::desktop::Config desktopViewConfig() const;
     void setDesktopViewConfig(const proto::desktop::Config& config);
 
-    bool showIconsInMenus() const;
-    void setShowIconsInMenus(bool enable);
-
     bool checkUpdates() const;
     void setCheckUpdates(bool check);
 

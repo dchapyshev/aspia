@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
+    <width>278</width>
     <height>226</height>
    </rect>
   </property>
@@ -14,9 +14,6 @@
    <string>Aspia Client</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="styleSheet">
-    <string notr="true">QWidget#centralwidget { background-color:#FAFAFA; }</string>
-   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -32,18 +29,12 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../../common/resources/common.qrc">:/img/computer.png</pixmap>
+         <pixmap resource="../../common/resources/common.qrc">:/img/cloud.svg</pixmap>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_address">
-        <property name="styleSheet">
-         <string notr="true">QLabel {
-font: bold 11px;
-color:#505050;
-}</string>
-        </property>
         <property name="text">
          <string>ID / Address</string>
         </property>
@@ -53,38 +44,6 @@ color:#505050;
     </item>
     <item>
      <widget class="QComboBox" name="combo_address">
-      <property name="styleSheet">
-       <string notr="true">QComboBox {
-border: 1px solid #CDCDCD;
-border-radius: 3px;
-background: #FAFAFA;
-color: #505050;
-padding: 4px;
-}
-QComboBox::drop-down {
-subcontrol-origin: padding;
-subcontrol-position: top right;
-border-left-width: 1px;
-border-left-color: #E1E8EE;
-border-left-style: solid;
-border-top-right-radius: 3px;
-border-bottom-right-radius: 3px;
-width: 25px;
-}
-QComboBox::drop-down::hover {
-background: #E9E9E9;
-}
-QComboBox::drop-down::pressed {
-background: #CDCDCD;
-}
-QComboBox::down-arrow {
-image: url(:/img/arrow-down.png);
-background-repeat: no-repeat;
-background-position: center center;
-width: 10px;
-height: 10px;
-}</string>
-      </property>
       <property name="editable">
        <bool>true</bool>
       </property>
@@ -104,18 +63,12 @@ height: 10px;
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../../common/resources/common.qrc">:/img/gear.png</pixmap>
+         <pixmap resource="../../common/resources/common.qrc">:/img/sliders.svg</pixmap>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_session_type">
-        <property name="styleSheet">
-         <string notr="true">QLabel {
-font: bold 11px;
-color:#505050;
-}</string>
-        </property>
         <property name="text">
          <string>Session Type</string>
         </property>
@@ -133,38 +86,6 @@ color:#505050;
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="styleSheet">
-         <string notr="true">QComboBox {
-border: 1px solid #CDCDCD;
-border-radius: 3px;
-background: #FAFAFA;
-color: #505050;
-padding: 4px;
-}
-QComboBox::drop-down {
-subcontrol-origin: padding;
-subcontrol-position: top right;
-border-left-width: 1px;
-border-left-color: #E1E8EE;
-border-left-style: solid;
-border-top-right-radius: 3px;
-border-bottom-right-radius: 3px;
-width: 25px;
-}
-QComboBox::drop-down::hover {
-background: #E9E9E9;
-}
-QComboBox::drop-down::pressed {
-background: #CDCDCD;
-}
-QComboBox::down-arrow {
-image: url(:/img/arrow-down.png);
-background-repeat: no-repeat;
-background-position: center center;
-width: 10px;
-height: 10px;
-}</string>
-        </property>
        </widget>
       </item>
       <item>
@@ -177,22 +98,7 @@ height: 10px;
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton {
-color: #505050;
-font: bold 11px;
-background-color: #FAFAFA;
-border: 1px solid #CDCDCD;
-border-radius: 3px;
 padding: 4px;
-}
-QPushButton:hover {
-background: #EBEBEB;
-border: 1px solid #AAAAAA;
-border-radius: 2px;
-}
-QPushButton:pressed {
-background: #D7D7D7;
-border: 1px solid #AAAAAA;
-border-radius: 2px;
 }</string>
         </property>
         <property name="text">
@@ -200,7 +106,7 @@ border-radius: 2px;
         </property>
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
-          <normaloff>:/img/gear-pencil.png</normaloff>:/img/gear-pencil.png</iconset>
+          <normaloff>:/img/gear.svg</normaloff>:/img/gear.svg</iconset>
         </property>
        </widget>
       </item>
@@ -232,26 +138,6 @@ border-radius: 2px;
       </item>
       <item>
        <widget class="QPushButton" name="button_connect">
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-color: #505050;
-font: bold 11px;
-background-color: #E9E9E9;
-border: 1px solid #CDCDCD;
-border-radius: 3px;
-padding: 5px 25px 5px 25px;
-}
-QPushButton:hover {
-background: #EBEBEB;
-border: 1px solid #AAAAAA;
-border-radius: 2px;
-}
-QPushButton:pressed {
-background: #D7D7D7;
-border: 1px solid #AAAAAA;
-border-radius: 2px;
-}</string>
-        </property>
         <property name="text">
          <string>Connect</string>
         </property>
@@ -272,7 +158,7 @@ border-radius: 2px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>262</width>
+     <width>278</width>
      <height>22</height>
     </rect>
    </property>
@@ -296,69 +182,34 @@ border-radius: 2px;
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="menu_language">
     <property name="title">
-     <string>View</string>
+     <string>Language</string>
     </property>
-    <widget class="QMenu" name="menu_language">
-     <property name="title">
-      <string>Language</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../../common/resources/common.qrc">
-       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
-     </property>
-    </widget>
-    <addaction name="menu_language"/>
     <addaction name="separator"/>
-    <addaction name="action_show_icons_in_menus"/>
    </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menuView"/>
+   <addaction name="menu_language"/>
    <addaction name="menu_help"/>
   </widget>
   <action name="action_help">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
-   </property>
    <property name="text">
     <string>Online Help...</string>
    </property>
   </action>
   <action name="action_about">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
-   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="action_settings">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
-   </property>
    <property name="text">
     <string>Settings...</string>
    </property>
   </action>
   <action name="action_exit">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
-   </property>
    <property name="text">
     <string>Exit</string>
-   </property>
-  </action>
-  <action name="action_show_icons_in_menus">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show icons in menus</string>
    </property>
   </action>
   <action name="action_check_for_updates">

@@ -49,6 +49,7 @@ private slots:
     void sessionConfigButtonPressed();
     void connectToHost();
     void onCheckUpdates();
+    void onThemeChanged();
 
 private:
     void createLanguageMenu(const QString& current_locale);

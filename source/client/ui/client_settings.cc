@@ -33,7 +33,6 @@ const QString kAddressListParam = QStringLiteral("AddressList");
 const QString kSessionTypeParam = QStringLiteral("SessionType");
 const QString kDesktopManageConfigParam = QStringLiteral("DesktopManageConfig");
 const QString kDesktopViewConfigParam = QStringLiteral("DesktopViewConfig");
-const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
 const QString kUpdateServerParam = QStringLiteral("UpdateServer");
 const QString kOneTimePasswordCheckedParam = QStringLiteral("OneTimePasswordChecked");
@@ -135,26 +134,6 @@ void ClientSettings::setDesktopViewConfig(const proto::desktop::Config& config)
 
     config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     settings_.setValue(kDesktopViewConfigParam, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ClientSettings::showIconsInMenus() const
-{
-    bool defaultValue;
-
-#if defined(Q_OS_MACOS)
-    defaultValue = false;
-#else
-    defaultValue = true;
-#endif
-
-    return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSettings::setShowIconsInMenus(bool enable)
-{
-    settings_.setValue(kShowIconsInMenusParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

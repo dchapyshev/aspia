@@ -18,6 +18,7 @@
 
 #include "client/ui/client_window.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/net/address.h"
@@ -52,11 +53,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ClientSettings settings;
-    Application::instance()->setAttribute(
-        Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
 
     ui.setupUi(this);
-    setFixedHeight(sizeHint().height());
 
     createLanguageMenu(settings.locale());
     reloadSessionTypes();
@@ -65,18 +63,6 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     combo_address->addItems(settings.addressList());
     combo_address->setCurrentIndex(0);
-
-    ui.action_show_icons_in_menus->setChecked(settings.showIconsInMenus());
-    connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
-    {
-        LOG(INFO) << "[ACTION] Show icons in menus:" << enable;
-
-        Application* instance = Application::instance();
-        instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-
-        ClientSettings settings;
-        settings.setShowIconsInMenus(enable);
-    });
 
     connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
 
@@ -145,7 +131,13 @@ ClientWindow::ClientWindow(QWidget* parent)
     ui.action_update_settings->setVisible(false);
 #endif
 
+    connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
+            this, &ClientWindow::onThemeChanged);
+
+    onThemeChanged();
     combo_address->setFocus();
+
+    setFixedHeight(sizeHint().height());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,6 +422,60 @@ void ClientWindow::onCheckUpdates()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientWindow::onThemeChanged()
+{
+    ui.label_id_icon->setPixmap(base::GuiApplication::svgPixmap(":/img/cloud.svg"));
+    ui.label_session_type_icon->setPixmap(base::GuiApplication::svgPixmap(":/img/sliders.svg"));
+    ui.button_session_config->setIcon(base::GuiApplication::svgIcon(":/img/gear.svg"));
+
+    static const QString kComboboxStyle =
+        QStringLiteral("QComboBox {"
+                           "border: 1px solid #CDCDCD;"
+                           "border-radius: 3px;"
+                           "padding: 4px;"
+                       "}"
+                       "QComboBox::drop-down {"
+                           "subcontrol-origin: padding;"
+                           "subcontrol-position: top right;"
+                           "border-left-width: 1px;"
+                           "border-left-color: #E1E8EE;"
+                           "border-left-style: solid;"
+                           "border-top-right-radius: 3px;"
+                           "border-bottom-right-radius: 3px;"
+                           "width: 25px;"
+                       "}"
+                       "QComboBox::drop-down::hover {"
+                           "background: #E9E9E9;"
+                       "}"
+                       "QComboBox::drop-down::pressed {"
+                           "background: #CDCDCD;"
+                       "}"
+                       "QComboBox::down-arrow {"
+                           "image: url(:/img/chevron-down.svg);"
+                           "background-repeat: no-repeat;"
+                           "background-position: center center;"
+                           "width: 10px;"
+                           "height: 10px;"
+                       "}");
+
+    ui.combo_address->setStyleSheet(kComboboxStyle);
+    ui.combo_session_type->setStyleSheet(kComboboxStyle);
+
+    static const QString kLabelStyle = QStringLiteral("QLabel { font: bold 11px; }");
+
+    ui.label_address->setStyleSheet(kLabelStyle);
+    ui.label_session_type->setStyleSheet(kLabelStyle);
+
+    ui.button_session_config->setStyleSheet("QPushButton { padding: 7px 7px 7px 7px; }");
+
+    ui.button_connect->setStyleSheet("QPushButton {"
+                                         "font: bold 11px;"
+                                         "padding: 5px 25px 5px 25px;"
+                                     "}");
+    reloadSessionTypes();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -459,18 +505,19 @@ void ClientWindow::reloadSessionTypes()
 
     auto add_session = [=](const QString& icon, proto::peer::SessionType session_type)
     {
-        combobox->addItem(QIcon(icon),
+        combobox->addItem(base::GuiApplication::svgIcon(icon),
                           common::sessionTypeToLocalizedString(session_type),
                           QVariant(session_type));
     };
 
     combobox->clear();
 
-    add_session(":/img/monitor-keyboard.png", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/computer_info.png", proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/text-chat.png", proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/pc-display.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/display.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder2.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/motherboard.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/share.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)
