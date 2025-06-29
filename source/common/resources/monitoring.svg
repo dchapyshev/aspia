@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="bi bi-process-monitor">
+  <!-- Рамка окна -->
+  <path fill="currentColor" d="M1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm1 0v11h12V2H2z"/>
+
+  <!-- Линия активности: немного сглаженная амплитуда -->
+  <path d="M3 9h2l1-4 2 6 1-3h4"
+        stroke="currentColor" stroke-width="1" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

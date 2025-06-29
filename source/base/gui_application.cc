@@ -186,8 +186,8 @@ bool GuiApplication::hasLocale(const QString& locale)
 // static
 QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& size)
 {
-    GuiApplication* current_app = GuiApplication::instance();
-    if (!current_app)
+    GuiApplication* application = GuiApplication::instance();
+    if (!application)
     {
         LOG(ERROR) << "Invalid application instance";
         return QPixmap();
@@ -207,7 +207,7 @@ QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& siz
         return QPixmap();
     }
 
-    buffer.replace("currentColor", current_app->window_text_color_);
+    buffer.replace("currentColor", application->window_text_color_);
 
     QSvgRenderer renderer(buffer);
 

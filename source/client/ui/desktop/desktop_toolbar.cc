@@ -18,16 +18,17 @@
 
 #include "client/ui/desktop/desktop_toolbar.h"
 
-#include "base/logging.h"
-#include "client/ui/desktop/desktop_settings.h"
-#include "client/ui/desktop/record_settings_dialog.h"
-#include "client/ui/desktop/select_screen_action.h"
-
 #include <QActionGroup>
 #include <QMenu>
 #include <QMessageBox>
 #include <QTimer>
 #include <QToolButton>
+
+#include "base/gui_application.h"
+#include "base/logging.h"
+#include "client/ui/desktop/desktop_settings.h"
+#include "client/ui/desktop/record_settings_dialog.h"
+#include "client/ui/desktop/select_screen_action.h"
 
 namespace client {
 
@@ -158,6 +159,24 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
 #endif // defined(Q_OS_MACOS)
 
     showFullScreenButtons(false);
+
+    ui.action_pin->setIcon(base::GuiApplication::svgIcon(":/img/pin-angle.svg"));
+    ui.action_settings->setIcon(base::GuiApplication::svgIcon(":/img/gear.svg"));
+    ui.action_autosize->setIcon(base::GuiApplication::svgIcon(":/img/fullscreen.svg"));
+    ui.action_fullscreen->setIcon(base::GuiApplication::svgIcon(":/img/arrows-fullscreen.svg"));
+    ui.action_cad->setIcon(base::GuiApplication::svgIcon(":/img/cad.svg"));
+    ui.action_menu->setIcon(base::GuiApplication::svgIcon(":/img/list.svg"));
+    ui.action_file_transfer->setIcon(base::GuiApplication::svgIcon(":/img/folder2.svg"));
+    ui.action_power_control->setIcon(base::GuiApplication::svgIcon(":/img/power.svg"));
+    ui.action_update->setIcon(base::GuiApplication::svgIcon(":/img/cloud-download.svg"));
+    ui.action_system_info->setIcon(base::GuiApplication::svgIcon(":/img/motherboard.svg"));
+    ui.action_close->setIcon(base::GuiApplication::svgIcon(":/img/x-square.svg"));
+    ui.action_minimize->setIcon(base::GuiApplication::svgIcon(":/img/arrow-down-square.svg"));
+    ui.action_text_chat->setIcon(base::GuiApplication::svgIcon(":/img/chat.svg"));
+    ui.action_start_recording->setIcon(base::GuiApplication::svgIcon(":/img/record.svg"));
+    ui.action_task_manager->setIcon(base::GuiApplication::svgIcon(":/img/monitoring.svg"));
+    ui.action_port_forwarding->setIcon(base::GuiApplication::svgIcon(":/img/share.svg"));
+
     adjustSize();
 }
 
@@ -375,7 +394,7 @@ void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list
         QAction* resolution_select_action = new QAction(ui.toolbar);
 
         resolution_select_action->setToolTip(tr("Resolution selection"));
-        resolution_select_action->setIcon(QIcon(":/img/monitor.png"));
+        resolution_select_action->setIcon(base::GuiApplication::svgIcon(":/img/display.svg"));
         resolution_select_action->setMenu(resolutions_menu_);
 
         ui.toolbar->insertAction(ui.action_power_control, resolution_select_action);
@@ -435,12 +454,12 @@ void DesktopToolBar::startRecording(bool enable)
 
     if (enable)
     {
-        ui.action_start_recording->setIcon(QIcon(":/img/control-stop.png"));
+        ui.action_start_recording->setIcon(base::GuiApplication::svgIcon(":/img/stop-fill.svg"));
         ui.action_start_recording->setText(tr("Stop recording"));
     }
     else
     {
-        ui.action_start_recording->setIcon(QIcon(":/img/control-record.png"));
+        ui.action_start_recording->setIcon(base::GuiApplication::svgIcon(":/img/record.svg"));
         ui.action_start_recording->setText(tr("Start recording"));
     }
 
@@ -530,14 +549,7 @@ void DesktopToolBar::onHideTimer()
 void DesktopToolBar::onFullscreenButton(bool checked)
 {
     LOG(INFO) << "[ACTION] Full screen button clicked:" << checked;
-
-    if (checked)
-        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-actual.png"));
-    else
-        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
-
     showFullScreenButtons(checked);
-
     emit sig_switchToFullscreen(checked);
 }
 
@@ -548,9 +560,7 @@ void DesktopToolBar::onAutosizeButton()
 
     if (ui.action_fullscreen->isChecked())
     {
-        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
         ui.action_fullscreen->setChecked(false);
-
         showFullScreenButtons(false);
     }
 

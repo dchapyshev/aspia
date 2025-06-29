@@ -54,8 +54,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>22</width>
-       <height>22</height>
+       <width>24</width>
+       <height>24</height>
       </size>
      </property>
      <addaction name="action_pin"/>
@@ -118,10 +118,10 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/pin.png</normaloff>:/img/pin.png</iconset>
+     <normaloff>:/img/pin-angle.svg</normaloff>:/img/pin-angle.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Lock toolbar</string>
    </property>
    <property name="toolTip">
     <string>Lock toolbar</string>
@@ -130,10 +130,10 @@
   <action name="action_settings">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
+     <normaloff>:/img/gear.svg</normaloff>:/img/gear.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Session configuration</string>
    </property>
    <property name="toolTip">
     <string>Session configuration</string>
@@ -142,10 +142,10 @@
   <action name="action_autosize">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-in-out.png</normaloff>:/img/arrow-in-out.png</iconset>
+     <normaloff>:/img/fullscreen.svg</normaloff>:/img/fullscreen.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Auto size</string>
    </property>
    <property name="toolTip">
     <string>Automatic window size</string>
@@ -157,10 +157,10 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/application-resize-full.png</normaloff>:/img/application-resize-full.png</iconset>
+     <normaloff>:/img/arrows-fullscreen.svg</normaloff>:/img/arrows-fullscreen.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Full screen</string>
    </property>
    <property name="toolTip">
     <string>Switch to full screen mode or back</string>
@@ -180,10 +180,10 @@
   <action name="action_cad">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/ctrl-alt-del.png</normaloff>:/img/ctrl-alt-del.png</iconset>
+     <normaloff>:/img/cad.svg</normaloff>:/img/cad.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Ctrl+Alt+Delete</string>
    </property>
    <property name="toolTip">
     <string>Send Ctrl+Alt+Delete</string>
@@ -192,10 +192,10 @@
   <action name="action_menu">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/menu.png</normaloff>:/img/menu.png</iconset>
+     <normaloff>:/img/list.svg</normaloff>:/img/list.svg</iconset>
    </property>
    <property name="text">
-    <string notr="true"/>
+    <string>Advanced menu</string>
    </property>
    <property name="toolTip">
     <string>Advanced menu</string>
@@ -215,10 +215,10 @@
   <action name="action_file_transfer">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+     <normaloff>:/img/folder2.svg</normaloff>:/img/folder2.svg</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>File transfer</string>
    </property>
    <property name="toolTip">
     <string>File transfer</string>
@@ -246,7 +246,7 @@
   <action name="action_power_control">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/lightning.png</normaloff>:/img/lightning.png</iconset>
+     <normaloff>:/img/power.svg</normaloff>:/img/power.svg</iconset>
    </property>
    <property name="text">
     <string>Power control</string>
@@ -281,7 +281,7 @@
   <action name="action_update">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/update.png</normaloff>:/img/update.png</iconset>
+     <normaloff>:/img/cloud-download.svg</normaloff>:/img/cloud-download.svg</iconset>
    </property>
    <property name="text">
     <string>Remote Update</string>
@@ -293,7 +293,7 @@
   <action name="action_system_info">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+     <normaloff>:/img/motherboard.svg</normaloff>:/img/motherboard.svg</iconset>
    </property>
    <property name="text">
     <string>System Information</string>
@@ -305,7 +305,7 @@
   <action name="action_close">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/cross-button.png</normaloff>:/img/cross-button.png</iconset>
+     <normaloff>:/img/x-square.svg</normaloff>:/img/x-square.svg</iconset>
    </property>
    <property name="text">
     <string>Close</string>
@@ -376,7 +376,7 @@
   <action name="action_minimize">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/navigation-270-button.png</normaloff>:/img/navigation-270-button.png</iconset>
+     <normaloff>:/img/arrow-down-square.svg</normaloff>:/img/arrow-down-square.svg</iconset>
    </property>
    <property name="text">
     <string>Minimize</string>
@@ -409,7 +409,7 @@
   <action name="action_text_chat">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+     <normaloff>:/img/chat.svg</normaloff>:/img/chat.svg</iconset>
    </property>
    <property name="text">
     <string>Text Chat</string>
@@ -429,7 +429,7 @@
   <action name="action_start_recording">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/control-record.png</normaloff>:/img/control-record.png</iconset>
+     <normaloff>:/img/record.svg</normaloff>:/img/record.svg</iconset>
    </property>
    <property name="text">
     <string>Start recording</string>
@@ -441,7 +441,7 @@
   <action name="action_task_manager">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/task-manager.png</normaloff>:/img/task-manager.png</iconset>
+     <normaloff>:/img/monitoring.svg</normaloff>:/img/monitoring.svg</iconset>
    </property>
    <property name="text">
     <string>Task Manager</string>
@@ -481,7 +481,7 @@
   <action name="action_port_forwarding">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
+     <normaloff>:/img/share.svg</normaloff>:/img/share.svg</iconset>
    </property>
    <property name="text">
     <string>Port Forwarding</string>
