@@ -18,10 +18,10 @@
 
 #include "client/ui/sys_info/sys_info_widget_event_logs.h"
 
+#include <QMenu>
+
 #include "base/logging.h"
 #include "common/system_info_constants.h"
-
-#include <QMenu>
 
 namespace client {
 
@@ -205,9 +205,9 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
 
     ui.combobox_page->setCurrentIndex(current_page);
 
-    QIcon error_icon(":/img/error.png");
-    QIcon warning_icon(":/img/warning.png");
-    QIcon info_icon(":/img/information.png");
+    QIcon error_icon(":/img/high-importance.svg");
+    QIcon warning_icon(":/img/box-important.svg");
+    QIcon info_icon(":/img/info.svg");
 
     for (int i = 0; i < event_logs.event_size(); ++i)
     {

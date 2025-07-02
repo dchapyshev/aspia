@@ -29,7 +29,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -169,7 +169,7 @@ void SysInfoWidgetLicenses::setSystemInfo(const proto::system_info::SystemInfo& 
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/license-key.png", QString::fromStdString(license.product_name()), group));
+                new Item(":/img/certificate.svg", QString::fromStdString(license.product_name()), group));
         }
     }
 

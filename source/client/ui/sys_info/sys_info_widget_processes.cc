@@ -126,7 +126,7 @@ void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo&
     }
 
     const proto::system_info::Processes& processes = system_info.processes();
-    QIcon item_icon(":/img/application.png");
+    QIcon item_icon(":/img/heart-monitor.svg");
 
     for (int i = 0; i < processes.process_size(); ++i)
     {

@@ -60,8 +60,8 @@
       <widget class="QToolBar" name="toolbar">
        <property name="iconSize">
         <size>
-         <width>16</width>
-         <height>16</height>
+         <width>24</width>
+         <height>24</height>
         </size>
        </property>
        <property name="toolButtonStyle">
@@ -87,8 +87,8 @@
       <widget class="QToolBar" name="toolbar2">
        <property name="iconSize">
         <size>
-         <width>16</width>
-         <height>16</height>
+         <width>24</width>
+         <height>24</height>
         </size>
        </property>
        <property name="toolButtonStyle">
@@ -159,7 +159,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/folder-up.png</normaloff>:/img/folder-up.png</iconset>
+     <normaloff>:/img/arrow-up.svg</normaloff>:/img/arrow-up.svg</iconset>
    </property>
    <property name="text">
     <string>Up</string>
@@ -171,7 +171,7 @@
   <action name="action_refresh">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+     <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -186,7 +186,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
+     <normaloff>:/img/add-folder.svg</normaloff>:/img/add-folder.svg</iconset>
    </property>
    <property name="text">
     <string>New Folder</string>
@@ -201,7 +201,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
+     <normaloff>:/img/close.svg</normaloff>:/img/close.svg</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -216,7 +216,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-045.png</normaloff>:/img/arrow-045.png</iconset>
+     <normaloff>:/img/send.svg</normaloff>:/img/send.svg</iconset>
    </property>
    <property name="text">
     <string>Send</string>

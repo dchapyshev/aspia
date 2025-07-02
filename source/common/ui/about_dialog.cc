@@ -198,8 +198,6 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
         LOG(INFO) << "[ACTION] Close button clicked";
         close();
     });
-
-    ui->push_button_donate->setIcon(base::GuiApplication::svgIcon(":/img/heart.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

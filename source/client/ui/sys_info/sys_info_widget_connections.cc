@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_connections.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -78,7 +78,7 @@ void SysInfoWidgetConnections::setSystemInfo(const proto::system_info::SystemInf
     }
 
     const proto::system_info::Connections& connections = system_info.connections();
-    QIcon item_icon(":/img/servers-network.png");
+    QIcon item_icon(":/img/connected.svg");
 
     for (int i = 0; i < connections.connection_size(); ++i)
     {

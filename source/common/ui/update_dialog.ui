@@ -34,7 +34,7 @@
            <string notr="true"/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../resources/common.qrc">:/img/globe.svg</pixmap>
+           <pixmap resource="../resources/common.qrc">:/img/restart.svg</pixmap>
           </property>
          </widget>
         </item>

@@ -74,7 +74,7 @@ public:
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(":/img/aspia-host.png"));
+        setIcon(0, QIcon(":/img/computer.svg"));
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
@@ -151,7 +151,7 @@ public:
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(":/img/computer.png"));
+        setIcon(0, QIcon(":/img/stack.svg"));
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
 
@@ -200,7 +200,7 @@ public:
     {
         updateItem(connection);
 
-        setIcon(0, QIcon(":/img/user.png"));
+        setIcon(0, QIcon(":/img/user.svg"));
         setText(0, QString::fromStdString(conn.client_user_name()));
         setText(1, QString::number(conn.host_id()));
         setText(2, QString::fromStdString(conn.host_address()));
@@ -262,9 +262,9 @@ public:
         setText(0, QString::fromStdString(user.name()));
 
         if (user.flags() & base::User::ENABLED)
-            setIcon(0, QIcon(":/img/user.png"));
+            setIcon(0, QIcon(":/img/user.svg"));
         else
-            setIcon(0, QIcon(":/img/user-disabled.png"));
+            setIcon(0, QIcon(":/img/locked-user.svg"));
     }
 
     // QTreeWidgetItem implementation.
@@ -1022,10 +1022,10 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     QMenu menu;
 
     QAction* modify_action = menu.addAction(tr("Modify"));
-    modify_action->setIcon(QIcon(":/img/pencil.png"));
+    modify_action->setIcon(QIcon(":/img/pencil-drawing.svg"));
 
     QAction* delete_action = menu.addAction(tr("Delete"));
-    delete_action->setIcon(QIcon(":/img/minus.png"));
+    delete_action->setIcon(QIcon(":/img/cancel.svg"));
 
     QTreeWidgetItem* current_item = ui->tree_users->itemAt(pos);
     if (!current_item)
@@ -1039,10 +1039,10 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     }
 
     QAction* add_action = menu.addAction(tr("Add"));
-    add_action->setIcon(QIcon(":/img/plus.png"));
+    add_action->setIcon(QIcon(":/img/add.svg"));
 
     QAction* refresh_action = menu.addAction(tr("Refresh"));
-    refresh_action->setIcon(QIcon(":/img/arrow-circle-double.png"));
+    refresh_action->setIcon(QIcon(":/img/replay.svg"));
 
     QAction* action = menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
     if (action == modify_action)

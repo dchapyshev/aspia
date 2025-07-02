@@ -29,7 +29,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -181,7 +181,7 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(user.disabled() ? ":/img/user-disabled.png" : ":/img/user.png",
+                new Item(user.disabled() ? ":/img/locked-user.svg" : ":/img/user.svg",
                          QString::fromStdString(user.name()), group));
         }
     }

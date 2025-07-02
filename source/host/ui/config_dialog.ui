@@ -507,7 +507,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/plus-lg.svg</normaloff>:/img/plus-lg.svg</iconset>
+             <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
            </property>
           </widget>
          </item>
@@ -527,7 +527,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/pencil.svg</normaloff>:/img/pencil.svg</iconset>
+             <normaloff>:/img/pencil-drawing.svg</normaloff>:/img/pencil-drawing.svg</iconset>
            </property>
           </widget>
          </item>
@@ -547,7 +547,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/dash-lg.svg</normaloff>:/img/dash-lg.svg</iconset>
+             <normaloff>:/img/cancel.svg</normaloff>:/img/cancel.svg</iconset>
            </property>
           </widget>
          </item>
@@ -632,8 +632,8 @@
   </layout>
   <action name="action_add">
    <property name="icon">
-    <iconset>
-     <normaloff>:/img/user-plus.png</normaloff>:/img/user-plus.png</iconset>
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
    </property>
    <property name="text">
     <string>Add</string>
@@ -641,8 +641,8 @@
   </action>
   <action name="action_modify">
    <property name="icon">
-    <iconset>
-     <normaloff>:/img/user-pencil.png</normaloff>:/img/user-pencil.png</iconset>
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/pencil-drawing.svg</normaloff>:/img/pencil-drawing.svg</iconset>
    </property>
    <property name="text">
     <string>Modify</string>
@@ -650,8 +650,8 @@
   </action>
   <action name="action_delete">
    <property name="icon">
-    <iconset>
-     <normaloff>:/img/user-minus.png</normaloff>:/img/user-minus.png</iconset>
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/cancel.svg</normaloff>:/img/cancel.svg</iconset>
    </property>
    <property name="text">
     <string>Delete</string>

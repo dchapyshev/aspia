@@ -552,10 +552,6 @@ void MainWindow::onThemeChanged()
 {
     QTimer::singleShot(100, this, [this]()
     {
-        ui.label_icon_id->setPixmap(base::GuiApplication::svgPixmap(":/img/cloud.svg"));
-        ui.label_icon_password->setPixmap(base::GuiApplication::svgPixmap(":/img/key.svg"));
-        ui.button_new_password->setIcon(base::GuiApplication::svgIcon(":/img/arrow-clockwise.svg"));
-
         auto set_edit_colors = [](QLineEdit* edit, const QString& color)
         {
             edit->setStyleSheet(QString("QLineEdit {"
@@ -820,22 +816,22 @@ void MainWindow::updateStatusBar()
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
-            icon = ":/img/x-lg.svg";
+            icon = ":/img/close.svg";
             break;
 
         case proto::internal::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
-            icon = ":/img/arrow-clockwise.svg";
+            icon = ":/img/replay.svg";
             break;
 
         case proto::internal::RouterState::CONNECTED:
             message = tr("Connected to a router");
-            icon = ":/img/check-lg.svg";
+            icon = ":/img/done.svg";
             break;
 
         case proto::internal::RouterState::FAILED:
             message = tr("Connection error");
-            icon = ":/img/x-lg.svg";
+            icon = ":/img/close.svg";
             break;
 
         default:
@@ -844,7 +840,7 @@ void MainWindow::updateStatusBar()
     }
 
     ui.button_status->setText(message);
-    ui.button_status->setIcon(base::GuiApplication::svgIcon(icon));
+    ui.button_status->setIcon(QIcon(icon));
 
     QString statusbar_text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
 

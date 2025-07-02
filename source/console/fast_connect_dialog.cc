@@ -84,12 +84,12 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
                                        QVariant(session_type));
     };
 
-    add_session(":/img/monitor-keyboard.png", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/computer_info.png", proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/text-chat.png", proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/port-forwarding.png", proto::peer::SESSION_TYPE_PORT_FORWARDING);
+    add_session(":/img/workstation.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/computer.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/file-explorer.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/motherboard.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/ethernet-off.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)

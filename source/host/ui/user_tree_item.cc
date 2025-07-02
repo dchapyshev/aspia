@@ -18,8 +18,6 @@
 
 #include "host/ui/user_tree_item.h"
 
-#include "base/gui_application.h"
-
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
@@ -40,9 +38,9 @@ void UserTreeItem::setUser(const base::User& user)
 void UserTreeItem::updateData()
 {
     if (user_.flags & base::User::ENABLED)
-        setIcon(0, base::GuiApplication::svgIcon(":/img/person.svg"));
+        setIcon(0, QIcon(":/img/user.svg"));
     else
-        setIcon(0, base::GuiApplication::svgIcon(":/img/person-slash.svg"));
+        setIcon(0, QIcon(":/img/locked-user.svg"));
 
     setText(0, user_.name);
 }

@@ -37,7 +37,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     computer_id_ = computer_id;
     ++computer_id;
 
-    setIcon(0, QIcon(":/img/computer.png"));
+    setIcon(0, QIcon(":/img/computer.svg"));
     updateItem();
 }
 

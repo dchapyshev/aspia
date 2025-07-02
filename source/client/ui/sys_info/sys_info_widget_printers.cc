@@ -30,7 +30,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -151,7 +151,7 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/printer.png",
+            ui.tree->addTopLevelItem(new Item(":/img/printer.svg",
                                               QString::fromStdString(printer.name()),
                                               group));
         }

@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_env_vars.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -76,7 +76,7 @@ void SysInfoWidgetEnvVars::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::EnvironmentVariables& variables = system_info.env_vars();
-    QIcon item_icon(":/img/block.png");
+    QIcon item_icon(":/img/day-view.svg");
 
     for (int i = 0; i < variables.variable_size(); ++i)
     {

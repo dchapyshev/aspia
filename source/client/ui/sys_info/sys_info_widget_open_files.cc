@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_open_files.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -78,7 +78,7 @@ void SysInfoWidgetOpenFiles::setSystemInfo(const proto::system_info::SystemInfo&
     }
 
     const proto::system_info::OpenFiles& open_files = system_info.open_files();
-    QIcon item_icon(":/img/folder-share.png");
+    QIcon item_icon(":/img/nas.svg");
 
     for (int i = 0; i < open_files.open_file_size(); ++i)
     {

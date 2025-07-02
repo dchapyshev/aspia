@@ -74,7 +74,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/cloud.svg</pixmap>
+           <pixmap resource="../../common/resources/common.qrc">:/img/clouds.svg</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -138,7 +138,7 @@ padding-left: 20px;
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/key.svg</pixmap>
+           <pixmap resource="../../common/resources/common.qrc">:/img/key-security.svg</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -247,7 +247,7 @@ border-radius: 2px;
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/arrow-clockwise.svg</normaloff>:/img/arrow-clockwise.svg</iconset>
+             <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -285,7 +285,7 @@ text-decoration: underline;
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/x-lg.svg</normaloff>:/img/x-lg.svg</iconset>
+           <normaloff>:/img/close.svg</normaloff>:/img/close.svg</iconset>
          </property>
         </widget>
        </item>

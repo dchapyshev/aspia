@@ -36,7 +36,7 @@
   <action name="action_save">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
+     <normaloff>:/img/save.svg</normaloff>:/img/save.svg</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -45,13 +45,13 @@
     <string>Save (Ctrl+S)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="action_print">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/printer.png</normaloff>:/img/printer.png</iconset>
+     <normaloff>:/img/printer.svg</normaloff>:/img/printer.svg</iconset>
    </property>
    <property name="text">
     <string>Print</string>
@@ -81,7 +81,7 @@
   <action name="action_refresh">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+     <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -90,7 +90,7 @@
     <string>Refresh (F5)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">F5</string>
+    <string>F5</string>
    </property>
   </action>
  </widget>

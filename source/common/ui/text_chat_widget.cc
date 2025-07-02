@@ -18,12 +18,6 @@
 
 #include "common/ui/text_chat_widget.h"
 
-#include "base/logging.h"
-#include "common/ui/text_chat_incoming_message.h"
-#include "common/ui/text_chat_outgoing_message.h"
-#include "common/ui/text_chat_status_message.h"
-#include "ui_text_chat_widget.h"
-
 #include <QDateTime>
 #include <QFile>
 #include <QFileDialog>
@@ -33,6 +27,12 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QTimer>
+
+#include "base/logging.h"
+#include "common/ui/text_chat_incoming_message.h"
+#include "common/ui/text_chat_outgoing_message.h"
+#include "common/ui/text_chat_status_message.h"
+#include "ui_text_chat_widget.h"
 
 namespace common {
 

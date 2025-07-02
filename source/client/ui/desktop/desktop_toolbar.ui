@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>343</width>
-    <height>45</height>
+    <height>46</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -118,7 +118,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/pin-angle.svg</normaloff>:/img/pin-angle.svg</iconset>
+     <normaloff>:/img/pin.svg</normaloff>:/img/pin.svg</iconset>
    </property>
    <property name="text">
     <string>Lock toolbar</string>
@@ -130,7 +130,7 @@
   <action name="action_settings">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/gear.svg</normaloff>:/img/gear.svg</iconset>
+     <normaloff>:/img/tools.svg</normaloff>:/img/tools.svg</iconset>
    </property>
    <property name="text">
     <string>Session configuration</string>
@@ -142,7 +142,7 @@
   <action name="action_autosize">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/fullscreen.svg</normaloff>:/img/fullscreen.svg</iconset>
+     <normaloff>:/img/move.svg</normaloff>:/img/move.svg</iconset>
    </property>
    <property name="text">
     <string>Auto size</string>
@@ -157,7 +157,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrows-fullscreen.svg</normaloff>:/img/arrows-fullscreen.svg</iconset>
+     <normaloff>:/img/expand.svg</normaloff>:/img/expand.svg</iconset>
    </property>
    <property name="text">
     <string>Full screen</string>
@@ -180,7 +180,7 @@
   <action name="action_cad">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/cad.svg</normaloff>:/img/cad.svg</iconset>
+     <normaloff>:/img/ctrl-alt-del.svg</normaloff>:/img/ctrl-alt-del.svg</iconset>
    </property>
    <property name="text">
     <string>Ctrl+Alt+Delete</string>
@@ -192,7 +192,7 @@
   <action name="action_menu">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/list.svg</normaloff>:/img/list.svg</iconset>
+     <normaloff>:/img/menu.svg</normaloff>:/img/menu.svg</iconset>
    </property>
    <property name="text">
     <string>Advanced menu</string>
@@ -215,7 +215,7 @@
   <action name="action_file_transfer">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/folder2.svg</normaloff>:/img/folder2.svg</iconset>
+     <normaloff>:/img/file-explorer.svg</normaloff>:/img/file-explorer.svg</iconset>
    </property>
    <property name="text">
     <string>File transfer</string>
@@ -246,7 +246,7 @@
   <action name="action_power_control">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/power.svg</normaloff>:/img/power.svg</iconset>
+     <normaloff>:/img/flash-on.svg</normaloff>:/img/flash-on.svg</iconset>
    </property>
    <property name="text">
     <string>Power control</string>
@@ -281,7 +281,7 @@
   <action name="action_update">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/cloud-download.svg</normaloff>:/img/cloud-download.svg</iconset>
+     <normaloff>:/img/restart.svg</normaloff>:/img/restart.svg</iconset>
    </property>
    <property name="text">
     <string>Remote Update</string>
@@ -293,7 +293,7 @@
   <action name="action_system_info">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/motherboard.svg</normaloff>:/img/motherboard.svg</iconset>
+     <normaloff>:/img/system-information.svg</normaloff>:/img/system-information.svg</iconset>
    </property>
    <property name="text">
     <string>System Information</string>
@@ -305,7 +305,7 @@
   <action name="action_close">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/x-square.svg</normaloff>:/img/x-square.svg</iconset>
+     <normaloff>:/img/close-window.svg</normaloff>:/img/close-window.svg</iconset>
    </property>
    <property name="text">
     <string>Close</string>
@@ -376,7 +376,7 @@
   <action name="action_minimize">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-down-square.svg</normaloff>:/img/arrow-down-square.svg</iconset>
+     <normaloff>:/img/minimize-window.svg</normaloff>:/img/minimize-window.svg</iconset>
    </property>
    <property name="text">
     <string>Minimize</string>
@@ -441,7 +441,7 @@
   <action name="action_task_manager">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/monitoring.svg</normaloff>:/img/monitoring.svg</iconset>
+     <normaloff>:/img/system-task.svg</normaloff>:/img/system-task.svg</iconset>
    </property>
    <property name="text">
     <string>Task Manager</string>
@@ -481,7 +481,7 @@
   <action name="action_port_forwarding">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/share.svg</normaloff>:/img/share.svg</iconset>
+     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
    </property>
    <property name="text">
     <string>Port Forwarding</string>

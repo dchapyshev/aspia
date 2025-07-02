@@ -26,6 +26,7 @@
 #include <QLocalSocket>
 #include <QLockFile>
 #include <QPainter>
+#include <QProxyStyle>
 #include <QSvgRenderer>
 
 #include "base/logging.h"
@@ -53,6 +54,18 @@ const int kWriteTimeoutMs = 1500;
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";
+
+class CustomStyle final : public QProxyStyle
+{
+public:
+    int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
+    {
+        if (metric == QStyle::PM_SmallIconSize)
+            return 24;
+
+        return QProxyStyle::pixelMetric(metric, option, widget);
+    }
+};
 
 } // namespace
 
@@ -95,7 +108,8 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     io_thread_.start();
 
     translations_ = std::make_unique<Translations>();
-    updateColors();
+
+    setStyle(new CustomStyle());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -184,30 +198,42 @@ bool GuiApplication::hasLocale(const QString& locale)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& size)
+QByteArray GuiApplication::svgByteArray(const QString &svg_file_path)
 {
     GuiApplication* application = GuiApplication::instance();
     if (!application)
     {
         LOG(ERROR) << "Invalid application instance";
-        return QPixmap();
+        return QByteArray();
     }
 
     QFile file(svg_file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
         LOG(ERROR) << "Unable to open svg file:" << svg_file_path << "(" << file.errorString() << ")";
-        return QPixmap();
+        return QByteArray();
     }
 
     QByteArray buffer = file.readAll();
     if (buffer.isEmpty())
     {
         LOG(ERROR) << "Empty svg file:" << svg_file_path;
-        return QPixmap();
+        return QByteArray();
     }
 
-    buffer.replace("currentColor", application->window_text_color_);
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& size)
+{
+    QByteArray buffer = svgByteArray(svg_file_path);
+    if (buffer.isEmpty())
+    {
+        LOG(ERROR) << "Empty svg file:" << svg_file_path;
+        return QPixmap();
+    }
 
     QSvgRenderer renderer(buffer);
 
@@ -290,10 +316,7 @@ void GuiApplication::sendMessage(const QByteArray& message)
 bool GuiApplication::event(QEvent* event)
 {
     if (event->type() == QEvent::ApplicationPaletteChange)
-    {
-        updateColors();
         emit sig_themeChanged();
-    }
 
     return QApplication::event(event);
 }
@@ -356,12 +379,6 @@ void GuiApplication::onNewConnection()
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
     emit sig_messageReceived(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void GuiApplication::updateColors()
-{
-    window_text_color_ = palette().color(QPalette::WindowText).name(QColor::HexRgb).toLatin1();
 }
 
 } // namespace base

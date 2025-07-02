@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_services.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -78,7 +78,7 @@ void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& 
     }
 
     const proto::system_info::Services& services = system_info.services();
-    QIcon item_icon(":/img/gear.png");
+    QIcon item_icon(":/img/gear.svg");
 
     for (int i = 0; i < services.service_size(); ++i)
     {

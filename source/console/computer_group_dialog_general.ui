@@ -72,7 +72,7 @@
           </property>
           <property name="icon">
            <iconset resource="../common/resources/common.qrc">
-            <normaloff>:/img/eye.png</normaloff>:/img/eye.png</iconset>
+            <normaloff>:/img/show-password.svg</normaloff>:/img/show-password.svg</iconset>
           </property>
           <property name="checkable">
            <bool>true</bool>

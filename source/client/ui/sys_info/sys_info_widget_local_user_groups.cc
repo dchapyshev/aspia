@@ -76,7 +76,7 @@ void SysInfoWidgetLocalUserGroups::setSystemInfo(const proto::system_info::Syste
     }
 
     const proto::system_info::LocalUserGroups& local_user_groups = system_info.local_user_groups();
-    QIcon item_icon(":/img/users.png");
+    QIcon item_icon(":/img/user-account.svg");
 
     for (int i = 0; i < local_user_groups.local_user_group_size(); ++i)
     {

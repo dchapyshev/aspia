@@ -55,7 +55,7 @@
           </property>
           <property name="icon">
            <iconset resource="../common/resources/common.qrc">
-            <normaloff>:/img/broom.png</normaloff>:/img/broom.png</iconset>
+            <normaloff>:/img/close.svg</normaloff>:/img/close.svg</iconset>
           </property>
           <property name="autoDefault">
            <bool>false</bool>
@@ -89,7 +89,7 @@
           </property>
           <property name="icon">
            <iconset resource="../common/resources/common.qrc">
-            <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
+            <normaloff>:/img/settings.svg</normaloff>:/img/settings.svg</iconset>
           </property>
           <property name="autoDefault">
            <bool>false</bool>

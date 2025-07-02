@@ -18,15 +18,15 @@
 
 #include "client/ui/desktop/task_manager_window.h"
 
-#include "base/logging.h"
-#include "client/ui/desktop/task_manager_settings.h"
-
 #include <QAction>
 #include <QActionGroup>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QTimer>
+
+#include "base/logging.h"
+#include "client/ui/desktop/task_manager_settings.h"
 
 namespace client {
 
@@ -71,7 +71,7 @@ class ProcessItem final : public QTreeWidgetItem
 public:
     explicit ProcessItem(const proto::task_manager::Process& process)
     {
-        setIcon(PROC_COL_NAME, QIcon(QStringLiteral(":/img/application.png")));
+        setIcon(PROC_COL_NAME, QIcon(QStringLiteral(":/img/system-task.svg")));
 
         setTextAlignment(PROC_COL_MEM_PRIVATE_WORKING_SET, Qt::AlignRight);
         setTextAlignment(PROC_COL_MEM_WORKING_SET, Qt::AlignRight);
@@ -258,7 +258,7 @@ public:
     explicit UserItem(const proto::task_manager::User& user)
         : session_id_(user.session_id())
     {
-        setIcon(USER_COL_NAME, QIcon(QStringLiteral(":/img/user.png")));
+        setIcon(USER_COL_NAME, QIcon(":/img/user.svg"));
         setText(USER_COL_ID, QString::number(user.session_id()));
 
         updateItem(user);
@@ -924,7 +924,7 @@ void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& 
 {
     ui.tree_services->clear();
 
-    QIcon item_icon(QStringLiteral(":/img/gear.png"));
+    QIcon item_icon = QIcon(QStringLiteral(":/img/gear.svg"));
 
     for (int i = 0; i < service_list.service_size(); ++i)
     {

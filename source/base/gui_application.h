@@ -54,8 +54,9 @@ public:
     void setLocale(const QString& locale);
     bool hasLocale(const QString& locale);
 
-    static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size = QSize(16, 16));
-    static QIcon svgIcon(const QString& svg_file_path, const QSize& size = QSize(16, 16));
+    static QByteArray svgByteArray(const QString& svg_file_path);
+    static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size = QSize(24, 24));
+    static QIcon svgIcon(const QString& svg_file_path, const QSize& size = QSize(24, 24));
     static QImage svgImage(const QString& svg_file_path, const QSize& size);
 
 public slots:
@@ -72,8 +73,6 @@ private slots:
     void onNewConnection();
 
 private:
-    void updateColors();
-
     QString lock_file_name_;
     QString server_name_;
 
@@ -83,8 +82,6 @@ private:
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
-
-    QByteArray window_text_color_; // Window text color in HEX.
 
     Q_DISABLE_COPY(GuiApplication)
 };

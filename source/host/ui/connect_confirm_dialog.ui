@@ -24,11 +24,20 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../common/resources/common.qrc">:/img/question.png</pixmap>
+        <pixmap resource="../../common/resources/common.qrc">:/img/help.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

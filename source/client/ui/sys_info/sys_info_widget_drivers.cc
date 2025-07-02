@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_drivers.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -78,7 +78,7 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::Drivers& drivers = system_info.drivers();
-    QIcon item_icon(":/img/graphic-card.png");
+    QIcon item_icon(":/img/network-card.svg");
 
     for (int i = 0; i < drivers.driver_size(); ++i)
     {

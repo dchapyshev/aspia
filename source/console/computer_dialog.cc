@@ -78,26 +78,26 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);
 
     QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(":/img/computer.png"));
+    general_item->setIcon(0, QIcon(":/img/computer.svg"));
     general_item->setText(0, tr("General"));
 
     QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(":/img/settings.png"));
+    sessions_item->setIcon(0, QIcon(":/img/settings.svg"));
     sessions_item->setText(0, tr("Sessions"));
 
     ui.tree->addTopLevelItem(general_item);
     ui.tree->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
+    desktop_manage_item->setIcon(0, QIcon(":/img/workstation.svg"));
     desktop_manage_item->setText(0, tr("Desktop Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
+    desktop_view_item->setIcon(0, QIcon(":/img/computer.svg"));
     desktop_view_item->setText(0, tr("Desktop View"));
 
     QTreeWidgetItem* port_forwarding_item = new QTreeWidgetItem(ITEM_TYPE_PORT_FORWARDING);
-    port_forwarding_item->setIcon(0, QIcon(":/img/port-forwarding.png"));
+    port_forwarding_item->setIcon(0, QIcon(":/img/ethernet-off.svg"));
     port_forwarding_item->setText(0, tr("Port Forwarding"));
 
     sessions_item->addChild(desktop_manage_item);

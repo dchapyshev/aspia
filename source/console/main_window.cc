@@ -1283,12 +1283,12 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
                     return;
             }
 
-            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book-pinned.png"));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/pin-file.svg"));
             mru_.pinFile(current_path);
         }
         else
         {
-            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book.png"));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/file.svg"));
             mru_.unpinFile(current_path);
         }
 
@@ -1615,9 +1615,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
     connect(new_tab, &AddressBookTab::sig_updateStateForComputers,
             ui.status_bar, &StatusBar::setUpdateState);
 
-    QIcon icon = mru_.isPinnedFile(file_path) ?
-        QIcon(":/img/address-book-pinned.png") : QIcon(":/img/address-book.png");
-
+    QIcon icon = QIcon(mru_.isPinnedFile(file_path) ? ":/img/pin-file.svg" : ":/img/file.svg");
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 
     QWidget* close_button = ui.tab_widget->tabBar()->tabButton(index, QTabBar::RightSide);

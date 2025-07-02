@@ -136,7 +136,7 @@
      </property>
      <property name="icon">
       <iconset resource="../common/resources/common.qrc">
-       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
+       <normaloff>:/img/language.svg</normaloff>:/img/language.svg</iconset>
      </property>
     </widget>
     <addaction name="menu_language"/>
@@ -171,8 +171,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>22</width>
-     <height>22</height>
+     <width>24</width>
+     <height>24</height>
     </size>
    </property>
    <attribute name="toolBarArea">
@@ -213,7 +213,7 @@
   <action name="action_new">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/document.png</normaloff>:/img/document.png</iconset>
+     <normaloff>:/img/file.svg</normaloff>:/img/file.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;New address book</string>
@@ -225,7 +225,7 @@
   <action name="action_open">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/open.png</normaloff>:/img/open.png</iconset>
+     <normaloff>:/img/opened-folder.svg</normaloff>:/img/opened-folder.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Open address book...</string>
@@ -240,7 +240,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
+     <normaloff>:/img/save.svg</normaloff>:/img/save.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -274,7 +274,7 @@
   <action name="action_exit">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
+     <normaloff>:/img/door.svg</normaloff>:/img/door.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Exit</string>
@@ -286,7 +286,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
+     <normaloff>:/img/add-folder.svg</normaloff>:/img/add-folder.svg</iconset>
    </property>
    <property name="text">
     <string>Add Computer Group</string>
@@ -298,7 +298,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/folder-pencil.png</normaloff>:/img/folder-pencil.png</iconset>
+     <normaloff>:/img/change-folder.svg</normaloff>:/img/change-folder.svg</iconset>
    </property>
    <property name="text">
     <string>Modify Computer Group</string>
@@ -310,7 +310,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/folder-minus.png</normaloff>:/img/folder-minus.png</iconset>
+     <normaloff>:/img/remove-folder.svg</normaloff>:/img/remove-folder.svg</iconset>
    </property>
    <property name="text">
     <string>Delete Computer Group</string>
@@ -322,7 +322,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer-plus.png</normaloff>:/img/computer-plus.png</iconset>
+     <normaloff>:/img/add-computer.svg</normaloff>:/img/add-computer.svg</iconset>
    </property>
    <property name="text">
     <string>Add Computer</string>
@@ -334,7 +334,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer-pencil.png</normaloff>:/img/computer-pencil.png</iconset>
+     <normaloff>:/img/change-computer.svg</normaloff>:/img/change-computer.svg</iconset>
    </property>
    <property name="text">
     <string>Modify Computer</string>
@@ -346,7 +346,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer-minus.png</normaloff>:/img/computer-minus.png</iconset>
+     <normaloff>:/img/remove-computer.svg</normaloff>:/img/remove-computer.svg</iconset>
    </property>
    <property name="text">
     <string>Delete Computer</string>
@@ -361,7 +361,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
+     <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
    </property>
    <property name="text">
     <string>Desktop &amp;Manage</string>
@@ -373,7 +373,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
+     <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
    </property>
    <property name="text">
     <string>Desktop &amp;View</string>
@@ -385,7 +385,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+     <normaloff>:/img/file-explorer.svg</normaloff>:/img/file-explorer.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;File Transfer</string>
@@ -394,7 +394,7 @@
   <action name="action_online_help">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
+     <normaloff>:/img/help.svg</normaloff>:/img/help.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Online Help...</string>
@@ -406,7 +406,7 @@
   <action name="action_about">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
+     <normaloff>:/img/info.svg</normaloff>:/img/info.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -418,7 +418,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/book-pencil.png</normaloff>:/img/book-pencil.png</iconset>
+     <normaloff>:/img/change-file.svg</normaloff>:/img/change-file.svg</iconset>
    </property>
    <property name="text">
     <string>Address Book Properties</string>
@@ -427,7 +427,7 @@
   <action name="action_desktop_manage_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
+     <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
    </property>
    <property name="text">
     <string>Desktop Manage</string>
@@ -439,7 +439,7 @@
   <action name="action_desktop_view_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
+     <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
    </property>
    <property name="text">
     <string>Desktop View</string>
@@ -451,7 +451,7 @@
   <action name="action_file_transfer_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
+     <normaloff>:/img/file-explorer.svg</normaloff>:/img/file-explorer.svg</iconset>
    </property>
    <property name="text">
     <string>File Transfer</string>
@@ -488,7 +488,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/plug-disconnect.png</normaloff>:/img/plug-disconnect.png</iconset>
+     <normaloff>:/img/connected.svg</normaloff>:/img/connected.svg</iconset>
    </property>
    <property name="text">
     <string>Fast Connect</string>
@@ -524,7 +524,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/disks.png</normaloff>:/img/disks.png</iconset>
+     <normaloff>:/img/save-all.svg</normaloff>:/img/save-all.svg</iconset>
    </property>
    <property name="text">
     <string>Save all</string>
@@ -576,7 +576,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer-copy.png</normaloff>:/img/computer-copy.png</iconset>
+     <normaloff>:/img/copy-computer.svg</normaloff>:/img/copy-computer.svg</iconset>
    </property>
    <property name="text">
     <string>Copy Computer</string>
@@ -588,7 +588,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/server.png</normaloff>:/img/server.png</iconset>
+     <normaloff>:/img/stack.svg</normaloff>:/img/stack.svg</iconset>
    </property>
    <property name="text">
     <string>Router Manage</string>
@@ -608,7 +608,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+     <normaloff>:/img/system-information.svg</normaloff>:/img/system-information.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;System Information</string>
@@ -620,7 +620,7 @@
   <action name="action_system_info_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+     <normaloff>:/img/system-information.svg</normaloff>:/img/system-information.svg</iconset>
    </property>
    <property name="text">
     <string>System Information</string>
@@ -635,7 +635,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+     <normaloff>:/img/chat.svg</normaloff>:/img/chat.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Text Chat</string>
@@ -647,7 +647,7 @@
   <action name="action_text_chat_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+     <normaloff>:/img/chat.svg</normaloff>:/img/chat.svg</iconset>
    </property>
    <property name="text">
     <string>Text Chat</string>
@@ -662,7 +662,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+     <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
    </property>
    <property name="text">
     <string>Update Status</string>
@@ -680,7 +680,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/import.png</normaloff>:/img/import.png</iconset>
+     <normaloff>:/img/import.svg</normaloff>:/img/import.svg</iconset>
    </property>
    <property name="text">
     <string>Import Computers/Groups</string>
@@ -695,7 +695,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/export.png</normaloff>:/img/export.png</iconset>
+     <normaloff>:/img/export.svg</normaloff>:/img/export.svg</iconset>
    </property>
    <property name="text">
     <string>Export Computer Group</string>
@@ -710,7 +710,7 @@
    </property>
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
+     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
    </property>
    <property name="text">
     <string>Port Forwarding</string>
@@ -719,7 +719,7 @@
   <action name="action_port_forwarding_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/port-forwarding.png</normaloff>:/img/port-forwarding.png</iconset>
+     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
    </property>
    <property name="text">
     <string>Port Forwarding</string>

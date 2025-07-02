@@ -98,7 +98,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/front.svg</normaloff>:/img/front.svg</iconset>
+           <normaloff>:/img/check-all.svg</normaloff>:/img/check-all.svg</iconset>
          </property>
         </widget>
        </item>
@@ -118,7 +118,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/back.svg</normaloff>:/img/back.svg</iconset>
+           <normaloff>:/img/uncheck-all.svg</normaloff>:/img/uncheck-all.svg</iconset>
          </property>
         </widget>
        </item>

@@ -35,7 +35,7 @@
       <widget class="QWidget" name="tab_hosts">
        <attribute name="icon">
         <iconset resource="../../../common/resources/common.qrc">
-         <normaloff>:/img/aspia-host.png</normaloff>:/img/aspia-host.png</iconset>
+         <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
        </attribute>
        <attribute name="title">
         <string>Hosts</string>
@@ -154,7 +154,7 @@
       <widget class="QWidget" name="tab_relay">
        <attribute name="icon">
         <iconset resource="../../../common/resources/common.qrc">
-         <normaloff>:/img/computer.png</normaloff>:/img/computer.png</iconset>
+         <normaloff>:/img/stack.svg</normaloff>:/img/stack.svg</iconset>
        </attribute>
        <attribute name="title">
         <string>Relay</string>
@@ -326,7 +326,7 @@
       <widget class="QWidget" name="tab_users">
        <attribute name="icon">
         <iconset resource="../../../common/resources/common.qrc">
-         <normaloff>:/img/user.png</normaloff>:/img/user.png</iconset>
+         <normaloff>:/img/user.svg</normaloff>:/img/user.svg</iconset>
        </attribute>
        <attribute name="title">
         <string>Users</string>
@@ -344,7 +344,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../common/resources/common.qrc">
-              <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
+              <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
             </property>
            </widget>
           </item>
@@ -361,7 +361,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../common/resources/common.qrc">
-              <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+              <normaloff>:/img/pencil-drawing.svg</normaloff>:/img/pencil-drawing.svg</iconset>
             </property>
            </widget>
           </item>
@@ -378,7 +378,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../common/resources/common.qrc">
-              <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
+              <normaloff>:/img/cancel.svg</normaloff>:/img/cancel.svg</iconset>
             </property>
            </widget>
           </item>
@@ -392,7 +392,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../common/resources/common.qrc">
-              <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+              <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
             </property>
            </widget>
           </item>

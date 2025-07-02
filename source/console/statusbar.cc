@@ -18,8 +18,6 @@
 
 #include "console/statusbar.h"
 
-#include <QIcon>
-
 namespace console {
 
 //--------------------------------------------------------------------------------------------------
@@ -32,35 +30,20 @@ StatusBar::StatusBar(QWidget* parent)
         if (animation_index_ > 3)
             animation_index_ = 0;
 
-        QString icon;
-
-        switch (animation_index_)
-        {
-            case 0:
-                icon = QStringLiteral(":/img/arrow-circle.png");
-                break;
-
-            case 1:
-                icon = QStringLiteral(":/img/arrow-circle-315.png");
-                break;
-
-            case 2:
-                icon = QStringLiteral(":/img/arrow-circle-225.png");
-                break;
-
-            case 3:
-                icon = QStringLiteral(":/img/arrow-circle-135.png");
-                break;
-
-            default:
-                return;
-        }
-
         if (status_label_)
         {
-            status_label_->setText(
-                QStringLiteral("<table><tr><td><img src='%1'></td><td>%2</td></tr></table>")
-                .arg(icon, tr("Status update...")));
+            QString dots;
+
+            switch (animation_index_)
+            {
+                case 0: dots = "   "; break;
+                case 1: dots = ".  "; break;
+                case 2: dots = ".. "; break;
+                case 3: dots = "..."; break;
+                default: break;
+            }
+
+            status_label_->setText(tr("Status update") + dots);
         }
 
         ++animation_index_;
@@ -76,24 +59,18 @@ void StatusBar::setCurrentComputerGroup(
     QString child_groups = tr("%n child group(s)", "", computer_group.computer_group_size());
     QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
 
-    QLabel* first_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
-        .arg(QString::fromStdString(computer_group.name())), this);
-
-    QLabel* second_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
-        .arg(child_groups), this);
-
-    QLabel* third_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/computer.png'></td><td>%1</td></tr></table>")
-        .arg(child_computers), this);
+    QLabel* first_label = new QLabel(QString::fromStdString(computer_group.name()), this);
+    QLabel* second_label = new QLabel(child_groups, this);
+    QLabel* third_label = new QLabel(child_computers, this);
 
     status_label_ = new QLabel(QString(), this);
 
-    first_label->setTextFormat(Qt::RichText);
-    second_label->setTextFormat(Qt::RichText);
-    third_label->setTextFormat(Qt::RichText);
-    status_label_->setTextFormat(Qt::RichText);
+    static const QString kStyle = QStringLiteral("QLabel { padding: 3px; }");
+
+    first_label->setStyleSheet(kStyle);
+    second_label->setStyleSheet(kStyle);
+    third_label->setStyleSheet(kStyle);
+    status_label_->setStyleSheet(kStyle);
 
     addWidget(first_label);
     addWidget(second_label);

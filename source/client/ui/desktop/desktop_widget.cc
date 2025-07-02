@@ -526,7 +526,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter_.fillRect(title_rect, QColor(207, 207, 207));
         painter_.fillRect(message_rect, QColor(255, 255, 255));
 
-        QPixmap icon(QStringLiteral(":/img/aspia-client.png"));
+        QPixmap icon(QStringLiteral(":/img/computer.svg"));
         QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
 
         title_rect.setLeft(icon_pos.x() + icon.width() + 8);

@@ -63,7 +63,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
-          <normaloff>:/img/chevron-left.svg</normaloff>:/img/chevron-left.svg</iconset>
+          <normaloff>:/img/back.svg</normaloff>:/img/back.svg</iconset>
         </property>
        </widget>
       </item>
@@ -120,7 +120,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
-          <normaloff>:/img/chevron-right.svg</normaloff>:/img/chevron-right.svg</iconset>
+          <normaloff>:/img/forward.svg</normaloff>:/img/forward.svg</iconset>
         </property>
        </widget>
       </item>
@@ -279,7 +279,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/mouse2.svg</normaloff>:/img/mouse2.svg</iconset>
+             <normaloff>:/img/computer-mouse.svg</normaloff>:/img/computer-mouse.svg</iconset>
            </property>
           </widget>
          </item>
@@ -307,7 +307,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/pause-fill.svg</normaloff>:/img/pause-fill.svg</iconset>
+             <normaloff>:/img/pause.svg</normaloff>:/img/pause.svg</iconset>
            </property>
           </widget>
          </item>
@@ -321,7 +321,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
-             <normaloff>:/img/stop-fill.svg</normaloff>:/img/stop-fill.svg</iconset>
+             <normaloff>:/img/stop.svg</normaloff>:/img/stop.svg</iconset>
            </property>
           </widget>
          </item>

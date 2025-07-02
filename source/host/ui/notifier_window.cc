@@ -53,19 +53,19 @@ public:
         switch (client.session_type)
         {
             case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-                icon = ":/img/pc-display.svg";
+                icon = ":/img/workstation.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                icon = ":/img/display.svg";
+                icon = ":/img/computer.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-                icon = ":/img/folder2.svg";
+                icon = ":/img/file-explorer.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-                icon = ":/img/motherboard.svg";
+                icon = ":/img/system-information.svg";
                 break;
 
             case proto::peer::SESSION_TYPE_TEXT_CHAT:
@@ -73,7 +73,7 @@ public:
                 break;
 
             case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-                icon = ":/img/share.svg";
+                icon = ":/img/ethernet-off.svg";
                 break;
 
             default:
@@ -81,7 +81,7 @@ public:
                 return;
         }
 
-        setIcon(0, base::GuiApplication::svgIcon(icon));
+        setIcon(0, QIcon(icon));
 
         if (display_name_.isEmpty())
         {
@@ -126,7 +126,7 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 {
     QToolButton* button = new QToolButton(parent);
 
-    button->setIcon(base::GuiApplication::svgIcon(icon));
+    button->setIcon(QIcon(icon));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     button->setFixedWidth(20);
     button->setFixedHeight(20);
@@ -248,7 +248,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
             ui.tree->addTopLevelItem(tree_item);
 
             QToolButton* stop_button =
-                createSessionButton(ui.tree, ":/img/stop-fill.svg", tr("Disconnect"));
+                createSessionButton(ui.tree, ":/img/stop.svg", tr("Disconnect"));
             quint32 tree_item_id = tree_item->id();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
@@ -487,13 +487,6 @@ void NotifierWindow::onHideNotifier()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onThemeChanged()
 {
-    ui.button_hide->setIcon(base::GuiApplication::svgIcon(":/img/chevron-right.svg"));
-    ui.button_show->setIcon(base::GuiApplication::svgIcon(":/img/chevron-left.svg"));
-    ui.button_lock_keyboard->setIcon(base::GuiApplication::svgIcon(":/img/keyboard.svg"));
-    ui.button_lock_mouse->setIcon(base::GuiApplication::svgIcon(":/img/mouse2.svg"));
-    ui.button_pause->setIcon(base::GuiApplication::svgIcon(":/img/pause-fill.svg"));
-    ui.button_stop->setIcon(base::GuiApplication::svgIcon(":/img/stop-fill.svg"));
-
     QString window_color = base::GuiApplication::palette().color(QPalette::Window).name(QColor::HexRgb);
 
     ui.tree->setStyleSheet(QString("background-color: %1;").arg(window_color));

@@ -29,7 +29,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -156,7 +156,7 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/graphic-card.png", QString::fromStdString(adapter.description()), group));
+                new Item(":/img/video-card.svg", QString::fromStdString(adapter.description()), group));
         }
     }
 

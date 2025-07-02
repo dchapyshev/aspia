@@ -38,7 +38,7 @@ bool isDoubleEqual(double first, double second)
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -249,7 +249,7 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& 
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/monitor.png", QString::fromStdString(monitor.system_name()), group));
+                new Item(":/img/imac.svg", QString::fromStdString(monitor.system_name()), group));
         }
     }
 

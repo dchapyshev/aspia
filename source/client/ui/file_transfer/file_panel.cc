@@ -18,6 +18,13 @@
 
 #include "client/ui/file_transfer/file_panel.h"
 
+#include <QAbstractButton>
+#include <QAction>
+#include <QLineEdit>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QMessageBox>
+
 #include "base/logging.h"
 #include "client/file_remover.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -25,13 +32,6 @@
 #include "client/ui/file_transfer/file_item_delegate.h"
 #include "client/ui/file_transfer/file_list_model.h"
 #include "common/file_platform_util.h"
-
-#include <QAbstractButton>
-#include <QAction>
-#include <QLineEdit>
-#include <QKeyEvent>
-#include <QMenu>
-#include <QMessageBox>
 
 namespace client {
 
@@ -348,8 +348,8 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
     if (ui.list->selectionModel()->hasSelection())
     {
-        copy_action.reset(new QAction(QIcon(":/img/arrow-045.png"), tr("&Send\tF11")));
-        delete_action.reset(new QAction(QIcon(":/img/cross-script.png"), tr("&Delete\tDelete")));
+        copy_action.reset(new QAction(QIcon(":/img/send.svg"), tr("&Send\tF11")));
+        delete_action.reset(new QAction(QIcon(":/img/close.svg"), tr("&Delete\tDelete")));
 
         copy_action->setEnabled(transfer_allowed_ && transfer_enabled_);
 
@@ -359,7 +359,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
     }
 
     std::unique_ptr<QAction> add_folder_action(new QAction(
-        QIcon(":/img/folder-plus.png"), tr("&Create Folder")));
+        QIcon(":/img/add-folder.svg"), tr("&Create Folder")));
 
     menu.addAction(add_folder_action.get());
 

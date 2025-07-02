@@ -18,9 +18,9 @@
 
 #include "common/file_platform_util.h"
 
-#include "base/logging.h"
-
 #include <QMimeDatabase>
+
+#include "base/logging.h"
 
 namespace common {
 
@@ -48,21 +48,21 @@ std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_nam
 {
     static QMimeDatabase mime_database;
     QMimeType mime_type = mime_database.mimeTypeForFile(file_name, QMimeDatabase::MatchExtension);
-    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")), mime_type.comment());
+    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/file.svg")), mime_type.comment());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::computerIcon()
 {
-    return QIcon(QStringLiteral(":/img/computer.png"));
+    return QIcon(QStringLiteral(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::directoryIcon()
 {
-    return QIcon(QStringLiteral(":/img/folder.png"));
+    return QIcon(QStringLiteral(":/img/folder.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,30 +73,24 @@ QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 
     switch (type)
     {
-        case proto::DriveList::Item::TYPE_CDROM:
-            icon_name = QStringLiteral(":/img/drive-disc.png");
-            break;
-
-        case proto::DriveList::Item::TYPE_REMOTE:
-            icon_name = QStringLiteral(":/img/drive-network.png");
-            break;
-
         case proto::DriveList::Item::TYPE_HOME_FOLDER:
-            icon_name = QStringLiteral(":/img/home.png");
+            icon_name = QStringLiteral(":/img/home.svg");
             break;
 
         case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
-            icon_name = QStringLiteral(":/img/desktop.png");
+            icon_name = QStringLiteral(":/img/desktop.svg");
             break;
 
         case proto::DriveList::Item::TYPE_ROOT_DIRECTORY:
-            icon_name = QStringLiteral(":/img/folder.png");
+            icon_name = QStringLiteral(":/img/folder.svg");
             break;
 
+        case proto::DriveList::Item::TYPE_REMOTE:
+        case proto::DriveList::Item::TYPE_CDROM:
         case proto::DriveList::Item::TYPE_RAM:
         case proto::DriveList::Item::TYPE_FIXED:
         default:
-            icon_name = QStringLiteral(":/img/drive.png");
+            icon_name = QStringLiteral(":/img/hdd.svg");
             break;
     }
 

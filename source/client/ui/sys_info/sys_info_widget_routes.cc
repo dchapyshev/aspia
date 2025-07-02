@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_routes.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -78,7 +78,7 @@ void SysInfoWidgetRoutes::setSystemInfo(const proto::system_info::SystemInfo& sy
     }
 
     const proto::system_info::Routes& routes = system_info.routes();
-    QIcon item_icon(":/img/servers-network.png");
+    QIcon item_icon(":/img/flow-chart.svg");
 
     for (int i = 0; i < routes.route_size(); ++i)
     {

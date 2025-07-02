@@ -31,9 +31,9 @@ const quintptr kCurrentFolderItem = 3;
 
 enum Column
 {
-    COLUMN_NAME        = 0,
-    COLUMN_TYPE        = 1,
-    COLUMN_COUNT       = 2
+    COLUMN_NAME  = 0,
+    COLUMN_TYPE  = 1,
+    COLUMN_COUNT = 2
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -71,9 +71,9 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
         const proto::file_transfer::DriveList::Item& item = list.item(i);
 
         Drive drive;
-        drive.icon        = common::FilePlatformUtil::driveIcon(item.type());
-        drive.path        = normalizePath(QString::fromStdString(item.path()));
-        drive.type        = item.type();
+        drive.icon = common::FilePlatformUtil::driveIcon(item.type());
+        drive.path = normalizePath(QString::fromStdString(item.path()));
+        drive.type = item.type();
 
         switch (item.type())
         {
@@ -277,7 +277,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 if (index.column() == COLUMN_NAME)
-                    return QIcon(QStringLiteral(":/img/computer.png"));
+                    return QIcon(QStringLiteral(":/img/computer.svg"));
             }
             break;
 
@@ -303,7 +303,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 if (index.column() == COLUMN_NAME)
-                    return QIcon(QStringLiteral(":/img/folder.png"));
+                    return QIcon(QStringLiteral(":/img/folder.svg"));
             }
             break;
 

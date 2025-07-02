@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>600</height>
+    <width>1025</width>
+    <height>721</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,8 +36,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>22</width>
-       <height>22</height>
+       <width>24</width>
+       <height>24</height>
       </size>
      </property>
      <property name="toolButtonStyle">
@@ -73,8 +73,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <attribute name="headerVisible">
@@ -102,7 +102,7 @@
   <action name="action_save">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
+     <normaloff>:/img/save.svg</normaloff>:/img/save.svg</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -111,13 +111,13 @@
     <string>Save (Ctrl+S)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="action_print">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/printer.png</normaloff>:/img/printer.png</iconset>
+     <normaloff>:/img/print.svg</normaloff>:/img/print.svg</iconset>
    </property>
    <property name="text">
     <string>Print</string>
@@ -126,7 +126,7 @@
     <string>Print (Ctrl+P)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+P</string>
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="action_copy_row">
@@ -147,7 +147,7 @@
   <action name="action_refresh">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+     <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -156,7 +156,7 @@
     <string>Refresh (F5)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">F5</string>
+    <string>F5</string>
    </property>
   </action>
  </widget>

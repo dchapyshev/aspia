@@ -81,7 +81,7 @@ border-radius: 3px;
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resources/common.qrc">:/img/user-24x24.png</pixmap>
+            <pixmap resource="../resources/common.qrc">:/img/user.svg</pixmap>
            </property>
           </widget>
          </item>

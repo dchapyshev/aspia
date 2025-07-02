@@ -30,7 +30,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -145,7 +145,7 @@ void SysInfoWidgetNetShares::setSystemInfo(const proto::system_info::SystemInfo&
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/folder-share.png",
+            ui.tree->addTopLevelItem(new Item(":/img/nas.svg",
                                               QString::fromStdString(share.name()),
                                               group));
         }

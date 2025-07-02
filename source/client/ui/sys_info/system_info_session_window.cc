@@ -65,9 +65,7 @@ public:
     CategoryItem(Type type, const QString& icon_path, const QString& text, const char* category = nullptr)
         : type_(type)
     {
-        QIcon icon(icon_path);
-
-        setIcon(0, icon);
+        setIcon(0, QIcon(icon_path));
         setText(0, text);
 
         if (category)
@@ -97,8 +95,8 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     ui->setupUi(this);
 
     QList<int> sizes;
-    sizes.push_back(210);
-    sizes.push_back(width() - 210);
+    sizes.push_back(250);
+    sizes.push_back(width() - 250);
     ui->splitter->setSizes(sizes);
 
     sys_info_widgets_.append(new SysInfoWidgetSummary(this));
@@ -133,7 +131,7 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
 
     CategoryItem* summary_category = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/computer.png",
+        ":/img/computer.svg",
         tr("Summary"),
         common::kSystemInfo_Summary);
 
@@ -142,35 +140,35 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* hardware_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/motherboard.png", tr("Hardware"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
 
     CategoryItem* devices = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/graphic-card.png",
+        ":/img/network-card.svg",
         tr("Devices"),
         common::kSystemInfo_Devices);
 
     CategoryItem* video_adapters = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/graphic-card.png",
+        ":/img/video-card.svg",
         tr("Video Adapters"),
         common::kSystemInfo_VideoAdapters);
 
     CategoryItem* monitors = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/monitor.png",
+        ":/img/imac.svg",
         tr("Monitors"),
         common::kSystemInfo_Monitors);
 
     CategoryItem* printers = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/printer.png",
+        ":/img/printer.svg",
         tr("Printers"),
         common::kSystemInfo_Printers);
 
     CategoryItem* power_options = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/power-supply.png",
+        ":/img/electrical.svg",
         tr("Power Options"),
         common::kSystemInfo_PowerOptions);
 
@@ -185,35 +183,35 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* software_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/operating-system.png", tr("Software"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
 
     CategoryItem* applications = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/applications.png",
+        ":/img/software.svg",
         tr("Applications"),
         common::kSystemInfo_Applications);
 
     CategoryItem* drivers = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/graphic-card.png",
+        ":/img/network-card.svg",
         tr("Drivers"),
         common::kSystemInfo_Drivers);
 
     CategoryItem* services = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/gear.png",
+        ":/img/gear.svg",
         tr("Services"),
         common::kSystemInfo_Services);
 
     CategoryItem* processes = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/application.png",
+        ":/img/heart-monitor.svg",
         tr("Processes"),
         common::kSystemInfo_Processes);
 
     CategoryItem* licenses = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/license-key.png",
+        ":/img/certificate.svg",
         tr("Licenses"),
         common::kSystemInfo_Licenses);
 
@@ -228,35 +226,35 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* network_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/graphic-card.png", tr("Network"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
 
     CategoryItem* network_adapters = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/graphic-card.png",
+        ":/img/network-card.svg",
         tr("Network Adapters"),
         common::kSystemInfo_NetworkAdapters);
 
     CategoryItem* routes = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/servers-network.png",
+        ":/img/flow-chart.svg",
         tr("Routes"),
         common::kSystemInfo_Routes);
 
     CategoryItem* connections = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/servers-network.png",
+        ":/img/connected.svg",
         tr("Connections"),
         common::kSystemInfo_Connections);
 
     CategoryItem* network_shares = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/folder-share.png",
+        ":/img/nas.svg",
         tr("Network Shares"),
         common::kSystemInfo_NetworkShares);
 
     CategoryItem* open_files = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/folder-share.png",
+        ":/img/nas.svg",
         tr("Open Files"),
         common::kSystemInfo_OpenFiles);
 
@@ -271,29 +269,29 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* os_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/operating-system.png", tr("Operating System"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
 
     CategoryItem* env_vars = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/block.png",
+        ":/img/day-view.svg",
         tr("Environment Variables"),
         common::kSystemInfo_EnvironmentVariables);
 
     CategoryItem* event_logs = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/document-list.png",
+        ":/img/log.svg",
         tr("Event Logs"),
         common::kSystemInfo_EventLogs);
 
     CategoryItem* local_users = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user.png",
+        ":/img/user.svg",
         tr("Users"),
         common::kSystemInfo_LocalUsers);
 
     CategoryItem* local_user_groups = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/users.png",
+        ":/img/user-account.svg",
         tr("User Groups"),
         common::kSystemInfo_LocalUserGroups);
 

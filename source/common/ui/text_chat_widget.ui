@@ -203,7 +203,7 @@ border-radius: 2px;
            </property>
            <property name="icon">
             <iconset resource="../resources/common.qrc">
-             <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+             <normaloff>:/img/send.svg</normaloff>:/img/send.svg</iconset>
            </property>
           </widget>
          </item>

@@ -58,7 +58,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
         item->setText(0, common::sessionTypeToLocalizedString(session_type));
-        item->setIcon(0, base::GuiApplication::svgIcon(icon));
+        item->setIcon(0, QIcon(icon));
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
@@ -77,12 +77,12 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(":/img/pc-display.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/display.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder2.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/motherboard.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/workstation.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/computer.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/file-explorer.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/system-information.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/share.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
+    add_session(":/img/ethernet-off.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
@@ -93,12 +93,6 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         if (!account_changed_)
             setAccountChanged(true);
     });
-
-    ui.button_check_all->setIcon(base::GuiApplication::svgIcon(":/img/front.svg"));
-    ui.button_check_all->setIconSize(QSize(22, 22));
-
-    ui.button_check_none->setIcon(base::GuiApplication::svgIcon(":/img/back.svg"));
-    ui.button_check_none->setIconSize(QSize(22, 22));
 }
 
 //--------------------------------------------------------------------------------------------------

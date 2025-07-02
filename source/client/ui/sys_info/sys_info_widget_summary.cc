@@ -29,7 +29,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -143,7 +143,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             items << mk(tr("Uptime"), delayToString(computer.uptime()));
 
         if (!items.isEmpty())
-            ui.tree->addTopLevelItem(new Item(":/img/computer.png", tr("Computer"), items));
+            ui.tree->addTopLevelItem(new Item(":/img/computer.svg", tr("Computer"), items));
     }
 
     {
@@ -153,7 +153,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         items << mk(tr("Client Version"), client_version_);
         items << mk(tr("Router Version"), router_version_);
 
-        ui.tree->addTopLevelItem(new Item(":/img/aspia-client.png", tr("Aspia Information"), items));
+        ui.tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
     }
 
     if (system_info.has_operating_system())
@@ -179,7 +179,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         if (!items.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/operating-system.png", tr("Operating System"), items));
+                new Item(":/img/operating-system.svg", tr("Operating System"), items));
         }
     }
 
@@ -197,7 +197,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         if (!items.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/motherboard.png", tr("Motherboard"), items));
+                new Item(":/img/motherboard.svg", tr("Motherboard"), items));
         }
     }
 
@@ -224,7 +224,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         if (!items.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/processor.png", tr("Processor"), items));
+                new Item(":/img/microchip.svg", tr("Processor"), items));
         }
     }
 
@@ -244,7 +244,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/bios.png", "BIOS", items));
+            ui.tree->addTopLevelItem(new Item(":/img/processor.svg", "BIOS", items));
         }
     }
 
@@ -290,7 +290,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         if (!items.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/memory.png", tr("Memory"), items));
+                new Item(":/img/memory-slot.svg", tr("Memory"), items));
         }
     }
 
@@ -329,7 +329,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/drive.png", tr("Logical Drives"), items));
+            ui.tree->addTopLevelItem(new Item(":/img/hdd.svg", tr("Logical Drives"), items));
         }
     }
 

@@ -18,9 +18,9 @@
 
 #include "client/ui/sys_info/sys_info_widget_devices.h"
 
-#include "common/system_info_constants.h"
-
 #include <QMenu>
+
+#include "common/system_info_constants.h"
 
 namespace client {
 
@@ -91,7 +91,7 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::WindowsDevices& devices = system_info.windows_devices();
-    QIcon item_icon(":/img/graphic-card.png");
+    QIcon item_icon(":/img/network-card.svg");
     QTreeWidget* tree = ui.tree;
 
     for (int i = 0; i < devices.device_size(); ++i)

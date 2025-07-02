@@ -29,7 +29,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -139,7 +139,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
     }
 
     const proto::system_info::PowerOptions& power_options = system_info.power_options();
-    QIcon item_icon(":/img/power-supply.png");
+    QIcon item_icon(":/img/electrical.svg");
 
     ui.tree->addTopLevelItem(
         new Item(item_icon, tr("Power Source"), powerSourceToString(power_options.power_source())));
@@ -236,7 +236,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/power-supply.png", tr("Battery #%1").arg(i + 1), group));
+                new Item(":/img/electrical.svg", tr("Battery #%1").arg(i + 1), group));
         }
     }
 

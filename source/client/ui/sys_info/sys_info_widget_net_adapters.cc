@@ -30,7 +30,7 @@ namespace {
 class Item : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    Item(const QString& icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
     {
         QIcon icon(icon_path);
 
@@ -186,7 +186,7 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/graphic-card.png",
+            ui.tree->addTopLevelItem(new Item(":/img/network-card.svg",
                                               QString::fromStdString(adapter.connection_name()),
                                               group));
         }

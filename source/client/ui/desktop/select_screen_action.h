@@ -21,7 +21,6 @@
 
 #include <QAction>
 
-#include "base/gui_application.h"
 #include "proto/desktop.h"
 
 namespace client {
@@ -35,7 +34,7 @@ public:
         : QAction(parent)
     {
         setToolTip(tr("Full Desktop"));
-        setIcon(base::GuiApplication::svgIcon(":/img/copy.svg"));
+        setIcon(QIcon(":/img/computer.svg"));
         setCheckable(true);
         screen_.set_id(-1);
     }
@@ -55,11 +54,11 @@ public:
 
         QString icon;
         if (number >= 1 && number <= 9)
-            icon = QString(":/img/%1-square.svg").arg(number);
+            icon = QString(":/img/monitor-%1.svg").arg(number);
         else
-            icon = ":/img/square.svg";
+            icon = ":/img/monitor-n.svg";
 
-        setIcon(base::GuiApplication::svgIcon(icon));
+        setIcon(QIcon(icon));
         setCheckable(true);
     }
 
