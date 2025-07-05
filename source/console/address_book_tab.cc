@@ -1124,7 +1124,7 @@ QByteArray AddressBookTab::saveState()
 
     {
         QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_5_12);
+        stream.setVersion(QDataStream::Qt_5_15);
 
         stream << ui.tree_computer->header()->saveState();
         stream << ui.splitter->saveState();
@@ -1137,7 +1137,7 @@ QByteArray AddressBookTab::saveState()
 void AddressBookTab::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_5_12);
+    stream.setVersion(QDataStream::Qt_5_15);
 
     QByteArray columns_state;
     QByteArray splitter_state;

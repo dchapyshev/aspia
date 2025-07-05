@@ -143,7 +143,7 @@ void FileList::createFolder()
 void FileList::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_5_12);
+    stream.setVersion(QDataStream::Qt_5_15);
 
     stream >> drive_list_state_;
     stream >> file_list_state_;
@@ -161,7 +161,7 @@ QByteArray FileList::saveState() const
 
     {
         QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_5_12);
+        stream.setVersion(QDataStream::Qt_5_15);
 
         if (isDriveListShown())
         {

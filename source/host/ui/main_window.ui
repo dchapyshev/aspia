@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>297</width>
-    <height>221</height>
+    <height>222</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,6 +31,9 @@
 </string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -45,70 +48,35 @@
     </property>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>11</number>
+      </property>
       <property name="leftMargin">
-       <number>9</number>
+       <number>6</number>
       </property>
       <property name="topMargin">
-       <number>9</number>
+       <number>6</number>
       </property>
       <property name="rightMargin">
-       <number>9</number>
+       <number>6</number>
       </property>
       <property name="bottomMargin">
-       <number>9</number>
+       <number>6</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_icon_id">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/clouds.svg</pixmap>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_id">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-font: bold 11px;
-}</string>
-          </property>
-          <property name="text">
-           <string>Your ID</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_id">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Your ID</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="edit_id">
         <property name="enabled">
          <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QLineEdit {
-border: 0;
-font-size: 20px;
-padding-left: 20px;
-}</string>
         </property>
         <property name="text">
          <string notr="true">-</string>
@@ -122,45 +90,14 @@ padding-left: 20px;
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_icon_password">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../../common/resources/common.qrc">:/img/key-security.svg</pixmap>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_password">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-font: bold 11px;
-}</string>
-          </property>
-          <property name="text">
-           <string>Password</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QFrame" name="frame">
@@ -195,13 +132,6 @@ border: 0;
           <widget class="QLineEdit" name="edit_password">
            <property name="enabled">
             <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QLineEdit {
-border: 0;
-font-size: 22px;
-padding-left: 20px;
-}</string>
            </property>
            <property name="text">
             <string notr="true">-</string>
@@ -270,16 +200,6 @@ border-radius: 2px;
          <property name="enabled">
           <bool>false</bool>
          </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-font: 11px;
-text-align: left;
-border: 0;
-}
-QPushButton:hover:enabled {
-text-decoration: underline;
-}</string>
-         </property>
          <property name="text">
           <string>Router is disabled</string>
          </property>
@@ -313,7 +233,7 @@ text-decoration: underline;
      <x>0</x>
      <y>0</y>
      <width>297</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">

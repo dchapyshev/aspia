@@ -27,7 +27,6 @@
 #include <QTextStream>
 
 #include "build/version.h"
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "ui_about_dialog.h"
 

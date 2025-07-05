@@ -424,14 +424,11 @@ void ClientWindow::onCheckUpdates()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onThemeChanged()
 {
-    ui.label_id_icon->setPixmap(base::GuiApplication::svgPixmap(":/img/clouds.svg"));
-    ui.label_session_type_icon->setPixmap(base::GuiApplication::svgPixmap(":/img/slider.svg"));
-
     static const QString kComboboxStyle =
         QStringLiteral("QComboBox {"
                            "border: 1px solid #CDCDCD;"
                            "border-radius: 3px;"
-                           "padding: 4px;"
+                           "padding: 3px;"
                        "}"
                        "QComboBox::drop-down {"
                            "subcontrol-origin: padding;"
@@ -465,7 +462,7 @@ void ClientWindow::onThemeChanged()
     ui.label_address->setStyleSheet(kLabelStyle);
     ui.label_session_type->setStyleSheet(kLabelStyle);
 
-    ui.button_session_config->setStyleSheet("QPushButton { padding: 7px 7px 7px 7px; }");
+    ui.button_session_config->setStyleSheet("QPushButton { padding: 4px 4px 4px 4px; }");
 
     ui.button_connect->setStyleSheet("QPushButton {"
                                          "font: bold 11px;"
@@ -502,21 +499,21 @@ void ClientWindow::reloadSessionTypes()
     proto::peer::SessionType current_session_type = settings.sessionType();
     QComboBox* combobox = ui.combo_session_type;
 
-    auto add_session = [=](const QString& icon, proto::peer::SessionType session_type)
+    auto add_session = [=](proto::peer::SessionType session_type)
     {
-        combobox->addItem(QIcon(icon),
-                          common::sessionTypeToLocalizedString(session_type),
+        combobox->addItem(common::sessionIcon(session_type),
+                          common::sessionName(session_type),
                           QVariant(session_type));
     };
 
     combobox->clear();
 
-    add_session(":/img/workstation.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/computer.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/file-explorer.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/system-information.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/ethernet-off.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

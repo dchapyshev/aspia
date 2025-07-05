@@ -558,25 +558,33 @@ void MainWindow::onThemeChanged()
                                             "border: 0;"
                                             "background-color: %1;"
                                             "font-size: 20px;"
-                                            "padding-left: 20px; }").arg(color));
+                                            "padding-left: 20px;"
+                                        "}").arg(color));
         };
 
-        auto set_label_colors = [](QLabel* label, const QString& color)
-        {
-            label->setStyleSheet(QString("QLabel {"
-                                    "color: %1"
-                                    "font: bold 11px;}").arg(color));
-        };
+        static const QString kLabelStyle = QStringLiteral("QLabel {"
+                                                              "font: bold 11px;"
+                                                              "padding-left: 3px;"
+                                                          "}");
 
         QPalette window_palette = palette();
         QString edit_color = window_palette.color(QPalette::Window).name(QColor::HexRgb);
         QString window_text = window_palette.color(QPalette::WindowText).name(QColor::HexRgb);
 
-        set_label_colors(ui.label_id, window_text);
-        set_label_colors(ui.label_password, window_text);
+        ui.label_id->setStyleSheet(kLabelStyle);
+        ui.label_password->setStyleSheet(kLabelStyle);
 
         set_edit_colors(ui.edit_id, edit_color);
         set_edit_colors(ui.edit_password, edit_color);
+
+        ui.button_status->setStyleSheet("QPushButton {"
+                                            "font: 11px;"
+                                            "text-align: left;"
+                                            "border: 0;"
+                                        "}"
+                                        "QPushButton:hover:enabled {"
+                                            "text-decoration: underline;"
+                                        "}");
 
         updateStatusBar();
     });

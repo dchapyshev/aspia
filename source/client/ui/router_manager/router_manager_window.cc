@@ -1674,7 +1674,7 @@ QByteArray RouterManagerWindow::saveState()
 
     {
         QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_5_12);
+        stream.setVersion(QDataStream::Qt_5_15);
 
         stream << saveGeometry();
         stream << ui->tree_hosts->header()->saveState();
@@ -1690,7 +1690,7 @@ QByteArray RouterManagerWindow::saveState()
 void RouterManagerWindow::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_5_12);
+    stream.setVersion(QDataStream::Qt_5_15);
 
     QByteArray window_geometry;
     QByteArray hosts_columns_state;

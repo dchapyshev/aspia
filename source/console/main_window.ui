@@ -60,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -142,6 +142,7 @@
     <addaction name="menu_language"/>
     <addaction name="action_toolbar"/>
     <addaction name="action_statusbar"/>
+    <addaction name="action_large_icons"/>
     <addaction name="separator"/>
     <addaction name="action_show_tray_icon"/>
     <addaction name="action_minimize_to_tray"/>
@@ -726,6 +727,14 @@
    </property>
    <property name="toolTip">
     <string>Port Forwarding</string>
+   </property>
+  </action>
+  <action name="action_large_icons">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Large icons</string>
    </property>
   </action>
  </widget>

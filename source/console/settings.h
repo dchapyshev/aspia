@@ -94,6 +94,9 @@ public:
     QByteArray addressBookDialogGeometry() const;
     void setAddressBookDialogGeometry(const QByteArray& geometry);
 
+    bool largeIcons() const;
+    void setLargeIcons(bool enable);
+
 private:
     QSettings settings_;
     Q_DISABLE_COPY(Settings)

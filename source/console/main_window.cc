@@ -57,6 +57,10 @@ MainWindow::MainWindow(const QString& file_path)
     ui.setupUi(this);
     createLanguageMenu(settings.locale());
 
+    bool large_icons = settings.largeIcons();
+    ui.tool_bar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
+    ui.action_large_icons->setChecked(large_icons);
+
     bool enable_recent_open = settings.isRecentOpenEnabled();
     ui.action_remember_last->setChecked(enable_recent_open);
     if (enable_recent_open)
@@ -156,6 +160,11 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.tab_widget, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
     connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
     connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui.action_large_icons, &QAction::toggled, this, [this](bool enable)
+    {
+        ui.tool_bar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
+        Application::instance()->settings().setLargeIcons(enable);
+    });
 
     QActionGroup* session_type_group = new QActionGroup(this);
 
