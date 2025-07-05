@@ -44,6 +44,10 @@ namespace base {
 
 namespace {
 
+const int kDefaultSmallIconSize = 20;
+const int kMinSmallIconSize = 16;
+const int kMaxSmallIconSize = 48;
+
 const int kMaxPendingConnections = 25;
 const int kConnectTimeoutMs = 1000;
 const int kDisconnectTimeoutMs = 1000;
@@ -58,13 +62,22 @@ const char kOkMessage[] = "OK";
 class CustomStyle final : public QProxyStyle
 {
 public:
+    explicit CustomStyle(int small_icon_size)
+        : small_icon_size_(small_icon_size)
+    {
+        // Nothing
+    }
+
     int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
     {
         if (metric == QStyle::PM_SmallIconSize)
-            return 24;
+            return small_icon_size_;
 
         return QProxyStyle::pixelMetric(metric, option, widget);
     }
+
+private:
+    const int small_icon_size_;
 };
 
 } // namespace
@@ -109,7 +122,17 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     translations_ = std::make_unique<Translations>();
 
-    setStyle(new CustomStyle());
+    int small_icon_size = kDefaultSmallIconSize;
+
+    if (qEnvironmentVariableIsSet("ASPIA_SMALL_ICON_SIZE"))
+        small_icon_size = qEnvironmentVariableIntValue("ASPIA_SMALL_ICON_SIZE");
+
+    if (small_icon_size < kMinSmallIconSize)
+        small_icon_size = kMinSmallIconSize;
+    else if (small_icon_size > kMaxSmallIconSize)
+        small_icon_size = kMaxSmallIconSize;
+
+    setStyle(new CustomStyle(small_icon_size));
 }
 
 //--------------------------------------------------------------------------------------------------
