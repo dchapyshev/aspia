@@ -74,8 +74,7 @@ const char* kThirdParty[] =
         " CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo; BSD License",
     "protobuf &copy; 2014 Google Inc.; BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd.; GNU General Public License 3.0",
-    "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License",
-    "Fugue Icons &copy; 2013 Yusuke Kamiyamane; Creative Commons Attribution 3.0 License"
+    "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License"
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -132,6 +131,9 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
         createList(tr("Translators:"), kTranslators, std::size(kTranslators));
     QString third_party =
         createList(tr("Third-party components:"), kThirdParty, std::size(kThirdParty));
+    QString icons =
+        "<b>" + tr("Graphics and images:") + "</b><br>&bull; " +
+        tr("Icons by %1").arg("<a href='https://icons8.com'>Icons8</a>");
 
     QString html;
 
@@ -142,6 +144,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     html += "<p>" + developers + "</p>";
     html += "<p>" + translators + "</p>";
     html += "<p>" + third_party + "</p>";
+    html += "<p>" + icons + "</p>";
     html += "</body><html>";
 
     ui->text_edit->setHtml(html);

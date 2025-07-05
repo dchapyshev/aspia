@@ -39,8 +39,8 @@ message DriveList
             TYPE_ROOT_DIRECTORY = 8;
         }
 
-        Type type         = 1;
-        string path       = 2;
+        Type type   = 1;
+        string path = 2;
         // Fields 3-5 deprecated.
     }
 
