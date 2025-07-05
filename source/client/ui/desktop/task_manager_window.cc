@@ -71,7 +71,7 @@ class ProcessItem final : public QTreeWidgetItem
 public:
     explicit ProcessItem(const proto::task_manager::Process& process)
     {
-        setIcon(PROC_COL_NAME, QIcon(QStringLiteral(":/img/system-task.svg")));
+        setIcon(PROC_COL_NAME, QIcon(QStringLiteral(":/img/browse-page.svg")));
 
         setTextAlignment(PROC_COL_MEM_PRIVATE_WORKING_SET, Qt::AlignRight);
         setTextAlignment(PROC_COL_MEM_WORKING_SET, Qt::AlignRight);

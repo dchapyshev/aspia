@@ -21,7 +21,6 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
@@ -53,12 +52,12 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.checkbox_disable_user->setChecked(false);
     }
 
-    auto add_session = [&](const QString& icon, proto::peer::SessionType session_type)
+    auto add_session = [&](proto::peer::SessionType session_type)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
-        item->setText(0, common::sessionTypeToLocalizedString(session_type));
-        item->setIcon(0, QIcon(icon));
+        item->setText(0, common::sessionName(session_type));
+        item->setIcon(0, common::sessionIcon(session_type));
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
@@ -77,12 +76,12 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(":/img/workstation.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/computer.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/file-explorer.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/system-information.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/ethernet-off.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);

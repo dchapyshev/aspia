@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
-    <height>721</height>
+    <width>990</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,8 +73,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>24</width>
-          <height>24</height>
+          <width>20</width>
+          <height>20</height>
          </size>
         </property>
         <attribute name="headerVisible">

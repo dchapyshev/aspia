@@ -30,6 +30,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "common/ui/session_type.h"
 
 namespace host {
 
@@ -48,40 +49,7 @@ public:
           display_name_(client.display_name),
           computer_name_(client.computer_name)
     {
-        QString icon;
-
-        switch (client.session_type)
-        {
-            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-                icon = ":/img/workstation.svg";
-                break;
-
-            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                icon = ":/img/computer.svg";
-                break;
-
-            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-                icon = ":/img/file-explorer.svg";
-                break;
-
-            case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-                icon = ":/img/system-information.svg";
-                break;
-
-            case proto::peer::SESSION_TYPE_TEXT_CHAT:
-                icon = ":/img/chat.svg";
-                break;
-
-            case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-                icon = ":/img/ethernet-off.svg";
-                break;
-
-            default:
-                LOG(FATAL) << "Unexpected session type:" << client.session_type;
-                return;
-        }
-
-        setIcon(0, QIcon(icon));
+        setIcon(0, common::sessionIcon(session_type_));
 
         if (display_name_.isEmpty())
         {

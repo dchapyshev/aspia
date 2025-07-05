@@ -77,19 +77,19 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     combo_address->addItems(state_.history);
     combo_address->setCurrentIndex(0);
 
-    auto add_session = [this](const QString& icon, proto::peer::SessionType session_type)
+    auto add_session = [this](proto::peer::SessionType session_type)
     {
-        ui.combo_session_type->addItem(QIcon(icon),
-                                       common::sessionTypeToLocalizedString(session_type),
+        ui.combo_session_type->addItem(common::sessionIcon(session_type),
+                                       common::sessionName(session_type),
                                        QVariant(session_type));
     };
 
-    add_session(":/img/workstation.svg", proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/computer.svg", proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/file-explorer.svg", proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(":/img/motherboard.svg", proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(":/img/chat.svg", proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(":/img/ethernet-off.svg", proto::peer::SESSION_TYPE_PORT_FORWARDING);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    add_session(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
@@ -387,7 +387,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 void FastConnectDialog::readState()
 {
     QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
-    stream.setVersion(QDataStream::Qt_5_12);
+    stream.setVersion(QDataStream::Qt_5_15);
 
     int session_type = 0;
     QByteArray desktop_manage_config;
@@ -455,7 +455,7 @@ void FastConnectDialog::writeState()
         bool session_params_from_address_book = ui.checkbox_use_session_params->isChecked();
 
         QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_5_12);
+        stream.setVersion(QDataStream::Qt_5_15);
 
         stream << state_.history << session_type << desktop_manage_config << desktop_view_config
                << creds_from_address_book << session_params_from_address_book << port_forwarding_config;

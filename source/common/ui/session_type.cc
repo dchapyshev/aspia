@@ -22,6 +22,8 @@
 
 namespace common {
 
+namespace {
+
 //--------------------------------------------------------------------------------------------------
 const char* sessionTypeToString(proto::peer::SessionType session_type)
 {
@@ -51,9 +53,73 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString sessionTypeToLocalizedString(proto::peer::SessionType session_type)
+const char* sessionTypeToShortString(proto::peer::SessionType session_type)
+{
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+            return QT_TRANSLATE_NOOP("SessionType", "Manage");
+
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+            return QT_TRANSLATE_NOOP("SessionType", "View");
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            return QT_TRANSLATE_NOOP("SessionType", "Files");
+
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            return QT_TRANSLATE_NOOP("SessionType", "Info");
+
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            return QT_TRANSLATE_NOOP("SessionType", "Chat");
+
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
+            return QT_TRANSLATE_NOOP("SessionType", "Ports");
+
+        default:
+            return "";
+    }
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+QString sessionName(proto::peer::SessionType session_type)
 {
     return QCoreApplication::translate("SessionType", sessionTypeToString(session_type));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString sessionShortName(proto::peer::SessionType session_type)
+{
+    return QCoreApplication::translate("SessionType", sessionTypeToShortString(session_type));
+}
+
+//--------------------------------------------------------------------------------------------------
+QIcon sessionIcon(proto::peer::SessionType session_type)
+{
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+            return QIcon(":/img/workstation.svg");
+
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+            return QIcon(":/img/computer.svg");
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            return QIcon(":/img/file-explorer.svg");
+
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            return QIcon(":/img/system-information.svg");
+
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            return QIcon(":/img/chat.svg");
+
+        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
+            return QIcon(":/img/ethernet-off.svg");
+
+        default:
+            return QIcon();
+    }
 }
 
 } // namespace common

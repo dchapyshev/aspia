@@ -95,8 +95,8 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     ui->setupUi(this);
 
     QList<int> sizes;
-    sizes.push_back(250);
-    sizes.push_back(width() - 250);
+    sizes.push_back(220);
+    sizes.push_back(width() - 220);
     ui->splitter->setSizes(sizes);
 
     sys_info_widgets_.append(new SysInfoWidgetSummary(this));

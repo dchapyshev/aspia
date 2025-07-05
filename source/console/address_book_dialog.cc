@@ -28,6 +28,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "common/ui/session_type.h"
 #include "console/computer_factory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
@@ -235,16 +236,16 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.tree_category->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(":/img/workstation.svg"));
-    desktop_manage_item->setText(0, tr("Desktop Manage"));
+    desktop_manage_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
+    desktop_manage_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(":/img/computer.svg"));
-    desktop_view_item->setText(0, tr("Desktop View"));
+    desktop_view_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
+    desktop_view_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
 
     QTreeWidgetItem* port_forwarding_item = new QTreeWidgetItem(ITEM_TYPE_PORT_FORWARDING);
-    port_forwarding_item->setIcon(0, QIcon(":/img/ethernet-off.svg"));
-    port_forwarding_item->setText(0, tr("Port Forwarding"));
+    port_forwarding_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_PORT_FORWARDING));
+    port_forwarding_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_PORT_FORWARDING));
 
     sessions_item->addChild(desktop_manage_item);
     sessions_item->addChild(desktop_view_item);

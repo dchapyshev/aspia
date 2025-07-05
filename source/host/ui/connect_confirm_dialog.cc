@@ -66,7 +66,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
     QString computer_name = QLatin1String("<b>") + QString::fromStdString(request.computer_name()) +
         QLatin1String("</b>");
     QString session_name = QLatin1String("<b>") +
-        common::sessionTypeToLocalizedString(request.session_type()) + QLatin1String("</b>");
+        common::sessionName(request.session_type()) + QLatin1String("</b>");
 
     message_ = tr("User %1 (%2) is trying to connect to your computer with %3 session type.")
         .arg(user_name, computer_name, session_name);
