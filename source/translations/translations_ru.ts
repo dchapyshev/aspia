@@ -2309,52 +2309,52 @@
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="77"/>
+        <location filename="../host/ui/main_window.ui" line="72"/>
         <source>Your ID</source>
         <translation>Ваш ID</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="115"/>
+        <location filename="../host/ui/main_window.ui" line="98"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="322"/>
+        <location filename="../host/ui/main_window.ui" line="288"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="348"/>
+        <location filename="../host/ui/main_window.ui" line="314"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="359"/>
+        <location filename="../host/ui/main_window.ui" line="325"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="370"/>
+        <location filename="../host/ui/main_window.ui" line="336"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="381"/>
+        <location filename="../host/ui/main_window.ui" line="347"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="392"/>
+        <location filename="../host/ui/main_window.ui" line="358"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="238"/>
+        <location filename="../host/ui/main_window.ui" line="204"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="284"/>
+        <location filename="../host/ui/main_window.ui" line="250"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
@@ -2363,37 +2363,37 @@
         <translation type="vanished">Вид</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="292"/>
+        <location filename="../host/ui/main_window.ui" line="258"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="298"/>
+        <location filename="../host/ui/main_window.ui" line="264"/>
         <source>Access</source>
         <translation>Доступ</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="314"/>
+        <location filename="../host/ui/main_window.ui" line="280"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="319"/>
+        <location filename="../host/ui/main_window.ui" line="285"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="327"/>
+        <location filename="../host/ui/main_window.ui" line="293"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="332"/>
+        <location filename="../host/ui/main_window.ui" line="298"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="337"/>
+        <location filename="../host/ui/main_window.ui" line="303"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
@@ -2402,7 +2402,7 @@
         <translation type="vanished">Показывать значки в меню</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="400"/>
+        <location filename="../host/ui/main_window.ui" line="366"/>
         <source>Port Forwarding</source>
         <translation>Перенаправление портов</translation>
     </message>
@@ -8840,87 +8840,97 @@
         <translation type="vanished">Версия: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="110"/>
+        <location filename="../common/ui/about_dialog.cc" line="109"/>
         <source>Version: %1 (%2)</source>
         <translation>Версия: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="115"/>
+        <location filename="../common/ui/about_dialog.cc" line="114"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="116"/>
+        <location filename="../common/ui/about_dialog.cc" line="115"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="121"/>
+        <location filename="../common/ui/about_dialog.cc" line="120"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="125"/>
+        <location filename="../common/ui/about_dialog.cc" line="124"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/ui/about_dialog.cc" line="125"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="127"/>
+        <location filename="../common/ui/about_dialog.cc" line="126"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="130"/>
+        <location filename="../common/ui/about_dialog.cc" line="129"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="132"/>
+        <location filename="../common/ui/about_dialog.cc" line="131"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="134"/>
+        <location filename="../common/ui/about_dialog.cc" line="133"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="155"/>
+        <location filename="../common/ui/about_dialog.cc" line="135"/>
+        <source>Graphics and images:</source>
+        <translation>Графика и изображения:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="136"/>
+        <source>Icons by %1</source>
+        <translation>Иконки от %1</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="158"/>
         <source>Path: %1</source>
         <translation>Путь: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="156"/>
+        <location filename="../common/ui/about_dialog.cc" line="159"/>
         <source>Compilation date: %1</source>
         <translation>Дата компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="157"/>
+        <location filename="../common/ui/about_dialog.cc" line="160"/>
         <source>Compilation time: %1</source>
         <translation>Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="160"/>
+        <location filename="../common/ui/about_dialog.cc" line="163"/>
         <source>Git branch: %1</source>
         <translation>Ветка Git: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="161"/>
+        <location filename="../common/ui/about_dialog.cc" line="164"/>
         <source>Git commit: %1</source>
         <translation>Коммит Git: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="164"/>
+        <location filename="../common/ui/about_dialog.cc" line="167"/>
         <source>Logging directory: %1</source>
         <translation>Директория логов: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="165"/>
+        <location filename="../common/ui/about_dialog.cc" line="168"/>
         <source>Logging file: %1</source>
         <translation>Файл лога: %1</translation>
     </message>
@@ -8961,32 +8971,32 @@
         <translation type="vanished">Частота обновления: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="169"/>
+        <location filename="../common/ui/about_dialog.cc" line="172"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="215"/>
+        <location filename="../common/ui/about_dialog.cc" line="218"/>
         <source>Save to file...</source>
         <translation>Сохранить в файл...</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="223"/>
+        <location filename="../common/ui/about_dialog.cc" line="226"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="225"/>
+        <location filename="../common/ui/about_dialog.cc" line="228"/>
         <source>TXT files (*.txt)</source>
         <translation>Файлы TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="240"/>
+        <location filename="../common/ui/about_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="241"/>
+        <location filename="../common/ui/about_dialog.cc" line="244"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
@@ -10464,14 +10474,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../host/ui/main_window.cc" line="488"/>
-        <location filename="../host/ui/main_window.cc" line="711"/>
-        <location filename="../host/ui/main_window.cc" line="898"/>
+        <location filename="../host/ui/main_window.cc" line="719"/>
+        <location filename="../host/ui/main_window.cc" line="906"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="227"/>
-        <location filename="../host/ui/main_window.cc" line="690"/>
+        <location filename="../host/ui/main_window.cc" line="698"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -10491,33 +10501,33 @@
         <translation>Пользователь &quot;%1&quot; (%2) начал запись экрана.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="734"/>
+        <location filename="../host/ui/main_window.cc" line="742"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="735"/>
+        <location filename="../host/ui/main_window.cc" line="743"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="833"/>
+        <location filename="../host/ui/main_window.cc" line="841"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="899"/>
+        <location filename="../host/ui/main_window.cc" line="907"/>
         <source>ID: %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="895"/>
+        <location filename="../host/ui/main_window.cc" line="903"/>
         <source>IP addresses:</source>
         <translation>IP адреса:</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="428"/>
-        <location filename="../host/ui/main_window.cc" line="818"/>
+        <location filename="../host/ui/main_window.cc" line="826"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -10532,7 +10542,7 @@
         <translation>Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="823"/>
+        <location filename="../host/ui/main_window.cc" line="831"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
@@ -10542,22 +10552,22 @@
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="828"/>
+        <location filename="../host/ui/main_window.cc" line="836"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="695"/>
+        <location filename="../host/ui/main_window.cc" line="703"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="728"/>
+        <location filename="../host/ui/main_window.cc" line="736"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="729"/>
+        <location filename="../host/ui/main_window.cc" line="737"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

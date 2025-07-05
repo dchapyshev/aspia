@@ -2213,52 +2213,52 @@
         <translation>Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="77"/>
+        <location filename="../host/ui/main_window.ui" line="72"/>
         <source>Your ID</source>
         <translation>你的 ID</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="115"/>
+        <location filename="../host/ui/main_window.ui" line="98"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="322"/>
+        <location filename="../host/ui/main_window.ui" line="288"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="348"/>
+        <location filename="../host/ui/main_window.ui" line="314"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">桌面管理</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="359"/>
+        <location filename="../host/ui/main_window.ui" line="325"/>
         <source>Desktop View</source>
         <translation type="unfinished">桌面查看</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="370"/>
+        <location filename="../host/ui/main_window.ui" line="336"/>
         <source>File Transfer</source>
         <translation type="unfinished">文件传输</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="381"/>
+        <location filename="../host/ui/main_window.ui" line="347"/>
         <source>System Information</source>
         <translation type="unfinished">系统信息</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="392"/>
+        <location filename="../host/ui/main_window.ui" line="358"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="238"/>
+        <location filename="../host/ui/main_window.ui" line="204"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="284"/>
+        <location filename="../host/ui/main_window.ui" line="250"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
@@ -2267,42 +2267,42 @@
         <translation type="obsolete">查看</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="292"/>
+        <location filename="../host/ui/main_window.ui" line="258"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="298"/>
+        <location filename="../host/ui/main_window.ui" line="264"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="314"/>
+        <location filename="../host/ui/main_window.ui" line="280"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="319"/>
+        <location filename="../host/ui/main_window.ui" line="285"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="327"/>
+        <location filename="../host/ui/main_window.ui" line="293"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="332"/>
+        <location filename="../host/ui/main_window.ui" line="298"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="337"/>
+        <location filename="../host/ui/main_window.ui" line="303"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="400"/>
+        <location filename="../host/ui/main_window.ui" line="366"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8037,117 +8037,127 @@
         <translation type="vanished">版本： %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="110"/>
+        <location filename="../common/ui/about_dialog.cc" line="109"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="115"/>
+        <location filename="../common/ui/about_dialog.cc" line="114"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia是根据以下版本发布的免费软件GNU通用公共许可证3。</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="116"/>
+        <location filename="../common/ui/about_dialog.cc" line="115"/>
         <source>You can get a copy of license here:</source>
         <translation>您可以在此处获取许可证副本：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="121"/>
+        <location filename="../common/ui/about_dialog.cc" line="120"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>您还可以在这里获得GNU GPL许可证的翻译：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="125"/>
+        <location filename="../common/ui/about_dialog.cc" line="124"/>
         <source>Links:</source>
         <translation>链接：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/ui/about_dialog.cc" line="125"/>
         <source>Home page:</source>
         <translation>主页：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="127"/>
+        <location filename="../common/ui/about_dialog.cc" line="126"/>
         <source>GitHub page:</source>
         <translation>GitHub页面：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="130"/>
+        <location filename="../common/ui/about_dialog.cc" line="129"/>
         <source>Developers:</source>
         <translation>开发人员：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="132"/>
+        <location filename="../common/ui/about_dialog.cc" line="131"/>
         <source>Translators:</source>
         <translation>翻译成员：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="134"/>
+        <location filename="../common/ui/about_dialog.cc" line="133"/>
         <source>Third-party components:</source>
         <translation>第三方组件：</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="155"/>
+        <location filename="../common/ui/about_dialog.cc" line="135"/>
+        <source>Graphics and images:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="136"/>
+        <source>Icons by %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="158"/>
         <source>Path: %1</source>
         <translation>路径： %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="156"/>
+        <location filename="../common/ui/about_dialog.cc" line="159"/>
         <source>Compilation date: %1</source>
         <translation>编译日期：%1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="157"/>
+        <location filename="../common/ui/about_dialog.cc" line="160"/>
         <source>Compilation time: %1</source>
         <translation>编译时间： %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="160"/>
+        <location filename="../common/ui/about_dialog.cc" line="163"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="161"/>
+        <location filename="../common/ui/about_dialog.cc" line="164"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="164"/>
+        <location filename="../common/ui/about_dialog.cc" line="167"/>
         <source>Logging directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="165"/>
+        <location filename="../common/ui/about_dialog.cc" line="168"/>
         <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="169"/>
+        <location filename="../common/ui/about_dialog.cc" line="172"/>
         <source>%1 version: %2</source>
         <translation>%1 版本： %2</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="215"/>
+        <location filename="../common/ui/about_dialog.cc" line="218"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="223"/>
+        <location filename="../common/ui/about_dialog.cc" line="226"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="225"/>
+        <location filename="../common/ui/about_dialog.cc" line="228"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="240"/>
+        <location filename="../common/ui/about_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="241"/>
+        <location filename="../common/ui/about_dialog.cc" line="244"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9459,14 +9469,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../host/ui/main_window.cc" line="488"/>
-        <location filename="../host/ui/main_window.cc" line="711"/>
-        <location filename="../host/ui/main_window.cc" line="898"/>
+        <location filename="../host/ui/main_window.cc" line="719"/>
+        <location filename="../host/ui/main_window.cc" line="906"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="227"/>
-        <location filename="../host/ui/main_window.cc" line="690"/>
+        <location filename="../host/ui/main_window.cc" line="698"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
@@ -9481,33 +9491,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="734"/>
+        <location filename="../host/ui/main_window.cc" line="742"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="735"/>
+        <location filename="../host/ui/main_window.cc" line="743"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="833"/>
+        <location filename="../host/ui/main_window.cc" line="841"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="899"/>
+        <location filename="../host/ui/main_window.cc" line="907"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="895"/>
+        <location filename="../host/ui/main_window.cc" line="903"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="428"/>
-        <location filename="../host/ui/main_window.cc" line="818"/>
+        <location filename="../host/ui/main_window.cc" line="826"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
@@ -9517,7 +9527,7 @@
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="823"/>
+        <location filename="../host/ui/main_window.cc" line="831"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
@@ -9527,7 +9537,7 @@
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="828"/>
+        <location filename="../host/ui/main_window.cc" line="836"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
@@ -9542,17 +9552,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="695"/>
+        <location filename="../host/ui/main_window.cc" line="703"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="728"/>
+        <location filename="../host/ui/main_window.cc" line="736"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="729"/>
+        <location filename="../host/ui/main_window.cc" line="737"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>

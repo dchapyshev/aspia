@@ -2039,92 +2039,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="77"/>
+        <location filename="../host/ui/main_window.ui" line="72"/>
         <source>Your ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="115"/>
+        <location filename="../host/ui/main_window.ui" line="98"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="322"/>
+        <location filename="../host/ui/main_window.ui" line="288"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="348"/>
+        <location filename="../host/ui/main_window.ui" line="314"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="359"/>
+        <location filename="../host/ui/main_window.ui" line="325"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="370"/>
+        <location filename="../host/ui/main_window.ui" line="336"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="381"/>
+        <location filename="../host/ui/main_window.ui" line="347"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="392"/>
+        <location filename="../host/ui/main_window.ui" line="358"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="400"/>
+        <location filename="../host/ui/main_window.ui" line="366"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="284"/>
+        <location filename="../host/ui/main_window.ui" line="250"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="292"/>
+        <location filename="../host/ui/main_window.ui" line="258"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="298"/>
+        <location filename="../host/ui/main_window.ui" line="264"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="314"/>
+        <location filename="../host/ui/main_window.ui" line="280"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="319"/>
+        <location filename="../host/ui/main_window.ui" line="285"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="327"/>
+        <location filename="../host/ui/main_window.ui" line="293"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="332"/>
+        <location filename="../host/ui/main_window.ui" line="298"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="337"/>
+        <location filename="../host/ui/main_window.ui" line="303"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="238"/>
+        <location filename="../host/ui/main_window.ui" line="204"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6647,117 +6647,127 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="110"/>
+        <location filename="../common/ui/about_dialog.cc" line="109"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="115"/>
+        <location filename="../common/ui/about_dialog.cc" line="114"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="116"/>
+        <location filename="../common/ui/about_dialog.cc" line="115"/>
         <source>You can get a copy of license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="121"/>
+        <location filename="../common/ui/about_dialog.cc" line="120"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="125"/>
+        <location filename="../common/ui/about_dialog.cc" line="124"/>
         <source>Links:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/ui/about_dialog.cc" line="125"/>
         <source>Home page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="127"/>
+        <location filename="../common/ui/about_dialog.cc" line="126"/>
         <source>GitHub page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="130"/>
+        <location filename="../common/ui/about_dialog.cc" line="129"/>
         <source>Developers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="132"/>
+        <location filename="../common/ui/about_dialog.cc" line="131"/>
         <source>Translators:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="134"/>
+        <location filename="../common/ui/about_dialog.cc" line="133"/>
         <source>Third-party components:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="155"/>
+        <location filename="../common/ui/about_dialog.cc" line="135"/>
+        <source>Graphics and images:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="136"/>
+        <source>Icons by %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="158"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="156"/>
+        <location filename="../common/ui/about_dialog.cc" line="159"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="157"/>
+        <location filename="../common/ui/about_dialog.cc" line="160"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="160"/>
+        <location filename="../common/ui/about_dialog.cc" line="163"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="161"/>
+        <location filename="../common/ui/about_dialog.cc" line="164"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="164"/>
+        <location filename="../common/ui/about_dialog.cc" line="167"/>
         <source>Logging directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="165"/>
+        <location filename="../common/ui/about_dialog.cc" line="168"/>
         <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="169"/>
+        <location filename="../common/ui/about_dialog.cc" line="172"/>
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="215"/>
+        <location filename="../common/ui/about_dialog.cc" line="218"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="223"/>
+        <location filename="../common/ui/about_dialog.cc" line="226"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="225"/>
+        <location filename="../common/ui/about_dialog.cc" line="228"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="240"/>
+        <location filename="../common/ui/about_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="241"/>
+        <location filename="../common/ui/about_dialog.cc" line="244"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8021,50 +8031,50 @@
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="488"/>
-        <location filename="../host/ui/main_window.cc" line="711"/>
-        <location filename="../host/ui/main_window.cc" line="898"/>
+        <location filename="../host/ui/main_window.cc" line="719"/>
+        <location filename="../host/ui/main_window.cc" line="906"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="227"/>
-        <location filename="../host/ui/main_window.cc" line="690"/>
+        <location filename="../host/ui/main_window.cc" line="698"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="695"/>
+        <location filename="../host/ui/main_window.cc" line="703"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="728"/>
+        <location filename="../host/ui/main_window.cc" line="736"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="729"/>
+        <location filename="../host/ui/main_window.cc" line="737"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="428"/>
-        <location filename="../host/ui/main_window.cc" line="818"/>
+        <location filename="../host/ui/main_window.cc" line="826"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="823"/>
+        <location filename="../host/ui/main_window.cc" line="831"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="828"/>
+        <location filename="../host/ui/main_window.cc" line="836"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="833"/>
+        <location filename="../host/ui/main_window.cc" line="841"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8094,22 +8104,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="734"/>
+        <location filename="../host/ui/main_window.cc" line="742"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="735"/>
+        <location filename="../host/ui/main_window.cc" line="743"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="899"/>
+        <location filename="../host/ui/main_window.cc" line="907"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="895"/>
+        <location filename="../host/ui/main_window.cc" line="903"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
