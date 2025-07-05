@@ -24,7 +24,6 @@ list(APPEND SOURCE_BASE
     asio_event_dispatcher.cc
     asio_event_dispatcher.h
     bitset.h
-    compiler_specific.h
     cpuid_util.cc
     cpuid_util.h
     debug.cc
