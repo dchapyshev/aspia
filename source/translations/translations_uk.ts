@@ -436,72 +436,70 @@
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="48"/>
+        <location filename="../client/ui/client_window.ui" line="21"/>
         <source>ID / Address</source>
         <translation>ID / Адреса</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="120"/>
+        <location filename="../client/ui/client_window.ui" line="35"/>
         <source>Session Type</source>
         <translation>Тип сесії</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="256"/>
+        <location filename="../client/ui/client_window.ui" line="103"/>
         <source>Connect</source>
         <translation>Підключити</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="301"/>
         <source>View</source>
-        <translation>Вигляд</translation>
+        <translation type="vanished">Вигляд</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="361"/>
         <source>Show icons in menus</source>
-        <translation>Показувати значки в меню</translation>
+        <translation type="vanished">Показувати значки в меню</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="366"/>
+        <location filename="../client/ui/client_window.ui" line="184"/>
         <source>Check for updates...</source>
         <translation>Перевірити оновлення...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="371"/>
+        <location filename="../client/ui/client_window.ui" line="189"/>
         <source>Update Settings</source>
         <translation>Оновити налаштування</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="376"/>
+        <location filename="../client/ui/client_window.ui" line="194"/>
         <source>Clear history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="305"/>
+        <location filename="../client/ui/client_window.ui" line="154"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="290"/>
+        <location filename="../client/ui/client_window.ui" line="143"/>
         <source>Help</source>
         <translation>Допомога</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="326"/>
+        <location filename="../client/ui/client_window.ui" line="164"/>
         <source>Online Help...</source>
         <translation>Допомога онлайн...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="335"/>
+        <location filename="../client/ui/client_window.ui" line="169"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="344"/>
+        <location filename="../client/ui/client_window.ui" line="174"/>
         <source>Settings...</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.ui" line="353"/>
+        <location filename="../client/ui/client_window.ui" line="179"/>
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
@@ -1201,302 +1199,307 @@
         <translation>&amp;Мова</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="155"/>
+        <location filename="../console/main_window.ui" line="156"/>
         <source>Tools</source>
         <translation>Інструменти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="170"/>
-        <location filename="../console/main_window.ui" line="471"/>
+        <location filename="../console/main_window.ui" line="171"/>
+        <location filename="../console/main_window.ui" line="472"/>
         <source>Tool Bar</source>
         <translation>Панель інструментів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="219"/>
+        <location filename="../console/main_window.ui" line="220"/>
         <source>&amp;New address book</source>
         <translation>&amp;Нова адресна книга</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="222"/>
+        <location filename="../console/main_window.ui" line="223"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="231"/>
+        <location filename="../console/main_window.ui" line="232"/>
         <source>&amp;Open address book...</source>
         <translation>&amp;Відкрити адресну книгу...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="234"/>
+        <location filename="../console/main_window.ui" line="235"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="246"/>
+        <location filename="../console/main_window.ui" line="247"/>
         <source>&amp;Save</source>
         <translation>&amp;Зберегти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="249"/>
+        <location filename="../console/main_window.ui" line="250"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="257"/>
+        <location filename="../console/main_window.ui" line="258"/>
         <source>Save &amp;as...</source>
         <translation>Зберегти &amp;як...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="260"/>
+        <location filename="../console/main_window.ui" line="261"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="268"/>
+        <location filename="../console/main_window.ui" line="269"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="271"/>
+        <location filename="../console/main_window.ui" line="272"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="280"/>
+        <location filename="../console/main_window.ui" line="281"/>
         <source>&amp;Exit</source>
         <translation>&amp;Вихід</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="292"/>
+        <location filename="../console/main_window.ui" line="293"/>
         <source>Add Computer Group</source>
         <translation>Додати групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="304"/>
+        <location filename="../console/main_window.ui" line="305"/>
         <source>Modify Computer Group</source>
         <translation>Змінити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="316"/>
+        <location filename="../console/main_window.ui" line="317"/>
         <source>Delete Computer Group</source>
         <translation>Видалити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="328"/>
+        <location filename="../console/main_window.ui" line="329"/>
         <source>Add Computer</source>
         <translation>Додати комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="340"/>
+        <location filename="../console/main_window.ui" line="341"/>
         <source>Modify Computer</source>
         <translation>Змінити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="352"/>
+        <location filename="../console/main_window.ui" line="353"/>
         <source>Delete Computer</source>
         <translation>Видалити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="367"/>
+        <location filename="../console/main_window.ui" line="368"/>
         <source>Desktop &amp;Manage</source>
         <translation>Робочий стіл і &amp;керування</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="379"/>
+        <location filename="../console/main_window.ui" line="380"/>
         <source>Desktop &amp;View</source>
         <translation>Робочий стіл і &amp;перегляд</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="391"/>
+        <location filename="../console/main_window.ui" line="392"/>
         <source>&amp;File Transfer</source>
         <translation>Передача &amp;файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="400"/>
+        <location filename="../console/main_window.ui" line="401"/>
         <source>&amp;Online Help...</source>
         <translation>Онлайн &amp;допомога...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="403"/>
+        <location filename="../console/main_window.ui" line="404"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="412"/>
+        <location filename="../console/main_window.ui" line="413"/>
         <source>&amp;About</source>
         <translation>Про пр&amp;ограму</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="424"/>
+        <location filename="../console/main_window.ui" line="425"/>
         <source>Address Book Properties</source>
         <translation>Налаштування адресної книги</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="433"/>
-        <location filename="../console/main_window.ui" line="436"/>
+        <location filename="../console/main_window.ui" line="434"/>
+        <location filename="../console/main_window.ui" line="437"/>
         <source>Desktop Manage</source>
         <translation>Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="445"/>
-        <location filename="../console/main_window.ui" line="448"/>
+        <location filename="../console/main_window.ui" line="446"/>
+        <location filename="../console/main_window.ui" line="449"/>
         <source>Desktop View</source>
         <translation>Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="457"/>
-        <location filename="../console/main_window.ui" line="460"/>
+        <location filename="../console/main_window.ui" line="458"/>
+        <location filename="../console/main_window.ui" line="461"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="482"/>
+        <location filename="../console/main_window.ui" line="483"/>
         <source>Status Bar</source>
         <translation>Рядок стану</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="494"/>
+        <location filename="../console/main_window.ui" line="495"/>
         <source>Fast Connect</source>
         <translation>Швидке підключення</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="497"/>
+        <location filename="../console/main_window.ui" line="498"/>
         <source>F8</source>
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="594"/>
+        <location filename="../console/main_window.ui" line="595"/>
         <source>Router Manage</source>
         <translation>Керування маршрутизатором</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="602"/>
+        <location filename="../console/main_window.ui" line="603"/>
         <source>Show icons in menus</source>
         <translation>Показувати значки в меню</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="614"/>
+        <location filename="../console/main_window.ui" line="615"/>
         <source>&amp;System Information</source>
         <translation>&amp;Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="617"/>
-        <location filename="../console/main_window.ui" line="626"/>
-        <location filename="../console/main_window.ui" line="629"/>
+        <location filename="../console/main_window.ui" line="618"/>
+        <location filename="../console/main_window.ui" line="627"/>
+        <location filename="../console/main_window.ui" line="630"/>
         <source>System Information</source>
         <translation>Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="641"/>
+        <location filename="../console/main_window.ui" line="642"/>
         <source>&amp;Text Chat</source>
         <translation>Текстовий &amp;чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="644"/>
-        <location filename="../console/main_window.ui" line="653"/>
-        <location filename="../console/main_window.ui" line="656"/>
+        <location filename="../console/main_window.ui" line="645"/>
+        <location filename="../console/main_window.ui" line="654"/>
+        <location filename="../console/main_window.ui" line="657"/>
         <source>Text Chat</source>
         <translation>Текстовий чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="668"/>
+        <location filename="../console/main_window.ui" line="669"/>
         <source>Update Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="671"/>
+        <location filename="../console/main_window.ui" line="672"/>
         <source>Update the status of computers in the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="674"/>
+        <location filename="../console/main_window.ui" line="675"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="686"/>
+        <location filename="../console/main_window.ui" line="687"/>
         <source>Import Computers/Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="689"/>
+        <location filename="../console/main_window.ui" line="690"/>
         <source>Import computers from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="701"/>
+        <location filename="../console/main_window.ui" line="702"/>
         <source>Export Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="704"/>
+        <location filename="../console/main_window.ui" line="705"/>
         <source>Export computer group to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="716"/>
-        <location filename="../console/main_window.ui" line="725"/>
-        <location filename="../console/main_window.ui" line="728"/>
+        <location filename="../console/main_window.ui" line="717"/>
+        <location filename="../console/main_window.ui" line="726"/>
+        <location filename="../console/main_window.ui" line="729"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="505"/>
+        <location filename="../console/main_window.ui" line="737"/>
+        <source>Large icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/main_window.ui" line="506"/>
         <source>Show tray icon</source>
         <translation>Показати піктограму в треї</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="513"/>
+        <location filename="../console/main_window.ui" line="514"/>
         <source>Minimize to tray</source>
         <translation>Згортати в трей</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="518"/>
+        <location filename="../console/main_window.ui" line="519"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="530"/>
+        <location filename="../console/main_window.ui" line="531"/>
         <source>Save all</source>
         <translation>Зберегти все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="533"/>
+        <location filename="../console/main_window.ui" line="534"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="541"/>
+        <location filename="../console/main_window.ui" line="542"/>
         <source>Close all</source>
         <translation>Закрити все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="544"/>
+        <location filename="../console/main_window.ui" line="545"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="549"/>
+        <location filename="../console/main_window.ui" line="550"/>
         <source>Check for updates...</source>
         <translation>Перевірити наявність оновлень...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="554"/>
+        <location filename="../console/main_window.ui" line="555"/>
         <source>Update Settings</source>
         <translation>Налаштування оновлень</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="559"/>
+        <location filename="../console/main_window.ui" line="560"/>
         <source>Clear</source>
         <translation>Очистити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="570"/>
+        <location filename="../console/main_window.ui" line="571"/>
         <source>Remember latest</source>
         <translation>Пам&apos;ятати останні</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="582"/>
+        <location filename="../console/main_window.ui" line="583"/>
         <source>Copy Computer</source>
         <translation>Скопіювати комп&apos;ютер</translation>
     </message>
@@ -1732,19 +1735,31 @@
 <context>
     <name>DesktopToolBar</name>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="124"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="127"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">Закріпити панель інструментів</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="136"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="139"/>
         <source>Session configuration</source>
         <translation type="unfinished">Налаштування сесії</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="148"/>
+        <source>Auto size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="151"/>
         <source>Automatic window size</source>
         <translation type="unfinished">Автоматичний розмір вікна</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="163"/>
+        <source>Full screen</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="166"/>
@@ -1757,11 +1772,17 @@
         <translation type="unfinished">Автоматична прокрутка</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="186"/>
+        <source>Ctrl+Alt+Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="189"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation type="unfinished">Передати Ctrl+Alt+Del</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="198"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="201"/>
         <source>Advanced menu</source>
         <translation type="unfinished">Розширене меню</translation>
@@ -1774,6 +1795,7 @@
         <translation type="unfinished">Зберегти знімок екрану...</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="221"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
         <translation type="unfinished">Передача файлів</translation>
@@ -2235,52 +2257,52 @@
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="95"/>
+        <location filename="../host/ui/main_window.ui" line="77"/>
         <source>Your ID</source>
         <translation>Ваш ID</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="159"/>
+        <location filename="../host/ui/main_window.ui" line="115"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="368"/>
+        <location filename="../host/ui/main_window.ui" line="322"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="394"/>
+        <location filename="../host/ui/main_window.ui" line="348"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="405"/>
+        <location filename="../host/ui/main_window.ui" line="359"/>
         <source>Desktop View</source>
         <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="416"/>
+        <location filename="../host/ui/main_window.ui" line="370"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="427"/>
+        <location filename="../host/ui/main_window.ui" line="381"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="438"/>
+        <location filename="../host/ui/main_window.ui" line="392"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="284"/>
+        <location filename="../host/ui/main_window.ui" line="238"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="330"/>
+        <location filename="../host/ui/main_window.ui" line="284"/>
         <source>Help</source>
         <translation>Допомога</translation>
     </message>
@@ -2289,37 +2311,37 @@
         <translation type="vanished">Вигляд</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="338"/>
+        <location filename="../host/ui/main_window.ui" line="292"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="344"/>
+        <location filename="../host/ui/main_window.ui" line="298"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="360"/>
+        <location filename="../host/ui/main_window.ui" line="314"/>
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="365"/>
+        <location filename="../host/ui/main_window.ui" line="319"/>
         <source>Online Help...</source>
         <translation>Онлайн допомога...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="373"/>
+        <location filename="../host/ui/main_window.ui" line="327"/>
         <source>About</source>
         <translation>Про</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="378"/>
+        <location filename="../host/ui/main_window.ui" line="332"/>
         <source>Settings...</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="383"/>
+        <location filename="../host/ui/main_window.ui" line="337"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
@@ -2328,7 +2350,7 @@
         <translation type="vanished">Показувати значки в меню</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="446"/>
+        <location filename="../host/ui/main_window.ui" line="400"/>
         <source>Port Forwarding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2962,33 +2984,63 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../common/ui/session_type.cc" line="31"/>
+        <location filename="../common/ui/session_type.cc" line="33"/>
         <source>Desktop Manage</source>
         <translation>Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="34"/>
+        <location filename="../common/ui/session_type.cc" line="36"/>
         <source>Desktop View</source>
         <translation>Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="37"/>
+        <location filename="../common/ui/session_type.cc" line="39"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="40"/>
+        <location filename="../common/ui/session_type.cc" line="42"/>
         <source>System Information</source>
         <translation>Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="43"/>
+        <location filename="../common/ui/session_type.cc" line="45"/>
         <source>Text Chat</source>
         <translation>Тесктовий чат</translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="46"/>
+        <location filename="../common/ui/session_type.cc" line="48"/>
         <source>Port Forwarding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="61"/>
+        <source>Manage</source>
+        <translation type="unfinished">Керування</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="64"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="67"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="70"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="73"/>
+        <source>Chat</source>
+        <translation type="unfinished">Чат</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="76"/>
+        <source>Ports</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3918,6 +3970,11 @@
         <translation type="unfinished">Зберегти (Ctrl+S)</translation>
     </message>
     <message>
+        <location filename="../client/ui/sys_info/system_info_session_window.ui" line="114"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
         <location filename="../client/ui/sys_info/system_info_session_window.ui" line="123"/>
         <source>Print</source>
         <translation type="unfinished">Друкувати</translation>
@@ -3926,6 +3983,11 @@
         <location filename="../client/ui/sys_info/system_info_session_window.ui" line="126"/>
         <source>Print (Ctrl+P)</source>
         <translation type="unfinished">Друкувати (Ctrl+P)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/sys_info/system_info_session_window.ui" line="129"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/sys_info/system_info_session_window.ui" line="134"/>
@@ -3951,6 +4013,11 @@
         <location filename="../client/ui/sys_info/system_info_session_window.ui" line="156"/>
         <source>Refresh (F5)</source>
         <translation type="unfinished">Оновити (F5)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/sys_info/system_info_session_window.ui" line="159"/>
+        <source>F5</source>
+        <translation type="unfinished">F5</translation>
     </message>
 </context>
 <context>
@@ -4247,6 +4314,11 @@
         <translation type="unfinished">Зберегти (Ctrl+S)</translation>
     </message>
     <message>
+        <location filename="../client/ui/text_chat/text_chat_session_window.ui" line="48"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
         <location filename="../client/ui/text_chat/text_chat_session_window.ui" line="57"/>
         <source>Print</source>
         <translation type="unfinished">Друкувати</translation>
@@ -4280,6 +4352,11 @@
         <location filename="../client/ui/text_chat/text_chat_session_window.ui" line="90"/>
         <source>Refresh (F5)</source>
         <translation type="unfinished">Оновити (F5)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/text_chat/text_chat_session_window.ui" line="93"/>
+        <source>F5</source>
+        <translation type="unfinished">F5</translation>
     </message>
 </context>
 <context>
@@ -4695,43 +4772,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="93"/>
+        <location filename="../client/ui/client_window.cc" line="79"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="94"/>
+        <location filename="../client/ui/client_window.cc" line="80"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="97"/>
+        <location filename="../client/ui/client_window.cc" line="83"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="98"/>
+        <location filename="../client/ui/client_window.cc" line="84"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="232"/>
+        <location filename="../client/ui/client_window.cc" line="224"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="330"/>
-        <location filename="../client/ui/client_window.cc" line="348"/>
+        <location filename="../client/ui/client_window.cc" line="322"/>
+        <location filename="../client/ui/client_window.cc" line="340"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="331"/>
+        <location filename="../client/ui/client_window.cc" line="323"/>
         <source>An invalid computer address was entered.</source>
         <translation>Було введено не коректну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="349"/>
+        <location filename="../client/ui/client_window.cc" line="341"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
@@ -4894,65 +4971,65 @@
         <translation type="unfinished">Почати запис</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="574"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="595"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="626"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="657"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="565"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="586"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="617"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="648"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="669"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="575"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="566"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="578"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="630"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="661"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="682"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="569"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="590"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="621"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="652"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="673"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="579"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="600"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="631"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="662"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="683"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="570"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="591"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="622"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="653"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="674"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="596"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="587"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="605"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="636"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="596"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="627"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="627"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="618"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">Ви певні, що бажаєте перезавантажити віддалений комп&apos;ютер в Безпечний Режим?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="658"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="679"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="670"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="782"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="773"/>
         <source>Scale</source>
         <translation type="unfinished">Масштаб</translation>
     </message>
@@ -7710,142 +7787,142 @@
 <context>
     <name>client::SystemInfoSessionWindow</name>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="137"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="135"/>
         <source>Summary</source>
         <translation type="unfinished">Загальне</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="145"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="143"/>
         <source>Hardware</source>
         <translation type="unfinished">Обладнання</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="150"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="148"/>
         <source>Devices</source>
         <translation type="unfinished">Пристрої</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="156"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="154"/>
         <source>Video Adapters</source>
         <translation type="unfinished">Відео адаптери</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="162"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="160"/>
         <source>Monitors</source>
         <translation type="unfinished">Монітори</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="168"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="166"/>
         <source>Printers</source>
         <translation type="unfinished">Принтери</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="174"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="172"/>
         <source>Power Options</source>
         <translation type="unfinished">Параметри живлення</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="188"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="186"/>
         <source>Software</source>
         <translation type="unfinished">Програмне забезпечення</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="193"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="191"/>
         <source>Applications</source>
         <translation type="unfinished">Програми</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="199"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="197"/>
         <source>Drivers</source>
         <translation type="unfinished">Драйвери</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="205"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="203"/>
         <source>Services</source>
         <translation type="unfinished">Сервіси</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="211"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="209"/>
         <source>Processes</source>
         <translation type="unfinished">Процеси</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="217"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="215"/>
         <source>Licenses</source>
         <translation type="unfinished">Ліцензії</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="231"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="229"/>
         <source>Network</source>
         <translation type="unfinished">Мережа</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="236"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="234"/>
         <source>Network Adapters</source>
         <translation type="unfinished">Мережеві адаптери</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="242"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="240"/>
         <source>Routes</source>
         <translation type="unfinished">Маршрути</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="248"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="246"/>
         <source>Connections</source>
         <translation type="unfinished">Підключення</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="254"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="252"/>
         <source>Network Shares</source>
         <translation type="unfinished">Мережеві ресурси</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="260"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="258"/>
         <source>Open Files</source>
         <translation type="unfinished">Відкриті файли</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="274"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="272"/>
         <source>Operating System</source>
         <translation type="unfinished">Операційна система</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="279"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="277"/>
         <source>Environment Variables</source>
         <translation type="unfinished">Змінні середовища</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="285"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="283"/>
         <source>Event Logs</source>
         <translation type="unfinished">Журнали подій</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="291"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="289"/>
         <source>Users</source>
         <translation type="unfinished">Користувачі</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="297"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="295"/>
         <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="324"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="322"/>
         <source>HTML File</source>
         <translation type="unfinished">Файл HTML</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="326"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="324"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished">Файл HTML (*.html)</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="337"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="335"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="338"/>
+        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="336"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished">Не вдалося зберегти файл: %1</translation>
     </message>
@@ -8250,117 +8327,117 @@
         <translation type="vanished">Версія: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="111"/>
+        <location filename="../common/ui/about_dialog.cc" line="110"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="116"/>
+        <location filename="../common/ui/about_dialog.cc" line="115"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia — вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="117"/>
+        <location filename="../common/ui/about_dialog.cc" line="116"/>
         <source>You can get a copy of license here:</source>
         <translation>Ви можете отримати копію ліцензії тут:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="122"/>
+        <location filename="../common/ui/about_dialog.cc" line="121"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознайомитися з перекладом ліцензії GNU GPL на вашу мову можна тут:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/ui/about_dialog.cc" line="125"/>
         <source>Links:</source>
         <translation>Посилання:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="127"/>
+        <location filename="../common/ui/about_dialog.cc" line="126"/>
         <source>Home page:</source>
         <translation>Домашня сторінка:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="128"/>
+        <location filename="../common/ui/about_dialog.cc" line="127"/>
         <source>GitHub page:</source>
         <translation>Сторінка GitHub:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="131"/>
+        <location filename="../common/ui/about_dialog.cc" line="130"/>
         <source>Developers:</source>
         <translation>Розробники:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="133"/>
+        <location filename="../common/ui/about_dialog.cc" line="132"/>
         <source>Translators:</source>
         <translation>Перекладачі:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="135"/>
+        <location filename="../common/ui/about_dialog.cc" line="134"/>
         <source>Third-party components:</source>
         <translation>Сторонні компоненти:</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="156"/>
+        <location filename="../common/ui/about_dialog.cc" line="155"/>
         <source>Path: %1</source>
         <translation>Шлях: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="157"/>
+        <location filename="../common/ui/about_dialog.cc" line="156"/>
         <source>Compilation date: %1</source>
         <translation>Дата компіляції: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="158"/>
+        <location filename="../common/ui/about_dialog.cc" line="157"/>
         <source>Compilation time: %1</source>
         <translation>Час компіляції: %1</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="161"/>
+        <location filename="../common/ui/about_dialog.cc" line="160"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="162"/>
+        <location filename="../common/ui/about_dialog.cc" line="161"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="165"/>
+        <location filename="../common/ui/about_dialog.cc" line="164"/>
         <source>Logging directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="166"/>
+        <location filename="../common/ui/about_dialog.cc" line="165"/>
         <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="170"/>
+        <location filename="../common/ui/about_dialog.cc" line="169"/>
         <source>%1 version: %2</source>
         <translation>%1 версія: %2</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="218"/>
+        <location filename="../common/ui/about_dialog.cc" line="215"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="226"/>
+        <location filename="../common/ui/about_dialog.cc" line="223"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="228"/>
+        <location filename="../common/ui/about_dialog.cc" line="225"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">TXT файли (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="243"/>
+        <location filename="../common/ui/about_dialog.cc" line="240"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="244"/>
+        <location filename="../common/ui/about_dialog.cc" line="241"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
@@ -8469,73 +8546,73 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="58"/>
+        <location filename="../common/ui/update_dialog.cc" line="59"/>
         <source>Receiving information...</source>
         <translation>Отримання інформації...</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="113"/>
+        <location filename="../common/ui/update_dialog.cc" line="114"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="211"/>
+        <location filename="../common/ui/update_dialog.cc" line="212"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="212"/>
+        <location filename="../common/ui/update_dialog.cc" line="213"/>
         <source>Error retrieving update information.</source>
         <translation>Виникла помилка під час отримання інформації про оновлення.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="222"/>
-        <location filename="../common/ui/update_dialog.cc" line="245"/>
+        <location filename="../common/ui/update_dialog.cc" line="223"/>
+        <location filename="../common/ui/update_dialog.cc" line="246"/>
         <source>No updates available.</source>
         <translation>Немає доступних оновлень.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="127"/>
+        <location filename="../common/ui/update_dialog.cc" line="128"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Оновлення буде завантажено. Після завершення завантаження програму буде закрито автоматично.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="129"/>
+        <location filename="../common/ui/update_dialog.cc" line="130"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Всі підключені сесії буде завершено. Ви не зможете встановити з&apos;єднання до завершення оновлення.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="131"/>
+        <location filename="../common/ui/update_dialog.cc" line="132"/>
         <source>All unsaved data will be lost.</source>
         <translation>Всі не збережені дані буде втрачено.</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="132"/>
+        <location filename="../common/ui/update_dialog.cc" line="133"/>
         <source>Continue?</source>
         <translation>Продовжити?</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="135"/>
+        <location filename="../common/ui/update_dialog.cc" line="136"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="140"/>
+        <location filename="../common/ui/update_dialog.cc" line="141"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="141"/>
+        <location filename="../common/ui/update_dialog.cc" line="142"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="152"/>
+        <location filename="../common/ui/update_dialog.cc" line="153"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="153"/>
+        <location filename="../common/ui/update_dialog.cc" line="154"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Виникла помилка під час встановлення оновлення: %1</translation>
     </message>
@@ -8543,37 +8620,37 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="115"/>
+        <location filename="../console/address_book_dialog.cc" line="116"/>
         <source>Without Encryption</source>
         <translation>Без шифрування</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="117"/>
+        <location filename="../console/address_book_dialog.cc" line="118"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="146"/>
+        <location filename="../console/address_book_dialog.cc" line="147"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="129"/>
+        <location filename="../console/address_book_dialog.cc" line="130"/>
         <source>Address Book</source>
         <translation>Адресна книга</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="102"/>
+        <location filename="../console/address_book_dialog.cc" line="103"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="228"/>
+        <location filename="../console/address_book_dialog.cc" line="229"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="232"/>
+        <location filename="../console/address_book_dialog.cc" line="233"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
@@ -8585,13 +8662,8 @@
         <source>View</source>
         <translation type="vanished">Перегляд</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="247"/>
-        <source>Port Forwarding</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="466"/>
+        <location filename="../console/address_book_dialog.cc" line="467"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символ.</numerusform>
@@ -8600,12 +8672,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="472"/>
+        <location filename="../console/address_book_dialog.cc" line="473"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="479"/>
+        <location filename="../console/address_book_dialog.cc" line="480"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символ.</numerusform>
@@ -8614,7 +8686,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="487"/>
+        <location filename="../console/address_book_dialog.cc" line="488"/>
         <source>Too long display name. The maximum length of the display name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -8623,12 +8695,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="513"/>
+        <location filename="../console/address_book_dialog.cc" line="514"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="519"/>
+        <location filename="../console/address_book_dialog.cc" line="520"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -8637,12 +8709,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="527"/>
+        <location filename="../console/address_book_dialog.cc" line="528"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="530"/>
+        <location filename="../console/address_book_dialog.cc" line="531"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -8651,48 +8723,46 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="534"/>
+        <location filename="../console/address_book_dialog.cc" line="535"/>
         <source>Do you want to enter a different password?</source>
         <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="444"/>
-        <location filename="../console/address_book_dialog.cc" line="537"/>
+        <location filename="../console/address_book_dialog.cc" line="445"/>
+        <location filename="../console/address_book_dialog.cc" line="538"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="239"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation type="obsolete">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="243"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="541"/>
+        <location filename="../console/address_book_dialog.cc" line="542"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="542"/>
+        <location filename="../console/address_book_dialog.cc" line="543"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="576"/>
+        <location filename="../console/address_book_dialog.cc" line="577"/>
         <source>An invalid router address was entered.</source>
         <translation>Введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="587"/>
+        <location filename="../console/address_book_dialog.cc" line="588"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="596"/>
+        <location filename="../console/address_book_dialog.cc" line="597"/>
         <source>Router password cannot be empty.</source>
         <translation>Пароль маршрутизатора не може бути порожнім.</translation>
     </message>
@@ -8758,53 +8828,53 @@
         <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1080"/>
+        <location filename="../console/address_book_tab.cc" line="1075"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1085"/>
+        <location filename="../console/address_book_tab.cc" line="1077"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1227"/>
+        <location filename="../console/address_book_tab.cc" line="1217"/>
         <source>Save Address Book</source>
         <translation>Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1229"/>
+        <location filename="../console/address_book_tab.cc" line="1219"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1244"/>
+        <location filename="../console/address_book_tab.cc" line="1234"/>
         <source>Unable to create or open address book file.</source>
         <translation>Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1258"/>
+        <location filename="../console/address_book_tab.cc" line="1248"/>
         <source>Unable to write address book file.</source>
         <translation>Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1289"/>
+        <location filename="../console/address_book_tab.cc" line="1279"/>
         <source>Root Group</source>
         <translation>Корінна група</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1301"/>
-        <location filename="../console/address_book_tab.cc" line="1316"/>
+        <location filename="../console/address_book_tab.cc" line="1291"/>
+        <location filename="../console/address_book_tab.cc" line="1306"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1303"/>
+        <location filename="../console/address_book_tab.cc" line="1293"/>
         <source>Could not open address book</source>
         <translation>Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1318"/>
+        <location filename="../console/address_book_tab.cc" line="1308"/>
         <source>Failed to save address book</source>
         <translation>Неможливо зберегти адресну книгу</translation>
     </message>
@@ -8812,34 +8882,32 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="62"/>
+        <location filename="../console/computer_dialog.cc" line="63"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="71"/>
+        <location filename="../console/computer_dialog.cc" line="72"/>
         <source>(copy)</source>
         <translation>(копіювати)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="82"/>
+        <location filename="../console/computer_dialog.cc" line="83"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="86"/>
+        <location filename="../console/computer_dialog.cc" line="87"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="93"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation type="obsolete">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="97"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -8848,11 +8916,6 @@
     <message>
         <source>View</source>
         <translation type="vanished">Перегляд</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog.cc" line="101"/>
-        <source>Port Forwarding</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8955,17 +9018,17 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="64"/>
+        <location filename="../console/computer_group_dialog.cc" line="65"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="80"/>
+        <location filename="../console/computer_group_dialog.cc" line="81"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="84"/>
+        <location filename="../console/computer_group_dialog.cc" line="85"/>
         <source>Sessions</source>
         <translation>Сесії</translation>
     </message>
@@ -8978,22 +9041,15 @@
         <translation type="vanished">Перегляд</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="91"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Керування робочим столом</translation>
+        <translation type="obsolete">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="95"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="99"/>
-        <source>Port Forwarding</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="245"/>
+        <location filename="../console/computer_group_dialog.cc" line="246"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
@@ -9002,12 +9058,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="254"/>
+        <location filename="../console/computer_group_dialog.cc" line="255"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="263"/>
+        <location filename="../console/computer_group_dialog.cc" line="264"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
@@ -9016,7 +9072,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="222"/>
+        <location filename="../console/computer_group_dialog.cc" line="223"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -9132,166 +9188,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console/main_window.cc" line="209"/>
-        <location filename="../console/main_window.cc" line="601"/>
-        <location filename="../console/main_window.cc" line="612"/>
-        <location filename="../console/main_window.cc" line="624"/>
-        <location filename="../console/main_window.cc" line="678"/>
-        <location filename="../console/main_window.cc" line="691"/>
-        <location filename="../console/main_window.cc" line="1705"/>
+        <location filename="../console/main_window.cc" line="218"/>
+        <location filename="../console/main_window.cc" line="610"/>
+        <location filename="../console/main_window.cc" line="621"/>
+        <location filename="../console/main_window.cc" line="633"/>
+        <location filename="../console/main_window.cc" line="687"/>
+        <location filename="../console/main_window.cc" line="700"/>
+        <location filename="../console/main_window.cc" line="1712"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="210"/>
+        <location filename="../console/main_window.cc" line="219"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="326"/>
+        <location filename="../console/main_window.cc" line="335"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="328"/>
+        <location filename="../console/main_window.cc" line="337"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="586"/>
+        <location filename="../console/main_window.cc" line="595"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="588"/>
-        <location filename="../console/main_window.cc" line="665"/>
+        <location filename="../console/main_window.cc" line="597"/>
+        <location filename="../console/main_window.cc" line="674"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="602"/>
+        <location filename="../console/main_window.cc" line="611"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="613"/>
+        <location filename="../console/main_window.cc" line="622"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="625"/>
+        <location filename="../console/main_window.cc" line="634"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="638"/>
+        <location filename="../console/main_window.cc" line="647"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="663"/>
+        <location filename="../console/main_window.cc" line="672"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="679"/>
+        <location filename="../console/main_window.cc" line="688"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="692"/>
+        <location filename="../console/main_window.cc" line="701"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="700"/>
+        <location filename="../console/main_window.cc" line="709"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="989"/>
-        <location filename="../console/main_window.cc" line="1340"/>
-        <location filename="../console/main_window.cc" line="1425"/>
+        <location filename="../console/main_window.cc" line="998"/>
+        <location filename="../console/main_window.cc" line="1349"/>
+        <location filename="../console/main_window.cc" line="1434"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="990"/>
-        <location filename="../console/main_window.cc" line="1426"/>
+        <location filename="../console/main_window.cc" line="999"/>
+        <location filename="../console/main_window.cc" line="1435"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="994"/>
-        <location filename="../console/main_window.cc" line="1344"/>
-        <location filename="../console/main_window.cc" line="1430"/>
+        <location filename="../console/main_window.cc" line="1003"/>
+        <location filename="../console/main_window.cc" line="1353"/>
+        <location filename="../console/main_window.cc" line="1439"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="995"/>
-        <location filename="../console/main_window.cc" line="1345"/>
-        <location filename="../console/main_window.cc" line="1431"/>
+        <location filename="../console/main_window.cc" line="1004"/>
+        <location filename="../console/main_window.cc" line="1354"/>
+        <location filename="../console/main_window.cc" line="1440"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="996"/>
-        <location filename="../console/main_window.cc" line="1432"/>
+        <location filename="../console/main_window.cc" line="1005"/>
+        <location filename="../console/main_window.cc" line="1441"/>
         <source>Cancel</source>
         <translation type="unfinished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1234"/>
+        <location filename="../console/main_window.cc" line="1243"/>
         <source>Close other tabs</source>
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1241"/>
+        <location filename="../console/main_window.cc" line="1250"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1242"/>
-        <location filename="../console/main_window.cc" line="1247"/>
+        <location filename="../console/main_window.cc" line="1251"/>
+        <location filename="../console/main_window.cc" line="1256"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1341"/>
+        <location filename="../console/main_window.cc" line="1350"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список нещодавніх адрес буде очищено. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1378"/>
+        <location filename="../console/main_window.cc" line="1387"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1393"/>
+        <location filename="../console/main_window.cc" line="1402"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1706"/>
+        <location filename="../console/main_window.cc" line="1713"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="743"/>
-        <location filename="../console/main_window.cc" line="1569"/>
+        <location filename="../console/main_window.cc" line="752"/>
+        <location filename="../console/main_window.cc" line="1578"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="293"/>
-        <location filename="../console/main_window.cc" line="637"/>
-        <location filename="../console/main_window.cc" line="699"/>
+        <location filename="../console/main_window.cc" line="302"/>
+        <location filename="../console/main_window.cc" line="646"/>
+        <location filename="../console/main_window.cc" line="708"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="294"/>
+        <location filename="../console/main_window.cc" line="303"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
@@ -9324,8 +9380,13 @@
 </context>
 <context>
     <name>console::StatusBar</name>
+    <message>
+        <location filename="../console/statusbar.cc" line="46"/>
+        <source>Status update</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="76"/>
+        <location filename="../console/statusbar.cc" line="59"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочірня група</numerusform>
@@ -9334,18 +9395,13 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="77"/>
+        <location filename="../console/statusbar.cc" line="60"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n дочірній комп&apos;ютер</numerusform>
             <numerusform>%n дочірні комп&apos;ютери</numerusform>
             <numerusform>%n дочірніх комп&apos;ютерів</numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../console/statusbar.cc" line="63"/>
-        <source>Status update...</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9421,61 +9477,61 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="413"/>
-        <location filename="../host/ui/config_dialog.cc" line="579"/>
-        <location filename="../host/ui/config_dialog.cc" line="645"/>
+        <location filename="../host/ui/config_dialog.cc" line="404"/>
+        <location filename="../host/ui/config_dialog.cc" line="570"/>
+        <location filename="../host/ui/config_dialog.cc" line="636"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="414"/>
+        <location filename="../host/ui/config_dialog.cc" line="405"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="562"/>
+        <location filename="../host/ui/config_dialog.cc" line="553"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="243"/>
         <source>Default</source>
         <translation>Стандартний</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="562"/>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="553"/>
+        <location filename="../host/ui/config_dialog.cc" line="593"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="574"/>
-        <location filename="../host/ui/config_dialog.cc" line="640"/>
+        <location filename="../host/ui/config_dialog.cc" line="565"/>
+        <location filename="../host/ui/config_dialog.cc" line="631"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="602"/>
+        <location filename="../host/ui/config_dialog.cc" line="593"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="627"/>
+        <location filename="../host/ui/config_dialog.cc" line="618"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="504"/>
-        <location filename="../host/ui/config_dialog.cc" line="541"/>
-        <location filename="../host/ui/config_dialog.cc" line="630"/>
-        <location filename="../host/ui/config_dialog.cc" line="666"/>
-        <location filename="../host/ui/config_dialog.cc" line="679"/>
-        <location filename="../host/ui/config_dialog.cc" line="963"/>
-        <location filename="../host/ui/config_dialog.cc" line="988"/>
-        <location filename="../host/ui/config_dialog.cc" line="1009"/>
-        <location filename="../host/ui/config_dialog.cc" line="1020"/>
-        <location filename="../host/ui/config_dialog.cc" line="1042"/>
-        <location filename="../host/ui/config_dialog.cc" line="1053"/>
+        <location filename="../host/ui/config_dialog.cc" line="495"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
+        <location filename="../host/ui/config_dialog.cc" line="621"/>
+        <location filename="../host/ui/config_dialog.cc" line="657"/>
+        <location filename="../host/ui/config_dialog.cc" line="670"/>
+        <location filename="../host/ui/config_dialog.cc" line="954"/>
+        <location filename="../host/ui/config_dialog.cc" line="979"/>
+        <location filename="../host/ui/config_dialog.cc" line="1000"/>
+        <location filename="../host/ui/config_dialog.cc" line="1011"/>
+        <location filename="../host/ui/config_dialog.cc" line="1033"/>
+        <location filename="../host/ui/config_dialog.cc" line="1044"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -9581,81 +9637,81 @@
         <translation>Відхилити підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="418"/>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
-        <location filename="../host/ui/config_dialog.cc" line="649"/>
+        <location filename="../host/ui/config_dialog.cc" line="409"/>
+        <location filename="../host/ui/config_dialog.cc" line="574"/>
+        <location filename="../host/ui/config_dialog.cc" line="640"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="419"/>
-        <location filename="../host/ui/config_dialog.cc" line="584"/>
-        <location filename="../host/ui/config_dialog.cc" line="650"/>
+        <location filename="../host/ui/config_dialog.cc" line="410"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="641"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="505"/>
-        <location filename="../host/ui/config_dialog.cc" line="542"/>
+        <location filename="../host/ui/config_dialog.cc" line="496"/>
+        <location filename="../host/ui/config_dialog.cc" line="533"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка під час обробки пароля.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="667"/>
+        <location filename="../host/ui/config_dialog.cc" line="658"/>
         <source>Incorrect router address entered.</source>
         <translation>Введено неправильну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="680"/>
+        <location filename="../host/ui/config_dialog.cc" line="671"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введено неправильний відкритий ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="857"/>
-        <location filename="../host/ui/config_dialog.cc" line="893"/>
+        <location filename="../host/ui/config_dialog.cc" line="848"/>
+        <location filename="../host/ui/config_dialog.cc" line="884"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="902"/>
+        <location filename="../host/ui/config_dialog.cc" line="893"/>
         <source>Started</source>
         <translation>Розпочато</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="903"/>
+        <location filename="../host/ui/config_dialog.cc" line="894"/>
         <source>Stop</source>
         <translation>Зупинити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="908"/>
+        <location filename="../host/ui/config_dialog.cc" line="899"/>
         <source>Not started</source>
         <translation>Не розпочато</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="909"/>
-        <location filename="../host/ui/config_dialog.cc" line="916"/>
-        <location filename="../host/ui/config_dialog.cc" line="929"/>
+        <location filename="../host/ui/config_dialog.cc" line="900"/>
+        <location filename="../host/ui/config_dialog.cc" line="907"/>
+        <location filename="../host/ui/config_dialog.cc" line="920"/>
         <source>Start</source>
         <translation>Почати</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="915"/>
+        <location filename="../host/ui/config_dialog.cc" line="906"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="926"/>
+        <location filename="../host/ui/config_dialog.cc" line="917"/>
         <source>Not installed</source>
         <translation>Не встановлено</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="933"/>
+        <location filename="../host/ui/config_dialog.cc" line="924"/>
         <source>Current service state: %1</source>
         <translation>Поточний стан служби: %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="852"/>
-        <location filename="../host/ui/config_dialog.cc" line="928"/>
+        <location filename="../host/ui/config_dialog.cc" line="843"/>
+        <location filename="../host/ui/config_dialog.cc" line="919"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
@@ -9674,28 +9730,28 @@
         <translation type="vanished">Поточний стан: %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="964"/>
+        <location filename="../host/ui/config_dialog.cc" line="955"/>
         <source>The service could not be installed.</source>
         <translation>Неможливо встановити службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="989"/>
+        <location filename="../host/ui/config_dialog.cc" line="980"/>
         <source>The service could not be removed.</source>
         <translation>Неможливо видалити службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="1010"/>
-        <location filename="../host/ui/config_dialog.cc" line="1043"/>
+        <location filename="../host/ui/config_dialog.cc" line="1001"/>
+        <location filename="../host/ui/config_dialog.cc" line="1034"/>
         <source>Could not access the service.</source>
         <translation>Немає доступу до служби.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="1021"/>
+        <location filename="../host/ui/config_dialog.cc" line="1012"/>
         <source>The service could not be started.</source>
         <translation>Неможливо запустити службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="1054"/>
+        <location filename="../host/ui/config_dialog.cc" line="1045"/>
         <source>The service could not be stopped.</source>
         <translation>Неможливо зупинити службу.</translation>
     </message>
@@ -9745,14 +9801,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../host/ui/main_window.cc" line="488"/>
-        <location filename="../host/ui/main_window.cc" line="715"/>
-        <location filename="../host/ui/main_window.cc" line="902"/>
+        <location filename="../host/ui/main_window.cc" line="711"/>
+        <location filename="../host/ui/main_window.cc" line="898"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="227"/>
-        <location filename="../host/ui/main_window.cc" line="694"/>
+        <location filename="../host/ui/main_window.cc" line="690"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
@@ -9772,38 +9828,38 @@
         <translation>Користувач %1 (%2) почав запис екрану.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="738"/>
+        <location filename="../host/ui/main_window.cc" line="734"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="739"/>
+        <location filename="../host/ui/main_window.cc" line="735"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="837"/>
+        <location filename="../host/ui/main_window.cc" line="833"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="903"/>
+        <location filename="../host/ui/main_window.cc" line="899"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="899"/>
+        <location filename="../host/ui/main_window.cc" line="895"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="428"/>
-        <location filename="../host/ui/main_window.cc" line="822"/>
+        <location filename="../host/ui/main_window.cc" line="818"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="827"/>
+        <location filename="../host/ui/main_window.cc" line="823"/>
         <source>Connecting to a router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
@@ -9813,7 +9869,7 @@
         <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="832"/>
+        <location filename="../host/ui/main_window.cc" line="828"/>
         <source>Connected to a router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
@@ -9828,17 +9884,17 @@
         <translation>Користувач %1 (%2) закінчив запис екрану.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="699"/>
+        <location filename="../host/ui/main_window.cc" line="695"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="732"/>
+        <location filename="../host/ui/main_window.cc" line="728"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="733"/>
+        <location filename="../host/ui/main_window.cc" line="729"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>
@@ -9846,42 +9902,42 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="251"/>
+        <location filename="../host/ui/notifier_window.cc" line="219"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="284"/>
+        <location filename="../host/ui/notifier_window.cc" line="252"/>
         <source>Unlock mouse</source>
         <translation>Розблокувати мишу</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="284"/>
+        <location filename="../host/ui/notifier_window.cc" line="252"/>
         <source>Lock mouse</source>
         <translation>Блокувати мишу</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="292"/>
+        <location filename="../host/ui/notifier_window.cc" line="260"/>
         <source>Unlock keyboard</source>
         <translation>Розблокувати клавіатуру</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="292"/>
+        <location filename="../host/ui/notifier_window.cc" line="260"/>
         <source>Lock keyboard</source>
         <translation>Блокувати клавіатуру</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="300"/>
+        <location filename="../host/ui/notifier_window.cc" line="268"/>
         <source>Resume</source>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="300"/>
+        <location filename="../host/ui/notifier_window.cc" line="268"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="517"/>
+        <location filename="../host/ui/notifier_window.cc" line="478"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Хост Aspia</translation>
     </message>
@@ -9889,37 +9945,37 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="42"/>
+        <location filename="../host/ui/user_dialog.cc" line="41"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="161"/>
-        <location filename="../host/ui/user_dialog.cc" line="174"/>
-        <location filename="../host/ui/user_dialog.cc" line="186"/>
-        <location filename="../host/ui/user_dialog.cc" line="198"/>
-        <location filename="../host/ui/user_dialog.cc" line="220"/>
-        <location filename="../host/ui/user_dialog.cc" line="241"/>
+        <location filename="../host/ui/user_dialog.cc" line="154"/>
+        <location filename="../host/ui/user_dialog.cc" line="167"/>
+        <location filename="../host/ui/user_dialog.cc" line="179"/>
+        <location filename="../host/ui/user_dialog.cc" line="191"/>
+        <location filename="../host/ui/user_dialog.cc" line="213"/>
+        <location filename="../host/ui/user_dialog.cc" line="234"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="162"/>
+        <location filename="../host/ui/user_dialog.cc" line="155"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, -,  .,@.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="175"/>
+        <location filename="../host/ui/user_dialog.cc" line="168"/>
         <source>The username you entered already exists.</source>
         <translation>Введене ім&apos;я користувача вже існує.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="187"/>
+        <location filename="../host/ui/user_dialog.cc" line="180"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="199"/>
+        <location filename="../host/ui/user_dialog.cc" line="192"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -9928,12 +9984,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="210"/>
+        <location filename="../host/ui/user_dialog.cc" line="203"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не задовільняє вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="213"/>
+        <location filename="../host/ui/user_dialog.cc" line="206"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль має містити символи нижнього і верхнього регістрів і має бути довшим за %n смивол.</numerusform>
@@ -9942,27 +9998,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="217"/>
+        <location filename="../host/ui/user_dialog.cc" line="210"/>
         <source>Do you want to enter a different password?</source>
         <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="224"/>
+        <location filename="../host/ui/user_dialog.cc" line="217"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="225"/>
+        <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="242"/>
+        <location filename="../host/ui/user_dialog.cc" line="235"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Невідома внутрішня помилка під час створення або редагування користувача.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="299"/>
+        <location filename="../host/ui/user_dialog.cc" line="292"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
