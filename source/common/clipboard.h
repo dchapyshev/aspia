@@ -33,6 +33,9 @@ public:
     explicit Clipboard(QObject* parent);
     virtual ~Clipboard() = default;
 
+    static const QString kMimeTypeTextUtf8;
+    static const QString kMimeTypeFileList;
+
 public slots:
     void start();
     void injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
@@ -43,11 +46,11 @@ signals:
 
 protected:
     virtual void init() = 0;
-    virtual void setData(const QString& data) = 0;
-    void onData(const QString& data);
+    virtual void setData(const QString& mime_type, const QByteArray& data) = 0;
+    void onData(const QString& mime_type, const QByteArray& data);
 
 private:
-    QString last_data_;
+    QByteArray last_data_;
 };
 
 } // namespace common

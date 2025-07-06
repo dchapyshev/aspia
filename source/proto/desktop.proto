@@ -149,6 +149,21 @@ message TouchEvent
 
 message ClipboardEvent
 {
+    message FileList
+    {
+        message File
+        {
+            string path       = 1;
+            bool is_dir       = 2;
+            int64 file_size   = 3;
+            int64 create_time = 4;
+            int64 access_time = 5;
+            int64 modify_time = 6;
+        }
+
+        repeated File file = 1;
+    }
+
     string mime_type = 1;
     bytes data = 2;
 }

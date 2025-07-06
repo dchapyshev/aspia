@@ -104,6 +104,14 @@ if (WIN32)
         ui/taskbar_button.h
         ui/taskbar_progress.cc
         ui/taskbar_progress.h)
+
+    list(APPEND SOURCE_COMMON_WIN
+        win/file_object.cc
+        win/file_object.h
+        win/file_stream.cc
+        win/file_stream.h
+        win/format_enumerator.cc
+        win/format_enumerator.h)
 endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)

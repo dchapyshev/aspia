@@ -22,18 +22,16 @@
 
 namespace common {
 
-namespace {
-
-const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 Clipboard::Clipboard(QObject* parent)
     : QObject(parent)
 {
     // Nothing
 }
+
+//--------------------------------------------------------------------------------------------------
+const QString Clipboard::kMimeTypeTextUtf8 = QStringLiteral("text/plain; charset=UTF-8");
+const QString Clipboard::kMimeTypeFileList = QStringLiteral("file-list");
 
 //--------------------------------------------------------------------------------------------------
 void Clipboard::start()
@@ -44,10 +42,12 @@ void Clipboard::start()
 //--------------------------------------------------------------------------------------------------
 void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (event.mime_type() == kMimeTypeTextUtf8)
+    QString mime_type = QString::fromStdString(event.mime_type());
+
+    if (mime_type == kMimeTypeTextUtf8 || mime_type == kMimeTypeFileList)
     {
         // Store last injected data.
-        last_data_ = QString::fromStdString(event.data());
+        last_data_ = QByteArray::fromStdString(event.data());
     }
     else
     {
@@ -55,23 +55,23 @@ void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event
         return;
     }
 
-    setData(last_data_);
+    setData(mime_type, last_data_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Clipboard::clearClipboard()
 {
-    setData(QString());
+    setData(QString(), QByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Clipboard::onData(const QString& data)
+void Clipboard::onData(const QString& mime_type, const QByteArray& data)
 {
     if (last_data_ == data)
         return;
 
     proto::desktop::ClipboardEvent event;
-    event.set_mime_type(kMimeTypeTextUtf8);
+    event.set_mime_type(mime_type.toStdString());
     event.set_data(data.toStdString());
 
     emit sig_clipboardEvent(event);

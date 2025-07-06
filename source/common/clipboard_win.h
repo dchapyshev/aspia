@@ -29,6 +29,8 @@ class MessageWindow;
 
 namespace common {
 
+class FileObject;
+
 class ClipboardWin final : public Clipboard
 {
     Q_OBJECT
@@ -40,16 +42,21 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const QString& data) final;
+    void setData(const QString& mime_type, const QByteArray& data) final;
 
 private:
     void onClipboardUpdate();
+    void onClipboardText();
+    void onClipboardFiles();
+    void setDataText(const QByteArray& data);
+    void setDataFiles(const QByteArray& data);
 
     // Handles messages received by |window_|.
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::MessageWindow> window_;
+    std::unique_ptr<FileObject> file_object_;
 
     Q_DISABLE_COPY(ClipboardWin)
 };
