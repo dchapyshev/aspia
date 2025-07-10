@@ -464,8 +464,8 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
 
     do
     {
-        file_object_ = std::make_unique<FileObject>(files);
-        if (!file_object_->isValid())
+        file_object_.reset(FileObject::create(files));
+        if (!file_object_)
         {
             LOG(ERROR) << "Invalid file object";
             break;
