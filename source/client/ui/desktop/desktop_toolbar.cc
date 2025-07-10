@@ -518,7 +518,6 @@ void DesktopToolBar::onHideTimer()
 {
     hide_timer_->stop();
 
-    ui.frame->setFixedWidth(50);
     ui.toolbar->hide();
     ui.frame->show();
 
