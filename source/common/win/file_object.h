@@ -30,12 +30,13 @@ namespace common {
 class FileObject final : public IDataObject
 {
 public:
-    explicit FileObject(const proto::desktop::ClipboardEvent::FileList& files);
     virtual ~FileObject() final;
 
-    bool isValid() const;
+    static FileObject* create(const proto::desktop::ClipboardEvent::FileList& files);
 
 private:
+    explicit FileObject(const proto::desktop::ClipboardEvent::FileList& files);
+
     // IUnknown
     HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
     ULONG __stdcall AddRef() final;

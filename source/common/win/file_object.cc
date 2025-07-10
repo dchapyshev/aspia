@@ -21,6 +21,7 @@
 #include <strsafe.h>
 
 #include "base/logging.h"
+#include "base/win/scoped_hglobal.h"
 #include "common/win/format_enumerator.h"
 
 namespace common {
@@ -69,9 +70,18 @@ FileObject::~FileObject()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileObject::isValid() const
+// static
+FileObject* FileObject::create(const proto::desktop::ClipboardEvent::FileList& files)
 {
-    return file_group_descriptor_ && file_contents_;
+    std::unique_ptr<FileObject> object(new FileObject(files));
+
+    if (!object->file_group_descriptor_ || !object->file_contents_)
+    {
+        LOG(ERROR) << "Format is not registered";
+        return nullptr;
+    }
+
+    return object.release();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,12 +150,14 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
             }
             else
             {
-                current->dwFlags |= FD_ATTRIBUTES | FD_FILESIZE | FD_PROGRESSUI;
+                current->dwFlags |= FD_FILESIZE | FD_PROGRESSUI;
                 current->dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
 
-                quint64 size = static_cast<quint64>(file.file_size());
-                current->nFileSizeLow = static_cast<DWORD>(size & 0xFFFFFFFF);
-                current->nFileSizeHigh = static_cast<DWORD>((size >> 32) & 0xFFFFFFFF);
+                ULARGE_INTEGER size;
+                size.QuadPart = static_cast<quint64>(file.file_size());
+
+                current->nFileSizeLow = size.LowPart;
+                current->nFileSizeHigh = size.HighPart;
             }
         }
 
@@ -158,12 +170,12 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
             return E_OUTOFMEMORY;
         }
 
-        BYTE* data = reinterpret_cast<BYTE*>(GlobalLock(memory));
+        {
+            base::ScopedHGLOBAL<BYTE> data(memory);
 
-        memcpy(data, &file_group_descriptor, sizeof(UINT));
-        memcpy(data + sizeof(UINT), file_descriptor.get(), sizeof(FILEDESCRIPTORW) * item_count);
-
-        GlobalUnlock(memory);
+            memcpy(data.get(), &file_group_descriptor, sizeof(UINT));
+            memcpy(data.get() + sizeof(UINT), file_descriptor.get(), sizeof(FILEDESCRIPTORW) * item_count);
+        }
 
         pMedium->tymed = TYMED_HGLOBAL;
         pMedium->hGlobal = memory;
@@ -173,8 +185,8 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
     }
     else if (pFormatEtc->cfFormat == file_contents_)
     {
-        int index = pFormatEtc->lindex;
-        int count = files_.file_size();
+        const int index = pFormatEtc->lindex;
+        const int count = files_.file_size();
 
         if (index < 0 && index >= count)
         {

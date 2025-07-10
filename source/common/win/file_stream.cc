@@ -24,8 +24,7 @@ namespace common {
 
 //--------------------------------------------------------------------------------------------------
 FileStream::FileStream()
-    : ref_count_(1),
-      data_event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
+    : data_event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
 {
     if (!data_event_.isValid())
     {
@@ -132,55 +131,64 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER*)
+HRESULT FileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition)
 {
+    NOTIMPLEMENTED();
     return STG_E_INVALIDFUNCTION;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Write(const void*, ULONG, ULONG*)
+HRESULT FileStream::Write(const void* pv, ULONG cb, ULONG* pcbWritten)
 {
+    NOTIMPLEMENTED();
     return STG_E_ACCESSDENIED;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::SetSize(ULARGE_INTEGER)
+HRESULT FileStream::SetSize(ULARGE_INTEGER libNewSize)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*, ULARGE_INTEGER*)
+HRESULT FileStream::CopyTo(
+    IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Commit(DWORD)
+HRESULT FileStream::Commit(DWORD grfCommitFlags)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
 HRESULT FileStream::Revert()
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+HRESULT FileStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+HRESULT FileStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD)
+HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD grfStatFlag)
 {
     if (!pstatstg)
         return STG_E_INVALIDPOINTER;
@@ -192,8 +200,9 @@ HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD)
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Clone(IStream**)
+HRESULT FileStream::Clone(IStream** ppstm)
 {
+    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 

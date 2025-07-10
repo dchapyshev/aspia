@@ -41,7 +41,6 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
       timer_(io_context_)
 {
     LOG(INFO) << "Ctor";
-
     timers_.reserve(kReservedSizeForTimersMap);
     timers_.max_load_factor(kLoadFactorForTimersMap);
 }

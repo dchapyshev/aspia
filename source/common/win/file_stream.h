@@ -44,18 +44,20 @@ private:
 
     // IStream
     HRESULT __stdcall Read(void* pv, ULONG cb, ULONG* pcbRead) final;
-    HRESULT __stdcall Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER*) final;
-    HRESULT __stdcall Write(const void*, ULONG, ULONG*) final;
-    HRESULT __stdcall SetSize(ULARGE_INTEGER) final;
-    HRESULT __stdcall CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*, ULARGE_INTEGER*) final;
-    HRESULT __stdcall Commit(DWORD) final;
+    HRESULT __stdcall Seek(
+        LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition) final;
+    HRESULT __stdcall Write(const void* pv, ULONG cb, ULONG* pcbWritten) final;
+    HRESULT __stdcall SetSize(ULARGE_INTEGER libNewSize) final;
+    HRESULT __stdcall CopyTo(
+        IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten) final;
+    HRESULT __stdcall Commit(DWORD grfCommitFlags) final;
     HRESULT __stdcall Revert() final;
-    HRESULT __stdcall LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD) final;
-    HRESULT __stdcall UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD) final;
-    HRESULT __stdcall Stat(STATSTG* pstatstg, DWORD) final;
-    HRESULT __stdcall Clone(IStream**) final;
+    HRESULT __stdcall LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType) final;
+    HRESULT __stdcall UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType) final;
+    HRESULT __stdcall Stat(STATSTG* pstatstg, DWORD grfStatFlag) final;
+    HRESULT __stdcall Clone(IStream** ppstm) final;
 
-    LONG ref_count_;
+    LONG ref_count_ = 1;
 
     base::ScopedHandle data_event_;
     QByteArray buffer_;
