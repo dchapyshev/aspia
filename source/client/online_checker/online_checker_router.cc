@@ -117,7 +117,7 @@ void OnlineCheckerRouter::onTcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void OnlineCheckerRouter::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
     onFinished(FROM_HERE);

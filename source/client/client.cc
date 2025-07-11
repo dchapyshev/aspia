@@ -241,7 +241,7 @@ void Client::onTcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Client::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection terminated:" << error_code;
 

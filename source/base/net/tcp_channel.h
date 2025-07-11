@@ -19,15 +19,18 @@
 #ifndef BASE_NET_TCP_CHANNEL_H
 #define BASE_NET_TCP_CHANNEL_H
 
+#include <QByteArray>
+#include <QObject>
 #include <QTimer>
 
-#include "base/net/network_channel.h"
-#include "base/net/variable_size.h"
-#include "base/net/write_task.h"
-#include "base/peer/host_id.h"
+#include <chrono>
 
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
+
+#include "base/net/variable_size.h"
+#include "base/net/write_task.h"
+#include "base/peer/host_id.h"
 
 namespace base {
 
@@ -36,7 +39,7 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannel final : public NetworkChannel
+class TcpChannel final : public QObject
 {
     Q_OBJECT
 
@@ -44,6 +47,50 @@ public:
     // Constructor available for client.
     explicit TcpChannel(QObject* parent = nullptr);
     ~TcpChannel() final;
+
+    static const quint32 kMaxMessageSize;
+
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
+
+    enum class ErrorCode
+    {
+        // Unknown error.
+        UNKNOWN,
+
+        // No error.
+        SUCCESS,
+
+        // Violation of the communication protocol.
+        INVALID_PROTOCOL,
+
+        // Cryptography error (message encryption or decryption failed).
+        ACCESS_DENIED,
+
+        // An error occurred with the network (e.g., the network cable was accidentally plugged out).
+        NETWORK_ERROR,
+
+        // The connection was refused by the peer (or timed out).
+        CONNECTION_REFUSED,
+
+        // The remote host closed the connection.
+        REMOTE_HOST_CLOSED,
+
+        // The host address was not found.
+        SPECIFIED_HOST_NOT_FOUND,
+
+        // The socket operation timed out.
+        SOCKET_TIMEOUT,
+
+        // The address specified is already in use and was set to be exclusive.
+        ADDRESS_IN_USE,
+
+        // The address specified does not belong to the host.
+        ADDRESS_NOT_AVAILABLE
+    };
+    Q_ENUM(ErrorCode)
 
     // Sets an instance of a class to encrypt and decrypt messages.
     // By default, a fake cryptographer is created that only copies the original message.
@@ -85,6 +132,11 @@ public:
 
     base::HostId hostId() const { return host_id_; }
     void setHostId(base::HostId host_id) { host_id_ = host_id; }
+
+    qint64 totalRx() const { return total_rx_; }
+    qint64 totalTx() const { return total_tx_; }
+    int speedRx();
+    int speedTx();
 
 signals:
     void sig_connected();
@@ -166,6 +218,9 @@ private:
     void onKeepAliveTimer();
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
+    void addTxBytes(size_t bytes_count);
+    void addRxBytes(size_t bytes_count);
+
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
@@ -193,9 +248,22 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;
 
+    qint64 total_tx_ = 0;
+    qint64 total_rx_ = 0;
+
+    TimePoint begin_time_tx_;
+    qint64 bytes_tx_ = 0;
+    int speed_tx_ = 0;
+
+    TimePoint begin_time_rx_;
+    qint64 bytes_rx_ = 0;
+    int speed_rx_ = 0;
+
     Q_DISABLE_COPY(TcpChannel)
 };
 
 } // namespace base
+
+Q_DECLARE_METATYPE(base::TcpChannel::ErrorCode)
 
 #endif // BASE_NET_TCP_CHANNEL_H

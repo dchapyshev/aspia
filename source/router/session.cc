@@ -173,7 +173,7 @@ void Session::sendMessage(const QByteArray& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Session::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Network error:" << error_code;
     emit sig_sessionFinished(session_id_);

@@ -103,7 +103,7 @@ protected:
     QString user_name_;
 
 private slots:
-    void onTcpDisconnected(NetworkChannel::ErrorCode error_code);
+    void onTcpDisconnected(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(quint8 channel_id, size_t pending);
 

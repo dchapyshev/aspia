@@ -19,7 +19,7 @@
 #ifndef CLIENT_UI_SESSION_WINDOW_H
 #define CLIENT_UI_SESSION_WINDOW_H
 
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 #include "client/client.h"
 #include "client/client_config.h"

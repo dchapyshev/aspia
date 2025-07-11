@@ -39,6 +39,8 @@ const int kWriteQueueReservedSize = 64;
 const TcpChannel::Seconds kKeepAliveInterval { 60 };
 const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
+auto g_errorCodeType = qRegisterMetaType<base::TcpChannel::ErrorCode>();
+
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
@@ -54,11 +56,34 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
+void resizeBuffer(QByteArray* buffer, size_t new_size)
+{
+    // If the reserved buffer size is less, then increase it.
+    if (buffer->capacity() < static_cast<QByteArray::size_type>(new_size))
+    {
+        buffer->clear();
+        buffer->reserve(static_cast<QByteArray::size_type>(new_size));
+    }
+
+    // Change the size of the buffer.
+    buffer->resize(static_cast<QByteArray::size_type>(new_size));
+}
+
+//--------------------------------------------------------------------------------------------------
+int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qint64 bytes)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<int>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(QObject* parent)
-    : NetworkChannel(parent),
+    : QObject(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_))
@@ -69,7 +94,7 @@ TcpChannel::TcpChannel(QObject* parent)
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
-    : NetworkChannel(parent),
+    : QObject(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket))
 {
@@ -86,6 +111,9 @@ TcpChannel::~TcpChannel()
     disconnectFrom();
     LOG(INFO) << "Dtor (end)";
 }
+
+//--------------------------------------------------------------------------------------------------
+const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
@@ -311,6 +339,34 @@ bool TcpChannel::setWriteBufferSize(size_t size)
 
     LOG(INFO) << "Write buffer size is changed:" << size;
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+int TcpChannel::speedRx()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
+
+    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
+
+    begin_time_rx_ = current_time;
+    bytes_rx_ = 0;
+
+    return speed_rx_;
+}
+
+//--------------------------------------------------------------------------------------------------
+int TcpChannel::speedTx()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
+
+    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
+
+    begin_time_tx_ = current_time;
+    bytes_tx_ = 0;
+
+    return speed_tx_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -887,6 +943,20 @@ void TcpChannel::sendKeepAlive(quint8 flags, const void* data, size_t size)
 
     // Add a task to the queue.
     addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::addTxBytes(size_t bytes_count)
+{
+    bytes_tx_ += bytes_count;
+    total_tx_ += bytes_count;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::addRxBytes(size_t bytes_count)
+{
+    bytes_rx_ += bytes_count;
+    total_rx_ += bytes_count;
 }
 
 } // namespace base

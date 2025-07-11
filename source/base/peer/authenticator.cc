@@ -200,13 +200,13 @@ bool Authenticator::onSessionKeyChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
+void Authenticator::onTcpDisconnected(TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Network error:" << error_code;
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 
-    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
+    if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
         result = ErrorCode::ACCESS_DENIED;
 
     finish(FROM_HERE, result);

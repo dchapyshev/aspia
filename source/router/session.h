@@ -85,7 +85,7 @@ protected:
     Session* sessionById(SessionId session_id) const;
 
 private slots:
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(quint8 channel_id, size_t pending);
 

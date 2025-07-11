@@ -91,7 +91,7 @@ protected:
     size_t pendingMessages() const;
 
 private slots:
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:

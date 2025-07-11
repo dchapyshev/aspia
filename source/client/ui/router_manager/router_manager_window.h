@@ -24,7 +24,7 @@
 #include <QVersionNumber>
 
 #include "base/peer/authenticator.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "client/router_config.h"
 #include "proto/router_admin.h"
 
@@ -54,7 +54,7 @@ public:
 public slots:
     void onConnecting();
     void onConnected(const QVersionNumber& peer_version);
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onDisconnected(base::TcpChannel::ErrorCode error_code);
     void onWaitForRouter();
     void onWaitForRouterTimeout();
     void onVersionMismatch(const QVersionNumber& router, const QVersionNumber& client);

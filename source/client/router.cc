@@ -293,7 +293,7 @@ void Router::onTcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Router::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Router disconnected:" << error_code;
     emit sig_disconnected(error_code);

@@ -50,7 +50,7 @@ public:
 
 private slots:
     void onTcpConnected();
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
@@ -132,8 +132,7 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpDisconnected(
-    base::NetworkChannel::ErrorCode /* error_code */)
+void OnlineCheckerDirect::Instance::onTcpDisconnected(base::TcpChannel::ErrorCode /* error_code */)
 {
     LOG(INFO) << "Connection aborted for computer:" << computer_id_;
     onFinished(FROM_HERE, false);

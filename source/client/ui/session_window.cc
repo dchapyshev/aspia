@@ -222,10 +222,9 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
 
         case Client::Status::HOST_DISCONNECTED:
         {
-            if (data.canConvert<base::NetworkChannel::ErrorCode>())
+            if (data.canConvert<base::TcpChannel::ErrorCode>())
             {
-                base::NetworkChannel::ErrorCode error_code =
-                    data.value<base::NetworkChannel::ErrorCode>();
+                base::TcpChannel::ErrorCode error_code = data.value<base::TcpChannel::ErrorCode>();
                 onErrorOccurred(netErrorToString(error_code));
             }
             else

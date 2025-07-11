@@ -163,7 +163,7 @@ size_t ClientSession::pendingMessages() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void ClientSession::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "Client disconnected with error:" << error_code;
     state_ = State::FINISHED;

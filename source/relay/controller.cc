@@ -218,7 +218,7 @@ void Controller::onTcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Controller::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "The connection to the router has been lost:" << error_code;
 

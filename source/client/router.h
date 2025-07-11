@@ -54,7 +54,7 @@ public:
 signals:
     void sig_connecting();
     void sig_connected(const QVersionNumber& peer_version);
-    void sig_disconnected(base::NetworkChannel::ErrorCode error_code);
+    void sig_disconnected(base::TcpChannel::ErrorCode error_code);
     void sig_waitForRouter();
     void sig_waitForRouterTimeout();
     void sig_versionMismatch(const QVersionNumber& router, const QVersionNumber& client);
@@ -66,7 +66,7 @@ signals:
 
 private slots:
     void onTcpConnected();
-    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
