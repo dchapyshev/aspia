@@ -94,10 +94,11 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 {
     QToolButton* button = new QToolButton(parent);
 
+    button->setIconSize(QSize(18, 18));
     button->setIcon(QIcon(icon));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    button->setFixedWidth(20);
-    button->setFixedHeight(20);
+    button->setFixedWidth(24);
+    button->setFixedHeight(24);
     button->setToolTip(tooltip);
 
     return button;
@@ -457,7 +458,12 @@ void NotifierWindow::onThemeChanged()
 {
     QString window_color = base::GuiApplication::palette().color(QPalette::Window).name(QColor::HexRgb);
 
-    ui.tree->setStyleSheet(QString("background-color: %1;").arg(window_color));
+    ui.tree->setStyleSheet(QString("QTreeWidget {"
+                                       "background-color: %1;"
+                                   "}"
+                                   "QTreeWidget::item {"
+                                       "border: none;"
+                                   "}").arg(window_color));
 
     ui.content->setStyleSheet(QString("#content {"
                                           "background-color: %1;"

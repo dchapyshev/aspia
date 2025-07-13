@@ -55,7 +55,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>24</height>
+          <height>26</height>
          </size>
         </property>
         <property name="text">
@@ -64,6 +64,12 @@
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
           <normaloff>:/img/back.svg</normaloff>:/img/back.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -112,7 +118,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>24</height>
+          <height>26</height>
          </size>
         </property>
         <property name="text">
@@ -121,6 +127,12 @@
         <property name="icon">
          <iconset resource="../../common/resources/common.qrc">
           <normaloff>:/img/forward.svg</normaloff>:/img/forward.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -188,12 +200,12 @@
          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
         </property>
         <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+         <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
         </property>
         <property name="iconSize">
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="indentation">
@@ -281,6 +293,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/computer-mouse.svg</normaloff>:/img/computer-mouse.svg</iconset>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -294,6 +312,12 @@
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/keyboard.svg</normaloff>:/img/keyboard.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -309,6 +333,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/pause.svg</normaloff>:/img/pause.svg</iconset>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -322,6 +352,12 @@
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/stop.svg</normaloff>:/img/stop.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
            </property>
           </widget>
          </item>
