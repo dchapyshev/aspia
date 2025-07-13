@@ -278,38 +278,71 @@ void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setReadBufferSize(size_t size)
+bool TcpChannel::setReadBufferSize(int size)
 {
-    asio::socket_base::receive_buffer_size option(static_cast<int>(size));
+    asio::socket_base::receive_buffer_size new_option(size);
 
     asio::error_code error_code;
-    socket_.set_option(option, error_code);
-
+    socket_.set_option(new_option, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Failed to set read buffer size:" << error_code;
         return false;
     }
 
-    LOG(INFO) << "Read buffer size is changed:" << size;
+    asio::socket_base::receive_buffer_size current_option;
+    socket_.get_option(current_option, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
+        return false;
+    }
+
+    // The operating system may adjust the buffer size at its discretion.
+    if (current_option.value() != size)
+    {
+        LOG(WARNING) << "Read buffer size set successfully, but actual size:"
+                     << current_option.value() << "expected:" << size;
+    }
+    else
+    {
+        LOG(INFO) << "Read buffer size is changed:" << size;
+    }
+
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setWriteBufferSize(size_t size)
+bool TcpChannel::setWriteBufferSize(int size)
 {
-    asio::socket_base::send_buffer_size option(static_cast<int>(size));
+    asio::socket_base::send_buffer_size new_option(size);
 
     asio::error_code error_code;
-    socket_.set_option(option, error_code);
-
+    socket_.set_option(new_option, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
-    LOG(INFO) << "Write buffer size is changed:" << size;
+    asio::socket_base::send_buffer_size current_option;
+    socket_.get_option(current_option, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Failed to set write buffer size:" << error_code;
+        return false;
+    }
+
+    if (current_option.value() != size)
+    {
+        LOG(WARNING) << "Write buffer size set successfully, but actual size:"
+                     << current_option.value() << "expected:" << size;
+    }
+    else
+    {
+        LOG(INFO) << "Write buffer size is changed:" << size;
+    }
+
     return true;
 }
 
@@ -397,10 +430,10 @@ void TcpChannel::setConnected(bool connected)
     if (!connected_)
         return;
 
-    asio::ip::tcp::no_delay option(true);
+    asio::ip::tcp::no_delay no_delay_option(true);
 
     asio::error_code error_code;
-    socket_.set_option(option, error_code);
+    socket_.set_option(no_delay_option, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
@@ -408,6 +441,28 @@ void TcpChannel::setConnected(bool connected)
     else
     {
         LOG(INFO) << "Nagle's algorithm is disabled";
+    }
+
+    asio::socket_base::receive_buffer_size receive_option;
+    socket_.get_option(receive_option, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
+    }
+    else
+    {
+        LOG(INFO) << "Read buffer size:" << receive_option.value();
+    }
+
+    asio::socket_base::send_buffer_size send_option;
+    socket_.get_option(send_option, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Failed to get write buffer size:" << error_code;
+    }
+    else
+    {
+        LOG(INFO) << "Write buffer size:" << send_option.value();
     }
 
     keep_alive_counter_.resize(sizeof(quint32));

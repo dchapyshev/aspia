@@ -129,8 +129,8 @@ public:
     // Sending a message. After the call, the message will be added to the queue to be sent.
     void send(quint8 channel_id, const QByteArray& buffer);
 
-    bool setReadBufferSize(size_t size);
-    bool setWriteBufferSize(size_t size);
+    bool setReadBufferSize(int size);
+    bool setWriteBufferSize(int size);
 
     size_t pendingMessages() const { return write_queue_.size(); }
 

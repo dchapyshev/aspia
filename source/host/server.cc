@@ -362,8 +362,11 @@ void Server::startSession(base::TcpChannel* channel)
 {
     LOG(INFO) << "Start authentication";
 
-    static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+    static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+    static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
+
     channel->setReadBufferSize(kReadBufferSize);
+    channel->setWriteBufferSize(kWriteBufferSize);
 
     const QVersionNumber& host_version = base::kCurrentVersion;
     if (host_version > channel->peerVersion())

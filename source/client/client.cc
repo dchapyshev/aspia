@@ -31,7 +31,8 @@ namespace client {
 namespace {
 
 auto g_statusType = qRegisterMetaType<client::Client::Status>();
-static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
 } // namespace
 
@@ -168,7 +169,6 @@ void Client::start()
 
         // Create a network channel for messaging.
         tcp_channel_ = new base::TcpChannel(authenticator.release(), this);
-        tcp_channel_->setReadBufferSize(kReadBufferSize);
 
         connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
         connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
@@ -417,6 +417,8 @@ void Client::channelReady()
     emit sig_showSessionWindow();
 
     // Now the session will receive incoming messages.
+    tcp_channel_->setReadBufferSize(kReadBufferSize);
+    tcp_channel_->setWriteBufferSize(kWriteBufferSize);
     tcp_channel_->resume();
 }
 
